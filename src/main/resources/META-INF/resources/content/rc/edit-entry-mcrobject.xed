@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+<MyCoReWebPage>
+  <section i18n="component.rc.slot.entry.mcrobject" xml:lang="all">
+    <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+      <xed:source uri="slotEntry:slotId={$slotId}&amp;entryId={$entryId}" />
+      <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
+      <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
+
+      <xed:bind xpath="entry">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">
+              <xed:choose>
+                <xed:when test="string-length($entryId) &gt; 0">
+                  <xed:output i18n="component.rc.slot.entry.mcrobject.title.edit" />
+                </xed:when>
+                <xed:otherwise>
+                  <xed:output i18n="component.rc.slot.entry.mcrobject.title.add" />
+                </xed:otherwise>
+              </xed:choose>
+            </h3>
+          </div>
+          <div class="panel-body">
+            <xed:bind xpath="mcrobject">
+              <dbt:template name="textInput" xpath="@id" id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
+                required="true" />
+              <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
+            </xed:bind>
+          </div>
+          <div class="panel-footer clearfix">
+            <div class="pull-right">
+              <dbt:template name="submitButton" i18n="button.debug" target="debug" />
+              <span>&#160;</span>
+              <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+              <span>&#160;</span>
+              <dbt:template name="cancelButton" i18n="button.cancel" />
+            </div>
+          </div>
+        </div>
+      </xed:bind>
+    </xed:form>
+  </section>
+</MyCoReWebPage>

@@ -1,0 +1,272 @@
+/*
+ * $Id: RCCalendar.java 2134 2014-12-08 14:37:17Z adler $ 
+ * $Revision$ $Date$
+ *
+ * This file is part of ***  M y C o R e  ***
+ * See http://www.mycore.de/ for details.
+ *
+ * This program is free software; you can use it, redistribute it
+ * and / or modify it under the terms of the GNU General Public License
+ * (GPL) as published by the Free Software Foundation; either version 2
+ * of the License or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program, in a file called gpl.txt or license.txt.
+ * If not, write to the Free Software Foundation Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
+ */
+package org.urmel.dbt.rc.datamodel;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.TimeZone;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+import org.apache.log4j.Logger;
+import org.jdom2.Element;
+import org.mycore.common.xml.MCRURIResolver;
+import org.urmel.dbt.rc.utils.RCCalendarTransformer;
+
+/**
+ * @author Ren\u00E9 Adler (eagle)
+ *
+ */
+@XmlRootElement(name = "calendar")
+@XmlAccessorType(XmlAccessType.NONE)
+public final class RCCalendar implements Serializable, Iterable<Period> {
+
+    private static final long serialVersionUID = -812825621316872737L;
+
+    private static final Logger LOGGER = Logger.getLogger(RCCalendar.class);
+
+    private static RCCalendar singleton;
+
+    private List<Period> periods;
+
+    private RCCalendar() {
+    }
+
+    /**
+     * Returns a {@link RCCalendar} instance.
+     * 
+     * @return a instance of {@link RCCalendar}
+     */
+    public static RCCalendar instance() {
+        if (singleton == null) {
+            final Element xml = MCRURIResolver.instance().resolve("resource:RCCalendar.xml");
+            if (xml != null) {
+                singleton = RCCalendarTransformer.buildRCCalendar(xml);
+            }
+        }
+        return singleton;
+    }
+
+    /**
+     * @return the periods
+     */
+    @XmlElement(name = "period")
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
+    /**
+     * Tries to obtain a {@link Period}, which was defined inside RC periods, by
+     * calculating <b>from</b> and <b>to</b> dates with the use of target date.
+     * 
+     * @param areaCode
+     *            specific area code for the period
+     * @param date
+     *            date which is inside the period to search for
+     * @return the targeting {@link Period} if one could be calculated,
+     *         <code>null</code> otherwise
+     */
+    public static Period getPeriod(final String areaCode, final Date date) {
+        try {
+            for (Period period : instance().iterable(areaCode)) {
+                if (period.getFromDate(date) != null && period.getToDate(date) != null) {
+                    final Period p = period.clone();
+                    p.setStartDate(date);
+                    p.setFullyQualified(true);
+                    return p;
+                }
+            }
+        } catch (final Throwable e) {
+            // Period is NULL
+            LOGGER.info("no period given for date " + date);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns a list of {@link Period} for given <code>areaCode</code>, <code>date</code> and 
+     * <code>numNext</code> (number of next periods).
+     * 
+     * @param areaCode specific area code for the period
+     * @param date date as starting point which should return period(s)
+     * @param numNext number of periods after starting one
+     * @return a list of {@link Period}
+     */
+    public static RCCalendar getPeriodList(final String areaCode, final Date date, final int numNext) {
+        try {
+            final Iterable<Period> periods = instance().iterable(areaCode);
+
+            final RCCalendar calendar = new RCCalendar();
+            calendar.periods = new ArrayList<Period>();
+
+            Date lastDate = date;
+
+            int pos = 0;
+            while (pos < numNext + 1) {
+                for (Period period : periods) {
+                    if (pos < numNext + 1 && period.getSetableFromDate(lastDate) != null
+                            && period.getSetableToDate(lastDate) != null) {
+                        final Period p = period.clone();
+                        p.setStartDate(lastDate);
+                        p.setFullyQualified(true);
+
+                        final Calendar nextDay = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                        nextDay.setTime(p.getSetableToDate(lastDate));
+                        nextDay.add(Calendar.DATE, 1);
+
+                        lastDate = nextDay.getTime();
+
+                        calendar.periods.add(p);
+                        pos++;
+                    }
+                }
+            }
+
+            return calendar;
+        } catch (final Throwable e) {
+            // Period is NULL
+            LOGGER.info("no periods given for date " + date);
+        }
+
+        return null;
+    }
+
+    /**
+     * Tries to obtain a {@link Period}, which was defined inside RC periods, by
+     * calculating <b>setableFrom</b> and <b>setableTo</b> dates with the use of target date.
+     * 
+     * @param areaCode
+     *            specific area code for the period
+     * @param date
+     *            date which is inside the period to search for
+     * @return the targeting {@link Period} if one could be calculated,
+     *         <code>null</code> otherwise
+     */
+    public static Period getPeriodBySetable(final String areaCode, final Date date) {
+        try {
+            for (Period period : instance().iterable(areaCode)) {
+                if (period.getSetableFromDate(date) != null && period.getSetableToDate(date) != null) {
+                    final Period p = period.clone();
+                    p.setStartDate(date);
+                    p.setFullyQualified(true);
+                    return p;
+                }
+            }
+        } catch (final Throwable e) {
+            // Period is NULL
+            LOGGER.info("no period given for date " + date);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param periods the periods to set
+     */
+    protected void setPeriods(final List<Period> periods) {
+        this.periods = periods;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Iterable#iterator()
+     */
+    @Override
+    public Iterator<Period> iterator() {
+        return periods.iterator();
+    }
+
+    /**
+     * Returns an iterator over a set of elements of type {@link Period} witch match the given location.
+     * 
+     * @param areaCode the which location
+     * @return the iterator
+     * 
+     * @see java.lang.Iterable#iterator()
+     */
+    public Iterator<Period> iterator(final String areaCode) {
+        return new Iterator<Period>() {
+            Iterator<Period> it = periods.iterator();
+
+            Period next = null;
+
+            @Override
+            public boolean hasNext() {
+                if (next != null) {
+                    return true;
+                }
+
+                while (it.hasNext()) {
+                    final Period period = it.next();
+                    if (period.getMatchingLocation() == null || areaCode.matches(period.getMatchingLocation())) {
+                        next = period;
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            @Override
+            public Period next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                } else {
+                    final Period period = next;
+                    next = null;
+                    return period;
+                }
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
+    /**
+     * Implementing this interface allows an object to be the target of the "foreach" statement with given location.
+     * 
+     * @param areaCode the which location
+     * @return the iterable
+     * 
+     * @see java.lang.Iterable
+     */
+    public Iterable<Period> iterable(final String areaCode) {
+        return new Iterable<Period>() {
+            public Iterator<Period> iterator() {
+                return RCCalendar.this.iterator(areaCode);
+            }
+        };
+    }
+}

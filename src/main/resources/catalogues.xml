@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalogues>
+  <catalog enabled="true" identifier="74f272a0-5bb1-11e0-80e3-0800200c9a66">
+    <name>Technische Universität Ilmenau</name>
+    <description>Universitätsbibliothek Ilmenau</description>
+    <opc db="1">http://opac.lbs-ilmenau.gbv.de</opc>
+    <ISIL>DE-ILM1</ISIL>
+    <ISIL>OCLC-DEUBI</ISIL>
+  </catalog>
+  <catalog enabled="true" identifier="434a9a20-8318-42e8-9964-1f5aa2999492">
+    <name>Fachhochschule Schmalkalden</name>
+    <description>Cellarius Bibliothek</description>
+    <opc db="2">http://opac.lbs-ilmenau.gbv.de</opc>
+    <ISIL>DE-SHM2</ISIL>
+  </catalog>
+  <catalog enabled="true" identifier="2fd22120-5bc5-11e0-80e3-0800200c9a66">
+    <name>Friedrich-Schiller-Universität Jena</name>
+    <description>Thüringer Universitäts- und Landesbibliothek Jena</description>
+    <opc db="1">http://kataloge.thulb.uni-jena.de</opc>
+    <ISIL>DE-27</ISIL>
+    <ISIL>OCLC-DETUL</ISIL>
+  </catalog>
+  <catalog enabled="true" identifier="1956b184-1a52-4d18-924c-bc5974d1b423">
+    <name>Universität Erfurt</name>
+    <description>Universitäts- und Forschungsbibliothek Erfurt/Gotha</description>
+    <opc db="1">http://opac.uni-erfurt.de/</opc>
+    <ISIL>DE-547</ISIL>
+    <ISIL>OCLC-DEUEG</ISIL>
+    <ISIL>OCLC-6EU</ISIL>
+  </catalog>
+</catalogues>

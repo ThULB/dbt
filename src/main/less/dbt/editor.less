@@ -1,0 +1,91 @@
+form.editor {
+  .form-horizontal;
+}
+
+td.editorValidationMessage {
+  .alert;
+  .alert-danger;
+  border-radius: 0;
+}
+
+table.editorValidationFailed {
+  .alert;
+  .alert-danger;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+td.editorValidationFailed {
+  padding: 2px;
+  input , select , textarea {
+    .has-error .form-control;
+  }
+
+  img {
+    position: relative;
+    z-index: 500;
+    display: inline-block;
+    float: right;
+    margin-right: 2px;
+    margin-top: -23px;
+  }
+
+  select + img {
+    margin-right: 25px;
+  }
+}
+
+td.editorHeadline {
+  & > label.editorText {
+    font-size: 30px;
+  }
+}
+
+td.editorCell {
+  padding: 2px;
+  & > table.editorPanel , & > table.editorValidationFailed {
+    width: 100%;
+  }
+}
+
+.editorButton {
+  .btn;
+  .btn-sm;
+  .btn-primary;
+  margin-left: 2px;
+  &.cancel {
+    .btn-default;
+  }
+}
+
+.editorPassword {
+  .form-control;
+  .input-sm;
+}
+
+.editorTextfield {
+  .form-control;
+  .input-sm;
+}
+
+label.editorList {
+  margin: 0 5px 0 5px;
+}
+
+select.editorList {
+  .form-control;
+  .input-sm;
+}
+
+.editorTextarea {
+  .form-control;
+  .input-sm;
+}
+
+.editorPMUD > input {
+  .btn;
+  .btn-sm;
+  .btn-primary;
+  margin-left: 2px;
+}
+

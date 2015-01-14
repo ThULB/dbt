@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MyCoReWebPage>
+
+<MyCoReWebPage>
+
+  <section i18n="component.rc.slot.location" xml:lang="all">
+
+    <h3>Semesterapparte Standorte</h3>
+    <classificationbrowser classification="RCLOC" addclassid="true" emptyleaves="true" style="bootstrap" />
+
+  </section>
+
+</MyCoReWebPage>

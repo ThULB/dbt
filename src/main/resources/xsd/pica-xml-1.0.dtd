@@ -1,0 +1,16 @@
+<!ELEMENT result (record+)>
+<!ATTLIST result 
+  url CDATA #REQUIRED
+  db CDATA #REQUIRED>
+
+<!ELEMENT record (field+)>
+<!ATTLIST record 
+  ppn CDATA #REQUIRED>
+
+<!ELEMENT field (subfield+)>
+<!ATTLIST field 
+  tag CDATA #REQUIRED
+  occurrence CDATA #IMPLIED>
+
+<!ELEMENT subfield (#PCDATA)*>
+<!ATTLIST subfield code CDATA #IMPLIED>

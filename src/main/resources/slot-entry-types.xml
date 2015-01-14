@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entry-types>
+  <entry-type class="org.urmel.dbt.rc.datamodel.entries.HeadlineEntry">
+    <i18n single="component.rc.slot.entry.headline" multiple="component.rc.slot.entry.headline.multiple" />
+  </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.entries.MCRObjectEntry">
+    <i18n single="component.rc.slot.entry.mcrobject" multiple="component.rc.slot.entry.mcrobject.multiple" />
+  </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.entries.TextEntry">
+    <i18n single="component.rc.slot.entry.text" multiple="component.rc.slot.entry.text.multiple" />
+  </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.entries.WebLinkEntry">
+    <i18n single="component.rc.slot.entry.webLink" multiple="component.rc.slot.entry.webLink.multiple" />
+  </entry-type>
+</entry-types>

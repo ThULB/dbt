@@ -1,0 +1,17 @@
+SlotList
+Slot
+Status
+PendingStatus
+Period
+RCCalendar
+Warning
+WarningDate
+
+SlotEntry
+entries.HeadlineEntry
+entries.MCRObjectEntry
+entries.TextEntry
+entries.WebLinkEntry
+
+SlotEntryTypes
+SlotEntryType

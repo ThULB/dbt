@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+  <xed:template id="failed-validation-messages">
+    <xed:if test="$xed-validation-failed">
+      <div class="alert alert-danger">
+        <h4>
+          <xed:output i18n="component.rc.inputhints" />
+        </h4>
+        <ul>
+          <xed:display-validation-messages />
+        </ul>
+      </div>
+    </xed:if>
+  </xed:template>
+
+  <xed:template id="title">
+    <dbt:template name="textInput" xpath="title" id="title" i18n="component.rc.slot.title" i18n.error="component.rc.slot.title.required" required="true" />
+  </xed:template>
+
+  <xed:template id="location">
+    <xed:bind xpath="location">
+      <div class="form-group">
+        <label class="col-md-3 control-label" for="locationSelect">
+          <xed:output i18n="component.rc.slot.location" />
+        </label>
+        <div class="col-md-9">
+          <dbt:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
+            href="RCSlotLocationServlet?categID=RCLOC&amp;action=chooseCategory" />
+          <xed:choose>
+            <xed:when test="string-length(label/@text) &gt; 0">
+              <xed:output value="label/@text" />
+            </xed:when>
+            <xed:otherwise>
+              <xed:multi-lang>
+                <xed:lang xml:lang="de">bitte wählen</xed:lang>
+                <xed:lang xml:lang="en">please select</xed:lang>
+              </xed:multi-lang>
+            </xed:otherwise>
+          </xed:choose>
+        </div>
+      </div>
+    </xed:bind>
+
+    <xed:validate xpath="slot" display="global" test="string-length(location/@id) &gt; 0" i18n="component.rc.location.required" />
+  </xed:template>
+
+  <xed:template id="singleLecturer">
+    <xed:bind xpath="lecturers">
+      <xed:bind xpath="lecturer">
+        <dbt:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" i18n.error="component.rc.slot.lecturer.name.required"
+          required="true" />
+        <dbt:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
+          required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
+      </xed:bind>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="singleValidTo">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="locationSelect">
+        <xed:output i18n="component.rc.slot.validTo" />
+      </label>
+      <dbt:template name="textInput" xpath="validTo" inline="true" colwidth="3" id="validTo" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
+        required="true" validate="true" type="datetime" format="yyyy-MM-dd;dd.MM.yyyy" />
+      <div class="col-md-6">
+        <xed:include uri="xslStyle:editor-include-period:period:areacode=0&amp;date=now" />
+      </div>
+    </div>
+  </xed:template>
+
+  <xed:template id="accesskeys">
+    <xed:bind xpath="accesskey">
+      <dbt:template name="textInput" xpath="@read" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
+        required="true" />
+      <dbt:template name="textInput" xpath="@write" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
+        required="true" />
+    </xed:bind>
+  </xed:template>
+
+</xed:template>

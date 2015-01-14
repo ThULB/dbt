@@ -1,0 +1,21 @@
+{
+  "name": "${project.artifactId}",
+  "description": "${project.description}",
+  "version": "1.0.0",
+  "author": "René Adler (eagle)",
+  "homepage": "${project.url}",
+  "repository": {
+    "type": "svn",
+    "url": "${project.scm.url}"
+  },
+  "license": "GPLv3",
+  "ignore": [
+    "bower_components"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "bootstrap": "~3.2.0",
+    "font-awesome": "~4.1.0"
+  }
+}

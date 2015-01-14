@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objecttype name="rcslot" isChild="false" isParent="true" hasDerivates="true" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="datamodel.xsd"
+>
+  <xsd>
+    <xs:import schemaLocation="http://www.mycore.de/dbt/rc/slot-1-0.xsd" />
+  </xsd>
+  <metadata>
+    <element name="rcSlotContainer" type="xml" style="dontknow" notinherit="true" heritable="false">
+      <xs:sequence>
+        <xs:element ref="slot" />
+      </xs:sequence>
+    </element>
+  </metadata>
+</objecttype>

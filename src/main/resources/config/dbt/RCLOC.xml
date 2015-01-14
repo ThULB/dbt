@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="RCLOC"
+  xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
+>
+  <label text="Standort Semesterapparat" xml:lang="de" />
+  <label text="Location Reserve Collection" xml:lang="en" />
+  <categories>
+    <category ID="0027">
+      <label text="ThULB Jena" xml:lang="de" />
+      <label text="ThULB Jena" xml:lang="en" />
+      <label text="1" xml:lang="x-originId" />
+      <url xlink:href="http://www.thulb.uni-jena.de/" />
+      <category ID="0027.01">
+        <label text="Testsemesterapparate" xml:lang="de" />
+        <label text="Testsemesterapparate" xml:lang="en" />
+        <url xlink:href="" />
+        <category ID="0027.01.01">
+          <label text="Geisteswissenschaften" xml:lang="de" />
+          <label text="Geisteswissenschaften" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+        <category ID="0027.01.02">
+          <label text="Naturwissenschaften" xml:lang="de" />
+          <label text="Naturwissenschaften" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+        <category ID="0027.01.03">
+          <label text="Rechts-, Wirtschafts- und Sozialwissenschaften" xml:lang="de" />
+          <label text="Rechts-, Wirtschafts- und Sozialwissenschaften" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+        <category ID="0027.01.04">
+          <label text="Medizin" xml:lang="de" />
+          <label text="Medizin" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+      </category>
+      <category ID="0027.11">
+        <label text="TB Geisteswissenschaften / Ebene 1" xml:lang="de" />
+        <label text="TB Geisteswissenschaften / Ebene 1" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        <category ID="0027.11.01">
+          <label text="Erziehungswissenschaften" xml:lang="de" />
+          <label text="Erziehungswissenschaften" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.11.02">
+          <label text="Medienwissenschaft" xml:lang="de" />
+          <label text="Medienwissenschaft" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.11.03">
+          <label text="Multimedia-Arbeitsbereich" xml:lang="de" />
+          <label text="Multimedia-Arbeitsbereich" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/bhg.html" />
+        </category>
+        <category ID="0027.11.04">
+          <label text="Philosophie" xml:lang="de" />
+          <label text="Philosophie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.11.05">
+          <label text="Psychologie" xml:lang="de" />
+          <label text="Psychologie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+      </category>
+      <category ID="0027.12">
+        <label text="TB Geisteswissenschaften / Ebene 2" xml:lang="de" />
+        <label text="TB Geisteswissenschaften / Ebene 2" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        <category ID="0027.12.01">
+          <label text="Archäologie / Ur- und Frühgeschichte" xml:lang="de" />
+          <label text="Archäologie / Ur- und Frühgeschichte" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.12.02">
+          <label text="Geschichte" xml:lang="de" />
+          <label text="Geschichte" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.12.03">
+          <label text="Klassische Philologie" xml:lang="de" />
+          <label text="Klassische Philologie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.12.04">
+          <label text="Semitistik" xml:lang="de" />
+          <label text="Semitistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.12.05">
+          <label text="Theologie / Religionswissenschaft" xml:lang="de" />
+          <label text="Theologie / Religionswissenschaft" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.12.06">
+          <label text="Volkskunde" xml:lang="de" />
+          <label text="Volkskunde" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+      </category>
+      <category ID="0027.13">
+        <label text="TB Geisteswissenschaften / Ebene 3" xml:lang="de" />
+        <label text="TB Geisteswissenschaften / Ebene 3" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        <category ID="0027.13.01">
+          <label text="Allg. u. vergl. Sprach- u. Literaturwiss." xml:lang="de" />
+          <label text="Allg. u. vergl. Sprach- u. Literaturwiss." xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.02">
+          <label text="Anglistik / Amerikanistik" xml:lang="de" />
+          <label text="Anglistik / Amerikanistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.03">
+          <label text="Germanistik" xml:lang="de" />
+          <label text="Germanistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.04">
+          <label text="Indogermanistik" xml:lang="de" />
+          <label text="Indogermanistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.05">
+          <label text="Indonesistik" xml:lang="de" />
+          <label text="Indonesistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.06">
+          <label text="Kaukasiologie" xml:lang="de" />
+          <label text="Kaukasiologie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.07">
+          <label text="Romanistik" xml:lang="de" />
+          <label text="Romanistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.13.08">
+          <label text="Slawistik" xml:lang="de" />
+          <label text="Slawistik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+      </category>
+      <category ID="0027.14">
+        <label text="TB Geisteswissenschaften / Ebene 4" xml:lang="de" />
+        <label text="TB Geisteswissenschaften / Ebene 4" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        <category ID="0027.14.01">
+          <label text="Kunstgeschichte" xml:lang="de" />
+          <label text="Kunstgeschichte" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+        <category ID="0027.14.02">
+          <label text="Musikwissenschaft" xml:lang="de" />
+          <label text="Musikwissenschaft" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" />
+        </category>
+      </category>
+      <category ID="0027.20">
+        <label text="TB Rechts-, Wirtschafts- und Sozialwissenschaften" xml:lang="de" />
+        <label text="TB Rechts-, Wirtschafts- und Sozialwissenschaften" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" />
+        <category ID="0027.20.01">
+          <label text="Rechtswissenschaft" xml:lang="de" />
+          <label text="Rechtswissenschaft" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" />
+        </category>
+        <category ID="0027.20.02">
+          <label text="Wirtschaftswissenschaften" xml:lang="de" />
+          <label text="Wirtschaftswissenschaften" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" />
+        </category>
+        <category ID="0027.20.03">
+          <label text="Politikwissenschaft / Soziologie" xml:lang="de" />
+          <label text="Politikwissenschaft / Soziologie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" />
+        </category>
+      </category>
+      <category ID="0027.30">
+        <label text="TB Naturwissenschaften" xml:lang="de" />
+        <label text="TB Naturwissenschaften" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/tb_natwi.html" />
+        <category ID="0027.30.01">
+          <label text="TB Naturwissenschaften" xml:lang="de" />
+          <label text="TB Naturwissenschaften" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_natwi.html" />
+        </category>
+        <category ID="0027.30.02">
+          <label text="Chemie" xml:lang="de" />
+          <label text="Chemie" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/14.html" />
+        </category>
+        <category ID="0027.30.03">
+          <label text="Physik" xml:lang="de" />
+          <label text="Physik" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/16.html" />
+        </category>
+      </category>
+      <category ID="0027.40">
+        <label text="TB Medizin" xml:lang="de" />
+        <label text="TB Medizin" xml:lang="en" />
+        <url xlink:href="http://www.thulb.uni-jena.de/Kontakt/Teil_+_+Zweigbibliotheken/Medizin.html" />
+        <category ID="0027.40.01">
+          <label text="TB Medizin" xml:lang="de" />
+          <label text="TB Medizin" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_klinmed.html" />
+        </category>
+        <category ID="0027.40.02">
+          <label text="Vorklinische Medizin" xml:lang="de" />
+          <label text="Vorklinische Medizin" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_med2.html" />
+        </category>
+        <category ID="0027.40.03">
+          <label text="Medizinische Studienbibliothek" xml:lang="de" />
+          <label text="Medizinische Studienbibliothek" xml:lang="en" />
+          <url xlink:href="http://www.thulb.uni-jena.de/tb_medst.html" />
+        </category>
+      </category>
+    </category>
+    <category ID="3400">
+      <label text="UB Ilmenau" xml:lang="de" />
+      <label text="UB Ilmenau" xml:lang="en" />
+      <label text="4" xml:lang="x-originId" />
+      <url xlink:href="http://www.tu-ilmenau.de/ub" />
+      <category ID="3400.01">
+        <label text="Hauptbibliothek" xml:lang="de" />
+        <label text="Hauptbibliothek" xml:lang="en" />
+        <url xlink:href="http://www.tu-ilmenau.de/ub" />
+        <category ID="3400.01.01">
+          <label text="EG" xml:lang="de" />
+          <label text="EG" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+      </category>
+    </category>
+    <category ID="0547">
+      <label text="UB Erfurt" xml:lang="de" />
+      <label text="UB Erfurt" xml:lang="en" />
+      <label text="2" xml:lang="x-originId" />
+      <url xlink:href="http://www.uni-erfurt.de/bibliothek" />
+      <category ID="0547.01">
+        <label text="Universitäts- und Forschungsbibliothek Erfurt/Gotha" xml:lang="de" />
+        <label text="Universitäts- und Forschungsbibliothek Erfurt/Gotha" xml:lang="en" />
+        <url xlink:href="http://www.uni-erfurt.de/bibliothek" />
+        <category ID="0547.01.01">
+          <label text="Semesterapparate" xml:lang="de" />
+          <label text="Semesterapparate" xml:lang="en" />
+          <url xlink:href="" />
+        </category>
+      </category>
+    </category>
+  </categories>
+</mycoreclass>

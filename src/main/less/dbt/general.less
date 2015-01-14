@@ -1,0 +1,28 @@
+body {
+  background-color: @dbt-backgroundColor;
+  background-image: url(../images/background.png);
+  font-family: @dbt-fontFamily;
+  margin: 0;
+  padding: 0;
+  @media (max-width: @container-desktop) {
+    background: @dbt-mobile-backgroundColor;
+  }
+}
+
+.text-collapse {
+  position: relative;
+  display: block;
+  height: auto;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-collapse .collapseOverlay {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  #gradient > .vertical (rgba(255, 255, 255, 0) , rgba(255, 255, 255, 1) , 20% , 90%);
+}

@@ -1,0 +1,44 @@
+<web-fragment xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" version="3.0" metadata-complete="true"
+>
+  <name>dbt</name>
+
+  <servlet id="RCSlotListServlet">
+    <servlet-name>RCSlotListServlet</servlet-name>
+    <servlet-class>org.urmel.dbt.rc.servlets.SlotListServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RCSlotListServlet</servlet-name>
+    <url-pattern>/servlets/RCSlotListServlet</url-pattern>
+    <url-pattern>/rc/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet id="RCSlotServlet">
+    <servlet-name>RCSlotServlet</servlet-name>
+    <servlet-class>org.urmel.dbt.rc.servlets.SlotServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RCSlotServlet</servlet-name>
+    <url-pattern>/servlets/RCSlotServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet id="RCSlotLocationServlet">
+    <servlet-name>RCSlotLocationServlet</servlet-name>
+    <servlet-class>org.urmel.dbt.rc.servlets.SlotLocationServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RCSlotLocationServlet</servlet-name>
+    <url-pattern>/servlets/RCSlotLocationServlet</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>OPCServlet</servlet-name>
+    <servlet-class>org.urmel.dbt.rc.servlets.OPCServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OPCServlet</servlet-name>
+    <url-pattern>/servlets/OPCServlet</url-pattern>
+    <url-pattern>/opc/*</url-pattern>
+  </servlet-mapping>
+
+</web-fragment>
