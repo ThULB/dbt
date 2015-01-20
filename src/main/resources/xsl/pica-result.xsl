@@ -16,14 +16,23 @@
 
   <xsl:param name="RecordIdSource" select="$catalogues/catalog[@identifier=$catalogId]/ISIL[1]/text()" />
 
+  <xsl:param name="Page" select="1" />
+  <xsl:param name="numPerPage" select="10" />
+
+  <xsl:variable name="start" select="(number($Page) - 1) * number($numPerPage)" />
+  <xsl:variable name="end" select="number($Page) * number($numPerPage)" />
+
   <xsl:template match="pica:result">
     <result catalogId="{@catalogId}">
       <xsl:for-each select="./pica:record">
-        <xsl:variable name="fullRecord" select="document(concat('opc:url=', $opcURL, '&amp;db=', $opcDB, '&amp;record=', @ppn))" />
-        <xsl:apply-templates select="$fullRecord" />
-        <pica-xml>
-          <xsl:copy-of select="$fullRecord" />
-        </pica-xml>
+        <xsl:if test="(position() &gt;= $start) and (position() &lt;= $end)">
+          <xsl:variable name="fullRecord" select="document(concat('opc:url=', $opcURL, '&amp;db=', $opcDB, '&amp;record=', @ppn))" />
+          <xsl:apply-templates select="$fullRecord" />
+          <xsl:copy-of select="." />
+<!--           <pica-xml> -->
+<!--             <xsl:copy-of select="$fullRecord" /> -->
+<!--           </pica-xml> -->
+        </xsl:if>
       </xsl:for-each>
     </result>
   </xsl:template>
