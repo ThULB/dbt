@@ -70,6 +70,21 @@ module.exports = function(grunt) {
 					cwd : 'bower_components/font-awesome/',
 					src : [ 'fonts/**' ],
 					dest : '<%=globalConfig.assetsDirectory%>/font-awesome/'
+				}, {
+					expand : true,
+					cwd : 'bower_components/bootstrap3-wysihtml5-bower/dist/',
+					src : [ '**' ],
+					dest : '<%=globalConfig.assetsDirectory%>/bootstrap3-wysihtml5/'
+				}, {
+					expand : true,
+					cwd : 'bower_components/wysihtml5x/dist/',
+					src : [ '**' ],
+					dest : '<%=globalConfig.assetsDirectory%>/wysihtml5x/'
+				}, {
+					expand : true,
+					cwd : 'bower_components/handlebars/',
+					src : [ 'handlebars.js', 'handlebars.min.js' ],
+					dest : '<%=globalConfig.assetsDirectory%>/handlebars/'
 				} ]
 			}
 		},
