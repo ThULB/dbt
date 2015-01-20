@@ -6,7 +6,7 @@
       <xed:source uri="slotEntry:slotId={$slotId}&amp;entryId={$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
-      
+
       <xed:bind xpath="entry">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -24,6 +24,11 @@
           <div class="panel-body">
             <xed:bind xpath="text">
               <xed:bind xpath="@format" default="plain" />
+              <dbt:template name="radioList" xpath="@format" default="plain" inline="true" id="format" i18n="component.rc.slot.entry.text.format">
+                <option value="plain" i18n="component.rc.slot.entry.text.format.plain" />
+                <option value="preformatted" i18n="component.rc.slot.entry.text.format.preformatted" />
+                <option value="html" i18n="component.rc.slot.entry.text.format.html" />
+              </dbt:template>
               <dbt:template name="textArea" xpath="." id="text" i18n="component.rc.slot.entry.text" i18n.error="component.rc.slot.entry.text.required"
                 required="true" />
             </xed:bind>
