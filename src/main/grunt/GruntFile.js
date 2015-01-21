@@ -72,19 +72,14 @@ module.exports = function(grunt) {
 					dest : '<%=globalConfig.assetsDirectory%>/font-awesome/'
 				}, {
 					expand : true,
-					cwd : 'bower_components/bootstrap3-wysihtml5-bower/dist/',
-					src : [ '**' ],
-					dest : '<%=globalConfig.assetsDirectory%>/bootstrap3-wysihtml5/'
+					cwd : 'bower_components/summernote/',
+					src : [ 'lang/**' ],
+					dest : '<%=globalConfig.assetsDirectory%>/summernote/'
 				}, {
 					expand : true,
-					cwd : 'bower_components/wysihtml5x/dist/',
+					cwd : 'bower_components/summernote/dist/',
 					src : [ '**' ],
-					dest : '<%=globalConfig.assetsDirectory%>/wysihtml5x/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/handlebars/',
-					src : [ 'handlebars.js', 'handlebars.min.js' ],
-					dest : '<%=globalConfig.assetsDirectory%>/handlebars/'
+					dest : '<%=globalConfig.assetsDirectory%>/summernote/'
 				} ]
 			}
 		},

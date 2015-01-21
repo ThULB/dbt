@@ -2,10 +2,20 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <section i18n="component.rc.slot.entry.text" xml:lang="all">
+
+    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote.css" />
+    <script src="../../dbt/assets/summernote/summernote.min.js" />
+
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
       <xed:source uri="slotEntry:slotId={$slotId}&amp;entryId={$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
+
+      <xed:choose>
+        <xed:when test="$CurrentLang = 'de'">
+          <script src="../../dbt/assets/summernote/lang/summernote-de-DE.js" />
+        </xed:when>
+      </xed:choose>
 
       <xed:bind xpath="entry">
         <div class="panel panel-default">
@@ -32,6 +42,30 @@
               <dbt:template name="textArea" xpath="." id="text" i18n="component.rc.slot.entry.text" i18n.error="component.rc.slot.entry.text.required"
                 required="true" />
             </xed:bind>
+            <script type="text/javascript">
+              $(document).ready(function() {
+              var lang = $("html").attr("lang");
+              var locale = null;
+
+              if (lang == 'de') {
+              locale = "de-DE";
+              }
+              if
+              ($("input:checked").val() == "html") {
+              $("#text").summernote({ lang: locale });
+              }
+
+              $("input#format").click(function() {
+              if
+              ($("input:checked").val() ==
+              "html") {
+              $("#text").summernote({ lang: locale });
+              } else {
+              $("#text").destroy();
+              }
+              });
+              });
+            </script>
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
