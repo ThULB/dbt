@@ -44,22 +44,22 @@
             </xed:bind>
             <script type="text/javascript">
               $(document).ready(function() {
-              var lang = $("html").attr("lang");
-              var locale = null;
+              var lang = null;
 
-              if (lang == 'de') {
-              locale = "de-DE";
+              if ($("html").attr("lang") == 'de') {
+              lang = "de-DE";
               }
               if
-              ($("input:checked").val() == "html") {
-              $("#text").summernote({ lang: locale });
+              ($("input:checked").val()
+              == "html") {
+              $("#text").summernote({ lang: lang });
               }
 
               $("input#format").click(function() {
               if
               ($("input:checked").val() ==
               "html") {
-              $("#text").summernote({ lang: locale });
+              $("#text").summernote({ lang: lang });
               } else {
               $("#text").destroy();
               }
