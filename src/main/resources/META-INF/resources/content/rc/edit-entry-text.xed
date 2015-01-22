@@ -43,28 +43,27 @@
                 required="true" />
             </xed:bind>
             <script type="text/javascript">
-              $(document).ready(function() {
-              var lang = null;
-
-              if ($("html").attr("lang") == 'de') {
-              lang = "de-DE";
-              }
-              if
-              ($("input:checked").val()
-              == "html") {
-              $("#text").summernote({ lang: lang });
-              }
-
-              $("input#format").click(function() {
-              if
-              ($("input:checked").val() ==
-              "html") {
-              $("#text").summernote({ lang: lang });
-              } else {
-              $("#text").destroy();
-              }
-              });
-              });
+              <![CDATA[
+                $(document).ready(function() {
+                  var lang = null;
+    
+                  if ($("html").attr("lang") == 'de') {
+                    lang = "de-DE";
+                  }
+                  
+                  if ($("input:checked").val() == "html") {
+                    $("#text").summernote({ lang: lang });
+                  }
+    
+                  $("input#format").click(function() {
+                    if ($("input:checked").val() == "html") {
+                      $("#text").summernote({ lang: lang });
+                    } else {
+                      $("#text").destroy();
+                    }
+                  });
+                });
+              ]]>
             </script>
           </div>
           <div class="panel-footer clearfix">
