@@ -52,12 +52,18 @@
                   }
                   
                   if ($("input:checked").val() == "html") {
-                    $("#text").summernote({ lang: lang });
+                    $("#text").summernote( {
+                        lang: lang,
+                        height: 150
+                    });
                   }
     
                   $("input#format").click(function() {
                     if ($("input:checked").val() == "html") {
-                      $("#text").summernote({ lang: lang });
+                      $("#text").summernote( {
+                        lang: lang,
+                        height: 150
+                      });
                     } else {
                       $("#text").destroy();
                     }
