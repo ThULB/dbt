@@ -45,25 +45,21 @@
             <script type="text/javascript">
               <![CDATA[
                 $(document).ready(function() {
-                  var lang = null;
+                  var options = {
+                        height: 150
+                      };
     
                   if ($("html").attr("lang") == 'de') {
-                    lang = "de-DE";
+                    options.lang = "de-DE";
                   }
                   
                   if ($("input:checked").val() == "html") {
-                    $("#text").summernote( {
-                        lang: lang,
-                        height: 150
-                    });
+                    $("#text").summernote(options);
                   }
     
                   $("input#format").click(function() {
                     if ($("input:checked").val() == "html") {
-                      $("#text").summernote( {
-                        lang: lang,
-                        height: 150
-                      });
+                      $("#text").summernote(options);
                     } else {
                       $("#text").destroy();
                     }
