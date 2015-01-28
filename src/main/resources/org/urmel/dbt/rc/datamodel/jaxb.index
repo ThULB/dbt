@@ -12,6 +12,7 @@ entries.HeadlineEntry
 entries.MCRObjectEntry
 entries.TextEntry
 entries.WebLinkEntry
+entries.OPCRecordEntry
 
 SlotEntryTypes
 SlotEntryType

@@ -33,11 +33,14 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
+import org.urmel.dbt.opc.OPCConnector;
+import org.urmel.dbt.opc.datamodel.pica.Record;
 import org.urmel.dbt.rc.datamodel.Slot;
 import org.urmel.dbt.rc.datamodel.SlotEntry;
 import org.urmel.dbt.rc.datamodel.SlotEntryTypes;
 import org.urmel.dbt.rc.datamodel.entries.HeadlineEntry;
 import org.urmel.dbt.rc.datamodel.entries.MCRObjectEntry;
+import org.urmel.dbt.rc.datamodel.entries.OPCRecordEntry;
 import org.urmel.dbt.rc.datamodel.entries.TextEntry;
 import org.urmel.dbt.rc.datamodel.entries.WebLinkEntry;
 import org.urmel.dbt.rc.utils.SlotEntryTransformer;
@@ -108,6 +111,20 @@ public class TestSlotEntry extends MCRTestCase {
         return slotEntry;
     }
 
+    private SlotEntry<OPCRecordEntry> newOPCRecordEntry() throws Exception {
+        SlotEntry<OPCRecordEntry> slotEntry = new SlotEntry<OPCRecordEntry>();
+
+        OPCRecordEntry opcRecord = new OPCRecordEntry();
+
+        OPCConnector opc = new OPCConnector("http://opac.lbs-ilmenau.gbv.de", "1");
+        opcRecord.setRecord(opc.getRecord("785761829"));
+        opcRecord.setComment("This is a comment!");
+
+        slotEntry.setEntry(opcRecord);
+
+        return slotEntry;
+    }
+
     @Test
     public void testHeadlineEntry() throws IOException {
         SlotEntry<HeadlineEntry> slotEntry = newHeadLineEntry();
@@ -143,6 +160,14 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testWebLinkEntry() throws IOException {
         SlotEntry<WebLinkEntry> slotEntry = newWebLinkEntry();
+
+        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
+                System.out);
+    }
+
+    @Test
+    public void testOPCRecordEntry() throws Exception {
+        SlotEntry<OPCRecordEntry> slotEntry = newOPCRecordEntry();
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
                 System.out);
@@ -191,10 +216,10 @@ public class TestSlotEntry extends MCRTestCase {
                 iHT = i;
             }
         }
-        
+
         assertNotEquals(-1, iPT);
         assertNotEquals(-1, iHT);
-        
+
         assertTrue(iPT < iHT);
     }
 
