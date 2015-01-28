@@ -34,7 +34,6 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 import org.urmel.dbt.opc.OPCConnector;
-import org.urmel.dbt.opc.datamodel.pica.Record;
 import org.urmel.dbt.rc.datamodel.Slot;
 import org.urmel.dbt.rc.datamodel.SlotEntry;
 import org.urmel.dbt.rc.datamodel.SlotEntryTypes;
@@ -114,13 +113,14 @@ public class TestSlotEntry extends MCRTestCase {
     private SlotEntry<OPCRecordEntry> newOPCRecordEntry() throws Exception {
         SlotEntry<OPCRecordEntry> slotEntry = new SlotEntry<OPCRecordEntry>();
 
-        OPCRecordEntry opcRecord = new OPCRecordEntry();
+        OPCRecordEntry opcEntry = new OPCRecordEntry();
 
         OPCConnector opc = new OPCConnector("http://opac.lbs-ilmenau.gbv.de", "1");
-        opcRecord.setRecord(opc.getRecord("785761829"));
-        opcRecord.setComment("This is a comment!");
+        opcEntry.setEPN("1508496013");
+        opcEntry.setRecord(opc.getRecord("785761829"));
+        opcEntry.setComment("This is a comment!");
 
-        slotEntry.setEntry(opcRecord);
+        slotEntry.setEntry(opcEntry);
 
         return slotEntry;
     }
