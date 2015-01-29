@@ -113,19 +113,19 @@
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcRecord" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" />
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcRecord" mode="edit" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" mode="edit" />
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|opcRecord" mode="edit">
+  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="edit">
     <xsl:apply-templates select="." mode="editButtons" />
     <xsl:apply-templates select="." />
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|opcRecord" mode="editButtons">
+  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
         <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}">
@@ -197,7 +197,7 @@
   </xsl:template>
   
   <!-- OPCRecordEntry -->
-  <xsl:template match="opcRecord">
+  <xsl:template match="opcrecord">
     <div class="mcrobject">
       <xsl:apply-templates select="*" />
       <xsl:if test="string-length(.) &gt; 0">
