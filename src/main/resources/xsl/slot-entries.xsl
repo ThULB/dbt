@@ -113,19 +113,19 @@
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcRecord" />
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject" mode="edit" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcRecord" mode="edit" />
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject" mode="edit">
+  <xsl:template match="headline|text|webLink|mcrobject|opcRecord" mode="edit">
     <xsl:apply-templates select="." mode="editButtons" />
     <xsl:apply-templates select="." />
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject" mode="editButtons">
+  <xsl:template match="headline|text|webLink|mcrobject|opcRecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
         <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}">
@@ -188,6 +188,18 @@
     <div class="mcrobject">
       <!-- simpler, call mode title -->
       <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
+      <xsl:if test="string-length(.) &gt; 0">
+        <span class="comment">
+          <xsl:value-of select="." />
+        </span>
+      </xsl:if>
+    </div>
+  </xsl:template>
+  
+  <!-- OPCRecordEntry -->
+  <xsl:template match="opcRecord">
+    <div class="mcrobject">
+      <xsl:apply-templates select="*" />
       <xsl:if test="string-length(.) &gt; 0">
         <span class="comment">
           <xsl:value-of select="." />

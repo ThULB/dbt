@@ -36,7 +36,7 @@ import org.urmel.dbt.opc.datamodel.pica.Record;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@XmlRootElement(name = "opc")
+@XmlRootElement(name = "opcrecord")
 @XmlAccessorType(XmlAccessType.NONE)
 public class OPCRecordEntry implements Serializable {
 
@@ -91,5 +91,65 @@ public class OPCRecordEntry implements Serializable {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return "OPCRecordEntry";
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((comment == null) ? 0 : comment.hashCode());
+        result = prime * result + ((epn == null) ? 0 : epn.hashCode());
+        result = prime * result + ((record == null) ? 0 : record.hashCode());
+        return result;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof OPCRecordEntry)) {
+            return false;
+        }
+        OPCRecordEntry other = (OPCRecordEntry) obj;
+        if (comment == null) {
+            if (other.comment != null) {
+                return false;
+            }
+        } else if (!comment.equals(other.comment)) {
+            return false;
+        }
+        if (epn == null) {
+            if (other.epn != null) {
+                return false;
+            }
+        } else if (!epn.equals(other.epn)) {
+            return false;
+        }
+        if (record == null) {
+            if (other.record != null) {
+                return false;
+            }
+        } else if (!record.equals(other.record)) {
+            return false;
+        }
+        return true;
     }
 }

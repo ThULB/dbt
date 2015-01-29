@@ -69,6 +69,7 @@ public class SlotEntryType implements Serializable {
             final XmlRootElement rootElm = clazz.getAnnotation(XmlRootElement.class);
             return rootElm.name();
         } catch (final ClassNotFoundException e) {
+            e.printStackTrace();
             return null;
         }
     }

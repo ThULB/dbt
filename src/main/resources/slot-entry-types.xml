@@ -12,4 +12,7 @@
   <entry-type class="org.urmel.dbt.rc.datamodel.entries.WebLinkEntry">
     <i18n single="component.rc.slot.entry.webLink" multiple="component.rc.slot.entry.webLink.multiple" />
   </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.entries.OPCRecordEntry">
+    <i18n single="component.rc.slot.entry.opcrecord" multiple="component.rc.slot.entry.opcrecord.multiple" />
+  </entry-type>
 </entry-types>
