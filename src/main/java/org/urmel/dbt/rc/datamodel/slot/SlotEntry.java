@@ -33,7 +33,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.urmel.dbt.rc.datamodel.TypedDate;
-import org.urmel.dbt.rc.datamodel.TypedDate.Type;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
