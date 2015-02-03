@@ -1,5 +1,5 @@
-SlotList
-Slot
+#SlotList
+#Slot
 Status
 PendingStatus
 Period
@@ -7,12 +7,12 @@ RCCalendar
 Warning
 WarningDate
 
-SlotEntry
-entries.HeadlineEntry
-entries.MCRObjectEntry
-entries.TextEntry
-entries.WebLinkEntry
-entries.OPCRecordEntry
+#SlotEntry
+#entries.HeadlineEntry
+#entries.MCRObjectEntry
+#entries.TextEntry
+#entries.WebLinkEntry
+#entries.OPCRecordEntry
 
-SlotEntryTypes
-SlotEntryType
+#SlotEntryTypes
+#SlotEntryType

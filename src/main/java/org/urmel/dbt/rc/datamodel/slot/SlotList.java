@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.urmel.dbt.rc.datamodel;
+package org.urmel.dbt.rc.datamodel.slot;
 
 import java.io.Serializable;
 import java.util.ArrayList;

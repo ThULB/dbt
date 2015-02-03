@@ -20,7 +20,7 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package org.urmel.dbt.rc.datamodel.entries;
+package org.urmel.dbt.rc.datamodel.slot.entries;
 
 import java.io.Serializable;
 
@@ -66,7 +66,7 @@ public class OPCRecordEntry implements Serializable {
     /**
      * @return the record
      */
-    @XmlElement(name = "record")
+    @XmlElement(name = "record", namespace="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd")
     public Record getRecord() {
         return record;
     }

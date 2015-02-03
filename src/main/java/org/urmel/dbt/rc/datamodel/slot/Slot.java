@@ -1,7 +1,7 @@
 /*
  * $Id$
  */
-package org.urmel.dbt.rc.datamodel;
+package org.urmel.dbt.rc.datamodel.slot;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -24,6 +24,10 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.urmel.dbt.rc.datamodel.Lecturer;
+import org.urmel.dbt.rc.datamodel.PendingStatus;
+import org.urmel.dbt.rc.datamodel.Status;
+import org.urmel.dbt.rc.datamodel.WarningDate;
 
 /**
  * Represents an Reserve Collection slot.

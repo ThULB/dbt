@@ -20,7 +20,7 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package org.urmel.dbt.rc.datamodel;
+package org.urmel.dbt.rc.datamodel.slot;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,6 +31,9 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.urmel.dbt.rc.datamodel.TypedDate;
+import org.urmel.dbt.rc.datamodel.TypedDate.Type;
 
 /**
  * @author Ren\u00E9 Adler (eagle)

@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.urmel.dbt.rc.datamodel.slot.Slot;
+
 /**
  * Represents the {@link Slot#Slot()} status.
  * 

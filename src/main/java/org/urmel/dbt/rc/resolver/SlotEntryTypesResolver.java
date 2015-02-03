@@ -30,7 +30,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.jdom2.transform.JDOMSource;
-import org.urmel.dbt.rc.datamodel.SlotEntryTypes;
+import org.urmel.dbt.rc.datamodel.slot.SlotEntryTypes;
 import org.urmel.dbt.rc.utils.SlotEntryTypesTransformer;
 
 /**

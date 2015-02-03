@@ -18,7 +18,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.urmel.dbt.rc.datamodel.Slot;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
 
 /**
  * @author René Adler (eagle)

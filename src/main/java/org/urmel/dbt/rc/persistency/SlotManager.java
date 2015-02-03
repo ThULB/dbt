@@ -34,9 +34,9 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.urmel.dbt.rc.datamodel.Slot;
-import org.urmel.dbt.rc.datamodel.SlotList;
 import org.urmel.dbt.rc.datamodel.Status;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
+import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.utils.SlotWrapper;
 import org.xml.sax.SAXException;
 

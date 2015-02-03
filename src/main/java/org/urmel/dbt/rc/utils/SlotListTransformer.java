@@ -12,7 +12,7 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRJAXBContent;
-import org.urmel.dbt.rc.datamodel.SlotList;
+import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.xml.sax.SAXParseException;
 
 public abstract class SlotListTransformer {

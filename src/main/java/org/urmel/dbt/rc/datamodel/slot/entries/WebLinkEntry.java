@@ -1,5 +1,5 @@
 /*
- * $Id: HeadlineEntry.java 2129 2014-11-25 09:57:01Z adler $ 
+ * $Id: WebLinkEntry.java 2129 2014-11-25 09:57:01Z adler $ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
@@ -20,12 +20,13 @@
  * If not, write to the Free Software Foundation Inc.,
  * 59 Temple Place - Suite 330, Boston, MA  02111-1307 USA
  */
-package org.urmel.dbt.rc.datamodel.entries;
+package org.urmel.dbt.rc.datamodel.slot.entries;
 
 import java.io.Serializable;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
@@ -33,27 +34,44 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@XmlRootElement(name = "headline")
+@XmlRootElement(name = "webLink")
 @XmlAccessorType(XmlAccessType.NONE)
-public class HeadlineEntry implements Serializable {
+public class WebLinkEntry implements Serializable {
 
-    private static final long serialVersionUID = -1237153354592936902L;
+    private static final long serialVersionUID = 5327721430875614905L;
 
-    private String text;
+    private String url;
+
+    private String label;
 
     /**
-     * @return the text
+     * @return the url
      */
-    @XmlValue
-    public String getText() {
-        return text;
+    @XmlAttribute(name = "url", required = true)
+    public String getURL() {
+        return url;
     }
 
     /**
-     * @param text the text to set
+     * @param url the url to set
      */
-    public void setText(final String text) {
-        this.text = text;
+    public void setURL(final String url) {
+        this.url = url;
+    }
+
+    /**
+     * @return the label
+     */
+    @XmlValue
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * @param label the label to set
+     */
+    public void setLabel(final String label) {
+        this.label = label;
     }
 
     /* (non-Javadoc)
@@ -61,7 +79,7 @@ public class HeadlineEntry implements Serializable {
      */
     @Override
     public String toString() {
-        return "HeadlineEntry";
+        return "WebLinkEntry";
     }
 
     /* (non-Javadoc)
@@ -71,7 +89,8 @@ public class HeadlineEntry implements Serializable {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((text == null) ? 0 : text.hashCode());
+        result = prime * result + ((label == null) ? 0 : label.hashCode());
+        result = prime * result + ((url == null) ? 0 : url.hashCode());
         return result;
     }
 
@@ -86,17 +105,25 @@ public class HeadlineEntry implements Serializable {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof HeadlineEntry)) {
+        if (!(obj instanceof WebLinkEntry)) {
             return false;
         }
-        final HeadlineEntry other = (HeadlineEntry) obj;
-        if (text == null) {
-            if (other.text != null) {
+        final WebLinkEntry other = (WebLinkEntry) obj;
+        if (label == null) {
+            if (other.label != null) {
                 return false;
             }
-        } else if (!text.equals(other.text)) {
+        } else if (!label.equals(other.label)) {
+            return false;
+        }
+        if (url == null) {
+            if (other.url != null) {
+                return false;
+            }
+        } else if (!url.equals(other.url)) {
             return false;
         }
         return true;
     }
+
 }

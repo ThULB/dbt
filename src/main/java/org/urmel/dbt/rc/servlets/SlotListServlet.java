@@ -19,7 +19,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.frontend.MCRFrontendUtil;
-import org.urmel.dbt.rc.datamodel.Slot;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
 import org.urmel.dbt.rc.utils.SlotTransformer;

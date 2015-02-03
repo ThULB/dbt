@@ -16,7 +16,7 @@ import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.metadata.MCRObjectService;
-import org.urmel.dbt.rc.datamodel.Slot;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
 
 /**
  * @author René Adler (eagle)

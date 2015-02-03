@@ -37,6 +37,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.urmel.dbt.rc.datamodel.slot.Slot;
+
 /**
  * <p>
  * This object represents a warning within or outside a period to be send as

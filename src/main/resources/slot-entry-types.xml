@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entry-types>
-  <entry-type class="org.urmel.dbt.rc.datamodel.entries.HeadlineEntry">
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.HeadlineEntry">
     <i18n single="component.rc.slot.entry.headline" multiple="component.rc.slot.entry.headline.multiple" />
   </entry-type>
-  <entry-type class="org.urmel.dbt.rc.datamodel.entries.MCRObjectEntry">
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.MCRObjectEntry">
     <i18n single="component.rc.slot.entry.mcrobject" multiple="component.rc.slot.entry.mcrobject.multiple" />
   </entry-type>
-  <entry-type class="org.urmel.dbt.rc.datamodel.entries.TextEntry">
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.TextEntry">
     <i18n single="component.rc.slot.entry.text" multiple="component.rc.slot.entry.text.multiple" />
   </entry-type>
-  <entry-type class="org.urmel.dbt.rc.datamodel.entries.WebLinkEntry">
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.WebLinkEntry">
     <i18n single="component.rc.slot.entry.webLink" multiple="component.rc.slot.entry.webLink.multiple" />
   </entry-type>
-  <entry-type class="org.urmel.dbt.rc.datamodel.entries.OPCRecordEntry">
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry">
     <i18n single="component.rc.slot.entry.opcrecord" multiple="component.rc.slot.entry.opcrecord.multiple" />
   </entry-type>
 </entry-types>

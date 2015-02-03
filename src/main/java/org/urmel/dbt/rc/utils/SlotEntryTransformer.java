@@ -15,7 +15,7 @@ import org.jdom2.JDOMException;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRJAXBContent;
-import org.urmel.dbt.rc.datamodel.SlotEntry;
+import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.xml.sax.SAXParseException;
 
 public abstract class SlotEntryTransformer {
