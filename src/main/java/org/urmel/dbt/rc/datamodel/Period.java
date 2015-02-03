@@ -758,14 +758,14 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
             // check the later period -> add one year to _to
             final int yearInc = year + 1;
-            _to = PERIOD_FORMAT.parse(to + yearInc);
+            _to = DateUtils.getEndOfDay(PERIOD_FORMAT.parse(to + yearInc));
             if (isInsideInclusive(_from, _to, base)) {
                 result = end ? DateUtils.getEndOfDay(_to) : DateUtils.getStartOfDay(_from);
             } else {
                 // check the earlier period -> substract one year of _from
                 final int yearDec = year - 1;
-                _from = PERIOD_FORMAT.parse(from + yearDec);
-                _to = PERIOD_FORMAT.parse(to + year);
+                _from = DateUtils.getStartOfDay(PERIOD_FORMAT.parse(from + yearDec));
+                _to = DateUtils.getEndOfDay(PERIOD_FORMAT.parse(to + year));
                 if (isInsideInclusive(_from, _to, base)) {
                     result = end ? DateUtils.getEndOfDay(_to) : DateUtils.getStartOfDay(_from);
                 }
