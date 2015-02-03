@@ -181,4 +181,8 @@
     <connection>scm:svn:http://svn.thulb.uni-jena.de/repos/dbt/trunk</connection>
     <developerConnection>scm:svn:https://svn.thulb.uni-jena.de/repos/dbt/trunk</developerConnection>
   </scm>
+  <ciManagement>
+    <system>bamboo</system>
+    <url>https://bamboo.mycore.de/browse/DBT</url>
+  </ciManagement>
 </project>
