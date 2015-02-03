@@ -62,7 +62,9 @@
 
   <xsl:template match="entries" mode="toc">
     <div class="slot-toc">
-      <h2>Inhaltsverzeichnis</h2>
+      <h2>
+        <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
+      </h2>
       <ul>
         <xsl:for-each select="group/entry/headline">
           <li>
