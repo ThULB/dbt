@@ -42,7 +42,7 @@
                   </a>
                 </xsl:when>
                 <xsl:otherwise>
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=view">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
                     <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
                   </a>
                 </xsl:otherwise>
