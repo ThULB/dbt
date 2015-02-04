@@ -185,4 +185,8 @@
     <system>bamboo</system>
     <url>https://bamboo.mycore.de/browse/DBT</url>
   </ciManagement>
+  <issueManagement>
+    <url>https://mycore.atlassian.net/browse/DBT</url>
+    <system>JIRA</system>
+  </issueManagement>
 </project>
