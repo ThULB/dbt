@@ -28,11 +28,20 @@
       <xsl:call-template name="cleanString">
         <xsl:with-param name="str" select="pica:field[@tag = '036C']/pica:subfield[@code='a']" />
       </xsl:call-template>
-      <xsl:text> / </xsl:text>
+      <xsl:choose>
+        <xsl:when test="not(pica:field[@tag = '021A'])">
+          <xsl:text> ; </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text> / </xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
       <xsl:call-template name="cleanString">
         <xsl:with-param name="str" select="pica:field[@tag = '036C']/pica:subfield[@code='l']" />
       </xsl:call-template>
-      <xsl:text> / </xsl:text>
+      <xsl:if test="pica:field[@tag = '021A']">
+        <xsl:text> / </xsl:text>
+      </xsl:if>
     </xsl:if>
     <xsl:choose>
       <xsl:when test="pica:field[@tag = '021A'] and string-length(pica:field[@tag = '021A']/pica:subfield[@code='8']) = 0">
@@ -63,35 +72,79 @@
           </xsl:call-template>
         </xsl:if>
       </xsl:when>
+      <!-- article -->
+      <xsl:when test="pica:field[@tag = '021G']/pica:subfield[@code='a']">
+        <xsl:call-template name="cleanString">
+          <xsl:with-param name="str" select="pica:field[@tag = '021G']/pica:subfield[@code='a']" />
+        </xsl:call-template>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
 
   <xsl:template match="pica:record" mode="isbdInfo">
     <xsl:apply-templates select="." mode="isbdAuthor" />
-    <xsl:apply-templates select="." mode="isbdVolume" />
-    <xsl:apply-templates select="." mode="isbdPublisher" />
-    <xsl:apply-templates select="." mode="isbdYear" />
+    <xsl:apply-templates select="." mode="isbdIn" />
+    <xsl:if test="not(pica:field[@tag = '027D']/pica:subfield[@code='a'])">
+      <xsl:apply-templates select="." mode="isbdVolume" />
+      <xsl:apply-templates select="." mode="isbdPublisher" />
+      <xsl:apply-templates select="." mode="isbdYear" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="pica:record" mode="isbdAuthor">
     <xsl:choose>
-      <xsl:when test="pica:field[@tag = '028A']">
+      <xsl:when test="pica:field[@tag = '028A']/pica:subfield[@code='d']">
         <xsl:text>/ </xsl:text>
         <xsl:value-of select="pica:field[@tag = '028A']/pica:subfield[@code='d']" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="pica:field[@tag = '028A']/pica:subfield[@code='a']" />
       </xsl:when>
-      <xsl:when test="pica:field[@tag = '028C']">
+      <xsl:when test="pica:field[@tag = '028C']/pica:subfield[@code='d']">
         <xsl:text>/ </xsl:text>
         <xsl:value-of select="pica:field[@tag = '028C']/pica:subfield[@code='d']" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="pica:field[@tag = '028C']/pica:subfield[@code='a']" />
+      </xsl:when>
+      <xsl:when test="pica:field[@tag = '029A']/pica:subfield[@code='8']">
+        <xsl:text>/ </xsl:text>
+        <xsl:value-of select="pica:field[@tag = '029A']/pica:subfield[@code='8']" />
+      </xsl:when>
+      <xsl:when test="pica:field[@tag = '029F']/pica:subfield[@code='8']">
+        <xsl:text>/ </xsl:text>
+        <xsl:value-of select="pica:field[@tag = '029F']/pica:subfield[@code='8']" />
       </xsl:when>
       <xsl:when test="pica:field[@tag = '021A']/pica:subfield[@code='h']">
         <xsl:text>/ </xsl:text>
         <xsl:value-of select="pica:field[@tag = '021A']/pica:subfield[@code='h']" />
       </xsl:when>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="pica:record" mode="isbdIn">
+    <xsl:if test="pica:field[@tag = '027D']/pica:subfield[@code='a']">
+      <xsl:if test="pica:field[@tag = '028A'] or pica:field[@tag = '028C'] or pica:field[@tag = '021A']/pica:subfield[@code='h']">
+        <xsl:text>. - </xsl:text>
+      </xsl:if>
+      <xsl:text>In: </xsl:text>
+      <xsl:value-of select="pica:field[@tag = '027D']/pica:subfield[@code='a']" />
+      <xsl:if test="pica:field[@tag = '031A']/pica:subfield[@code='d']">
+        <xsl:text>, Bd. </xsl:text>
+        <xsl:value-of select="pica:field[@tag = '031A']/pica:subfield[@code='d']" />
+        <xsl:if test="pica:field[@tag = '031A']/pica:subfield[@code='j']">
+          <xsl:text> (</xsl:text>
+          <xsl:value-of select="pica:field[@tag = '031A']/pica:subfield[@code='j']" />
+          <xsl:text>)</xsl:text>
+        </xsl:if>
+        <xsl:if test="pica:field[@tag = '031A']/pica:subfield[@code='e']">
+          <xsl:text>, </xsl:text>
+          <xsl:value-of select="pica:field[@tag = '031A']/pica:subfield[@code='e']" />
+        </xsl:if>
+        <xsl:if test="pica:field[@tag = '031A']/pica:subfield[@code='h']">
+          <xsl:text>, S. </xsl:text>
+          <xsl:value-of select="pica:field[@tag = '031A']/pica:subfield[@code='h']" />
+        </xsl:if>
+      </xsl:if>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="pica:record" mode="isbdVolume">
