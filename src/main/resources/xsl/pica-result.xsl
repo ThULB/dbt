@@ -29,8 +29,29 @@
   <xsl:variable name="end" select="number($Page) * number($numPerPage)" />
 
   <xsl:template match="/pica:result">
-    <hgroup class="mb20">
-      <div class="col-xs-12 col-sm-6 col-md-6">
+    <xsl:variable name="needsPagination">
+      <xsl:choose>
+        <xsl:when test="count(./pica:record) &gt; number($numPerPage)">
+          <xsl:value-of select="'true'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'false'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="hCols">
+      <xsl:choose>
+        <xsl:when test="$needsPagination = 'true'">
+          <xsl:value-of select="6" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="12" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <hgroup>
+      <div class="col-xs-12 col-sm-{$hCols} col-md-{$hCols}">
         <h1>
           <xsl:value-of select="i18n:translate('component.opc.result.pageTitle')" />
         </h1>
@@ -38,12 +59,14 @@
           <xsl:value-of select="i18n:translate('component.opc.result.head.hits', concat($Page, ';', count(./pica:record)))" />
         </h2>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-6">
-        <xsl:call-template name="paginate">
-          <xsl:with-param name="extraStyles" select="'pull-right'" />
-          <xsl:with-param name="pages" select="ceiling(count(./pica:record) div number($numPerPage))" />
-        </xsl:call-template>
-      </div>
+      <xsl:if test="$needsPagination = 'true'">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+          <xsl:call-template name="paginate">
+            <xsl:with-param name="extraStyles" select="'pull-right'" />
+            <xsl:with-param name="pages" select="ceiling(count(./pica:record) div number($numPerPage))" />
+          </xsl:call-template>
+        </div>
+      </xsl:if>
     </hgroup>
     <section class="col-xs-12 col-sm-12 col-md-12">
       <xsl:for-each select="./pica:record">
