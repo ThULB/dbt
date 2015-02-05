@@ -17,7 +17,8 @@
   <xsl:variable name="opcURL" select="$catalogues/catalog[@identifier=$catalogId]/opc/text()" />
   <xsl:variable name="opcDB" select="$catalogues/catalog[@identifier=$catalogId]/opc/@db" />
 
-  <xsl:variable name="recordURLPrefix" select="concat($opcURL,'/DB=', $opcDB, '/CMD?ACT=SRCHA&amp;IKT=1016&amp;SRT=YOP&amp;TRM=ppn+')" />
+  <!-- set XMLPRS to Y to get PICA longtitle -->
+  <xsl:variable name="recordURLPrefix" select="concat($opcURL,'/DB=', $opcDB, '/XMLPRS=N/PPN?PPN=')" />
 
   <xsl:param name="RecordIdSource" select="$catalogues/catalog[@identifier=$catalogId]/ISIL[1]/text()" />
 
@@ -80,6 +81,12 @@
         </xsl:if>
       </xsl:for-each>
     </section>
+  </xsl:template>
+
+  <xsl:template match="pica:record" mode="cover">
+    <xsl:for-each select="pica:field[@tag='009P' and pica:subfield[@code='q' and contains(text(), 'cover')]][1]">
+      <img class="cover" src="{pica:subfield[@code='a']}" />
+    </xsl:for-each>
   </xsl:template>
 
 </xsl:stylesheet>
