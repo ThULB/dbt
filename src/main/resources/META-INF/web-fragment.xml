@@ -33,7 +33,7 @@
 
   <servlet>
     <servlet-name>OPCServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.rc.servlets.OPCServlet</servlet-class>
+    <servlet-class>org.urmel.dbt.opc.servlets.OPCServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>OPCServlet</servlet-name>
