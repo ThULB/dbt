@@ -29,25 +29,34 @@
   <xsl:variable name="end" select="number($Page) * number($numPerPage)" />
 
   <xsl:template match="/pica:result">
-    <div id="search-result">
-      <div class="head clearfix">
-        <span class="hits pull-left">
+    <hgroup class="mb20">
+      <div class="col-xs-12 col-sm-6 col-md-6">
+        <h1>
+          <xsl:value-of select="i18n:translate('component.opc.result.pageTitle')" />
+        </h1>
+        <h2>
           <xsl:value-of select="i18n:translate('component.opc.result.head.hits', concat($Page, ';', count(./pica:record)))" />
-        </span>
+        </h2>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6">
         <xsl:call-template name="paginate">
           <xsl:with-param name="extraStyles" select="'pull-right'" />
           <xsl:with-param name="pages" select="ceiling(count(./pica:record) div number($numPerPage))" />
         </xsl:call-template>
       </div>
+    </hgroup>
+    <section class="col-xs-12 col-sm-12 col-md-12">
       <xsl:for-each select="./pica:record">
         <xsl:if test="(position() &gt;= $start) and (position() &lt;= $end)">
           <xsl:variable name="fullRecord" select="document(concat('opc:url=', $opcURL, '&amp;db=', $opcDB, '&amp;record=', @ppn))" />
-          <div class="record">
-            <xsl:apply-templates select="$fullRecord" mode="isbd" />
-          </div>
+          <article class="search-result row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+              <xsl:apply-templates select="$fullRecord" mode="isbd" />
+            </div>
+          </article>
         </xsl:if>
       </xsl:for-each>
-    </div>
+    </section>
   </xsl:template>
 
 </xsl:stylesheet>

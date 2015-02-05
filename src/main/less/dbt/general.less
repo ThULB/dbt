@@ -26,3 +26,34 @@ body {
   width: 100%;
   #gradient > .vertical (rgba(255, 255, 255, 0) , rgba(255, 255, 255, 1) , 20% , 90%);
 }
+
+.mb20 {
+  margin-bottom: 20px;
+}
+
+hgroup {
+  border-bottom: 1px solid #ccc;
+  &:before , &:after {
+    content: " ";
+    display: table;
+  }
+
+  &:after {
+    clear: both;
+  }
+
+  h1 {
+    color: #2a3644;
+    font-weight: 500;
+    font-size: 1.625em / 1.15;
+    margin-top: 0;
+  }
+
+  h2 {
+    color: #2a3644;
+    font-size: 1.125em;
+    margin: 0;
+    padding-bottom: 10px;
+  }
+}
+

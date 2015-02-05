@@ -1,71 +1,66 @@
 .panel-result {
-    margin: 0;
-    border-width: 1px;
-    border-style: solid;
-    border-color: @table-border-color;
-    
-    .border-top-radius(@panel-border-radius - 1);
-    .border-bottom-radius(0);
-    
-    & ~ & {
-        border-top: 0;
-        .border-top-radius(0);
-    }
-    
-    .panel-heading {
-        padding: 5px 10px 0 10px;
-        
-        .panel-title {
-            font-size: ceil((@font-size-base * 0.975));
-            
-            a {
-                color: @brand-primary;
-            }
-        }
-    }
-    
-    .panel-body {
-        padding: 5px 10px 5px 10px;
-        font-size: ceil((@font-size-base * 0.875));
-    }
-    
-    .panel-footer {
-        padding: 5px 10px 5px 10px;
-    }
-    
-    &:nth-child(even) {
-        background: @dbt-results-backgroundColor;
-        
-        .panel-footer {
-            background: darken(@dbt-results-backgroundColor, 4%);
-        }
-    }
-    
-    &:nth-child(odd) {
-        background: darken(@dbt-results-backgroundColor, 2%);
-        
-        .panel-footer {
-            background: darken(@dbt-results-backgroundColor, 8%);
-        }
-    }
-    
-    &:last-child {
-        border-bottom: 1px solid @table-border-color;
-        margin-bottom: @line-height-computed;
-        
-        .border-bottom-radius(@panel-border-radius - 1);
-    }   
-}
+  margin: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-color: @table-border-color;
+  .border-top-radius (@panel-border-radius - 1);
+  .border-bottom-radius (0);
+  & ~ & {
+    border-top: 0;
+    .border-top-radius (0);
+  }
 
-/**
- * OPC Result
- */
-#search-result {
-  .record {
-    font-size: 0.9em;
-    margin: 10px 0;
-    > a {
-      font-size: 1.1em;
+  .panel-heading {
+    padding: 5px 10px 0 10px;
+    .panel-title {
+      font-size: ceil((@font-size-base * 0.975));
+      a {
+        color: @brand-primary;
+      }
     }
   }
+
+  .panel-body {
+    padding: 5px 10px 5px 10px;
+    font-size: ceil((@font-size-base * 0.875));
+  }
+
+  .panel-footer {
+    padding: 5px 10px 5px 10px;
+  }
+
+  &:nth-child(even) {
+    background: @dbt-results-backgroundColor;
+    .panel-footer {
+      background: darken(@dbt-results-backgroundColor, 4%);
+    }
+  }
+
+  &:nth-child(odd) {
+    background: darken(@dbt-results-backgroundColor, 2%);
+    .panel-footer {
+      background: darken(@dbt-results-backgroundColor, 8%);
+    }
+  }
+
+  &:last-child {
+    border-bottom: 1px solid @table-border-color;
+    margin-bottom: @line-height-computed;
+    .border-bottom-radius (@panel-border-radius - 1);
+  }
 }
+
+// OPC Search Result
+.search-result {
+  h3 {
+    font-weight: 500;
+    font-size: 1.0em;
+    margin-bottom: 0 ! important;
+    margin-top: 0 ! important;
+  }
+
+  p {
+    font-size: 0.9em;
+  }
+}
+
