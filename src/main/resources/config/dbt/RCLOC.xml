@@ -8,7 +8,7 @@
     <category ID="0027">
       <label text="ThULB Jena" xml:lang="de" />
       <label text="ThULB Jena" xml:lang="en" />
-      <label text="1" xml:lang="x-originId" />
+      <label text="2fd22120-5bc5-11e0-80e3-0800200c9a66" xml:lang="x-catId" />
       <url xlink:href="http://www.thulb.uni-jena.de/" />
       <category ID="0027.01">
         <label text="Testsemesterapparate" xml:lang="de" />
@@ -224,7 +224,7 @@
     <category ID="3400">
       <label text="UB Ilmenau" xml:lang="de" />
       <label text="UB Ilmenau" xml:lang="en" />
-      <label text="4" xml:lang="x-originId" />
+      <label text="74f272a0-5bb1-11e0-80e3-0800200c9a66" xml:lang="x-catId" />
       <url xlink:href="http://www.tu-ilmenau.de/ub" />
       <category ID="3400.01">
         <label text="Hauptbibliothek" xml:lang="de" />
@@ -240,7 +240,7 @@
     <category ID="0547">
       <label text="UB Erfurt" xml:lang="de" />
       <label text="UB Erfurt" xml:lang="en" />
-      <label text="2" xml:lang="x-originId" />
+      <label text="1956b184-1a52-4d18-924c-bc5974d1b423" xml:lang="x-catId" />
       <url xlink:href="http://www.uni-erfurt.de/bibliothek" />
       <category ID="0547.01">
         <label text="Universitäts- und Forschungsbibliothek Erfurt/Gotha" xml:lang="de" />
