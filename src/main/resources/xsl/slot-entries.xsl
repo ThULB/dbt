@@ -93,7 +93,7 @@
     </div>
   </xsl:template>
 
-  <xsl:variable name="entryTypes" select="document('slotTypes:entries')/entry-types" />
+  <xsl:variable name="entryTypes" select="document('slot:entryTypes')/entry-types" />
 
   <xsl:template name="addNewEntry">
     <xsl:param name="lastEntry" select="''" />
