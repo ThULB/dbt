@@ -23,13 +23,18 @@
 package org.urmel.dbt.rc.resolver;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
+import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
+import org.mycore.datamodel.classifications2.MCRCategory;
+import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntryTypes;
@@ -39,13 +44,14 @@ import org.urmel.dbt.rc.utils.SlotEntryTypesTransformer;
 import org.urmel.dbt.rc.utils.SlotTransformer;
 
 /**
- * This resolver can be used to resolve a {@link Slot}, {@link SlotEntry} and also {@link SlotEntryTypes}. 
+ * This resolver can be used to resolve a {@link Slot}, {@link SlotEntry}, {@link SlotEntryTypes} and also the set catalogId. 
  * <br />
  * <br />
  * Syntax:
  * <ul> 
- * <li><code>slot:slotId=slotId</code> to resolve an {@link Slot}</li>
- * <li><code>slot:slotId=slotId&entryId=entryId</code> to resolve an {@link SlotEntry}</li>
+ * <li><code>slot:slotId={slotId}</code> to resolve an {@link Slot}</li>
+ * <li><code>slot:slotId={slotId}&entryId={entryId}</code> to resolve an {@link SlotEntry}</li>
+ * <li><code>slot:slotId={slotId}&catalogId</code> to resolve an catalogId (from RCLOC classification)</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
  * </ul>
  * 
@@ -55,6 +61,8 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
 public class SlotResolver implements URIResolver {
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
+
+    private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     /* (non-Javadoc)
      * @see javax.xml.transform.URIResolver#resolve(java.lang.String, java.lang.String)
@@ -87,6 +95,21 @@ public class SlotResolver implements URIResolver {
                 final SlotEntry<?> entry = slot.getEntryById(entryId);
 
                 return new JDOMSource(SlotEntryTransformer.buildExportableXML(entry));
+            } else if (params.get("catalogId") != null) {
+                List<MCRCategory> categories = DAO.getParents(slot.getLocation());
+
+                String catalogId = null;
+                for (MCRCategory category : categories) {
+                    if (category.getLabel("x-catId") != null) {
+                        catalogId = category.getLabel("x-catId").getText();
+                        break;
+                    }
+                }
+
+                final Element root = new Element("catalog");
+                root.setText(catalogId);
+
+                return new JDOMSource(root);
             }
 
             return new JDOMSource(SlotTransformer.buildExportableXML(slot));
@@ -94,5 +117,4 @@ public class SlotResolver implements URIResolver {
             throw new TransformerException("Exception resolving " + href, ex);
         }
     }
-
 }
