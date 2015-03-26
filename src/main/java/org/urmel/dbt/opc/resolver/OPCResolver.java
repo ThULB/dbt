@@ -31,6 +31,7 @@ import javax.xml.transform.URIResolver;
 
 import org.jdom2.transform.JDOMSource;
 import org.urmel.dbt.opc.OPCConnector;
+import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.opc.utils.IKTListTransformer;
 import org.urmel.dbt.opc.utils.RecordTransformer;
 import org.urmel.dbt.opc.utils.ResultTransformer;
@@ -60,10 +61,15 @@ public class OPCResolver implements URIResolver {
                 }
             }
 
-            final String url = params.get("url");
-            final String db = params.get("db");
+            OPCConnector opc = null;
 
-            final OPCConnector opc = new OPCConnector(url, db);
+            if (params.get("catalogId") != null) {
+                opc = Catalogues.instance().getCatalogById(params.get("catalogId")).getOPCConnector();
+            } else if (params.get("isil") != null) {
+                opc = Catalogues.instance().getCatalogByISIL(params.get("isil")).getOPCConnector();
+            } else {
+                opc = new OPCConnector(params.get("url"), params.get("db"));
+            }
 
             if (params.containsKey("iktList")) {
                 return new JDOMSource(IKTListTransformer.buildExportableXML(opc.getIKTList()));
