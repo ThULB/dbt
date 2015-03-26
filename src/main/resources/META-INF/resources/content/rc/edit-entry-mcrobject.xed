@@ -3,7 +3,7 @@
 <MyCoReWebPage>
   <section i18n="component.rc.slot.entry.mcrobject" xml:lang="all">
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
-      <xed:source uri="slotEntry:slotId={$slotId}&amp;entryId={$entryId}" />
+      <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 

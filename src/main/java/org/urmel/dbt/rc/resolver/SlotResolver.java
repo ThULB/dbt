@@ -32,20 +32,27 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.transform.JDOMSource;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
+import org.urmel.dbt.rc.datamodel.slot.SlotEntryTypes;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotEntryTransformer;
+import org.urmel.dbt.rc.utils.SlotEntryTypesTransformer;
+import org.urmel.dbt.rc.utils.SlotTransformer;
 
 /**
- * This resolver can be used to resolve a {@link SlotEntry} for given 
- * <code>slotId</code> and <code>entryId</code>.
+ * This resolver can be used to resolve a {@link Slot}, {@link SlotEntry} and also {@link SlotEntryTypes}. 
  * <br />
  * <br />
- * Syntax: <code>slotEntry:slotId=slotId&entryId=entryId</code>
+ * Syntax:
+ * <ul> 
+ * <li><code>slot:slotId=slotId</code> to resolve an {@link Slot}</li>
+ * <li><code>slot:slotId=slotId&entryId=entryId</code> to resolve an {@link SlotEntry}</li>
+ * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
+ * </ul>
  * 
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-public class SlotEntryResolver implements URIResolver {
+public class SlotResolver implements URIResolver {
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 
@@ -68,13 +75,21 @@ public class SlotEntryResolver implements URIResolver {
                 }
             }
 
+            if (params.get("entryTypes") != null) {
+                return new JDOMSource(SlotEntryTypesTransformer.buildExportableXML(SlotEntryTypes.instance()));
+            }
+
             final String slotId = params.get("slotId");
             final String entryId = params.get("entryId");
 
             final Slot slot = SLOT_MGR.getSlotById(slotId);
-            final SlotEntry<?> entry = slot.getEntryById(entryId);
+            if (entryId != null) {
+                final SlotEntry<?> entry = slot.getEntryById(entryId);
 
-            return new JDOMSource(SlotEntryTransformer.buildExportableXML(entry));
+                return new JDOMSource(SlotEntryTransformer.buildExportableXML(entry));
+            }
+
+            return new JDOMSource(SlotTransformer.buildExportableXML(slot));
         } catch (final Exception ex) {
             throw new TransformerException("Exception resolving " + href, ex);
         }

@@ -22,6 +22,9 @@
  */
 package org.urmel.dbt.rc.servlets;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -59,29 +62,53 @@ public class SlotServlet extends MCRServlet {
             if (slotId != null) {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
+                final Element firstChild = xml.getChildren().size() > 0 ? xml.getChildren().get(0) : null;
 
-                if (slot.getEntries() == null) {
-                    LOGGER.debug("Add new entry: " + slotEntry);
-                    slot.addEntry(slotEntry);
+                if ("search".equals(firstChild.getName())) {
+                    final Map<String, String> params = new HashMap<String, String>();
+                    params.put("slotId", slotId);
+                    params.put("afterId", afterId);
+
+                    job.getResponse().sendRedirect(
+                            MCRFrontendUtil.getBaseURL() + "opc/DE-ILM1/search/" + firstChild.getTextTrim()
+                                    + toQueryString(params));
                 } else {
-                    final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
-                    if (se != null) {
-                        LOGGER.debug("Update entry: " + slotEntry);
-                        slot.setEntry(slotEntry);
+                    final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
+
+                    if (slot.getEntries() == null) {
+                        LOGGER.debug("Add new entry: " + slotEntry);
+                        slot.addEntry(slotEntry);
                     } else {
-                        LOGGER.info("Add new entry after \"" + afterId + "\".");
-                        slot.addEntry(slotEntry, afterId);
+                        final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
+                        if (se != null) {
+                            LOGGER.debug("Update entry: " + slotEntry);
+                            slot.setEntry(slotEntry);
+                        } else {
+                            LOGGER.info("Add new entry after \"" + afterId + "\".");
+                            slot.addEntry(slotEntry, afterId);
+                        }
                     }
+
+                    SLOT_MGR.saveOrUpdate(slot);
+
+                    job.getResponse().sendRedirect(
+                            MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
+                                    + slotEntry.getId());
                 }
-
-                SLOT_MGR.saveOrUpdate(slot);
-
-                job.getResponse()
-                        .sendRedirect(
-                                MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
-                                        + slotEntry.getId());
             }
         }
+    }
+
+    private String toQueryString(final Map<String, String> parameters) {
+        StringBuffer queryStr = new StringBuffer();
+        for (String name : parameters.keySet()) {
+            if (parameters.get(name) != null) {
+                if (queryStr.length() > 0) {
+                    queryStr.append("&");
+                }
+                queryStr.append(name + "=" + parameters.get(name));
+            }
+        }
+        return queryStr.toString().length() > 0 ? "?" + queryStr.toString() : queryStr.toString();
     }
 }
