@@ -98,7 +98,7 @@
                     <xsl:value-of
                     select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-opcrecord.xed?slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;ppn=', @ppn)" />
                   </xsl:attribute>
-                  <xsl:value-of select="i18n:translate('component.rc.slot.entry.button.add')" />
+                  <xsl:value-of select="i18n:translate('button.add')" />
                 </a>
               </div>
             </xsl:if>
