@@ -93,7 +93,11 @@
             </div>
             <xsl:if test="string-length($slotId) &gt; 0">
               <div class="col-xs-{12 - $colwidth} col-sm-{12 - $colwidth} col-md-{12 - $colwidth} text-center">
-                <a class="btn btn-default" href="#">
+                <a class="btn btn-default">
+                  <xsl:attribute name="href">
+                    <xsl:value-of
+                    select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-opcrecord.xed?slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;ppn=', @ppn)" />
+                  </xsl:attribute>
                   <xsl:value-of select="i18n:translate('component.rc.slot.entry.button.add')" />
                 </a>
               </div>

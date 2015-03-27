@@ -24,17 +24,17 @@
           </div>
           <div class="panel-body">
             <xed:choose>
-              <xed:when test="string-length($entryId) &gt; 0">
+              <xed:when test="$entryId and string-length($entryId) &gt; 0">
                 <!--             <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.opcrecord.comment" /> -->
               </xed:when>
-              <xed:otherwise>
+              <xed:when test="$catalogId and string-length($catalogId) &gt; 0">
                 <xed:bind xpath="search">
                   <dbt:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
                     uri="xslStyle:iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
                   <dbt:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term"
                     i18n.error="component.rc.slot.entry.opcrecord.term.required" required="true" />
                 </xed:bind>
-              </xed:otherwise>
+              </xed:when>
             </xed:choose>
           </div>
           <div class="panel-footer clearfix">
