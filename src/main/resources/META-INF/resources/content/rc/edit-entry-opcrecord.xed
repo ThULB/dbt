@@ -4,7 +4,7 @@
   <section i18n="component.rc.slot.entry.opcrecord" xml:lang="all">
 
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
-      <xed:source uri="slotEntry:slotId={$slotId}&amp;entryId={$entryId}" />
+      <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 
@@ -23,13 +23,32 @@
             </h3>
           </div>
           <div class="panel-body">
-            <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
+            <xed:choose>
+              <xed:when test="string-length($entryId) &gt; 0">
+                <!--             <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.opcrecord.comment" /> -->
+              </xed:when>
+              <xed:otherwise>
+                <xed:bind xpath="search">
+                  <dbt:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
+                    uri="xslStyle:iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+                  <dbt:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term"
+                    i18n.error="component.rc.slot.entry.opcrecord.term.required" required="true" />
+                </xed:bind>
+              </xed:otherwise>
+            </xed:choose>
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
               <dbt:template name="submitButton" i18n="button.debug" target="debug" />
               <span>&#160;</span>
-              <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+              <xed:choose>
+                <xed:when test="string-length($entryId) &gt; 0">
+                  <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+                </xed:when>
+                <xed:otherwise>
+                  <dbt:template name="submitButton" i18n="button.search" target="servlet" href="RCSlotServlet" />
+                </xed:otherwise>
+              </xed:choose>
               <span>&#160;</span>
               <dbt:template name="cancelButton" i18n="button.cancel" />
             </div>

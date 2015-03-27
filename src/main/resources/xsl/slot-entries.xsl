@@ -9,6 +9,7 @@
   <xsl:param name="Mode" select="'view'" />
 
   <xsl:variable name="slotId" select="/slot/@id" />
+  <xsl:variable name="catalogId" select="document(concat('slot:slotId=',$slotId,'&amp;catalogId'))" />
 
   <xsl:template name="groupEntries">
     <xsl:param name="entries" />
@@ -103,10 +104,15 @@
         <xsl:value-of select="i18n:translate('component.rc.slot.entry.add')" />
       </b>
       <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
-        <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{./@name}.xed?slotId={$slotId}&amp;afterId={$lastEntry}">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-', ./@name, '.xed?slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
+            <xsl:if test="@name = 'opcrecord'">
+              <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
+            </xsl:if>
+          </xsl:attribute>
           <xsl:value-of select="i18n:translate(i18n/@single)" />
         </a>
-
         <xsl:if test="position() != last()">
           <xsl:text> | </xsl:text>
         </xsl:if>

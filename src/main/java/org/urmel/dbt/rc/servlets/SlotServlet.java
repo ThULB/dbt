@@ -32,6 +32,8 @@ import org.jdom2.output.XMLOutputter;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.urmel.dbt.opc.datamodel.Catalog;
+import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.persistency.SlotManager;
@@ -65,13 +67,21 @@ public class SlotServlet extends MCRServlet {
                 final Element firstChild = xml.getChildren().size() > 0 ? xml.getChildren().get(0) : null;
 
                 if ("search".equals(firstChild.getName())) {
+                    final String catalogId = job.getRequest().getParameter("catalogId");
+                    final Catalog catalog = Catalogues.instance().getCatalogById(catalogId);
+
                     final Map<String, String> params = new HashMap<String, String>();
                     params.put("slotId", slotId);
                     params.put("afterId", afterId);
 
-                    job.getResponse().sendRedirect(
-                            MCRFrontendUtil.getBaseURL() + "opc/DE-ILM1/search/" + firstChild.getTextTrim()
-                                    + toQueryString(params));
+                    job.getResponse()
+                            .sendRedirect(
+                                    MCRFrontendUtil.getBaseURL()
+                                            + "opc/"
+                                            + (catalog != null && catalog.getISIL() != null
+                                                    && catalog.getISIL().size() > 0 ? catalog.getISIL().get(0)
+                                                    : catalogId) + "/search/" + firstChild.getTextTrim()
+                                            + toQueryString(params));
                 } else {
                     final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
 
