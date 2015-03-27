@@ -81,7 +81,7 @@ public class SlotServlet extends MCRServlet {
                                             + (catalog != null && catalog.getISIL() != null
                                                     && catalog.getISIL().size() > 0 ? catalog.getISIL().get(0)
                                                     : catalogId) + "/search/" + firstChild.getTextTrim()
-                                            + toQueryString(params));
+                                            + toQueryString(params, true));
                 } else {
                     final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
 
@@ -109,14 +109,14 @@ public class SlotServlet extends MCRServlet {
         }
     }
 
-    private String toQueryString(final Map<String, String> parameters) {
+    private String toQueryString(final Map<String, String> parameters, final boolean withXSLPrefix) {
         StringBuffer queryStr = new StringBuffer();
         for (String name : parameters.keySet()) {
             if (parameters.get(name) != null) {
                 if (queryStr.length() > 0) {
                     queryStr.append("&");
                 }
-                queryStr.append(name + "=" + parameters.get(name));
+                queryStr.append((withXSLPrefix ? "XSL." : "") + name + "=" + parameters.get(name));
             }
         }
         return queryStr.toString().length() > 0 ? "?" + queryStr.toString() : queryStr.toString();

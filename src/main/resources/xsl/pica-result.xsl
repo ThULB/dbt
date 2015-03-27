@@ -21,6 +21,10 @@
   <xsl:variable name="recordURLPrefix" select="concat($opcURL,'/DB=', $opcDB, '/XMLPRS=N/PPN?PPN=')" />
 
   <xsl:param name="RecordIdSource" select="$catalogues/catalog[@identifier=$catalogId]/ISIL[1]/text()" />
+  
+  <!-- RC slot params -->
+  <xsl:param name="slotId" />
+  <xsl:param name="afterId" />
 
   <!-- Pagination -->
   <xsl:param name="Page" select="1" />
@@ -70,13 +74,30 @@
       </xsl:if>
     </hgroup>
     <section class="col-xs-12 col-sm-12 col-md-12">
+      <xsl:variable name="colwidth">
+        <xsl:choose>
+          <xsl:when test="string-length($slotId) &gt; 0">
+            <xsl:value-of select="10" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="12" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
       <xsl:for-each select="./pica:record">
         <xsl:if test="(position() &gt;= $start) and (position() &lt;= $end)">
           <xsl:variable name="fullRecord" select="document(concat('opc:url=', $opcURL, '&amp;db=', $opcDB, '&amp;record=', @ppn))" />
           <article class="search-result row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="col-xs-{$colwidth} col-sm-{$colwidth} col-md-{$colwidth}">
               <xsl:apply-templates select="$fullRecord" mode="isbd" />
             </div>
+            <xsl:if test="string-length($slotId) &gt; 0">
+              <div class="col-xs-{12 - $colwidth} col-sm-{12 - $colwidth} col-md-{12 - $colwidth} text-center">
+                <a class="btn btn-default" href="#">
+                  <xsl:value-of select="i18n:translate('component.rc.slot.entry.button.add')" />
+                </a>
+              </div>
+            </xsl:if>
           </article>
         </xsl:if>
       </xsl:for-each>
