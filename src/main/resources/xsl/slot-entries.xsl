@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xalan i18n xlink"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
 >
 
   <!-- include custom templates for supported objecttypes -->
   <xsl:include href="xslInclude:objectTypes" />
 
+  <xsl:include href="pica-record-isbd.xsl" />
+
   <xsl:param name="Mode" select="'view'" />
 
   <xsl:variable name="slotId" select="/slot/@id" />
+  
+   <!-- OPC vars -->
+  <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />
   <xsl:variable name="catalogId" select="document(concat('slot:slotId=',$slotId,'&amp;catalogId'))" />
+  <xsl:variable name="opcURL" select="$catalogues/catalog[@identifier=$catalogId]/opc/text()" />
+  <xsl:variable name="opcDB" select="$catalogues/catalog[@identifier=$catalogId]/opc/@db" />
+
+  <!-- set XMLPRS to Y to get PICA longtitle -->
+  <xsl:variable name="recordURLPrefix" select="concat($opcURL,'/DB=', $opcDB, '/XMLPRS=N/PPN?PPN=')" />
+
+  <xsl:param name="RecordIdSource" select="$catalogues/catalog[@identifier=$catalogId]/ISIL[1]/text()" />
 
   <xsl:template name="groupEntries">
     <xsl:param name="entries" />
@@ -206,11 +218,11 @@
   
   <!-- OPCRecordEntry -->
   <xsl:template match="opcrecord">
-    <div class="mcrobject">
-      <xsl:apply-templates select="*" />
-      <xsl:if test="string-length(.) &gt; 0">
+    <div class="opcrecord">
+      <xsl:apply-templates select="pica:record" mode="isbd" />
+      <xsl:if test="string-length(comment) &gt; 0">
         <span class="comment">
-          <xsl:value-of select="." />
+          <xsl:value-of select="comment" />
         </span>
       </xsl:if>
     </div>

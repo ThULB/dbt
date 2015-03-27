@@ -5,6 +5,7 @@
 
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
       <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
+      <xed:source uri="xslStyle:pica-record-opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 
@@ -24,8 +25,11 @@
           </div>
           <div class="panel-body">
             <xed:choose>
+              <xed:when test="$ppn and string-length($ppn) &gt; 0">
+                <dbt:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
+              </xed:when>
               <xed:when test="$entryId and string-length($entryId) &gt; 0">
-                <!--             <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.opcrecord.comment" /> -->
+                <dbt:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
               </xed:when>
               <xed:when test="$catalogId and string-length($catalogId) &gt; 0">
                 <xed:bind xpath="search">

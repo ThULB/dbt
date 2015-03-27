@@ -86,7 +86,7 @@
       </xsl:variable>
       <xsl:for-each select="./pica:record">
         <xsl:if test="(position() &gt;= $start) and (position() &lt;= $end)">
-          <xsl:variable name="fullRecord" select="document(concat('opc:url=', $opcURL, '&amp;db=', $opcDB, '&amp;record=', @ppn))" />
+          <xsl:variable name="fullRecord" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', @ppn))" />
           <article class="search-result row">
             <div class="col-xs-{$colwidth} col-sm-{$colwidth} col-md-{$colwidth}">
               <xsl:apply-templates select="$fullRecord" mode="isbd" />
@@ -96,7 +96,7 @@
                 <a class="btn btn-default">
                   <xsl:attribute name="href">
                     <xsl:value-of
-                    select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-opcrecord.xed?slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;ppn=', @ppn)" />
+                    select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-opcrecord.xed?slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;catalogId=', $catalogId, '&amp;ppn=', @ppn)" />
                   </xsl:attribute>
                   <xsl:value-of select="i18n:translate('button.add')" />
                 </a>
