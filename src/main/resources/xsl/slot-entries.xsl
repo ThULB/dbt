@@ -140,9 +140,17 @@
     <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" mode="edit" />
   </xsl:template>
 
+  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="view">
+    <div class="entry-{name()}">
+      <xsl:apply-templates select="." />
+    </div>
+  </xsl:template>
+
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="edit">
-    <xsl:apply-templates select="." mode="editButtons" />
-    <xsl:apply-templates select="." />
+    <div class="entry-{name()}">
+      <xsl:apply-templates select="." mode="editButtons" />
+      <xsl:apply-templates select="." />
+    </div>
   </xsl:template>
 
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="editButtons">
@@ -205,27 +213,23 @@
   
   <!-- MCRObjectEntry -->
   <xsl:template match="mcrobject">
-    <div class="mcrobject">
       <!-- simpler, call mode title -->
-      <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
-      <xsl:if test="string-length(.) &gt; 0">
-        <span class="comment">
-          <xsl:value-of select="." />
-        </span>
-      </xsl:if>
-    </div>
+    <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
+    <xsl:if test="string-length(.) &gt; 0">
+      <span class="comment">
+        <xsl:value-of select="." />
+      </span>
+    </xsl:if>
   </xsl:template>
   
   <!-- OPCRecordEntry -->
   <xsl:template match="opcrecord">
-    <div class="opcrecord">
-      <xsl:apply-templates select="pica:record" mode="isbd" />
-      <xsl:if test="string-length(comment) &gt; 0">
-        <span class="comment">
-          <xsl:value-of select="comment" />
-        </span>
-      </xsl:if>
-    </div>
+    <xsl:apply-templates select="pica:record" mode="isbd" />
+    <xsl:if test="string-length(comment) &gt; 0">
+      <span class="comment">
+        <xsl:value-of select="comment" />
+      </span>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>

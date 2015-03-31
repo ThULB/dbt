@@ -46,7 +46,7 @@
               <dbt:template name="submitButton" i18n="button.debug" target="debug" />
               <span>&#160;</span>
               <xed:choose>
-                <xed:when test="string-length($entryId) &gt; 0">
+                <xed:when test="($entryId and string-length($entryId) &gt; 0) or ($ppn and string-length($ppn) &gt; 0)">
                   <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
                 </xed:when>
                 <xed:otherwise>
