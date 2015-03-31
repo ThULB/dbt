@@ -46,12 +46,15 @@
               <dbt:template name="submitButton" i18n="button.debug" target="debug" />
               <span>&#160;</span>
               <xed:choose>
-                <xed:when test="($entryId and string-length($entryId) &gt; 0) or ($ppn and string-length($ppn) &gt; 0)">
+                <xed:when test="$ppn and string-length($ppn) &gt; 0">
                   <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
                 </xed:when>
-                <xed:otherwise>
+                <xed:when test="$entryId and string-length($entryId) &gt; 0">
+                  <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+                </xed:when>
+                <xed:when test="$catalogId and string-length($catalogId) &gt; 0">
                   <dbt:template name="submitButton" i18n="button.search" target="servlet" href="RCSlotServlet" />
-                </xed:otherwise>
+                </xed:when>
               </xed:choose>
               <span>&#160;</span>
               <dbt:template name="cancelButton" i18n="button.cancel" />
