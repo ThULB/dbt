@@ -133,7 +133,7 @@
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" mode="view" />
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
