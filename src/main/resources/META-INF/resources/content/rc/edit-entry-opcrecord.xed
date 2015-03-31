@@ -5,7 +5,7 @@
 
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
       <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
-      <xed:source uri="xslStyle:pica-record-opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}" />
+      <xed:source uri="xslStyle:pica2opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 
