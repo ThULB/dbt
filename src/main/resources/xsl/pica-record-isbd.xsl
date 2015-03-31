@@ -23,6 +23,12 @@
     </p>
   </xsl:template>
 
+  <xsl:template match="pica:record" mode="isbdText">
+    <xsl:apply-templates select="." mode="isbdTitle" />
+    <xsl:text disable-output-escaping="yes">&#13;</xsl:text>
+    <xsl:apply-templates select="." mode="isbdInfo" />
+  </xsl:template>
+
   <xsl:template match="pica:record" mode="isbdTitle">
     <xsl:if test="pica:field[@tag = '036C']">
       <xsl:call-template name="cleanString">

@@ -26,6 +26,16 @@
           <div class="panel-body">
             <xed:choose>
               <xed:when test="$ppn and string-length($ppn) &gt; 0">
+                <div class="form-group ">
+                  <label class="col-md-3 control-label" for="isbd">
+                    <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
+                  </label>
+                  <div class="col-md-9 ">
+                    <pre class="no-style" id="isbd">
+                      <xed:output value="display" />
+                    </pre>
+                  </div>
+                </div>
                 <dbt:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
               </xed:when>
               <xed:when test="$entryId and string-length($entryId) &gt; 0">
