@@ -12,7 +12,7 @@
   <!-- ************************************************************ -->
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
 
-  <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" />
+  <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" encoding="UTF-8" />
   <xsl:strip-space elements="*" />
 
   <!-- ************************************************************ -->
