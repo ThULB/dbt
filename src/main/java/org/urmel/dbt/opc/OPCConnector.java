@@ -33,6 +33,8 @@ import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,6 +55,9 @@ import org.urmel.dbt.opc.datamodel.pica.Record;
 import org.urmel.dbt.opc.datamodel.pica.Result;
 import org.urmel.dbt.opc.utils.PicaCharDecoder;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+
 /**
  * The PICA OPC Connector based on hidden XML interface and the plain PICA+ output.
  * 
@@ -61,6 +66,12 @@ import org.urmel.dbt.opc.utils.PicaCharDecoder;
  */
 public class OPCConnector {
     private static final Logger LOGGER = Logger.getLogger(OPCConnector.class);
+
+    private static final Cache<Object, Object> CACHE;
+
+    static {
+        CACHE = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(10, TimeUnit.MINUTES).build();
+    }
 
     private String db;
 
@@ -276,14 +287,27 @@ public class OPCConnector {
             if (this.url == null) {
                 throw new Exception("No OPC URL was set.");
             }
-            LOGGER.info("Search OPAC for \"" + trm + "\" with IKT \"" + ikt + "\"...");
 
-            final URL pageURL = new URL(this.url + "/XML=1.0/DB=" + this.db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
-                    + "&SRT=YOP&SHRTST=" + this.maxread + "&TRM=" + URLEncoder.encode(trm, "UTF-8"));
+            final URL url = this.url;
+            final String db = this.db;
+            final int maxread = this.maxread;
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            Result result = (Result) CACHE.get(generateCacheKey(trm + "_" + ikt), new Callable<Result>() {
+                @Override
+                public Result call() throws Exception {
+                    LOGGER.info("Search OPAC for \"" + trm + "\" with IKT \"" + ikt + "\"...");
 
-            return parseResult(xml);
+                    final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
+                            + "&SRT=YOP&SHRTST=" + maxread + "&TRM=" + URLEncoder.encode(trm, "UTF-8"));
+
+                    final Document xml = new SAXBuilder().build(pageURL);
+
+                    return parseResult(xml);
+
+                }
+            });
+
+            return result;
         } catch (final Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -316,14 +340,25 @@ public class OPCConnector {
             if (this.url == null) {
                 throw new Exception("No OPC URL was set.");
             }
-            LOGGER.info("Enumarates member publications of PPN " + PPN);
 
-            final URL pageURL = new URL(this.url + "/XML=1.0/DB=" + this.db + "/FAM?PPN=" + PPN + "&SHRTST="
-                    + this.maxread);
+            final URL url = this.url;
+            final String db = this.db;
+            final int maxread = this.maxread;
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            Result result = (Result) CACHE.get(generateCacheKey("fam_" + PPN), new Callable<Result>() {
+                @Override
+                public Result call() throws Exception {
+                    LOGGER.info("Enumarates member publications of PPN " + PPN);
 
-            return parseResult(xml);
+                    final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/FAM?PPN=" + PPN + "&SHRTST=" + maxread);
+
+                    final Document xml = new SAXBuilder().build(pageURL);
+
+                    return parseResult(xml);
+                }
+            });
+
+            return result;
         } catch (final Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
@@ -403,8 +438,15 @@ public class OPCConnector {
 
     private String getPicaPlus(final String PPN) throws Exception {
         try {
-            final String ppraw = readWebPageFromUrl(this.url + "/DB=" + this.db + "/PPN?PLAIN=ON&PPN=" + PPN);
+            final URL url = this.url;
+            final String db = this.db;
 
+            String ppraw = (String) CACHE.get(generateCacheKey("raw_" + PPN), new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    return readWebPageFromUrl(url + "/DB=" + db + "/PPN?PLAIN=ON&PPN=" + PPN);
+                }
+            });
             return ppraw;
         } catch (final Exception e) {
             e.printStackTrace();
@@ -669,6 +711,10 @@ public class OPCConnector {
         }
 
         return content;
+    }
+
+    private String generateCacheKey(final String key) {
+        return this.url.getHost() + "_" + this.db + "-" + key;
     }
 
     static {

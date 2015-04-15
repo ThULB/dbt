@@ -1,5 +1,5 @@
 /*
- * $Id: OPCServlet.java 2171 2015-01-14 07:02:16Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***
@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -80,14 +79,8 @@ public class OPCServlet extends MCRServlet {
             if (catalog != null) {
                 final OPCConnector opc = catalog.getOPCConnector();
                 if ("search".equals(action)) {
-                    Result result = (Result) MCRSessionMgr.getCurrentSession().get(
-                            catalog.getIdentifier() + "_" + request);
-
-                    if (result == null) {
-                        result = opc.search(request);
-                        result.setCatalog(catalog);
-                        MCRSessionMgr.getCurrentSession().put(catalog.getIdentifier() + "_" + request, result);
-                    }
+                    final Result result = opc.search(request);
+                    result.setCatalog(catalog);
 
                     getLayoutService().doLayout(req, res,
                             new MCRJDOMContent(ResultTransformer.buildExportableXML(result)));
