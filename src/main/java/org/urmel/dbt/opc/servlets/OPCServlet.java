@@ -27,6 +27,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -79,8 +80,13 @@ public class OPCServlet extends MCRServlet {
             if (catalog != null) {
                 final OPCConnector opc = catalog.getOPCConnector();
                 if ("search".equals(action)) {
-                    final Result result = opc.search(request);
-                    result.setCatalog(catalog);
+                    Result result = (Result) MCRSessionMgr.getCurrentSession().get(catalog + "_" + request);
+
+                    if (result == null) {
+                        result = opc.search(request);
+                        result.setCatalog(catalog);
+                        MCRSessionMgr.getCurrentSession().put(catalog + "_" + request, result);
+                    }
 
                     getLayoutService().doLayout(req, res,
                             new MCRJDOMContent(ResultTransformer.buildExportableXML(result)));
