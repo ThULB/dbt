@@ -242,32 +242,42 @@ public class OPCConnector {
             if (this.url == null) {
                 throw new Exception("No OPC URL was set.");
             }
-            final URL pageURL = new URL(this.url + "/XML=1.0/MENUIKTLIST");
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final URL url = this.url;
 
-            final IKTList ikts = new IKTList();
+            IKTList iktList = (IKTList) CACHE.get(generateCacheKey("iktlist"), new Callable<IKTList>() {
+                @Override
+                public IKTList call() throws Exception {
+                    final URL pageURL = new URL(url + "/XML=1.0/MENUIKTLIST");
 
-            final List<Element> entries = xml.getRootElement().getChildren("IKTLIST");
-            if (entries.size() == 1) {
-                final Element entry = (Element) entries.get(0);
+                    final Document xml = new SAXBuilder().build(pageURL);
 
-                final List<Element> children = entry.getChildren();
+                    final IKTList ikts = new IKTList();
 
-                for (int k = 0; k < children.size(); ++k) {
-                    final Element child = (Element) children.get(k);
+                    final List<Element> entries = xml.getRootElement().getChildren("IKTLIST");
+                    if (entries.size() == 1) {
+                        final Element entry = (Element) entries.get(0);
 
-                    final IKT ikt = new IKT();
+                        final List<Element> children = entry.getChildren();
 
-                    ikt.setKey(child.getText());
-                    ikt.setMnemonic(child.getAttributeValue("mnemonic"));
-                    ikt.setDescription(child.getAttributeValue("description"));
+                        for (int k = 0; k < children.size(); ++k) {
+                            final Element child = (Element) children.get(k);
 
-                    ikts.addIKT(ikt);
+                            final IKT ikt = new IKT();
+
+                            ikt.setKey(child.getText());
+                            ikt.setMnemonic(child.getAttributeValue("mnemonic"));
+                            ikt.setDescription(child.getAttributeValue("description"));
+
+                            ikts.addIKT(ikt);
+                        }
+                    }
+
+                    return ikts;
                 }
-            }
+            });
 
-            return ikts;
+            return iktList;
         } catch (final Exception e) {
             throw new Exception(e.getMessage());
         }
