@@ -80,12 +80,13 @@ public class OPCServlet extends MCRServlet {
             if (catalog != null) {
                 final OPCConnector opc = catalog.getOPCConnector();
                 if ("search".equals(action)) {
-                    Result result = (Result) MCRSessionMgr.getCurrentSession().get(catalog + "_" + request);
+                    Result result = (Result) MCRSessionMgr.getCurrentSession().get(
+                            catalog.getIdentifier() + "_" + request);
 
                     if (result == null) {
                         result = opc.search(request);
                         result.setCatalog(catalog);
-                        MCRSessionMgr.getCurrentSession().put(catalog + "_" + request, result);
+                        MCRSessionMgr.getCurrentSession().put(catalog.getIdentifier() + "_" + request, result);
                     }
 
                     getLayoutService().doLayout(req, res,
