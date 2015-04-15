@@ -30,8 +30,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.URIResolver;
 
 import org.jdom2.transform.JDOMSource;
+import org.mycore.common.MCRSessionMgr;
 import org.urmel.dbt.opc.OPCConnector;
 import org.urmel.dbt.opc.datamodel.Catalogues;
+import org.urmel.dbt.opc.datamodel.pica.Record;
+import org.urmel.dbt.opc.datamodel.pica.Result;
 import org.urmel.dbt.opc.utils.IKTListTransformer;
 import org.urmel.dbt.opc.utils.RecordTransformer;
 import org.urmel.dbt.opc.utils.ResultTransformer;
@@ -74,19 +77,41 @@ public class OPCResolver implements URIResolver {
             if (params.containsKey("iktList")) {
                 return new JDOMSource(IKTListTransformer.buildExportableXML(opc.getIKTList()));
             } else if (params.containsKey("search")) {
+                Result result = null;
                 if (params.containsKey("ikt")) {
-                    return new JDOMSource(ResultTransformer.buildExportableXML(opc.search(params.get("search"),
-                            params.get("ikt"))));
+                    result = (Result) MCRSessionMgr.getCurrentSession().get(
+                            params.get("search") + "_" + params.get("ikt"));
+                    if (result == null) {
+                        result = opc.search(params.get("search"), params.get("ikt"));
+                    }
                 } else {
-                    return new JDOMSource(ResultTransformer.buildExportableXML(opc.search(params.get("search"))));
+                    result = (Result) MCRSessionMgr.getCurrentSession().get(params.get("search"));
+                    if (result == null) {
+                        result = opc.search(params.get("search"));
+                    }
                 }
+
+                return new JDOMSource(ResultTransformer.buildExportableXML(result));
             } else if (params.containsKey("family")) {
-                return new JDOMSource(ResultTransformer.buildExportableXML(opc.family(params.get("family"))));
+                Result result = (Result) MCRSessionMgr.getCurrentSession().get(params.get("family"));
+                if (result == null) {
+                    result = opc.search(params.get("family"));
+                }
+                return new JDOMSource(ResultTransformer.buildExportableXML(result));
             } else if (params.containsKey("record")) {
-                return new JDOMSource(RecordTransformer.buildExportableXML(opc.getRecord(params.get("record"))));
+                Record record = (Record) MCRSessionMgr.getCurrentSession().get(params.get("record"));
+                if (record == null) {
+                    record = opc.getRecord(params.get("record"));
+                    MCRSessionMgr.getCurrentSession().put(params.get("record"), record);
+                }
+                return new JDOMSource(RecordTransformer.buildExportableXML(record));
             } else if (params.containsKey("barcode")) {
-                return new JDOMSource(RecordTransformer.buildExportableXML(opc.getRecord(opc.getPPNFromBarcode(params
-                        .get("barcode")))));
+                Record record = (Record) MCRSessionMgr.getCurrentSession().get(params.get("barcode"));
+                if (record == null) {
+                    record = opc.getRecord(opc.getPPNFromBarcode(params.get("barcode")));
+                    MCRSessionMgr.getCurrentSession().put(params.get("barcode"), record);
+                }
+                return new JDOMSource(RecordTransformer.buildExportableXML(record));
             } else {
                 throw new TransformerException("Couldn't resolve " + href);
             }
