@@ -313,7 +313,6 @@ public class OPCConnector {
                     final Document xml = new SAXBuilder().build(pageURL);
 
                     return parseResult(xml);
-
                 }
             });
 
@@ -439,7 +438,7 @@ public class OPCConnector {
                 return result;
             }
 
-            return null;
+            return new Result(this);
         } catch (final Exception e) {
             e.printStackTrace();
             throw new Exception(e.getMessage());
