@@ -11,32 +11,31 @@
   </xsl:template>
 
   <xsl:template match="slot">
-    <field name="slotId">
-      <xsl:value-of select="@id" />
-    </field>
-    <field name="status">
-      <xsl:value-of select="@status" />
-    </field>
-    <field name="onlineOnly">
-      <xsl:value-of select="@onlineOnly" />
-    </field>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="@*|*" mode="slot" />
   </xsl:template>
 
-  <xsl:template match="title">
+  <xsl:template match="@id" mode="slot">
+    <field name="slotId">
+      <xsl:value-of select="." />
+    </field>
+  </xsl:template>
+
+  <xsl:template match="title" mode="slot">
     <field name="{name()}">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
 
-  <xsl:template match="lecturer">
+  <xsl:template match="lecturer" mode="slot">
     <field name="{name()}">
       <xsl:value-of select="@name" />
     </field>
   </xsl:template>
 
-  <xsl:template match="entries">
-    <!-- ignore entries -->
+  <xsl:template match="slot/@*[not(contains('id', name()))]" mode="slot">
+    <field name="{name()}">
+      <xsl:value-of select="." />
+    </field>
   </xsl:template>
 
 </xsl:stylesheet>
