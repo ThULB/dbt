@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+
+  <xed:template id="include">
+    <xed:choose>
+      <xed:when test="$ppn and string-length($ppn) &gt; 0">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-opcrecord-includes.xed" ref="edit" />
+      </xed:when>
+      <xed:when test="$entryId and string-length($entryId) &gt; 0">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-opcrecord-includes.xed" ref="edit" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-opcrecord-includes.xed" ref="search" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="search">
+    <xed:bind xpath="search">
+      <dbt:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
+        uri="xslStyle:iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+      <dbt:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term" i18n.error="component.rc.slot.entry.opcrecord.term.required"
+        required="true" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="edit">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="isbd">
+        <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
+      </label>
+      <div class="col-md-9 entry-opcrecord">
+        <h3>
+          <xed:output value="opcrecord/display/h3" />
+        </h3>
+        <p>
+          <xed:output value="opcrecord/display/p" />
+        </p>
+      </div>
+    </div>
+    <dbt:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
+  </xed:template>
+
+  <xed:template id="submit">
+    <xed:choose>
+      <xed:when test="$ppn and string-length($ppn) &gt; 0">
+        <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+      </xed:when>
+      <xed:when test="$entryId and string-length($entryId) &gt; 0">
+        <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+      </xed:when>
+      <xed:otherwise>
+        <dbt:template name="submitButton" i18n="button.search" target="servlet" href="RCSlotServlet" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+</xed:template>
