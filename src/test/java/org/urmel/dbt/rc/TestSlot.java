@@ -321,7 +321,7 @@ public class TestSlot extends MCRHibTestCase {
 
         assertEquals("Neue Überschrift", ((HeadlineEntry) slot.getEntryById(slotEntry.getId()).getEntry()).getText());
     }
-    
+
     @Test
     public void testSlotEntryRemove() {
         Slot slot = new Slot("3400.01.01.0001");
@@ -335,11 +335,13 @@ public class TestSlot extends MCRHibTestCase {
         slotEntry.setEntry(headline);
 
         slot.addEntry(slotEntry);
-        
+
         SlotEntry<?> entry = slot.getEntryById(slotEntry.getId());
 
         assertEquals(slotEntry.getId(), entry.getId());
+        assertEquals(1, slot.getEntries().size());
 
         assertTrue("slot entry remove", slot.removeEntry(slotEntry));
+        assertEquals(0, slot.getEntries().size());
     }
 }
