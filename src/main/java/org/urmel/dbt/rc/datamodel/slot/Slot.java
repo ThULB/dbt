@@ -437,6 +437,14 @@ public class Slot implements Serializable {
     }
 
     /**
+     * @param entry the entry to remove
+     * @return <code>true</code> (as specified by {@link Collection#remove})
+     */
+    public boolean removeEntry(final SlotEntry<?> entry) {
+        return entries.remove(entry);
+    }
+
+    /**
      * Returns a copy of current {@link Slot} without entries.
      * 
      * @return a basic copy of current slot

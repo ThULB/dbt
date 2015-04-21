@@ -22,9 +22,7 @@
  */
 package org.urmel.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -322,5 +320,26 @@ public class TestSlot extends MCRHibTestCase {
         slot.setEntry(entry);
 
         assertEquals("Neue Überschrift", ((HeadlineEntry) slot.getEntryById(slotEntry.getId()).getEntry()).getText());
+    }
+    
+    @Test
+    public void testSlotEntryRemove() {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setStatus(Status.ACTIVE);
+
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+
+        HeadlineEntry headline = new HeadlineEntry();
+        headline.setText("Überschrift");
+
+        slotEntry.setEntry(headline);
+
+        slot.addEntry(slotEntry);
+        
+        SlotEntry<?> entry = slot.getEntryById(slotEntry.getId());
+
+        assertEquals(slotEntry.getId(), entry.getId());
+
+        assertTrue("slot entry remove", slot.removeEntry(slotEntry));
     }
 }
