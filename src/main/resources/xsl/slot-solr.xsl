@@ -5,6 +5,8 @@
 
   <xsl:import href="xslImport:solr-document:slot-solr.xsl" />
 
+  <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
+
   <xsl:template match="mycoreobject[contains(@ID,'_rcslot_')]">
     <xsl:apply-imports />
     <xsl:apply-templates select="metadata/def.rcSlotContainer/rcSlotContainer/slot" />
@@ -18,22 +20,32 @@
     <field name="slotId">
       <xsl:value-of select="." />
     </field>
+
+    <field name="category">
+      <xsl:variable name="rcLocId">
+        <xsl:value-of select="substring(., 1, string-length(.) - 5)" />
+      </xsl:variable>
+      <xsl:value-of select="concat('RCLOC:', $rcLocId)" />
+    </field>
   </xsl:template>
 
   <xsl:template match="title" mode="slot">
-    <field name="{name()}">
+    <field name="search_result_link_text">
+      <xsl:value-of select="." />
+    </field>
+    <field name="slot.{name()}">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
 
   <xsl:template match="lecturer" mode="slot">
-    <field name="{name()}">
+    <field name="slot.{name()}">
       <xsl:value-of select="@name" />
     </field>
   </xsl:template>
 
   <xsl:template match="slot/@*[not(contains('id', name()))]" mode="slot">
-    <field name="{name()}">
+    <field name="slot.{name()}">
       <xsl:value-of select="." />
     </field>
   </xsl:template>
