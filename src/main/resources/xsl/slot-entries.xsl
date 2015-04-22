@@ -159,6 +159,9 @@
         <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}">
           <span class="glyphicon glyphicon-pencil" />
         </a>
+        <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}&amp;action=delete">
+          <span class="glyphicon glyphicon-trash" />
+        </a>
       </div>
     </div>
   </xsl:template>

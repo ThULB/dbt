@@ -56,8 +56,9 @@ public class SlotServlet extends MCRServlet {
         if (doc != null) {
             final Element xml = doc.getRootElement();
 
-            LOGGER.info(new XMLOutputter().outputString(xml));
+            LOGGER.debug(new XMLOutputter().outputString(xml));
 
+            final String action = job.getRequest().getParameter("action");
             final String slotId = job.getRequest().getParameter("slotId");
             final String afterId = job.getRequest().getParameter("afterId");
 
@@ -85,7 +86,13 @@ public class SlotServlet extends MCRServlet {
                 } else {
                     final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
 
-                    if (slot.getEntries() == null) {
+                    if ("delete".equals(action)) {
+                        final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
+                        if (se != null) {
+                            LOGGER.info("Remove entry: " + se);
+                            slot.removeEntry(se);
+                        }
+                    } else if (slot.getEntries() == null) {
                         LOGGER.debug("Add new entry: " + slotEntry);
                         slot.addEntry(slotEntry);
                     } else {
