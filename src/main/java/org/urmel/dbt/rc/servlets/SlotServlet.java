@@ -86,15 +86,17 @@ public class SlotServlet extends MCRServlet {
                 } else {
                     final SlotEntry<?> slotEntry = SlotEntryTransformer.buildSlotEntry(xml);
 
+                    boolean success = true;
+
                     if ("delete".equals(action)) {
                         final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                         if (se != null) {
-                            LOGGER.info("Remove entry: " + se);
-                            slot.removeEntry(se);
+                            LOGGER.debug("Remove entry: " + se);
+                            success = slot.removeEntry(se);
                         }
                     } else if (slot.getEntries() == null) {
                         LOGGER.debug("Add new entry: " + slotEntry);
-                        slot.addEntry(slotEntry);
+                        success = slot.addEntry(slotEntry);
                     } else {
                         final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                         if (se != null) {
@@ -102,11 +104,12 @@ public class SlotServlet extends MCRServlet {
                             slot.setEntry(slotEntry);
                         } else {
                             LOGGER.info("Add new entry after \"" + afterId + "\".");
-                            slot.addEntry(slotEntry, afterId);
+                            success = slot.addEntry(slotEntry, afterId);
                         }
                     }
 
-                    SLOT_MGR.saveOrUpdate(slot);
+                    if (success)
+                        SLOT_MGR.saveOrUpdate(slot);
 
                     job.getResponse().sendRedirect(
                             MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
