@@ -79,9 +79,23 @@ public class TestOPCResolver extends MCRTestCase {
     }
 
     @Test
+    public void testRecordBasicCopy() throws IOException {
+        Element xml = MCRURIResolver.instance().resolve(
+                "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=785761829&copys=false");
+        new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
+    }
+
+    @Test
     public void testBarcode() throws IOException {
         Element xml = MCRURIResolver.instance().resolve(
                 "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&barcode=ILM1$005419999");
+        new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
+    }
+
+    @Test
+    public void testBarcodeBasicCopy() throws IOException {
+        Element xml = MCRURIResolver.instance().resolve(
+                "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&barcode=ILM1$005419999&copys=false");
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 

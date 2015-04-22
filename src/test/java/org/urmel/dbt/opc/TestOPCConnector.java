@@ -89,6 +89,15 @@ public class TestOPCConnector extends MCRTestCase {
     }
 
     @Test
+    public void testRecordBasicCopy() throws Exception {
+        OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
+        Record record = opc.getRecord("785761829");
+
+        new XMLOutputter(Format.getPrettyFormat()).output(RecordTransformer.buildExportableXML(record.getBasicCopy()),
+                System.out);
+    }
+
+    @Test
     public void testCatalogues() throws Exception {
         Catalogues catalogues = Catalogues.instance();
 
@@ -105,7 +114,7 @@ public class TestOPCConnector extends MCRTestCase {
         result.setCatalog(catalog);
 
         Document doc = ResultTransformer.buildExportableXML(result);
-        
+
         assertNotNull(doc.getRootElement().getAttribute("catalogId"));
     }
 }

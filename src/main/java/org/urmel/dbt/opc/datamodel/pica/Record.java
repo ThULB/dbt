@@ -23,7 +23,11 @@
 package org.urmel.dbt.opc.datamodel.pica;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
@@ -133,6 +137,31 @@ public class Record {
         }
 
         return res;
+    }
+
+    /**
+     * Returns a copy of current {@link Record} without local fields.
+     * 
+     * @return a basic copy of current record
+     */
+    public Record getBasicCopy() {
+        final Record copy = new Record();
+
+        copy.connection = this.connection;
+        copy.ppn = this.ppn;
+
+        // local title fields
+        final List<String> excluded_fields = Arrays.asList("101@", "201@", "201B", "201D", "201F", "201U", "203@",
+                "208@", "209A", "209B", "209C", "209F", "209G", "209J", "209O", "209R", "209W", "220B", "220C", "220D",
+                "231@", "231A", "231B", "231C", "231D", "237A", "237B", "244Z", "245P", "245Z");
+
+        for (PPField field : this.fields) {
+            if (!excluded_fields.contains(field.getTag())) {
+                copy.fields.add(field);
+            }
+        }
+
+        return copy;
     }
 
     public void load() {

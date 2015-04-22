@@ -32,6 +32,7 @@ import javax.xml.transform.URIResolver;
 import org.jdom2.transform.JDOMSource;
 import org.urmel.dbt.opc.OPCConnector;
 import org.urmel.dbt.opc.datamodel.Catalogues;
+import org.urmel.dbt.opc.datamodel.pica.Record;
 import org.urmel.dbt.opc.utils.IKTListTransformer;
 import org.urmel.dbt.opc.utils.RecordTransformer;
 import org.urmel.dbt.opc.utils.ResultTransformer;
@@ -83,10 +84,13 @@ public class OPCResolver implements URIResolver {
             } else if (params.containsKey("family")) {
                 return new JDOMSource(ResultTransformer.buildExportableXML(opc.family(params.get("family"))));
             } else if (params.containsKey("record")) {
-                return new JDOMSource(RecordTransformer.buildExportableXML(opc.getRecord(params.get("record"))));
+                final Record record = opc.getRecord(params.get("record"));
+                return new JDOMSource(RecordTransformer.buildExportableXML(!params.containsKey("copys")
+                        || Boolean.parseBoolean(params.get("copys")) ? record : record.getBasicCopy()));
             } else if (params.containsKey("barcode")) {
-                return new JDOMSource(RecordTransformer.buildExportableXML(opc.getRecord(opc.getPPNFromBarcode(params
-                        .get("barcode")))));
+                final Record record = opc.getRecord(opc.getPPNFromBarcode(params.get("barcode")));
+                return new JDOMSource(RecordTransformer.buildExportableXML(!params.containsKey("copys")
+                        || Boolean.parseBoolean(params.get("copys")) ? record : record.getBasicCopy()));
             } else {
                 throw new TransformerException("Couldn't resolve " + href);
             }
