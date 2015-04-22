@@ -147,7 +147,7 @@
   </xsl:template>
 
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="edit">
-    <div class="entry-{name()}">
+    <div class="entry-{name()}" id="{../@id}">
       <xsl:apply-templates select="." mode="editButtons" />
       <xsl:apply-templates select="." />
     </div>
@@ -171,7 +171,7 @@
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
     <a name="{../@id}" />
-    <h2 id="{../@id}">
+    <h2>
       <xsl:value-of select="." />
     </h2>
   </xsl:template>
@@ -180,19 +180,19 @@
   <xsl:template match="text">
     <xsl:choose>
       <xsl:when test="@format = 'plain'">
-        <pre id="{../@id}" class="pre-scrollable">
+        <pre class="pre-scrollable">
           <code>
             <xsl:value-of select="." />
           </code>
         </pre>
       </xsl:when>
       <xsl:when test="@format = 'preformatted'">
-        <pre id="{../@id}" class="pre-scrollable">
+        <pre class="pre-scrollable">
           <xsl:value-of select="." />
         </pre>
       </xsl:when>
       <xsl:otherwise>
-        <p id="{../@id}">
+        <p>
           <xsl:value-of select="." disable-output-escaping="yes" />
         </p>
       </xsl:otherwise>
@@ -201,7 +201,7 @@
   
   <!-- WebLinkEntry -->
   <xsl:template match="webLink">
-    <a id="{../@id}" href="{@url}">
+    <a href="{@url}">
       <xsl:choose>
         <xsl:when test="string-length(.) &gt; 0">
           <xsl:value-of select="." />
