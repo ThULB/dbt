@@ -103,7 +103,7 @@ public class SlotServlet extends MCRServlet {
                             LOGGER.debug("Update entry: " + slotEntry);
                             slot.setEntry(slotEntry);
                         } else {
-                            LOGGER.info("Add new entry after \"" + afterId + "\".");
+                            LOGGER.debug("Add new entry after \"" + afterId + "\".");
                             success = slot.addEntry(slotEntry, afterId);
                         }
                     }
