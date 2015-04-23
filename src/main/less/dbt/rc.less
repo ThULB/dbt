@@ -44,7 +44,10 @@
         right: 0;
         top: 0;
         z-index: 10;
-        opacity: 0.25;
+        @media (min-width: 768px) {
+          opacity: 0.25;
+        }
+
         > a {
           color: #777;
           > span {
@@ -65,7 +68,9 @@
     .entry-webLink , .entry-text , .entry-headline , .entry-opcrecord , .entry-mcrobject {
       margin-bottom: 10px;
       &:hover .entry-buttons > .btn-group {
-        opacity: 1;
+        @media (min-width: 768px) {
+          opacity: 1;
+        }
       }
     }
 
