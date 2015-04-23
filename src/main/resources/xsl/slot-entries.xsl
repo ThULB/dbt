@@ -118,7 +118,6 @@
       <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
         <a>
           <xsl:attribute name="href">
-<!--             <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-', ./@name, '.xed?slotId=', $slotId, '&amp;afterId=', $lastEntry)" /> -->
             <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=', ./@name,'&amp;slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
             <xsl:if test="@name = 'opcrecord'">
               <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
@@ -149,6 +148,7 @@
 
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="edit">
     <div class="entry-{name()}" id="{../@id}">
+      <xsl:apply-templates select="." mode="extraAttributes" />
       <xsl:apply-templates select="." mode="editButtons" />
       <xsl:apply-templates select="." />
     </div>
@@ -157,17 +157,24 @@
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}">
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" alt="{i18n:translate('component.rc.slot.entry.edit')}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
+        >
           <span class="glyphicon glyphicon-pencil" />
         </a>
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete">
-          <span class="glyphicon glyphicon-trash" />
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" alt="{i18n:translate('component.rc.slot.entry.delete')}"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
+        >
+          <span class="glyphicon glyphicon-trash text-danger" />
         </a>
       </div>
     </div>
   </xsl:template>
   
   <!-- ==== ENTRIES ======================================================= -->
+
+  <xsl:template match="*" mode="extraAttributes">
+  </xsl:template>
   
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
@@ -198,6 +205,12 @@
         </p>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="text" mode="extraAttributes">
+    <xsl:attribute name="format">
+      <xsl:value-of select="@format" />
+    </xsl:attribute>
   </xsl:template>
   
   <!-- WebLinkEntry -->

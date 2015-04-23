@@ -35,9 +35,6 @@
     .entry-buttons {
       position: relative;
       > .btn-group {
-        background-color: #fff;
-        border: 1px solid #e1e1e8;
-        border-radius: 0 4px;
         color: #777;
         cursor: pointer;
         display: block;
@@ -47,6 +44,7 @@
         right: 0;
         top: 0;
         z-index: 10;
+        opacity: 0.25;
         > a {
           color: #777;
           > span {
@@ -56,8 +54,19 @@
       }
     }
 
+    .entry-text[format="plain"] , .entry-text[format="preformated"] {
+      .entry-buttons > .btn-group {
+        background-color: #fff;
+        border: 1px solid #e1e1e8;
+        border-radius: 0 4px;
+      }
+    }
+
     .entry-webLink , .entry-text , .entry-headline , .entry-opcrecord , .entry-mcrobject {
       margin-bottom: 10px;
+      &:hover .entry-buttons > .btn-group {
+        opacity: 1;
+      }
     }
 
     .entry-opcrecord {
