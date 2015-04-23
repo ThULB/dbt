@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+
+  <!-- ====[ General Templates ]=========== -->
+  <xed:template id="source">
+    <xed:choose>
+      <xed:when test="$entry = 'opcrecord'">
+        <xed:source uri="xslStyle:slot-entry-preprocessor:slot:slotId={$slotId}&amp;entryId={$entryId}" />
+        <xed:source uri="xslStyle:pica2opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}&amp;copys=false" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="title">
+    <xed:choose>
+      <xed:when test="string-length($action) &gt; 0 and $action = 'delete'">
+        <xed:output i18n="component.rc.slot.entry.{$entry}.title.delete" />
+      </xed:when>
+      <xed:when test="string-length($entryId) &gt; 0">
+        <xed:output i18n="component.rc.slot.entry.{$entry}.title.edit" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:output i18n="component.rc.slot.entry.{$entry}.title.add" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="editor">
+    <xed:choose>
+      <xed:when test="string-length($action) &gt; 0 and $action = 'delete'">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="{$entry}-delete" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="{$entry}-edit" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="buttons">
+    <dbt:template name="submitButton" i18n="button.debug" target="debug" />
+    <span>&#160;</span>
+    <xed:choose>
+      <xed:when test="string-length($action) &gt; 0 and $action = 'delete'">
+        <dbt:template name="submitButton" class="btn-danger" i18n="button.delete" target="servlet" href="RCSlotServlet" />
+      </xed:when>
+      <xed:when test="contains('opcrecord', $entry)">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="{$entry}-submit" />
+      </xed:when>
+      <xed:otherwise>
+        <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+      </xed:otherwise>
+    </xed:choose>
+    <span>&#160;</span>
+    <dbt:template name="cancelButton" i18n="button.cancel" />
+  </xed:template>
+  
+  <!-- ====[ Entry Templates ]============= -->
+
+  <xed:template id="headline-edit">
+    <dbt:template name="textInput" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline" i18n.error="component.rc.slot.entry.headline.required"
+      required="true" />
+  </xed:template>
+
+  <xed:template id="headline-delete">
+    <dbt:template name="static" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline" />
+  </xed:template>
+
+  <xed:template id="mcrobject-edit">
+    <xed:bind xpath="mcrobject">
+      <dbt:template name="textInput" xpath="@id" id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
+        required="true" />
+      <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="mcrobject-delete">
+    <xed:bind xpath="mcrobject">
+      <dbt:template name="static" xpath="@id" id="id" i18n="component.rc.slot.entry.mcrobject" />
+      <dbt:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="opcrecord-submit">
+    <xed:choose>
+      <xed:when test="$ppn and string-length($ppn) &gt; 0">
+        <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+      </xed:when>
+      <xed:when test="$entryId and string-length($entryId) &gt; 0">
+        <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotServlet" />
+      </xed:when>
+      <xed:otherwise>
+        <dbt:template name="submitButton" i18n="button.search" target="servlet" href="RCSlotServlet" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="opcrecord-edit">
+    <xed:choose>
+      <xed:when test="$ppn and string-length($ppn) &gt; 0">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="edit-opcrecord" />
+      </xed:when>
+      <xed:when test="$entryId and string-length($entryId) &gt; 0">
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="edit-opcrecord" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="search-opcrecord" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="opcrecord-delete">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="isbd">
+        <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
+      </label>
+      <div class="col-md-9 entry-opcrecord">
+        <h3>
+          <xed:output value="opcrecord/display/h3" />
+        </h3>
+        <p>
+          <xed:output value="opcrecord/display/p" />
+        </p>
+      </div>
+    </div>
+    <dbt:template name="static" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
+  </xed:template>
+
+  <xed:template id="edit-opcrecord">
+    <div class="form-group">
+      <label class="col-md-3 control-label" for="isbd">
+        <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
+      </label>
+      <div class="col-md-9 entry-opcrecord">
+        <h3>
+          <xed:output value="opcrecord/display/h3" />
+        </h3>
+        <p>
+          <xed:output value="opcrecord/display/p" />
+        </p>
+      </div>
+    </div>
+    <dbt:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
+  </xed:template>
+
+  <xed:template id="search-opcrecord">
+    <xed:bind xpath="search">
+      <dbt:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
+        uri="xslStyle:iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+      <dbt:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term" i18n.error="component.rc.slot.entry.opcrecord.term.required"
+        required="true" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="text-edit">
+    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote.css" />
+    <script src="../../dbt/assets/summernote/summernote.min.js" />
+
+    <xed:if test="$CurrentLang = 'de'">
+      <script src="../../dbt/assets/summernote/lang/summernote-de-DE.js" />
+    </xed:if>
+
+    <xed:bind xpath="text">
+      <xed:bind xpath="@format" default="plain" />
+      <dbt:template name="radioList" xpath="@format" default="plain" inline="true" id="format" i18n="component.rc.slot.entry.text.format">
+        <option value="plain" i18n="component.rc.slot.entry.text.format.plain" />
+        <option value="preformatted" i18n="component.rc.slot.entry.text.format.preformatted" />
+        <option value="html" i18n="component.rc.slot.entry.text.format.html" />
+      </dbt:template>
+      <dbt:template name="textArea" xpath="." id="text" i18n="component.rc.slot.entry.text" i18n.error="component.rc.slot.entry.text.required"
+        required="true" />
+    </xed:bind>
+    <script type="text/javascript">
+    <![CDATA[
+                $(document).ready(function() {
+                  var options = {
+                        height: 150
+                      };
+    
+                  if ($("html").attr("lang") == 'de') {
+                    options.lang = "de-DE";
+                  }
+                  
+                  if ($("input:checked").val() == "html") {
+                    $("#text").summernote(options);
+                  }
+    
+                  $("input#format").click(function() {
+                    if ($("input:checked").val() == "html") {
+                      $("#text").summernote(options);
+                    } else {
+                      $("#text").destroy();
+                    }
+                  });
+                });
+    ]]>
+    </script>
+  </xed:template>
+
+  <xed:template id="text-delete">
+    <xed:bind xpath="text">
+      <dbt:template name="static" xpath="." id="text" i18n="component.rc.slot.entry.text" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="webLink-edit">
+    <xed:bind xpath="webLink">
+      <dbt:template name="textInput" xpath="@url" default="http://" id="url" i18n="component.rc.slot.entry.webLink.url" i18n.error="component.rc.slot.entry.webLink.url.required"
+        required="true" />
+      <dbt:template name="textArea" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description" i18n.error="component.rc.slot.entry.webLink.description.required"
+        required="true" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="webLink-delete">
+    <xed:bind xpath="webLink">
+      <dbt:template name="static" xpath="@url" id="url" i18n="component.rc.slot.entry.webLink.url" />
+      <dbt:template name="static" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description" />
+    </xed:bind>
+  </xed:template>
+
+</xed:template>

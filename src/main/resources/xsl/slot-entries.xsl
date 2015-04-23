@@ -118,7 +118,8 @@
       <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
         <a>
           <xsl:attribute name="href">
-            <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-', ./@name, '.xed?slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
+<!--             <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-', ./@name, '.xed?slotId=', $slotId, '&amp;afterId=', $lastEntry)" /> -->
+            <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=', ./@name,'&amp;slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
             <xsl:if test="@name = 'opcrecord'">
               <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
             </xsl:if>
@@ -156,10 +157,10 @@
   <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
-        <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}">
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}">
           <span class="glyphicon glyphicon-pencil" />
         </a>
-        <a href="{$WebApplicationBaseURL}content/rc/edit-entry-{local-name(.)}.xed?slotId={$slotId}&amp;entryId={../@id}&amp;action=delete">
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete">
           <span class="glyphicon glyphicon-trash" />
         </a>
       </div>

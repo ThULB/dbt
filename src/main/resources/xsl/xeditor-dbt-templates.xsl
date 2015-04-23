@@ -31,7 +31,7 @@
   </xsl:variable>
   <xsl:variable name="label-width" select="$grid-width - $input-width" />
 
-  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput|checkboxList|radioList|textArea', @name)]">
+  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput|checkboxList|radioList|textArea|static', @name)]">
     <xed:bind xpath="{@xpath}">
       <xsl:if test="string-length(@default) &gt; 0">
         <xsl:attribute name="default">
@@ -44,7 +44,7 @@
         </xsl:attribute>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="contains('textInput|passwordInput|selectInput', @name) and (@inline = 'true')">
+        <xsl:when test="contains('textInput|passwordInput|selectInput|static', @name) and (@inline = 'true')">
           <xsl:apply-templates select="." mode="inline" />
         </xsl:when>
         <xsl:otherwise>
@@ -68,7 +68,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <button type="submit" xed:target="{$target}" class="btn btn-primary btn-{$input-size}">
+    <button type="submit" xed:target="{$target}" class="btn btn-primary btn-{$input-size} {@class}">
       <xsl:if test="string-length(@href) &gt; 0">
         <xsl:attribute name="xed:href">
           <xsl:value-of select="@href" />
@@ -86,7 +86,7 @@
 
   <!-- MODE=formline -->
 
-  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput|checkboxList|radioList|textArea', @name)]" mode="formline">
+  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput|checkboxList|radioList|textArea|static', @name)]" mode="formline">
     <xsl:if test="string-length(@i18n) &gt; 0">
       <xsl:apply-templates select="." mode="label" />
     </xsl:if>
@@ -110,7 +110,7 @@
 
   <!-- MODE=inline -->
 
-  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput', @name)]" mode="inline">
+  <xsl:template match="dbt:template[contains('textInput|passwordInput|selectInput|static', @name)]" mode="inline">
     <xsl:variable name="colsize">
       <xsl:choose>
         <xsl:when test="string-length(@colsize) &gt; 0">
@@ -204,6 +204,19 @@
       </xsl:attribute>
       <xsl:apply-templates select="." mode="inputOptions" />
     </textarea>
+  </xsl:template>
+
+  <xsl:template match="dbt:template[@name='static']" mode="widget">
+    <p class="form-control-static {@class}" id="{@id}">
+      <xsl:choose>
+        <xsl:when test="@xpath">
+          <xed:output value="." />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="." />
+        </xsl:otherwise>
+      </xsl:choose>
+    </p>
   </xsl:template>
 
   <xsl:template match="dbt:template[@name='checkboxList' or @name='radioList']" mode="widget">

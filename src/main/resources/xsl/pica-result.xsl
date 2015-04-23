@@ -96,7 +96,7 @@
                 <a class="btn btn-default">
                   <xsl:attribute name="href">
                     <xsl:value-of
-                    select="concat($WebApplicationBaseURL, 'content/rc/edit-entry-opcrecord.xed?slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;catalogId=', $catalogId, '&amp;ppn=', @ppn)" />
+                    select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=opcrecord&amp;slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;catalogId=', $catalogId, '&amp;ppn=', @ppn)" />
                   </xsl:attribute>
                   <xsl:value-of select="i18n:translate('button.add')" />
                 </a>
