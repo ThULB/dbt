@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver mcrxsl i18n"
+  xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n"
 >
   <!-- ************************************************************ -->
   <!-- *                  additional stylesheets                  * -->
@@ -464,7 +464,9 @@
           <xsl:value-of select="$pageLastModified" />
         </xsl:otherwise>
       </xsl:choose>
+      <xsl:text> - </xsl:text>
     </xsl:if>
+    <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
   </xsl:template>
 
 </xsl:stylesheet>
