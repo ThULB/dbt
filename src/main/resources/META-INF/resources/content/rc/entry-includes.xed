@@ -40,8 +40,8 @@
   </xed:template>
 
   <xed:template id="buttons">
-    <dbt:template name="submitButton" i18n="button.debug" target="debug" />
-    <span>&#160;</span>
+<!--     <dbt:template name="submitButton" i18n="button.debug" target="debug" /> -->
+<!--     <span>&#160;</span> -->
     <xed:choose>
       <xed:when test="string-length($action) &gt; 0 and $action = 'delete'">
         <dbt:template name="submitButton" class="btn-danger" i18n="button.delete" target="servlet" href="RCSlotServlet" />
