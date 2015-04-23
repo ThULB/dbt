@@ -174,27 +174,27 @@
     </xed:bind>
     <script type="text/javascript">
     <![CDATA[
-                $(document).ready(function() {
-                  var options = {
-                        height: 150
-                      };
+      $(document).ready(function() {
+        var options = {
+          height: 150
+        };
     
-                  if ($("html").attr("lang") == 'de') {
-                    options.lang = "de-DE";
-                  }
+        if ($("html").attr("lang") == 'de') {
+          options.lang = "de-DE";
+        }
                   
-                  if ($("input:checked").val() == "html") {
-                    $("#text").summernote(options);
-                  }
+        if ($("input:checked").val() == "html") {
+          $("#text").summernote(options);
+        }
     
-                  $("input#format").click(function() {
-                    if ($("input:checked").val() == "html") {
-                      $("#text").summernote(options);
-                    } else {
-                      $("#text").destroy();
-                    }
-                  });
-                });
+        $("input#format").click(function() {
+          if ($("input:checked").val() == "html") {
+            $("#text").summernote(options);
+          } else {
+            $("#text").destroy();
+          }
+        });
+      });
     ]]>
     </script>
   </xed:template>
