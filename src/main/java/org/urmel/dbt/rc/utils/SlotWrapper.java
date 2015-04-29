@@ -9,7 +9,6 @@ import java.util.List;
 import org.jdom2.Content;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaXML;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -17,15 +16,13 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
+import org.urmel.dbt.rc.persistency.SlotManager;
 
 /**
  * @author René Adler (eagle)
  *
  */
 public class SlotWrapper {
-
-    private static final String DEFAULT_PROJECT_ID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID.rcslot",
-            "dbt");
 
     private static final String SLOT_OBJECT_TYPE = "rcslot";
 
@@ -43,7 +40,7 @@ public class SlotWrapper {
      * @return the base id
      */
     public static String getMCRObjectBaseID() {
-        return getMCRObjectBaseID(DEFAULT_PROJECT_ID);
+        return getMCRObjectBaseID(SlotManager.DEFAULT_PROJECT_ID);
     }
 
     public static String getMCRObjectBaseID(String projectID) {
@@ -51,7 +48,7 @@ public class SlotWrapper {
     }
 
     public static MCRObject wrapSlot(Slot slot) {
-        return wrapSlot(slot, DEFAULT_PROJECT_ID);
+        return wrapSlot(slot, SlotManager.DEFAULT_PROJECT_ID);
     }
 
     public static MCRObject wrapSlot(Slot slot, String projectID) {

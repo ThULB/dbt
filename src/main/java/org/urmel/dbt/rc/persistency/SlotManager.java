@@ -28,6 +28,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -46,8 +47,11 @@ import org.xml.sax.SAXException;
  */
 public final class SlotManager {
 
+    public static final String DEFAULT_PROJECT_ID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID.rcslot",
+            "dbt");
+
     private static final Logger LOGGER = Logger.getLogger(SlotManager.class);
-    
+
     private static SlotManager singelton;
 
     private SlotList slotList;
