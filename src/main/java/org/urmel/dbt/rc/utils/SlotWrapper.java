@@ -66,7 +66,8 @@ public class SlotWrapper {
     }
 
     public MCRObjectID setID(String projectID, int ID) {
-        MCRObjectID objID = MCRObjectID.getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
+        MCRObjectID objID = ID == 0 ? MCRObjectID.getNextFreeId(SlotManager.getMCRObjectBaseID()) : MCRObjectID
+                .getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
         object.setId(objID);
         return objID;
     }
