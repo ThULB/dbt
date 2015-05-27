@@ -441,6 +441,7 @@ public class Slot implements Serializable {
         if (entries != null) {
             for (int c = 0; c < entries.size(); c++) {
                 if (entry.getId().equals(entries.get(c).getId())) {
+                    entry.setModified(new Date());
                     entries.set(c, entry);
                     return;
                 }
