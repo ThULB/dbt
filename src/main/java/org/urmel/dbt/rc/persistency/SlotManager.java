@@ -216,8 +216,8 @@ public final class SlotManager {
         } else {
             final MCRObject obj = SlotWrapper.wrapSlot(slot);
             obj.setId(MCRObjectID.getNextFreeId(obj.getId().getBase()));
-            MCRMetadataManager.create(obj);
             slot.setMCRObjectID(obj.getId());
+            MCRMetadataManager.create(obj);
         }
 
         if (slot.getEntries() != null) {
