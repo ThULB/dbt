@@ -24,8 +24,6 @@ import org.urmel.dbt.rc.persistency.SlotManager;
  */
 public class SlotWrapper {
 
-    private static final String SLOT_OBJECT_TYPE = "rcslot";
-
     private static final String SLOT_CONTAINER = "rcSlotContainer";
 
     private static final String DEF_SLOT_CONTAINER = "def.rcSlotContainer";
@@ -34,21 +32,8 @@ public class SlotWrapper {
 
     private MCRObject object;
 
-    /**
-     * Returns the base id of the MCRObject.
-     * 
-     * @return the base id
-     */
-    public static String getMCRObjectBaseID() {
-        return getMCRObjectBaseID(SlotManager.DEFAULT_PROJECT_ID);
-    }
-
-    public static String getMCRObjectBaseID(String projectID) {
-        return projectID + "_" + SLOT_OBJECT_TYPE;
-    }
-
     public static MCRObject wrapSlot(Slot slot) {
-        return wrapSlot(slot, SlotManager.DEFAULT_PROJECT_ID);
+        return wrapSlot(slot, SlotManager.PROJECT_ID);
     }
 
     public static MCRObject wrapSlot(Slot slot, String projectID) {
@@ -81,7 +66,7 @@ public class SlotWrapper {
     }
 
     public MCRObjectID setID(String projectID, int ID) {
-        MCRObjectID objID = MCRObjectID.getInstance(MCRObjectID.formatID(projectID, SLOT_OBJECT_TYPE, ID));
+        MCRObjectID objID = MCRObjectID.getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
         object.setId(objID);
         return objID;
     }

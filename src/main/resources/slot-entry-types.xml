@@ -3,9 +3,6 @@
   <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.HeadlineEntry">
     <i18n single="component.rc.slot.entry.headline" multiple="component.rc.slot.entry.headline.multiple" />
   </entry-type>
-  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.MCRObjectEntry">
-    <i18n single="component.rc.slot.entry.mcrobject" multiple="component.rc.slot.entry.mcrobject.multiple" />
-  </entry-type>
   <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.TextEntry">
     <i18n single="component.rc.slot.entry.text" multiple="component.rc.slot.entry.text.multiple" />
   </entry-type>
@@ -14,5 +11,11 @@
   </entry-type>
   <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry">
     <i18n single="component.rc.slot.entry.opcrecord" multiple="component.rc.slot.entry.opcrecord.multiple" />
+  </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.FileEntry">
+    <i18n single="component.rc.slot.entry.file" multiple="component.rc.slot.entry.file.multiple" />
+  </entry-type>
+  <entry-type class="org.urmel.dbt.rc.datamodel.slot.entries.MCRObjectEntry">
+    <i18n single="component.rc.slot.entry.mcrobject" multiple="component.rc.slot.entry.mcrobject.multiple" />
   </entry-type>
 </entry-types>

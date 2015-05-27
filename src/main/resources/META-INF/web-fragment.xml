@@ -20,6 +20,7 @@
   <servlet-mapping>
     <servlet-name>RCSlotServlet</servlet-name>
     <url-pattern>/servlets/RCSlotServlet</url-pattern>
+    <url-pattern>/rcentry/*</url-pattern>
   </servlet-mapping>
 
   <servlet id="RCSlotLocationServlet">

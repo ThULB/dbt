@@ -28,16 +28,19 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
+import org.mycore.datamodel.ifs2.MCRVersionedMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.tmatesoft.svn.core.SVNException;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
+import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
+import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
 import org.urmel.dbt.rc.utils.SlotWrapper;
 import org.xml.sax.SAXException;
 
@@ -47,8 +50,11 @@ import org.xml.sax.SAXException;
  */
 public final class SlotManager {
 
-    public static final String DEFAULT_PROJECT_ID = MCRConfiguration.instance().getString("MCR.SWF.Project.ID.rcslot",
-            "dbt");
+    public static final String PROJECT_ID = "rc";
+
+    public static final String SLOT_TYPE = "slot";
+
+    public static final String ENTRY_TYPE = "entry";
 
     private static final Logger LOGGER = Logger.getLogger(SlotManager.class);
 
@@ -57,10 +63,8 @@ public final class SlotManager {
     private SlotList slotList;
 
     private SlotManager() {
-        if (slotList == null) {
-            slotList = new SlotList();
-            loadList();
-        }
+        slotList = new SlotList();
+        loadList();
     }
 
     /**
@@ -77,12 +81,21 @@ public final class SlotManager {
     }
 
     /**
+     * Returns the base id of the MCRObject.
+     * 
+     * @return the base id
+     */
+    public static String getMCRObjectBaseID() {
+        return PROJECT_ID + "_" + SLOT_TYPE;
+    }
+
+    /**
      * Loads the {@link Slot} metadata from content store.
      * You have to clear the {@link SlotManager#slotList} before.
      */
     public synchronized void loadList() {
         final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.instance();
-        final List<String> ids = xmlManager.listIDsForBase(SlotWrapper.getMCRObjectBaseID());
+        final List<String> ids = xmlManager.listIDsForBase(getMCRObjectBaseID());
 
         for (String objId : ids) {
             try {
@@ -169,12 +182,29 @@ public final class SlotManager {
     }
 
     /**
+     * Returns the current SVN revision of an {@link Slot}.
+     * 
+     * @param slot the {@link Slot}
+     * @return an number or <code>null</code> on Exception
+     */
+    public synchronized Long getLastRevision(final Slot slot) {
+        MCRVersionedMetadata vm;
+        try {
+            vm = MCRXMLMetadataManager.instance().getVersionedMetaData(slot.getMCRObjectID());
+            return new Long(vm.getLastPresentRevision());
+        } catch (SVNException | IOException e) {
+            return null;
+        }
+    }
+
+    /**
      * Saves or updates the metadata of given {@link Slot}.
      * 
      * @param slot the slot
      * @throws MCRActiveLinkException 
      * @throws MCRPersistenceException 
      */
+    @SuppressWarnings("unchecked")
     public synchronized void saveOrUpdate(final Slot slot) throws MCRPersistenceException, MCRActiveLinkException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
@@ -188,6 +218,16 @@ public final class SlotManager {
             obj.setId(MCRObjectID.getNextFreeId(obj.getId().getBase()));
             MCRMetadataManager.create(obj);
             slot.setMCRObjectID(obj.getId());
+        }
+
+        if (slot.getEntries() != null) {
+            for (SlotEntry<?> slotEntry : slot.getEntries()) {
+                if (slotEntry.getEntry() instanceof FileEntry) {
+                    if (!FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
+                        FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry);
+                    }
+                }
+            }
         }
     }
 

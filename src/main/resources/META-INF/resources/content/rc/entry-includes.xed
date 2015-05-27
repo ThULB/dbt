@@ -221,4 +221,17 @@
     </xed:bind>
   </xed:template>
 
+  <xed:template id="file-edit">
+    <xed:bind xpath="file">
+      <dbt:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
+      <dbt:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="file-delete">
+    <xed:bind xpath="file">
+      <dbt:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
+      <dbt:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+    </xed:bind>
+  </xed:template>
 </xed:template>

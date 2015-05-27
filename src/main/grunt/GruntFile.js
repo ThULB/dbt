@@ -62,6 +62,11 @@ module.exports = function(grunt) {
 					dest : '<%=globalConfig.assetsDirectory%>/bootstrap/'
 				}, {
 					expand : true,
+					cwd : 'bower_components/bootstrap-fileinput/',
+					src : [ 'css/**', 'img/**', 'js/**' ],
+					dest : '<%=globalConfig.assetsDirectory%>/bootstrap-fileinput/'
+				}, {
+					expand : true,
 					cwd : 'bower_components/jquery/dist/',
 					src : [ '**' ],
 					dest : '<%=globalConfig.assetsDirectory%>/jquery/'

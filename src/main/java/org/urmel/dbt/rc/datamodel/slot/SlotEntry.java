@@ -176,7 +176,7 @@ public class SlotEntry<V> implements Serializable {
     /**
      * @return the entry
      */
-    @XmlAnyElement
+    @XmlAnyElement(lax = true)
     public V getEntry() {
         return entry;
     }

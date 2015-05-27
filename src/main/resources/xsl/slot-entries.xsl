@@ -118,7 +118,15 @@
       <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
         <a>
           <xsl:attribute name="href">
-            <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=', ./@name,'&amp;slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
+            <xsl:choose>
+              <xsl:when test="@name = 'file'">
+                <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry-file.xml')" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry.xed')" />
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="concat('?entry=', ./@name,'&amp;slotId=', $slotId, '&amp;afterId=', $lastEntry)" />
             <xsl:if test="@name = 'opcrecord'">
               <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
             </xsl:if>
@@ -133,20 +141,20 @@
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" mode="view" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|file|opcrecord" mode="view" />
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|opcrecord" mode="edit" />
+    <xsl:apply-templates select="headline|text|webLink|mcrobject|file|opcrecord" mode="edit" />
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="view">
+  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="view">
     <div class="entry-{name()}">
       <xsl:apply-templates select="." />
     </div>
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="edit">
+  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="edit">
     <div class="entry-{name()}" id="{../@id}">
       <xsl:apply-templates select="." mode="extraAttributes" />
       <xsl:apply-templates select="." mode="editButtons" />
@@ -154,7 +162,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|opcrecord" mode="editButtons">
+  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
         <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" alt="{i18n:translate('component.rc.slot.entry.edit')}"
@@ -232,6 +240,30 @@
   <xsl:template match="mcrobject">
       <!-- simpler, call mode title -->
     <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
+    <xsl:if test="string-length(.) &gt; 0">
+      <span class="comment">
+        <xsl:value-of select="." />
+      </span>
+    </xsl:if>
+  </xsl:template>
+  
+  <!-- File -->
+  <xsl:template match="file">
+    <h3>
+      <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
+        <xsl:value-of select="@name" />
+      </a>
+    </h3>
+    <p>
+      <xsl:text>SHA-1: </xsl:text>
+      <code>
+        <xsl:value-of select="@hash" />
+      </code>
+      <xsl:text> - </xsl:text>
+      <xsl:call-template name="formatFileSize">
+        <xsl:with-param name="size" select="@size" />
+      </xsl:call-template>
+    </p>
     <xsl:if test="string-length(.) &gt; 0">
       <span class="comment">
         <xsl:value-of select="." />

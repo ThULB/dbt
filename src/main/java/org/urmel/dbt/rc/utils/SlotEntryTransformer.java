@@ -35,23 +35,23 @@ public abstract class SlotEntryTransformer {
         }
     }
 
-    private static Document getDocument(SlotEntry<?> slot) {
-        MCRJAXBContent<SlotEntry<?>> content = new MCRJAXBContent<SlotEntry<?>>(JAXB_CONTEXT, slot);
+    private static Document getDocument(SlotEntry<?> slotEntry) {
+        MCRJAXBContent<SlotEntry<?>> content = new MCRJAXBContent<SlotEntry<?>>(JAXB_CONTEXT, slotEntry);
         try {
-            Document SlotXML = content.asXML();
-            return SlotXML;
+            Document slotEntryXML = content.asXML();
+            return slotEntryXML;
         } catch (SAXParseException | JDOMException | IOException e) {
             throw new MCRException("Exception while transforming SlotEntry to JDOM document.", e);
         }
     }
 
-    public static Document buildExportableXML(SlotEntry<?> slot) {
-        return getDocument(slot);
+    public static Document buildExportableXML(SlotEntry<?> slotEntry) {
+        return getDocument(slotEntry);
     }
 
     public static SlotEntry<?> buildSlotEntry(Element element) {
         if (!element.getName().equals(ROOT_ELEMENT_NAME)) {
-            throw new IllegalArgumentException("Element is not a rc slot element.");
+            throw new IllegalArgumentException("Element is not a rc entry element.");
         }
         try {
             Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();

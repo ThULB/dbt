@@ -5,6 +5,7 @@ package org.urmel.dbt.rc.datamodel.slot;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -336,6 +337,18 @@ public class Slot implements Serializable {
     /**
      * @param validTo the validTo to set
      */
+    public void setValidTo(final String validTo) {
+        final DateFormat df = new SimpleDateFormat(DEFAULT_DATE_FORMAT, Locale.ROOT);
+        try {
+            this.validTo = df.parse(validTo);
+        } catch (ParseException e) {
+            this.validTo = null;
+        }
+    }
+
+    /**
+     * @param validTo the validTo to set
+     */
     public void setValidTo(final Date validTo) {
         this.validTo = validTo;
     }
@@ -395,6 +408,7 @@ public class Slot implements Serializable {
         if (entries == null) {
             entries = new ArrayList<SlotEntry<?>>();
         }
+
         return entries.add(entry);
     }
 

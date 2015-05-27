@@ -2,6 +2,7 @@ SlotList
 Slot
 
 SlotEntry
+entries.FileEntry
 entries.HeadlineEntry
 entries.MCRObjectEntry
 entries.TextEntry

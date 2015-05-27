@@ -78,4 +78,20 @@ public class SlotEntryTypes implements Serializable {
     void setEntryTypes(final List<SlotEntryType> entryTypes) {
         this.entryTypes = entryTypes;
     }
+
+    /**
+     * Returns the {@link SlotEntryType} for given entryType parameter or <code>null</code> if nothing found.
+     * 
+     * @param entryType the entryType to search
+     * @return an {@link SlotEntryType} or <code>null</code> if nothing was found
+     */
+    public SlotEntryType getEntryType(final String entryType) {
+        for (SlotEntryType t : entryTypes) {
+            if (entryType.equals(t.getName())) {
+                return t;
+            }
+        }
+
+        return null;
+    }
 }

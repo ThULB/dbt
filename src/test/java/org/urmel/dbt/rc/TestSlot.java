@@ -22,7 +22,10 @@
  */
 package org.urmel.dbt.rc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -59,6 +62,7 @@ import org.urmel.dbt.rc.datamodel.TypedDate;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
+import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.HeadlineEntry;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -256,6 +260,48 @@ public class TestSlot extends MCRHibTestCase {
         headline.setText("Überschrift");
 
         slotEntry.setEntry(headline);
+
+        slot.addEntry(slotEntry);
+
+        SLOT_MANAGER.saveOrUpdate(slot);
+
+        assertNotNull(slot.getMCRObjectID());
+
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(slot.getMCRObjectID());
+
+        assertNotNull(obj);
+
+        Slot ts = SlotWrapper.unwrapMCRObject(obj);
+
+        assertEquals(slot.getSlotId(), ts.getSlotId());
+
+        assertEquals(slot.getEntries().get(0).getId(), ts.getEntries().get(0).getId());
+    }
+
+    @Test
+    public void testSaveSlotWithFileEntry() throws IOException, JDOMException, SAXException, MCRPersistenceException,
+            MCRActiveLinkException {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setTitle("Test ESA");
+        slot.setStatus(Status.ACTIVE);
+        slot.setValidTo(new Date());
+
+        Lecturer lecturer = new Lecturer();
+        lecturer.setName("Mustermann, Max");
+        lecturer.setEmail("max.mustermann@muster.de");
+        lecturer.setOrigin("0815");
+
+        slot.addLecturer(lecturer);
+
+        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
+
+        FileEntry fileEntry = new FileEntry();
+
+        fileEntry.setName("mycore.properties");
+        fileEntry.setComment("This is a comment!");
+        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
+
+        slotEntry.setEntry(fileEntry);
 
         slot.addEntry(slotEntry);
 

@@ -37,6 +37,7 @@ import org.urmel.dbt.opc.OPCConnector;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntryTypes;
+import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.HeadlineEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.MCRObjectEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
@@ -125,6 +126,18 @@ public class TestSlotEntry extends MCRTestCase {
         return slotEntry;
     }
 
+    private SlotEntry<FileEntry> newFileEntry() {
+        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
+
+        FileEntry fileEntry = new FileEntry();
+        fileEntry.setName("test.txt");
+        fileEntry.setComment("This is a comment!");
+        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
+        slotEntry.setEntry(fileEntry);
+
+        return slotEntry;
+    }
+
     @Test
     public void testHeadlineEntry() throws IOException {
         SlotEntry<HeadlineEntry> slotEntry = newHeadLineEntry();
@@ -174,7 +187,17 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     @Test
-    public void testAddSlotEntries() {
+    public void testFileEntry() throws IOException {
+        SlotEntry<FileEntry> slotEntry = newFileEntry();
+
+        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
+                System.out);
+
+        assertEquals("C7380191CAFF6EE5AA20F4B44B2D02CD098F659", slotEntry.getEntry().getHash());
+    }
+
+    @Test
+    public void testAddSlotEntries() throws Exception {
         Slot slot = new Slot("3400.01.01.0001");
 
         slot.addEntry(newHeadLineEntry());
@@ -182,8 +205,10 @@ public class TestSlotEntry extends MCRTestCase {
         slot.addEntry(newPlainTextEntry());
         slot.addEntry(newHtmlTextEntry());
         slot.addEntry(newWebLinkEntry());
+        slot.addEntry(newOPCRecordEntry());
+        slot.addEntry(newFileEntry());
 
-        assertEquals(5, slot.getEntries().size());
+        assertEquals(7, slot.getEntries().size());
     }
 
     @Test
