@@ -193,7 +193,7 @@ public class TestSlotEntry extends MCRTestCase {
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
                 System.out);
 
-        assertEquals("C7380191CAFF6EE5AA20F4B44B2D02CD098F659", slotEntry.getEntry().getHash());
+        assertEquals("84FB3A153C8C7300E6E2A6A46F58B226A51D5B7A", slotEntry.getEntry().getHash());
     }
 
     @Test
