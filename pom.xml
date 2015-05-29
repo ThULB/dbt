@@ -133,6 +133,13 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.mycore.mir</groupId>
+      <artifactId>mir-parent</artifactId>
+      <version>${project.parent.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
       <version>${mycore.version}</version>
