@@ -48,6 +48,13 @@
                 </xsl:otherwise>
               </xsl:choose>
             </li>
+            <xsl:if test="$Mode = 'edit'">
+              <li role="presentation">
+                <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
+                  <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                </a>
+              </li>
+            </xsl:if>
             <li role="presentation">
               <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
                 <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />

@@ -69,6 +69,11 @@ public class SlotListServlet extends MCRServlet {
                 s.setPendingStatus(slot.getPendingStatus());
                 s.setValidTo(slot.getValidToAsDate());
                 s.setComment(slot.getComment());
+
+                if (slot.getReadKey() != null)
+                    s.setReadKey(slot.getReadKey());
+                if (slot.getWriteKey() != null)
+                    s.setWriteKey(slot.getWriteKey());
             }
 
             SLOT_MGR.saveList();
