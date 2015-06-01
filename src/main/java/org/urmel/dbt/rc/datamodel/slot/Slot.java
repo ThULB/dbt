@@ -33,16 +33,12 @@ import org.urmel.dbt.rc.datamodel.WarningDate;
 /**
  * Represents an Reserve Collection slot.
  * 
- * @author René Adler (eagle)
- */
-/**
  * @author Ren\u00E9 Adler (eagle)
- *
  */
 @XmlRootElement(name = "slot")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "slot", propOrder = { "slotId", "status", "pendingStatus", "onlineOnly", "title", "lecturers",
-        "validTo", "comment", "warningDates", "entries" })
+        "validTo", "comment", "warningDates", "accessKeys", "entries" })
 public class Slot implements Serializable {
 
     /**
@@ -70,6 +66,10 @@ public class Slot implements Serializable {
     private PendingStatus pendingStatus;
 
     private boolean onlineOnly;
+
+    private String readKey;
+
+    private String writeKey;
 
     private String title;
 
@@ -233,6 +233,44 @@ public class Slot implements Serializable {
      */
     public void setOnlineOnly(final boolean onlineOnly) {
         this.onlineOnly = onlineOnly;
+    }
+
+    /**
+     * @return the readKey
+     */
+    public String getReadKey() {
+        return readKey;
+    }
+
+    /**
+     * @param readKey the readKey to set
+     */
+    public void setReadKey(String readKey) {
+        this.readKey = readKey;
+    }
+
+    /**
+     * @return the writeKey
+     */
+    public String getWriteKey() {
+        return writeKey;
+    }
+
+    /**
+     * @param writeKey the writeKey to set
+     */
+    public void setWriteKey(String writeKey) {
+        this.writeKey = writeKey;
+    }
+
+    @XmlElement(name = "accesskeys")
+    AccessKeys getAccessKeys() {
+        return AccessKeys.buildAccessKeys(readKey, writeKey);
+    }
+
+    void setAccessKeys(final AccessKeys accKeys) {
+        readKey = accKeys.readKey;
+        writeKey = accKeys.writeKey;
     }
 
     /**
@@ -460,6 +498,30 @@ public class Slot implements Serializable {
     }
 
     /**
+     * Returns a exportable copy of current {@link Slot}.
+     * 
+     * @return a exportable copy of current slot
+     */
+    public Slot getExportableCopy() {
+        final Slot copy = new Slot();
+
+        copy.id = this.id;
+        copy.objId = this.objId;
+        copy.location = this.location;
+        copy.status = this.status;
+        copy.pendingStatus = this.pendingStatus;
+        copy.onlineOnly = this.onlineOnly;
+        copy.title = this.title;
+        copy.lecturers = this.lecturers;
+        copy.warningDates = this.warningDates;
+        copy.validTo = this.validTo;
+        copy.comment = this.comment;
+        copy.entries = this.entries;
+
+        return copy;
+    }
+
+    /**
      * Returns a copy of current {@link Slot} without entries.
      * 
      * @return a basic copy of current slot
@@ -591,5 +653,26 @@ public class Slot implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @XmlRootElement(name = "accesskeys")
+    private static class AccessKeys {
+        @XmlAttribute(name = "readkey", required = true)
+        public String readKey;
+
+        @XmlAttribute(name = "writekey")
+        public String writeKey;
+
+        public static AccessKeys buildAccessKeys(final String readKey, final String writeKey) {
+            if (readKey == null && writeKey == null)
+                return null;
+
+            final AccessKeys accKeys = new AccessKeys();
+
+            accKeys.readKey = readKey;
+            accKeys.writeKey = writeKey;
+
+            return accKeys;
+        }
     }
 }

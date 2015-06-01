@@ -109,6 +109,9 @@ public class TestSlot extends MCRHibTestCase {
 
         slot.addWarningDate(new Date());
 
+        slot.setReadKey("blah");
+        slot.setWriteKey("blub");
+
         Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         cal.setTime(new Date());
         cal.add(Calendar.DAY_OF_MONTH, 7);
@@ -134,7 +137,14 @@ public class TestSlot extends MCRHibTestCase {
 
         assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), slot.getLocation());
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotTransformer.buildExportableXML(slot), System.out);
+        Document xml = SlotTransformer.buildExportableXML(slot);
+
+        new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
+
+        Slot transSlot = SlotTransformer.buildSlot(xml.getRootElement());
+
+        assertEquals(slot.getReadKey(), transSlot.getReadKey());
+        assertEquals(slot.getWriteKey(), transSlot.getWriteKey());
     }
 
     @Test
@@ -246,6 +256,9 @@ public class TestSlot extends MCRHibTestCase {
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
         slot.setValidTo(new Date());
+
+        slot.setReadKey("blah");
+        slot.setWriteKey("blub");
 
         Lecturer lecturer = new Lecturer();
         lecturer.setName("Mustermann, Max");

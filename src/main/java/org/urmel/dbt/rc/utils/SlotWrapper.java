@@ -94,8 +94,17 @@ public class SlotWrapper {
         MCRMetaElement defSlotContainer = new MCRMetaElement(MCRMetaXML.class, DEF_SLOT_CONTAINER, false, true, list);
         om.setMetadataElement(defSlotContainer);
 
-        Document doc = SlotTransformer.buildExportableXML(slot);
+        Document doc = SlotTransformer.buildExportableXML(slot.getExportableCopy());
         slotContainer.addContent(doc.getRootElement());
+
+        if (slot.getReadKey() != null) {
+            setServiceFlag("readkey", slot.getReadKey());
+            slot.setReadKey(null);
+        }
+        if (slot.getWriteKey() != null) {
+            setServiceFlag("writekey", slot.getWriteKey());
+            slot.setWriteKey(null);
+        }
     }
 
     public String getServiceFlag(String type) {

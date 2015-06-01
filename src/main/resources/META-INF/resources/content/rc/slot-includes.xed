@@ -69,10 +69,10 @@
   </xed:template>
 
   <xed:template id="accesskeys">
-    <xed:bind xpath="accesskey">
-      <dbt:template name="textInput" xpath="@read" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
+    <xed:bind xpath="accesskeys">
+      <dbt:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
         required="true" />
-      <dbt:template name="textInput" xpath="@write" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
+      <dbt:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
         required="true" />
     </xed:bind>
   </xed:template>
