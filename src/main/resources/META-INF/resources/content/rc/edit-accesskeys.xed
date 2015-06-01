@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
-  <section i18n="component.rc.slot.new_title" xml:lang="all">
+  <section i18n="component.rc.slot.edit.accesskeys" xml:lang="all">
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
       <xed:source uri="slot:slotId={$slotId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
