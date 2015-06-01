@@ -51,7 +51,8 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
  * <ul> 
  * <li><code>slot:slotId={slotId}</code> to resolve an {@link Slot}</li>
  * <li><code>slot:slotId={slotId}&entryId={entryId}</code> to resolve an {@link SlotEntry}</li>
- * <li><code>slot:slotId={slotId}&catalogId</code> to resolve an catalogId (from RCLOC classification)</li>
+ * <li><code>slot:slotId={slotId}&catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
+ * <li><code>slot:slotId={slotId}&objectId</code> to get the {@link MCRObjectID} for slot</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
  * </ul>
  * 
@@ -108,6 +109,11 @@ public class SlotResolver implements URIResolver {
 
                 final Element root = new Element("catalog");
                 root.setText(catalogId);
+
+                return new JDOMSource(root);
+            } else if (params.get("objectId") != null) {
+                final Element root = new Element("mcrobject");
+                root.setText(slot.getMCRObjectID().toString());
 
                 return new JDOMSource(root);
             }
