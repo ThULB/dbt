@@ -56,7 +56,7 @@ public class SlotListServlet extends MCRServlet {
                 return;
             }
 
-            final String slotId = slot.getSlotId();
+            final String slotId = xml.getAttributeValue("id");
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
 
