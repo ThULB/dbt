@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRContent;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -67,6 +68,7 @@ public class SlotServlet extends MCRServlet {
     @SuppressWarnings("unchecked")
     public void doGetPost(final MCRServletJob job) throws Exception {
         final HttpServletRequest req = job.getRequest();
+        final HttpServletResponse res = job.getResponse();
 
         // checks path and return the file content.
         final String path = req.getPathInfo();
@@ -80,6 +82,13 @@ public class SlotServlet extends MCRServlet {
 
             if (slotId != null && entryId != null && fileName != null) {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
+
+                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                    res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
+
                 final SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) slot.getEntryById(entryId);
 
                 if (slotEntry != null) {
@@ -110,6 +119,11 @@ public class SlotServlet extends MCRServlet {
 
         if (slotId != null) {
             final Slot slot = SLOT_MGR.getSlotById(slotId);
+
+            if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
 
             final Element firstChild = xml != null && xml.getChildren().size() > 0 ? xml.getChildren().get(0) : null;
 

@@ -11,14 +11,15 @@ import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
+import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.frontend.MCRFrontendUtil;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -88,9 +89,17 @@ public class SlotListServlet extends MCRServlet {
                 final StringTokenizer st = new StringTokenizer(path, "/");
 
                 final String slotId = st.nextToken();
+                final Slot slot = SLOT_MGR.getSlotById(slotId);
+
+                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                    getLayoutService().doLayout(job.getRequest(), job.getResponse(),
+                            new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
+                    return;
+                }
 
                 getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                        new MCRJDOMContent(SlotTransformer.buildExportableXML(SLOT_MGR.getSlotById(slotId))));
+                        new MCRJDOMContent(SlotTransformer.buildExportableXML(slot)));
                 return;
             }
 
