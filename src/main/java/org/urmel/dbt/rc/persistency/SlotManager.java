@@ -27,7 +27,10 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUserInformation;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -35,6 +38,7 @@ import org.mycore.datamodel.ifs2.MCRVersionedMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.mycore.datamodel.metadata.MCRObjectService;
 import org.tmatesoft.svn.core.SVNException;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -87,6 +91,23 @@ public final class SlotManager {
      */
     public static String getMCRObjectBaseID() {
         return PROJECT_ID + "_" + SLOT_TYPE;
+    }
+
+    /**
+     * Checks if current user allowed to access the {@link Slot} by given {@link MCRObjectID} and permission.
+     * This method checks if current user is owner or the user has access from any strategy.
+     *  
+     * @param objId the {@link MCRObjectID}
+     * @param permission the permission
+     * @return <code>true</code> if allowed or <code>false</code> if not
+     */
+    public static boolean checkPermission(final MCRObjectID objId, final String permission) {
+        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
+        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
+        final MCRObjectService os = obj.getService();
+        final String owner = (os.isFlagTypeSet("createdby") ? os.getFlags("createdby").get(0) : null);
+
+        return owner.equals(currentUser.getUserID()) || MCRAccessManager.checkPermission(objId, permission);
     }
 
     /**

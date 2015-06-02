@@ -51,7 +51,7 @@ public class SlotListServlet extends MCRServlet {
 
             if (slot.getMCRObjectID() == null && !MCRAccessManager.checkPermission(MCRAccessManager.PERMISSION_WRITE)
                     || slot.getMCRObjectID() != null
-                    && !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                    && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                 job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
@@ -99,8 +99,8 @@ public class SlotListServlet extends MCRServlet {
                 final String slotId = st.nextToken();
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        || !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                             new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
                     return;

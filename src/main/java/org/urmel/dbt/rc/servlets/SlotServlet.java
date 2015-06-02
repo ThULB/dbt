@@ -83,8 +83,8 @@ public class SlotServlet extends MCRServlet {
             if (slotId != null && entryId != null && fileName != null) {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        || !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                     res.sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -120,7 +120,7 @@ public class SlotServlet extends MCRServlet {
         if (slotId != null) {
             final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-            if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+            if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                 res.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
