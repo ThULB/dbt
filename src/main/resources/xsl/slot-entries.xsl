@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="acl xalan i18n xlink pica"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
 >
 
   <!-- include custom templates for supported objecttypes -->
   <xsl:include href="xslInclude:objectTypes" />
 
   <xsl:include href="pica-record-isbd.xsl" />
-
-  <xsl:param name="Mode" select="'view'" />
-  <xsl:variable name="effectiveMode">
-    <xsl:choose>
-      <xsl:when test="$Mode = 'edit' and acl:checkPermission($objectId, 'writedb')">
-        <xsl:text>edit</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>view</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="slotId" select="/slot/@id" />
-  <xsl:variable name="objectId" select="document(concat('slot:slotId=', /slot/@id, '&amp;objectId'))/mcrobject" />
   
    <!-- OPC vars -->
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />

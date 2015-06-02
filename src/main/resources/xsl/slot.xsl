@@ -9,17 +9,40 @@
 
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', /slot/@id))" />
 
-  <xsl:variable name="objectId" select="document(concat('slot:slotId=', /slot/@id, '&amp;objectId'))/mcrobject" />
+  <xsl:param name="Mode" select="'view'" />
+  <xsl:variable name="effectiveMode">
+    <xsl:choose>
+      <xsl:when test="$Mode = 'edit' and $writePermission">
+        <xsl:text>edit</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>view</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
+  <xsl:variable name="slotId" select="/slot/@id" />
+  <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
+
+  <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
+  <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
 
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
     <div id="slot-body">
-      <xsl:if test="acl:checkPermission($objectId, 'read')">
-        <xsl:apply-templates select="entries" />
-      </xsl:if>
-      <xsl:if test="count(entries) = 0 and $effectiveMode = 'edit'">
-        <xsl:call-template name="addNewEntry" />
-      </xsl:if>
+      <xsl:choose>
+        <xsl:when test="not($readPermission)">
+          <div class="alert alert-warning" role="alert">
+            <xsl:value-of select="i18n:translate('component.rc.slot.no_access')" />
+          </div>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="entries" />
+          <xsl:if test="count(entries) = 0 and $effectiveMode = 'edit'">
+            <xsl:call-template name="addNewEntry" />
+          </xsl:if>
+        </xsl:otherwise>
+      </xsl:choose>
     </div>
   </xsl:template>
 
@@ -30,7 +53,7 @@
         <xsl:if test="@status = 'new'">
           <!-- TODO: New badge if needed -->
         </xsl:if>
-        <xsl:if test="acl:checkPermission($objectId, 'writedb')">
+        <xsl:if test="$writePermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
