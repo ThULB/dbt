@@ -6,6 +6,7 @@ package org.urmel.dbt.rc.servlets;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -48,7 +49,14 @@ public class SlotListServlet extends MCRServlet {
 
             final Slot slot = SlotTransformer.buildSlot(xml);
 
-            final String slotId = xml.getAttributeValue("id");
+            if (slot.getMCRObjectID() == null && !MCRAccessManager.checkPermission(MCRAccessManager.PERMISSION_WRITE)
+                    || slot.getMCRObjectID() != null
+                    && !MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
+            }
+
+            final String slotId = slot.getSlotId();
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
 
