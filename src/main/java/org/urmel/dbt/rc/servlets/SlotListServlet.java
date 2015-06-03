@@ -18,6 +18,7 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -49,13 +50,6 @@ public class SlotListServlet extends MCRServlet {
 
             final Slot slot = SlotTransformer.buildSlot(xml);
 
-            if (slot.getMCRObjectID() == null && !MCRAccessManager.checkPermission(MCRAccessManager.PERMISSION_WRITE)
-                    || slot.getMCRObjectID() != null
-                    && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
-                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
-                return;
-            }
-
             final String slotId = xml.getAttributeValue("id");
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
@@ -83,6 +77,16 @@ public class SlotListServlet extends MCRServlet {
                     s.setReadKey(slot.getReadKey());
                 if (slot.getWriteKey() != null)
                     s.setWriteKey(slot.getWriteKey());
+
+                slot.setMCRObjectID(s.getMCRObjectID());
+            }
+
+            if (slot.getMCRObjectID() == null
+                    && !MCRAccessManager.checkPermission(MCRObjectID.formatID(SlotManager.getMCRObjectBaseID(), 0),
+                            MCRAccessManager.PERMISSION_WRITE) || slot.getMCRObjectID() != null
+                    && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                return;
             }
 
             SLOT_MGR.saveList();
