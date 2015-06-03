@@ -54,7 +54,7 @@ import org.xml.sax.SAXException;
  */
 public final class SlotManager {
 
-    public static final String POOLPRIVILEGE_ADMINISTRATE_SLOT = "administrate-slot";
+    public static final String POOLPRIVILEGE_ADMINISTRATE_SLOTS = "administrate-slots";
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
@@ -118,7 +118,7 @@ public final class SlotManager {
      * @return <code>true</code> if allowed or <code>false</code> if not
      */
     public static boolean checkPermission(final String objId, final String permission) {
-        if (MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
+        if (MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {
             return true;
         }
 
