@@ -7,7 +7,7 @@
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 
-  <xsl:template match="mycoreobject[contains(@ID,'_rcslot_')]">
+  <xsl:template match="mycoreobject[contains(@ID,'rc_slot_')]">
     <xsl:apply-imports />
     <xsl:apply-templates select="metadata/def.rcSlotContainer/rcSlotContainer/slot" />
   </xsl:template>
