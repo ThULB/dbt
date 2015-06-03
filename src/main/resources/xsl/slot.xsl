@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="acl i18n xlink"
+<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="acl i18n xlink"
 >
   <xsl:include href="MyCoReLayout.xsl" />
 
@@ -53,7 +53,7 @@
         <xsl:if test="@status = 'new'">
           <!-- TODO: New badge if needed -->
         </xsl:if>
-        <xsl:if test="$writePermission">
+        <xsl:if test="$readPermission and $writePermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
