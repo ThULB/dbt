@@ -18,7 +18,6 @@ import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
-import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -61,9 +60,20 @@ public class SlotListServlet extends MCRServlet {
             }
 
             if (slotId == null) {
+                if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_CREATE_SLOT)) {
+                    job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
+
                 SLOT_MGR.addSlot(slot);
             } else {
                 final Slot s = SLOT_MGR.getSlotById(slotId);
+
+                if (s.getMCRObjectID() != null
+                        && !SlotManager.checkPermission(s.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                    job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
 
                 s.setTitle(slot.getTitle());
                 s.setLecturers(slot.getLecturers());
@@ -79,14 +89,6 @@ public class SlotListServlet extends MCRServlet {
                     s.setWriteKey(slot.getWriteKey());
 
                 slot.setMCRObjectID(s.getMCRObjectID());
-            }
-
-            if (slot.getMCRObjectID() == null
-                    && !MCRAccessManager.checkPermission(MCRObjectID.formatID(SlotManager.getMCRObjectBaseID(), 0),
-                            MCRAccessManager.PERMISSION_WRITE) || slot.getMCRObjectID() != null
-                    && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
-                job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
-                return;
             }
 
             SLOT_MGR.saveList();
