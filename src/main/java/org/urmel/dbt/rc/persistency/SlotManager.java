@@ -102,6 +102,18 @@ public final class SlotManager {
      * @return <code>true</code> if allowed or <code>false</code> if not
      */
     public static boolean checkPermission(final MCRObjectID objId, final String permission) {
+        return checkPermission(objId.toString(), permission);
+    }
+    
+    /**
+     * Checks if current user allowed to access the {@link Slot} by given {@link MCRObjectID} and permission.
+     * This method checks if current user is owner or the user has access from any strategy.
+     *  
+     * @param objId the {@link MCRObjectID}
+     * @param permission the permission
+     * @return <code>true</code> if allowed or <code>false</code> if not
+     */
+    public static boolean checkPermission(final String objId, final String permission) {
         final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
         final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
         final MCRObjectService os = obj.getService();
