@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
   <xed:template id="failed-validation-messages">
     <xed:if test="$xed-validation-failed">
       <div class="alert alert-danger">
@@ -14,7 +14,7 @@
   </xed:template>
 
   <xed:template id="title">
-    <dbt:template name="textInput" xpath="title" id="title" i18n="component.rc.slot.title" i18n.error="component.rc.slot.title.required" required="true" />
+    <mir:template name="textInput" xpath="title" id="title" i18n="component.rc.slot.title" i18n.error="component.rc.slot.title.required" required="true" />
   </xed:template>
 
   <xed:template id="location">
@@ -24,7 +24,7 @@
           <xed:output i18n="component.rc.slot.location" />
         </label>
         <div class="col-md-9">
-          <dbt:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
+          <mir:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
             href="RCSlotLocationServlet?categID=RCLOC&amp;action=chooseCategory" />
           <xed:choose>
             <xed:when test="string-length(label/@text) &gt; 0">
@@ -47,9 +47,9 @@
   <xed:template id="singleLecturer">
     <xed:bind xpath="lecturers">
       <xed:bind xpath="lecturer">
-        <dbt:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" i18n.error="component.rc.slot.lecturer.name.required"
+        <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" i18n.error="component.rc.slot.lecturer.name.required"
           required="true" />
-        <dbt:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
+        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
           required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
       </xed:bind>
     </xed:bind>
@@ -60,7 +60,7 @@
       <label class="col-md-3 control-label" for="locationSelect">
         <xed:output i18n="component.rc.slot.validTo" />
       </label>
-      <dbt:template name="textInput" xpath="validTo" inline="true" colwidth="3" id="validTo" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
+      <mir:template name="textInput" xpath="validTo" inline="true" colwidth="3" id="validTo" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
         required="true" validate="true" type="datetime" format="yyyy-MM-dd;dd.MM.yyyy" />
       <div class="col-md-6">
         <xed:include uri="xslStyle:editor-include-period:period:areacode=0&amp;date=now" />
@@ -70,9 +70,9 @@
 
   <xed:template id="accesskeys">
     <xed:bind xpath="accesskeys">
-      <dbt:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
+      <mir:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
         required="true" />
-      <dbt:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
+      <mir:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
         required="true" />
     </xed:bind>
   </xed:template>

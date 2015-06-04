@@ -3,8 +3,8 @@
 <MyCoReWebPage>
   <section i18n="component.rc.slot.entry" xml:lang="all">
 
-    <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
-      <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="source" />
+    <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
+      <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="source" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit#{$entryId}" />
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 
@@ -12,15 +12,15 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">
-              <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="title" />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="title" />
             </h3>
           </div>
           <div class="panel-body">
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="editor" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="editor" />
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
-              <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/entry-includes.xed" ref="buttons" />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="buttons" />
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
   <section i18n="component.rc.slot.new_title" xml:lang="all">
-    <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:dbt="http://www.mycore.de/dbt">
+    <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
       <xed:source uri="xslStyle:slot-preprocessor:webapp:content/rc/editor-slot-defaults.xml" />
       <xed:bind xpath="slot">
         <div class="panel panel-default">
@@ -12,23 +12,23 @@
             </h3>
           </div>
           <div class="panel-body">
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
 
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/slot-includes.xed" ref="title" />
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/slot-includes.xed" ref="location" />
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="title" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="location" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
 
             <!-- FIXME use it from include -->
-            <dbt:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true" uri="xslStyle:periods2options:period:areacode=0&amp;date=now&amp;list=true"
+            <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true" uri="xslStyle:periods2options:period:areacode=0&amp;date=now&amp;list=true"
               i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required" required="true" />
 
-            <xed:include uri="xslStyle:xeditor-dbt-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
-              <dbt:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
+              <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
               <span>&#160;</span>
-              <dbt:template name="cancelButton" i18n="button.cancel" />
+              <mir:template name="cancelButton" i18n="button.cancel" />
             </div>
           </div>
         </div>
