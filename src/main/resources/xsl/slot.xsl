@@ -53,7 +53,7 @@
         <xsl:if test="@status = 'new'">
           <!-- TODO: New badge if needed -->
         </xsl:if>
-        <xsl:if test="$readPermission and $writePermission">
+        <xsl:if test="$writePermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
