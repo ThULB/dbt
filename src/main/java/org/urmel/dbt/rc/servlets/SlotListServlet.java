@@ -106,7 +106,7 @@ public class SlotListServlet extends MCRServlet {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
                 if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        || !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                        && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                             new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
                     return;
