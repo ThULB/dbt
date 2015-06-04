@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="acl i18n xlink"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="acl i18n mcrxsl xlink"
 >
   <xsl:include href="MyCoReLayout.xsl" />
 
@@ -31,9 +32,19 @@
     <xsl:apply-templates mode="slotHead" select="." />
     <div id="slot-body">
       <xsl:choose>
-        <xsl:when test="not($readPermission)">
+        <xsl:when test="mcrxsl:isCurrentUserGuestUser()">
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_access')" />
+          </div>
+        </xsl:when>
+        <xsl:when test="not($readPermission)">
+          <div class="alert alert-warning" role="alert">
+            <xsl:value-of select="i18n:translate('component.rc.slot.no_accesskey')" />
+            <p>
+              <a href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={$RequestURL}">
+                <xsl:value-of select="i18n:translate('component.rc.slot.enter_accesskey')" />
+              </a>
+            </p>
           </div>
         </xsl:when>
         <xsl:otherwise>
