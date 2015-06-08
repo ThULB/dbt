@@ -23,6 +23,7 @@
   </xsl:variable>
 
   <xsl:variable name="slotId" select="/slot/@id" />
+  <xsl:variable name="onlineOnly" select="/slot/@onlineOnly" />
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
 
   <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />

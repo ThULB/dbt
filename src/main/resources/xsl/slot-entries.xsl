@@ -269,11 +269,18 @@
   
   <!-- OPCRecordEntry -->
   <xsl:template match="opcrecord">
-    <xsl:apply-templates select="pica:record" mode="isbd" />
-    <xsl:if test="string-length(comment) &gt; 0">
-      <span class="comment">
-        <xsl:value-of select="comment" />
-      </span>
+    <xsl:if test="$writePermission or (($onlineOnly = 'false') and (string-length(@epn) &gt; 0)) or ($onlineOnly = 'true')">
+      <xsl:apply-templates select="pica:record" mode="isbd" />
+      <xsl:if test="string-length(comment) &gt; 0">
+        <span class="comment">
+          <xsl:value-of select="comment" />
+        </span>
+      </xsl:if>
+      <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)">
+        <span class="label label-warning">
+          <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.release_required')" />
+        </span>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
 
