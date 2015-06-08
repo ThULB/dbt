@@ -25,6 +25,7 @@
   <xsl:variable name="slotId" select="/slot/@id" />
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
 
+  <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
   <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
   <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
 
@@ -64,7 +65,7 @@
         <xsl:if test="@status = 'new'">
           <!-- TODO: New badge if needed -->
         </xsl:if>
-        <xsl:if test="$writePermission">
+        <xsl:if test="$hasAdminPermission or $writePermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
@@ -90,11 +91,13 @@
                   <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
                 </a>
               </li>
-              <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
-                  <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
-                </a>
-              </li>
+              <xsl:if test="$hasAdminPermission">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
+                  </a>
+                </li>
+              </xsl:if>
             </ul>
           </div>
         </xsl:if>
