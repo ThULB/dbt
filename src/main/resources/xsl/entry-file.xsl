@@ -5,7 +5,7 @@
 
   <xsl:include href="MyCoReLayout.xsl" />
 
-  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.entry.file.title')" />
+  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.entry.file.title.add')" />
 
   <xsl:variable name="entry">
     <xsl:call-template name="UrlGetParam">
