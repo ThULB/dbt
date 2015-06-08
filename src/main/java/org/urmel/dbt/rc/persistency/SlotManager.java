@@ -30,7 +30,9 @@ import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRUserInformation;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -39,6 +41,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserManager;
 import org.tmatesoft.svn.core.SVNException;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -57,6 +61,8 @@ public final class SlotManager {
     public static final String POOLPRIVILEGE_ADMINISTRATE_SLOTS = "administrate-slots";
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
+
+    public static final String ADMIN_GROUP = MCRConfiguration.instance().getString("MCR.Users.Superuser.GroupName");
 
     public static final String PROJECT_ID = "rc";
 
@@ -118,7 +124,7 @@ public final class SlotManager {
      * @return <code>true</code> if allowed or <code>false</code> if not
      */
     public static boolean checkPermission(final String objId, final String permission) {
-        if (MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {
+        if (hasAdminPermission()) {
             return true;
         }
 
@@ -127,7 +133,17 @@ public final class SlotManager {
         final MCRObjectService os = obj.getService();
         final String owner = (os.isFlagTypeSet("createdby") ? os.getFlags("createdby").get(0) : null);
 
-        return owner.equals(currentUser.getUserID()) || MCRAccessManager.checkPermission(objId, permission);
+        if (owner.equals(currentUser.getUserID()))
+            return true;
+
+        return MCRAccessManager.checkPermission(objId, permission);
+    }
+
+    public static boolean hasAdminPermission() {
+        final MCRUser currentUser = MCRUserManager.getCurrentUser();
+        return currentUser.equals(MCRSystemUserInformation.getSuperUserInstance())
+                || currentUser.isUserInRole(ADMIN_GROUP)
+                && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
     }
 
     /**

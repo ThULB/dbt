@@ -21,6 +21,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -92,6 +93,10 @@ public class SlotListServlet extends MCRServlet {
             }
 
             SLOT_MGR.saveList();
+
+            if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
+                MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
+            }
 
             job.getResponse().sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId());
         } else {
