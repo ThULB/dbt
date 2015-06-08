@@ -107,6 +107,7 @@ public class SlotServlet extends MCRServlet {
 
         // edit slot entries
         final String action = getParameter(req, "action");
+        final String entry = getParameter(req, "entry");
         final String slotId = getParameter(req, "slotId");
         final String afterId = getParameter(req, "afterId");
 
@@ -156,6 +157,19 @@ public class SlotServlet extends MCRServlet {
 
                     final Part filePart = req.getPart("file");
                     final String fileName = getFilename(filePart);
+
+                    if (fileName == null || fileName.length() == 0) {
+                        final Map<String, String> params = new HashMap<String, String>();
+                        params.put("entry", entry);
+                        params.put("slotId", slotId);
+                        params.put("afterId", afterId);
+                        params.put("invalid", "true");
+
+                        job.getResponse().sendRedirect(
+                                MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                        + toQueryString(params, false));
+                        return;
+                    }
 
                     slotEntry = new SlotEntry<FileEntry>();
 

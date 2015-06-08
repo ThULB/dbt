@@ -25,6 +25,12 @@
       <xsl:with-param name="par" select="'afterId'" />
     </xsl:call-template>
   </xsl:variable>
+  <xsl:variable name="invalid">
+    <xsl:call-template name="UrlGetParam">
+      <xsl:with-param name="url" select="$RequestURL" />
+      <xsl:with-param name="par" select="'invalid'" />
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:template match="entry-file">
     <form action="{$ServletsBaseURL}RCSlotServlet" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
