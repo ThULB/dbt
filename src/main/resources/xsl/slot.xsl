@@ -66,32 +66,41 @@
         <xsl:if test="@status = 'new'">
           <!-- TODO: New badge if needed -->
         </xsl:if>
-        <xsl:if test="$hasAdminPermission or $writePermission">
+        <xsl:if test="$readPermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
               <span class="caret" />
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
-              <li role="presentation">
-                <xsl:choose>
-                  <xsl:when test="$effectiveMode = 'view'">
-                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                      <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
-                    </a>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
-                    </a>
-                  </xsl:otherwise>
-                </xsl:choose>
-              </li>
-              <li role="presentation">
-                <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
-                  <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
-                </a>
-              </li>
+              <xsl:if test="$hasAdminPermission or $writePermission">
+                <li role="presentation">
+                  <xsl:choose>
+                    <xsl:when test="$effectiveMode = 'view'">
+                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
+                        <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
+                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
+                </li>
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                  </a>
+                </li>
+              </xsl:if>
+              <xsl:if test="not($hasAdminPermission) and not($writePermission)">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={$RequestURL}">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.change_accesskey')" />
+                  </a>
+                </li>
+              </xsl:if>
               <xsl:if test="$hasAdminPermission">
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
