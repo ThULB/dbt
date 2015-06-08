@@ -251,7 +251,7 @@
       </a>
     </h3>
     <p>
-      <xsl:text>SHA-1: </xsl:text>
+      <xsl:text>SHA-256: </xsl:text>
       <code>
         <xsl:value-of select="@hash" />
       </code>
