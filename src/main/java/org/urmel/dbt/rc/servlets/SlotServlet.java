@@ -224,6 +224,7 @@ public class SlotServlet extends MCRServlet {
 
                             fe.setContent(pdfEncrypted.toByteArray());
                         } catch (Exception e) {
+                            LOGGER.error(e);
                             params.put("errorcode", Integer.toString(ERROR_NOT_SUPPORTED));
 
                             job.getResponse().sendRedirect(
