@@ -74,11 +74,11 @@ public class SlotServlet extends MCRServlet {
 
     private static final Logger LOGGER = Logger.getLogger(SlotServlet.class);
 
-    private static final int ERROR_EMPTY_FILE = 1000;
+    private static final int ERROR_EMPTY_FILE = 100;
 
-    private static final int ERROR_PAGE_LIMIT_EXCEEDED = 1001;
+    private static final int ERROR_PAGE_LIMIT_EXCEEDED = 101;
 
-    private static final int ERROR_NOT_SUPPORTED = 1002;
+    private static final int ERROR_NOT_SUPPORTED = 102;
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 

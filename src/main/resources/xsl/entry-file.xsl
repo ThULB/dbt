@@ -31,6 +31,12 @@
       <xsl:with-param name="par" select="'invalid'" />
     </xsl:call-template>
   </xsl:variable>
+  <xsl:variable name="errorcode">
+    <xsl:call-template name="UrlGetParam">
+      <xsl:with-param name="url" select="$RequestURL" />
+      <xsl:with-param name="par" select="'errorcode'" />
+    </xsl:call-template>
+  </xsl:variable>
 
   <xsl:template match="entry-file">
     <form action="{$ServletsBaseURL}RCSlotServlet" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
@@ -46,6 +52,11 @@
           </h3>
         </div>
         <div class="panel-body">
+          <xsl:if test="$invalid = 'true'">
+            <div class="alert alert-danger">
+              <xsl:value-of select="i18n:translate(concat('component.rc.slot.entry.file.errorcode.', $errorcode))" />
+            </div>
+          </xsl:if>
           <div class="form-group">
             <label for="file" class="col-md-3 control-label">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file')" />
