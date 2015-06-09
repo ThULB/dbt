@@ -175,6 +175,7 @@ public class SlotServlet extends MCRServlet {
 
                     final FileEntry fe = new FileEntry();
                     fe.setName(fileName);
+                    fe.setCopyrighted(Boolean.parseBoolean(getParameter(req, "copyrighted")));
                     fe.setContent(filePart.getInputStream());
                     fe.setComment(getParameter(req, "comment"));
 

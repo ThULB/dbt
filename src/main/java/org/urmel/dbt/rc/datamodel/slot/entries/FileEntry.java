@@ -51,6 +51,8 @@ public class FileEntry implements Serializable {
 
     private String name;
 
+    private boolean copyrighted;
+
     private String hash;
 
     private long size = 0;
@@ -72,6 +74,21 @@ public class FileEntry implements Serializable {
      */
     public void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * @return the copyrighted
+     */
+    @XmlAttribute(name = "copyrighted")
+    public boolean isCopyrighted() {
+        return copyrighted;
+    }
+
+    /**
+     * @param copyrighted the copyrighted to set
+     */
+    public void setCopyrighted(boolean copyrighted) {
+        this.copyrighted = copyrighted;
     }
 
     /**

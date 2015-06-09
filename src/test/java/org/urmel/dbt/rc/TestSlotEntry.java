@@ -131,6 +131,7 @@ public class TestSlotEntry extends MCRTestCase {
 
         FileEntry fileEntry = new FileEntry();
         fileEntry.setName("test.txt");
+        fileEntry.setCopyrighted(false);
         fileEntry.setComment("This is a comment!");
         fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
         slotEntry.setEntry(fileEntry);

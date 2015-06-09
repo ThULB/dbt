@@ -58,6 +58,17 @@
             </div>
           </div>
           <div class="form-group">
+            <div class="col-md-offset-3 col-md-9">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="copyrighted" value="true">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.copyrighted')" />
+                  </input>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="comment" class="col-md-3 control-label">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.comment')" />
             </label>
