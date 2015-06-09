@@ -74,6 +74,12 @@ public class SlotServlet extends MCRServlet {
 
     private static final Logger LOGGER = Logger.getLogger(SlotServlet.class);
 
+    private static final int ERROR_EMPTY_FILE = 1000;
+
+    private static final int ERROR_PAGE_LIMIT_EXCEEDED = 1001;
+
+    private static final int ERROR_NOT_SUPPORTED = 1002;
+
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 
     @SuppressWarnings("unchecked")
@@ -177,7 +183,7 @@ public class SlotServlet extends MCRServlet {
                     final boolean isCopyrighted = Boolean.parseBoolean(getParameter(req, "copyrighted"));
 
                     if (fileName == null || fileName.length() == 0) {
-                        params.put("fileName", fileName);
+                        params.put("errorcode", Integer.toString(ERROR_EMPTY_FILE));
 
                         job.getResponse().sendRedirect(
                                 MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
@@ -200,7 +206,7 @@ public class SlotServlet extends MCRServlet {
 
                             LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
                             if (numPages == -1 || numPages > 50) {
-                                params.put("numPages", Integer.toString(numPages));
+                                params.put("errorcode", Integer.toString(ERROR_PAGE_LIMIT_EXCEEDED));
 
                                 job.getResponse().sendRedirect(
                                         MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
@@ -214,14 +220,11 @@ public class SlotServlet extends MCRServlet {
 
                             LOGGER.info("Encrypt \"" + fileName + "\".");
                             pdfEncrypted = new ByteArrayOutputStream();
-                            if (encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()),
-                                    pdfEncrypted)) {
-                                fe.setContent(pdfEncrypted.toByteArray());
-                            } else {
-                                throw new RuntimeException("Couldn't encrypt PDF.");
-                            }
+                            encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
+
+                            fe.setContent(pdfEncrypted.toByteArray());
                         } catch (Exception e) {
-                            params.put("generatePDF", e.getMessage());
+                            params.put("errorcode", Integer.toString(ERROR_NOT_SUPPORTED));
 
                             job.getResponse().sendRedirect(
                                     MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
@@ -318,16 +321,9 @@ public class SlotServlet extends MCRServlet {
         return req.getParameter(name);
     }
 
-    private static int getNumPagesFromPDF(InputStream fileStream) {
-        try {
-            PDDocument doc = PDDocument.load(fileStream);
-            return doc.getNumberOfPages();
-        } catch (IOException e) {
-            // ignore and send -1
-            LOGGER.error(e);
-        }
-
-        return -1;
+    private static int getNumPagesFromPDF(InputStream fileStream) throws IOException {
+        PDDocument doc = PDDocument.load(fileStream);
+        return doc.getNumberOfPages();
     }
 
     private static void copyPDF(InputStream pdfInput, OutputStream pdfOutput) throws IOException, COSVisitorException {
@@ -348,34 +344,27 @@ public class SlotServlet extends MCRServlet {
         }
     }
 
-    private static boolean encryptPDF(String entryID, InputStream pdfInput, OutputStream pdfOutput) {
-        try {
-            PDDocument doc = PDDocument.load(pdfInput);
+    private static void encryptPDF(String entryID, InputStream pdfInput, OutputStream pdfOutput) throws IOException,
+            BadSecurityHandlerException, COSVisitorException {
+        PDDocument doc = PDDocument.load(pdfInput);
 
-            AccessPermission ap = new AccessPermission();
+        AccessPermission ap = new AccessPermission();
 
-            ap.setCanAssembleDocument(false);
-            ap.setCanExtractContent(false);
-            ap.setCanExtractForAccessibility(false);
-            ap.setCanFillInForm(false);
-            ap.setCanModify(false);
-            ap.setCanModifyAnnotations(false);
-            ap.setCanPrint(false);
-            ap.setCanPrintDegraded(false);
-            ap.setReadOnly();
+        ap.setCanAssembleDocument(false);
+        ap.setCanExtractContent(false);
+        ap.setCanExtractForAccessibility(false);
+        ap.setCanFillInForm(false);
+        ap.setCanModify(false);
+        ap.setCanModifyAnnotations(false);
+        ap.setCanPrint(false);
+        ap.setCanPrintDegraded(false);
+        ap.setReadOnly();
 
-            if (!doc.isEncrypted()) {
-                StandardProtectionPolicy spp = new StandardProtectionPolicy(entryID, null, ap);
-                doc.protect(spp);
+        if (!doc.isEncrypted()) {
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(entryID, null, ap);
+            doc.protect(spp);
 
-                doc.save(pdfOutput);
-
-                return true;
-            }
-        } catch (IOException | BadSecurityHandlerException | COSVisitorException e) {
-            LOGGER.error(e);
+            doc.save(pdfOutput);
         }
-
-        return false;
     }
 }
