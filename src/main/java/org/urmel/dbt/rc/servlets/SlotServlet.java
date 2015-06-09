@@ -22,8 +22,11 @@
  */
 package org.urmel.dbt.rc.servlets;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -35,6 +38,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.apache.log4j.Logger;
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdfwriter.COSWriter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.BadSecurityHandlerException;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
@@ -155,15 +166,18 @@ public class SlotServlet extends MCRServlet {
                         return;
                     }
 
+                    final Map<String, String> params = new HashMap<String, String>();
+                    params.put("entry", entry);
+                    params.put("slotId", slotId);
+                    params.put("afterId", afterId);
+                    params.put("invalid", "true");
+
                     final Part filePart = req.getPart("file");
                     final String fileName = getFilename(filePart);
+                    final boolean isCopyrighted = Boolean.parseBoolean(getParameter(req, "copyrighted"));
 
                     if (fileName == null || fileName.length() == 0) {
-                        final Map<String, String> params = new HashMap<String, String>();
-                        params.put("entry", entry);
-                        params.put("slotId", slotId);
-                        params.put("afterId", afterId);
-                        params.put("invalid", "true");
+                        params.put("fileName", fileName);
 
                         job.getResponse().sendRedirect(
                                 MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
@@ -175,8 +189,54 @@ public class SlotServlet extends MCRServlet {
 
                     final FileEntry fe = new FileEntry();
                     fe.setName(fileName);
-                    fe.setCopyrighted(Boolean.parseBoolean(getParameter(req, "copyrighted")));
-                    fe.setContent(filePart.getInputStream());
+                    fe.setCopyrighted(isCopyrighted);
+
+                    if (isCopyrighted && "application/pdf".equals(filePart.getContentType())) {
+                        ByteArrayOutputStream pdfCopy = null;
+                        ByteArrayOutputStream pdfEncrypted = null;
+
+                        try {
+                            final int numPages = getNumPagesFromPDF(filePart.getInputStream());
+
+                            LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
+                            if (numPages == -1 || numPages > 50) {
+                                params.put("numPages", Integer.toString(numPages));
+
+                                job.getResponse().sendRedirect(
+                                        MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                                + toQueryString(params, false));
+                                return;
+                            }
+
+                            LOGGER.info("Make an supported copy for \"" + fileName + "\".");
+                            pdfCopy = new ByteArrayOutputStream();
+                            copyPDF(filePart.getInputStream(), pdfCopy);
+
+                            LOGGER.info("Encrypt \"" + fileName + "\".");
+                            pdfEncrypted = new ByteArrayOutputStream();
+                            if (encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()),
+                                    pdfEncrypted)) {
+                                fe.setContent(pdfEncrypted.toByteArray());
+                            } else {
+                                throw new RuntimeException("Couldn't encrypt PDF.");
+                            }
+                        } catch (Exception e) {
+                            params.put("generatePDF", e.getMessage());
+
+                            job.getResponse().sendRedirect(
+                                    MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                            + toQueryString(params, false));
+                            return;
+                        } finally {
+                            if (pdfCopy != null) {
+                                pdfCopy.close();
+                            }
+                            if (pdfEncrypted != null) {
+                                pdfEncrypted.close();
+                            }
+                        }
+                    } else
+                        fe.setContent(filePart.getInputStream());
                     fe.setComment(getParameter(req, "comment"));
 
                     ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
@@ -256,5 +316,66 @@ public class SlotServlet extends MCRServlet {
         }
 
         return req.getParameter(name);
+    }
+
+    private static int getNumPagesFromPDF(InputStream fileStream) {
+        try {
+            PDDocument doc = PDDocument.load(fileStream);
+            return doc.getNumberOfPages();
+        } catch (IOException e) {
+            // ignore and send -1
+            LOGGER.error(e);
+        }
+
+        return -1;
+    }
+
+    private static void copyPDF(InputStream pdfInput, OutputStream pdfOutput) throws IOException, COSVisitorException {
+        COSWriter writer = null;
+        try {
+            PDFParser parser = new PDFParser(pdfInput);
+            parser.parse();
+
+            COSDocument doc = parser.getDocument();
+
+            writer = new COSWriter(pdfOutput);
+
+            writer.write(doc);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
+    private static boolean encryptPDF(String entryID, InputStream pdfInput, OutputStream pdfOutput) {
+        try {
+            PDDocument doc = PDDocument.load(pdfInput);
+
+            AccessPermission ap = new AccessPermission();
+
+            ap.setCanAssembleDocument(false);
+            ap.setCanExtractContent(false);
+            ap.setCanExtractForAccessibility(false);
+            ap.setCanFillInForm(false);
+            ap.setCanModify(false);
+            ap.setCanModifyAnnotations(false);
+            ap.setCanPrint(false);
+            ap.setCanPrintDegraded(false);
+            ap.setReadOnly();
+
+            if (!doc.isEncrypted()) {
+                StandardProtectionPolicy spp = new StandardProtectionPolicy(entryID, null, ap);
+                doc.protect(spp);
+
+                doc.save(pdfOutput);
+
+                return true;
+            }
+        } catch (IOException | BadSecurityHandlerException | COSVisitorException e) {
+            LOGGER.error(e);
+        }
+
+        return false;
     }
 }
