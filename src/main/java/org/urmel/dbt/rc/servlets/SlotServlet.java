@@ -74,10 +74,13 @@ public class SlotServlet extends MCRServlet {
 
     private static final Logger LOGGER = Logger.getLogger(SlotServlet.class);
 
+    // Error code: for a empty file or empty file parameter
     private static final int ERROR_EMPTY_FILE = 100;
 
+    // Error code: for a PDF document with exceeded page limit
     private static final int ERROR_PAGE_LIMIT_EXCEEDED = 101;
 
+    // Error code: for a unsupported PDF document
     private static final int ERROR_NOT_SUPPORTED = 102;
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
@@ -322,12 +325,28 @@ public class SlotServlet extends MCRServlet {
         return req.getParameter(name);
     }
 
-    private static int getNumPagesFromPDF(InputStream fileStream) throws IOException {
-        PDDocument doc = PDDocument.load(fileStream);
+    /**
+     * Returns the number of pages from given PDF {@link InputStream}.
+     * 
+     * @param pdfInput the {@link InputStream}
+     * @return the number of pages
+     * @throws IOException
+     */
+    private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
+        PDDocument doc = PDDocument.load(pdfInput);
         return doc.getNumberOfPages();
     }
 
-    private static void copyPDF(InputStream pdfInput, OutputStream pdfOutput) throws IOException, COSVisitorException {
+    /**
+     * Makes an save copy of given PDF {@link InputStream} to an new {@link OutputStram}.
+     * 
+     * @param pdfInput the PDF {@link InputStream}
+     * @param pdfOutput the PDF {@link OutputStram}
+     * @throws IOException
+     * @throws COSVisitorException
+     */
+    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput) throws IOException,
+            COSVisitorException {
         COSWriter writer = null;
         try {
             PDFParser parser = new PDFParser(pdfInput);
@@ -345,8 +364,18 @@ public class SlotServlet extends MCRServlet {
         }
     }
 
-    private static void encryptPDF(String entryID, InputStream pdfInput, OutputStream pdfOutput) throws IOException,
-            BadSecurityHandlerException, COSVisitorException {
+    /**
+     * Secures the PDF document and set the password.
+     * 
+     * @param password the password
+     * @param pdfInput the PDF {@link InputStream}
+     * @param pdfOutput the PDF {@link OutputStram}
+     * @throws IOException
+     * @throws BadSecurityHandlerException
+     * @throws COSVisitorException
+     */
+    private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
+            throws IOException, BadSecurityHandlerException, COSVisitorException {
         PDDocument doc = PDDocument.load(pdfInput);
 
         AccessPermission ap = new AccessPermission();
@@ -362,7 +391,7 @@ public class SlotServlet extends MCRServlet {
         ap.setReadOnly();
 
         if (!doc.isEncrypted()) {
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(entryID, null, ap);
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(password, null, ap);
             doc.protect(spp);
 
             doc.save(pdfOutput);
