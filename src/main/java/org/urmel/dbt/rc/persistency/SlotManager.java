@@ -128,6 +128,31 @@ public final class SlotManager {
             return true;
         }
 
+        if (isOwner(objId))
+            return true;
+
+        return MCRAccessManager.checkPermission(objId, permission);
+    }
+
+    /**
+     * Checks if current user is reserve collection administrator.
+     * 
+     * @return <code>true</code> if is administrator
+     */
+    public static boolean hasAdminPermission() {
+        final MCRUser currentUser = MCRUserManager.getCurrentUser();
+        return currentUser.equals(MCRSystemUserInformation.getSuperUserInstance())
+                || currentUser.isUserInRole(ADMIN_GROUP)
+                && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
+    }
+
+    /**
+     * Checks if current user is owner of reserve collection.
+     * 
+     * @param objId the {@link MCRObjectID}
+     * @return <code>true</code> is owner
+     */
+    public static boolean isOwner(final String objId) {
         final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
         final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
         final MCRObjectService os = obj.getService();
@@ -136,14 +161,7 @@ public final class SlotManager {
         if (owner.equals(currentUser.getUserID()))
             return true;
 
-        return MCRAccessManager.checkPermission(objId, permission);
-    }
-
-    public static boolean hasAdminPermission() {
-        final MCRUser currentUser = MCRUserManager.getCurrentUser();
-        return currentUser.equals(MCRSystemUserInformation.getSuperUserInstance())
-                || currentUser.isUserInRole(ADMIN_GROUP)
-                && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
+        return false;
     }
 
     /**

@@ -27,6 +27,7 @@
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
 
   <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
+  <xsl:variable name="isOwner" select="acl:isOwner($objectId)" />
   <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
   <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
 
@@ -88,11 +89,13 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </li>
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
-                    <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
-                  </a>
-                </li>
+                <xsl:if test="$hasAdminPermission or $isOwner">
+                  <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
+                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                    </a>
+                  </li>
+                </xsl:if>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($writePermission)">
                 <li role="presentation">
