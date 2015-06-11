@@ -11,6 +11,7 @@
   <!-- *                  additional stylesheets                  * -->
   <!-- ************************************************************ -->
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
+  <xsl:include href="resource:xsl/layout/dbt-navigation.xsl" />
 
   <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" encoding="UTF-8" />
   <xsl:strip-space elements="*" />
@@ -94,6 +95,7 @@
 
   <xsl:template name="layout.cssLinks">
     <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/css/layout.min.css" type="text/css" />
+    <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.css" type="text/css" />
 
     <xsl:if test="$include.HTML.Head.CSS">
       <xsl:copy-of select="$include.HTML.Head.CSS" />
@@ -105,7 +107,11 @@
   <xsl:template name="layout.scripts">
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/jquery.smartmenus.min.js"></script>
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.min.js"></script>
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js"></script>
 
     <xsl:if test="$include.HTML.Head.JS">

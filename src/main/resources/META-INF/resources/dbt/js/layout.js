@@ -229,11 +229,12 @@ jQuery(document).ready(function() {
 	new components.textCollapseComponent();
 	new components.CopyToClipboardComponent();
 
-	new components.dropDownAnimationComponent();
-	
+	// new components.dropDownAnimationComponent();
+
 	/*
 	 * TOOLTIP
-	 * Description: Initialize all Bootstrap Tooltips. 
+	 * 
+	 * Description: Initialize all Bootstrap Tooltips.
 	 */
 	$('*[data-toggle="tooltip"]').tooltip();
 });

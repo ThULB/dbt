@@ -58,17 +58,17 @@ module.exports = function(grunt) {
 				files : [ {
 					expand : true,
 					cwd : 'bower_components/bootstrap/dist/',
-					src : [ 'fonts/**', 'js/**' ],
+					src : [ 'fonts/**', 'js/*.min.*' ],
 					dest : '<%=globalConfig.assetsDirectory%>/bootstrap/'
 				}, {
 					expand : true,
 					cwd : 'bower_components/bootstrap-fileinput/',
-					src : [ 'css/**', 'img/**', 'js/**' ],
+					src : [ 'css/*.min.*', 'img/**', 'js/*.min.*' ],
 					dest : '<%=globalConfig.assetsDirectory%>/bootstrap-fileinput/'
 				}, {
 					expand : true,
 					cwd : 'bower_components/jquery/dist/',
-					src : [ '**' ],
+					src : [ '*.min.*' ],
 					dest : '<%=globalConfig.assetsDirectory%>/jquery/'
 				}, {
 					expand : true,
@@ -83,8 +83,13 @@ module.exports = function(grunt) {
 				}, {
 					expand : true,
 					cwd : 'bower_components/summernote/dist/',
-					src : [ '**' ],
+					src : [ '*.min.*', '*.css' ],
 					dest : '<%=globalConfig.assetsDirectory%>/summernote/'
+				}, {
+					expand : true,
+					cwd : 'bower_components/smartmenus/dist/',
+					src : [ 'addons/**/*.min.*', 'addons/**/*.css', '*.min.*' ],
+					dest : '<%=globalConfig.assetsDirectory%>/smartmenus/'
 				} ]
 			}
 		},
