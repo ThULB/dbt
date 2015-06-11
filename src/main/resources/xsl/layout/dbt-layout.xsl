@@ -105,14 +105,14 @@
   <!-- Load JavaScripts -->
 
   <xsl:template name="layout.scripts">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js"></script>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/jquery.smartmenus.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/jquery.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/jquery.smartmenus.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap/js/bootstrap.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
 
     <xsl:if test="$include.HTML.Head.JS">
       <xsl:copy-of select="$include.HTML.Head.JS" />
@@ -212,7 +212,7 @@
               <xsl:value-of select="$userId" />
             </xsl:otherwise>
           </xsl:choose>
-          <b class="caret"></b>
+          <b class="caret" />
         </a>
         <div class="dropdown-menu pull-right no-padding">
           <div id="user-info" class="panel">
@@ -270,11 +270,11 @@
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
           <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
+          <span class="icon-bar" />
+          <span class="icon-bar" />
+          <span class="icon-bar" />
         </button>
-        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}"></a>
+        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}" />
       </div>
       <div class="navbar-collapse collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
@@ -283,7 +283,7 @@
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='main']" />
-          <xsl:call-template name="mir.basketMenu" />
+          <xsl:call-template name="layout.head.basketMenu" />
         </ul>
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find?qry={0}" class="navbar-form navbar-right visible-xs visible-md visible-lg"
           role="search"
@@ -292,13 +292,50 @@
             <input class="form-control" type="text" id="searchTerm" name="qry" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit" name="search">
-                <span class="glyphicon glyphicon-search"></span>
+                <span class="glyphicon glyphicon-search" />
               </button>
             </div>
           </div>
         </form>
       </div>
     </div>
+  </xsl:template>
+
+  <xsl:template name="layout.head.basketMenu">
+    <xsl:variable name="basketType" select="'objects'" />
+    <xsl:variable name="basket" select="document(concat('basket:',$basketType))/basket" />
+    <xsl:variable name="entryCount" select="count($basket/entry)" />
+    <li class="dropdown" id="basket-list-item">
+      <a class="dropdown-toggle" href="#" title="{i18n:translate('basket.title.objects')}">
+        <i class="fa fa-bookmark" />
+        <sup>
+          <xsl:value-of select="$entryCount" />
+        </sup>
+      </a>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+        <li class="disabled">
+          <a>
+            <xsl:choose>
+              <xsl:when test="$entryCount = 0">
+                <xsl:value-of select="i18n:translate('basket.numEntries.none')" disable-output-escaping="yes" />
+              </xsl:when>
+              <xsl:when test="$entryCount = 1">
+                <xsl:value-of select="i18n:translate('basket.numEntries.one')" disable-output-escaping="yes" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="i18n:translate('basket.numEntries.many',$entryCount)" disable-output-escaping="yes" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </a>
+        </li>
+        <li class="divider" />
+        <li>
+          <a href="{$ServletsBaseURL}MCRBasketServlet{$HttpSession}?type={$basket/@type}&amp;action=show">
+            <xsl:value-of select="i18n:translate('basket.open')" />
+          </a>
+        </li>
+      </ul>
+    </li>
   </xsl:template>
 
   <xsl:template name="layout.content">
@@ -346,7 +383,7 @@
                 <span class="language {$CurrentLang}">
                   <xsl:value-of select="i18n:translate('navigation.Language')" />
                 </span>
-                <span class="caret"></span>
+                <span class="caret" />
               </button>
               <ul class="dropdown-menu">
                 <li>
@@ -355,12 +392,12 @@
                   </xsl:if>
                   <a href="#" class="language de">
                     <xsl:attribute name="href">
-                                            <xsl:call-template name="UrlSetParam">
-                                                <xsl:with-param name="url" select="$RequestURL" />
-                                                <xsl:with-param name="par" select="'lang'" />
-                                                <xsl:with-param name="value" select="'de'" />
-                                            </xsl:call-template>
-                                        </xsl:attribute>
+                      <xsl:call-template name="UrlSetParam">
+                        <xsl:with-param name="url" select="$RequestURL" />
+                        <xsl:with-param name="par" select="'lang'" />
+                        <xsl:with-param name="value" select="'de'" />
+                      </xsl:call-template>
+                    </xsl:attribute>
                     <xsl:text>Deutsch</xsl:text>
                   </a>
                 </li>
@@ -370,12 +407,12 @@
                   </xsl:if>
                   <a href="#" class="language en">
                     <xsl:attribute name="href">
-                                            <xsl:call-template name="UrlSetParam">
-                                                <xsl:with-param name="url" select="$RequestURL" />
-                                                <xsl:with-param name="par" select="'lang'" />
-                                                <xsl:with-param name="value" select="'en'" />
-                                            </xsl:call-template>
-                                        </xsl:attribute>
+                      <xsl:call-template name="UrlSetParam">
+                        <xsl:with-param name="url" select="$RequestURL" />
+                        <xsl:with-param name="par" select="'lang'" />
+                        <xsl:with-param name="value" select="'en'" />
+                      </xsl:call-template>
+                    </xsl:attribute>
                     <xsl:text>English</xsl:text>
                   </a>
                 </li>
@@ -388,14 +425,14 @@
   </xsl:template>
   
   <!-- ************************************************************ -->
-    <!-- *                      Action Buttons                      * -->
-    <!-- ************************************************************ -->
+  <!-- *                      Action Buttons                      * -->
+  <!-- ************************************************************ -->
   <xsl:variable name="actions" />
 
   <xsl:template name="action.buttons">
     <xsl:variable name="actions.combined" select="xalan:nodeset($actions)/action" />
 
-    <xsl:if test="count($actions.combined) > 0">
+    <xsl:if test="count($actions.combined) &gt; 0">
       <div class="actionButtons btn-group btn-group-sm pull-right">
         <xsl:apply-templates select="$actions.combined" mode="action.buttons" />
       </div>
@@ -410,40 +447,40 @@
         <xsl:attribute name="target">_blank</xsl:attribute>
       </xsl:if>
       <xsl:attribute name="class">
-                <xsl:choose>
-                    <xsl:when test="string-length(@style) &gt; 0">
-                        <xsl:value-of select="concat('btn btn-', @style)" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="'btn btn-default'" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
+        <xsl:choose>
+          <xsl:when test="string-length(@style) &gt; 0">
+            <xsl:value-of select="concat('btn btn-', @style)" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="'btn btn-default'" />
+          </xsl:otherwise>
+      </xsl:choose>
+      </xsl:attribute>
       <xsl:attribute name="href">
-                <xsl:value-of select="@target" />
-                <xsl:for-each select="param">
-                    <xsl:choose>
-                        <xsl:when test="position() = 1">
-                            <xsl:value-of select="'?'" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="'&amp;'" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:value-of select="@name" />
-                    <xsl:value-of select="'='" />
-                    <xsl:value-of xmlns:encoder="xalan://java.net.URLEncoder" select="encoder:encode(string(@value),'UTF-8')" />
-                </xsl:for-each>
-            </xsl:attribute>
+        <xsl:value-of select="@target" />
+        <xsl:for-each select="param">
+          <xsl:choose>
+            <xsl:when test="position() = 1">
+              <xsl:value-of select="'?'" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="'&amp;'" />
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:value-of select="@name" />
+          <xsl:value-of select="'='" />
+          <xsl:value-of xmlns:encoder="xalan://java.net.URLEncoder" select="encoder:encode(string(@value),'UTF-8')" />
+        </xsl:for-each>
+      </xsl:attribute>
       <xsl:choose>
         <xsl:when test="@type='icon'">
           <xsl:attribute name="alt">
-                        <xsl:value-of select="@label" />
-                    </xsl:attribute>
+            <xsl:value-of select="@label" />
+          </xsl:attribute>
           <xsl:attribute name="title">
-                        <xsl:value-of select="@label" />
-                    </xsl:attribute>
-          <span class="glyphicon glyphicon-{@icon}"></span>
+            <xsl:value-of select="@label" />
+          </xsl:attribute>
+          <span class="glyphicon glyphicon-{@icon}" />
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="@label" />
