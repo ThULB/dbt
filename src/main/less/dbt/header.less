@@ -206,7 +206,6 @@ nav {
           color: @dbt-navbar-colorHighlight;
           .box-shadow (~"0 5px 10px -1px rgba(90, 90, 90, 0.5) inset, 2px 35px 65px 5px rgba(235, 235, 235, 0.5) inset");
           .reset-filter ();
-          
           .icon-bar {
             background-color: @dbt-navbar-colorHighlight;
           }
@@ -254,6 +253,14 @@ nav {
         margin-left: 5px;
         margin-right: 0;
         position: relative;
+        &.sm-collapsible {
+          .caret , ul .caret {
+            border: 0;
+            border-radius: 0;
+            background: transparent;
+          }
+        }
+
         @media (min-width: @screen-sm) {
           &:before {
             content: "";
