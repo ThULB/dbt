@@ -71,10 +71,14 @@
   <xed:template id="accesskeys">
     <xed:bind xpath="accesskeys">
       <mir:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
-        required="true" />
+        required="true" maxlength="64" />
       <mir:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
-        required="true" />
+        required="true" maxlength="64" />
     </xed:bind>
+
+    <xed:validate xpath="slot" display="global"
+      test="(string-length(accesskeys/@readkey) &gt; 0) and (string-length(accesskeys/@writekey) &gt; 0) and (accesskeys/@readkey != accesskeys/@writekey)"
+      i18n="component.rc.slot.accesskey.matches" />
   </xed:template>
 
 </xed:template>
