@@ -3,7 +3,7 @@
   exclude-result-prefixes="xlink"
 >
 
-  <xsl:import href="xslImport:solr-document:slot-solr.xsl" />
+  <xsl:import href="xslImport:solr-document:rc/slot-solr.xsl" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 

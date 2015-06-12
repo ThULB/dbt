@@ -6,7 +6,7 @@
   <!-- include custom templates for supported objecttypes -->
   <xsl:include href="xslInclude:objectTypes" />
 
-  <xsl:include href="pica-record-isbd.xsl" />
+  <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
   
    <!-- OPC vars -->
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />

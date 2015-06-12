@@ -3,7 +3,7 @@
 <MyCoReWebPage>
   <section i18n="component.rc.slot.new_title" xml:lang="all">
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
-      <xed:source uri="xslStyle:slot-preprocessor:webapp:content/rc/editor-slot-defaults.xml" />
+      <xed:source uri="xslStyle:rc/slot-preprocessor:webapp:content/rc/editor-slot-defaults.xml" />
       <xed:bind xpath="slot">
         <div class="panel panel-default">
           <div class="panel-heading">
@@ -19,7 +19,7 @@
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
 
             <!-- FIXME use it from include -->
-            <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true" uri="xslStyle:periods2options:period:areacode=0&amp;date=now&amp;list=true"
+            <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true" uri="xslStyle:rc/periods2options:period:areacode=0&amp;date=now&amp;list=true"
               i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required" required="true" />
 
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />

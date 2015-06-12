@@ -5,8 +5,8 @@
   <xed:template id="source">
     <xed:choose>
       <xed:when test="$entry = 'opcrecord'">
-        <xed:source uri="xslStyle:slot-entry-preprocessor:slot:slotId={$slotId}&amp;entryId={$entryId}" />
-        <xed:source uri="xslStyle:pica2opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}&amp;copys=false" />
+        <xed:source uri="xslStyle:rc/slot-entry-preprocessor:slot:slotId={$slotId}&amp;entryId={$entryId}" />
+        <xed:source uri="xslStyle:rc/pica2opcrecord:opc:catalogId={$catalogId}&amp;record={$ppn}&amp;copys=false" />
       </xed:when>
       <xed:otherwise>
         <xed:source uri="slot:slotId={$slotId}&amp;entryId={$entryId}" />
@@ -134,9 +134,9 @@
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
       <div class="col-md-9 entry-opcrecord">
-        <h3>
-          <xed:output value="opcrecord/display/h3" />
-        </h3>
+        <h4>
+          <xed:output value="opcrecord/display/h4" />
+        </h4>
         <p>
           <xed:output value="opcrecord/display/p" />
         </p>
@@ -145,7 +145,7 @@
 
     <xed:if test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
       <xed:bind xpath="opcrecord/pica:record/@ppn" name="ppn" />
-      <mir:template name="selectInput" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn" uri="xslStyle:copys2options?ppn={$ppn}:slot:slotId={$slotId}&amp;catalogId" />
+      <mir:template name="selectInput" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn" uri="xslStyle:opc/copys2options?ppn={$ppn}:slot:slotId={$slotId}&amp;catalogId" />
     </xed:if>
 
     <mir:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
@@ -154,7 +154,7 @@
   <xed:template id="search-opcrecord">
     <xed:bind xpath="search">
       <mir:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
-        uri="xslStyle:iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+        uri="xslStyle:opc/iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
       <mir:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term" i18n.error="component.rc.slot.entry.opcrecord.term.required"
         required="true" />
     </xed:bind>

@@ -6,16 +6,27 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl xsi xlink pica"
 >
 
-  <xsl:include href="pica-record-isbd.xsl" />
+  <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
 
-  <xsl:template match="/">
+  <xsl:template match="/entry">
     <entry>
-      <opcrecord>
-        <display>
-          <xsl:apply-templates select="pica:record" mode="isbd" />
-        </display>
-        <xsl:copy-of select="pica:record" />
-      </opcrecord>
+      <xsl:apply-templates select="@*|node()" />
     </entry>
   </xsl:template>
+
+  <xsl:template match="opcrecord">
+    <opcrecord>
+      <xsl:apply-templates select="@*|node()" />
+      <display>
+        <xsl:apply-templates select="pica:record" mode="isbd" />
+      </display>
+    </opcrecord>
+  </xsl:template>
+
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()" />
+    </xsl:copy>
+  </xsl:template>
+
 </xsl:stylesheet>

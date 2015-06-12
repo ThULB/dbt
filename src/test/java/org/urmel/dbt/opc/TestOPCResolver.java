@@ -102,7 +102,7 @@ public class TestOPCResolver extends MCRTestCase {
     @Test
     public void testPica2Mods() throws Exception {
         Element xml = MCRURIResolver.instance().resolve(
-                "xslStyle:pica2mods?RecordIdSource=DEIlm1&PURLPrefix="
+                "xslStyle:opc/pica2mods?RecordIdSource=DEIlm1&PURLPrefix="
                         + URLEncoder.encode("http://service.bibliothek.tu-ilmenau.de/opac.php/search/ppn ", "UTF-8")
                         + ":opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=729763749");
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);

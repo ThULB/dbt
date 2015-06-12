@@ -63,7 +63,7 @@
       <mir:template name="textInput" xpath="validTo" inline="true" colwidth="3" id="validTo" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
         required="true" validate="true" type="datetime" format="yyyy-MM-dd;dd.MM.yyyy" />
       <div class="col-md-6">
-        <xed:include uri="xslStyle:editor-include-period:period:areacode=0&amp;date=now" />
+        <xed:include uri="xslStyle:rc/editor-include-period:period:areacode=0&amp;date=now" />
       </div>
     </div>
   </xed:template>
