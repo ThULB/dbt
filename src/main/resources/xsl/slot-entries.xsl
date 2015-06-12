@@ -245,11 +245,11 @@
   
   <!-- File -->
   <xsl:template match="file">
-    <h3>
+    <h4>
       <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
         <xsl:value-of select="@name" />
       </a>
-    </h3>
+    </h4>
     <p>
       <xsl:text>SHA-256: </xsl:text>
       <code>
