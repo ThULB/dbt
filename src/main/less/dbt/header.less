@@ -189,7 +189,7 @@ nav {
       height: @dbt-navbar-height;
       min-width: 220px;
       @media (max-width: (@container-desktop - 1)) {
-        min-width: 150px;
+        min-width: 100px;
       }
 
       .navbar-toggle {
@@ -351,7 +351,7 @@ nav {
             }
           }
 
-          > .open {
+          > .open, li:not(.dropdown):hover {
             > a , > a:hover , > a:focus {
               #gradient > .vertical (#5A5A5A , rgba(255, 255, 255, 0.5) , 0% , 10%);
               border-style: solid;
