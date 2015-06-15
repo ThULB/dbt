@@ -361,66 +361,71 @@
   </xsl:template>
 
   <xsl:template name="layout.footer">
-    <div class="container-fluid">
-      <div class="pull-left">
-        <ul class="nav-footer">
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='below']//item" />
-        </ul>
-        <p class="credit">
-          <xsl:value-of select="i18n:translate('dbt.copyright')" />
-        </p>
-      </div>
+    <div id="nav" class="col-xs-12 col-sm-12 col-md-12">
+      <ul class="nav-footer">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='below']//item" />
+      </ul>
+    </div>
 
-      <div class="pull-right">
-        <p>
-          <xsl:call-template name="layout.footer.lastModified" />
-        </p>
-        <div class="pull-right">
-          <form id="langSelect" method="get">
-            <input type="hidden" name="lang" value="{$CurrentLang}" />
-            <div class="btn-group dropup pull-right">
-              <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                <span class="language {$CurrentLang}">
-                  <xsl:value-of select="i18n:translate('navigation.Language')" />
-                </span>
-                <span class="caret" />
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <xsl:if test="$CurrentLang = 'de'">
-                    <xsl:attribute name="class">active</xsl:attribute>
-                  </xsl:if>
-                  <a href="#" class="language de">
-                    <xsl:attribute name="href">
+    <div id="info" class="col-xs-10 col-sm-10 col-md-10">
+      <p>
+        <xsl:value-of select="i18n:translate('dbt.copyright')" />
+      </p>
+      <p>
+        <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
+      </p>
+    </div>
+    <div class="col-xs-2 col-sm-2 col-md-2">
+      <form id="langSelect" method="get">
+        <input type="hidden" name="lang" value="{$CurrentLang}" />
+        <div class="btn-group dropup pull-right">
+          <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+            <span class="language {$CurrentLang}">
+              <xsl:value-of select="i18n:translate('navigation.Language')" />
+            </span>
+            <span class="caret" />
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <xsl:if test="$CurrentLang = 'de'">
+                <xsl:attribute name="class">active</xsl:attribute>
+              </xsl:if>
+              <a href="#" class="language de">
+                <xsl:attribute name="href">
                       <xsl:call-template name="UrlSetParam">
                         <xsl:with-param name="url" select="$RequestURL" />
                         <xsl:with-param name="par" select="'lang'" />
                         <xsl:with-param name="value" select="'de'" />
                       </xsl:call-template>
                     </xsl:attribute>
-                    <xsl:text>Deutsch</xsl:text>
-                  </a>
-                </li>
-                <li>
-                  <xsl:if test="$CurrentLang = 'en'">
-                    <xsl:attribute name="class">active</xsl:attribute>
-                  </xsl:if>
-                  <a href="#" class="language en">
-                    <xsl:attribute name="href">
+                <xsl:text>Deutsch</xsl:text>
+              </a>
+            </li>
+            <li>
+              <xsl:if test="$CurrentLang = 'en'">
+                <xsl:attribute name="class">active</xsl:attribute>
+              </xsl:if>
+              <a href="#" class="language en">
+                <xsl:attribute name="href">
                       <xsl:call-template name="UrlSetParam">
                         <xsl:with-param name="url" select="$RequestURL" />
                         <xsl:with-param name="par" select="'lang'" />
                         <xsl:with-param name="value" select="'en'" />
                       </xsl:call-template>
                     </xsl:attribute>
-                    <xsl:text>English</xsl:text>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </form>
+                <xsl:text>English</xsl:text>
+              </a>
+            </li>
+          </ul>
         </div>
-      </div>
+      </form>
+    </div>
+
+    <xsl:variable name="mcr_version" select="concat('MyCoRe ',mcrver:getCompleteVersion())" />
+    <div id="powered_by" class="col-xs-12 col-sm-12 col-md-12">
+      <a href="http://www.mycore.de">
+        <img src="{$WebApplicationBaseURL}dbt/images/mycore_logo_small_invert.png" class="img-responsive center-block" title="{$mcr_version}" alt="powered by MyCoRe" />
+      </a>
     </div>
   </xsl:template>
   
@@ -487,29 +492,6 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
-  </xsl:template>
-
-  <xsl:variable name="pageLastModified" />
-
-  <xsl:template name="layout.footer.lastModified">
-    <xsl:if test="string-length($pageLastModified) &gt; 0">
-      <xsl:value-of select="i18n:translate('webpage.modified')" />
-      <xsl:text>: </xsl:text>
-      <xsl:choose>
-        <xsl:when test="$CurrentLang = 'de'">
-          <xsl:value-of select="substring($pageLastModified,9,2)" />
-          <xsl:text>.</xsl:text>
-          <xsl:value-of select="substring($pageLastModified,6,2)" />
-          <xsl:text>.</xsl:text>
-          <xsl:value-of select="substring($pageLastModified,1,4)" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$pageLastModified" />
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:text> - </xsl:text>
-    </xsl:if>
-    <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
   </xsl:template>
 
 </xsl:stylesheet>
