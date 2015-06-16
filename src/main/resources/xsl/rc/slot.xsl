@@ -76,10 +76,15 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$hasAdminPermission or $writePermission">
                 <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-slot.xed?slotId={@id}">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                  </a>
+                </li>
+                <li role="presentation">
                   <xsl:choose>
                     <xsl:when test="$effectiveMode = 'view'">
                       <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
