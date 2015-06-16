@@ -80,6 +80,14 @@
                     <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
                   </a>
                 </li>
+                <xsl:if test="$hasAdminPermission or $isOwner">
+                  <li role="presentation">
+                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
+                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                    </a>
+                  </li>
+                </xsl:if>
+                <li class="divider" />
                 <li role="presentation">
                   <xsl:choose>
                     <xsl:when test="$effectiveMode = 'view'">
@@ -93,13 +101,6 @@
                       </a>
                     </xsl:otherwise>
                   </xsl:choose>
-                </li>
-              </xsl:if>
-              <xsl:if test="$hasAdminPermission or $isOwner">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
-                    <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
-                  </a>
                 </li>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($writePermission)">
