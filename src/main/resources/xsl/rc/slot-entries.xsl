@@ -51,13 +51,22 @@
 
     <entries>
       <xsl:for-each select="$entries">
-        <xsl:if test="headline">
-          <xsl:call-template name="groupEntries">
-            <xsl:with-param name="entries" select="$entries" />
-            <xsl:with-param name="hlPos" select="position()" />
-            <xsl:with-param name="hlIndex" select="count(preceding-sibling::*/headline) + 1" />
-          </xsl:call-template>
-        </xsl:if>
+        <xsl:choose>
+          <xsl:when test="position() = 1 and not(headline)">
+            <xsl:call-template name="groupEntries">
+              <xsl:with-param name="entries" select="$entries" />
+              <xsl:with-param name="hlPos" select="position()" />
+              <xsl:with-param name="hlIndex" select="1" />
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:when test="headline">
+            <xsl:call-template name="groupEntries">
+              <xsl:with-param name="entries" select="$entries" />
+              <xsl:with-param name="hlPos" select="position()" />
+              <xsl:with-param name="hlIndex" select="count(preceding-sibling::*/headline) + 1" />
+            </xsl:call-template>
+          </xsl:when>
+        </xsl:choose>
       </xsl:for-each>
     </entries>
   </xsl:variable>
@@ -70,20 +79,22 @@
   </xsl:template>
 
   <xsl:template match="entries" mode="toc">
-    <div class="slot-toc">
-      <h2>
-        <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
-      </h2>
-      <ul>
-        <xsl:for-each select="group/entry/headline">
-          <li>
-            <a href="{concat('#', ../@id)}">
-              <xsl:value-of select="." />
-            </a>
-          </li>
-        </xsl:for-each>
-      </ul>
-    </div>
+    <xsl:if test="count(group/entry/headline) &gt; 0">
+      <div class="slot-toc">
+        <h2>
+          <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
+        </h2>
+        <ul>
+          <xsl:for-each select="group/entry/headline">
+            <li>
+              <a href="{concat('#', ../@id)}">
+                <xsl:value-of select="." />
+              </a>
+            </li>
+          </xsl:for-each>
+        </ul>
+      </div>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="group">
@@ -204,9 +215,9 @@
         </pre>
       </xsl:when>
       <xsl:otherwise>
-        <p>
+        <div>
           <xsl:value-of select="." disable-output-escaping="yes" />
-        </p>
+        </div>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
