@@ -44,7 +44,12 @@ import org.urmel.dbt.rc.utils.RCCalendarTransformer;
  * the current date.
  * <br />
  * <br />
- * Syntax: <code>period:areacode=areaCode[&date={now|31.12.2011}]</code>
+ * Syntax:
+ * <ul>
+ * <li><code>period:areacode=areaCode[&date={now|31.12.2011}]</code> get (set able) period for given date</li>
+ * <li><code>period:areacode=areaCode[&date={now|31.12.2011}][&fq=true]</code> get (fq = full qualified) period for given date</li>
+ * <li><code>period:areacode=areaCode[&date={now|31.12.2011}][&list=true][&numnext=1]</code> get periods (+ next) for given date</li>
+ * </ul>
  * 
  * @author Ren\u00E9 Adler (eagle)
  *
@@ -71,6 +76,7 @@ public class PeriodResolver implements URIResolver {
 
             final String areaCode = params.get("areacode");
             final String dateStr = params.get("date") != null ? params.get("date") : "now";
+            final boolean fq = params.get("fq") != null ? Boolean.parseBoolean(params.get("fq")) : false;
             final boolean list = params.get("list") != null ? Boolean.parseBoolean(params.get("list")) : false;
             final int numNext = params.get("numnext") != null ? Integer.parseInt(params.get("numnext")) : 1;
 
@@ -80,7 +86,8 @@ public class PeriodResolver implements URIResolver {
             }
 
             if (!list) {
-                final Period period = RCCalendar.getPeriodBySetable(areaCode, date);
+                final Period period = fq ? RCCalendar.getPeriod(areaCode, date) : RCCalendar.getPeriodBySetable(
+                        areaCode, date);
                 return new JDOMSource(PeriodTransformer.buildExportableXML(period));
             } else {
                 final RCCalendar calendar = RCCalendar.getPeriodList(areaCode, date, numNext);
@@ -90,5 +97,4 @@ public class PeriodResolver implements URIResolver {
             throw new TransformerException("Exception resolving " + href, ex);
         }
     }
-
 }
