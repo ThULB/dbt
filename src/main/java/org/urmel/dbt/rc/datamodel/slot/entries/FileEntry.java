@@ -45,7 +45,7 @@ import org.apache.commons.io.IOUtils;
 @XmlAccessorType(XmlAccessType.NONE)
 public class FileEntry implements Serializable {
 
-    public static final String DEFAULT_HASH_TYPE = "SHA-256";
+    public static final String DEFAULT_HASH_TYPE = "SHA-1";
 
     private static final long serialVersionUID = 2749951822001215240L;
 
