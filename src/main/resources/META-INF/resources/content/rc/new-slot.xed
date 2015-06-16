@@ -26,6 +26,7 @@
           </div>
           <div class="panel-footer clearfix">
             <div class="pull-right">
+              <mir:template name="submitButton" i18n="button.debug" target="debug" href="RCSlotListServlet" />
               <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
               <span>&#160;</span>
               <mir:template name="cancelButton" i18n="button.cancel" />

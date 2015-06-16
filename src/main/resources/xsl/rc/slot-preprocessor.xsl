@@ -7,6 +7,7 @@
       <lecturers>
         <lecturer name="{$currentUser/realName}" email="{$currentUser/eMail}" />
       </lecturers>
+      <xsl:copy-of select="*" />
     </slot>
   </xsl:template>
 </xsl:stylesheet>
