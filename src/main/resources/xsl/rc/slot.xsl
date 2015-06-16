@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="acl i18n mcrxsl xlink"
+  exclude-result-prefixes="acl encoder i18n mcrxsl xlink"
 >
   <xsl:include href="MyCoReLayout.xsl" />
 
@@ -56,7 +56,7 @@
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_accesskey')" />
             <p>
-              <a href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={$RequestURL}">
+              <a href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}">
                 <xsl:value-of select="i18n:translate('component.rc.slot.enter_accesskey')" />
               </a>
             </p>
@@ -88,13 +88,15 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$hasAdminPermission or $writePermission">
                 <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-slot.xed?slotId={@id}">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
                     <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
                   </a>
                 </li>
                 <xsl:if test="$hasAdminPermission or $isOwner">
                   <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}">
+                    <a role="menuitem" tabindex="-1"
+                      href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                    >
                       <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
                     </a>
                   </li>
@@ -117,7 +119,9 @@
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($writePermission)">
                 <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={$RequestURL}">
+                  <a role="menuitem" tabindex="-1"
+                    href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}"
+                  >
                     <xsl:value-of select="i18n:translate('component.rc.slot.change_accesskey')" />
                   </a>
                 </li>

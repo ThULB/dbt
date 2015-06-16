@@ -4,7 +4,8 @@
   <section i18n="component.rc.slot.edit" xml:lang="all">
     <xed:form class="form-horizontal" role="form" xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
       <xed:source uri="xslStyle:rc/slot-edit-preprocessor:slot:slotId={$slotId}" />
-      <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
+      <xed:cancel url="{$url}" />
+      <xed:cancel url="/rc/{$slotId}" />
 
       <xed:bind xpath="slot">
         <div class="panel panel-default">
