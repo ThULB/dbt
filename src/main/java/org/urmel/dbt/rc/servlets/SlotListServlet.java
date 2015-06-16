@@ -117,7 +117,12 @@ public class SlotListServlet extends MCRServlet {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
             }
 
-            job.getResponse().sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId());
+            String redirectURL = job.getRequest().getParameter("url");
+            if (redirectURL == null || redirectURL.length() == 0) {
+                redirectURL = MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId();
+            }
+
+            job.getResponse().sendRedirect(redirectURL);
         } else {
             final HttpServletRequest req = job.getRequest();
 
