@@ -141,7 +141,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
                         p.setFullyQualified(true);
 
                         final Calendar nextDay = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-                        nextDay.setTime(p.getSetableToDate(lastDate));
+                        nextDay.setTime(p.getToDate());
                         nextDay.add(Calendar.DATE, 1);
 
                         lastDate = nextDay.getTime();

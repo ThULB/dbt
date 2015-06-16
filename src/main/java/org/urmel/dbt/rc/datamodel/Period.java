@@ -117,6 +117,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         final Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         c.setTime(base);
         this.baseDate = PERIOD_FORMAT.parse(fromShort + c.get(Calendar.YEAR));
+
+        if (this.baseDate.after(base))
+            this.baseDate = PERIOD_FORMAT.parse(fromShort + (c.get(Calendar.YEAR) - 1));
     }
 
     /**
