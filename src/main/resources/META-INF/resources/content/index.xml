@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Willkommen bei MIR!">
+    <div class="container jumbotwo">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>
+            <span class="glyphicon glyphicon-check" />
+            Wissenschaftliche Abschlussarbeiten
+          </h3>
+          <p>In der DBT werden alle digital abgegebenen Dissertationen und Habilitationen sowie bestimmten Kriterien genügende Studienabschlussarbeiten
+            abgelegt. Sie finden hier alle notwendigen Informationen zur Abgabe Ihrer Dissertation/Habiltation und Studienabschlußarbeiten an Ihrer jeweiligen
+            Hochschule.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h3>
+            <span class="glyphicon glyphicon-flash" />
+            E-Publikationen
+          </h3>
+          <p>
+            <img alt="Logo Open Access" src="../dbt/images/logo_open_access.png" style="width: 80px; height: 74px; margin-left: 20px; margin-right: 20px; float: left;" />
+            Ein Grundprinzip der Veröffentlichung der Dokumente in der DBT ist der <b>Open-Access</b>-Gedanke.
+            Bis auf wenige Dokumente sind die Volltexte der Publikationen frei zugänglich. Auch Sie können Ihre elektronischen
+            Publikationen bei uns veröffentlichen. Neben der weltweiten Verfügbarkeit im Internet sorgen wir auch für die Langzeitverfügbarkeit Ihrer
+            Publikation.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h3>
+            <span class="glyphicon glyphicon-heart" />
+            Semesterapparate Online
+          </h3>
+          <p>Ein elektronischer Semesterapparat enthält Bücher aus dem Bestand der Bibliothek, wichtige Internet-Links und andere Materialien zu einer
+            Lehrveranstaltung. Er besteht in der Regel für die Dauer eines Semesters. Die zu den elektronischen Semesterapparaten gehörenden Bücher werden zur
+            Präsenznutzung in der Bibliothek aufgestellt.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h3>
+            <span class="glyphicon glyphicon-facetime-video" />
+            Vorlesungsmitschnitte
+          </h3>
+          <p>
+            Durch das
+            <a href="http://www.uni-jena.de/Multimediazentrum.html" shape="rect" target="_blank">
+              <b>Multimediazentrum</b>
+            </a>
+            werden aktuelle Vorlesungsmitschnitte mit synchron ablaufender Präsentation angefertigt und in der DBT abgelegt. Es ist bereits eine große Anzahl
+            aus vielen
+            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=VREIHE" shape="rect">
+              <b>Fachgebieten</b>
+            </a>
+            verfügbar. Außerdem werden
+            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=KONFERENZEN" shape="rect">Tagungen, Workshops</a>
+            und
+            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=VERANST" shape="rect">universitäre Veranstaltungen</a>
+            aufgezeichnet
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</MyCoReWebPage>
