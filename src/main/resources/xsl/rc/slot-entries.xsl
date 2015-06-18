@@ -25,8 +25,6 @@
     <xsl:param name="hlPos" select="1" />
     <xsl:param name="hlIndex" select="1" />
 
-    <xsl:variable name="numHLs" select="count($entries/headline)" />
-
     <xsl:if test="$hlIndex = 1 and $hlPos &gt; 1">
       <group>
         <xsl:for-each select="$entries">
@@ -51,22 +49,13 @@
 
     <entries>
       <xsl:for-each select="$entries">
-        <xsl:choose>
-          <xsl:when test="position() = 1 and not(headline)">
-            <xsl:call-template name="groupEntries">
-              <xsl:with-param name="entries" select="$entries" />
-              <xsl:with-param name="hlPos" select="position()" />
-              <xsl:with-param name="hlIndex" select="1" />
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:when test="headline">
-            <xsl:call-template name="groupEntries">
-              <xsl:with-param name="entries" select="$entries" />
-              <xsl:with-param name="hlPos" select="position()" />
-              <xsl:with-param name="hlIndex" select="count(preceding-sibling::*/headline) + 1" />
-            </xsl:call-template>
-          </xsl:when>
-        </xsl:choose>
+        <xsl:if test="headline or (count($entries/headline) = 0)">
+          <xsl:call-template name="groupEntries">
+            <xsl:with-param name="entries" select="$entries" />
+            <xsl:with-param name="hlPos" select="position()" />
+            <xsl:with-param name="hlIndex" select="count(preceding-sibling::*/headline) + 1" />
+          </xsl:call-template>
+        </xsl:if>
       </xsl:for-each>
     </entries>
   </xsl:variable>
