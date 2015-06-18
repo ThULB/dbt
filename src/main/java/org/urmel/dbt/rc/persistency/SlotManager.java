@@ -186,31 +186,6 @@ public final class SlotManager {
     }
 
     /**
-     * Saves btw. updates current {@link SlotList}.
-     * 
-     * @throws MCRActiveLinkException 
-     * @throws MCRPersistenceException 
-     * @throws SAXException 
-     * @throws JDOMException 
-     * @throws IOException 
-     */
-    public synchronized void saveList() throws MCRPersistenceException, MCRActiveLinkException, IOException,
-            JDOMException, SAXException {
-        for (Slot slot : slotList.getSlots()) {
-            final MCRObjectID objId = slot.getMCRObjectID();
-            if (objId != null && MCRMetadataManager.exists(objId)) {
-                final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
-                final Slot ts = SlotWrapper.unwrapMCRObject(obj);
-                if (!ts.equals(slot)) {
-                    saveOrUpdate(slot);
-                }
-            } else {
-                saveOrUpdate(slot);
-            }
-        }
-    }
-
-    /**
      * Adds a new {@link Slot} to {@link SlotList}.
      * 
      * @param slot the slot

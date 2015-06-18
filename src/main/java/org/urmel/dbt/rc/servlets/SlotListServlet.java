@@ -95,23 +95,10 @@ public class SlotListServlet extends MCRServlet {
                     return;
                 }
 
-                s.setTitle(slot.getTitle());
-                s.setLecturers(slot.getLecturers());
-                s.setOnlineOnly(slot.isOnlineOnly());
-                s.setStatus(slot.getStatus());
-                s.setPendingStatus(slot.getPendingStatus());
-                s.setValidTo(slot.getValidToAsDate());
-                s.setComment(slot.getComment());
-
-                if (slot.getReadKey() != null)
-                    s.setReadKey(slot.getReadKey());
-                if (slot.getWriteKey() != null)
-                    s.setWriteKey(slot.getWriteKey());
-
                 slot.setMCRObjectID(s.getMCRObjectID());
             }
 
-            SLOT_MGR.saveList();
+            SLOT_MGR.saveOrUpdate(slot);
 
             if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());

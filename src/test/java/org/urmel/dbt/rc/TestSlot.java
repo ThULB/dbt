@@ -230,7 +230,7 @@ public class TestSlot extends MCRHibTestCase {
         slot2.setStatus(Status.ACTIVE);
         assertEquals(3, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01")));
 
-        assertEquals(1, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "0027_01_01")));
+        assertEquals(1, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "0027.01.01")));
     }
 
     @Test
@@ -339,12 +339,12 @@ public class TestSlot extends MCRHibTestCase {
         Slot slot1 = new Slot("3400.01.01.0001");
         slot1.setStatus(Status.ACTIVE);
         SLOT_MANAGER.addSlot(slot1);
+        SLOT_MANAGER.saveOrUpdate(slot1);
 
         Slot slot2 = new Slot("3400.01.01.0002");
         slot2.setStatus(Status.FREE);
         SLOT_MANAGER.addSlot(slot2);
-
-        SLOT_MANAGER.saveList();
+        SLOT_MANAGER.saveOrUpdate(slot2);
 
         assertNotNull(slot1.getMCRObjectID());
         assertNotNull(slot2.getMCRObjectID());
