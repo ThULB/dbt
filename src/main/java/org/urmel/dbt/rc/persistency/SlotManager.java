@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
@@ -50,7 +49,6 @@ import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
 import org.urmel.dbt.rc.utils.SlotWrapper;
-import org.xml.sax.SAXException;
 
 /**
  * @author René Adler (eagle)
