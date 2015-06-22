@@ -155,7 +155,11 @@
       <xsl:apply-templates select="." mode="extraAttributes" />
       <xsl:apply-templates select="." mode="editButtons" />
       <xsl:apply-templates select="." />
+      <xsl:apply-templates select="." mode="infoLine" />
     </div>
+  </xsl:template>
+
+  <xsl:template match="*" mode="extraAttributes">
   </xsl:template>
 
   <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="editButtons">
@@ -174,11 +178,17 @@
       </div>
     </div>
   </xsl:template>
+
+  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="infoLine">
+    <xsl:if test="$hasAdminPermission">
+      <div class="entry-infoline">
+        <xsl:value-of select="i18n:translate('component.rc.slot.entry.infoLine', concat(../@id, ';', ../date[@type='created'], ';', ../date[@type='modified']))"
+          disable-output-escaping="yes" />
+      </div>
+    </xsl:if>
+  </xsl:template>
   
   <!-- ==== ENTRIES ======================================================= -->
-
-  <xsl:template match="*" mode="extraAttributes">
-  </xsl:template>
   
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
