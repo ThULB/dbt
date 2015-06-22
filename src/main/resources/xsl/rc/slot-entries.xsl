@@ -249,17 +249,27 @@
       <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
         <xsl:value-of select="@name" />
       </a>
+      <xsl:if test="not($hasAdminPermission)">
+        <small>
+          <xsl:text> - </xsl:text>
+          <xsl:call-template name="formatFileSize">
+            <xsl:with-param name="size" select="@size" />
+          </xsl:call-template>
+        </small>
+      </xsl:if>
     </h4>
-    <p>
-      <xsl:text>SHA-1: </xsl:text>
-      <code>
-        <xsl:value-of select="@hash" />
-      </code>
-      <xsl:text> - </xsl:text>
-      <xsl:call-template name="formatFileSize">
-        <xsl:with-param name="size" select="@size" />
-      </xsl:call-template>
-    </p>
+    <xsl:if test="$hasAdminPermission">
+      <p>
+        <xsl:text>SHA-1: </xsl:text>
+        <code>
+          <xsl:value-of select="@hash" />
+        </code>
+        <xsl:text> - </xsl:text>
+        <xsl:call-template name="formatFileSize">
+          <xsl:with-param name="size" select="@size" />
+        </xsl:call-template>
+      </p>
+    </xsl:if>
     <xsl:if test="string-length(.) &gt; 0">
       <span class="comment">
         <xsl:value-of select="." />
