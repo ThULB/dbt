@@ -56,7 +56,7 @@
         }
       }
     }
-    
+
     .entry-infoline {
       font-size: 0.8em;
     }
@@ -71,9 +71,15 @@
 
     .entry-webLink , .entry-text , .entry-headline , .entry-opcrecord , .entry-mcrobject , .entry-file {
       margin-bottom: 10px;
+      .entry-buttons > .btn-group {
+        border-radius: 4px;
+      }
+
       &:hover .entry-buttons > .btn-group {
         @media (min-width: 768px) {
-          opacity: 1;
+          background-color: #fff;
+          border: 1px solid #e1e1e8;
+          opacity: 0.9;
         }
       }
     }
