@@ -81,6 +81,7 @@
         <xsl:value-of select="concat('var servletsBaseURL = &quot;', $ServletsBaseURL, '&quot;;')" disable-output-escaping="yes" />
         <xsl:value-of select="concat('var slotId = &quot;', $slotId, '&quot;;')" disable-output-escaping="yes" />
         <![CDATA[
+          var oldEntryIndex;
           var slotEntries = $("div.slot-section").sortable({
             containerSelector: 'div.slot-section',
             itemSelector: 'div[class|="entry"][class!="entry-headline"][class!="entry-buttons"][class!="entry-infoline"]',
@@ -95,6 +96,8 @@
               pointer = container.rootGroup.pointer,
               placeholder = container.rootGroup.placeholder;
           
+              oldEntryIndex = $item.index();
+
               adjustment = {
                 left: pointer.left - offset.left,
                 top: pointer.top - offset.top
@@ -118,9 +121,12 @@
               isContainer && obj.push($('div:first', parent).attr("id"));
               return isContainer ? obj.concat(children) : parent.attr("id");
             },
+            
             onDrop: function ($item, container, _super) {
-              var data = slotEntries.sortable("serialize").get();
-              $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data.join() });
+              if (oldEntryIndex != $item.index()) {
+                var data = slotEntries.sortable("serialize").get();
+                $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data.join() });
+              }
               _super($item, container);
             }
           });
