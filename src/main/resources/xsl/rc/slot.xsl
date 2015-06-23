@@ -83,9 +83,9 @@
         <![CDATA[
           var oldEntryIndex;
           var slotEntries = $("div.slot-section").sortable({
+            group: 'slot-entries',
             containerSelector: 'div.slot-section',
-            itemSelector: 'div[class|="entry"][class!="entry-headline"][class!="entry-buttons"][class!="entry-infoline"]',
-            exclude: 'div.entry-headline',
+            itemSelector: 'div[class|="entry"][class!="entry-buttons"][class!="entry-infoline"]',
             handle: 'span.entry-mover',
             placeholder: '<div class="entry-placeholder" />',
             pullPlaceholder: true,
@@ -117,9 +117,7 @@
             
             // persists new order of entries
             serialize: function (parent, children, isContainer) {
-              var obj = [];
-              isContainer && obj.push($('div:first', parent).attr("id"));
-              return isContainer ? obj.concat(children) : parent.attr("id");
+              return isContainer ? children : parent.attr("id");
             },
             
             onDrop: function ($item, container, _super) {

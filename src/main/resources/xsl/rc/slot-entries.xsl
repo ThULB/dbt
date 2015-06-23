@@ -171,11 +171,9 @@
         <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" title="{i18n:translate('component.rc.slot.entry.delete')}">
           <span class="glyphicon glyphicon-trash text-danger" />
         </a>
-        <xsl:if test="name(.) != 'headline'">
-          <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
-            <span class=" entry-mover glyphicon glyphicon-screenshot " />
-          </a>
-        </xsl:if>
+        <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
+          <span class=" entry-mover glyphicon glyphicon-screenshot " />
+        </a>
       </div>
     </div>
   </xsl:template>
