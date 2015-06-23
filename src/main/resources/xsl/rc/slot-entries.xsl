@@ -165,19 +165,15 @@
   <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="editButtons">
     <div class="entry-buttons">
       <div class="btn-group">
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" alt="{i18n:translate('component.rc.slot.entry.edit')}"
-          title="{i18n:translate('component.rc.slot.entry.edit')}"
-        >
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" title="{i18n:translate('component.rc.slot.entry.edit')}">
           <span class="glyphicon glyphicon-pencil" />
         </a>
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" alt="{i18n:translate('component.rc.slot.entry.delete')}"
-          title="{i18n:translate('component.rc.slot.entry.delete')}"
-        >
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" title="{i18n:translate('component.rc.slot.entry.delete')}">
           <span class="glyphicon glyphicon-trash text-danger" />
         </a>
         <xsl:if test="name(.) != 'headline'">
-          <a href="#">
-            <span class="entry-mover glyphicon glyphicon-screenshot" />
+          <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
+            <span class=" entry-mover glyphicon glyphicon-screenshot " />
           </a>
         </xsl:if>
       </div>
