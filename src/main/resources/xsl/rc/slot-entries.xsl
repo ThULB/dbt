@@ -175,6 +175,11 @@
         >
           <span class="glyphicon glyphicon-trash text-danger" />
         </a>
+        <xsl:if test="name(.) != 'headline'">
+          <a href="#">
+            <span class="entry-mover glyphicon glyphicon-screenshot" />
+          </a>
+        </xsl:if>
       </div>
     </div>
   </xsl:template>

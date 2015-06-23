@@ -72,6 +72,7 @@
     .entry-webLink , .entry-text , .entry-headline , .entry-opcrecord , .entry-mcrobject , .entry-file {
       margin-bottom: 10px;
       .entry-buttons > .btn-group {
+        border: 1px solid transparent;
         border-radius: 4px;
       }
 
@@ -123,6 +124,27 @@
 
   > p {
     font-size: 13px;
+  }
+}
+
+// Drag and Drop for RC entries
+body.dragging , body.dragging * {
+  cursor: move ! important;
+}
+
+.dragged {
+  position: absolute;
+  opacity: 0.5;
+  z-index: 2000;
+}
+
+#slot-body {
+  .slot-section {
+    div.entry-placeholder {
+      position: relative;
+      border: 1px dotted #ccc;
+      background-color: #fafafa;
+    }
   }
 }
 

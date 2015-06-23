@@ -90,6 +90,11 @@ module.exports = function(grunt) {
 					cwd : 'bower_components/smartmenus/dist/',
 					src : [ 'addons/**/*.min.*', 'addons/**/*.css', '*.min.*' ],
 					dest : '<%=globalConfig.assetsDirectory%>/smartmenus/'
+				}, {
+					expand : true,
+					cwd : 'bower_components/jquery-sortable/source/js',
+					src : [ '*min.js' ],
+					dest : '<%=globalConfig.assetsDirectory%>/jquery/plugins/'
 				} ]
 			}
 		},

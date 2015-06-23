@@ -19,6 +19,7 @@
     "bootstrap-fileinput": "~4.2.0",
     "font-awesome": "~4.3.0",
     "summernote": "~0.6.0",
-    "smartmenus": "~1.0.0-beta1"
+    "smartmenus": "~1.0.0-beta1",
+    "jquery-sortable": "~0.9.12"
   }
 }

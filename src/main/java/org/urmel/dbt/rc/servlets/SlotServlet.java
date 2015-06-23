@@ -27,7 +27,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -115,13 +117,13 @@ public class SlotServlet extends MCRServlet {
                     final FileEntry fileEntry = (FileEntry) slotEntry.getEntry();
                     if (fileEntry != null && fileName.equals(fileEntry.getName())) {
                         MCRContent content = FileEntryManager.retrieve(slot, slotEntry);
-                        content.sendTo(job.getResponse().getOutputStream());
+                        content.sendTo(res.getOutputStream());
                         return;
                     }
                 }
             }
 
-            job.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
@@ -156,13 +158,11 @@ public class SlotServlet extends MCRServlet {
                 params.put("slotId", slotId);
                 params.put("afterId", afterId);
 
-                job.getResponse()
-                        .sendRedirect(
-                                MCRFrontendUtil.getBaseURL()
-                                        + "opc/"
-                                        + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0 ? catalog
-                                                .getISIL().get(0) : catalogId) + "/search/" + firstChild.getTextTrim()
-                                        + toQueryString(params, true));
+                res.sendRedirect(MCRFrontendUtil.getBaseURL()
+                        + "opc/"
+                        + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0 ? catalog
+                                .getISIL().get(0) : catalogId) + "/search/" + firstChild.getTextTrim()
+                        + toQueryString(params, true));
             } else {
                 SlotEntry<?> slotEntry = xml != null ? SlotEntryTransformer.buildSlotEntry(xml) : null;
 
@@ -170,8 +170,7 @@ public class SlotServlet extends MCRServlet {
 
                 if (slotEntry == null && "upload".equals(action)) {
                     if (getParameter(req, "cancel") != null) {
-                        job.getResponse().sendRedirect(
-                                MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
+                        res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
                         return;
                     }
 
@@ -188,9 +187,8 @@ public class SlotServlet extends MCRServlet {
                     if (fileName == null || fileName.length() == 0) {
                         params.put("errorcode", Integer.toString(ERROR_EMPTY_FILE));
 
-                        job.getResponse().sendRedirect(
-                                MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                        + toQueryString(params, false));
+                        res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                + toQueryString(params, false));
                         return;
                     }
 
@@ -211,9 +209,8 @@ public class SlotServlet extends MCRServlet {
                             if (numPages == -1 || numPages > 50) {
                                 params.put("errorcode", Integer.toString(ERROR_PAGE_LIMIT_EXCEEDED));
 
-                                job.getResponse().sendRedirect(
-                                        MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                                + toQueryString(params, false));
+                                res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                        + toQueryString(params, false));
                                 return;
                             }
 
@@ -230,9 +227,8 @@ public class SlotServlet extends MCRServlet {
                             LOGGER.error(e);
                             params.put("errorcode", Integer.toString(ERROR_NOT_SUPPORTED));
 
-                            job.getResponse().sendRedirect(
-                                    MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                            + toQueryString(params, false));
+                            res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
+                                    + toQueryString(params, false));
                             return;
                         } finally {
                             if (pdfCopy != null) {
@@ -249,7 +245,22 @@ public class SlotServlet extends MCRServlet {
                     ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                 }
 
-                if ("delete".equals(action)) {
+                if ("order".equals(action)) {
+                    final String items = getParameter(req, "items");
+                    final StringTokenizer st = new StringTokenizer(items, ",");
+
+                    final List<SlotEntry<?>> sortedEntries = new ArrayList<SlotEntry<?>>();
+                    while (st.hasMoreTokens()) {
+                        final String id = st.nextToken();
+                        sortedEntries.add(slot.getEntryById(id));
+                    }
+                    slot.setEntries(sortedEntries);
+                    
+                    SLOT_MGR.saveOrUpdate(slot);
+
+                    res.sendError(HttpServletResponse.SC_OK);
+                    return;
+                } else if ("delete".equals(action)) {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
                         LOGGER.debug("Remove entry: " + se);
@@ -272,10 +283,8 @@ public class SlotServlet extends MCRServlet {
                 if (success)
                     SLOT_MGR.saveOrUpdate(slot);
 
-                job.getResponse()
-                        .sendRedirect(
-                                MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
-                                        + slotEntry.getId());
+                res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
+                        + slotEntry.getId());
             }
         }
     }

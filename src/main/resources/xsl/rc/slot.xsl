@@ -75,6 +75,58 @@
         </xsl:otherwise>
       </xsl:choose>
     </div>
+    <xsl:if test="$effectiveMode = 'edit'">
+      <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery-sortable-min.js" />
+      <script type="text/javascript">
+        <xsl:value-of select="concat('var servletsBaseURL = &quot;', $ServletsBaseURL, '&quot;;')" disable-output-escaping="yes" />
+        <xsl:value-of select="concat('var slotId = &quot;', $slotId, '&quot;;')" disable-output-escaping="yes" />
+        <![CDATA[
+          var slotEntries = $("div.slot-section").sortable({
+            containerSelector: 'div.slot-section',
+            itemSelector: 'div[class|="entry"][class!="entry-headline"][class!="entry-buttons"][class!="entry-infoline"]',
+            exclude: 'div.entry-headline',
+            handle: 'span.entry-mover',
+            placeholder: '<div class="entry-placeholder" />',
+            pullPlaceholder: true,
+            
+            // set item relative to cursor position
+            onDragStart: function ($item, container, _super) {
+              var offset = $item.offset(),
+              pointer = container.rootGroup.pointer,
+              placeholder = container.rootGroup.placeholder;
+          
+              adjustment = {
+                left: pointer.left - offset.left,
+                top: pointer.top - offset.top
+              }
+              
+              placeholder.height($item.height());
+          
+              _super($item, container)
+            },
+            
+            onDrag: function ($item, position) {
+              $item.css({
+                left: position.left - adjustment.left,
+                top: position.top - adjustment.top
+              })
+            },
+            
+            // persits new order of entries
+            serialize: function (parent, children, isContainer) {
+              var obj = [];
+              isContainer && obj.push($('div:first', parent).attr("id"));
+              return isContainer ? obj.concat(children) : parent.attr("id");
+            },
+            onDrop: function ($item, container, _super) {
+              var data = slotEntries.sortable("serialize").get();
+              $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data.join() });
+              _super($item, container);
+            }
+          });
+        ]]>
+      </script>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="slot" mode="slotHead">
