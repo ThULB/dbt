@@ -115,7 +115,7 @@
               })
             },
             
-            // persits new order of entries
+            // persists new order of entries
             serialize: function (parent, children, isContainer) {
               var obj = [];
               isContainer && obj.push($('div:first', parent).attr("id"));
