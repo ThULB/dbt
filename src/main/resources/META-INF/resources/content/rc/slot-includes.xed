@@ -39,11 +39,12 @@
   </xed:template>
 
   <xed:template id="editor">
+    <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
+
+    <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+    
     <xed:choose>
       <xed:when test="string-length($slotId)">
-        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
-        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
-
         <xed:choose>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
@@ -54,13 +55,9 @@
         </xed:choose>
       </xed:when>
       <xed:otherwise>
-        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
-
-        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="location" />
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
 
-        <!-- FIXME use it from include -->
         <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true"
           uri="xslStyle:rc/periods2options:period:areacode=0&amp;date=now&amp;list=true" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
           required="true" />
@@ -127,19 +124,6 @@
           required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
       </xed:bind>
     </xed:bind>
-  </xed:template>
-
-  <xed:template id="singleValidTo">
-    <div class="form-group">
-      <label class="col-md-3 control-label" for="locationSelect">
-        <xed:output i18n="component.rc.slot.validTo" />
-      </label>
-      <mir:template name="textInput" xpath="validTo" inline="true" colwidth="3" id="validTo" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
-        required="true" validate="true" type="datetime" format="yyyy-MM-dd;dd.MM.yyyy" />
-      <div class="col-md-6">
-        <xed:include uri="xslStyle:rc/editor-include-period:period:areacode=0&amp;date=now" />
-      </div>
-    </div>
   </xed:template>
 
   <xed:template id="accesskeys">
