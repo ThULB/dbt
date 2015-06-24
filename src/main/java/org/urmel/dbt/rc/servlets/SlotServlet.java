@@ -269,14 +269,14 @@ public class SlotServlet extends MCRServlet {
                     if (se != null) {
                         LOGGER.debug("Remove entry: " + se);
                         success = slot.removeEntry(se);
-                        
+
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.DELETE_EVENT);
                         evt.put(SlotManager.ENTRY_TYPE, se);
                     }
                 } else if (slot.getEntries() == null) {
                     LOGGER.debug("Add new entry: " + slotEntry);
                     success = slot.addEntry(slotEntry);
-                    
+
                     evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
                     evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                 } else {
@@ -284,13 +284,13 @@ public class SlotServlet extends MCRServlet {
                     if (se != null) {
                         LOGGER.debug("Update entry: " + slotEntry);
                         slot.setEntry(slotEntry);
-                        
+
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.UPDATE_EVENT);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     } else {
                         LOGGER.debug("Add new entry after \"" + afterId + "\".");
                         success = slot.addEntry(slotEntry, afterId);
-                        
+
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
@@ -299,6 +299,10 @@ public class SlotServlet extends MCRServlet {
                 if (success) {
                     SLOT_MGR.saveOrUpdate(slot);
                     if (evt != null) {
+                        if (evt.getObjectType().equals(SlotManager.ENTRY_TYPE)) {
+                            evt.put("slotId", slot.getSlotId());
+                        }
+
                         if (MCREvent.DELETE_EVENT.equals(evt.getEventType())) {
                             MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
                         } else {
