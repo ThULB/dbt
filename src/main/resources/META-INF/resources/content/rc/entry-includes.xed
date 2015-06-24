@@ -117,9 +117,9 @@
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
       <div class="col-md-9 entry-opcrecord">
-        <h3>
-          <xed:output value="opcrecord/display/h3" />
-        </h3>
+        <h4>
+          <xed:output value="opcrecord/display/h4" />
+        </h4>
         <p>
           <xed:output value="opcrecord/display/p" />
         </p>
