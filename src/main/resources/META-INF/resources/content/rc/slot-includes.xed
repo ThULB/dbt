@@ -43,6 +43,15 @@
       <xed:when test="string-length($slotId)">
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+
+        <xed:choose>
+          <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+          </xed:when>
+          <xed:otherwise>
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturerEmail" />
+          </xed:otherwise>
+        </xed:choose>
       </xed:when>
       <xed:otherwise>
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
@@ -104,6 +113,16 @@
       <xed:bind xpath="lecturer">
         <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" i18n.error="component.rc.slot.lecturer.name.required"
           required="true" />
+        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
+          required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
+      </xed:bind>
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="singleLecturerEmail">
+    <xed:bind xpath="lecturers">
+      <xed:bind xpath="lecturer">
+        <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" />
         <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
           required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
       </xed:bind>
