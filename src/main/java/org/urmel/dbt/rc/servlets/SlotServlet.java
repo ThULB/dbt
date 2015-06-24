@@ -53,6 +53,8 @@ import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRContent;
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventManager;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -245,6 +247,8 @@ public class SlotServlet extends MCRServlet {
                     ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                 }
 
+                MCREvent evt = null;
+
                 if ("order".equals(action)) {
                     final String items = getParameter(req, "items");
                     final StringTokenizer st = new StringTokenizer(items, ",");
@@ -255,7 +259,7 @@ public class SlotServlet extends MCRServlet {
                         sortedEntries.add(slot.getEntryById(id));
                     }
                     slot.setEntries(sortedEntries);
-                    
+
                     SLOT_MGR.saveOrUpdate(slot);
 
                     res.sendError(HttpServletResponse.SC_OK);
@@ -265,23 +269,43 @@ public class SlotServlet extends MCRServlet {
                     if (se != null) {
                         LOGGER.debug("Remove entry: " + se);
                         success = slot.removeEntry(se);
+                        
+                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.DELETE_EVENT);
+                        evt.put(SlotManager.ENTRY_TYPE, se);
                     }
                 } else if (slot.getEntries() == null) {
                     LOGGER.debug("Add new entry: " + slotEntry);
                     success = slot.addEntry(slotEntry);
+                    
+                    evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                    evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                 } else {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
                         LOGGER.debug("Update entry: " + slotEntry);
                         slot.setEntry(slotEntry);
+                        
+                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.UPDATE_EVENT);
+                        evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     } else {
                         LOGGER.debug("Add new entry after \"" + afterId + "\".");
                         success = slot.addEntry(slotEntry, afterId);
+                        
+                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                        evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
                 }
 
-                if (success)
+                if (success) {
                     SLOT_MGR.saveOrUpdate(slot);
+                    if (evt != null) {
+                        if (MCREvent.DELETE_EVENT.equals(evt.getEventType())) {
+                            MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
+                        } else {
+                            MCREventManager.instance().handleEvent(evt);
+                        }
+                    }
+                }
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
                         + slotEntry.getId());

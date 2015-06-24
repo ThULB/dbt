@@ -33,6 +33,8 @@ import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventManager;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -73,6 +75,8 @@ public class SlotListServlet extends MCRServlet {
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
 
+            MCREvent evt = null;
+
             if (location != null) {
                 final MCRCategory category = DAO
                         .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location), 0);
@@ -86,6 +90,9 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 SLOT_MGR.addSlot(slot);
+
+                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.CREATE_EVENT);
+                evt.put(SlotManager.SLOT_TYPE, slot);
             } else {
                 final Slot s = SLOT_MGR.getSlotById(slotId);
 
@@ -96,9 +103,16 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 slot.setMCRObjectID(s.getMCRObjectID());
+
+                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
+                evt.put(SlotManager.SLOT_TYPE, slot);
             }
 
             SLOT_MGR.saveOrUpdate(slot);
+
+            if (evt != null) {
+                MCREventManager.instance().handleEvent(evt);
+            }
 
             if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
