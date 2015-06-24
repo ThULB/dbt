@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
+
+  <!-- ====[ General Templates ]=========== -->
+
   <xed:template id="failed-validation-messages">
     <xed:if test="$xed-validation-failed">
       <div class="alert alert-danger">
@@ -13,7 +16,59 @@
     </xed:if>
   </xed:template>
 
+  <xed:template id="source">
+    <xed:choose>
+      <xed:when test="string-length($slotId) &gt; 0">
+        <xed:source uri="xslStyle:rc/slot-edit-preprocessor:slot:slotId={$slotId}" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:source uri="xslStyle:rc/slot-preprocessor:webapp:content/rc/editor-slot-defaults.xml" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
   <xed:template id="title">
+    <xed:choose>
+      <xed:when test="string-length($slotId)">
+        <xed:output i18n="component.rc.slot.edit" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:output i18n="component.rc.slot.new_title" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="editor">
+    <xed:choose>
+      <xed:when test="string-length($slotId)">
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+      </xed:when>
+      <xed:otherwise>
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
+
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="location" />
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+
+        <!-- FIXME use it from include -->
+        <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true"
+          uri="xslStyle:rc/periods2options:period:areacode=0&amp;date=now&amp;list=true" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
+          required="true" />
+
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
+      </xed:otherwise>
+    </xed:choose>
+  </xed:template>
+
+  <xed:template id="buttons">
+    <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
+    <span>&#160;</span>
+    <mir:template name="cancelButton" i18n="button.cancel" />
+  </xed:template>
+
+  <!-- ====[ Slot Templates ]============== -->
+  <xed:template id="rcTitle">
     <mir:template name="textInput" xpath="title" id="title" i18n="component.rc.slot.title" i18n.error="component.rc.slot.title.required" required="true" />
   </xed:template>
 

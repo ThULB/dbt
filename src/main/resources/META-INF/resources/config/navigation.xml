@@ -85,7 +85,7 @@
       <label xml:lang="de">Aktuelle Liste</label>
       <label xml:lang="en">Current list</label>
     </item>
-    <item href="/content/rc/new-slot.xed" type="extern">
+    <item href="/content/rc/slot.xed" type="intern">
       <label xml:lang="de">Einrichten</label>
       <label xml:lang="en">Establish</label>
     </item>

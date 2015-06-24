@@ -149,7 +149,7 @@
             <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$hasAdminPermission or $writePermission">
                 <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/edit-slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
                     <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
                   </a>
                 </li>
