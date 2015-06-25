@@ -67,6 +67,10 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("&slotId=" + evt.get("slotId"));
         uri.append("&entryId=" + entry.getId());
 
+        uri.append(":slot:");
+        uri.append("slotId=" + evt.get("slotId"));
+        uri.append("&entryId=" + entry.getId());
+
         MailQueue.addJob(uri.toString());
     }
 }
