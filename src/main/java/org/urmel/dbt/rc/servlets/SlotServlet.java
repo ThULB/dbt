@@ -292,6 +292,7 @@ public class SlotServlet extends MCRServlet {
                         success = slot.addEntry(slotEntry, afterId);
 
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                        evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
                 }
 
