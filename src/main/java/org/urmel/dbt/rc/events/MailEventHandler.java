@@ -94,6 +94,12 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append(":notnull:slot:");
         uri.append("slotId=" + evt.get("slotId"));
 
+        if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+            final String rev = (String) evt.get("rev");
+            if (rev != null && !rev.isEmpty())
+                uri.append("&rev=" + rev);
+        }
+
         MailQueue.addJob(uri.toString());
     }
 
@@ -109,6 +115,12 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append(":notnull:slot:");
         uri.append("slotId=" + evt.get("slotId"));
         uri.append("&entryId=" + entry.getId());
+
+        if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+            final String rev = (String) evt.get("rev");
+            if (rev != null && !rev.isEmpty())
+                uri.append("&rev=" + rev);
+        }
 
         MailQueue.addJob(uri.toString());
     }

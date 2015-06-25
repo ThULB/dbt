@@ -292,12 +292,17 @@ public class SlotServlet extends MCRServlet {
                         success = slot.addEntry(slotEntry, afterId);
 
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
-                        evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
                 }
 
                 if (success) {
+                    // put svn revision on event (needed on deletion) 
+                    if (evt != null) {
+                        evt.put("rev", Long.toString(SLOT_MGR.getLastRevision(slot)));
+                    }
+
                     SLOT_MGR.saveOrUpdate(slot);
+
                     if (evt != null) {
                         if (evt.getObjectType().equals(SlotManager.ENTRY_TYPE)) {
                             evt.put("slotId", slot.getSlotId());
