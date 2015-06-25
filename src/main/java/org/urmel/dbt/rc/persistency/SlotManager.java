@@ -26,12 +26,14 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
@@ -49,6 +51,7 @@ import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
 import org.urmel.dbt.rc.utils.SlotWrapper;
+import org.xml.sax.SAXException;
 
 /**
  * @author René Adler (eagle)
@@ -205,6 +208,30 @@ public final class SlotManager {
      */
     public Slot getSlotById(final String slotId) {
         return slotList.getSlotById(slotId);
+    }
+
+    /**
+     * Returns a slot for given id and revision.
+     * 
+     * @param slotId
+     * @param revision
+     * @return the slot
+     */
+    public Slot getSlotById(final String slotId, final Long revision) {
+        final Slot slot = getSlotById(slotId);
+
+        if (slot != null && revision != null) {
+            MCRVersionedMetadata vm;
+            try {
+                vm = MCRXMLMetadataManager.instance().getVersionedMetaData(slot.getMCRObjectID());
+                MCRContent cont = vm.getRevision(revision).retrieve();
+                return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
+            } catch (IOException | JDOMException | SAXException e) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     /**

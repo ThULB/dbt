@@ -49,8 +49,8 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
  * <br />
  * Syntax:
  * <ul> 
- * <li><code>slot:slotId={slotId}</code> to resolve an {@link Slot}</li>
- * <li><code>slot:slotId={slotId}&entryId={entryId}</code> to resolve an {@link SlotEntry}</li>
+ * <li><code>slot:slotId={slotId}[&rev=revision]</code> to resolve an {@link Slot}</li>
+ * <li><code>slot:slotId={slotId}&entryId={entryId}[&rev=revision]</code> to resolve an {@link SlotEntry}</li>
  * <li><code>slot:slotId={slotId}&catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
  * <li><code>slot:slotId={slotId}&objectId</code> to get the {@link MCRObjectID} for slot</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
@@ -90,8 +90,11 @@ public class SlotResolver implements URIResolver {
 
             final String slotId = params.get("slotId");
             final String entryId = params.get("entryId");
+            final String revision = params.get("revision");
 
-            final Slot slot = SLOT_MGR.getSlotById(slotId);
+            final Slot slot = revision != null ? SLOT_MGR.getSlotById(slotId, Long.parseLong(revision)) : SLOT_MGR
+                    .getSlotById(slotId);
+            
             if (entryId != null) {
                 final SlotEntry<?> entry = slot.getEntryById(entryId);
 
