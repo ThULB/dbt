@@ -22,24 +22,15 @@
  */
 package org.urmel.dbt.rc.events;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.mycore.common.MCRMailer;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.events.MCREvent;
+import org.urmel.dbt.common.MailQueue;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
-import org.urmel.dbt.rc.utils.SlotEntryTransformer;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
 public class MailEventHandler extends EventHandlerBase {
-
-    private static final Logger LOGGER = Logger.getLogger(MailEventHandler.class);
 
     private static final String MAIL_STYLESHEET = "rc/mail-events";
 
@@ -48,8 +39,7 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleEntryCreated(MCREvent evt, SlotEntry<?> entry) {
-        MCRContent xml = new MCRJDOMContent(SlotEntryTransformer.buildExportableXML(entry));
-        handleEvent(evt, xml);
+        handleEvent(evt, entry);
     }
 
     /* (non-Javadoc)
@@ -57,8 +47,7 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleEntryUpdated(MCREvent evt, SlotEntry<?> entry) {
-        MCRContent xml = new MCRJDOMContent(SlotEntryTransformer.buildExportableXML(entry));
-        handleEvent(evt, xml);
+        handleEvent(evt, entry);
     }
 
     /* (non-Javadoc)
@@ -66,27 +55,18 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleEntryDeleted(MCREvent evt, SlotEntry<?> entry) {
-        MCRContent xml = new MCRJDOMContent(SlotEntryTransformer.buildExportableXML(entry));
-        handleEvent(evt, xml);
+        handleEvent(evt, entry);
     }
 
-    private void sendNotificationMail(MCREvent evt, MCRContent doc) throws Exception {
-        LOGGER.info("Preparing mail for: " + doc.getSystemId());
-        HashMap<String, String> parameters = new HashMap<String, String>();
-        for (Map.Entry<String, Object> entry : evt.entrySet()) {
-            parameters.put(entry.getKey(), entry.getValue().toString());
-        }
-        parameters.put("action", evt.getEventType());
-        parameters.put("type", evt.getObjectType());
+    private void handleEvent(MCREvent evt, SlotEntry<?> entry) {
+        final StringBuffer uri = new StringBuffer();
 
-        MCRMailer.sendMail(doc.asXML(), MAIL_STYLESHEET, parameters);
-    }
+        uri.append("xslStyle:" + MAIL_STYLESHEET);
+        uri.append("?action=" + evt.getEventType());
+        uri.append("&type=" + evt.getObjectType());
+        uri.append("&slotId=" + evt.get("slotId"));
+        uri.append("&entryId=" + entry.getId());
 
-    private void handleEvent(MCREvent evt, MCRContent xml) {
-        try {
-            sendNotificationMail(evt, xml);
-        } catch (Exception e) {
-            LOGGER.error("Error while handling event: " + evt, e);
-        }
+        MailQueue.addJob(uri.toString());
     }
 }
