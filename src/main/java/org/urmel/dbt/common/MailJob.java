@@ -70,38 +70,38 @@ public class MailJob extends MCRJobAction {
      */
     @Override
     public void execute() throws ExecutionException {
-        final Map<String, String> params = job.getParameters();
+        try {
+            final Map<String, String> params = job.getParameters();
 
-        StringBuffer sb = new StringBuffer();
-        if (params.containsKey("uri")) {
-            sb.append(params.get("uri"));
-        } else {
-            List<String> up = new ArrayList<String>();
-            for (String key : params.keySet()) {
-                if (key.startsWith("uri_")) {
-                    int i = Integer.parseInt(key.split("_")[1]);
-                    up.add(i, params.get(key));
+            StringBuffer sb = new StringBuffer();
+            if (params.containsKey("uri")) {
+                sb.append(params.get("uri"));
+            } else {
+                List<String> up = new ArrayList<String>();
+                for (String key : params.keySet()) {
+                    if (key.startsWith("uri_")) {
+                        int i = Integer.parseInt(key.split("_")[1]);
+                        up.add(i, params.get(key));
+                    }
+                }
+
+                if (!up.isEmpty()) {
+                    for (String p : up) {
+                        sb.append(p);
+                    }
                 }
             }
 
-            if (!up.isEmpty()) {
-                for (String p : up) {
-                    sb.append(p);
-                }
-            }
-        }
+            final String uri = sb.toString();
 
-        final String uri = sb.toString();
+            final Element xml = MCRURIResolver.instance().resolve(uri);
+            final String to = xml.getAttributeValue("to");
 
-        final Element xml = MCRURIResolver.instance().resolve(uri);
-        final String to = xml.getAttributeValue("to");
-
-        if (to != null && !to.isEmpty()) {
-            try {
+            if (to != null && !to.isEmpty()) {
                 MCRMailer.send(xml);
-            } catch (Exception ex) {
-                throw new ExecutionException(ex);
             }
+        } catch (Exception ex) {
+            throw new ExecutionException(ex);
         }
     }
 
