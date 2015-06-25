@@ -91,7 +91,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("&type=" + evt.getObjectType());
         uri.append("&slotId=" + slot.getId());
 
-        uri.append(":slot:");
+        uri.append(":notnull:slot:");
         uri.append("slotId=" + evt.get("slotId"));
 
         MailQueue.addJob(uri.toString());
@@ -106,7 +106,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("&slotId=" + evt.get("slotId"));
         uri.append("&entryId=" + entry.getId());
 
-        uri.append(":slot:");
+        uri.append(":notnull:slot:");
         uri.append("slotId=" + evt.get("slotId"));
         uri.append("&entryId=" + entry.getId());
 
