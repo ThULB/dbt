@@ -22,6 +22,9 @@
  */
 package org.urmel.dbt.common;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.jdom2.Element;
@@ -67,16 +70,38 @@ public class MailJob extends MCRJobAction {
      */
     @Override
     public void execute() throws ExecutionException {
-        final String uri = job.getParameter("uri");
+        final Map<String, String> params = job.getParameters();
 
-        try {
-            final Element xml = MCRURIResolver.instance().resolve(uri);
-            final String to = xml.getAttributeValue("to");
+        StringBuffer sb = new StringBuffer();
+        if (params.containsKey("uri")) {
+            sb.append(params.get("uri"));
+        } else {
+            List<String> up = new ArrayList<String>();
+            for (String key : params.keySet()) {
+                if (key.startsWith("uri_")) {
+                    int i = Integer.parseInt(key.split("_")[1]);
+                    up.add(i, params.get(key));
+                }
+            }
 
-            if (to != null && !to.isEmpty())
+            if (!up.isEmpty()) {
+                for (String p : up) {
+                    sb.append(p);
+                }
+            }
+        }
+
+        final String uri = sb.toString();
+
+        final Element xml = MCRURIResolver.instance().resolve(uri);
+        final String to = xml.getAttributeValue("to");
+
+        if (to != null && !to.isEmpty()) {
+            try {
                 MCRMailer.send(xml);
-        } catch (Exception ex) {
-            throw new ExecutionException(ex);
+            } catch (Exception ex) {
+                throw new ExecutionException(ex);
+            }
         }
     }
 

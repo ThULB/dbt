@@ -38,7 +38,16 @@ public class MailQueue {
 
     public static void addJob(final String uri) {
         final Map<String, String> params = new HashMap<String, String>();
-        params.put("uri", uri);
+
+        if (uri.length() > 254) {
+            int i = 0;
+            for (String p : uri.split("(?<=\\G.{254})")) {
+                params.put("uri_" + Integer.toString(i), p);
+                i++;
+            }
+        } else {
+            params.put("uri", uri);
+        }
 
         MCRJob job = MAIL_QUEUE.getJob(params);
         if (job == null) {
