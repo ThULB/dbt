@@ -299,7 +299,7 @@ public class SlotServlet extends MCRServlet {
                 if (success) {
                     // put svn revision on event (needed on deletion) 
                     if (evt != null) {
-                        evt.put("rev", Long.toString(SLOT_MGR.getLastRevision(slot)));
+                        evt.put("revision", Long.toString(SLOT_MGR.getLastRevision(slot)));
                     }
 
                     SLOT_MGR.saveOrUpdate(slot);
