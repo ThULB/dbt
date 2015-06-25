@@ -64,6 +64,7 @@
         </to>
       </xsl:for-each>
       <subject>
+        <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
         <xsl:choose>
           <xsl:when test="$action = 'create'">
             <xsl:text>Neuer Katalog-Eintrag</xsl:text>
@@ -77,6 +78,25 @@
         </xsl:choose>
       </subject>
       <body>
+        <xsl:text>Sehr geehrt(e) Mitarbeiter(in),</xsl:text>
+        <xsl:value-of select="$newline" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>der/die DozentIn hat in seinen Online-Semesterapparat ein </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$action = 'create'">
+            <xsl:text>neuen Katalog-Eintrag hinzugefügt</xsl:text>
+          </xsl:when>
+          <xsl:when test="$action = 'update'">
+            <xsl:text>Katalog-Eintrag geändert</xsl:text>
+          </xsl:when>
+          <xsl:when test="$action = 'delete'">
+            <xsl:text>Katalog-Eintrag gelöscht</xsl:text>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:text>:</xsl:text>
+        <xsl:value-of select="$newline" />
+        <xsl:value-of select="$newline" />
+
         <xsl:apply-templates select="pica:record" mode="isbdText" />
         <xsl:value-of select="$newline" />
         <xsl:value-of select="$newline" />
@@ -84,9 +104,11 @@
         <xsl:variable name="ppn" select="pica:record/@ppn" />
         <xsl:variable name="record" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', $ppn, '&amp;copys=true'))" />
 
-        <xsl:text>Eintrag  : </xsl:text>
-        <xsl:value-of select="concat($WebApplicationBaseURL, 'rc/', $slotId, '?XSL.Mode=edit#', $entryId)" />
-        <xsl:value-of select="$newline" />
+        <xsl:if test="$action != 'delete'">
+          <xsl:text>Eintrag  : </xsl:text>
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'rc/', $slotId, '?XSL.Mode=edit#', $entryId)" />
+          <xsl:value-of select="$newline" />
+        </xsl:if>
         <xsl:text>Katalog  : </xsl:text>
         <xsl:value-of select="concat($recordURLPrefix, $ppn)" />
         <xsl:value-of select="$newline" />
@@ -103,6 +125,20 @@
           <xsl:value-of select="pica:subfield[@code='a']" />
           <xsl:value-of select="$newline" />
         </xsl:for-each>
+
+        <xsl:value-of select="$newline" />
+        <xsl:choose>
+          <xsl:when test="$action = 'create'">
+            <xsl:text>- Stellen Sie ein Exemplar in das Präsenz-Regal im Lesesaal</xsl:text>
+            <xsl:value-of select="$newline" />
+            <xsl:text>- Schalten Sie diesen Eintrag frei (GBV-Kat. u. DBT)</xsl:text>
+            <xsl:value-of select="$newline" />
+          </xsl:when>
+          <xsl:when test="$action = 'delete'">
+            <xsl:text>- Buchen Sie bitte das Exemplar in PICA/DBT zurück</xsl:text>
+            <xsl:value-of select="$newline" />
+          </xsl:when>
+        </xsl:choose>
       </body>
     </xsl:if>
   </xsl:template>
