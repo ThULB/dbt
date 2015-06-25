@@ -86,7 +86,7 @@ public abstract class EventHandlerBase implements MCREventHandler {
                 return;
             }
 
-            LOGGER.warn("Can't find method for " + SlotManager.SLOT_TYPE + " for event type " + evt.getEventType());
+            LOGGER.warn("Can't find method for " + SlotManager.ENTRY_TYPE + " for event type " + evt.getEventType());
             return;
         }
     }
@@ -136,7 +136,7 @@ public abstract class EventHandlerBase implements MCREventHandler {
                 return;
             }
 
-            LOGGER.warn("Can't find method for " + SlotManager.SLOT_TYPE + " for event type " + evt.getEventType());
+            LOGGER.warn("Can't find method for " + SlotManager.ENTRY_TYPE + " for event type " + evt.getEventType());
             return;
         }
     }
