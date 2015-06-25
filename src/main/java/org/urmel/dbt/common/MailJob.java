@@ -95,7 +95,7 @@ public class MailJob extends MCRJobAction {
             final String uri = sb.toString();
 
             final Element xml = MCRURIResolver.instance().resolve(uri);
-            final String to = xml.getAttributeValue("to");
+            final String to = xml.getChildTextTrim("to");
 
             if (to != null && !to.isEmpty()) {
                 MCRMailer.send(xml);
