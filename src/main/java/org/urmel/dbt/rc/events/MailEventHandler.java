@@ -84,7 +84,7 @@ public class MailEventHandler extends EventHandlerBase {
     }
 
     private void handleEvent(MCREvent evt, Slot slot) {
-        final StringBuffer uri = new StringBuffer();
+        final StringBuilder uri = new StringBuilder();
 
         uri.append("xslStyle:" + MAIL_STYLESHEET);
         uri.append("?action=" + evt.getEventType());
@@ -104,7 +104,7 @@ public class MailEventHandler extends EventHandlerBase {
     }
 
     private void handleEvent(MCREvent evt, SlotEntry<?> entry) {
-        final StringBuffer uri = new StringBuffer();
+        final StringBuilder uri = new StringBuilder();
 
         uri.append("xslStyle:" + MAIL_STYLESHEET);
         uri.append("?action=" + evt.getEventType());

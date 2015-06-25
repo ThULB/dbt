@@ -73,7 +73,7 @@ public class MailJob extends MCRJobAction {
         try {
             final Map<String, String> params = job.getParameters();
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             if (params.containsKey("uri")) {
                 sb.append(params.get("uri"));
             } else {
