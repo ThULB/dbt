@@ -24,6 +24,7 @@ package org.urmel.dbt.rc.events;
 
 import org.mycore.common.events.MCREvent;
 import org.urmel.dbt.common.MailQueue;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 
 /**
@@ -33,6 +34,30 @@ import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 public class MailEventHandler extends EventHandlerBase {
 
     private static final String MAIL_STYLESHEET = "rc/mail-events";
+
+    /* (non-Javadoc)
+     * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotCreated(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
+     */
+    @Override
+    protected void handleSlotCreated(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot);
+    }
+
+    /* (non-Javadoc)
+     * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotUpdated(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
+     */
+    @Override
+    protected void handleSlotUpdated(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot);
+    }
+
+    /* (non-Javadoc)
+     * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotDeleted(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
+     */
+    @Override
+    protected void handleSlotDeleted(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot);
+    }
 
     /* (non-Javadoc)
      * @see org.urmel.dbt.rc.events.EventHandlerBase#handleEntryCreated(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.SlotEntry)
@@ -56,6 +81,20 @@ public class MailEventHandler extends EventHandlerBase {
     @Override
     protected void handleEntryDeleted(MCREvent evt, SlotEntry<?> entry) {
         handleEvent(evt, entry);
+    }
+
+    private void handleEvent(MCREvent evt, Slot slot) {
+        final StringBuffer uri = new StringBuffer();
+
+        uri.append("xslStyle:" + MAIL_STYLESHEET);
+        uri.append("?action=" + evt.getEventType());
+        uri.append("&type=" + evt.getObjectType());
+        uri.append("&slotId=" + slot.getId());
+
+        uri.append(":slot:");
+        uri.append("slotId=" + evt.get("slotId"));
+
+        MailQueue.addJob(uri.toString());
     }
 
     private void handleEvent(MCREvent evt, SlotEntry<?> entry) {
