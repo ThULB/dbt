@@ -104,7 +104,7 @@
         <xsl:variable name="ppn" select="pica:record/@ppn" />
         <xsl:variable name="record" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', $ppn, '&amp;copys=true'))" />
 
-        <xsl:if test="$action != 'delete'">
+        <xsl:if test="($action != 'delete') or (@deleted = 'true')">
           <xsl:text>Eintrag  : </xsl:text>
           <xsl:value-of select="concat($WebApplicationBaseURL, 'rc/', $slotId, '?XSL.Mode=edit#', $entryId)" />
           <xsl:value-of select="$newline" />
