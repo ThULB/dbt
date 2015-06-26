@@ -5,7 +5,7 @@
 
   <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
 
-  <xsl:param name="MCR.mir-module.MailSender" />
+  <xsl:param name="MCR.RC.MailSender" />
 
   <xsl:param name="WebApplicationBaseURL" />
 
@@ -81,7 +81,7 @@
         <xsl:text>Sehr geehrt(e) Mitarbeiter(in),</xsl:text>
         <xsl:value-of select="$newline" />
         <xsl:value-of select="$newline" />
-        <xsl:text>der/die DozentIn hat in seinen Online-Semesterapparat ein </xsl:text>
+        <xsl:text>der/die DozentIn hat in seinem Online-Semesterapparat ein </xsl:text>
         <xsl:choose>
           <xsl:when test="$action = 'create'">
             <xsl:text>neuen Katalog-Eintrag hinzugefügt</xsl:text>
@@ -126,6 +126,7 @@
           <xsl:value-of select="$newline" />
         </xsl:for-each>
 
+        <xsl:value-of select="$newline" />
         <xsl:value-of select="$newline" />
         <xsl:choose>
           <xsl:when test="$action = 'create'">
