@@ -43,6 +43,8 @@ public class OPCRecordEntry implements Serializable {
     private static final long serialVersionUID = -4540182175442477505L;
 
     private String epn;
+    
+    private Boolean deletionMark;
 
     private Record record;
 
@@ -61,6 +63,21 @@ public class OPCRecordEntry implements Serializable {
      */
     public void setEPN(String epn) {
         this.epn = epn;
+    }
+
+    /**
+     * @return the deletionMark
+     */
+    @XmlAttribute(name = "deleted")
+    public Boolean getDeletionMark() {
+        return deletionMark;
+    }
+
+    /**
+     * @param deletionMark the deletionMark to set
+     */
+    public void setDeletionMark(Boolean deletionMark) {
+        this.deletionMark = deletionMark;
     }
 
     /**

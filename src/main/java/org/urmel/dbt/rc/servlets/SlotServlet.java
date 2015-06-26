@@ -63,6 +63,7 @@ import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
+import org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import org.urmel.dbt.rc.persistency.FileEntryManager;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotEntryTransformer;
@@ -267,8 +268,14 @@ public class SlotServlet extends MCRServlet {
                 } else if ("delete".equals(action)) {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
-                        LOGGER.debug("Remove entry: " + se);
-                        success = slot.removeEntry(se);
+                        if (se.getEntry() instanceof OPCRecordEntry && !SlotManager.hasAdminPermission()) {
+                            LOGGER.debug("Set deletion mark: " + se);
+                            ((OPCRecordEntry) se.getEntry()).setDeletionMark(true);
+                            slot.setEntry(se);
+                        } else {
+                            LOGGER.debug("Remove entry: " + se);
+                            success = slot.removeEntry(se);
+                        }
 
                         evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.DELETE_EVENT);
                         evt.put(SlotManager.ENTRY_TYPE, se);

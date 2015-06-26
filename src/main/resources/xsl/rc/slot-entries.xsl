@@ -287,6 +287,25 @@
   </xsl:template>
   
   <!-- OPCRecordEntry -->
+
+  <xsl:template match="opcrecord" mode="editButtons">
+    <div class="entry-buttons">
+      <div class="btn-group">
+        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" title="{i18n:translate('component.rc.slot.entry.edit')}">
+          <span class="glyphicon glyphicon-pencil" />
+        </a>
+        <xsl:if test="$hasAdminPermission or (string-length(@deleted) = 0) or (@deleted != 'true')">
+          <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" title="{i18n:translate('component.rc.slot.entry.delete')}">
+            <span class="glyphicon glyphicon-trash text-danger" />
+          </a>
+        </xsl:if>
+        <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
+          <span class=" entry-mover glyphicon glyphicon-screenshot " />
+        </a>
+      </div>
+    </div>
+  </xsl:template>
+
   <xsl:template match="opcrecord">
     <xsl:if test="$writePermission or (($onlineOnly = 'false') and (string-length(@epn) &gt; 0)) or ($onlineOnly = 'true')">
       <xsl:apply-templates select="pica:record" mode="isbd" />
@@ -298,6 +317,11 @@
       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)">
         <span class="label label-warning">
           <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.release_required')" />
+        </span>
+      </xsl:if>
+      <xsl:if test="$writePermission and ($onlineOnly = 'false') and (@deleted = 'true')">
+        <span class="label label-danger">
+          <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.deletion_mark')" />
         </span>
       </xsl:if>
     </xsl:if>
