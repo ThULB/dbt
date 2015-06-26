@@ -4,8 +4,8 @@
 
 @dark_neutral:      #999;       // dark gray
 @light_neutral:     #ccc;       // light gray
-@link_color:        #085;       // blue
-@highlight:         #085;       // DBT green
+@link_color:        @brand-primary;    // blue
+@highlight:         @brand-primary;    // orange
 
 @filter_back:       #ECF0F1;
 @filter_border:     #ccc;
@@ -26,8 +26,11 @@
   .result_search {
     .search_box {
       display: inline-block;
-      width: 80%;
+      width: 100%;
       margin-top: 25px;
+      .caret {
+        margin-left: 6px;
+      }
     }
   }
 }
@@ -52,7 +55,7 @@
       float: left;
       width: 100%;
       .panel-heading {
-        background-color: @filter_back;
+        background-color: @panel-default-heading-bg;
         .panel-title {
           color: @filter_headline;
         }
@@ -188,19 +191,15 @@
         .btn {
           margin-right: 0px;
           padding: 2px 10px;
-          background: none;
           background-color: transparent;
           border: 1px solid @light_neutral;
           border-width: 0px 1px 0px 0px;
           border-radius: 0;
           border-top-right-radius: 10px;
           color: @dark_neutral;
-          box-shadow: none;
           &:hover {
             color: @link_color;
-            background: none;
             background-color: transparent;
-            box-shadow: none;
           }
         }
         .caret {
@@ -269,52 +268,69 @@
 
 
 /* file box *****************************************************************/
-@file_box_color: @gray-lighter;
+@file_box_color: @panel-default-heading-bg;
 
       .file_box {
-          border: 1px solid @file_box_color;
-          border-radius: 5px;
-          margin-bottom: 10px;
+          border: 0px solid @file_box_color;
+          border-radius: 0px;
+          margin-bottom: 30px;
         .header {
           .headline {
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            background-color: @file_box_color;
-            padding: 5px 0 5px 0;
+            border-bottom: 1px solid #ddd;
+            padding: 0px 0 0px 0;
             .title {
-              padding: 0 0 0 15px;
+              padding: 0 0 0 0;
+              .file_toggle {
+                font-size: 16px;
+                border: none;
+                background: none;
+                color: inherit;
+                text-shadow: none;
+                padding: 0;
+                font-weight: 300;
+                .set_number {
+                  margin-left: 6px;
+                }
+                .caret {
+                  margin-left: 6px;
+                }
+              }
             }
             .options {
                 .dropdown-menu > li > a:hover {
-                  background-color: @highlight;
+                  background: @brand-primary;
                 }
                 .btn {
-                  border: 0px solid transparent;
+                  border: none;
                   margin-right: 0px;
-                  padding: 2px 10px;
-                  background-color: transparent;
-                  color: @brand-primary;
+                  background: none;
+                  text-shadow: none;
+                  box-shadow: none;
+                  padding: 5px 10px;
+                  font-size: 12px;
+                  line-height: 1.5;
                   &:hover {
-                    color: @link_color;
-                    background-color: transparent;
+                    color: @brand-primary;
+                    background: none;
+                    box-shadow: none;
                   }
                 }
                 .caret {
                   margin-left: 6px;
                 }
                 .open > .dropdown-toggle {
-                  color: @highlight;
-                  background-color: transparent;
+                  color: @brand-primary;
+                  background: none;
                   .btn-default {
-                    background-color: transparent;
+                    background: none;
                   }
                   &:hover {
-                    color: @link_color;
+                    color: @brand-primary;
                   }
                 }
                 .option {
                   color: @dark_neutral;
-                  background-color: transparent;
+                  background: none;
                   &:hover {
                     color: white;
                   }
@@ -329,50 +345,59 @@
           }
         }
         .body {
+          margin-top: 5px;
+          div:nth-child(odd) {
+            .file_set {
+              background-color: #F5F5F5;
+            }
+          }
+          div:nth-child(even) {
+            .file_set {
+              background-color: #F9F9F9;
+            }
+          }
           .file_set {
             > .glyphicon-star {
                 color: #fafafa;
                 padding-right: 5px;
+                padding-left: 5px;
             }
             &.active_file {
               > .glyphicon-star {
                 color: @brand-success;
               }
             }
-            &.even {
-              background-color: @table-bg-accent;
-            }
             border-top: 0px solid @file_box_color;
-            padding: 5px 0 5px 15px;
+            padding: 5px 0px 5px 0px;
             .options {
                 .dropdown-menu > li > a:hover {
-                  background-color: @highlight;
+                  background: @brand-primary;
                 }
                 .btn {
                   margin-right: 0px;
                   padding: 2px 10px;
-                  background-color: transparent;
-                  border: 1px solid @light_neutral;
-                  border-width: 0px 0px 0px 0px;
+                  background: none;
+                  border: none;
                   border-radius: 0;
-                  border-top-right-radius: 0px;
+                  box-shadow: none;
                   color: @dark_neutral;
                   &:hover {
-                    color: @link_color;
-                    background-color: transparent;
+                    color: @brand-primary;
+                    background: none;
                   }
                 }
                 .caret {
                   margin-left: 6px;
                 }
                 .open > .dropdown-toggle {
-                  color: @highlight;
-                  background-color: transparent;
+                  color: @brand-primary;
+                  background: none;
                   .btn-default {
-                    background-color: transparent;
+                    background: none;
+                    box-shadow: none;
                   }
                   &:hover {
-                    color: @link_color;
+                    color: @brand-primary;
                   }
                 }
                 .option {
@@ -405,12 +430,45 @@
             }
             .file_size {
                 color: @gray;
-                padding-left: 10px;
+                padding: 0 10px 0 10px;
                 float: right;
             }
           }
         }
       }
+
+/* filter *******************************************************************/
+
+.filter {
+    border-right: 0px solid #ccc;
+}
+.filter,
+.filter > li ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.filter > li ul {
+    display:none;
+}
+.filter > li {
+    margin:0 0 0px 0;
+    padding:0 0 0 0;
+}
+.filter > li > ul > li {
+    margin:0 0 0px 0px;
+    padding:0 0 0 0;
+}
+.filter .hits {
+    color: #ccc;
+}
+.filter .hits:before {
+    content: " (";
+}
+.filter .hits:after {
+    content: ")";
+}
+
 
 /* xs: default up to 750px ***************************************************/
 

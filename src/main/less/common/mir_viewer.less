@@ -1,7 +1,22 @@
 .viewer {
+  // .viewer is only the embedded viewer
   height: 550px;
   position: relative;
   margin-bottom: 30px;
+
+  .navbar.navbar-default {
+    background-color: @panel-default-heading-bg;
+    border-color: @panel-default-border;
+
+    .dropdown {
+      height: 34px;
+    }
+  }
+
+  .btn {
+    padding: 6px 10px;
+  }
+
 }
 
 h3.mir-viewer {
@@ -14,25 +29,22 @@ h3.mir-viewer {
 
 
 .mycoreViewer {
-  .navbar {
-    background-color: @panel-default-heading-bg;
-    border-color: @panel-default-border;
 
-    .dropdown {
-      height: 36px !important;
+  &:not(.viewer) .navbar.navbar-default {
+    select {
+      height: 44px;
     }
 
     button {
       padding: 10px 15px;
     }
-
-    .btn {
-      margin-top: 9px;
-      padding: 6px 10px;
-    }
   }
 
-  >div:not(.navbar) {
-    top: 60px !important;
+  .navbar.navbar-default .btn {
+      margin-top: 9px;
+    }
+
+  > div:not(.navbar):not(.navbar-default) {
+    top: @navbar-height;
   }
 }

@@ -1,7 +1,7 @@
 .metadata {
   overflow: hidden;
   border: none;
-  font-family: "Droid Sans", Arial, Helvetica, sans-serif;
+  font-family: inherit;
   margin: 2em 0;
   th {
     text-align: right;
@@ -59,8 +59,13 @@
 }
 #cite_link_box {
   text-align: center;
-
+  .label {
+    margin: 0px 2px;
+  }
   #copy_cite_link {
+  }
+  #url_site_link {
+    font-size: 12px;
   }
   #cite_link_code_box {
     display: none;
@@ -70,9 +75,24 @@
   }
 }
 
+
 .shariff li {
-    width: 80px;
+  width: 87px;
 }
+
+.altmetric-embed {
+  margin-bottom: 20px;
+}
+
+#citation-style {
+  margin: 20px 0px;
+}
+
+#crossref-cite {
+  margin: 5px 0px;
+}
+
+
 @grayLight: #f6f6f6;
 @grayDark: #ECF0F1;
 
