@@ -39,7 +39,7 @@
     </xsl:message>
     <email>
       <from>
-        <xsl:value-of select="$MCR.mir-module.MailSender" />
+        <xsl:value-of select="$MCR.RC.MailSender" />
       </from>
       <xsl:apply-templates select="/*" mode="email" />
     </email>
