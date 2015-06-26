@@ -125,6 +125,9 @@
         </p>
       </div>
     </div>
+    <xed:if test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
+      <mir:template name="static" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn" />
+    </xed:if>
     <mir:template name="static" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
   </xed:template>
 
@@ -145,7 +148,8 @@
 
     <xed:if test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
       <xed:bind xpath="opcrecord/pica:record/@ppn" name="ppn" />
-      <mir:template name="selectInput" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn" uri="xslStyle:opc/copys2options?ppn={$ppn}:slot:slotId={$slotId}&amp;catalogId" />
+      <mir:template name="selectInput" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn"
+        uri="xslStyle:opc/copys2options?ppn={$ppn}:slot:slotId={$slotId}&amp;catalogId" />
     </xed:if>
 
     <mir:template name="textArea" xpath="opcrecord/comment" id="comment" i18n="component.rc.slot.entry.opcrecord.comment" />
