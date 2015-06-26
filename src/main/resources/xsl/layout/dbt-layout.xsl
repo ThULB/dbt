@@ -114,6 +114,11 @@
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
 
+    <script type="text/javascript">
+      <xsl:value-of select="concat('var webApplicationBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
+      <xsl:value-of select="concat('var currentLang = &quot;', $CurrentLang, '&quot;;')" disable-output-escaping="yes" />
+    </script>
+
     <xsl:if test="$include.HTML.Head.JS">
       <xsl:copy-of select="$include.HTML.Head.JS" />
     </xsl:if>
