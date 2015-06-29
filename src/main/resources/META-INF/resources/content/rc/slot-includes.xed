@@ -45,11 +45,10 @@
       <xed:when test="string-length($slotId)">
         <xed:choose>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
-            <mir:template name="radioList" xpath="@status" id="status" inline="true" i18n="component.rc.slot.status"
-              uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:org.urmel.dbt.rc.datamodel.Status" />
-
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
             <hr />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
 
             <hr />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
@@ -64,6 +63,7 @@
       </xed:when>
       <xed:otherwise>
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
 
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="location" />
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
@@ -86,6 +86,17 @@
   <!-- ====[ Slot Templates ]============== -->
   <xed:template id="rcTitle">
     <mir:template name="textInput" xpath="title" id="title" i18n="component.rc.slot.title" i18n.error="component.rc.slot.title.required" required="true" />
+  </xed:template>
+
+  <xed:template id="status">
+    <mir:template name="radioList" xpath="@status" id="status" inline="true" i18n="component.rc.slot.status"
+      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:org.urmel.dbt.rc.datamodel.Status" />
+  </xed:template>
+
+  <xed:template id="onlineOnly">
+    <mir:template name="checkboxList" xpath="@onlineOnly" id="onlineOnly" inline="true">
+      <option value="true" i18n="component.rc.slot.onlineOnly" />
+    </mir:template>
   </xed:template>
 
   <xed:template id="location">
