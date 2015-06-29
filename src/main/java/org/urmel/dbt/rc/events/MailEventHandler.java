@@ -89,7 +89,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("xslStyle:" + MAIL_STYLESHEET);
         uri.append("?action=" + evt.getEventType());
         uri.append("&type=" + evt.getObjectType());
-        uri.append("&slotId=" + slot.getId());
+        uri.append("&slotId=" + slot.getSlotId());
 
         uri.append(":notnull:slot:");
         uri.append("slotId=" + evt.get("slotId"));
