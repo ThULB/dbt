@@ -201,6 +201,15 @@ public final class SlotManager {
     }
 
     /**
+     * Set a {@link Slot} to {@link SlotList}.
+     * 
+     * @param slot the slot
+     */
+    public void setSlot(final Slot slot) {
+        slotList.setSlot(slot);
+    }
+
+    /**
      * Returns a slot by given id.
      * 
      * @param slotId the slot id

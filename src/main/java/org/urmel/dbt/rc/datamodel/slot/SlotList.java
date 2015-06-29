@@ -52,6 +52,22 @@ public class SlotList implements Serializable {
     }
 
     /**
+     * @param slot the slot to set
+     */
+    public void setSlot(final Slot slot) {
+        if (slots != null) {
+            for (int c = 0; c < slots.size(); c++) {
+                if (slot.getSlotId().equals(slots.get(c).getSlotId())) {
+                    slots.set(c, slot);
+                    return;
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("Couldn't find Slot with id \"" + slot.getSlotId() + "\"!");
+    }
+
+    /**
      * Returns a slot by given id.
      * 
      * @param slotId the slot id

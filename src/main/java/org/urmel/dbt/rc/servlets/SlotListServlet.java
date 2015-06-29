@@ -103,6 +103,8 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 slot.setMCRObjectID(s.getMCRObjectID());
+                
+                SLOT_MGR.setSlot(slot);
 
                 evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
                 evt.put(SlotManager.SLOT_TYPE, slot);
