@@ -41,20 +41,30 @@
   <xed:template id="editor">
     <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="failed-validation-messages" />
 
-    <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
-    
     <xed:choose>
       <xed:when test="string-length($slotId)">
         <xed:choose>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
+            <mir:template name="radioList" xpath="@status" id="status" inline="true" i18n="component.rc.slot.status"
+              uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:org.urmel.dbt.rc.datamodel.Status" />
+
+            <hr />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+
+            <hr />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
           </xed:when>
           <xed:otherwise>
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+
+            <hr />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturerEmail" />
           </xed:otherwise>
         </xed:choose>
       </xed:when>
       <xed:otherwise>
+        <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="location" />
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
 
