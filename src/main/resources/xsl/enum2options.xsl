@@ -16,6 +16,7 @@
 
   <xsl:template match="value">
     <option value="{text()}">
+      <xsl:copy-of select="@*" />
       <xsl:value-of select="i18n:translate(concat($i18nPrefix, '.', $enumName, '.', text()))" />
     </option>
   </xsl:template>
