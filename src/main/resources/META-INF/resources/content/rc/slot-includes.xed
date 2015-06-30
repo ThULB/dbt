@@ -50,14 +50,34 @@
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
 
-            <hr />
-            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+            <fieldset>
+              <legend>
+                <xed:output i18n="component.rc.slot.lecturer" />
+              </legend>
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+            </fieldset>
+            <fieldset class="{$xed-validation-marker}">
+              <legend>
+                <xed:output i18n="component.rc.slot.contact" />
+              </legend>
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="contact" />
+            </fieldset>
           </xed:when>
           <xed:otherwise>
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
 
-            <hr />
-            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturerEmail" />
+            <fieldset>
+              <legend>
+                <xed:output i18n="component.rc.slot.lecturer" />
+              </legend>
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturerEmail" />
+            </fieldset>
+            <fieldset class="{$xed-validation-marker}">
+              <legend>
+                <xed:output i18n="component.rc.slot.contact" />
+              </legend>
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="contact" />
+            </fieldset>
           </xed:otherwise>
         </xed:choose>
       </xed:when>
@@ -129,9 +149,9 @@
   <xed:template id="singleLecturer">
     <xed:bind xpath="lecturers">
       <xed:bind xpath="lecturer">
-        <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" i18n.error="component.rc.slot.lecturer.name.required"
+        <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.person.name" i18n.error="component.rc.slot.person.name.required"
           required="true" />
-        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
+        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.person.email" i18n.error="component.rc.slot.person.email.required"
           required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
       </xed:bind>
     </xed:bind>
@@ -140,11 +160,23 @@
   <xed:template id="singleLecturerEmail">
     <xed:bind xpath="lecturers">
       <xed:bind xpath="lecturer">
-        <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.lecturer.name" />
-        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.lecturer.email" i18n.error="component.rc.slot.lecturer.email.required"
+        <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.person.name" />
+        <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.person.email" i18n.error="component.rc.slot.person.email.required"
           required="true" validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
       </xed:bind>
     </xed:bind>
+  </xed:template>
+
+  <xed:template id="contact">
+    <xed:bind xpath="contact">
+      <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.person.name" />
+      <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.person.email" i18n.error="component.rc.slot.person.email.required"
+        validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
+    </xed:bind>
+
+    <xed:validate xpath="slot" display="global local"
+      test="((string-length(contact/@name) = 0) and (string-length(contact/@email) = 0)) or ((string-length(contact/@name) &gt; 0) and (string-length(contact/@email) &gt; 0))"
+      i18n="component.rc.slot.person.email.required" />
   </xed:template>
 
   <xed:template id="accesskeys">

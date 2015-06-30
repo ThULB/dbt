@@ -212,6 +212,15 @@
         <xsl:text>)</xsl:text>
         <xsl:text> - </xsl:text>
         <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
+        <xsl:if test="string-length(contact/@name) &gt; 0">
+          <div class="contact">
+            <strong>
+              <xsl:value-of select="i18n:translate('component.rc.slot.contact')" />
+              <xsl:text>: </xsl:text>
+            </strong>
+            <xsl:value-of select="contact/@name" />
+          </div>
+        </xsl:if>
       </div>
     </div>
   </xsl:template>

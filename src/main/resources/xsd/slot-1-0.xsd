@@ -1,70 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
-  <xs:element name="lecturer" type="lecturer"/>
+  <xs:element name="lecturer" type="person" />
 
-  <xs:element name="slot" type="slot"/>
+  <xs:element name="slot" type="slot" />
 
-  <xs:element name="warning" type="warningDate"/>
+  <xs:element name="warning" type="warningDate" />
 
   <xs:complexType name="slot">
     <xs:sequence>
-      <xs:element name="title" type="xs:string" minOccurs="0"/>
+      <xs:element name="title" type="xs:string" minOccurs="0" />
       <xs:element name="lecturers">
         <xs:complexType>
           <xs:sequence>
-            <xs:element ref="lecturer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="lecturer" minOccurs="0" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
-      <xs:element name="validTo" type="xs:string" minOccurs="0"/>
-      <xs:element name="comment" type="xs:string" minOccurs="0"/>
+      <xs:element name="contact" type="person" minOccurs="0" />
+      <xs:element name="validTo" type="xs:string" minOccurs="0" />
+      <xs:element name="comment" type="xs:string" minOccurs="0" />
       <xs:element name="warnings" minOccurs="0">
         <xs:complexType>
           <xs:sequence>
-            <xs:element ref="warning" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="warning" minOccurs="0" maxOccurs="unbounded" />
           </xs:sequence>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
-    <xs:attribute name="id" type="xs:string"/>
-    <xs:attribute name="status" type="status"/>
-    <xs:attribute name="pendingStatus" type="pendingStatus"/>
-    <xs:attribute name="onlineOnly" type="xs:boolean" use="required"/>
+    <xs:attribute name="id" type="xs:string" />
+    <xs:attribute name="status" type="status" />
+    <xs:attribute name="pendingStatus" type="pendingStatus" />
+    <xs:attribute name="onlineOnly" type="xs:boolean" use="required" />
   </xs:complexType>
 
-  <xs:complexType name="lecturer">
-    <xs:sequence/>
-    <xs:attribute name="email" type="xs:string" use="required"/>
-    <xs:attribute name="name" type="xs:string" use="required"/>
-    <xs:attribute name="origin" type="xs:string"/>
+  <xs:complexType name="person">
+    <xs:sequence />
+    <xs:attribute name="email" type="xs:string" use="required" />
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="origin" type="xs:string" />
   </xs:complexType>
 
   <xs:complexType name="warningDate">
     <xs:simpleContent>
       <xs:extension base="xs:string">
-        <xs:attribute name="format" type="xs:string"/>
+        <xs:attribute name="format" type="xs:string" />
       </xs:extension>
     </xs:simpleContent>
   </xs:complexType>
 
   <xs:simpleType name="status">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="free"/>
-      <xs:enumeration value="reserved"/>
-      <xs:enumeration value="new"/>
-      <xs:enumeration value="active"/>
-      <xs:enumeration value="archived"/>
-      <xs:enumeration value="pending"/>
+      <xs:enumeration value="free" />
+      <xs:enumeration value="reserved" />
+      <xs:enumeration value="new" />
+      <xs:enumeration value="active" />
+      <xs:enumeration value="archived" />
+      <xs:enumeration value="pending" />
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="pendingStatus">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="free"/>
-      <xs:enumeration value="reserved"/>
-      <xs:enumeration value="active"/>
-      <xs:enumeration value="archived"/>
+      <xs:enumeration value="free" />
+      <xs:enumeration value="reserved" />
+      <xs:enumeration value="active" />
+      <xs:enumeration value="archived" />
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

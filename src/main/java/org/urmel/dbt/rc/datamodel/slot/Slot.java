@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.metadata.MCRObjectID;
+import org.urmel.dbt.rc.datamodel.Contact;
 import org.urmel.dbt.rc.datamodel.Lecturer;
 import org.urmel.dbt.rc.datamodel.PendingStatus;
 import org.urmel.dbt.rc.datamodel.Status;
@@ -38,7 +39,7 @@ import org.urmel.dbt.rc.datamodel.WarningDate;
 @XmlRootElement(name = "slot")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "slot", propOrder = { "slotId", "status", "pendingStatus", "onlineOnly", "title", "lecturers",
-        "validTo", "comment", "warningDates", "accessKeys", "entries" })
+        "contact", "validTo", "comment", "warningDates", "accessKeys", "entries" })
 public class Slot implements Serializable {
 
     /**
@@ -74,6 +75,8 @@ public class Slot implements Serializable {
     private String title;
 
     private List<Lecturer> lecturers = new ArrayList<Lecturer>();
+
+    private Contact contact;
 
     private List<WarningDate> warningDates;
 
@@ -291,6 +294,8 @@ public class Slot implements Serializable {
     /**
      * @return the lecturers
      */
+    @XmlElementWrapper(name = "lecturers", required = true)
+    @XmlElement(name = "lecturer")
     public List<Lecturer> getLecturers() {
         return lecturers;
     }
@@ -298,8 +303,6 @@ public class Slot implements Serializable {
     /**
      * @param lecturers the lecturers to set
      */
-    @XmlElementWrapper(name = "lecturers", required = true)
-    @XmlElement(name = "lecturer")
     public void setLecturers(final List<Lecturer> lecturers) {
         this.lecturers = lecturers;
     }
@@ -309,6 +312,21 @@ public class Slot implements Serializable {
      */
     public void addLecturer(final Lecturer lecturer) {
         lecturers.add(lecturer);
+    }
+
+    /**
+     * @return the contact
+     */
+    @XmlElement(name = "contact")
+    public Contact getContact() {
+        return contact;
+    }
+
+    /**
+     * @param contact the contact to set
+     */
+    public void setContact(Contact contact) {
+        this.contact = contact;
     }
 
     /**
@@ -513,6 +531,7 @@ public class Slot implements Serializable {
         copy.onlineOnly = this.onlineOnly;
         copy.title = this.title;
         copy.lecturers = this.lecturers;
+        copy.contact = this.contact;
         copy.warningDates = this.warningDates;
         copy.validTo = this.validTo;
         copy.comment = this.comment;
@@ -537,6 +556,7 @@ public class Slot implements Serializable {
         copy.onlineOnly = this.onlineOnly;
         copy.title = this.title;
         copy.lecturers = this.lecturers;
+        copy.contact = this.contact;
         copy.warningDates = this.warningDates;
         copy.validTo = this.validTo;
         copy.comment = this.comment;
@@ -581,6 +601,7 @@ public class Slot implements Serializable {
         result = prime * result + ((comment == null) ? 0 : comment.hashCode());
         result = prime * result + id;
         result = prime * result + ((lecturers == null) ? 0 : lecturers.hashCode());
+        result = prime * result + ((contact == null) ? 0 : contact.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + (onlineOnly ? 1231 : 1237);
         result = prime * result + ((pendingStatus == null) ? 0 : pendingStatus.hashCode());
@@ -620,6 +641,13 @@ public class Slot implements Serializable {
                 return false;
             }
         } else if (!lecturers.equals(other.lecturers)) {
+            return false;
+        }
+        if (contact == null) {
+            if (other.contact != null) {
+                return false;
+            }
+        } else if (!contact.equals(other.contact)) {
             return false;
         }
         if (location == null) {
