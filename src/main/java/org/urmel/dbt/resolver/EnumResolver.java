@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.resolver;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import javax.xml.transform.Source;
@@ -30,6 +31,7 @@ import javax.xml.transform.URIResolver;
 
 import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
+import org.urmel.dbt.annotation.EnumValue;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -51,10 +53,19 @@ public class EnumResolver implements URIResolver {
                 Element root = new Element("enum");
                 root.setAttribute("name", cls.getSimpleName());
                 for (Object obj : cls.getEnumConstants()) {
-                    Method m = obj.getClass().getDeclaredMethod("value");
-                    Element elm = new Element("value");
-                    elm.setText((String) m.invoke(obj));
-                    root.addContent(elm);
+                    final Method m = obj.getClass().getDeclaredMethod("value");
+                    final String value = (String) m.invoke(obj);
+
+                    EnumValue enumValue = getAnnotation(cls, value);
+
+                    if (enumValue == null || enumValue.visible()) {
+                        Element elm = new Element("value");
+                        elm.setText(value);
+                        if (enumValue != null && enumValue.disabled()) {
+                            elm.setAttribute("disabled", Boolean.toString(enumValue.disabled()));
+                        }
+                        root.addContent(elm);
+                    }
                 }
 
                 return new JDOMSource(root);
@@ -66,4 +77,12 @@ public class EnumResolver implements URIResolver {
         }
     }
 
+    private EnumValue getAnnotation(final Class<?> cls, final String value) {
+        for (Field field : cls.getDeclaredFields()) {
+            if (field.getName().equalsIgnoreCase(value)) {
+                return field.getAnnotation(EnumValue.class);
+            }
+        }
+        return null;
+    }
 }
