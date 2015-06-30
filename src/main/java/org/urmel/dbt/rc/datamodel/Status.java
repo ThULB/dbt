@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.urmel.dbt.annotation.EnumValue;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 
 /**
@@ -51,6 +52,7 @@ public enum Status {
     /**
      * Stands for a pending slot status change.
      */
+    @EnumValue(disabled = true)
     @XmlEnumValue("pending")
     PENDING("pending");
 
