@@ -228,7 +228,7 @@
   
   <!-- WebLinkEntry -->
   <xsl:template match="webLink">
-    <a href="{@url}">
+    <a href="{@url}" target="_blank">
       <xsl:choose>
         <xsl:when test="string-length(.) &gt; 0">
           <xsl:value-of select="." />

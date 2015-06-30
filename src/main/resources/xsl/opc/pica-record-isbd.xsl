@@ -9,7 +9,7 @@
     <h4>
       <xsl:choose>
         <xsl:when test="string-length($recordURLPrefix) &gt; 0">
-          <a href="{$recordURLPrefix}{@ppn}">
+          <a href="{$recordURLPrefix}{@ppn}" target="_blank">
             <xsl:apply-templates select="." mode="isbdTitle" />
           </a>
         </xsl:when>
