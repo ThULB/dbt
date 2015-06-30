@@ -200,7 +200,16 @@
       </h1>
       <div class="info">
         <xsl:for-each select="lecturers/lecturer">
-          <xsl:value-of select="@name" />
+          <xsl:choose>
+            <xsl:when test="$readPermission and string-length(/slot/contact/@email) = 0">
+              <a href="mailto:{@email}">
+                <xsl:value-of select="@name" />
+              </a>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@name" />
+            </xsl:otherwise>
+          </xsl:choose>
           <xsl:if test="position() != last()">
             <xsl:text>; </xsl:text>
           </xsl:if>
@@ -218,7 +227,16 @@
               <xsl:value-of select="i18n:translate('component.rc.slot.contact')" />
               <xsl:text>: </xsl:text>
             </strong>
-            <xsl:value-of select="contact/@name" />
+            <xsl:choose>
+              <xsl:when test="$readPermission">
+                <a href="mailto:{contact/@email}">
+                  <xsl:value-of select="contact/@name" />
+                </a>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="contact/@name" />
+              </xsl:otherwise>
+            </xsl:choose>
           </div>
         </xsl:if>
       </div>
