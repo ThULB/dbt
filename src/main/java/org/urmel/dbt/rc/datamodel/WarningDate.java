@@ -114,4 +114,22 @@ public class WarningDate implements Serializable, Comparable<WarningDate> {
         return warningDate.compareTo(o.warningDate);
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("WarningDate [");
+        if (warningDate != null) {
+            builder.append("warningDate=");
+            builder.append(warningDate);
+            builder.append(", ");
+        }
+        builder.append("format=");
+        builder.append(getFormat());
+        builder.append("]");
+        return builder.toString();
+    }
+
 }

@@ -5,18 +5,18 @@
     <label xml:lang="en" text="Winter semester" />
     <warnings>
       <!-- type: periodEnd|lectureEnd|validTo -->
-      <warning type="periodEnd" at="11.01." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
-      <warning type="periodEnd" at="01.03." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
-      <warning type="periodEnd" at="31.03." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
+      <warning type="periodEnd" at="11.01." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
+      <warning type="periodEnd" at="01.03." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
+      <warning type="periodEnd" at="31.03." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
     </warnings>
   </period>
   <period from="01.04." to="30.09." lectureEnd="04.08." matchingLocation=".*" setableFrom="04.02." setableTo="01.08.">
     <label xml:lang="de" text="Sommersemester" />
     <label xml:lang="en" text="Summer semester" />
     <warnings>
-      <warning type="periodEnd" at="10.06." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
-      <warning type="periodEnd" at="01.09." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
-      <warning type="periodEnd" at="30.09." template="e-mail-semapp-inactivate" groupTemplate="e-mail-semapp-warning-group" />
+      <warning type="periodEnd" at="10.06." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
+      <warning type="periodEnd" at="01.09." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
+      <warning type="periodEnd" at="30.09." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
     </warnings>
   </period>
 </calendar>

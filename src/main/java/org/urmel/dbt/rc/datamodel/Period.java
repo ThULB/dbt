@@ -575,6 +575,45 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         this.warnings = warnings;
     }
 
+    /**
+     * Returns the actual {@link Warning} for given {@link Date}.
+     * 
+     * @param date the {@link Date} to check
+     * @return {@link Warning} or <code>null</code> if none matches
+     */
+    public Warning getWarning(final Date date) {
+        return getWarning(date, null);
+    }
+
+    /**
+     * Returns the actual {@link Warning} for given {@link Date} and {@link WarningType}.
+     * 
+     * @param date the {@link Date} to check
+     * @param warningType the {@link WarningType}
+     * @return {@link Warning} or <code>null</code> if none matches
+     */
+    public Warning getWarning(final Date date, final WarningType warningType) {
+        if (warnings != null && !getWarnings().isEmpty()) {
+            try {
+                Warning warning = null;
+                for (Warning w : getWarnings()) {
+                    if (warningType == null || w.getType() == warningType) {
+                        if (date.after(w.getWarningDate()) || date.equals(w.getWarningDate())) {
+                            if (warning == null || w.getWarningDate().after(warning.getWarningDate())) {
+                                warning = w;
+                            }
+                        }
+                    }
+                }
+                return warning;
+            } catch (IllegalArgumentException | ParseException | CloneNotSupportedException e) {
+                return null;
+            }
+        }
+
+        return null;
+    }
+
     private String getLabelExtension(Date date) throws ParseException {
         String result = null;
 

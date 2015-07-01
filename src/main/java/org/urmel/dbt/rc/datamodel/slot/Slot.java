@@ -349,6 +349,33 @@ public class Slot implements Serializable {
     }
 
     /**
+     * Checks if {@link WarningDate} is set on {@link Slot}.
+     * 
+     * @param warningDate the warningDate to check
+     * @return <code>true</code> if {@link Slot} has warning date
+     */
+    public boolean hasWarningDate(final WarningDate warningDate) {
+        if (warningDates != null && !warningDates.isEmpty()) {
+            for (final WarningDate wd : warningDates) {
+                if (wd.compareTo(warningDate) == 0)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if {@link Date} is set as {@link WarningDate} on {@link Slot}.
+     * 
+     * @param warningDate the warningDate to check
+     * @return <code>true</code> if {@link Slot} has warning date
+     */
+    public boolean hasWarningDate(final Date warningDate) {
+        return hasWarningDate(new WarningDate(warningDate));
+    }
+
+    /**
      * @param warningDate the warning date to set
      */
     public void addWarningDate(final Date warningDate) {
