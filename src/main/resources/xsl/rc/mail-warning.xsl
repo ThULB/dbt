@@ -3,6 +3,8 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
 >
 
+  <xsl:include href="slot-templates.xsl" />
+
   <xsl:param name="MCR.RC.MailSender" />
 
   <xsl:param name="WebApplicationBaseURL" />
@@ -44,6 +46,18 @@
       <xsl:value-of select="$newline" />
       <xsl:value-of select="$newline" />
       <xsl:text>folgender Semesterapparat wird ablaufen:</xsl:text>
+      <xsl:value-of select="$newline" />
+      <xsl:value-of select="$newline" />
+
+      <xsl:text>Standort  : </xsl:text>
+      <xsl:apply-templates select="@id" mode="rcLocationText" />
+      <xsl:value-of select="$newline" />
+      <xsl:text>Semester  : </xsl:text>
+      <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
+      <xsl:value-of select="$newline" />
+      <xsl:text>Gültig bis: </xsl:text>
+      <xsl:value-of select="validTo" />
+      <xsl:value-of select="$newline" />
       <!-- TODO mail text -->
     </body>
   </xsl:template>

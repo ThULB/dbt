@@ -31,18 +31,6 @@
   <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
   <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
 
-  <xsl:variable name="date">
-    <xsl:choose>
-      <xsl:when test="string-length(/slot/validTo) &gt; 0">
-        <xsl:value-of select="/slot/validTo" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>now</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
-
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
     <div id="slot-body">
