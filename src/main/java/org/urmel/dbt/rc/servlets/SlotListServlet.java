@@ -78,8 +78,8 @@ public class SlotListServlet extends MCRServlet {
             MCREvent evt = null;
 
             if (location != null) {
-                final MCRCategory category = DAO
-                        .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location), 0);
+                final MCRCategory category = DAO.getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location),
+                        0);
                 slot.setLocation(category.getId());
             }
 
@@ -103,7 +103,10 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 slot.setMCRObjectID(s.getMCRObjectID());
-                
+                if (s.getValidToAsDate().before(slot.getValidToAsDate())) {
+                    slot.setWarningDates(null);
+                }
+
                 SLOT_MGR.setSlot(slot);
 
                 evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
