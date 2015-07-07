@@ -32,12 +32,6 @@ public enum Status {
     RESERVED("reserved"),
 
     /**
-     * Stands for a new slot.
-     */
-    @XmlEnumValue("new")
-    NEW("new"),
-
-    /**
      * Stands for a active slot.
      */
     @XmlEnumValue("active")

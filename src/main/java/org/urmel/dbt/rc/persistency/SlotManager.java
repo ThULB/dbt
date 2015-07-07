@@ -194,7 +194,7 @@ public final class SlotManager {
     public void addSlot(final Slot slot) {
         if (slot.getId() == 0 && slot.getLocation() != null) {
             slot.setId(getNextFreeId(slot.getLocation()));
-            slot.setStatus(Status.NEW);
+            slot.setStatus(Status.ACTIVE);
         }
 
         slotList.addSlot(slot);

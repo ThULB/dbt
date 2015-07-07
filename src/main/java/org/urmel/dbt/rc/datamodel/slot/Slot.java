@@ -190,7 +190,7 @@ public class Slot implements Serializable {
      * @return true if this slot an active one
      */
     public boolean isActive() {
-        return status == Status.ACTIVE || status == Status.NEW;
+        return status == Status.ACTIVE;
     }
 
     /**
