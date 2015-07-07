@@ -153,7 +153,8 @@ public class SlotListServlet extends MCRServlet {
             }
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(SLOT_MGR.getActiveSlotList())));
+                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(
+                            SlotManager.hasAdminPermission() ? SLOT_MGR.getSlotList() : SLOT_MGR.getActiveSlotList())));
         }
     }
 }
