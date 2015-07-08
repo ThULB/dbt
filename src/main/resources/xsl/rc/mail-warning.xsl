@@ -49,6 +49,9 @@
       <xsl:value-of select="$newline" />
       <xsl:value-of select="$newline" />
 
+      <xsl:text>Titel  : </xsl:text>
+      <xsl:value-of select="title" />
+      <xsl:value-of select="$newline" />
       <xsl:text>Standort  : </xsl:text>
       <xsl:apply-templates select="@id" mode="rcLocationText" />
       <xsl:value-of select="$newline" />
