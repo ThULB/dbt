@@ -30,7 +30,14 @@
   <xed:template id="title">
     <xed:choose>
       <xed:when test="string-length($slotId)">
-        <xed:output i18n="component.rc.slot.edit" />
+        <xed:choose>
+          <xed:when test="$action = 'status'">
+            <xed:output i18n="component.rc.slot.setPendingStatus" />
+          </xed:when>
+          <xed:otherwise>
+            <xed:output i18n="component.rc.slot.edit" />
+          </xed:otherwise>
+        </xed:choose>
       </xed:when>
       <xed:otherwise>
         <xed:output i18n="component.rc.slot.new_title" />
@@ -44,6 +51,15 @@
     <xed:choose>
       <xed:when test="string-length($slotId)">
         <xed:choose>
+          <xed:when test="$action = 'status'">
+            <div class="alert alert-info">
+              <p>
+                <xed:output i18n="component.rc.slot.setPendingStatus.info" />
+              </p>
+            </div>
+            <xed:bind xpath="@status" set="pending" />
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="pendingStatus" />
+          </xed:when>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
             <hr />
@@ -102,6 +118,8 @@
   </xed:template>
 
   <xed:template id="buttons">
+    <mir:template name="submitButton" i18n="button.debug" target="debug" />
+    <span>&#160;</span>
     <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
     <span>&#160;</span>
     <mir:template name="cancelButton" i18n="button.cancel" />
@@ -115,6 +133,11 @@
   <xed:template id="status">
     <mir:template name="radioList" xpath="@status" id="status" inline="true" i18n="component.rc.slot.status"
       uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:org.urmel.dbt.rc.datamodel.Status" />
+  </xed:template>
+
+  <xed:template id="pendingStatus">
+    <mir:template name="radioList" xpath="@pendingStatus" default="active" id="pendingStatus" i18n="component.rc.slot.setPendingStatus.pendingStatus"
+      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot.setPendingStatus:enum:org.urmel.dbt.rc.datamodel.PendingStatus" />
   </xed:template>
 
   <xed:template id="onlineOnly">

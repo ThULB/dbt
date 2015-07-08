@@ -58,7 +58,12 @@
       <xsl:text>Gültig bis: </xsl:text>
       <xsl:value-of select="validTo" />
       <xsl:value-of select="$newline" />
+      <xsl:value-of select="$newline" />
       <!-- TODO mail text -->
+      <xsl:text>Benutzen Sie bitte nachfolgenden Link um uns mitzuteilen was mit Ihrem Semesterapparat geschehen soll.</xsl:text>
+      <xsl:value-of select="$newline" />
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/slot.xed?action=status&amp;slotId=', @id)" />
+      <xsl:value-of select="$newline" />
     </body>
   </xsl:template>
 </xsl:stylesheet>
