@@ -35,6 +35,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.urmel.dbt.common.MailQueue;
 import org.urmel.dbt.rc.datamodel.Period;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
+import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.Warning;
 import org.urmel.dbt.rc.datamodel.WarningDate;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -57,43 +58,45 @@ public class RCCommands extends MCRAbstractCommands {
 
         if (!slotList.getSlots().isEmpty()) {
             for (final Slot slot : slotList.getSlots()) {
-                LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
+                if (slot.getStatus() == Status.ACTIVE) {
+                    LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
 
-                final Date today = new Date();
-                final Date validTo = slot.getValidToAsDate();
-                final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
+                    final Date today = new Date();
+                    final Date validTo = slot.getValidToAsDate();
+                    final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
 
-                try {
-                    final Warning pWarning = period.getWarning(today);
+                    try {
+                        final Warning pWarning = period.getWarning(today);
 
-                    if (pWarning != null) {
-                        final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
-                                : new WarningDate(pWarning.getWarningDate());
+                        if (pWarning != null) {
+                            final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
+                                    : new WarningDate(pWarning.getWarningDate());
 
-                        if (sWarning != null) {
-                            LOGGER.info("...add warning");
+                            if (sWarning != null) {
+                                LOGGER.info("...add warning");
 
-                            slot.addWarningDate(sWarning);
-                            mgr.saveOrUpdate(slot);
+                                slot.addWarningDate(sWarning);
+                                mgr.saveOrUpdate(slot);
 
-                            final StringBuilder uri = new StringBuilder();
+                                final StringBuilder uri = new StringBuilder();
 
-                            uri.append("xslStyle:" + pWarning.getTemplate());
-                            uri.append("?warningDate=" + sWarning.getWarningDate());
-                            uri.append(":notnull:slot:");
-                            uri.append("slotId=" + slot.getSlotId());
+                                uri.append("xslStyle:" + pWarning.getTemplate());
+                                uri.append("?warningDate=" + sWarning.getWarningDate());
+                                uri.append(":notnull:slot:");
+                                uri.append("slotId=" + slot.getSlotId());
 
-                            LOGGER.info("...send mail");
-                            MailQueue.addJob(uri.toString());
+                                LOGGER.info("...send mail");
+                                MailQueue.addJob(uri.toString());
 
-                            continue;
+                                continue;
+                            }
                         }
-                    }
 
-                    LOGGER.info("...nothing to do.");
-                } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
-                        | MCRPersistenceException | MCRActiveLinkException e) {
-                    LOGGER.error(e.getMessage());
+                        LOGGER.info("...nothing to do.");
+                    } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
+                            | MCRPersistenceException | MCRActiveLinkException e) {
+                        LOGGER.error(e.getMessage());
+                    }
                 }
             }
         }
