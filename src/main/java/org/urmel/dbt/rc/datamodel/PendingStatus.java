@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlType;
 
+import org.urmel.dbt.annotation.EnumValue;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 
 /**
@@ -40,7 +41,14 @@ public enum PendingStatus {
      * Stands for a archived slot for late reactivation.
      */
     @XmlEnumValue("archived")
-    ARCHIVED("archived");
+    ARCHIVED("archived"),
+    
+    /**
+     * Stands for a archived slot for late reactivation.
+     */
+    @EnumValue(visible = false)
+    @XmlEnumValue("validating")
+    VALIDATING("validating");
 
     private final String value;
 
