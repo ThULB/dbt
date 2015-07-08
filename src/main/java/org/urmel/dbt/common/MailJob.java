@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.jdom2.Element;
-import org.mycore.common.MCRMailer;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
@@ -96,7 +95,7 @@ public class MailJob extends MCRJobAction {
             final Element xml = MCRURIResolver.instance().resolve(uri);
 
             if (!xml.getChildren("to").isEmpty()) {
-                MCRMailer.send(xml);
+                Mailer.send(xml, true);
             }
         } catch (Exception ex) {
             throw new ExecutionException(ex);
