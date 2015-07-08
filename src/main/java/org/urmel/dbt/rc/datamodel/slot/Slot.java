@@ -190,7 +190,8 @@ public class Slot implements Serializable {
      * @return true if this slot an active one
      */
     public boolean isActive() {
-        return status == Status.ACTIVE;
+        final Date today = new Date();
+        return status == Status.ACTIVE || (status == Status.PENDING && validTo != null && today.before(validTo));
     }
 
     /**
