@@ -166,7 +166,7 @@ public class SlotListServlet extends MCRServlet {
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(
-                            SlotManager.hasAdminPermission() ? SLOT_MGR.getSlotList() : SLOT_MGR.getActiveSlotList())));
+                            SlotManager.hasAdminPermission() ? SLOT_MGR.getBasicSlotList() : SLOT_MGR.getActiveSlotList())));
         }
     }
 }

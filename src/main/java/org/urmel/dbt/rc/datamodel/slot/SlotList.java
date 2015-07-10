@@ -84,6 +84,21 @@ public class SlotList implements Serializable {
     }
 
     /**
+     * Returns a {@link SlotList}.
+     * 
+     * @return the {@link SlotList}
+     */
+    public SlotList getBasicSlots() {
+        final SlotList slotList = new SlotList();
+
+        for (Slot slot : slots) {
+            slotList.addSlot(slot.getBasicCopy());
+        }
+
+        return slotList;
+    }
+
+    /**
      * Returns a {@link SlotList} with only active {@link Slot}s.
      * 
      * @return the {@link SlotList}

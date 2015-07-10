@@ -343,6 +343,15 @@ public final class SlotManager {
     }
 
     /**
+     * Returns a {@link SlotList} without entries.
+     * 
+     * @return the {@link SlotList}
+     */
+    public SlotList getBasicSlotList() {
+        return slotList.getBasicSlots();
+    }
+
+    /**
      * Returns a {@link SlotList} with only active {@link Slot}s.
      * 
      * @return the {@link SlotList}
