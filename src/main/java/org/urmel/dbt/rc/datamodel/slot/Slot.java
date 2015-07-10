@@ -206,6 +206,9 @@ public class Slot implements Serializable {
      * @param status the status to set
      */
     public void setStatus(final Status status) {
+        if (this.status == Status.PENDING && status != Status.PENDING)
+            this.pendingStatus = null;
+
         this.status = status;
     }
 
@@ -221,7 +224,10 @@ public class Slot implements Serializable {
      * @param pendingStatus the pendingStatus to set
      */
     public void setPendingStatus(final PendingStatus pendingStatus) {
-        this.pendingStatus = pendingStatus;
+        if (this.status != Status.PENDING)
+            this.pendingStatus = null;
+        else
+            this.pendingStatus = pendingStatus;
     }
 
     /**

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRPersistenceException;
@@ -42,6 +43,8 @@ import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
+import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserManager;
 import org.tmatesoft.svn.core.SVNException;
@@ -50,6 +53,7 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
+import org.urmel.dbt.rc.utils.SlotTransformer;
 import org.urmel.dbt.rc.utils.SlotWrapper;
 import org.xml.sax.SAXException;
 
@@ -70,6 +74,8 @@ public final class SlotManager {
     public static final String SLOT_TYPE = "slot";
 
     public static final String ENTRY_TYPE = "entry";
+
+    public static final String REACTIVATE_EVENT = "reactivate";
 
     private static final Logger LOGGER = Logger.getLogger(SlotManager.class);
 
@@ -144,7 +150,7 @@ public final class SlotManager {
         final MCRUser currentUser = MCRUserManager.getCurrentUser();
         return currentUser.equals(MCRSystemUserInformation.getSuperUserInstance())
                 || currentUser.isUserInRole(ADMIN_GROUP)
-                && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
+                        && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
     }
 
     /**
@@ -162,6 +168,19 @@ public final class SlotManager {
         if (owner.equals(currentUser.getUserID()))
             return true;
 
+        return false;
+    }
+
+    public static boolean notMatchesPreviousAccessKeys(List<Element> nodes) {
+        if (nodes != null && !nodes.isEmpty()) {
+            final Slot slot = SlotTransformer.buildSlot(nodes.get(0));
+            final Slot cSlot = SlotManager.instance().getSlotById(slot.getSlotId());
+
+            final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
+
+            return accKP != null && !accKP.getReadKey().equals(slot.getReadKey())
+                    && !accKP.getWriteKey().equals(slot.getWriteKey());
+        }
         return false;
     }
 

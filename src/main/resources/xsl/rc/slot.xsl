@@ -13,7 +13,7 @@
   <xsl:param name="Mode" select="'view'" />
   <xsl:variable name="effectiveMode">
     <xsl:choose>
-      <xsl:when test="$Mode = 'edit' and $writePermission">
+      <xsl:when test="$Mode = 'edit' and ($writePermission and (/slot/@status != 'archived'))">
         <xsl:text>edit</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -56,6 +56,17 @@
           </div>
         </xsl:when>
         <xsl:otherwise>
+          <xsl:if test="$effectiveMode = 'edit' and @pendingStatus = 'validating'">
+            <div class="alert alert-warning">
+              <p>
+                <xsl:value-of disable-output-escaping="yes" select="i18n:translate('component.rc.slot.message.validating')" />
+              </p>
+              <br />
+              <a href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivateComplete&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
+                <xsl:value-of select="i18n:translate('component.rc.slot.reactivate.complete')" />
+              </a>
+            </div>
+          </xsl:if>
           <xsl:apply-templates select="entries" />
           <xsl:if test="count(entries) = 0 and $effectiveMode = 'edit'">
             <xsl:call-template name="addNewEntry" />
@@ -135,7 +146,16 @@
               <span class="caret" />
             </button>
             <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
-              <xsl:if test="$hasAdminPermission or $writePermission">
+              <xsl:if test="$writePermission and (@status = 'archived')">
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1"
+                    href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                  >
+                    <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
+                  </a>
+                </li>
+              </xsl:if>
+              <xsl:if test="$hasAdminPermission or ($writePermission and (@status != 'archived'))">
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
                     <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />

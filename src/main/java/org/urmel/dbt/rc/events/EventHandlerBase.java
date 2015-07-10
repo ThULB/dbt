@@ -60,6 +60,8 @@ public abstract class EventHandlerBase implements MCREventHandler {
                     handleSlotUpdated(evt, slot);
                 } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
                     handleSlotDeleted(evt, slot);
+                } else if (evt.getEventType().equals(SlotManager.REACTIVATE_EVENT)) {
+                    handleSlotReactivate(evt, slot);
                 } else {
                     LOGGER.warn("Can't find method for an slot data handler for event type " + evt.getEventType());
                 }
@@ -156,6 +158,10 @@ public abstract class EventHandlerBase implements MCREventHandler {
     }
 
     protected void handleSlotDeleted(MCREvent evt, Slot slot) {
+        doNothing(evt, slot);
+    }
+
+    protected void handleSlotReactivate(MCREvent evt, Slot slot) {
         doNothing(evt, slot);
     }
 

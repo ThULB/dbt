@@ -60,6 +60,14 @@ public class MailEventHandler extends EventHandlerBase {
     }
 
     /* (non-Javadoc)
+     * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotReactivate(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
+     */
+    @Override
+    protected void handleSlotReactivate(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot);
+    }
+
+    /* (non-Javadoc)
      * @see org.urmel.dbt.rc.events.EventHandlerBase#handleEntryCreated(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.SlotEntry)
      */
     @Override
@@ -92,7 +100,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("&slotId=" + slot.getSlotId());
 
         uri.append(":notnull:slot:");
-        uri.append("slotId=" + evt.get("slotId"));
+        uri.append("slotId=" + slot.getSlotId());
 
         if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
             final String rev = (String) evt.get("revision");

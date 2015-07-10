@@ -34,6 +34,9 @@
           <xed:when test="$action = 'status'">
             <xed:output i18n="component.rc.slot.setPendingStatus" />
           </xed:when>
+          <xed:when test="($action = 'reactivate') or ($action = 'reactivateComplete')">
+            <xed:output i18n="component.rc.slot.reactivate" />
+          </xed:when>
           <xed:otherwise>
             <xed:output i18n="component.rc.slot.edit" />
           </xed:otherwise>
@@ -54,11 +57,46 @@
           <xed:when test="$action = 'status'">
             <div class="alert alert-info">
               <p>
-                <xed:output i18n="component.rc.slot.setPendingStatus.info" />
+                <xed:output i18n="component.rc.slot.message.pendingStatus" />
               </p>
             </div>
             <xed:bind xpath="@status" set="pending" />
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="pendingStatus" />
+          </xed:when>
+          <xed:when test="$action = 'reactivate'">
+            <xed:choose>
+              <xed:when test="string-length($xed-validation-marker) &gt; 0"></xed:when>
+              <xed:otherwise>
+                <div class="alert alert-info">
+                  <p>
+                    <xed:output i18n="component.rc.slot.message.reactivate" />
+                  </p>
+                </div>
+              </xed:otherwise>
+            </xed:choose>
+            <xed:bind xpath="@status" set="pending" />
+            <xed:bind xpath="@pendingStatus" set="validating" />
+          </xed:when>
+          <xed:when test="$action = 'reactivateComplete'">
+            <xed:choose>
+              <xed:when test="string-length($xed-validation-marker) &gt; 0"></xed:when>
+              <xed:otherwise>
+                <div class="alert alert-info">
+                  <p>
+                    <xed:output i18n="component.rc.slot.message.reactivateComplete" />
+                  </p>
+                </div>
+              </xed:otherwise>
+            </xed:choose>
+            <xed:bind xpath="@status" set="active" />
+            <xed:bind xpath="@pendingStatus" set="" />
+
+            <fieldset class="{$xed-validation-marker}">
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
+
+              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','notMatchesPreviousAccessKeys', /slot)"
+                i18n="component.rc.slot.accesskey.matchesPrevious" />
+            </fieldset>
           </xed:when>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
@@ -120,7 +158,14 @@
   <xed:template id="buttons">
     <mir:template name="submitButton" i18n="button.debug" target="debug" />
     <span>&#160;</span>
-    <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
+    <xed:choose>
+      <xed:when test="($action = 'reactivate') or ($action = 'reactivateComplete')">
+        <mir:template name="submitButton" i18n="component.rc.slot.reactivate.button" target="servlet" href="RCSlotListServlet" />
+      </xed:when>
+      <xed:otherwise>
+        <mir:template name="submitButton" i18n="button.save" target="servlet" href="RCSlotListServlet" />
+      </xed:otherwise>
+    </xed:choose>
     <span>&#160;</span>
     <mir:template name="cancelButton" i18n="button.cancel" />
   </xed:template>

@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.rc.servlets;
 
+import java.util.Date;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,6 +44,7 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
+import org.urmel.dbt.rc.datamodel.RCCalendar;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -63,7 +65,10 @@ public class SlotListServlet extends MCRServlet {
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     public void doGetPost(final MCRServletJob job) throws Exception {
+        final HttpServletRequest req = job.getRequest();
+
         final Document doc = (Document) (job.getRequest().getAttribute("MCRXEditorSubmission"));
+
         if (doc != null) {
             final Element xml = doc.getRootElement();
 
@@ -71,6 +76,7 @@ public class SlotListServlet extends MCRServlet {
 
             final Slot slot = SlotTransformer.buildSlot(xml);
 
+            final String action = req.getParameter("action");
             final String slotId = xml.getAttributeValue("id");
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
@@ -103,13 +109,21 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 slot.setMCRObjectID(s.getMCRObjectID());
+
+                if ("reactivateComplete".equals(action)) {
+                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                    slot.setValidTo(
+                            RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
+                } else
+                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
+
+                // remove warning dates on new validTo date
                 if (s.getValidToAsDate().before(slot.getValidToAsDate())) {
                     slot.setWarningDates(null);
                 }
 
                 SLOT_MGR.setSlot(slot);
 
-                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
                 evt.put(SlotManager.SLOT_TYPE, slot);
             }
 
@@ -130,8 +144,6 @@ public class SlotListServlet extends MCRServlet {
 
             job.getResponse().sendRedirect(redirectURL);
         } else {
-            final HttpServletRequest req = job.getRequest();
-
             final String path = req.getPathInfo();
 
             if (path != null) {
