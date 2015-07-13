@@ -75,6 +75,8 @@ public final class SlotManager {
 
     public static final String ENTRY_TYPE = "entry";
 
+    public static final String INACTIVATE_EVENT = "inactivate";
+
     public static final String REACTIVATE_EVENT = "reactivate";
 
     private static final Logger LOGGER = Logger.getLogger(SlotManager.class);

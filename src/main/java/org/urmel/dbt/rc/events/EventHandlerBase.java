@@ -60,6 +60,8 @@ public abstract class EventHandlerBase implements MCREventHandler {
                     handleSlotUpdated(evt, slot);
                 } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
                     handleSlotDeleted(evt, slot);
+                } else if (evt.getEventType().equals(SlotManager.INACTIVATE_EVENT)) {
+                    handleSlotInactivate(evt, slot);
                 } else if (evt.getEventType().equals(SlotManager.REACTIVATE_EVENT)) {
                     handleSlotReactivate(evt, slot);
                 } else {
@@ -158,6 +160,10 @@ public abstract class EventHandlerBase implements MCREventHandler {
     }
 
     protected void handleSlotDeleted(MCREvent evt, Slot slot) {
+        doNothing(evt, slot);
+    }
+
+    protected void handleSlotInactivate(MCREvent evt, Slot slot) {
         doNothing(evt, slot);
     }
 
