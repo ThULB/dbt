@@ -70,10 +70,13 @@ public class RCCommands extends MCRAbstractCommands {
                     try {
                         if (today.after(validTo)) {
                             MCREvent evt = null;
+                            boolean save = true;
 
                             switch (slot.getStatus()) {
+                            case ARCHIVED:
                             case FREE:
                             case RESERVED:
+                                save = false;
                                 break;
                             case ACTIVE:
                                 LOGGER.info("...archive slot");
@@ -81,6 +84,8 @@ public class RCCommands extends MCRAbstractCommands {
                                 slot.setStatus(Status.ARCHIVED);
 
                                 evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+
+                                break;
                             case PENDING:
                                 switch (slot.getPendingStatus()) {
                                 case ACTIVE:
@@ -105,9 +110,11 @@ public class RCCommands extends MCRAbstractCommands {
                                     LOGGER.info("...empty slot. (TODO");
                                 case VALIDATING:
                                 default:
-                                    continue;
+                                    save = false;
                                 }
-                            default:
+                            }
+
+                            if (save) {
                                 mgr.setSlot(slot);
                                 mgr.saveOrUpdate(slot);
 
