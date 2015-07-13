@@ -53,6 +53,7 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
  * <li><code>slot:slotId={slotId}&entryId={entryId}[&rev=revision]</code> to resolve an {@link SlotEntry}</li>
  * <li><code>slot:slotId={slotId}&catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
  * <li><code>slot:slotId={slotId}&objectId</code> to get the {@link MCRObjectID} for slot</li>
+ * <li><code>slot:slotId={slotId}&isActive</code> to get information about a slot is active</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
  * </ul>
  * 
@@ -92,9 +93,9 @@ public class SlotResolver implements URIResolver {
             final String entryId = params.get("entryId");
             final String revision = params.get("revision");
 
-            final Slot slot = revision != null ? SLOT_MGR.getSlotById(slotId, Long.parseLong(revision)) : SLOT_MGR
-                    .getSlotById(slotId);
-            
+            final Slot slot = revision != null ? SLOT_MGR.getSlotById(slotId, Long.parseLong(revision))
+                    : SLOT_MGR.getSlotById(slotId);
+
             if (entryId != null) {
                 final SlotEntry<?> entry = slot.getEntryById(entryId);
 
@@ -117,6 +118,11 @@ public class SlotResolver implements URIResolver {
             } else if (params.get("objectId") != null) {
                 final Element root = new Element("mcrobject");
                 root.setText(slot.getMCRObjectID().toString());
+
+                return new JDOMSource(root);
+            } else if (params.get("isActive") != null) {
+                final Element root = new Element("slot");
+                root.setText(Boolean.toString(slot.isActive()));
 
                 return new JDOMSource(root);
             }
