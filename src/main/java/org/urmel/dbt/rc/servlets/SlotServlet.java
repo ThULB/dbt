@@ -161,11 +161,10 @@ public class SlotServlet extends MCRServlet {
                 params.put("slotId", slotId);
                 params.put("afterId", afterId);
 
-                res.sendRedirect(MCRFrontendUtil.getBaseURL()
-                        + "opc/"
-                        + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0 ? catalog
-                                .getISIL().get(0) : catalogId) + "/search/" + firstChild.getTextTrim()
-                        + toQueryString(params, true));
+                res.sendRedirect(MCRFrontendUtil.getBaseURL() + "opc/"
+                        + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
+                                ? catalog.getISIL().get(0) : catalogId)
+                        + "/search/" + firstChild.getTextTrim() + toQueryString(params, true));
             } else {
                 SlotEntry<?> slotEntry = xml != null ? SlotEntryTransformer.buildSlotEntry(xml) : null;
 
@@ -223,7 +222,8 @@ public class SlotServlet extends MCRServlet {
 
                             LOGGER.info("Encrypt \"" + fileName + "\".");
                             pdfEncrypted = new ByteArrayOutputStream();
-                            encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
+                            encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()),
+                                    pdfEncrypted);
 
                             fe.setContent(pdfEncrypted.toByteArray());
                         } catch (Exception e) {
@@ -268,7 +268,8 @@ public class SlotServlet extends MCRServlet {
                 } else if ("delete".equals(action)) {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
-                        if (se.getEntry() instanceof OPCRecordEntry && !SlotManager.hasAdminPermission()) {
+                        if (se.getEntry() instanceof OPCRecordEntry && !SlotManager.hasAdminPermission()
+                                && ((OPCRecordEntry) se.getEntry()).getEPN() != null) {
                             LOGGER.debug("Set deletion mark: " + se);
                             ((OPCRecordEntry) se.getEntry()).setDeletionMark(true);
                             slot.setEntry(se);
@@ -395,8 +396,8 @@ public class SlotServlet extends MCRServlet {
      * @throws IOException
      * @throws COSVisitorException
      */
-    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput) throws IOException,
-            COSVisitorException {
+    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
+            throws IOException, COSVisitorException {
         COSWriter writer = null;
         try {
             PDFParser parser = new PDFParser(pdfInput);
