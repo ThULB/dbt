@@ -191,7 +191,8 @@ public class Slot implements Serializable {
      */
     public boolean isActive() {
         final Date today = new Date();
-        return status == Status.ACTIVE || (status == Status.PENDING && validTo != null && today.before(validTo));
+        return status == Status.ACTIVE || (status == Status.PENDING && pendingStatus != PendingStatus.VALIDATING
+                && validTo != null && today.before(validTo));
     }
 
     /**

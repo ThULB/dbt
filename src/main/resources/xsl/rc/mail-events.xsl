@@ -52,8 +52,9 @@
   <!-- Entry Templates -->
   <xsl:template match="opcrecord" mode="email">
     <xsl:variable name="slot" select="document(concat('slot:slotId=', $slotId))/slot" />
+    <xsl:variable name="isActive" select="document(concat('slot:slotId=', $slotId, '&amp;isActive'))/slot" />
 
-    <xsl:if test="($slot/@onlineOnly = 'false') and ($action != 'update')">
+    <xsl:if test="($slot/@onlineOnly = 'false') and ($isActive = 'true') and ($action != 'update')">
       <xsl:message>
         Send Mail for:
         <xsl:value-of select="name()" />
