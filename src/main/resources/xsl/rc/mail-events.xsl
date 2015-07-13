@@ -98,34 +98,9 @@
         <xsl:value-of select="$newline" />
         <xsl:value-of select="$newline" />
 
-        <xsl:apply-templates select="pica:record" mode="isbdText" />
-        <xsl:value-of select="$newline" />
-        <xsl:value-of select="$newline" />
-
-        <xsl:variable name="ppn" select="pica:record/@ppn" />
-        <xsl:variable name="record" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', $ppn, '&amp;copys=true'))" />
-
-        <xsl:if test="($action != 'delete') or (@deleted = 'true')">
-          <xsl:text>Eintrag  : </xsl:text>
-          <xsl:value-of select="concat($WebApplicationBaseURL, 'rc/', $slotId, '?XSL.Mode=edit#', $entryId)" />
-          <xsl:value-of select="$newline" />
-        </xsl:if>
-        <xsl:text>Katalog  : </xsl:text>
-        <xsl:value-of select="concat($recordURLPrefix, $ppn)" />
-        <xsl:value-of select="$newline" />
-        <xsl:text>PPN      : </xsl:text>
-        <xsl:value-of select="$ppn" />
-        <xsl:value-of select="$newline" />
-
-        <xsl:for-each select="$record//pica:field[@tag = '209A']">
-          <xsl:value-of select="$newline" />
-          <xsl:text>Standort : </xsl:text>
-          <xsl:value-of select="pica:subfield[@code='f']" />
-          <xsl:value-of select="$newline" />
-          <xsl:text>Signatur : </xsl:text>
-          <xsl:value-of select="pica:subfield[@code='a']" />
-          <xsl:value-of select="$newline" />
-        </xsl:for-each>
+        <xsl:apply-templates select="." mode="output">
+          <xsl:with-param name="withCopys" select="$action = 'create'" />
+        </xsl:apply-templates>
 
         <xsl:value-of select="$newline" />
         <xsl:value-of select="$newline" />
@@ -142,6 +117,46 @@
           </xsl:when>
         </xsl:choose>
       </body>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="opcrecord" mode="output">
+    <xsl:param name="withCopys" select="true()" />
+
+    <xsl:apply-templates select="pica:record" mode="isbdText" />
+    <xsl:value-of select="$newline" />
+    <xsl:value-of select="$newline" />
+
+    <xsl:variable name="ppn" select="pica:record/@ppn" />
+    <xsl:variable name="record" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', $ppn, '&amp;copys=true'))" />
+
+    <xsl:if test="($action != 'delete') or (@deleted = 'true')">
+      <xsl:text>Eintrag  : </xsl:text>
+      <xsl:value-of select="concat($WebApplicationBaseURL, 'rc/', $slotId, '?XSL.Mode=edit#', $entryId)" />
+      <xsl:value-of select="$newline" />
+    </xsl:if>
+    <xsl:text>Katalog  : </xsl:text>
+    <xsl:value-of select="concat($recordURLPrefix, $ppn)" />
+    <xsl:value-of select="$newline" />
+    <xsl:text>PPN      : </xsl:text>
+    <xsl:value-of select="$ppn" />
+    <xsl:value-of select="$newline" />
+    <xsl:if test="string-length(@epn) &gt; 0">
+      <xsl:text>EPN      : </xsl:text>
+      <xsl:value-of select="@epn" />
+      <xsl:value-of select="$newline" />
+    </xsl:if>
+
+    <xsl:if test="$withCopys">
+      <xsl:for-each select="$record//pica:field[@tag = '209A']">
+        <xsl:value-of select="$newline" />
+        <xsl:text>Standort : </xsl:text>
+        <xsl:value-of select="pica:subfield[@code='f']" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>Signatur : </xsl:text>
+        <xsl:value-of select="pica:subfield[@code='a']" />
+        <xsl:value-of select="$newline" />
+      </xsl:for-each>
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
