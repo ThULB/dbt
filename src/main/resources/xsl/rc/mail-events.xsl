@@ -4,6 +4,7 @@
 >
 
   <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
+  <xsl:include href="slot-templates.xsl" />
 
   <xsl:param name="MCR.RC.MailSender" />
 
@@ -82,8 +83,24 @@
             </xsl:when>
           </xsl:choose>
           <xsl:text>:</xsl:text>
+          <xsl:value-of select="$newline" />
+          <xsl:value-of select="$newline" />
 
-          <xsl:apply-templates select="//opcrecord" mode="output" />
+          <xsl:text>Titel  : </xsl:text>
+          <xsl:value-of select="title" />
+          <xsl:value-of select="$newline" />
+          <xsl:text>Standort  : </xsl:text>
+          <xsl:apply-templates select="@id" mode="rcLocationText" />
+          <xsl:value-of select="$newline" />
+          <xsl:text>Semester  : </xsl:text>
+          <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
+          <xsl:value-of select="$newline" />
+          <xsl:text>Gültig bis: </xsl:text>
+          <xsl:value-of select="validTo" />
+
+          <xsl:apply-templates select="//opcrecord" mode="output">
+            <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
+          </xsl:apply-templates>
 
           <xsl:value-of select="$newline" />
           <xsl:value-of select="$newline" />
