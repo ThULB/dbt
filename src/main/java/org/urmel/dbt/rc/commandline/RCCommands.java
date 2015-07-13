@@ -28,6 +28,8 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.events.MCREvent;
+import org.mycore.common.events.MCREventManager;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
@@ -51,14 +53,14 @@ public class RCCommands extends MCRAbstractCommands {
 
     private static final Logger LOGGER = Logger.getLogger(RCCommands.class);
 
-    @MCRCommand(syntax = "send rc warnings", help = "send warning mails for reserve collections")
-    public static void checkSlots() throws IOException {
+    @MCRCommand(syntax = "rc inactivator", help = "send warning mails for reserve collections or inactivate, set new status")
+    public static void rcInactivator() throws IOException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
 
         if (!slotList.getSlots().isEmpty()) {
             for (final Slot slot : slotList.getSlots()) {
-                if (slot.getStatus() == Status.ACTIVE) {
+                if (slot.isActive()) {
                     LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
 
                     final Date today = new Date();
@@ -66,29 +68,81 @@ public class RCCommands extends MCRAbstractCommands {
                     final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
 
                     try {
-                        final Warning pWarning = period.getWarning(today);
+                        if (today.after(validTo)) {
+                            MCREvent evt = null;
 
-                        if (pWarning != null) {
-                            final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
-                                    : new WarningDate(pWarning.getWarningDate());
+                            switch (slot.getStatus()) {
+                            case FREE:
+                            case RESERVED:
+                                break;
+                            case ACTIVE:
+                                LOGGER.info("...archive slot");
 
-                            if (sWarning != null) {
-                                LOGGER.info("...add warning");
+                                slot.setStatus(Status.ARCHIVED);
 
-                                slot.addWarningDate(sWarning);
+                                evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                            case PENDING:
+                                switch (slot.getPendingStatus()) {
+                                case ACTIVE:
+                                    LOGGER.info("...reactivate slot");
+
+                                    slot.setStatus(Status.ACTIVE);
+                                    slot.setValidTo(RCCalendar
+                                            .getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                                    break;
+                                case ARCHIVED:
+                                    LOGGER.info("...archive slot");
+
+                                    slot.setStatus(Status.ARCHIVED);
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                    break;
+                                case FREE:
+                                    LOGGER.info("...delete slot. (TODO");
+                                case RESERVED:
+                                    LOGGER.info("...empty slot. (TODO");
+                                case VALIDATING:
+                                default:
+                                    continue;
+                                }
+                            default:
+                                mgr.setSlot(slot);
                                 mgr.saveOrUpdate(slot);
 
-                                final StringBuilder uri = new StringBuilder();
-
-                                uri.append("xslStyle:" + pWarning.getTemplate());
-                                uri.append("?warningDate=" + sWarning.getWarningDate());
-                                uri.append(":notnull:slot:");
-                                uri.append("slotId=" + slot.getSlotId());
-
-                                LOGGER.info("...send mail");
-                                MailQueue.addJob(uri.toString());
+                                if (evt != null) {
+                                    evt.put(SlotManager.SLOT_TYPE, slot);
+                                    MCREventManager.instance().handleEvent(evt);
+                                }
 
                                 continue;
+                            }
+                        } else if (slot.getStatus() == Status.ACTIVE) {
+                            final Warning pWarning = period.getWarning(today);
+
+                            if (pWarning != null) {
+                                final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
+                                        : new WarningDate(pWarning.getWarningDate());
+
+                                if (sWarning != null) {
+                                    LOGGER.info("...add warning");
+
+                                    slot.addWarningDate(sWarning);
+                                    mgr.saveOrUpdate(slot);
+
+                                    final StringBuilder uri = new StringBuilder();
+
+                                    uri.append("xslStyle:" + pWarning.getTemplate());
+                                    uri.append("?warningDate=" + sWarning.getWarningDate());
+                                    uri.append(":notnull:slot:");
+                                    uri.append("slotId=" + slot.getSlotId());
+
+                                    LOGGER.info("...send mail");
+                                    MailQueue.addJob(uri.toString());
+
+                                    continue;
+                                }
                             }
                         }
 
