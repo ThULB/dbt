@@ -45,6 +45,65 @@
     </email>
   </xsl:template>
 
+  <xsl:template match="slot" mode="email">
+    <xsl:if test="($action = 'inactivate') or ($action = 'reactivate')">
+      <xsl:if test="count(//opcrecord) &gt; 0">
+        <xsl:message>
+          Send Mail for:
+          <xsl:value-of select="name()" />
+        </xsl:message>
+        <xsl:for-each select="lecturers/lecturer">
+          <to>
+            <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
+          </to>
+        </xsl:for-each>
+        <subject>
+          <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
+          <xsl:choose>
+            <xsl:when test="$action = 'inactivate'">
+              <xsl:text>wurde inaktiviert</xsl:text>
+            </xsl:when>
+            <xsl:when test="$action = 'reactivate'">
+              <xsl:text>wurde reaktiviert</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+        </subject>
+        <body>
+          <xsl:text>Sehr geehrt(e) Mitarbeiter(in),</xsl:text>
+          <xsl:value-of select="$newline" />
+          <xsl:value-of select="$newline" />
+          <xsl:text>der nachfolgende Online-Semesterapparat </xsl:text>
+          <xsl:choose>
+            <xsl:when test="$action = 'inactivate'">
+              <xsl:text>wurde inaktiviert</xsl:text>
+            </xsl:when>
+            <xsl:when test="$action = 'reactivate'">
+              <xsl:text>wurde reaktiviert</xsl:text>
+            </xsl:when>
+          </xsl:choose>
+          <xsl:text>:</xsl:text>
+
+          <xsl:apply-templates select="//opcrecord" mode="output" />
+
+          <xsl:value-of select="$newline" />
+          <xsl:value-of select="$newline" />
+          <xsl:choose>
+            <xsl:when test="$action = 'inactivate'">
+              <xsl:text>- Buchen Sie bitte alle Exemplare in PICA/DBT zurück</xsl:text>
+              <xsl:value-of select="$newline" />
+            </xsl:when>
+            <xsl:when test="$action = 'reactivate'">
+              <xsl:text>- Stellen Sie alle Exemplare in das Präsenz-Regal im Lesesaal</xsl:text>
+              <xsl:value-of select="$newline" />
+              <xsl:text>- Schalten Sie alle Einträge frei (GBV-Kat. u. DBT)</xsl:text>
+              <xsl:value-of select="$newline" />
+            </xsl:when>
+          </xsl:choose>
+        </body>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="entry" mode="email">
     <xsl:apply-templates select="opcrecord" mode="email" />
   </xsl:template>
@@ -95,8 +154,6 @@
           </xsl:when>
         </xsl:choose>
         <xsl:text>:</xsl:text>
-        <xsl:value-of select="$newline" />
-        <xsl:value-of select="$newline" />
 
         <xsl:apply-templates select="." mode="output">
           <xsl:with-param name="withCopys" select="$action = 'create'" />
@@ -123,6 +180,8 @@
   <xsl:template match="opcrecord" mode="output">
     <xsl:param name="withCopys" select="true()" />
 
+    <xsl:value-of select="$newline" />
+    <xsl:value-of select="$newline" />
     <xsl:apply-templates select="pica:record" mode="isbdText" />
     <xsl:value-of select="$newline" />
     <xsl:value-of select="$newline" />
