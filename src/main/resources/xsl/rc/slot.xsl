@@ -154,6 +154,9 @@
                     <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
                   </a>
                 </li>
+                <xsl:if test="$hasAdminPermission">
+                  <li class="divider" />
+                </xsl:if>
               </xsl:if>
               <xsl:if test="$hasAdminPermission or ($writePermission and (@status != 'archived'))">
                 <li role="presentation">
@@ -170,21 +173,23 @@
                     </a>
                   </li>
                 </xsl:if>
-                <li class="divider" />
-                <li role="presentation">
-                  <xsl:choose>
-                    <xsl:when test="$effectiveMode = 'view'">
-                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
-                      </a>
-                    </xsl:when>
-                    <xsl:otherwise>
-                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
-                      </a>
-                    </xsl:otherwise>
-                  </xsl:choose>
-                </li>
+                <xsl:if test="($hasAdminPermission or $writePermission) and (@status != 'archived')">
+                  <li class="divider" />
+                  <li role="presentation">
+                    <xsl:choose>
+                      <xsl:when test="$effectiveMode = 'view'">
+                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
+                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
+                        </a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
+                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
+                        </a>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </li>
+                </xsl:if>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($writePermission)">
                 <li role="presentation">
@@ -196,6 +201,7 @@
                 </li>
               </xsl:if>
               <xsl:if test="$hasAdminPermission">
+                <li class="divider" />
                 <li role="presentation">
                   <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
                     <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
