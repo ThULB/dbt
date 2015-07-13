@@ -98,9 +98,14 @@
           <xsl:text>Gültig bis: </xsl:text>
           <xsl:value-of select="validTo" />
 
-          <xsl:apply-templates select="//opcrecord" mode="output">
-            <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
-          </xsl:apply-templates>
+          <xsl:for-each select="//entry">
+            <xsl:if test="opcrecord">
+              <xsl:apply-templates select="opcrecord" mode="output">
+                <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
+                <xsl:with-param name="entryId" select="@id" />
+              </xsl:apply-templates>
+            </xsl:if>
+          </xsl:for-each>
 
           <xsl:value-of select="$newline" />
           <xsl:value-of select="$newline" />
@@ -196,6 +201,7 @@
 
   <xsl:template match="opcrecord" mode="output">
     <xsl:param name="withCopys" select="true()" />
+    <xsl:param name="entryId" select="$entryId" />
 
     <xsl:value-of select="$newline" />
     <xsl:value-of select="$newline" />
