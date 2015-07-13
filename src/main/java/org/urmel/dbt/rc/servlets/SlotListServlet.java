@@ -45,6 +45,7 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
+import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -110,7 +111,9 @@ public class SlotListServlet extends MCRServlet {
 
                 slot.setMCRObjectID(s.getMCRObjectID());
 
-                if ("reactivateComplete".equals(action)) {
+                if (s.getStatus() != slot.getStatus() && slot.getStatus() == Status.ARCHIVED) {
+                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                } else if ("reactivateComplete".equals(action)) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
                             RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
@@ -165,8 +168,8 @@ public class SlotListServlet extends MCRServlet {
             }
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(
-                            SlotManager.hasAdminPermission() ? SLOT_MGR.getBasicSlotList() : SLOT_MGR.getActiveSlotList())));
+                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(SlotManager.hasAdminPermission()
+                            ? SLOT_MGR.getBasicSlotList() : SLOT_MGR.getActiveSlotList())));
         }
     }
 }
