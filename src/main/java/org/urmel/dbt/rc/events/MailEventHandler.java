@@ -60,6 +60,14 @@ public class MailEventHandler extends EventHandlerBase {
     }
 
     /* (non-Javadoc)
+     * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotInactivate(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
+     */
+    @Override
+    protected void handleSlotInactivate(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot);
+    }
+
+    /* (non-Javadoc)
      * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotReactivate(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)
      */
     @Override
