@@ -182,7 +182,7 @@
       <xsl:otherwise>
         <ul class="nav nav-userinfo pull-right">
           <li>
-            <a href="{$ServletsBaseURL}MCRLoginServlet?url={$RequestURL}">
+            <a class="login" href="{$ServletsBaseURL}MCRLoginServlet?url={$RequestURL}">
               <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
             </a>
           </li>
