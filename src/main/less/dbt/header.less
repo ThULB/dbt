@@ -111,6 +111,15 @@ nav {
       list-style-type: none;
       > li {
         float: left;
+        
+        a {
+          background: transparent;
+          color: #ffffff;
+          
+          &:hover , &:focus , &:active , &.active {
+            background: transparent;
+          }
+        }
       }
 
       .dropdown-toggle {

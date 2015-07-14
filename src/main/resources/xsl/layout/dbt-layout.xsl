@@ -154,26 +154,41 @@
   </xsl:template>
 
   <xsl:template name="layout.head.loginForm">
-    <form id="loginForm" action="{$ServletsBaseURL}MCRLoginServlet" method="post" class="form-inline pull-right" role="form">
-      <input type="hidden" name="action" value="login" />
-      <input type="hidden" name="realm" value="local" />
-      <input type="hidden" name="url" value="{$RequestURL}" />
-      <div class="form-group">
-        <label class="sr-only" for="loginUID">
-          <xsl:value-of select="i18n:translate('dbt.login.uid.placeholder')" />
-        </label>
-        <input type="text" class="input-sm" id="loginUID" name="uid" placeholder="{i18n:translate('dbt.login.uid.placeholder')}" />
-      </div>
-      <div class="form-group">
-        <label class="sr-only" for="loginPWD">
-          <xsl:value-of select="i18n:translate('dbt.login.pwd.placeholder')" />
-        </label>
-        <input type="password" class="input-sm" id="loginPWD" name="pwd" placeholder="{i18n:translate('dbt.login.pwd.placeholder')}" />
-      </div>
-      <button type="submit" class="btn btn-primary" name="login">
-        <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
-      </button>
-    </form>
+    <xsl:variable name="realms" select="document('realm:all')/realms" />
+
+    <xsl:choose>
+      <xsl:when test="count($realms/realm) = 1">
+        <form id="loginForm" action="{$ServletsBaseURL}MCRLoginServlet" method="post" class="form-inline pull-right" role="form">
+          <input type="hidden" name="action" value="login" />
+          <input type="hidden" name="realm" value="local" />
+          <input type="hidden" name="url" value="{$RequestURL}" />
+          <div class="form-group">
+            <label class="sr-only" for="loginUID">
+              <xsl:value-of select="i18n:translate('dbt.login.uid.placeholder')" />
+            </label>
+            <input type="text" class="input-sm" id="loginUID" name="uid" placeholder="{i18n:translate('dbt.login.uid.placeholder')}" />
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="loginPWD">
+              <xsl:value-of select="i18n:translate('dbt.login.pwd.placeholder')" />
+            </label>
+            <input type="password" class="input-sm" id="loginPWD" name="pwd" placeholder="{i18n:translate('dbt.login.pwd.placeholder')}" />
+          </div>
+          <button type="submit" class="btn btn-primary" name="login">
+            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+          </button>
+        </form>
+      </xsl:when>
+      <xsl:otherwise>
+        <ul class="nav nav-userinfo pull-right">
+          <li>
+            <a href="{$ServletsBaseURL}MCRLoginServlet?url={$RequestURL}">
+              <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+            </a>
+          </li>
+        </ul>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="layout.head.logoutForm">
