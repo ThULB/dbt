@@ -34,7 +34,7 @@ public class DisplayNameConverter implements MCRUserAttributeConverter<String, S
 
     @Override
     public String convert(String value, String separator, Map<String, String> valueMapping) throws Exception {
-        return value = new String(((String) value).getBytes("ISO-8859-1"), "UTF-8");
+        return new String(((String) value).getBytes("ISO-8859-1"), "UTF-8");
     }
 
 }
