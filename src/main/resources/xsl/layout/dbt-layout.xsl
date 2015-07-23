@@ -284,10 +284,12 @@
                 </span>
                 <br />
               </xsl:if>
-              <a href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=save">
-                <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
-              </a>
-              <xsl:text>&#160;-&#160;</xsl:text>
+              <xsl:if test="$userData/@locked = 'false'">
+                <a href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=save">
+                  <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
+                </a>
+                <xsl:text>&#160;-&#160;</xsl:text>
+              </xsl:if>
               <a href="{$pwdChgURL}">
                 <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
               </a>
