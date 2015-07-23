@@ -289,6 +289,8 @@
                   <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
                 </a>
                 <xsl:text>&#160;-&#160;</xsl:text>
+              </xsl:if>
+              <xsl:if test="($userData/@locked = 'false') or ($userData/@realm != 'local')">
                 <a href="{$pwdChgURL}">
                   <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
                 </a>
