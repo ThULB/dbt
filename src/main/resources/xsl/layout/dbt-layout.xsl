@@ -289,10 +289,10 @@
                   <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
                 </a>
                 <xsl:text>&#160;-&#160;</xsl:text>
+                <a href="{$pwdChgURL}">
+                  <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
+                </a>
               </xsl:if>
-              <a href="{$pwdChgURL}">
-                <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
-              </a>
             </div>
             <div class="panel-footer">
               <a href="{$ServletsBaseURL}logout" class="btn btn-primary btn-sm">
