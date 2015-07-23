@@ -211,6 +211,17 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
+    <xsl:variable name="realm" select="document(concat('realm:', $userData/@realm))/realm" />
+    <xsl:variable name="pwdChgURL">
+      <xsl:choose>
+        <xsl:when test="string-length($realm/passwordChangeURL) &gt; 0">
+          <xsl:value-of select="$realm/passwordChangeURL" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($WebApplicationBaseURL, 'authorization/change-password.xed?action=password')" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
 
     <ul class="nav nav-userinfo pull-right">
       <li class="dropdown">
@@ -246,6 +257,15 @@
                 </span>
                 <br />
               </xsl:if>
+              <xsl:if test="$userData/@realm != 'local'">
+                <strong>
+                  <xsl:value-of select="i18n:translate('component.user2.admin.user.realm')" />
+                </strong>
+                <span class="pull-right">
+                  <xsl:value-of select="$realm/label" />
+                </span>
+                <br />
+              </xsl:if>
               <xsl:if test="$userData/eMail">
                 <strong>
                   <xsl:value-of select="i18n:translate('component.user2.admin.user.email')" />
@@ -264,11 +284,11 @@
                 </span>
                 <br />
               </xsl:if>
-              <a href="{$WebApplicationBaseURL}authorization/change-user.xed?action=save&amp;id=current">
+              <a href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=save">
                 <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
               </a>
               <xsl:text>&#160;-&#160;</xsl:text>
-              <a href="{$WebApplicationBaseURL}authorization/change-password.xed?action=password">
+              <a href="{$pwdChgURL}">
                 <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
               </a>
             </div>
