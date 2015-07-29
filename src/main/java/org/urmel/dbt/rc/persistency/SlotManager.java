@@ -231,6 +231,11 @@ public final class SlotManager {
         slotList.setSlot(slot);
     }
 
+    /**
+     * Remove a {@link SLot} from {@link SlotList}.
+     * 
+     * @param slot the slot
+     */
     public void removeSlot(final Slot slot) {
         slotList.removeSlot(slot);
     }
