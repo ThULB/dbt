@@ -58,7 +58,6 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs2.MCRStoreCenter;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
-import org.mycore.user2.MCRUserManager;
 import org.urmel.dbt.rc.datamodel.Lecturer;
 import org.urmel.dbt.rc.datamodel.PendingStatus;
 import org.urmel.dbt.rc.datamodel.Status;
