@@ -66,6 +66,10 @@ public class SlotList implements Serializable {
 
         throw new IllegalArgumentException("Couldn't find Slot with id \"" + slot.getSlotId() + "\"!");
     }
+    
+    public void removeSlot(final Slot slot) {
+        slots.remove(slot);
+    }
 
     /**
      * Returns a slot by given id.

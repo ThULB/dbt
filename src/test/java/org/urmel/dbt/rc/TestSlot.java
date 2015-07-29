@@ -45,6 +45,9 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mycore.common.MCRHibTestCase;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -55,6 +58,7 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs2.MCRStoreCenter;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.user2.MCRUserManager;
 import org.urmel.dbt.rc.datamodel.Lecturer;
 import org.urmel.dbt.rc.datamodel.PendingStatus;
 import org.urmel.dbt.rc.datamodel.Status;
@@ -75,6 +79,13 @@ public class TestSlot extends MCRHibTestCase {
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     private static SlotManager SLOT_MANAGER;
+
+    static {
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        session.setCurrentIP("127.0.0.1");
+        session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
+        MCRSessionMgr.setCurrentSession(session);
+    }
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -250,8 +261,8 @@ public class TestSlot extends MCRHibTestCase {
     }
 
     @Test
-    public void testSaveSlot() throws IOException, JDOMException, SAXException, MCRPersistenceException,
-            MCRActiveLinkException {
+    public void testSaveSlot()
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -292,8 +303,8 @@ public class TestSlot extends MCRHibTestCase {
     }
 
     @Test
-    public void testSaveSlotWithFileEntry() throws IOException, JDOMException, SAXException, MCRPersistenceException,
-            MCRActiveLinkException {
+    public void testSaveSlotWithFileEntry()
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -334,8 +345,80 @@ public class TestSlot extends MCRHibTestCase {
     }
 
     @Test
-    public void testSaveSlotList() throws IOException, MCRPersistenceException, MCRActiveLinkException, JDOMException,
-            SAXException {
+    public void testDeleteSlot()
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setTitle("Test ESA");
+        slot.setStatus(Status.ACTIVE);
+        slot.setValidTo(new Date());
+
+        slot.setReadKey("blah");
+        slot.setWriteKey("blub");
+
+        Lecturer lecturer = new Lecturer();
+        lecturer.setName("Mustermann, Max");
+        lecturer.setEmail("max.mustermann@muster.de");
+        lecturer.setOrigin("0815");
+
+        slot.addLecturer(lecturer);
+
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+
+        HeadlineEntry headline = new HeadlineEntry();
+        headline.setText("Überschrift");
+
+        slotEntry.setEntry(headline);
+
+        slot.addEntry(slotEntry);
+
+        SLOT_MANAGER.saveOrUpdate(slot);
+
+        startNewTransaction();
+
+        SLOT_MANAGER.delete(slot);
+
+        assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
+    }
+    
+    @Test
+    public void testDeleteSlotWithFileEntry()
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setTitle("Test ESA");
+        slot.setStatus(Status.ACTIVE);
+        slot.setValidTo(new Date());
+
+        Lecturer lecturer = new Lecturer();
+        lecturer.setName("Mustermann, Max");
+        lecturer.setEmail("max.mustermann@muster.de");
+        lecturer.setOrigin("0815");
+
+        slot.addLecturer(lecturer);
+
+        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
+
+        FileEntry fileEntry = new FileEntry();
+
+        fileEntry.setName("mycore.properties");
+        fileEntry.setComment("This is a comment!");
+        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
+
+        slotEntry.setEntry(fileEntry);
+
+        slot.addEntry(slotEntry);
+
+        SLOT_MANAGER.saveOrUpdate(slot);
+
+        startNewTransaction();
+
+        SLOT_MANAGER.delete(slot);
+
+        assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
+    }
+
+    @Test
+    public void testSaveSlotList()
+            throws IOException, MCRPersistenceException, MCRActiveLinkException, JDOMException, SAXException {
         Slot slot1 = new Slot("3400.01.01.0001");
         slot1.setStatus(Status.ACTIVE);
         SLOT_MANAGER.addSlot(slot1);

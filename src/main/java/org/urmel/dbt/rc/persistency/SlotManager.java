@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
@@ -230,6 +231,10 @@ public final class SlotManager {
         slotList.setSlot(slot);
     }
 
+    public void removeSlot(final Slot slot) {
+        slotList.removeSlot(slot);
+    }
+
     /**
      * Returns a slot by given id.
      * 
@@ -332,6 +337,39 @@ public final class SlotManager {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Delete a given {@link Slot}.
+     * 
+     * @param slot the slot
+     * @throws MCRPersistenceException
+     * @throws MCRActiveLinkException
+     */
+    @SuppressWarnings("unchecked")
+    public synchronized void delete(final Slot slot) throws MCRPersistenceException, MCRActiveLinkException {
+        final MCRObjectID objID = slot.getMCRObjectID();
+
+        if (objID != null && MCRMetadataManager.exists(objID)) {
+            if (slot.getEntries() != null) {
+                for (SlotEntry<?> slotEntry : slot.getEntries()) {
+                    if (slotEntry.getEntry() instanceof FileEntry) {
+                        if (!FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
+                            FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry);
+                        }
+                    }
+                }
+            }
+
+            final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objID);
+            final SlotWrapper wrapper = new SlotWrapper(obj);
+            wrapper.setSlot(slot);
+            MCRMetadataManager.delete(wrapper.getMCRObject());
+
+            removeSlot(slot);
+        } else {
+            throw new MCRException("Not reserve collection found for ID \"" + objID + "\".");
         }
     }
 
