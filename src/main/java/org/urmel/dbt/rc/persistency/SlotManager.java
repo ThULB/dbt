@@ -369,7 +369,7 @@ public final class SlotManager {
 
             removeSlot(slot);
         } else {
-            throw new MCRException("Not reserve collection found for ID \"" + objID + "\".");
+            throw new MCRException("No reserve collection found for ID \"" + objID + "\".");
         }
     }
 
