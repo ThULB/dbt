@@ -1,17 +1,22 @@
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-less');
-	grunt.loadNpmTasks('grunt-replace');
+	grunt.loadNpmTasks('grunt-bowercopy');
 	var fs = require('fs');
+	var path = require('path');
+	var util = require('util');
+	var getAbsoluteDir = function(dir) {
+		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
+	}
 	var globalConfig = {
 		lessFile : grunt.option('lessFile'),
 		lessDirectory : function() {
 			var lessFile = grunt.config('globalConfig.lessFile');
 			return lessFile.substring(0, Math.max(lessFile.lastIndexOf("/"), lessFile.lastIndexOf("\\")));
 		},
-		targetDirectory : grunt.option('targetDirectory'),
-		assetsDirectory : grunt.option('assetsDirectory'),
+		targetDirectory : getAbsoluteDir(grunt.option('targetDirectory')),
+		assetsDirectory : getAbsoluteDir(grunt.option('assetsDirectory')),
+		assetsDirectoryRelative : path.basename(grunt.option('assetsDirectory')),
 		lastModified : new Date(0)
 	};
 	var dirLastModified = function(dir, date) {
@@ -41,61 +46,32 @@ module.exports = function(grunt) {
 		banner : '/*!\n' + ' * <%= pkg.name %> v${project.version}\n' + ' * Homepage: <%= pkg.homepage %>\n'
 				+ ' * Copyright 2013-<%= grunt.template.today("yyyy") %> <%= pkg.author %> and others\n' + ' * Licensed under <%= pkg.license %>\n'
 				+ ' * Based on Bootstrap\n' + '*/\n',
-		replace : {
-			dist : {
+		bowercopy : {
+			deps : {
 				options : {
-					patterns : [
-					// resolve css from google fonts on build time
-					{
-						match : /@import url\("\/\/fonts/,
-						replacement : '@import (inline) url("http://fonts'
-					} ]
-				}
-			}
-		},
-		copy : {
-			main : {
-				files : [ {
-					expand : true,
-					cwd : 'bower_components/bootstrap/dist/',
-					src : [ 'fonts/**', 'js/*.min.*' ],
-					dest : '<%=globalConfig.assetsDirectory%>/bootstrap/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/bootstrap-fileinput/',
-					src : [ 'css/*.min.*', 'img/**', 'js/*.min.*' ],
-					dest : '<%=globalConfig.assetsDirectory%>/bootstrap-fileinput/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/jquery/dist/',
-					src : [ '*.min.*' ],
-					dest : '<%=globalConfig.assetsDirectory%>/jquery/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/font-awesome/',
-					src : [ 'fonts/**' ],
-					dest : '<%=globalConfig.assetsDirectory%>/font-awesome/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/summernote/',
-					src : [ 'lang/**' ],
-					dest : '<%=globalConfig.assetsDirectory%>/summernote/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/summernote/dist/',
-					src : [ '*.min.*', '*.css' ],
-					dest : '<%=globalConfig.assetsDirectory%>/summernote/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/smartmenus/dist/',
-					src : [ 'addons/**/*.min.*', 'addons/**/*.css', '*.min.*' ],
-					dest : '<%=globalConfig.assetsDirectory%>/smartmenus/'
-				}, {
-					expand : true,
-					cwd : 'bower_components/jquery-sortable/source/js',
-					src : [ '*min.js' ],
-					dest : '<%=globalConfig.assetsDirectory%>/jquery/plugins/'
-				} ]
+					destPrefix : '<%=globalConfig.assetsDirectory%>/'
+				},
+				files : {
+					'bootstrap/fonts' : 'bootstrap/dist/fonts',
+					'bootstrap/js' : 'bootstrap/dist/js/*.min.js',
+
+					'bootstrap-fileinput/css' : 'bootstrap-fileinput/css',
+					'bootstrap-fileinput/img' : 'bootstrap-fileinput/img',
+					'bootstrap-fileinput/js' : 'bootstrap-fileinput/js/*min.js',
+
+					'font-awesome/css' : 'font-awesome/css',
+					'font-awesome/fonts' : 'font-awesome/fonts',
+
+					'summernote/lang' : 'summernote/lang',
+					'summernote' : [ 'summernote/dist/*.min.*', 'summernote/dist/*.css' ],
+
+					'smartmenus/addons' : 'smartmenus/dist/addons',
+					'smartmenus/' : 'smartmenus/dist/*.min.*',
+
+					'jquery' : 'jquery/dist/*min.js',
+
+					'jquery/plugins' : 'jquery-sortable/source/js/*min.js',
+				},
 			}
 		},
 		concat : {
@@ -187,8 +163,7 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', 'build a theme', function() {
 		grunt.log.writeln('less directory: ' + grunt.config('globalConfig').lessDirectory());
-		grunt.task.run('copy');
-		grunt.task.run('replace');
+		grunt.task.run('bowercopy');
 		grunt.config('globalConfig.lastModified', new Date(Math.max(dirLastModified(grunt.config('globalConfig').lessDirectory()),
 				dirLastModified('bower_components'))));
 		grunt.task.run('build:layout');
