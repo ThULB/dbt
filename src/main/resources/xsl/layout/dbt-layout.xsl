@@ -94,8 +94,9 @@
   <!-- CSS Links -->
 
   <xsl:template name="layout.cssLinks">
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/css/layout.min.css" type="text/css" />
+    <link href="{$WebApplicationBaseURL}assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/css/layout.min.css" type="text/css" />
 
     <xsl:if test="$include.HTML.Head.CSS">
       <xsl:copy-of select="$include.HTML.Head.CSS" />
@@ -105,11 +106,11 @@
   <!-- Load JavaScripts -->
 
   <xsl:template name="layout.scripts">
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/jquery.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/jquery.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/jquery.smartmenus.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap/js/bootstrap.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/smartmenus/addons/bootstrap/jquery.smartmenus.bootstrap.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />

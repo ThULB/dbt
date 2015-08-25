@@ -52,23 +52,15 @@ module.exports = function(grunt) {
 					destPrefix : '<%=globalConfig.assetsDirectory%>/'
 				},
 				files : {
-					'bootstrap/fonts' : 'bootstrap/dist/fonts',
-					'bootstrap/js' : 'bootstrap/dist/js/*.min.js',
-
 					'bootstrap-fileinput/css' : 'bootstrap-fileinput/css',
 					'bootstrap-fileinput/img' : 'bootstrap-fileinput/img',
 					'bootstrap-fileinput/js' : 'bootstrap-fileinput/js/*min.js',
-
-					'font-awesome/css' : 'font-awesome/css',
-					'font-awesome/fonts' : 'font-awesome/fonts',
 
 					'summernote/lang' : 'summernote/lang',
 					'summernote' : [ 'summernote/dist/*.min.*', 'summernote/dist/*.css' ],
 
 					'smartmenus/addons' : 'smartmenus/dist/addons',
 					'smartmenus/' : 'smartmenus/dist/*.min.*',
-
-					'jquery' : 'jquery/dist/*min.js',
 
 					'jquery/plugins' : 'jquery-sortable/source/js/*min.js',
 				},
@@ -95,8 +87,8 @@ module.exports = function(grunt) {
 					sourceMapFilename : "",
 					outputSourceFiles : true,
 					modifyVars : {
-						"icon-font-path" : "'../assets/bootstrap/fonts/'",
-						"fa-font-path" : "'../assets/font-awesome/fonts'",
+						"icon-font-path" : "'../../assets/bootstrap/fonts/'",
+						"fa-font-path" : "'../../assets/font-awesome/fonts'",
 						"brand-primary" : "#008855",
 						"brand-success" : "#5cb85c",
 						"brand-warning" : "#f0ad4e",

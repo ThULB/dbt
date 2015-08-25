@@ -17,7 +17,6 @@
   "devDependencies": {
     "bootstrap": "~3.3.5",
     "bootstrap-fileinput": "~4.2.5",
-    "font-awesome": "~4.4.0",
     "summernote": "~0.6.13",
     "smartmenus": "~1.0.0-beta1",
     "jquery-sortable": "~0.9.12"
