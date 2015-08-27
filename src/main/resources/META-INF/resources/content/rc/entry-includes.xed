@@ -193,11 +193,11 @@
           options.lang = "de-DE";
         }
                   
-        if ($("input:checked").val() == "html") {
+        if ($("input[id^='format']:checked").val() == "html") {
           $("#text").summernote(options);
         }
     
-        $("input#format").click(function() {
+        $("input[id^='format']").click(function() {
           if ($("input:checked").val() == "html") {
             $("#text").summernote(options);
           } else {
