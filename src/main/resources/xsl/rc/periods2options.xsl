@@ -16,6 +16,11 @@
 
   <xsl:template match="period">
     <option value="{@to}">
+      <xsl:if test="@setable = 'false'">
+        <xsl:attribute name="class">
+          <xsl:text>not-setable</xsl:text>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:value-of select="concat(label[lang($CurrentLang)]/@description, ' (', @from, '-', @to, ')')" />
     </option>
   </xsl:template>

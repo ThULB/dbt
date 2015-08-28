@@ -114,12 +114,10 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * @throws ParseException should never occurs
      */
     public void setStartDate(final Date base) throws ParseException {
-        final Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        c.setTime(base);
-        this.baseDate = PERIOD_FORMAT.parse(fromShort + c.get(Calendar.YEAR));
-
-        if (this.baseDate.after(base))
-            this.baseDate = PERIOD_FORMAT.parse(fromShort + (c.get(Calendar.YEAR) - 1));
+        this.baseDate = getPeriodDate(base, fromShort, toShort, false);
+        if (this.baseDate == null) {
+            this.baseDate = getPeriodDate(base, setableFromShort, setableToShort, true);
+        }
     }
 
     /**
@@ -411,6 +409,27 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         this.setableToShort = setableToShort;
     }
 
+    @XmlAttribute(name = "setable", required = false)
+    public boolean isSetable() throws ParseException {
+        final Date today = new Date();
+        final Date to = getToDate();
+        
+        if (to != null && today.after(to)) {
+            return false;
+        } else {
+            final Date setTo = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
+            if (setTo != null && today.after(setTo)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isSetable(final Date base) throws ParseException {
+        return getPeriodDate(base, setableFromShort, setableToShort, false) != null;
+    }
+
     /**
      * Returns the lectureEnd date as short string or 
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
@@ -630,8 +649,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
             int fromYear = fromDate.get(Calendar.YEAR);
             int toYear = toDate.get(Calendar.YEAR);
 
-            result = fromYear < toYear ? Integer.toString(fromYear) + "/" + Integer.toString(toYear) : Integer
-                    .toString(fromYear);
+            result = fromYear < toYear ? Integer.toString(fromYear) + "/" + Integer.toString(toYear)
+                    : Integer.toString(fromYear);
         } else {
             Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
             c.setTime(date);
@@ -867,4 +886,45 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         return clone;
     }
 
+    /* (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Period [");
+        if (baseDate != null) {
+            builder.append("baseDate=");
+            builder.append(baseDate);
+            builder.append(", ");
+        }
+        if (matchingLocation != null) {
+            builder.append("matchingLocation=");
+            builder.append(matchingLocation);
+            builder.append(", ");
+        }
+        if (fromShort != null) {
+            builder.append("fromShort=");
+            builder.append(fromShort);
+            builder.append(", ");
+        }
+        if (toShort != null) {
+            builder.append("toShort=");
+            builder.append(toShort);
+            builder.append(", ");
+        }
+        if (setableFromShort != null) {
+            builder.append("setableFromShort=");
+            builder.append(setableFromShort);
+            if (setableToShort != null) {
+                builder.append(", ");
+            }
+        }
+        if (setableToShort != null) {
+            builder.append("setableToShort=");
+            builder.append(setableToShort);
+        }
+        builder.append("]");
+        return builder.toString();
+    }
 }

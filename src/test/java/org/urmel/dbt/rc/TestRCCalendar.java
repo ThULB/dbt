@@ -22,7 +22,7 @@
  */
 package org.urmel.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -88,6 +88,17 @@ public class TestRCCalendar extends MCRTestCase {
     public void testPeriodResolverList() throws IOException {
         Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
+
+        assertTrue(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+    }
+
+    @Test
+    public void testPeriodResolverListAll() throws IOException {
+        Element input = MCRURIResolver.instance()
+                .resolve("period:areacode=0&date=31.03.2015&onlySetable=false&list=true");
+        new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
+
+        assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
     }
 
     @Test
@@ -115,6 +126,7 @@ public class TestRCCalendar extends MCRTestCase {
                 .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
+        assertTrue(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
         assertEquals(2, input.getChildren("period").size());
     }
 
@@ -124,5 +136,22 @@ public class TestRCCalendar extends MCRTestCase {
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertEquals(3, input.getChildren("period").size());
+    }
+
+    @Test
+    public void testPeriodResolverListMoreAll() throws IOException {
+        Element input = MCRURIResolver.instance()
+                .resolve("period:areacode=0&date=30.09.2014&list=true&onlySetable=false&numnext=1");
+        new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
+
+        assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+
+        int numSetable = 0;
+        for (Element child : input.getChildren("period")) {
+            if (Boolean.parseBoolean(child.getAttributeValue("setable"))) {
+                numSetable++;
+            }
+        }
+        assertEquals(2, numSetable);
     }
 }

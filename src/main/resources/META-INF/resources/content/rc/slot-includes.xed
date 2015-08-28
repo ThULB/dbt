@@ -105,7 +105,7 @@
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
 
             <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true"
-              uri="xslStyle:rc/periods2options:period:areacode=0&amp;date=now&amp;list=true" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
+              uri="xslStyle:rc/periods2options:period:areacode=0&amp;date={.}&amp;onlySetable=false&amp;list=true" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
               required="true" />
 
             <fieldset>

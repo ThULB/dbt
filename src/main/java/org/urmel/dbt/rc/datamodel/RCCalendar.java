@@ -114,7 +114,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     }
 
     /**
-     * Returns a list of {@link Period} for given <code>areaCode</code>, <code>date</code> and 
+     * Returns a list of setable {@link Period} for given <code>areaCode</code>, <code>date</code> and 
      * <code>numNext</code> (number of next periods).
      * 
      * @param areaCode specific area code for the period
@@ -122,7 +122,21 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      * @param numNext number of periods after starting one
      * @return a list of {@link Period}
      */
-    public static RCCalendar getPeriodList(final String areaCode, final Date date, final int numNext) {
+    public static RCCalendar getPeriodList(final String areaCode, final Date date, int numNext) {
+        return getPeriodList(areaCode, date, true, numNext);
+    }
+
+    /**
+     * Returns a list of {@link Period} for given <code>areaCode</code>, <code>date</code> and 
+     * <code>numNext</code> (number of next periods).
+     * 
+     * @param areaCode specific area code for the period
+     * @param date date as starting point which should return period(s)
+     * @param onlySetable if <code>true</code> only setable periods are listed  
+     * @param numNext number of periods after first setable one
+     * @return a list of {@link Period}
+     */
+    public static RCCalendar getPeriodList(final String areaCode, final Date date, boolean onlySetable, int numNext) {
         try {
             final Iterable<Period> periods = instance().iterable(areaCode);
 
@@ -134,10 +148,20 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             int pos = 0;
             while (pos < numNext + 1) {
                 for (Period period : periods) {
-                    if (pos < numNext + 1 && period.getSetableFromDate(lastDate) != null
-                            && period.getSetableToDate(lastDate) != null) {
+                    period.setBaseDate(lastDate);
+                    if (!onlySetable && period.getFromDate(lastDate) == null && period.getToDate(lastDate) == null) {
+                        continue;
+                    }
+
+                    if (pos < numNext + 1 && ((period.isSetable(lastDate) && onlySetable) || (!onlySetable && (period
+                            .isSetable(lastDate)
+                            || (period.getFromDate(lastDate) != null && period.getToDate(lastDate) != null))))) {
                         final Period p = period.clone();
-                        p.setStartDate(lastDate);
+
+                        if (onlySetable) {
+                            p.setStartDate(lastDate);
+                        }
+
                         p.setFullyQualified(true);
 
                         final Calendar nextDay = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
@@ -146,8 +170,15 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
                         lastDate = nextDay.getTime();
 
-                        calendar.periods.add(p);
-                        pos++;
+                        boolean setAble = p.isSetable();
+
+                        if (setAble && onlySetable || !onlySetable) {
+                            calendar.periods.add(p);
+                        }
+
+                        if (setAble) {
+                            pos++;
+                        }
                     }
                 }
             }
