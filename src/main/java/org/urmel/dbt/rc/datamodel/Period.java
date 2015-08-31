@@ -419,7 +419,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         } else {
             Date setTo = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
             if (setTo == null)
-                getPeriodDate(today, setableFromShort, setableToShort, true);
+                setTo = getPeriodDate(today, setableFromShort, setableToShort, true);
 
             if (setTo == null || today.after(setTo)) {
                 return false;
