@@ -413,12 +413,12 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     public boolean isSetable() throws ParseException {
         final Date today = new Date();
         final Date to = getToDate();
-        
+
         if (to != null && today.after(to)) {
             return false;
         } else {
             final Date setTo = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
-            if (setTo != null && today.after(setTo)) {
+            if (setTo == null || today.after(setTo)) {
                 return false;
             }
         }
