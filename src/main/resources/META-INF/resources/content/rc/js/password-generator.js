@@ -1,5 +1,6 @@
 /**
- * $Id$ $Revision$ $Date$
+ * $Id$ $Revision$
+ * $Date$
  * 
  * @author Ren\u00E9 Adler (eagle)
  * 
