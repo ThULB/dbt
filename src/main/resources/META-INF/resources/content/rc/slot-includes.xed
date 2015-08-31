@@ -151,6 +151,8 @@
           required="true" />
 
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
+
+        <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
       </xed:otherwise>
     </xed:choose>
   </xed:template>
@@ -254,9 +256,15 @@
   <xed:template id="accesskeys">
     <xed:bind xpath="accesskeys">
       <mir:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
-        required="true" maxlength="64" />
+        required="true" maxlength="64"
+      >
+        <action id="readKeyGenerator" i18n="component.rc.slot.accesskey.generate" />
+      </mir:template>
       <mir:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
-        required="true" maxlength="64" />
+        required="true" maxlength="64"
+      >
+        <action id="writeKeyGenerator" i18n="component.rc.slot.accesskey.generate" />
+      </mir:template>
     </xed:bind>
 
     <xed:validate xpath="slot" display="global"
