@@ -22,7 +22,11 @@
  */
 package org.urmel.dbt.rc.datamodel;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,11 +40,19 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
+import org.jdom2.Document;
 import org.jdom2.Element;
-import org.mycore.common.xml.MCRURIResolver;
+import org.jdom2.JDOMException;
+import org.mycore.common.MCRException;
+import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.content.MCRFileContent;
+import org.mycore.common.content.MCRSourceContent;
+import org.mycore.common.xml.MCRXMLParserFactory;
 import org.urmel.dbt.rc.utils.RCCalendarTransformer;
+import org.xml.sax.SAXException;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -50,13 +62,51 @@ import org.urmel.dbt.rc.utils.RCCalendarTransformer;
 @XmlAccessorType(XmlAccessType.NONE)
 public final class RCCalendar implements Serializable, Iterable<Period> {
 
+    static final String RESOURCE_URI = "resource:rccalendar.xml";
+
+    static final String URI_CFG_KEY = "DBT.RC.Calendar.URI";
+
     private static final long serialVersionUID = -812825621316872737L;
 
     private static final Logger LOGGER = Logger.getLogger(RCCalendar.class);
 
     private static RCCalendar singleton;
 
+    private static URI calendarURI;
+
+    private static File calendarFile;
+
     private List<Period> periods;
+
+    static {
+        MCRConfiguration config = MCRConfiguration.instance();
+        String dataDirProperty = "MCR.datadir";
+        String dataDir = config.getString(dataDirProperty, null);
+        if (dataDir == null) {
+            LOGGER.warn(dataDirProperty + " is undefined.");
+            try {
+                calendarURI = new URI(config.getString(URI_CFG_KEY, RESOURCE_URI));
+            } catch (URISyntaxException e) {
+                throw new MCRException(e);
+            }
+        } else {
+            File dataDirFile = new File(dataDir);
+            String calendarCfg = config.getString(URI_CFG_KEY,
+                    dataDirFile.toURI().toString() + File.separator + "rccalendar.xml");
+            try {
+                calendarURI = new URI(calendarCfg);
+                LOGGER.info("Using rc calendar defined in " + calendarURI);
+                if ("file".equals(calendarURI.getScheme())) {
+                    calendarFile = new File(calendarURI);
+                    LOGGER.info("Loading rc calendar from file: " + calendarFile);
+                } else {
+                    LOGGER.info("Try loading rc calendar with URIResolver for scheme " + calendarURI.toString());
+                }
+            } catch (URISyntaxException e) {
+                throw new MCRException(e);
+            }
+        }
+    }
 
     private RCCalendar() {
     }
@@ -68,12 +118,29 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      */
     public static RCCalendar instance() {
         if (singleton == null) {
-            final Element xml = MCRURIResolver.instance().resolve("resource:RCCalendar.xml");
-            if (xml != null) {
-                singleton = RCCalendarTransformer.buildRCCalendar(xml);
+            Element xml;
+            try {
+                xml = getCalendar().getRootElement();
+                if (xml != null) {
+                    singleton = RCCalendarTransformer.buildRCCalendar(xml);
+                }
+            } catch (JDOMException | TransformerException | SAXException | IOException e) {
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return singleton;
+    }
+
+    private static Document getCalendar() throws JDOMException, TransformerException, SAXException, IOException {
+        if (calendarFile == null) {
+            return MCRSourceContent.getInstance(calendarURI.toASCIIString()).asXML();
+        }
+        if (!calendarFile.exists() || calendarFile.length() == 0) {
+            LOGGER.info("Creating " + calendarFile.getAbsolutePath() + "...");
+            MCRSourceContent realmsContent = MCRSourceContent.getInstance(RESOURCE_URI);
+            realmsContent.sendTo(calendarFile);
+        }
+        return MCRXMLParserFactory.getNonValidatingParser().parseXML(new MCRFileContent(calendarFile));
     }
 
     /**
