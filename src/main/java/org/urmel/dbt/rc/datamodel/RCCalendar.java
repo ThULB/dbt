@@ -91,8 +91,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             }
         } else {
             File dataDirFile = new File(dataDir);
-            String calendarCfg = config.getString(URI_CFG_KEY,
-                    dataDirFile.toURI().toString() + File.separator + "rccalendar.xml");
+            String calendarCfg = config.getString(URI_CFG_KEY, dataDirFile.toURI().toString() + "rccalendar.xml");
             try {
                 calendarURI = new URI(calendarCfg);
                 LOGGER.info("Using rc calendar defined in " + calendarURI);
