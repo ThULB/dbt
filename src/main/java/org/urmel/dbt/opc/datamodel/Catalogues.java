@@ -81,7 +81,7 @@ public class Catalogues {
     }
 
     static String getCataloguesConfigResourceName() {
-        return MCRConfiguration.instance().getString("OPC.CataloguesConfig", "catalogues.xml");
+        return MCRConfiguration.instance().getString("DBT.OPC.CataloguesConfig", "catalogues.xml");
     }
 
     /**

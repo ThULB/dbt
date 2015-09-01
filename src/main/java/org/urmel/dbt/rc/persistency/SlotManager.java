@@ -68,7 +68,7 @@ public final class SlotManager {
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
-    public static final String ADMIN_GROUP = MCRConfiguration.instance().getString("MCR.Users.Superuser.GroupName");
+    public static final String ADMIN_GROUP = MCRConfiguration.instance().getString("DBT.RC.Administrator.GroupName");
 
     public static final String PROJECT_ID = "rc";
 
