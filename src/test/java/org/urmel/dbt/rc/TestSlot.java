@@ -102,7 +102,7 @@ public class TestSlot extends MCRHibTestCase {
         }
         SLOT_MANAGER.getSlotList().getSlots().clear();
 
-        Document xml = new Document(MCRURIResolver.instance().resolve("resource:config/dbt/RCLOC.xml"));
+        Document xml = new Document(MCRURIResolver.instance().resolve("resource:setup/classifications/RCLOC.xml"));
         MCRCategory category = MCRXMLTransformer.getCategory(xml);
         DAO.addCategory(null, category);
     }
