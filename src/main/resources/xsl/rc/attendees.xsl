@@ -38,9 +38,16 @@
   <xsl:template match="attendee">
     <tr>
       <td>
-        <a href="mailto:{@email}">
-          <xsl:value-of select="@name" />
-        </a>
+        <xsl:choose>
+          <xsl:when test="string-length(@email) &gt; 0">
+            <a href="mailto:{@email}">
+              <xsl:value-of select="@name" />
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@name" />
+          </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="$hasAdminPermission">
           <xsl:value-of select="concat(' (',@uid, ')')" />
         </xsl:if>
