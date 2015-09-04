@@ -46,8 +46,6 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
-import org.mycore.user2.MCRUser;
-import org.mycore.user2.MCRUserManager;
 import org.tmatesoft.svn.core.SVNException;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -150,8 +148,8 @@ public final class SlotManager {
      * @return <code>true</code> if is administrator
      */
     public static boolean hasAdminPermission() {
-        final MCRUser currentUser = MCRUserManager.getCurrentUser();
-        return currentUser.equals(MCRSystemUserInformation.getSuperUserInstance())
+        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
+        return currentUser.getUserID().equals(MCRSystemUserInformation.getSuperUserInstance().getUserID())
                 || currentUser.isUserInRole(ADMIN_GROUP)
                         && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
     }
