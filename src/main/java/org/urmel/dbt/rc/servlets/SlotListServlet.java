@@ -161,7 +161,7 @@ public class SlotListServlet extends MCRServlet {
 
                 if (option != null) {
                     if ("attendees".equals(option) && SlotManager.hasAdminPermission()
-                            || SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                            || SlotManager.isOwner(slot.getMCRObjectID().toString())) {
                         List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
 
                         getLayoutService().doLayout(job.getRequest(), job.getResponse(),
