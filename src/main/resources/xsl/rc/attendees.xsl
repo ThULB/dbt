@@ -7,7 +7,12 @@
 
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.attendees.pageTitle')" />
 
+  <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
+
   <xsl:template match="/attendees">
+    <h2>
+      <xsl:value-of select="$PageTitle" />
+    </h2>
     <table id="attendees" class="table">
       <thead>
         <tr>
@@ -36,14 +41,21 @@
         <a href="mailto:{@email}">
           <xsl:value-of select="@name" />
         </a>
+        <xsl:if test="$hasAdminPermission">
+          <xsl:value-of select="concat(' (',@uid, ')')" />
+        </xsl:if>
       </td>
       <td>
         <xsl:choose>
           <xsl:when test="@owner = 'true'">
-            <xsl:value-of select="i18n:translate('component.rc.attendees.type.owner')" />
+            <strong>
+              <xsl:value-of select="i18n:translate('component.rc.attendees.type.owner')" />
+            </strong>
           </xsl:when>
           <xsl:when test="@owner = 'false' and @writeKey = 'true'">
-            <xsl:value-of select="i18n:translate('component.rc.attendees.type.contact')" />
+            <strong>
+              <xsl:value-of select="i18n:translate('component.rc.attendees.type.contact')" />
+            </strong>
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="i18n:translate('component.rc.attendees.type.attendee')" />
