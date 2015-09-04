@@ -23,12 +23,17 @@
 package org.urmel.dbt.rc.persistency;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
@@ -46,7 +51,9 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.mycore.user2.MCRUser;
 import org.tmatesoft.svn.core.SVNException;
+import org.urmel.dbt.rc.datamodel.Attendee;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
@@ -161,12 +168,22 @@ public final class SlotManager {
      * @return <code>true</code> is owner
      */
     public static boolean isOwner(final String objId) {
-        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
+        return isOwner(objId, MCRSessionMgr.getCurrentSession().getUserInformation());
+    }
+
+    /**
+     * Checks if current user is owner of reserve collection.
+     * 
+     * @param objId the {@link MCRObjectID}
+     * @param user the {@link MCRUserInformation}
+     * @return <code>true</code> is owner
+     */
+    public static boolean isOwner(final String objId, final MCRUserInformation user) {
         final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
         final MCRObjectService os = obj.getService();
         final String owner = (os.isFlagTypeSet("createdby") ? os.getFlags("createdby").get(0) : null);
 
-        if (owner.equals(currentUser.getUserID()))
+        if (owner.equals(user.getUserID()))
             return true;
 
         return false;
@@ -374,6 +391,34 @@ public final class SlotManager {
         } else {
             throw new MCRException("No reserve collection found for ID \"" + objID + "\".");
         }
+    }
+
+    /**
+     * Returns a list of {@link Attendee} based on {@link MCRObjectID} without any check of valid key.
+     * 
+     * @param slot the {@link Slot}
+     * @return a list of {@link Attendee}
+     */
+    public List<Attendee> getAttendees(final Slot slot) {
+        final List<Attendee> attendees = new ArrayList<Attendee>();
+
+        final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
+        Session session = MCRHIBConnection.instance().getSession();
+
+        Criteria criteria = session.createCriteria(MCRUser.class);
+
+        criteria = criteria.createCriteria("attributes");
+        criteria.add(Restrictions.eq("indices", filterStr));
+
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        @SuppressWarnings("unchecked")
+        final List<MCRUser> results = criteria.list();
+
+        for (MCRUser user : results) {
+            attendees.add(new Attendee(slot, user));
+        }
+
+        return attendees;
     }
 
     /**

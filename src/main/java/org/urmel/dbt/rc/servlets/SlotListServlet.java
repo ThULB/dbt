@@ -23,6 +23,7 @@
 package org.urmel.dbt.rc.servlets;
 
 import java.util.Date;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,10 +45,12 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
+import org.urmel.dbt.rc.datamodel.Attendee;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.persistency.SlotManager;
+import org.urmel.dbt.rc.utils.AttendeeTransformer;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
 import org.urmel.dbt.rc.utils.SlotTransformer;
 
@@ -153,7 +156,19 @@ public class SlotListServlet extends MCRServlet {
                 final StringTokenizer st = new StringTokenizer(path, "/");
 
                 final String slotId = st.nextToken();
+                final String option = st.hasMoreTokens() ? st.nextToken() : null;
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
+
+                if (option != null) {
+                    if ("attendees".equals(option) && SlotManager.hasAdminPermission()
+                            || SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                        List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
+
+                        getLayoutService().doLayout(job.getRequest(), job.getResponse(),
+                                new MCRJDOMContent(AttendeeTransformer.buildExportableXML(attendees)));
+                        return;
+                    }
+                }
 
                 if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
                         && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
