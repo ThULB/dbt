@@ -29,7 +29,7 @@
           <xsl:sort select="@owner" />
         </xsl:apply-templates>
         <xsl:apply-templates select="attendee[@owner!='true' and @writeKey!='true']">
-          <xsl:sort select="@name" />
+          <xsl:sort select="substring-after(@name, ' ')" />
         </xsl:apply-templates>
       </tbody>
     </table>
