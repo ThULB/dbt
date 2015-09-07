@@ -87,6 +87,11 @@
             <xsl:value-of select="i18n:translate('component.rc.attendees.type.attendee')" />
           </xsl:otherwise>
         </xsl:choose>
+        <xsl:if test="$hasAdminPermission and @owner = 'false' and @readKey = 'false' and @writeKey = 'false'">
+          <xsl:text>&#160;</xsl:text>
+          <span class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip" data-placement="right"
+            title="{i18n:translate('component.rc.attendees.invalidKey')}" />
+        </xsl:if>
       </td>
     </tr>
   </xsl:template>
