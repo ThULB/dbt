@@ -4,11 +4,13 @@
 >
 
   <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
+
   <xsl:include href="slot-templates.xsl" />
 
   <xsl:param name="MCR.RC.MailSender" />
 
   <xsl:param name="WebApplicationBaseURL" />
+  <xsl:param name="RequestURL" />
 
   <!-- Event vars -->
   <xsl:param name="action" />
