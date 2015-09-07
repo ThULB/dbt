@@ -5,6 +5,7 @@
 >
 
   <xsl:param name="CurrentLang" />
+  <xsl:param name="RequestURL" />
 
   <xsl:param name="Mode" select="'view'" />
 

@@ -10,7 +10,6 @@
   <xsl:param name="MCR.RC.MailSender" />
 
   <xsl:param name="WebApplicationBaseURL" />
-  <xsl:param name="RequestURL" />
 
   <!-- Event vars -->
   <xsl:param name="action" />
