@@ -34,6 +34,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRJAXBContent;
 import org.urmel.dbt.rc.datamodel.Attendee;
 import org.urmel.dbt.rc.datamodel.Attendee.Attendees;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.xml.sax.SAXParseException;
 
 /**
@@ -65,12 +66,16 @@ public class AttendeeTransformer {
         }
     }
 
-    public static Document buildExportableXML(final List<Attendee> list) {
+    public static Document buildExportableXML(final Slot slot, final List<Attendee> list) {
+        return buildExportableXML(slot.getSlotId(), list);
+    }
+
+    public static Document buildExportableXML(final String slotId, final List<Attendee> list) {
         Attendees attendees = new Attendees();
 
         final MCRJAXBContent<Attendees> content = new MCRJAXBContent<Attendees>(JAXB_CONTEXT, attendees);
         try {
-            attendees.slotId = list.isEmpty() ? null : list.get(0).getSlotId();
+            attendees.slotId = slotId;
             attendees.attendees = list;
             final Document xml = content.asXML();
             return xml;

@@ -5,13 +5,19 @@
 >
   <xsl:include href="MyCoReLayout.xsl" />
 
-  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.attendees.pageTitle')" />
+  <xsl:include href="slot-templates.xsl" />
+
+  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.attendees')" />
+
+  <xsl:variable name="slot" select="document(concat('slot:slotId=', /attendees/@slotId))" />
+  <xsl:variable name="slotId" select="/attendees/@slotId" />
 
   <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
 
   <xsl:template match="/attendees">
+    <xsl:apply-templates mode="slotHead" select="$slot" />
     <h2>
-      <xsl:value-of select="$PageTitle" />
+      <xsl:value-of select="i18n:translate('component.rc.attendees')" />
     </h2>
     <table id="attendees" class="table">
       <thead>
@@ -25,12 +31,25 @@
         </tr>
       </thead>
       <tbody>
-        <xsl:apply-templates select="attendee[@owner='true']|attendee[@writeKey='true']">
-          <xsl:sort select="@owner" />
-        </xsl:apply-templates>
-        <xsl:apply-templates select="attendee[@owner!='true' and @writeKey!='true']">
-          <xsl:sort select="substring-after(@name, ' ')" />
-        </xsl:apply-templates>
+        <xsl:choose>
+          <xsl:when test="count(attendee) &gt; 0">
+            <xsl:apply-templates select="attendee[@owner='true']|attendee[@writeKey='true']">
+              <xsl:sort select="@owner" />
+            </xsl:apply-templates>
+            <xsl:apply-templates select="attendee[@owner!='true' and @writeKey!='true']">
+              <xsl:sort select="substring-after(@name, ' ')" />
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <tr>
+              <td colspan="2" class="text-center">
+                <strong>
+                  <xsl:value-of select="i18n:translate('component.rc.attendees.emptyList')" />
+                </strong>
+              </td>
+            </tr>
+          </xsl:otherwise>
+        </xsl:choose>
       </tbody>
     </table>
   </xsl:template>

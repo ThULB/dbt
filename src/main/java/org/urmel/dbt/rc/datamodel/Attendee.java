@@ -62,10 +62,6 @@ public class Attendee extends Person implements Serializable {
         setEmail(user.getEMailAddress());
     }
 
-    public String getSlotId() {
-        return slot.getSlotId();
-    }
-
     @XmlAttribute(name = "uid")
     public String getUID() {
         return user.getUserID();

@@ -165,7 +165,7 @@ public class SlotListServlet extends MCRServlet {
                         List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
 
                         getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                                new MCRJDOMContent(AttendeeTransformer.buildExportableXML(attendees)));
+                                new MCRJDOMContent(AttendeeTransformer.buildExportableXML(slotId, attendees)));
                         return;
                     }
                 }
