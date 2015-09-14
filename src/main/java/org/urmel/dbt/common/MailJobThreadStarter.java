@@ -24,6 +24,7 @@ package org.urmel.dbt.common;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.mycore.common.events.MCRStartupHandler;
 import org.mycore.services.queuedjob.MCRJobMaster;
@@ -33,7 +34,7 @@ import org.mycore.services.queuedjob.MCRJobMaster;
  *
  */
 public class MailJobThreadStarter implements MCRStartupHandler.AutoExecutable {
-    private static Logger LOGGER = Logger.getLogger(MailJobThreadStarter.class);
+    private static Logger LOGGER = LogManager.getLogger(MailJobThreadStarter.class);
 
     @Override
     public String getName() {

@@ -31,6 +31,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
@@ -42,7 +43,7 @@ import org.urmel.dbt.opc.utils.CataloguesTransformer;
 @XmlRootElement(name = "catalogues")
 public class Catalogues {
 
-    private static final Logger LOGGER = Logger.getLogger(Catalogues.class);
+    private static final Logger LOGGER = LogManager.getLogger(Catalogues.class);
 
     private static Catalogues SINGLETON;
 

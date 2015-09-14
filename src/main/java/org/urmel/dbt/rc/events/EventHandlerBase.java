@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.rc.events;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRException;
 import org.mycore.common.events.MCREvent;
@@ -39,7 +40,7 @@ import org.urmel.dbt.rc.persistency.SlotManager;
  */
 public abstract class EventHandlerBase implements MCREventHandler {
 
-    private static final Logger LOGGER = Logger.getLogger(EventHandlerBase.class);
+    private static final Logger LOGGER = LogManager.getLogger(EventHandlerBase.class);
 
     /**
      * This method handle all calls for EventHandler for the event types

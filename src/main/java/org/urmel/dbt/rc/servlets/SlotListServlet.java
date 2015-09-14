@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -62,7 +63,7 @@ public class SlotListServlet extends MCRServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger LOGGER = Logger.getLogger(SlotListServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger(SlotListServlet.class);
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 

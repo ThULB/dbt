@@ -36,6 +36,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRegistration;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -52,7 +53,7 @@ import org.mycore.common.events.MCRStartupHandler;
  */
 public class DBTAutoDeploy implements MCRStartupHandler.AutoExecutable, MCRShutdownHandler.Closeable {
 
-    private static final Logger LOGGER = Logger.getLogger(DBTAutoDeploy.class);
+    private static final Logger LOGGER = LogManager.getLogger(DBTAutoDeploy.class);
 
     private static final String HANDLER_NAME = DBTAutoDeploy.class.getName();
 

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
@@ -51,7 +52,7 @@ import org.urmel.dbt.rc.persistency.SlotManager;
 @MCRCommandGroup(name = "RC Commands")
 public class RCCommands extends MCRAbstractCommands {
 
-    private static final Logger LOGGER = Logger.getLogger(RCCommands.class);
+    private static final Logger LOGGER = LogManager.getLogger(RCCommands.class);
 
     @MCRCommand(syntax = "rc inactivator", help = "send warning mails for reserve collections or inactivate, set new status")
     public static void rcInactivator() throws IOException {

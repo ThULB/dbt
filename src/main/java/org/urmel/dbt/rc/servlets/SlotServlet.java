@@ -39,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.exceptions.COSVisitorException;
@@ -77,7 +78,7 @@ public class SlotServlet extends MCRServlet {
 
     private static final long serialVersionUID = -3138681111200495882L;
 
-    private static final Logger LOGGER = Logger.getLogger(SlotServlet.class);
+    private static final Logger LOGGER = LogManager.getLogger(SlotServlet.class);
 
     // Error code: for a empty file or empty file parameter
     private static final int ERROR_EMPTY_FILE = 100;

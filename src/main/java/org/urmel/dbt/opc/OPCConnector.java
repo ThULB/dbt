@@ -43,6 +43,7 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -65,7 +66,7 @@ import com.google.common.cache.CacheBuilder;
  *
  */
 public class OPCConnector {
-    private static final Logger LOGGER = Logger.getLogger(OPCConnector.class);
+    private static final Logger LOGGER = LogManager.getLogger(OPCConnector.class);
 
     private static final Cache<Object, Object> CACHE;
 

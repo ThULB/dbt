@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.log4j.LogManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfigurationDir;
 
@@ -83,7 +83,7 @@ public class DBTVersion {
         try {
             return Integer.parseInt(prop.getProperty("revision.number"));
         } catch (NumberFormatException e) {
-            Logger.getLogger(DBTVersion.class).error(
+            LogManager.getLogger(DBTVersion.class).error(
                     "Error parsing revisionnumber: " + prop.getProperty("revision.number"));
             return -1;
         }

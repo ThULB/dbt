@@ -42,6 +42,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.TransformerException;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -68,7 +69,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     private static final long serialVersionUID = -812825621316872737L;
 
-    private static final Logger LOGGER = Logger.getLogger(RCCalendar.class);
+    private static final Logger LOGGER = LogManager.getLogger(RCCalendar.class);
 
     private static RCCalendar singleton;
 

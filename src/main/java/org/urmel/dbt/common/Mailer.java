@@ -44,6 +44,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -63,7 +64,7 @@ import org.mycore.common.xsl.MCRParameterCollector;
  */
 public class Mailer {
 
-    private static final Logger LOGGER = Logger.getLogger(Mailer.class);
+    private static final Logger LOGGER = LogManager.getLogger(Mailer.class);
 
     private static Session mailSession;
 
