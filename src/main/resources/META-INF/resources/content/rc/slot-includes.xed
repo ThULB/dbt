@@ -94,8 +94,8 @@
             <fieldset class="{$xed-validation-marker}">
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
 
-              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','notMatchesPreviousAccessKeys', /slot)"
-                i18n="component.rc.slot.accesskey.matchesPrevious" />
+              <xed:validate xpath="slot" display="global local"
+                test="not(xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isMatchPreviousAccessKeys', /slot))" i18n="component.rc.slot.accesskey.matchesPrevious" />
             </fieldset>
           </xed:when>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">

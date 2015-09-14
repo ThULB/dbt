@@ -172,7 +172,7 @@ public final class SlotManager {
     }
 
     /**
-     * Checks if current user is owner of reserve collection.
+     * Checks if user is owner of reserve collection.
      * 
      * @param objId the {@link MCRObjectID}
      * @param user the {@link MCRUserInformation}
@@ -189,15 +189,21 @@ public final class SlotManager {
         return false;
     }
 
-    public static boolean notMatchesPreviousAccessKeys(List<Element> nodes) {
+    /**
+     * Checks if given access key was previously used on slot.
+     * 
+     * @param nodes the slot element
+     * @return <code>true</code> if key is matching
+     */
+    public static boolean isMatchPreviousAccessKeys(List<Element> nodes) {
         if (nodes != null && !nodes.isEmpty()) {
             final Slot slot = SlotTransformer.buildSlot(nodes.get(0));
             final Slot cSlot = SlotManager.instance().getSlotById(slot.getSlotId());
 
             final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
 
-            return accKP != null && !accKP.getReadKey().equals(slot.getReadKey())
-                    && !accKP.getWriteKey().equals(slot.getWriteKey());
+            return accKP != null
+                    && (accKP.getReadKey().equals(slot.getReadKey()) || accKP.getWriteKey().equals(slot.getWriteKey()));
         }
         return false;
     }
