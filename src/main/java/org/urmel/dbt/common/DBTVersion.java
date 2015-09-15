@@ -28,7 +28,7 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.log4j.LogManager;
+import org.apache.logging.log4j.LogManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfigurationDir;
 

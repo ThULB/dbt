@@ -26,8 +26,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
