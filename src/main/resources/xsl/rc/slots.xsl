@@ -11,6 +11,8 @@
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slots.title')" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
+  
+  <xsl:param name="numPerPage" select="50" />
 
   <xsl:template match="/slots">
     <h2>
