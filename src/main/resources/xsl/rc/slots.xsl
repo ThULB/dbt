@@ -11,7 +11,7 @@
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slots.title')" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
-  
+
   <xsl:param name="numPerPage" select="50" />
 
   <xsl:template match="/slots">
@@ -31,7 +31,7 @@
     <col sortBy="id" class="col-xs-3 col-md-3">
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
-    <col class="col-xs-3 col-md-3">
+    <col sortBy="xpath:name() = 'name' and parent('lecturer')" class="col-xs-3 col-md-3">
       <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
     <col sortBy="title" class="col-xs-4 col-md-4">
