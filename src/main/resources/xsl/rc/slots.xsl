@@ -38,7 +38,7 @@
       </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
-    <col width="10%">
+    <col sortBy="validTo" width="10%">
       <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
     </col>
     <col sortBy="xpath:name() = 'name' and parent('lecturer')" width="15%">
