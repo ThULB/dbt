@@ -31,18 +31,6 @@
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 
-  <xsl:variable name="date">
-    <xsl:choose>
-      <xsl:when test="string-length(/slot/validTo) &gt; 0">
-        <xsl:value-of select="/slot/validTo" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>now</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-  <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
-
   <xsl:template match="@id" mode="rcLocation">
     <xsl:variable name="rcLocId">
       <xsl:value-of select="substring(., 1, string-length(.) - 5)" />
@@ -84,9 +72,6 @@
     <div id="slot-head">
       <h1>
         <xsl:value-of select="title" />
-        <xsl:if test="@status = 'new'">
-          <!-- TODO: New badge if needed -->
-        </xsl:if>
         <xsl:if test="$readPermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
@@ -177,6 +162,18 @@
         </xsl:if>
       </h1>
       <div class="info">
+        <xsl:variable name="date">
+          <xsl:choose>
+            <xsl:when test="string-length(validTo) &gt; 0">
+              <xsl:value-of select="validTo" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>now</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
+
         <xsl:for-each select="lecturers/lecturer">
           <xsl:choose>
             <xsl:when test="$readPermission and string-length(/slot/contact/@email) = 0">

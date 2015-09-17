@@ -12,8 +12,6 @@
   <xsl:variable name="slot" select="document(concat('slot:slotId=', /attendees/@slotId))" />
   <xsl:variable name="slotId" select="/attendees/@slotId" />
 
-  <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
-
   <xsl:template match="/attendees">
     <xsl:apply-templates mode="slotHead" select="$slot" />
     <h2>
