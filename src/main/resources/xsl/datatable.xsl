@@ -343,7 +343,7 @@
             <xsl:value-of select="substring-after($SortBy, 'xpath:')" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="'position(.)'" />
+            <xsl:value-of select="''" />
           </xsl:otherwise>
         </xsl:choose>
       </xsl:variable>
