@@ -21,6 +21,7 @@
 
     <xsl:apply-templates mode="dataTable" select=".">
       <xsl:with-param name="id" select="'slots'" />
+      <xsl:with-param name="disableFilter" select="true()"></xsl:with-param>
     </xsl:apply-templates>
   </xsl:template>
 
