@@ -20,9 +20,8 @@
   <xsl:variable name="headerCols">
     <xsl:apply-templates mode="dataTableHeader" select="." />
   </xsl:variable>
-  
-  <xsl:variable name="defaultNumPerPage" select="10" />
 
+  <xsl:variable name="defaultNumPerPage" select="10" />
   <xsl:variable name="defaultSortBy">
     <xsl:value-of
       select="xalan:nodeset($headerCols)/col[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy|xalan:nodeset($headerCols)/th[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy" />
