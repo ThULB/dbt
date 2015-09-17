@@ -25,16 +25,16 @@
   </xsl:template>
 
   <xsl:template mode="dataTableHeader" match="slots">
-    <col sortBy="id" sortOrder="asc" class="col-xs-2 col-md-2">
+    <col sortBy="id" sortOrder="asc" width="10%">
       <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
     </col>
-    <col class="col-xs-3 col-md-3">
+    <col width="25%">
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
-    <col sortBy="xpath:name() = 'name' and parent('lecturer')" class="col-xs-3 col-md-3">
+    <col sortBy="xpath:name() = 'name' and parent('lecturer')" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
-    <col sortBy="title" class="col-xs-4 col-md-4">
+    <col sortBy="title" width="*">
       <xsl:value-of select="i18n:translate('component.rc.slot.title')" />
     </col>
   </xsl:template>
