@@ -33,6 +33,18 @@
       <xsl:value-of select="@id" />
     </xsl:message>
 
+    <xsl:variable name="date">
+      <xsl:choose>
+        <xsl:when test="string-length(validTo) &gt; 0">
+          <xsl:value-of select="validTo" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>now</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
+
     <xsl:for-each select="lecturers/lecturer">
       <to>
         <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />

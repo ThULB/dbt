@@ -48,6 +48,18 @@
   </xsl:template>
 
   <xsl:template match="slot" mode="email">
+    <xsl:variable name="date">
+      <xsl:choose>
+        <xsl:when test="string-length(validTo) &gt; 0">
+          <xsl:value-of select="validTo" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>now</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
+
     <xsl:if test="($action = 'inactivate') or ($action = 'reactivate')">
       <xsl:if test="count(//opcrecord) &gt; 0">
         <xsl:message>
