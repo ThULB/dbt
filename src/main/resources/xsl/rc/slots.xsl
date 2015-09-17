@@ -25,10 +25,16 @@
   </xsl:template>
 
   <xsl:template mode="dataTableHeader" match="slots">
-    <col sortBy="id" sortOrder="asc" width="10%">
-      <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
-    </col>
+    <xsl:if test="$hasAdminPermission">
+      <col sortBy="id" sortOrder="asc" width="10%">
+        <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
+      </col>
+    </xsl:if>
     <col width="25%">
+      <xsl:if test="not($hasAdminPermission)">
+        <xsl:attribute name="sortBy">id</xsl:attribute>
+        <xsl:attribute name="sortOrder">asc</xsl:attribute>
+      </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
     <col sortBy="xpath:name() = 'name' and parent('lecturer')" width="15%">
@@ -40,16 +46,18 @@
   </xsl:template>
 
   <xsl:template mode="dataTableRow" match="slot">
-    <col align="center" valign="top">
-      <a href="{$WebApplicationBaseURL}rc/{@id}">
-        <xsl:value-of select="@id" />
-      </a>
-      <xsl:if test="@status = 'new'">
-        <span class="label label-danger pull-right">
-          <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
-        </span>
-      </xsl:if>
-    </col>
+    <xsl:if test="$hasAdminPermission">
+      <col align="center" valign="top">
+        <a href="{$WebApplicationBaseURL}rc/{@id}">
+          <xsl:value-of select="@id" />
+        </a>
+        <xsl:if test="@status = 'new'">
+          <span class="label label-danger pull-right">
+            <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
+          </span>
+        </xsl:if>
+      </col>
+    </xsl:if>
     <col valign="top">
       <xsl:apply-templates select="@id" mode="rcLocation" />
     </col>
