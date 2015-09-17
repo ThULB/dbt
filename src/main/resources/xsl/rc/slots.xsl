@@ -37,6 +37,9 @@
       </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
+    <col width="10%">
+      <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
+    </col>
     <col sortBy="xpath:name() = 'name' and parent('lecturer')" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
@@ -58,10 +61,25 @@
         </xsl:if>
       </col>
     </xsl:if>
-    <col valign="top">
+    <col class="text-ellipsis" valign="top">
       <xsl:apply-templates select="@id" mode="rcLocation" />
     </col>
     <col valign="top">
+      <xsl:variable name="date">
+        <xsl:choose>
+          <xsl:when test="string-length(validTo) &gt; 0">
+            <xsl:value-of select="validTo" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>now</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
+      <xsl:value-of
+        select="concat($period//label[lang($CurrentLang)]/@shortText, '&#160;', substring-after($period//label[lang($CurrentLang)]/@description, concat($period//label[lang($CurrentLang)]/@text, ' ')))" />
+    </col>
+    <col class="text-ellipsis" valign="top">
       <xsl:for-each select="lecturers/lecturer">
         <xsl:value-of select="@name" />
         <xsl:if test="position() != last()">
@@ -70,7 +88,7 @@
       </xsl:for-each>
     </col>
     <col valign="top">
-      <a href="{$WebApplicationBaseURL}rc/{@id}">
+      <a href="{$WebApplicationBaseURL}rc/{@id}" title="{title}">
         <xsl:value-of select="title" />
       </a>
     </col>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <calendar>
   <period from="01.10." to="31.03." lectureEnd="20.02." matchingLocation=".*" setableFrom="02.08." setableTo="03.02.">
-    <label xml:lang="de" text="Wintersemester" />
-    <label xml:lang="en" text="Winter semester" />
+    <label xml:lang="de" text="Wintersemester" shortText="WS" />
+    <label xml:lang="en" text="Winter semester" shortText="WS" />
     <warnings>
       <!-- type: periodEnd|lectureEnd|validTo -->
       <warning type="periodEnd" at="11.01." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
@@ -11,8 +11,8 @@
     </warnings>
   </period>
   <period from="01.04." to="30.09." lectureEnd="04.08." matchingLocation=".*" setableFrom="04.02." setableTo="01.08.">
-    <label xml:lang="de" text="Sommersemester" />
-    <label xml:lang="en" text="Summer semester" />
+    <label xml:lang="de" text="Sommersemester" shortText="SS" />
+    <label xml:lang="en" text="Summer semester" shortText="SS" />
     <warnings>
       <warning type="periodEnd" at="10.06." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />
       <warning type="periodEnd" at="01.09." template="rc/mail-warning" groupTemplate="rc/mail-warning-group" />

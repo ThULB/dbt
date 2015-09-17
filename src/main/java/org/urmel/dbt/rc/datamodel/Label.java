@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlRootElement(name = "label")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "label", propOrder = { "lang", "text", "description" })
+@XmlType(name = "label", propOrder = { "lang", "text", "shortText", "description" })
 public class Label implements Serializable {
 
     private static final long serialVersionUID = -4864726018817716446L;
@@ -44,6 +44,8 @@ public class Label implements Serializable {
     private String lang;
 
     private String text;
+
+    private String shortText;
 
     private String description;
 
@@ -75,6 +77,21 @@ public class Label implements Serializable {
      */
     public void setText(final String text) {
         this.text = text;
+    }
+
+    /**
+     * @return the shortText
+     */
+    @XmlAttribute(name = "shortText")
+    public String getShortText() {
+        return shortText;
+    }
+
+    /**
+     * @param shortText the shortText to set
+     */
+    public void setShortText(String shortText) {
+        this.shortText = shortText;
     }
 
     /**
