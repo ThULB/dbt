@@ -20,6 +20,8 @@
   <xsl:variable name="headerCols">
     <xsl:apply-templates mode="dataTableHeader" select="." />
   </xsl:variable>
+  
+  <xsl:variable name="defaultNumPerPage" select="10" />
 
   <xsl:variable name="defaultSortBy">
     <xsl:value-of
@@ -65,7 +67,7 @@
   <xsl:variable name="numPerPage">
     <xsl:call-template name="getParam">
       <xsl:with-param name="par" select="'numPerPage'" />
-      <xsl:with-param name="default" select="10" />
+      <xsl:with-param name="default" select="$defaultNumPerPage" />
     </xsl:call-template>
   </xsl:variable>
   <xsl:variable name="Filter">
