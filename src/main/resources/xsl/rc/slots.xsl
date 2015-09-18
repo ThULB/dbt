@@ -38,7 +38,7 @@
       </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
-    <col sortBy="validTo" width="10%">
+    <col sortBy="validTo" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
     </col>
     <col sortBy="name" width="15%">
@@ -65,7 +65,7 @@
     <col class="text-ellipsis" valign="top">
       <xsl:apply-templates select="@id" mode="rcLocation" />
     </col>
-    <col valign="top">
+    <col class="text-ellipsis" valign="top">
       <xsl:variable name="date">
         <xsl:choose>
           <xsl:when test="string-length(validTo) &gt; 0">
@@ -80,7 +80,7 @@
       <xsl:value-of
         select="concat($period//label[lang($CurrentLang)]/@shortText, '&#160;', substring-after($period//label[lang($CurrentLang)]/@description, concat($period//label[lang($CurrentLang)]/@text, ' ')))" />
     </col>
-    <col class="text-ellipsis" valign="top">
+    <col valign="top">
       <xsl:for-each select="lecturers/lecturer">
         <xsl:value-of select="@name" />
         <xsl:if test="position() != last()">
