@@ -337,16 +337,6 @@
     <xsl:variable name="sortedCol" select="$dataTableSortedCol" />
 
     <tbody>
-      <xsl:variable name="xpath">
-        <xsl:choose>
-          <xsl:when test="starts-with($SortBy, 'xpath:')">
-            <xsl:value-of select="substring-after($SortBy, 'xpath:')" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="''" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
       <xsl:variable name="sortOrder">
         <xsl:choose>
           <xsl:when test="$SortOrder = 'desc'">
@@ -359,7 +349,9 @@
       </xsl:variable>
 
       <xsl:for-each select="./*">
-        <xsl:sort select="*[name() = $SortBy]|@*[name() = $SortBy]|text()[$SortBy = 'text()']|*[$xpath]" order="{$sortOrder}" data-type="{$SortType}" />
+        <xsl:sort
+          select="*[name() = $SortBy]|@*[name() = $SortBy]|text()[$SortBy = 'text()']|descendant-or-self::*[name() = $SortBy]|descendant-or-self::*//@*[name() = $SortBy]"
+          order="{$sortOrder}" data-type="{$SortType}" />
 
         <xsl:if test="((position() &gt;= $start) and (position() &lt;= $end)) or ($nativeLimit)">
           <xsl:variable name="trClass">
