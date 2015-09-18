@@ -148,6 +148,9 @@
     </xsl:variable>
     <xsl:variable name="start">
       <xsl:choose>
+        <xsl:when test="$total = 0">
+          <xsl:value-of select="0" />
+        </xsl:when>
         <xsl:when test="$Page &gt; $pages">
           <xsl:value-of select="1" />
         </xsl:when>
