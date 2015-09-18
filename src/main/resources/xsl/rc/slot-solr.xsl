@@ -21,12 +21,22 @@
       <xsl:value-of select="." />
     </field>
 
+    <xsl:variable name="rcLocId">
+      <xsl:value-of select="substring(., 1, string-length(.) - 5)" />
+    </xsl:variable>
+
     <field name="category">
-      <xsl:variable name="rcLocId">
-        <xsl:value-of select="substring(., 1, string-length(.) - 5)" />
-      </xsl:variable>
       <xsl:value-of select="concat('RCLOC:', $rcLocId)" />
     </field>
+
+    <xsl:variable name="currentLocation" select="$rcLocations/descendant-or-self::category[@ID=$rcLocId]" />
+    <xsl:for-each select="$currentLocation/ancestor-or-self::category">
+      <xsl:for-each select="label[not(starts-with(@xml:lang, 'x-'))]">
+        <field name="slot.location">
+          <xsl:value-of select="@text" />
+        </field>
+      </xsl:for-each>
+    </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="title" mode="slot">

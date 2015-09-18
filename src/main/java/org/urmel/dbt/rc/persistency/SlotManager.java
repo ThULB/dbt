@@ -469,10 +469,14 @@ public final class SlotManager {
                 MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL"));
 
         final SolrQuery query = new SolrQuery();
-        query.setQuery(filter + " OR slot.lecturer:" + filter);
+        final String filterStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter%"
+                .replace("%filter%", filter);
+        
+        query.setQuery(filterStr);
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE);
         query.setFields("slotId");
         query.setStart(0);
+
         final QueryResponse response = client.query(query);
 
         SolrDocumentList results = response.getResults();

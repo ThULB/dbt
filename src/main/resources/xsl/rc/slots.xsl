@@ -63,6 +63,9 @@
       </col>
     </xsl:if>
     <col class="text-ellipsis" valign="top">
+      <xsl:attribute name="title">
+        <xsl:apply-templates select="@id" mode="rcLocationText" />
+      </xsl:attribute>
       <xsl:apply-templates select="@id" mode="rcLocation" />
     </col>
     <col class="text-ellipsis" valign="top">

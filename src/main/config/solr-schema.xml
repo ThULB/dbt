@@ -205,6 +205,7 @@
     <!-- dbt rc slot -->
   <field name="slotId" type="string" indexed="true" multiValued="false" />
   <field name="slot.status" type="string" indexed="true" multiValued="false" />
+  <field name="slot.location" type="text_general" indexed="true" multiValued="true" />
   <field name="slot.onlineOnly" type="boolean" />
   <field name="slot.title" type="text_de" indexed="true" />
   <field name="slot.lecturer" type="namesType" indexed="true" multiValued="true" />
