@@ -50,6 +50,7 @@ import org.urmel.dbt.rc.datamodel.Attendee;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
+import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.AttendeeTransformer;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
@@ -183,9 +184,13 @@ public class SlotListServlet extends MCRServlet {
                 return;
             }
 
+            final String filter = req.getParameter("Filter");
+            final SlotList slotList = filter != null && !filter.isEmpty() ? SLOT_MGR.getFilteredSlotList(filter)
+                    : SLOT_MGR.getSlotList();
+
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(SlotManager.hasAdminPermission()
-                            ? SLOT_MGR.getBasicSlotList() : SLOT_MGR.getActiveSlotList())));
+                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(
+                            SlotManager.hasAdminPermission() ? slotList.getBasicSlots() : slotList.getActiveSlots())));
         }
     }
 }

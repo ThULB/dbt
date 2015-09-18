@@ -28,6 +28,13 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocument;
+import org.apache.solr.common.SolrDocumentList;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -453,5 +460,33 @@ public final class SlotManager {
      */
     public SlotList getActiveSlotList() {
         return slotList.getActiveSlots();
+    }
+
+    public SlotList getFilteredSlotList(final String filter) throws IOException, SolrServerException {
+        final SlotList slotList = new SlotList();
+
+        final SolrClient client = new HttpSolrClient(
+                MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL"));
+
+        final SolrQuery query = new SolrQuery();
+        query.setQuery(filter + " OR slot.lecturer:" + filter);
+        query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE);
+        query.setFields("slotId");
+        query.setStart(0);
+        final QueryResponse response = client.query(query);
+
+        SolrDocumentList results = response.getResults();
+        for (SolrDocument doc : results) {
+            for (Object val : (ArrayList<Object>) doc.getFieldValues("slotId")) {
+                final Slot slot = getSlotById((String) val);
+                if (slot != null) {
+                    slotList.addSlot(slot);
+                }
+            }
+        }
+
+        client.close();
+
+        return slotList;
     }
 }
