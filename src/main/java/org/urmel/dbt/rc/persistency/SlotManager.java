@@ -445,6 +445,16 @@ public final class SlotManager {
         return slotList;
     }
 
+    /**
+     * Returns a filtered and sorted {@link SlotList}.
+     * 
+     * @param filter the filter string
+     * @param sortBy the field to sort
+     * @param sortOrder the sort order
+     * @return the slot list
+     * @throws IOException
+     * @throws SolrServerException
+     */
     public SlotList getFilteredSlotList(final String filter, final String sortBy, final String sortOrder)
             throws IOException, SolrServerException {
         final SlotList slotList = new SlotList();
@@ -454,7 +464,7 @@ public final class SlotManager {
 
         final SolrQuery query = new SolrQuery();
         final String filterStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter%"
-                .replace("%filter%", filter);
+                .replace("%filter%", filter != null && !filter.isEmpty() ? filter : "*");
 
         query.setQuery(filterStr);
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE);
@@ -462,6 +472,8 @@ public final class SlotManager {
 
         if (sortBy != null && sortOrder != null) {
             query.setSort(sortBy, ORDER.valueOf(sortOrder));
+        } else {
+            query.setSort("slotId", ORDER.asc);
         }
 
         query.setStart(0);

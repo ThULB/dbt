@@ -184,8 +184,7 @@ public class SlotListServlet extends MCRServlet {
                 return;
             }
 
-            String filter = req.getParameter("Filter");
-            filter = filter != null && !filter.isEmpty() ? filter : "*";
+            final String filter = req.getParameter("Filter");
             final String sortBy = req.getParameter("SortBy");
             final String sortOrder = req.getParameter("SortOrder");
 
