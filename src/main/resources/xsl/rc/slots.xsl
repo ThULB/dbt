@@ -53,13 +53,17 @@
   </xsl:template>
 
   <xsl:template mode="dataTableRow" match="slot">
-    <xsl:if test="$hasAdminPermission">
+    <xsl:if test="$hasAdminPermission" xmlns:encoder="xalan://java.net.URLEncoder">
       <col align="center" valign="top">
         <div class="btn-group btn-group-xs">
-          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={$RequestURL}" title="{i18n:translate('component.rc.slot.edit')}">
+          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+            title="{i18n:translate('component.rc.slot.edit')}"
+          >
             <span class="glyphicon glyphicon-pencil" />
           </a>
-          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={$RequestURL}" title="{i18n:translate('component.rc.slot.edit.accesskeys')}">
+          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+            title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
+          >
             <span class="glyphicon glyphicon-lock" />
           </a>
         </div>
