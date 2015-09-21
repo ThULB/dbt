@@ -27,6 +27,9 @@
 
   <xsl:template mode="dataTableHeader" match="slots">
     <xsl:if test="$hasAdminPermission">
+      <col align="center" width="5%">
+        <xsl:value-of select="i18n:translate('component.rc.slot.actions')" />
+      </col>
       <col sortBy="slotId" sortOrder="asc" width="10%">
         <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
       </col>
@@ -51,6 +54,16 @@
 
   <xsl:template mode="dataTableRow" match="slot">
     <xsl:if test="$hasAdminPermission">
+      <col align="center" valign="top">
+        <div class="btn-group btn-group-xs">
+          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={$RequestURL}" title="{i18n:translate('component.rc.slot.edit')}">
+            <span class="glyphicon glyphicon-pencil" />
+          </a>
+          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={$RequestURL}" title="{i18n:translate('component.rc.slot.edit.accesskeys')}">
+            <span class="glyphicon glyphicon-lock" />
+          </a>
+        </div>
+      </col>
       <col align="center" valign="top">
         <a href="{$WebApplicationBaseURL}rc/{@id}">
           <xsl:value-of select="@id" />
