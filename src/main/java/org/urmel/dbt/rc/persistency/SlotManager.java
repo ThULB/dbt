@@ -448,7 +448,7 @@ public final class SlotManager {
     /**
      * Returns a filtered and sorted {@link SlotList}.
      * 
-     * @param search the filter string
+     * @param search the search string
      * @param sortBy the field to sort
      * @param sortOrder the sort order
      * @return the slot list
@@ -460,6 +460,17 @@ public final class SlotManager {
         return getFilteredSlotList(search, null, sortBy, sortOrder);
     }
 
+    /**
+     * Returns a filtered and sorted {@link SlotList}.
+     * 
+     * @param search the search string
+     * @param filter the extra filter
+     * @param sortBy the field to sort
+     * @param sortOrder the sort order
+     * @return the slot list
+     * @throws IOException
+     * @throws SolrServerException
+     */
     public SlotList getFilteredSlotList(final String search, final String filter, final String sortBy,
             final String sortOrder) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
