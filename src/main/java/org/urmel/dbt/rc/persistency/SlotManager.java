@@ -30,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -444,7 +445,8 @@ public final class SlotManager {
         return slotList;
     }
 
-    public SlotList getFilteredSlotList(final String filter) throws IOException, SolrServerException {
+    public SlotList getFilteredSlotList(final String filter, final String sortBy, final String sortOrder)
+            throws IOException, SolrServerException {
         final SlotList slotList = new SlotList();
 
         final SolrClient client = new HttpSolrClient(
@@ -453,10 +455,15 @@ public final class SlotManager {
         final SolrQuery query = new SolrQuery();
         final String filterStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter%"
                 .replace("%filter%", filter);
-        
+
         query.setQuery(filterStr);
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE);
         query.setFields("slotId");
+
+        if (sortBy != null && sortOrder != null) {
+            query.setSort(sortBy, ORDER.valueOf(sortOrder));
+        }
+
         query.setStart(0);
 
         final QueryResponse response = client.query(query);

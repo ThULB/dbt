@@ -27,24 +27,24 @@
 
   <xsl:template mode="dataTableHeader" match="slots">
     <xsl:if test="$hasAdminPermission">
-      <col sortBy="id" sortOrder="asc" width="10%">
+      <col sortBy="slotId" sortOrder="asc" width="10%">
         <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
       </col>
     </xsl:if>
     <col width="25%">
       <xsl:if test="not($hasAdminPermission)">
-        <xsl:attribute name="sortBy">id</xsl:attribute>
+        <xsl:attribute name="sortBy">slotId</xsl:attribute>
         <xsl:attribute name="sortOrder">asc</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
-    <col sortBy="validTo" width="15%">
+    <col sortBy="slot.validTo" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
     </col>
-    <col sortBy="name" width="15%">
+    <col sortBy="slot.lecturers" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
-    <col sortBy="title" width="*">
+    <col sortBy="slot.title" width="*">
       <xsl:value-of select="i18n:translate('component.rc.slot.title')" />
     </col>
   </xsl:template>

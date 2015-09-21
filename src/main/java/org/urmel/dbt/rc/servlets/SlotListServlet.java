@@ -184,9 +184,12 @@ public class SlotListServlet extends MCRServlet {
                 return;
             }
 
-            final String filter = req.getParameter("Filter");
-            final SlotList slotList = filter != null && !filter.isEmpty() ? SLOT_MGR.getFilteredSlotList(filter)
-                    : SLOT_MGR.getSlotList();
+            String filter = req.getParameter("Filter");
+            filter = filter != null && !filter.isEmpty() ? filter : "*";
+            final String sortBy = req.getParameter("SortBy");
+            final String sortOrder = req.getParameter("SortOrder");
+
+            final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter, sortBy, sortOrder);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(
