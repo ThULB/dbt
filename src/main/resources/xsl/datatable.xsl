@@ -215,12 +215,12 @@
                 <label>
                   <xsl:value-of select="i18n:translate(concat($i18nprefix, '.search'))" />
                   <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                  <input class="form-control input-sm" type="text" name="Filter">
+                  <input class="form-control input-sm" type="search" name="Filter">
                     <xsl:attribute name="value">
-                  <xsl:if test="string-length($Filter) &gt; 0">
-                    <xsl:value-of select="$Filter" />
-                  </xsl:if>
-                </xsl:attribute>
+                      <xsl:if test="string-length($Filter) &gt; 0">
+                        <xsl:value-of select="$Filter" />
+                      </xsl:if>
+                    </xsl:attribute>
                   </input>
                 </label>
               </div>
