@@ -186,13 +186,19 @@ public class SlotListServlet extends MCRServlet {
             }
 
             final String filter = req.getParameter("Filter");
+            final String page = req.getParameter("Page");
+            final String numPerPage = req.getParameter("numPerPage");
             final String sortBy = req.getParameter("SortBy");
             final String sortOrder = req.getParameter("SortOrder");
+
+            final Integer start = page != null && numPerPage != null
+                    ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage) : 0;
+            final Integer rows = numPerPage != null ? Integer.parseInt(numPerPage) : null;
 
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
                     !SlotManager.hasAdminPermission() ? "slot.status:active or createdby:"
                             + MCRSessionMgr.getCurrentSession().getUserInformation().getUserID() : null,
-                    sortBy, sortOrder);
+                    start, rows, sortBy, sortOrder);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));

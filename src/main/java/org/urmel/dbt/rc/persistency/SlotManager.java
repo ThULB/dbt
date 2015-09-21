@@ -449,30 +449,17 @@ public final class SlotManager {
      * Returns a filtered and sorted {@link SlotList}.
      * 
      * @param search the search string
-     * @param sortBy the field to sort
-     * @param sortOrder the sort order
-     * @return the slot list
-     * @throws IOException
-     * @throws SolrServerException
-     */
-    public SlotList getFilteredSlotList(final String search, final String sortBy, final String sortOrder)
-            throws IOException, SolrServerException {
-        return getFilteredSlotList(search, null, sortBy, sortOrder);
-    }
-
-    /**
-     * Returns a filtered and sorted {@link SlotList}.
-     * 
-     * @param search the search string
      * @param filter the extra filter
+     * @param start the start position
+     * @param rows the number of rows to return
      * @param sortBy the field to sort
      * @param sortOrder the sort order
      * @return the slot list
      * @throws IOException
      * @throws SolrServerException
      */
-    public SlotList getFilteredSlotList(final String search, final String filter, final String sortBy,
-            final String sortOrder) throws SolrServerException, IOException {
+    public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
+            final String sortBy, final String sortOrder) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
         final SolrClient client = new HttpSolrClient(
@@ -493,7 +480,8 @@ public final class SlotManager {
             query.setSort("slotId", ORDER.asc);
         }
 
-        query.setStart(0);
+        query.setStart(start);
+        query.setRows(rows);
 
         final QueryResponse response = client.query(query);
 
@@ -506,6 +494,7 @@ public final class SlotManager {
                 }
             }
         }
+        slotList.setTotal(results.getNumFound());
 
         client.close();
 

@@ -26,6 +26,8 @@ public class SlotList implements Serializable {
 
     private List<Slot> slots = new ArrayList<Slot>();
 
+    private Long total;
+
     /**
      * @return the slots
      */
@@ -72,9 +74,13 @@ public class SlotList implements Serializable {
         slots.remove(slot);
     }
 
-    @XmlAttribute(name="total")
-    int getTotal() {
-        return slots.size();
+    @XmlAttribute(name = "total")
+    public long getTotal() {
+        return total != null ? total : slots.size();
+    }
+
+    public void setTotal(final Long total) {
+        this.total = total;
     }
 
     /**
@@ -100,6 +106,7 @@ public class SlotList implements Serializable {
      */
     public SlotList getBasicSlots() {
         final SlotList slotList = new SlotList();
+        slotList.total = this.total;
 
         for (Slot slot : slots) {
             slotList.addSlot(slot.getBasicCopy());
