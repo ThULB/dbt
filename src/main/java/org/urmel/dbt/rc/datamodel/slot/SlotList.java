@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -66,9 +67,14 @@ public class SlotList implements Serializable {
 
         throw new IllegalArgumentException("Couldn't find Slot with id \"" + slot.getSlotId() + "\"!");
     }
-    
+
     public void removeSlot(final Slot slot) {
         slots.remove(slot);
+    }
+
+    @XmlAttribute(name="total")
+    int getTotal() {
+        return slots.size();
     }
 
     /**

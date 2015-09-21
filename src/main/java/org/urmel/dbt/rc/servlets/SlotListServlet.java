@@ -35,6 +35,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
@@ -188,11 +189,13 @@ public class SlotListServlet extends MCRServlet {
             final String sortBy = req.getParameter("SortBy");
             final String sortOrder = req.getParameter("SortOrder");
 
-            final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter, sortBy, sortOrder);
+            final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
+                    !SlotManager.hasAdminPermission() ? "slot.status:active or createdby:"
+                            + MCRSessionMgr.getCurrentSession().getUserInformation().getUserID() : null,
+                    sortBy, sortOrder);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(
-                            SlotManager.hasAdminPermission() ? slotList.getBasicSlots() : slotList.getActiveSlots())));
+                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
         }
     }
 }

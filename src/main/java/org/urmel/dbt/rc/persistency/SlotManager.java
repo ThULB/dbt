@@ -448,26 +448,32 @@ public final class SlotManager {
     /**
      * Returns a filtered and sorted {@link SlotList}.
      * 
-     * @param filter the filter string
+     * @param search the filter string
      * @param sortBy the field to sort
      * @param sortOrder the sort order
      * @return the slot list
      * @throws IOException
      * @throws SolrServerException
      */
-    public SlotList getFilteredSlotList(final String filter, final String sortBy, final String sortOrder)
+    public SlotList getFilteredSlotList(final String search, final String sortBy, final String sortOrder)
             throws IOException, SolrServerException {
+        return getFilteredSlotList(search, null, sortBy, sortOrder);
+    }
+
+    public SlotList getFilteredSlotList(final String search, final String filter, final String sortBy,
+            final String sortOrder) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
         final SolrClient client = new HttpSolrClient(
                 MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL"));
 
         final SolrQuery query = new SolrQuery();
-        final String filterStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter%"
-                .replace("%filter%", filter != null && !filter.isEmpty() ? filter : "*");
+        final String searchStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter%"
+                .replace("%filter%", search != null && !search.isEmpty() ? search : "*");
 
-        query.setQuery(filterStr);
-        query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE);
+        query.setQuery(searchStr);
+        query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE,
+                filter != null && !filter.isEmpty() ? filter : "");
         query.setFields("slotId");
 
         if (sortBy != null && sortOrder != null) {
@@ -494,4 +500,5 @@ public final class SlotManager {
 
         return slotList;
     }
+
 }
