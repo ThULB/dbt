@@ -444,24 +444,6 @@ public final class SlotManager {
         return slotList;
     }
 
-    /**
-     * Returns a {@link SlotList} without entries.
-     * 
-     * @return the {@link SlotList}
-     */
-    public SlotList getBasicSlotList() {
-        return slotList.getBasicSlots();
-    }
-
-    /**
-     * Returns a {@link SlotList} with only active {@link Slot}s.
-     * 
-     * @return the {@link SlotList}
-     */
-    public SlotList getActiveSlotList() {
-        return slotList.getActiveSlots();
-    }
-
     public SlotList getFilteredSlotList(final String filter) throws IOException, SolrServerException {
         final SlotList slotList = new SlotList();
 

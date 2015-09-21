@@ -216,7 +216,7 @@ public class TestSlot extends MCRHibTestCase {
 
         assertEquals(2, SLOT_MANAGER.getSlotList().getSlots().size());
 
-        SlotList activeSlots = SLOT_MANAGER.getActiveSlotList();
+        SlotList activeSlots = SLOT_MANAGER.getSlotList().getActiveSlots();
 
         assertEquals(1, activeSlots.getSlots().size());
         assertNull(activeSlots.getSlots().get(0).getEntries());
