@@ -371,6 +371,12 @@
             <xsl:variable name="row">
               <xsl:apply-templates mode="dataTableRow" select="." />
             </xsl:variable>
+            <!-- extra css class for row -->
+            <xsl:if test="xalan:nodeset($row)/class">
+              <xsl:attribute name="class">
+                <xsl:value-of select="concat($trClass, ' ', xalan:nodeset($row)/class)" />
+              </xsl:attribute>
+            </xsl:if>
             <xsl:for-each select="xalan:nodeset($row)/col|xalan:nodeset($row)/td">
               <xsl:variable name="tdClass">
                 <xsl:if test="$sortedCol = position()">
