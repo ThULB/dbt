@@ -54,6 +54,16 @@
 
   <xsl:template mode="dataTableRow" match="slot">
     <xsl:if test="$hasAdminPermission" xmlns:encoder="xalan://java.net.URLEncoder">
+      <class>
+        <xsl:choose>
+          <xsl:when test="@status = 'pending'">
+            <xsl:value-of select="concat('slot-', @status, '-', @pendingStatus)" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('slot-', @status)" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </class>
       <col align="center" valign="top">
         <div class="btn-group btn-group-xs">
           <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
