@@ -106,9 +106,22 @@ public class RCCommands extends MCRAbstractCommands {
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                                     break;
                                 case FREE:
-                                    LOGGER.info("...delete slot. (TODO");
+                                    LOGGER.info("...delete slot.");
+
+                                    mgr.delete(slot);
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                    evt.put(SlotManager.SLOT_TYPE, slot);
+                                    MCREventManager.instance().handleEvent(evt);
+                                    continue;
                                 case RESERVED:
-                                    LOGGER.info("...empty slot. (TODO");
+                                    LOGGER.info("...empty slot.");
+
+                                    slot.setStatus(Status.RESERVED);
+                                    slot.getEntries().clear();
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                    break;
                                 case VALIDATING:
                                 default:
                                     save = false;
