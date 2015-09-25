@@ -474,7 +474,7 @@ public final class SlotManager {
                 filter != null && !filter.isEmpty() ? filter : "");
         query.setFields("slotId");
 
-        if (sortBy != null && sortOrder != null) {
+        if (sortBy != null && !sortBy.isEmpty() && sortOrder != null && !sortOrder.isEmpty()) {
             query.setSort(sortBy, ORDER.valueOf(sortOrder));
         } else {
             query.setSort("slotId", ORDER.asc);
