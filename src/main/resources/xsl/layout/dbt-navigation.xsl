@@ -160,19 +160,16 @@
           <xsl:when test="count($currentItem/ancestor-or-self::*[name() != 'group']) != 0">
             <xsl:apply-templates select="$currentItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
               <xsl:with-param name="navigation" select="$navigation" />
-              <xsl:with-param name="currentAddress" select="$currentAddress" />
             </xsl:apply-templates>
           </xsl:when>
           <xsl:when test="count($prevItem/ancestor-or-self::*) != 0">
             <xsl:apply-templates select="$prevItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
               <xsl:with-param name="navigation" select="$navigation" />
-              <xsl:with-param name="currentAddress" select="$currentAddress" />
             </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
             <xsl:apply-templates select="$referItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
               <xsl:with-param name="navigation" select="$navigation" />
-              <xsl:with-param name="currentAddress" select="$currentAddress" />
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
@@ -182,7 +179,6 @@
 
   <xsl:template match="*" mode="breadcrumbItem">
     <xsl:param name="navigation" />
-    <xsl:param name="currentAddress" />
 
     <xsl:variable name="href">
       <xsl:variable name="url">
@@ -210,7 +206,7 @@
 
     <li>
       <xsl:choose>
-        <xsl:when test="@href = $currentAddress">
+        <xsl:when test="(concat($WebApplicationBaseURL, substring-after(@href,'/')) = $RequestURL) or (concat($WebApplicationBaseURL, @href) = $RequestURL)">
           <xsl:attribute name="class">active</xsl:attribute>
           <xsl:value-of select="./label[lang($CurrentLang)]" />
         </xsl:when>
