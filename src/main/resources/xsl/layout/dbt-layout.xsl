@@ -388,6 +388,9 @@
       <a name="All" />
       <div class="container">
         <div id="main">
+          <xsl:call-template name="navigation.breadcrumbPath">
+            <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
+          </xsl:call-template>
 <!--         <xsl:call-template name="layout.breadcrumbPath" /> -->
 <!--           <xsl:call-template name="action.buttons" /> -->
 

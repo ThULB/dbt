@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:decoder="xalan://java.net.URLDecoder">
+
+  <xsl:param name="Referer" />
 
   <xsl:template match="/navigation//label">
   </xsl:template>
-  
+
   <xsl:template match="/navigation//menu[@id and (group[item] or item)]">
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
     <xsl:variable name="menuId" select="generate-id(.)" />
@@ -22,7 +24,7 @@
       </ul>
     </li>
   </xsl:template>
-  
+
   <xsl:template match="/navigation//group[@id and item]">
     <xsl:param name="rootNode" select="." />
     <xsl:if test="name(preceding-sibling::*[1])='item'">
@@ -53,7 +55,7 @@
       </xsl:choose>
     </xsl:param>
     <xsl:choose>
-      <xsl:when test="string-length($url ) &gt; 0">
+      <xsl:when test="string-length($url) &gt; 0">
         <li>
           <xsl:if test="$active">
             <xsl:attribute name="class">
@@ -82,5 +84,150 @@
         <xsl:value-of select="label[lang($DefaultLang)]" />
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="navigation.breadcrumbPath">
+    <xsl:param name="navigation" />
+
+    <xsl:variable name="referAddress">
+      <xsl:variable name="URLParam">
+        <xsl:call-template name="UrlGetParam">
+          <xsl:with-param name="url" select="$Referer" />
+          <xsl:with-param name="par" select="'url'" />
+        </xsl:call-template>
+      </xsl:variable>
+      <xsl:message>
+        URLParam:
+        <xsl:value-of select="decoder:decode(string($URLParam),'UTF-8')" />
+      </xsl:message>
+      <xsl:variable name="address">
+        <xsl:choose>
+          <xsl:when test="string-length($URLParam) &gt; 0">
+            <xsl:value-of select="concat('/', substring-after(decoder:decode(string($URLParam),'UTF-8'), $WebApplicationBaseURL))" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="concat('/', substring-after($Referer, $WebApplicationBaseURL))" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="contains($address, '?')">
+          <xsl:value-of select="substring-before($address, '?')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$address" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="currentAddress">
+      <xsl:variable name="address" select="concat('/', substring-after($RequestURL, $WebApplicationBaseURL))" />
+      <xsl:choose>
+        <xsl:when test="contains($address, '?')">
+          <xsl:value-of select="substring-before($address, '?')" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$address" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="referItem" select="$navigation/descendant-or-self::item[starts-with(@href, $referAddress)]" />
+    <xsl:variable name="prevItem"
+      select="$navigation/descendant-or-self::item[starts-with($currentAddress, @href)]|$navigation/descendant-or-self::item[starts-with($referAddress, @href)]" />
+    <xsl:variable name="currentItem" select="$navigation/descendant-or-self::item[starts-with(@href, $currentAddress)]" />
+
+    <xsl:message>
+      RequestURL:
+      <xsl:value-of select="$RequestURL" />
+      Referer:
+      <xsl:value-of select="$Referer" />
+      currentAddress:
+      <xsl:value-of select="$currentAddress" />
+      referAddress:
+      <xsl:value-of select="$referAddress" />
+      referItem:
+      <xsl:value-of select="$referItem" />
+      prevItem:
+      <xsl:value-of select="$prevItem" />
+      currentItem:
+      <xsl:value-of select="$currentItem" />
+    </xsl:message>
+
+    <xsl:if test="$currentAddress != $navigation/@hrefStartingPage">
+      <ol class="breadcrumb">
+        <xsl:choose>
+          <xsl:when test="count($currentItem/ancestor-or-self::*[name() != 'group']) != 0">
+            <xsl:apply-templates select="$currentItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
+              <xsl:with-param name="navigation" select="$navigation" />
+              <xsl:with-param name="currentAddress" select="$currentAddress" />
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:when test="count($prevItem/ancestor-or-self::*) != 0">
+            <xsl:apply-templates select="$prevItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
+              <xsl:with-param name="navigation" select="$navigation" />
+              <xsl:with-param name="currentAddress" select="$currentAddress" />
+            </xsl:apply-templates>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="$referItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
+              <xsl:with-param name="navigation" select="$navigation" />
+              <xsl:with-param name="currentAddress" select="$currentAddress" />
+            </xsl:apply-templates>
+          </xsl:otherwise>
+        </xsl:choose>
+      </ol>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="*" mode="breadcrumbItem">
+    <xsl:param name="navigation" />
+    <xsl:param name="currentAddress" />
+
+    <xsl:variable name="href">
+      <xsl:variable name="url">
+        <xsl:choose>
+          <xsl:when test="name(.) = 'navigation'">
+            <xsl:value-of select="@hrefStartingPage" />
+          </xsl:when>
+          <xsl:when test="string-length(@href) &gt; 0">
+            <xsl:value-of select="@href" />
+          </xsl:when>
+        </xsl:choose>
+      </xsl:variable>
+      <xsl:choose>
+        <xsl:when test="string-length($url) != 0 and starts-with($url, '/')">
+          <xsl:value-of select="concat($WebApplicationBaseURL, substring-after($url, '/'))" />
+        </xsl:when>
+        <xsl:when test="string-length($url) != 0">
+          <xsl:value-of select="concat($WebApplicationBaseURL, $url)" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="'#'" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <li>
+      <xsl:choose>
+        <xsl:when test="@href = $currentAddress">
+          <xsl:attribute name="class">active</xsl:attribute>
+          <xsl:value-of select="./label[lang($CurrentLang)]" />
+        </xsl:when>
+        <xsl:otherwise>
+          <a href="{$href}">
+            <xsl:choose>
+              <xsl:when test="name(.) = 'navigation'">
+                <xsl:variable name="hrefStartingPage" select="@hrefStartingPage" />
+                <xsl:value-of select="$navigation//item[@href=$hrefStartingPage]/label[lang($CurrentLang)]" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="./label[lang($CurrentLang)]" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </a>
+        </xsl:otherwise>
+      </xsl:choose>
+    </li>
   </xsl:template>
 </xsl:stylesheet>

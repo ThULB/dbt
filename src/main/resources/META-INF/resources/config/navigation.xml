@@ -81,7 +81,7 @@
   <menu id="rc">
     <label xml:lang="de">Semesterapparate</label>
     <label xml:lang="en">Reserve Collections</label>
-    <item href="/rc" type="extern">
+    <item href="/rc" type="intern">
       <label xml:lang="de">Aktuelle Liste</label>
       <label xml:lang="en">Current list</label>
     </item>
