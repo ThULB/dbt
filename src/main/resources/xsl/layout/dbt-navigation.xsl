@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:decoder="xalan://java.net.URLDecoder">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:decoder="xalan://java.net.URLDecoder"
+  exclude-result-prefixes="xalan decoder"
+>
 
   <xsl:param name="Referer" />
 
@@ -7,15 +9,15 @@
   </xsl:template>
 
   <xsl:template match="/navigation//menu[@id and (group[item] or item)]">
-    <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
+    <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress]" />
     <xsl:variable name="menuId" select="generate-id(.)" />
     <li class="dropdown">
       <xsl:if test="$active">
         <xsl:attribute name="class">
-          <xsl:value-of select="'active'" />
+          <xsl:value-of select="'dropdown active'" />
         </xsl:attribute>
       </xsl:if>
-      <a id="{$menuId}" class="dropdown-toggle" href="#">
+      <a id="{$menuId}" class="dropdown-toggle" data-toggle="dropdown" href="#">
         <xsl:apply-templates select="." mode="linkText" />
         <span class="caret"></span>
       </a>
@@ -85,6 +87,10 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+  
+  <!-- ************************************************************ -->
+  <!-- * Breadcrumb Path -->
+  <!-- ************************************************************ -->
 
   <xsl:template name="navigation.breadcrumbPath">
     <xsl:param name="navigation" />
@@ -154,7 +160,9 @@
       <xsl:value-of select="$currentItem" />
     </xsl:message>
 
-    <xsl:if test="$currentAddress != $navigation/@hrefStartingPage">
+    <xsl:if
+      test="$currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*) != 0 or count($prevItem/ancestor-or-self::*) != 0 or count($currentItem/ancestor-or-self::*) != 0)"
+    >
       <ol class="breadcrumb">
         <xsl:choose>
           <xsl:when test="count($currentItem/ancestor-or-self::*[name() != 'group']) != 0">
@@ -173,6 +181,21 @@
             </xsl:apply-templates>
           </xsl:otherwise>
         </xsl:choose>
+        <xsl:if test="count($prevItem/ancestor-or-self::*) != 0 and count($currentItem/ancestor-or-self::*) = 0">
+          <xsl:variable name="activeItem">
+            <item href="{concat('/', substring-after($RequestURL, $WebApplicationBaseURL))}">
+              <label xml:lang="{$CurrentLang}">
+                <xsl:call-template name="ShortenText">
+                  <xsl:with-param name="text" select="$PageTitle" />
+                  <xsl:with-param name="length" select="22" />
+                </xsl:call-template>
+              </label>
+            </item>
+          </xsl:variable>
+          <xsl:apply-templates select="xalan:nodeset($activeItem)" mode="breadcrumbItem">
+            <xsl:with-param name="navigation" select="$navigation" />
+          </xsl:apply-templates>
+        </xsl:if>
       </ol>
     </xsl:if>
   </xsl:template>
@@ -204,13 +227,18 @@
       </xsl:choose>
     </xsl:variable>
 
-    <li>
-      <xsl:choose>
-        <xsl:when test="(concat($WebApplicationBaseURL, substring-after(@href,'/')) = $RequestURL) or (concat($WebApplicationBaseURL, @href) = $RequestURL)">
-          <xsl:attribute name="class">active</xsl:attribute>
+
+    <xsl:choose>
+      <xsl:when test="(concat($WebApplicationBaseURL, substring-after(@href,'/')) = $RequestURL) or (concat($WebApplicationBaseURL, @href) = $RequestURL)">
+        <li class="active">
           <xsl:value-of select="./label[lang($CurrentLang)]" />
-        </xsl:when>
-        <xsl:otherwise>
+        </li>
+      </xsl:when>
+      <xsl:when test="name(.) = 'menu'">
+        <xsl:apply-templates select="." />
+      </xsl:when>
+      <xsl:otherwise>
+        <li>
           <a href="{$href}">
             <xsl:choose>
               <xsl:when test="name(.) = 'navigation'">
@@ -222,8 +250,8 @@
               </xsl:otherwise>
             </xsl:choose>
           </a>
-        </xsl:otherwise>
-      </xsl:choose>
-    </li>
+        </li>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 </xsl:stylesheet>

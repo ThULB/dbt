@@ -59,9 +59,6 @@ module.exports = function(grunt) {
 					'summernote/lang' : 'summernote/lang',
 					'summernote' : [ 'summernote/dist/*.min.*', 'summernote/dist/*.css' ],
 
-					'smartmenus/addons' : 'smartmenus/dist/addons',
-					'smartmenus/' : 'smartmenus/dist/*.min.*',
-
 					'jquery/plugins' : 'jquery-sortable/source/js/*min.js',
 				},
 			}
