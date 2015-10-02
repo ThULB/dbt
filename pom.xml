@@ -14,6 +14,7 @@
     <template.cssdir>${project.build.directory}/classes/META-INF/resources/dbt/css</template.cssdir>
     <template.assetsdir>${project.build.directory}/classes/META-INF/resources/dbt/assets</template.assetsdir>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
+    <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <forbiddenapis.skip>false</forbiddenapis.skip>
   </properties>
   <build>
@@ -72,25 +73,42 @@
       <plugin>
         <groupId>pl.allegro</groupId>
         <artifactId>grunt-maven-plugin</artifactId>
-        <configuration>
-          <gruntBuildDirectory>${grunt.projectBase}</gruntBuildDirectory>
-          <ignoreTasksErrors>false</ignoreTasksErrors>
-          <ignoreAllErrors>false</ignoreAllErrors>
-          <gruntOptions>
-            <gruntOption>--verbose</gruntOption>
-            <gruntOption>--lessFile ${basedir}/src/main/less/build.less</gruntOption>
-            <gruntOption>--targetDirectory ${template.cssdir}</gruntOption>
-            <gruntOption>--assetsDirectory ${template.assetsdir}</gruntOption>
-          </gruntOptions>
-        </configuration>
         <executions>
           <execution>
+            <id>webapp</id>
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
               <goal>bower</goal>
               <goal>grunt</goal>
             </goals>
+            <configuration>
+              <gruntBuildDirectory>${grunt.projectBase}</gruntBuildDirectory>
+              <ignoreTasksErrors>false</ignoreTasksErrors>
+              <ignoreAllErrors>false</ignoreAllErrors>
+              <gruntOptions>
+                <gruntOption>--verbose</gruntOption>
+                <gruntOption>--lessFile ${basedir}/src/main/less/build.less</gruntOption>
+                <gruntOption>--targetDirectory ${template.cssdir}</gruntOption>
+                <gruntOption>--assetsDirectory ${template.assetsdir}</gruntOption>
+              </gruntOptions>
+            </configuration>
+          </execution>
+          <execution>
+            <id>rcclient</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>npm</goal>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <gruntBuildDirectory>${rcclient.projectBase}</gruntBuildDirectory>
+              <ignoreTasksErrors>false</ignoreTasksErrors>
+              <ignoreAllErrors>false</ignoreAllErrors>
+              <gruntOptions>
+                <gruntOption>--verbose</gruntOption>
+              </gruntOptions>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -110,6 +128,22 @@
                 <resource>
                   <filtering>true</filtering>
                   <directory>${basedir}/src/main/grunt</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>rcclient-resources</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${rcclient.projectBase}</outputDirectory>
+              <resources>
+                <resource>
+                  <filtering>true</filtering>
+                  <directory>${basedir}/src/main/rcclient</directory>
                 </resource>
               </resources>
             </configuration>

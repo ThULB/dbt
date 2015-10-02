@@ -4,16 +4,8 @@ module.exports = function(grunt) {
 		pkg : grunt.file.readJSON('package.json'),
 		clean : {
 			build : {
-				src : [ "build" ]
+				src : [ "build", "dist" ]
 			},
-		},
-		bower : {
-			install : {
-				options : {
-					targetDir : 'build/lib',
-					layout : 'byComponent'
-				}
-			}
 		},
 		tsd : {
 			refresh : {
@@ -59,11 +51,17 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		/*
-		 * less : { build : { options : { paths : [ "less" ], cleancss : true },
-		 * files : { "build/www/css/<%= pkg.name %>.css" : "src/main/less/<%=
-		 * pkg.name %>.less" } } },
-		 */
+		less : {
+			build : {
+				options : {
+					paths : [ "less" ],
+					cleancss : true
+				},
+				files : {
+					"build/<%= pkg.name %>/chrome/content/<%= pkg.name %>..css" : [ 'less/build.less' ]
+				}
+			}
+		},
 		copy : {
 			build : {
 				expand : true,
@@ -72,10 +70,23 @@ module.exports = function(grunt) {
 				dest : 'build/<%= pkg.name %>'
 			},
 		},
+		compress : {
+			main : {
+				options : {
+					archive : 'dist/<%= pkg.name %>.zip'
+				},
+				files : [ {
+					expand : true,
+					cwd : 'build/<%= pkg.name %>',
+					src : [ '**/*' ],
+					dest : ''
+				} ]
+			}
+		},
 		watch : {
 			scripts : {
-				files : [ 'typescript/**/*.ts', 'less/**/*.less' ],
-				tasks : [ 'typescript', 'concat'/* , 'less' */, 'copy:build' ],
+				files : [ 'resources/**/*.xul', 'typescript/**/*.ts', 'less/**/*.less' ],
+				tasks : [ 'typescript', 'concat', 'less', 'copy:build' ],
 				options : {
 					spawn : false,
 				},
@@ -85,15 +96,18 @@ module.exports = function(grunt) {
 
 	// Build Tasks
 	grunt.loadNpmTasks('grunt-contrib-clean');
+	grunt.loadNpmTasks('grunt-contrib-compress');
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
-	// grunt.loadNpmTasks('grunt-contrib-less');
+	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-bower-task');
 	grunt.loadNpmTasks('grunt-tsd');
 	grunt.loadNpmTasks('grunt-typescript');
 
 	// Build task(s).
-	grunt.registerTask('build', [ 'bower', 'typescript', 'uglify', 'copy:build' ]);
+	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build' ]);
+
+	// Default task
+	grunt.registerTask('default', [ 'clean', 'build', 'compress' ]);
 };
