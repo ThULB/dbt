@@ -13,7 +13,7 @@ class IBWRCClient {
     onSlotListLoaded(delegate: rc.Client) {
         var slots: Array<rc.Slot> = delegate.getSlots();
 
-        var mlRC: XULElement = <XULElement>document.getElementById("mlESA");
+        var mlRC: XULMenuListElement = <any>document.getElementById("mlESA");
 
         mlRC.removeAllItems();
 

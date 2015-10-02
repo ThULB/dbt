@@ -274,3 +274,28 @@ interface nsIFile extends nsISupports {
     reveal();
     setRelativeDescriptor(fromFile: nsIFile, relativeDesc: string);
 }
+
+interface nsIBoxObject extends nsISupports {
+    element: Element;
+    parentBox: Element;
+    firstChild: Element;
+    lastChild: Element;
+    nextSibling: Element;
+    previousSibling: Element;
+    x: number;
+    y: number;
+    screenX: number;
+    screenY: number;
+    width: number;
+    height: number;
+
+    getPropertyAsSupports(propertyName: string): nsISupports;
+    setPropertyAsSupports(propertyName: string, value: nsISupports);
+    getProperty(propertyName: string): string;
+    setProperty(propertyName: string, propertyValue: string);
+    removeProperty(propertyName: string);
+}
+
+interface nsIObserver extends nsISupports {
+    observe(aSubject: nsISupports, aTopic: string, aData: string);
+}
