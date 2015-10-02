@@ -7,17 +7,6 @@ module.exports = function(grunt) {
 				src : [ "build", "dist" ]
 			},
 		},
-		tsd : {
-			refresh : {
-				options : {
-					command : 'reinstall',
-					latest : true,
-					overwrite : true,
-					save : true,
-					config : 'tsd.json',
-				}
-			}
-		},
 		typescript : {
 			base : {
 				src : [ 'typescript/**/*.ts' ],
@@ -25,7 +14,7 @@ module.exports = function(grunt) {
 				options : {
 					module : 'commonjs', // or amd, commonjs
 					target : 'es3', // or es3
-					basePath : 'src',
+					rootDir : 'src',
 					sourceMap : true,
 					comments : true,
 					ignoreError : false,
@@ -36,7 +25,7 @@ module.exports = function(grunt) {
 		concat : {
 			debug : {
 				files : {
-					'build/<%= pkg.name %>/chrome/content/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
+					'build/<%= pkg.name %>/chrome/content/' : [ 'build/js/<%= pkg.name %>.js*' ]
 				},
 			}
 		},
@@ -58,7 +47,7 @@ module.exports = function(grunt) {
 					cleancss : true
 				},
 				files : {
-					"build/<%= pkg.name %>/chrome/content/<%= pkg.name %>..css" : [ 'less/build.less' ]
+					"build/<%= pkg.name %>/chrome/content/css/<%= pkg.name %>.css" : [ 'less/build.less' ]
 				}
 			}
 		},
@@ -102,7 +91,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-tsd');
 	grunt.loadNpmTasks('grunt-typescript');
 
 	// Build task(s).
