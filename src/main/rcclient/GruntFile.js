@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 		},
 		typescript : {
 			base : {
-				src : [ 'typescript/**/*.ts' ],
+				src : [ '<%= pkg.src %>/typescript/**/*.ts' ],
 				dest : 'build/js/<%= pkg.name %>.js',
 				options : {
 					module : 'commonjs', // or amd, commonjs
@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 		concat : {
 			debug : {
 				files : {
-					'build/<%= pkg.name %>/chrome/content/' : [ 'build/js/<%= pkg.name %>.js*' ]
+					'build/<%= pkg.name %>/chrome/content/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
 				},
 			}
 		},
@@ -47,14 +47,20 @@ module.exports = function(grunt) {
 					cleancss : true
 				},
 				files : {
-					"build/<%= pkg.name %>/chrome/content/css/<%= pkg.name %>.css" : [ 'less/build.less' ]
+					"build/<%= pkg.name %>/chrome/content/css/<%= pkg.name %>.css" : [ '<%= pkg.src %>/less/build.less' ]
 				}
 			}
 		},
 		copy : {
+			debug : {
+				expand : true,
+				cwd : 'build/',
+				src : '*.map',
+				dest : 'build/<%= pkg.name %>/chrome/content/'
+			},
 			build : {
 				expand : true,
-				cwd : 'resources/',
+				cwd : '<%= pkg.src %>/resources/',
 				src : '**',
 				dest : 'build/<%= pkg.name %>'
 			},
@@ -74,8 +80,8 @@ module.exports = function(grunt) {
 		},
 		watch : {
 			scripts : {
-				files : [ 'resources/**/*.xul', 'typescript/**/*.ts', 'less/**/*.less' ],
-				tasks : [ 'typescript', 'concat', 'less', 'copy:build' ],
+				files : [ '<%= pkg.src %>/resources/**/*.xul', '<%= pkg.src %>/typescript/**/*.ts', '<%= pkg.src %>/less/**/*.less' ],
+				tasks : [ 'typescript', 'concat', 'less', 'copy:debug', 'copy:build' ],
 				options : {
 					spawn : false,
 				},

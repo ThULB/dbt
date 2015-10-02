@@ -75,7 +75,7 @@
         <artifactId>grunt-maven-plugin</artifactId>
         <executions>
           <execution>
-            <id>webapp</id>
+            <id>grunt-webapp</id>
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
@@ -95,7 +95,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>rcclient</id>
+            <id>default-cli</id>
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
@@ -144,6 +144,10 @@
                 <resource>
                   <filtering>true</filtering>
                   <directory>${basedir}/src/main/rcclient</directory>
+                  <includes>
+                    <include>GruntFile.js</include>
+                    <include>package.json</include>
+                  </includes>
                 </resource>
               </resources>
             </configuration>

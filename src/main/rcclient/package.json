@@ -5,6 +5,8 @@
     "version" : "2.0.0",
     "author" : "René Adler (eagle)",
     "homepage" : "${project.url}",
+    
+    "src" : "${basedir}/src/main/rcclient",
   
     "repository": {
       "type": "svn",
