@@ -60,6 +60,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
 import org.tmatesoft.svn.core.SVNException;
 import org.urmel.dbt.rc.datamodel.Attendee;
@@ -467,7 +468,8 @@ public final class SlotManager {
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter% or slot.validTo:%filter%"
-                .replace("%filter%", search != null && !search.isEmpty() ? search : "*");
+                .replace("%filter%",
+                        search != null && !search.isEmpty() ? MCRSolrUtils.escapeSearchValue(search) : "*");
 
         query.setQuery(searchStr);
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE,
