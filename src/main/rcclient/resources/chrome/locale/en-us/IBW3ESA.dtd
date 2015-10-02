@@ -1,0 +1,33 @@
+<!ENTITY app.title	"Booking">
+
+<!ENTITY tabSingle.label "Single Copy">
+<!ENTITY tabSingle.accesskey "S">
+<!ENTITY tabMulti.label "Multiple Copys">
+<!ENTITY tabMulti.accesskey "M">
+
+<!ENTITY mOptions.label "Options">
+<!ENTITY mOptions.accesskey "O">
+<!ENTITY mOptions.Settings.label "Settings...">
+<!ENTITY mOptions.Settings.accesskey "s">
+
+<!ENTITY mHelp.label "?">
+<!ENTITY mHelp.accesskey "?">
+<!ENTITY mHelp.About.label "About">
+<!ENTITY mHelp.About.accesskey "b">
+
+<!ENTITY defaultValues.PleaseSelect "(please select)">
+
+<!ENTITY lblESA.label "ESA Number:">
+<!ENTITY lblPPN.label "Title/PPN:">
+<!ENTITY lblExp.label "Copy:">
+<!ENTITY lblSgn.label "Signature:">
+<!ENTITY lblLoc.label "Location:">
+<!ENTITY lblBundelEPN.label "EPN first unit:">
+
+<!ENTITY cbSgn.label "Change Signature">
+<!ENTITY cbPre.label "Present Copy">
+
+<!ENTITY btnUnRegister.label "Reverse">
+<!ENTITY btnUnRegister.accesskey "R">
+<!ENTITY btnRegister.label "Activate">
+<!ENTITY btnRegister.accesskey "A">

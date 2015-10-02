@@ -1,0 +1,34 @@
+<!ENTITY app.title	"Verbuchung auf Semesterapparat">
+
+<!ENTITY tabSingle.label "Einzelne Exemplare">
+<!ENTITY tabSingle.accesskey "E">
+<!ENTITY tabMulti.label "Mehrere Exemplare">
+<!ENTITY tabMulti.accesskey "M">
+
+<!ENTITY mOptions.label "Optionen">
+<!ENTITY mOptions.accesskey "O">
+<!ENTITY mOptions.Settings.label "Einstellungen...">
+<!ENTITY mOptions.Settings.accesskey "s">
+
+<!ENTITY mHelp.label "?">
+<!ENTITY mHelp.accesskey "?">
+<!ENTITY mHelp.About.label "Über IBW3ESA">
+<!ENTITY mHelp.About.accesskey "Ü">
+
+
+<!ENTITY defaultValues.PleaseSelect "(bitte wählen)">
+
+<!ENTITY lblESA.label "SemApp Nummer:">
+<!ENTITY lblPPN.label "Title/PPN:">
+<!ENTITY lblExp.label "Exemplar:">
+<!ENTITY lblSgn.label "Signatur:">
+<!ENTITY lblLoc.label "Standort:">
+<!ENTITY lblBundelEPN.label "EPN erster Band:">
+
+<!ENTITY cbSgn.label "Signatur ändern">
+<!ENTITY cbPre.label "Präsenzexemplar">
+
+<!ENTITY btnUnRegister.label "Aufheben">
+<!ENTITY btnUnRegister.accesskey "A">
+<!ENTITY btnRegister.label "Freischalten">
+<!ENTITY btnRegister.accesskey "F">

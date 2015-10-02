@@ -1,0 +1,7 @@
+<!ENTITY dlg.title	"Settings">
+
+<!ENTITY lblWebSrv.label "Web-Server URL:">
+<!ENTITY lblInd.label "Indicator:">
+
+<!ENTITY cbPre.label "Present Copy as default">
+<!ENTITY cbSgn.label "allow Signature changes">
