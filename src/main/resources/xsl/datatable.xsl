@@ -319,7 +319,7 @@
                     </xsl:call-template>
                   </xsl:attribute>
                   <xsl:value-of select="text()" />
-                  <span class="pull-right {$iconClass} sort-icon" />
+                  <span class="pull-left {$iconClass} sort-icon" />
                 </a>
               </xsl:when>
               <xsl:otherwise>
