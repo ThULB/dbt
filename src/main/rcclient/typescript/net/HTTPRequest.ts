@@ -14,21 +14,14 @@ module net {
         private mChannel: nsIChannel;
 
         private mCallbackClass: any;
-        private mCompleteCallback: (aData: any, aSuccess: boolean) => void;
-        private mProgressCallback: (aProgress: number, aProgressMax: number) => void;
+        private mCompleteCallback: (aClass: HTTPRequest, aData: any, aSuccess: boolean) => void;
+        private mProgressCallback: (aClass: HTTPRequest, aProgress: number, aProgressMax: number) => void;
 
         constructor(aURL: string, aMethod?: string, aData?: string, aCache?: boolean) {
-            this.mURL = aURL;
             this.mMethod = aMethod != null ? aMethod.toUpperCase() : HTTPRequest.METHOD_GET;
             this.mData = aData;
 
-            var ioService: nsIIOService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
-            var timestamp: string = "_timestamp=" + (new Date).getTime();
-
-            this.mURI = ioService.newURI(this.mURL +
-                (aCache == null || aCache == false ? (this.mURL.indexOf("?") != -1 ? "&" : "?") + timestamp : "")
-                , null, null);
-            this.mChannel = ioService.newChannelFromURI(this.mURI);
+            this.setURL(aURL);
 
             if (aCache == null || aCache == false) {
                 try {
@@ -38,6 +31,20 @@ module net {
                     // ignore Exception
                 }
             }
+        }
+
+        setURL(aURL: string) {
+            this.mURL = aURL;
+
+            var ioService: nsIIOService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
+            this.mURI = ioService.newURI(this.mURL, null, null);
+
+            this.mChannel = ioService.newChannelFromURI(this.mURI);
+            this.mChannel.contentCharset = "UTF-8";
+        }
+
+        getChannel(): nsIChannel {
+            return this.mChannel;
         }
 
         execute(aCallbackClass: any, aCompleteCallback, aProgressCallback?): void {
@@ -69,14 +76,14 @@ module net {
             var cbClass: any = aClass.mCallbackClass;
             var callback: Function = aClass.mCompleteCallback;
 
-            (callback != null) && callback.call(cbClass, aData, aSuccess);
+            (callback != null) && callback.call(cbClass, aClass, aData, aSuccess);
         }
 
         private onProgess(aClass: net.HTTPRequest, aProgress: number, aProgressMax: number): void {
             var cbClass: any = aClass.mCallbackClass;
-            var callback: Function = aClass.mCompleteCallback;
+            var callback: Function = aClass.mProgressCallback;
 
-            (callback != null) && callback.call(cbClass, aProgress, aProgressMax);
+            (callback != null) && callback.call(cbClass, aClass, aProgress, aProgressMax);
         }
     }
 

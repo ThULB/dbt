@@ -22,6 +22,16 @@ interface XULCommandDispatcher extends nsISupports {
     advanceFocusIntoSubtree(elt: Element);
 }
 
+interface XULCommandEvent extends Event {
+    ctrlKey: boolean;
+    shiftKey: boolean;
+    altKey: boolean;
+    metaKey: boolean;
+    sourceEvent: Event;
+
+    initCommandEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, ctrlKeyArg: boolean, altKeyArg: boolean, shiftKeyArg: boolean, metaKeyArg: boolean, sourceEvent: Event)
+}
+
 interface XULDocument extends nsISupports, Document {
     popupNode: Node;
     popupRangeParent: Node;

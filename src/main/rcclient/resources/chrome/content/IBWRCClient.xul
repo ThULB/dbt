@@ -1,4 +1,4 @@
-<?xml version="1.0"?> <!-- -*- Mode: HTML -*- -->
+<?xml version="1.0" encoding="UTF-8"?> <!-- -*- Mode: HTML -*- -->
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
 <?xml-stylesheet href="chrome://IBWRCClient/content/css/IBWRCClient.css" type="text/css"?>
 
@@ -37,7 +37,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&lblESA.label;" width="100" />
-                <menulist id="mlESA" width="300" oncommand="onSelESA()">
+                <menulist id="mlRC" width="300">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -90,7 +90,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&lblESA.label;" width="100" />
-                <menulist id="mlESABar" width="300" oncommand="onSelESABar()">
+                <menulist id="mlRCBar" width="300" oncommand="onSelESABar()">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>

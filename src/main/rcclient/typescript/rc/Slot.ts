@@ -15,11 +15,18 @@ module rc {
 
             slot.title = (<Text>elm.getElementsByTagName("title").item(0).firstChild).data;
 
+            slot.entries = new Array<Entry>();
+            var entries = elm.getElementsByTagName("entry");
+            for (var i = 0; i < entries.length; i++) {
+                var entry: Entry = Entry.parseEntry(<Element>entries.item(i));
+                (entry != null) && slot.entries.push(entry);
+            }
+
             return slot;
         }
 
         toString(): string {
-            return "Slot [id=" + this.id + ", " + this.status + ", eOnly=" + this.eOnly + ", title=" + this.title + "]";
+            return "Slot [id=" + this.id + ", status=" + this.status + ", eOnly=" + this.eOnly + ", title=" + this.title + ", numEntries=" + this.entries.length + "]";
         }
     }
 }

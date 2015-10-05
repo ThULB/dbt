@@ -299,3 +299,18 @@ interface nsIBoxObject extends nsISupports {
 interface nsIObserver extends nsISupports {
     observe(aSubject: nsISupports, aTopic: string, aData: string);
 }
+
+interface nsIStringBundle extends nsISupports {
+    formatStringFromID(aID: number, params: string, length: number): string;
+    formatStringFromName(aName: string, params: string, length: number): string;
+    getSimpleEnumeration(): nsISimpleEnumerator;
+    GetStringFromID(aID: number): string;
+    GetStringFromName(aName: string): string;
+}
+
+interface nsIStringBundleService extends nsISupports {
+    createBundle(aURLSpec: string): nsIStringBundle;
+    createExtensibleBundle(aRegistryKey: string): nsIStringBundle;
+    flushBundles();
+    formatStatusMessage(aStatus: number, aStatusArg: string): string;
+}
