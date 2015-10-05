@@ -107,6 +107,7 @@
               <ignoreAllErrors>false</ignoreAllErrors>
               <gruntOptions>
                 <gruntOption>--verbose</gruntOption>
+                <gruntOption>--buildNumber ${buildNumber}</gruntOption>
               </gruntOptions>
             </configuration>
           </execution>

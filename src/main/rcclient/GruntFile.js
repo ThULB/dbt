@@ -81,12 +81,28 @@ module.exports = function(grunt) {
 		watch : {
 			scripts : {
 				files : [ '<%= pkg.src %>/resources/**/*.xul', '<%= pkg.src %>/typescript/**/*.ts', '<%= pkg.src %>/less/**/*.less' ],
-				tasks : [ 'typescript', 'concat', 'less', 'copy:debug', 'copy:build' ],
+				tasks : [ 'typescript', 'concat', 'less', 'copy:debug', 'copy:build', 'replace' ],
 				options : {
 					spawn : false,
 				},
 			},
 		},
+		replace : {
+			build : {
+				options : {
+					patterns : [ {
+						match : 'BUILDNUMBER',
+						replacement : grunt.option('buildNumber')
+					} ]
+				},
+				files : [ {
+					expand : true,
+					flatten : true,
+					src : [ '<%= pkg.src %>/resources/application.ini' ],
+					dest : 'build/<%= pkg.name %>'
+				} ]
+			}
+		}
 	});
 
 	// Build Tasks
@@ -97,10 +113,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-typescript');
 
 	// Build task(s).
-	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build' ]);
+	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build', 'replace' ]);
 
 	// Default task
 	grunt.registerTask('default', [ 'clean', 'build', 'compress' ]);
