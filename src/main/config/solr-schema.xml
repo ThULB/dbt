@@ -199,10 +199,10 @@
   <field name="mods.place" type="text_de" multiValued="true" />
   <field name="mods.pindexname" type="string" multiValued="true" />
   <field name="mods.pindexname.published" type="string" multiValued="true" />
-  <field name="mods.embargo" type="string" />
+  <field name="mods.embargo" type="date" />
   <dynamicField name="mods.relatedItem*" type="string" multiValued="true" />
 
-    <!-- dbt rc slot -->
+      <!-- dbt rc slot -->
   <field name="slotId" type="string" indexed="true" multiValued="false" />
   <field name="slot.status" type="string" indexed="true" multiValued="false" />
   <field name="slot.location" type="text_general" indexed="true" multiValued="true" />
@@ -212,7 +212,7 @@
   <field name="slot.validTo" type="string" indexed="true" multiValued="false" />
   <!-- used for sorting -->
   <field name="slot.lecturers" type="string" indexed="true" multiValued="false" />
-
+  
     <!-- ******************************************** -->
     <!-- * SEARCH -->
     <!-- ******************************************** -->
@@ -226,7 +226,11 @@
 
     <!-- all names (personal and corporate) with role in fieldname -->
   <dynamicField name="mods.nameByRole.*" type="string" multiValued="true" />
+
+  <field name="mods.name.conference" type="string" multiValued="true" />
+
   <dynamicField name="identifier.type.*" type="string" multiValued="true" />
+  <field name="topic" type="string" multiValued="true" />
 
     <!-- End: MyCoRe specific schema definition -->
 
