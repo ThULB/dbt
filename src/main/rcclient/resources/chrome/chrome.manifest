@@ -1,4 +1,4 @@
 content IBWRCClient content/
 
-locale IBWRCClient en-US locale/en-us/
-locale IBWRCClient de locale/de/
+locale IBWRCClient en-us locale/en-us/
+locale IBWRCClient de-de locale/de/

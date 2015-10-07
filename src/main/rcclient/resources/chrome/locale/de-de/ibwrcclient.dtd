@@ -1,3 +1,4 @@
+<!-- Main Window -->
 <!ENTITY app.title	"Verbuchung auf Semesterapparat">
 
 <!ENTITY tabSingle.label "Einzelne Exemplare">
@@ -32,3 +33,24 @@
 <!ENTITY btnUnRegister.accesskey "A">
 <!ENTITY btnRegister.label "Freischalten">
 <!ENTITY btnRegister.accesskey "F">
+
+<!-- Options -->
+<!ENTITY dlg.title  "Einstellungen">
+
+<!ENTITY lblWebSrv.label "Web-Server URL:">
+<!ENTITY lblInd.label "Indikator:">
+
+<!ENTITY cbPre.label "Präsenzexemplar als Standard">
+<!ENTITY cbSgn.label "Signatur ändern erlauben">
+
+<!-- About -->
+<!ENTITY text.caption               "IBW3ESA Info">
+<!ENTITY text.version               "Version">
+<!ENTITY text.applVersion           "Anwendung Version:">
+<!ENTITY text.fileVersion           "Datei Version:">
+<!ENTITY text.firmName              "TU-Ilmenau (Universitätsbibliothek)">
+<!ENTITY text.firmStreet            "Langewiesener Str. 37">
+<!ENTITY text.firmTown              "98693 Ilmenau">
+<!ENTITY text.copyright             "René Adler &lt;rene.adler@tu-ilmenau.de&gt;, 2010-">
+<!ENTITY text.IBW3ESAinfo     "Info IBW3ESA">
+<!ENTITY text.Infos         "Info's und Features">

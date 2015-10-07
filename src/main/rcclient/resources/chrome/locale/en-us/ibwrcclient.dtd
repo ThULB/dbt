@@ -1,3 +1,4 @@
+<!-- Main Windows -->
 <!ENTITY app.title	"Booking">
 
 <!ENTITY tabSingle.label "Single Copy">
@@ -31,3 +32,24 @@
 <!ENTITY btnUnRegister.accesskey "R">
 <!ENTITY btnRegister.label "Activate">
 <!ENTITY btnRegister.accesskey "A">
+
+<!-- Options -->
+<!ENTITY dlg.title  "Settings">
+
+<!ENTITY lblWebSrv.label "Web-Server URL:">
+<!ENTITY lblInd.label "Indicator:">
+
+<!ENTITY cbPre.label "Present Copy as default">
+<!ENTITY cbSgn.label "allow Signature changes">
+
+<!-- About -->
+<!ENTITY text.caption               "About IBW3ESA">
+<!ENTITY text.version               "Version ">
+<!ENTITY text.applVersion           "Application version: ">
+<!ENTITY text.fileVersion           "File version: ">
+<!ENTITY text.firmName              "TU-Ilmenau (Universitätsbibliothek)">
+<!ENTITY text.firmStreet            "Langewiesener Str. 37">
+<!ENTITY text.firmTown              "98693 Ilmenau">
+<!ENTITY text.copyright             "René Adler &lt;rene.adler@tu-ilmenau.de&gt;, 2010-">
+<!ENTITY text.IBW3ESAinfo     "IBW3ESA Info">
+<!ENTITY text.Infos         "Infos and Features">

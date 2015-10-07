@@ -1,7 +1,0 @@
-<!ENTITY dlg.title	"Einstellungen">
-
-<!ENTITY lblWebSrv.label "Web-Server URL:">
-<!ENTITY lblInd.label "Indikator:">
-
-<!ENTITY cbPre.label "Präsenzexemplar als Standard">
-<!ENTITY cbSgn.label "Signatur ändern erlauben">

@@ -2,7 +2,7 @@
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?> 
 <?xml-stylesheet href="chrome://IBWRCClient/content/css/IBWRCClient.css" type="text/css"?>
 
-<!DOCTYPE window SYSTEM "chrome://IBWRCClient/locale/IBW3ESA.dtd">
+<!DOCTYPE window SYSTEM "chrome://IBWRCClient/locale/ibwrcclient.dtd">
 
 <window title="&app.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="onLoad();">
 
@@ -37,7 +37,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&lblESA.label;" width="100" />
-                <menulist id="mlRC" width="300">
+                <menulist id="mlSlots" width="300">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -45,7 +45,7 @@
               </hbox>
               <hbox align="center">
                 <caption label="&lblPPN.label;" width="100" />
-                <menulist id="mlPPN" width="300" oncommand="onSelPPN()" disabled="true">
+                <menulist id="mlPPN" width="300" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -53,7 +53,7 @@
               </hbox>
               <hbox align="center">
                 <caption label="&lblExp.label;" width="100" />
-                <menulist id="mlExp" width="270" oncommand="onSelExp()" disabled="true">
+                <menulist id="mlCopy" width="270" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -90,7 +90,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&lblESA.label;" width="100" />
-                <menulist id="mlRCBar" width="300" oncommand="onSelESABar()">
+                <menulist id="mlSlotsBar" width="300" oncommand="onSelESABar()">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>

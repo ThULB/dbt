@@ -19,7 +19,7 @@ class IBWRCClient {
     handleEvent(ev: Event) {
         if (ev.type === "command") {
             switch ((<XULElement>ev.currentTarget).getAttribute("id")) {
-                case "mlRC":
+                case "mlSlots":
                     this.onSelectSlot(<XULCommandEvent>ev);
                     break;
             }
@@ -27,7 +27,7 @@ class IBWRCClient {
     }
 
     onSlotListLoaded(delegate: rc.Client) {
-        var elms: string[] = ["mlRC", "mlRCBar"];
+        var elms: string[] = ["mlSlots", "mlSlotsBar"];
         var slots: Array<rc.Slot> = delegate.getSlots();
 
         for (var i in elms) {
@@ -35,7 +35,7 @@ class IBWRCClient {
             mlRC.addEventListener("command", this, false);
 
             mlRC.removeAllItems();
-            mlRC.appendItem(core.Locale.getInstance().getString("global.pleaseSelect"), null);
+            mlRC.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
             mlRC.selectedIndex = 0;
 
             for (var i in slots) {
@@ -52,7 +52,7 @@ class IBWRCClient {
         mlPPN.addEventListener("command", this, false);
 
         mlPPN.removeAllItems();
-        mlPPN.appendItem(core.Locale.getInstance().getString("global.pleaseSelect"), null);
+        mlPPN.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
         mlPPN.selectedIndex = 0;
         mlPPN.disabled = false;
 
