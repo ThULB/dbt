@@ -21,6 +21,9 @@ module rc {
             this.mPWD = "G?4(<#EeTqn*Tu)F";
         }
 
+        /**
+         * Method to login to RC servlet.
+         */
         private login() {
             console.log("Logon on server...");
             var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
@@ -28,6 +31,9 @@ module rc {
             request.execute(this, this.onLoginComplete);
         }
 
+        /**
+         * Loads Slots after successfully login.
+         */
         loadSlots() {
             this.addListener(Client.LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.LOGIN_SUCCESS);
@@ -39,6 +45,11 @@ module rc {
             this.login();
         }
 
+        /**
+         * Loads Slot after successfully login.
+         * 
+         * @param id the Slot id to load
+         */
         loadSlot(id: string) {
             this.addListener(Client.LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.LOGIN_SUCCESS);
@@ -50,6 +61,11 @@ module rc {
             this.login();
         }
 
+        /**
+         * Returns an Slot array.
+         * 
+         * @return a Slot array
+         */
         getSlots(): Array<Slot> {
             return this.mSlots;
         }
@@ -63,6 +79,11 @@ module rc {
             return null;
         }
 
+        /**
+         * Setter for a new or already exists Slot object.
+         * 
+         * @param slot the Slot to add or to overwrite with new data 
+         */
         setSlot(slot: Slot) {
             if (!core.Utils.isValid(slot)) return;
 
@@ -76,10 +97,25 @@ module rc {
             this.mSlots.push(slot);
         }
 
+        /**
+         * Callback method after a successfully login. Triggers LOGIN_SUCCESS event.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         * @param aSuccess the status of the HTTPRequest
+         */
         private onLoginComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             this.dispatch(Client.LOGIN_SUCCESS, aRequest);
         }
 
+        /**
+         * Callback method after successfully loaded Slot list.
+         * Parse Slots from given XML data and triggers SLOT_LIST_LOADED afterward.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         * @param aSuccess the status of the HTTPRequest
+         */
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             if (!aSuccess) return;
 
@@ -98,6 +134,14 @@ module rc {
             this.dispatch(Client.SLOT_LIST_LOADED);
         }
 
+        /**
+         * Callback method after successfully loaded Slot.
+         * Parse entries from given XML data and triggers SLOT_LOADED afterward. 
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         * @param aSuccess the status of the HTTPRequest
+         */
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean): void {
             if (!aSuccess) return;
 

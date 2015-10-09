@@ -26,6 +26,11 @@ class IBWRCClient {
         }
     }
 
+    /**
+     * Callback method of loaded Slot list. Used to display Slots in MenuListElement.
+     * 
+     * @param delegate the delegating rc.Client
+     */
     onSlotListLoaded(delegate: rc.Client) {
         var elms: string[] = ["mlSlots", "mlSlotsBar"];
         var slots: Array<rc.Slot> = delegate.getSlots();
@@ -48,6 +53,11 @@ class IBWRCClient {
         }
     }
 
+    /**
+     * Callback method of loaded Slot. Used to display Entry (OPC records) in MenuListElement.
+     * 
+     * @param delegate the delegating rc.CLient
+     */
     onSlotLoaded(delegate: rc.Client, slot: rc.Slot) {
         delegate.clearListenersByEvent(rc.Client.SLOT_LOADED);
 
@@ -65,6 +75,11 @@ class IBWRCClient {
         }
     }
 
+    /**
+     * Callback method of selected Slot. Used to trigger Entry loading.
+     * 
+     * @param ev the command event
+     */
     onSelectSlot(ev: XULCommandEvent) {
         var mlRC: XULMenuListElement = <any>ev.currentTarget;
         var slotId = mlRC.selectedItem.value;

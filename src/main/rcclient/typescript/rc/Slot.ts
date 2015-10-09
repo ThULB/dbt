@@ -33,6 +33,11 @@ module rc {
         title: string;
         entries: Array<Entry>;
 
+        /**
+         * Parse Slot from given Element.
+         * 
+         * @param elm the Slot element to parse
+         */
         public static parseSlot(elm: Element): Slot {
             var slot: Slot = new Slot();
 
@@ -52,6 +57,11 @@ module rc {
             return slot;
         }
 
+        /**
+         * String presentation of the Slot object.
+         * 
+         * @return the string 
+         */
         toString(): string {
             return "Slot [id=" + this.id + ", status=" + this.status + ", eOnly=" + this.eOnly + ", title=" + this.title + ", numEntries=" + this.entries.length + "]";
         }

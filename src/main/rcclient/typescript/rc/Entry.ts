@@ -4,6 +4,11 @@ module rc {
         ppn: string;
         epn: string;
 
+        /**
+         * Parse Entry from given Element.
+         * 
+         * @param elm the Entry element to parse
+         */
         public static parseEntry(elm: Element): Entry {
             var record: NodeList = elm.getElementsByTagName("opcrecord");
 
@@ -23,6 +28,11 @@ module rc {
             return entry;
         }
 
+        /**
+         * String presentation of the Entry object.
+         * 
+         * @return the string 
+         */
         toString(): string {
             return "Entry [id=" + this.id + ", ppn=" + this.ppn + ", epn=" + this.epn + "]";
         }
