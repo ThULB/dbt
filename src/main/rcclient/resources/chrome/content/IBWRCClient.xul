@@ -63,8 +63,8 @@
               <hbox align="center">
                 <caption label="" width="100" />
                 <vbox align="left,center">
-                  <checkbox id="cbSgn" label="&cbSgn.label;" checked="&amp;defaultSgnEdt" />
-                  <checkbox id="cbPre" label="&cbPre.label;" checked="&amp;defaultPre" onclick="onClick_Pre()" />
+                  <checkbox id="cbSgn" label="&cbSgn.label;" checked="&amp;defaultSgnEdt" disabled="true" />
+                  <checkbox id="cbPre" label="&cbPre.label;" checked="&amp;defaultPre" disabled="true" onclick="onClick_Pre()" />
                 </vbox>
               </hbox>
               <hbox id="BundelBox" align="center" hidden="true">
