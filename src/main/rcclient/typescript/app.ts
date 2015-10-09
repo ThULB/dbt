@@ -40,7 +40,7 @@ class IBWRCClient {
 
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
-                mlRC.appendItem(slot.title, slot.id);
+                mlRC.appendItem("(" + slot.id + "|" + (slot.status == rc.Status.ACTIVE ? "A" : (slot.status == rc.Status.ARCHIVED ? "I" : (slot.status == rc.Status.PENDING ? "U" : "-"))) + ") " + slot.title, slot.id);
             }
         }
     }

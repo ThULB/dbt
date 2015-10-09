@@ -1,7 +1,34 @@
 module rc {
+    export enum Status {
+        /**
+         * Stands for an free and unused slot.
+         */
+        FREE,
+
+        /**
+         * Stands for an reserved slot.
+         */
+        RESERVED,
+
+        /**
+         * Stands for a active slot.
+         */
+        ACTIVE,
+
+        /**
+         * Stands for a archived slot for late reactivation.
+         */
+        ARCHIVED,
+
+        /**
+         * Stands for a pending slot status change.
+         */
+        PENDING
+    }
+
     export class Slot {
         id: string;
-        status: string;
+        status: Status;
         eOnly: boolean;
         title: string;
         entries: Array<Entry>;
@@ -10,7 +37,7 @@ module rc {
             var slot: Slot = new Slot();
 
             slot.id = elm.getAttribute("id");
-            slot.status = elm.getAttribute("status");
+            slot.status = Status[elm.getAttribute("status").toUpperCase()];
             slot.eOnly = (elm.hasAttribute("onlineOnly") ? elm.getAttribute("onlineOnly") === "true" : false);
 
             slot.title = (<Text>elm.getElementsByTagName("title").item(0).firstChild).data;
