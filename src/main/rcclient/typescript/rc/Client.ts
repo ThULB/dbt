@@ -64,7 +64,7 @@ module rc {
         }
 
         setSlot(slot: Slot) {
-            if (slot == null) return;
+            if (!core.Utils.isValid(slot)) return;
 
             for (var i in this.mSlots) {
                 if (this.mSlots[i].id == slot.id) {
@@ -82,12 +82,12 @@ module rc {
 
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             if (!aSuccess) return;
-            
+
             console.log("..loading slots done.");
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
-            if (doc != null) {
+            if (core.Utils.isValid(doc)) {
                 var slots: NodeList = doc.getElementsByTagName("slot");
                 for (var c = 0; c < slots.length; c++) {
                     var slot: Slot = Slot.parseSlot(<Element>slots.item(c));
@@ -106,7 +106,7 @@ module rc {
 
             var slot: Slot = null;
 
-            if (doc != null) {
+            if (core.Utils.isValid(doc)) {
                 var elm: Element = <Element>doc.getElementsByTagName("slot").item(0);
                 slot = Slot.parseSlot(elm);
                 this.setSlot(slot);
