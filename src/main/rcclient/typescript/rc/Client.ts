@@ -80,9 +80,9 @@ module rc {
             this.dispatch(Client.LOGIN_SUCCESS, aRequest);
         }
 
-        private onSlotsComplete(aClass: net.HTTPRequest, aData: string, aSuccess: boolean) {
+        private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             if (!aSuccess) return;
-
+            
             console.log("..loading slots done.");
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
@@ -98,7 +98,7 @@ module rc {
             this.dispatch(Client.SLOT_LIST_LOADED);
         }
 
-        private onSlotComplete(aClass: net.HTTPRequest, aData: string, aSuccess: boolean): void {
+        private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean): void {
             if (!aSuccess) return;
 
             console.log("..loading slot done.");
