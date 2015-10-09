@@ -40,6 +40,9 @@ class IBWRCClient {
 
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
+
+                if (slot.eOnly) continue;
+
                 mlRC.appendItem("(" + slot.id + "|" + core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]) + ") " + slot.title, slot.id);
             }
         }

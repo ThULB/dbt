@@ -38,7 +38,7 @@ module rc {
 
             slot.id = elm.getAttribute("id");
             slot.status = Status[elm.getAttribute("status").toUpperCase()];
-            slot.eOnly = (elm.hasAttribute("onlineOnly") ? elm.getAttribute("onlineOnly") === "true" : false);
+            slot.eOnly = (elm.hasAttribute("onlineOnly") ? core.Utils.toBoolean(elm.getAttribute("onlineOnly")) : false);
 
             slot.title = (<Text>elm.getElementsByTagName("title").item(0).firstChild).data;
 
