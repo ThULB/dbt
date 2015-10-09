@@ -40,7 +40,7 @@ class IBWRCClient {
 
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
-                mlRC.appendItem("(" + slot.id + "|" + (slot.status == rc.Status.ACTIVE ? "A" : (slot.status == rc.Status.ARCHIVED ? "I" : (slot.status == rc.Status.PENDING ? "U" : "-"))) + ") " + slot.title, slot.id);
+                mlRC.appendItem("(" + slot.id + "|" + core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]) + ") " + slot.title, slot.id);
             }
         }
     }
@@ -66,7 +66,7 @@ class IBWRCClient {
         var mlRC: XULMenuListElement = <any>ev.currentTarget;
         var slotId = mlRC.selectedItem.value;
 
-        if (slotId != null) {
+        if (core.Utils.isValid(slotId)) {
             this.rcClient.addListener(rc.Client.SLOT_LOADED, this, this.onSlotLoaded);
             this.rcClient.loadSlot(slotId);
         } else {
