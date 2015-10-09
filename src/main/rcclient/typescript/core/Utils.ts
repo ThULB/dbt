@@ -1,7 +1,7 @@
 module core {
     export class Utils {
         public static isValid(aObj: any): boolean {
-            return void 0 !== aObj && null !== aObj && "undefined" !== typeof aObj;
+            return void 0 !== aObj && null !== aObj && "undefined" !== typeof aObj && !("null" === aObj && "string" == typeof aObj);
         }
 
         public static toBoolean(aObj: any): boolean {
