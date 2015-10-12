@@ -66,7 +66,7 @@ module.exports = function(grunt) {
 			},
 		},
 		compress : {
-			main : {
+			dist : {
 				options : {
 					archive : 'dist/<%= pkg.name %>.zip'
 				},
@@ -81,14 +81,14 @@ module.exports = function(grunt) {
 		watch : {
 			scripts : {
 				files : [ '<%= pkg.src %>/resources/**/*.xul', '<%= pkg.src %>/typescript/**/*.ts', '<%= pkg.src %>/less/**/*.less' ],
-				tasks : [ 'typescript', 'concat', 'less', 'copy:debug', 'copy:build', 'replace' ],
+				tasks : [ 'typescript', 'concat', 'less', 'copy:debug', 'copy:build', 'replace:version' ],
 				options : {
 					spawn : false,
 				},
 			},
 		},
 		replace : {
-			build : {
+			version : {
 				options : {
 					patterns : [ {
 						match : 'BUILDNUMBER',
@@ -99,6 +99,21 @@ module.exports = function(grunt) {
 					expand : true,
 					flatten : true,
 					src : [ '<%= pkg.src %>/resources/application.ini' ],
+					dest : 'build/<%= pkg.name %>'
+				} ]
+			},
+			dist : {
+				options : {
+					patterns : [ {
+						match : /chrome:\/\/IBWRCClient\//g,
+						replacement : 'chrome://ibw/'
+					} ]
+				},
+				files : [ {
+					expand : true,
+					flatten : false,
+					cwd : '<%= pkg.src %>/resources/',
+					src : [ '**/*.xul' ],
 					dest : 'build/<%= pkg.name %>'
 				} ]
 			}
@@ -117,8 +132,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-typescript');
 
 	// Build task(s).
-	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build', 'replace' ]);
+	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build', 'replace:version' ]);
 
 	// Default task
-	grunt.registerTask('default', [ 'clean', 'build', 'compress' ]);
+	grunt.registerTask('default', [ 'clean', 'build', 'replace:dist', 'compress' ]);
 };
