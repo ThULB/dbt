@@ -72,9 +72,9 @@ module.exports = function(grunt) {
 				},
 				files : [ {
 					expand : true,
-					cwd : 'build/<%= pkg.name %>',
-					src : [ '**/*' ],
-					dest : ''
+					cwd : 'build/<%= pkg.name %>/chrome',
+					src : [ 'content/**/*', 'locale/**/*' ],
+					dest : 'chrome/ibw'
 				} ]
 			}
 		},
