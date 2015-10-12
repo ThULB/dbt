@@ -1,9 +1,11 @@
 /// <reference path="definitions/XUL.d.ts" />
+/// <reference path="definitions/WinIBW.d.ts" />
 /// <reference path="core/Locale.ts" />
 /// <reference path="rc/Client.ts" />
 
 class IBWRCClient {
     private rcClient: rc.Client;
+    private activeWindow: IActiveWindow;
 
     constructor() {
         this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
@@ -22,8 +24,25 @@ class IBWRCClient {
                 case "mlSlots":
                     this.onSelectSlot(<XULCommandEvent>ev);
                     break;
+                case "mlPPN":
+                    this.onSelectPPN(<XULCommandEvent>ev);
+                    break;
             }
         }
+    }
+
+    /**
+     * Returns the active WinIBW window.
+     * 
+     * @return the active WinIBW window
+     */
+    getActiveWindow(): IActiveWindow {
+        if (!core.Utils.isValid(this.activeWindow)) {
+            var ibw: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
+            this.activeWindow = ibw.activeWindow;
+        }
+
+        return this.activeWindow;
     }
 
     /**
@@ -90,6 +109,20 @@ class IBWRCClient {
         } else {
             var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
             mlPPN.disabled = true;
+        }
+    }
+
+    /**
+     * Callback method of selected PPN. Used to trigger EPN loading.
+     * 
+     * @param ev the command event
+     */
+    onSelectPPN(ev: XULCommandEvent) {
+        var mlPPN: XULMenuListElement = <any>ev.currentTarget;
+        var ppn = mlPPN.selectedItem.value;
+
+        if (core.Utils.isValid(ppn)) {
+            this.getActiveWindow().command("f ppn " + ppn, false);
         }
     }
 }
