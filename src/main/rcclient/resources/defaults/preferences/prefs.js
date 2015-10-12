@@ -1,4 +1,4 @@
-pref("toolkit.defaultChromeURI", "chrome://IBWRCClient/content/IBWRCClient.xul");
+pref("toolkit.defaultChromeURI", "chrome://IBWRCClient/content/xul/IBWRCClient.xul");
 
 /* debugging prefs, disable these before you deploy your application! */
 pref("browser.dom.window.dump.enabled", true);

@@ -26,7 +26,7 @@ interface IActiveWindow extends nsISupports {
     showMessage(msg: string, type: number);
     appendMessage(msg: string, type: number);
     findString(str: string): boolean;
-    findTagContent(tag: string, n: number, b: boolean): string;
+    findTagContent(tag: string, num: number, withCat: boolean): string;
 }
 
 interface IWindow extends nsISupports {
@@ -171,8 +171,8 @@ interface IEditControl extends nsISupports {
     setRTLEnabled(b: boolean);
     getUserWantedLangCode(): string;
     setUserWantedLangCode(code: string);
-    findTag(tag: string, n: number, b1: boolean, b2: boolean, b3: boolean): string;
-    findTag2(tag: string, n: number, b1: boolean, b2: boolean, b3: boolean): string;
+    findTag(tag: string, num: number, withCat: boolean, b2: boolean, b3: boolean): string;
+    findTag2(tag: string, num: number, withCat: boolean, b2: boolean, b3: boolean): string;
     hasFocus(): boolean;
     setFocus();
     getDOMElement(): Element;
