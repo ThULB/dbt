@@ -7,7 +7,7 @@ class IBWRCClient {
 
     constructor() {
         this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
-        this.rcClient.addListener(rc.Client.SLOT_LIST_LOADED, this, this.onSlotListLoaded);
+        this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
         this.rcClient.loadSlots();
     }
 
@@ -59,7 +59,7 @@ class IBWRCClient {
      * @param delegate the delegating rc.CLient
      */
     onSlotLoaded(delegate: rc.Client, slot: rc.Slot) {
-        delegate.clearListenersByEvent(rc.Client.SLOT_LOADED);
+        delegate.clearListenersByEvent(rc.Client.EVENT_SLOT_LOADED);
 
         var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
         mlPPN.addEventListener("command", this, false);
@@ -85,7 +85,7 @@ class IBWRCClient {
         var slotId = mlRC.selectedItem.value;
 
         if (core.Utils.isValid(slotId)) {
-            this.rcClient.addListener(rc.Client.SLOT_LOADED, this, this.onSlotLoaded);
+            this.rcClient.addListener(rc.Client.EVENT_SLOT_LOADED, this, this.onSlotLoaded);
             this.rcClient.loadSlot(slotId);
         } else {
             var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");

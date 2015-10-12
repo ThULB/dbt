@@ -27,10 +27,29 @@ module rc {
     }
 
     export class Slot {
+        /**
+         *  The Slot Id
+         */
         id: string;
+        
+        /**
+         * The Slot status
+         */
         status: Status;
+        
+        /**
+         *  The eOnly state
+         */
         eOnly: boolean;
+        
+        /**
+         * The Slot title
+         */
         title: string;
+        
+        /**
+         * The Slot entries (only OPCRecord)
+         */
         entries: Array<Entry>;
 
         /**

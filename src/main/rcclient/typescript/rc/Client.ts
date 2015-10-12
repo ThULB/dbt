@@ -3,9 +3,9 @@
 
 module rc {
     export class Client extends core.EventDispatcher {
-        public static LOGIN_SUCCESS = "LOGIN_SUCCESS";
-        public static SLOT_LIST_LOADED = "SLOT_LIST_LOADED";
-        public static SLOT_LOADED = "SLOT_LOADED";
+        public static EVENT_LOGIN_SUCCESS = "LOGIN_SUCCESS";
+        public static EVENT_SLOT_LIST_LOADED = "SLOT_LIST_LOADED";
+        public static EVENT_SLOT_LOADED = "SLOT_LOADED";
 
         private mURL: string;
         private mUID: string;
@@ -35,8 +35,8 @@ module rc {
          * Loads Slots after successfully login.
          */
         loadSlots() {
-            this.addListener(Client.LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
-                aDelegate.clearListenersByEvent(Client.LOGIN_SUCCESS);
+            this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 console.log("Loading slots...")
                 aRequest.setURL(this.mURL + "/rc?XSL.Style=xml");
@@ -51,8 +51,8 @@ module rc {
          * @param id the Slot id to load
          */
         loadSlot(id: string) {
-            this.addListener(Client.LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
-                aDelegate.clearListenersByEvent(Client.LOGIN_SUCCESS);
+            this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 console.log("Loading slot with id \"" + id + "\"...")
                 aRequest.setURL(this.mURL + "/rc/" + id + "?XSL.Style=xml");
@@ -98,19 +98,19 @@ module rc {
         }
 
         /**
-         * Callback method after a successfully login. Triggers LOGIN_SUCCESS event.
+         * Callback method after a successfully login. Triggers EVENT_LOGIN_SUCCESS event.
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
          * @param aSuccess the status of the HTTPRequest
          */
         private onLoginComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
-            this.dispatch(Client.LOGIN_SUCCESS, aRequest);
+            this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
         }
 
         /**
          * Callback method after successfully loaded Slot list.
-         * Parse Slots from given XML data and triggers SLOT_LIST_LOADED afterward.
+         * Parse Slots from given XML data and triggers EVENT_SLOT_LIST_LOADED afterward.
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
@@ -131,12 +131,12 @@ module rc {
                 }
             }
 
-            this.dispatch(Client.SLOT_LIST_LOADED);
+            this.dispatch(Client.EVENT_SLOT_LIST_LOADED);
         }
 
         /**
          * Callback method after successfully loaded Slot.
-         * Parse entries from given XML data and triggers SLOT_LOADED afterward. 
+         * Parse entries from given XML data and triggers EVENT_SLOT_LOADED afterward. 
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
@@ -156,7 +156,7 @@ module rc {
                 this.setSlot(slot);
             }
 
-            this.dispatch(Client.SLOT_LOADED, slot);
+            this.dispatch(Client.EVENT_SLOT_LOADED, slot);
         }
     }
 }

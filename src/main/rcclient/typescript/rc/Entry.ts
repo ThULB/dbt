@@ -1,7 +1,18 @@
 module rc {
     export class Entry {
+        /**
+         * The Entry Id 
+         */
         id: string;
+        
+        /**
+         * The PPN
+         */
         ppn: string;
+        
+        /**
+         * The EPN
+         */
         epn: string;
 
         /**
