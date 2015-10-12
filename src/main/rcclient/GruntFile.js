@@ -112,8 +112,8 @@ module.exports = function(grunt) {
 				files : [ {
 					expand : true,
 					flatten : false,
-					cwd : '<%= pkg.src %>/resources/',
-					src : [ '**/*.xul' ],
+					cwd : 'build/<%= pkg.name %>',
+					src : [ '**/*.js', '**/*.xul' ],
 					dest : 'build/<%= pkg.name %>'
 				} ]
 			}
