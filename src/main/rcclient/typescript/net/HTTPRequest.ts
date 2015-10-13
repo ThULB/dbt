@@ -23,14 +23,9 @@ module net {
 
             this.setURL(aURL);
 
-            this.mChannel.loadFlags |= Components.interfaces.nsIRequest.VALIDATE_NEVER;
             if (aCache == null || aCache == false) {
-                try {
-                    // bypass cache
-                    this.mChannel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
-                } catch (ex) {
-                    // ignore Exception
-                }
+                // bypass cache
+                this.mChannel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
             }
         }
 
