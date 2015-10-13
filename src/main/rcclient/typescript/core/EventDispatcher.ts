@@ -1,5 +1,4 @@
 /// <reference path="Utils.ts" />
-/// <reference path="NSObject.ts" />
 
 module core {
     interface EventTarget {
@@ -7,12 +6,12 @@ module core {
         listener: any;
     }
 
-    export class EventDispatcher extends core.NSObject {
+    export class EventDispatcher {
         private _messageListeners: Object = {};
 
         public addListener(event: string, scope: any, listener: any) {
             core.Utils.isValid(this._messageListeners[event]) || (this._messageListeners[event] = []);
-            this._messageListeners[event].push(<EventTarget> { scope: scope, listener: listener });
+            this._messageListeners[event].push(<EventTarget>{ scope: scope, listener: listener });
         }
 
         public clearListeners() {
@@ -30,7 +29,7 @@ module core {
                     do {
                         d = null;
                         for (var c = 0, l = this._messageListeners[ev].length; c < l; c++)
-                            if ((<EventTarget> this._messageListeners[ev][c]).scope == scope) {
+                            if ((<EventTarget>this._messageListeners[ev][c]).scope == scope) {
                                 d = c;
                                 break;
                             }
@@ -50,7 +49,7 @@ module core {
                 args = args.concat(argArray);
 
                 for (var c = 0, l = ev.length; c < l; c++) {
-                    (<EventTarget> ev[c]).listener.apply((<EventTarget> ev[c]).scope, args);
+                    (<EventTarget>ev[c]).listener.apply((<EventTarget>ev[c]).scope, args);
                 }
             }
         }
