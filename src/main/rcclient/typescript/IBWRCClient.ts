@@ -4,11 +4,15 @@
 /// <reference path="rc/Client.ts" />
 
 class IBWRCClient {
+    public static localURIPrefix: string = "chrome://IBWRCClient/";
+
     private rcClient: rc.Client;
     private activeWindow: IActiveWindow;
 
     constructor() {
-        this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
+        core.Locale.getInstance(IBWRCClient.localURIPrefix + "locale/ibwrcclient.properties");
+        
+        this.rcClient = new rc.Client("http://141.24.167.11:8291/mir");
         this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
         this.rcClient.loadSlots();
     }
@@ -119,15 +123,18 @@ class IBWRCClient {
      */
     onSelectPPN(ev: XULCommandEvent) {
         var mlPPN: XULMenuListElement = <any>ev.currentTarget;
-        var ppn = mlPPN.selectedItem.value;
+        var PPN = mlPPN.selectedItem.value;
 
-        if (core.Utils.isValid(ppn)) {
-            this.getActiveWindow().command("f ppn " + ppn, false);
+        if (core.Utils.isValid(PPN)) {
+            this.getActiveWindow().command("f ppn " + PPN, false);
         }
     }
 }
 
 function onLoad() {
-    core.Locale.getInstance("chrome://IBWRCClient/locale/ibwrcclient.properties");
-    new IBWRCClient();
+    try {
+        new IBWRCClient();
+    } catch (e) {
+        alert(e);
+    }
 }

@@ -85,8 +85,20 @@ interface nsIScriptableInputStream extends nsIInputStream {
     read(aCount: number): string;
     readBytes(aCount: number): string;
 }
+
 interface nsIStringInputStream extends nsIScriptableInputStream {
     setData(data: string, dataLen: number);
+}
+
+interface nsIScriptableUnicodeConverter extends nsISupports {
+    charset: string;
+
+    ConvertFromUnicode(aSrc: string): string;
+    Finish(): string;
+    ConvertToUnicode(aSrc: string): string;
+    convertFromByteArray(aData: any, aCount: number): string;
+    convertToByteArray(aString: string, aLen?: number): any;
+    convertToInputStream(aString: string): nsIInputStream;
 }
 
 interface nsIRequestObserver extends nsISupports {
@@ -109,7 +121,7 @@ interface nsIProgressEventSink extends nsISupports {
 }
 
 interface nsIHttpEventSink extends nsISupports {
-    onRedirect(httpChannel: nsIHttpChannel, newChannel: nsIChannel)
+    onRedirect(httpChannel: nsIHttpChannel, newChannel: nsIChannel);
 }
 
 interface nsILoadGroup extends nsISupports {
@@ -145,6 +157,19 @@ interface nsIRequest extends nsISupports {
     isPending(): boolean;
     resume();
     suspend();
+}
+
+interface nsIAsyncVerifyRedirectCallback extends nsISupports {
+    onRedirectVerifyCallback(result: number);
+}
+
+interface nsIChannelEventSink extends nsISupports {
+    // constants
+    REDIRECT_TEMPORARY: number;
+    REDIRECT_PERMANENT: number;
+    REDIRECT_INTERNAL: number;
+
+    asyncOnChannelRedirect(oldChannel: nsIChannel, newChannel: nsIChannel, flags: number, callback: nsIAsyncVerifyRedirectCallback);
 }
 
 interface nsIChannel extends nsIRequest {

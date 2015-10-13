@@ -25,7 +25,6 @@ module rc {
          * Method to login to RC servlet.
          */
         private login() {
-            console.log("Logon on server...");
             var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
             var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/servlets/MCRLoginServlet?action=login", net.HTTPRequest.METHOD_POST, data);
             request.execute(this, this.onLoginComplete);
@@ -38,7 +37,6 @@ module rc {
             this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
-                console.log("Loading slots...")
                 aRequest.setURL(this.mURL + "/rc?XSL.Style=xml");
                 aRequest.execute(this, this.onSlotsComplete);
             });
@@ -54,7 +52,6 @@ module rc {
             this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
-                console.log("Loading slot with id \"" + id + "\"...")
                 aRequest.setURL(this.mURL + "/rc/" + id + "?XSL.Style=xml");
                 aRequest.execute(this, this.onSlotComplete);
             });
@@ -105,6 +102,8 @@ module rc {
          * @param aSuccess the status of the HTTPRequest
          */
         private onLoginComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+            if (!aSuccess) return;
+
             this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
         }
 
@@ -119,7 +118,6 @@ module rc {
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             if (!aSuccess) return;
 
-            console.log("..loading slots done.");
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
@@ -145,7 +143,6 @@ module rc {
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean): void {
             if (!aSuccess) return;
 
-            console.log("..loading slot done.");
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
             var slot: Slot = null;

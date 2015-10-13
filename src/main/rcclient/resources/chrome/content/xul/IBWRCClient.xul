@@ -6,20 +6,20 @@
 
 <window title="&app.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="onLoad();">
 
-  <script type="application/javascript" src="chrome://IBWRCClient/content/IBWRCClient.js" />
+  <script src="IBWRCClient.js" />
 
-  <menubar>
-    <menu label="&mOptions.label;" accesskey="&mOptions.accesskey;">
-      <menupopup>
-        <menuitem label="&mOptions.Settings.label;" accesskey="&mOptions.Settings.accesskey;" oncommand="onOptions();" />
-      </menupopup>
-    </menu>
-    <menu label="&mHelp.label;" accesskey="&mHelp.accesskey;">
-      <menupopup>
-        <menuitem label="&mHelp.About.label;" accesskey="&mHelp.About.accesskey;" oncommand="onAbout();" />
-      </menupopup>
-    </menu>
-  </menubar>
+<!--   <menubar> -->
+<!--     <menu label="&mOptions.label;" accesskey="&mOptions.accesskey;"> -->
+<!--       <menupopup> -->
+<!--         <menuitem label="&mOptions.Settings.label;" accesskey="&mOptions.Settings.accesskey;" oncommand="onOptions();" /> -->
+<!--       </menupopup> -->
+<!--     </menu> -->
+<!--     <menu label="&mHelp.label;" accesskey="&mHelp.accesskey;"> -->
+<!--       <menupopup> -->
+<!--         <menuitem label="&mHelp.About.label;" accesskey="&mHelp.About.accesskey;" oncommand="onAbout();" /> -->
+<!--       </menupopup> -->
+<!--     </menu> -->
+<!--   </menubar> -->
 
   <vbox flex="1" height="290">
     <vbox align="start" height="100" style="background-color:#ffffff; border:2px outset #c0c0c0;">

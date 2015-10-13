@@ -25,7 +25,7 @@ module.exports = function(grunt) {
 		concat : {
 			debug : {
 				files : {
-					'build/<%= pkg.name %>/chrome/content/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
+					'build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
 				},
 			}
 		},
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
 					sourceMap : false
 				},
 				files : {
-					'build/<%= pkg.name %>/chrome/content/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
+					'build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
 				}
 			}
 		},
