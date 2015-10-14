@@ -2,19 +2,30 @@
 /// <reference path="definitions/WinIBW.d.ts" />
 /// <reference path="core/Locale.ts" />
 /// <reference path="rc/Client.ts" />
+/// <reference path="ibw/Application.ts" />
+/// <reference path="ibw/Error.ts" />
 
 class IBWRCClient {
     public static localURIPrefix: string = "chrome://IBWRCClient/";
 
     private rcClient: rc.Client;
-    private activeWindow: IActiveWindow;
+    private userInfo: ibw.UserInfo;
 
     constructor() {
         core.Locale.getInstance(IBWRCClient.localURIPrefix + "locale/ibwrcclient.properties");
-        
-        this.rcClient = new rc.Client("http://141.24.167.11:8291/mir");
-        this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
-        this.rcClient.loadSlots();
+
+        try {
+            this.userInfo = ibw.getUserInfo();
+            if (core.Utils.isValid(this.userInfo)) {
+                //this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
+                this.rcClient = new rc.Client("http://141.24.167.11:8291/mir");
+                this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
+                this.rcClient.loadSlots();
+            }
+        } catch (ex) {
+            alert(ex);
+            window.close();
+        }
     }
 
     /**
@@ -33,20 +44,6 @@ class IBWRCClient {
                     break;
             }
         }
-    }
-
-    /**
-     * Returns the active WinIBW window.
-     * 
-     * @return the active WinIBW window
-     */
-    getActiveWindow(): IActiveWindow {
-        if (!core.Utils.isValid(this.activeWindow)) {
-            var ibw: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
-            this.activeWindow = ibw.activeWindow;
-        }
-
-        return this.activeWindow;
     }
 
     /**
@@ -69,7 +66,7 @@ class IBWRCClient {
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
 
-                if (slot.eOnly) continue;
+                if (slot.eOnly || slot.id.indexOf(this.userInfo.libId) != 0) continue;
 
                 mlRC.appendItem("(" + slot.id + "|" + core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]) + ") " + slot.title, slot.id);
             }
@@ -126,7 +123,7 @@ class IBWRCClient {
         var PPN = mlPPN.selectedItem.value;
 
         if (core.Utils.isValid(PPN)) {
-            this.getActiveWindow().command("f ppn " + PPN, false);
+            ibw.Application().activeWindow.command("f ppn " + PPN, false);
         }
     }
 }
