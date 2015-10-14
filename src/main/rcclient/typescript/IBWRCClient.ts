@@ -1,9 +1,8 @@
 /// <reference path="definitions/XUL.d.ts" />
-/// <reference path="definitions/WinIBW.d.ts" />
+
 /// <reference path="core/Locale.ts" />
 /// <reference path="rc/Client.ts" />
 /// <reference path="ibw/Application.ts" />
-/// <reference path="ibw/Error.ts" />
 
 class IBWRCClient {
     public static localURIPrefix: string = "chrome://IBWRCClient/";
@@ -23,7 +22,7 @@ class IBWRCClient {
                 this.rcClient.loadSlots();
             }
         } catch (ex) {
-            alert(ex);
+            ibw.showError(ex);
             window.close();
         }
     }
@@ -132,6 +131,6 @@ function onLoad() {
     try {
         new IBWRCClient();
     } catch (e) {
-        alert(e);
+        ibw.showError(e);
     }
 }

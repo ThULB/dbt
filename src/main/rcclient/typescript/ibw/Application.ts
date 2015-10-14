@@ -1,6 +1,8 @@
 /// <reference path="../definitions/XPCOM.d.ts" />
 /// <reference path="../definitions/WinIBW.d.ts" />
 
+/// <reference path="Error.ts" />
+
 module ibw {
     export class UserInfo {
         uid: string;
@@ -46,5 +48,11 @@ module ibw {
         }
 
         throw new ibw.Error(ibw.ErrorCode.NO_LOGIN);
+    }
+
+    export function showError(error: Error) {
+        // TODO enable messageBox isn't on WINE
+        // application.messageBox(error.name, error.message, "error-icon");
+        alert(error);
     }
 }
