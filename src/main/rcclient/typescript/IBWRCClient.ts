@@ -123,7 +123,7 @@ class IBWRCClient {
         var PPN = mlPPN.selectedItem.value;
 
         if (core.Utils.isValid(PPN)) {
-            ibw.Application().activeWindow.command("f ppn " + PPN, false);
+            ibw.getActiveWindow().command("f ppn " + PPN, false);
         }
     }
 }

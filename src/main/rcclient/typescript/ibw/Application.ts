@@ -9,28 +9,38 @@ module ibw {
         description: string;
     }
 
-    export function Application(): IApplication {
-        return Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication)
+    var application: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
+
+    /**
+     * Returns the activeWindow interface.
+     * 
+     * @return the activeWindow interface
+     */
+    export function getActiveWindow(): IActiveWindow {
+        return application.activeWindow;
     }
 
+    /**
+     * Returns the user informations.
+     * 
+     * @return the user information
+     */
     export function getUserInfo(): UserInfo {
-        var activeWindow: IActiveWindow = ibw.Application().activeWindow;
-
-        if (core.Utils.isValid(activeWindow.title))
+        if (core.Utils.isValid(application.activeWindow.title))
             throw new ibw.Error(ibw.ErrorCode.ACTIVE_TTILE);
 
-        activeWindow.command("s ben", false);
-        if (activeWindow.status.toUpperCase() == "OK") {
-            activeWindow.simulateIBWKey("F7");
-            if (activeWindow.status.toUpperCase() == "OK") {
+        application.activeWindow.command("s ben", false);
+        if (application.activeWindow.status.toUpperCase() == "OK") {
+            application.activeWindow.simulateIBWKey("F7");
+            if (application.activeWindow.status.toUpperCase() == "OK") {
                 var userInfo: UserInfo = new UserInfo();
 
-                userInfo.uid = activeWindow.getVariable("P3VU1");
-                userInfo.name = activeWindow.getVariable("P3VU6");
-                userInfo.libId = activeWindow.getVariable("P3VU3");
-                userInfo.description = activeWindow.getVariable("P3VUS");
+                userInfo.uid = application.activeWindow.getVariable("P3VU1");
+                userInfo.name = application.activeWindow.getVariable("P3VU6");
+                userInfo.libId = application.activeWindow.getVariable("P3VU3");
+                userInfo.description = application.activeWindow.getVariable("P3VUS");
 
-                activeWindow.simulateIBWKey("FE");
+                application.activeWindow.simulateIBWKey("FE");
                 return userInfo;
             }
         }
