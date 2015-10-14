@@ -2,6 +2,8 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
+		banner : '/*!\n' + ' * <%= pkg.name %> v${project.version}\n' + ' * Homepage: <%= pkg.homepage %>\n'
+				+ ' * Copyright 2013-<%= grunt.template.today("yyyy") %> <%= pkg.author %> and others\n' + ' * Licensed under <%= pkg.license %>\n' + ' */\n',
 		clean : {
 			build : {
 				src : [ "build", "dist" ]
@@ -32,8 +34,10 @@ module.exports = function(grunt) {
 		uglify : {
 			build : {
 				options : {
+					banner : '<%= banner %>',
 					preserveComments : 'some',
-					sourceMap : false
+					sourceMap : false,
+					screwIE8 : true
 				},
 				files : {
 					'build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>.js' ]
@@ -43,8 +47,10 @@ module.exports = function(grunt) {
 		less : {
 			build : {
 				options : {
-					paths : [ "less" ],
-					cleancss : true
+					banner : '<%= banner %>',
+					cleancss : true,
+					compress : true,
+					paths : [ "less" ]
 				},
 				files : {
 					"build/<%= pkg.name %>/chrome/content/css/<%= pkg.name %>.css" : [ '<%= pkg.src %>/less/build.less' ]
