@@ -2,6 +2,7 @@ interface String {
     defaultCharset: string;
 
     format: (...args: Array<any>) => string;
+    isEmpty: () => boolean;
     startsWith: (searchString: string, position?: number) => boolean;
     toUnicode: () => string;
 }
@@ -19,6 +20,10 @@ String.prototype.format = function(...args: Array<any>): string {
             RegExp("\\{" + i + "\\}", 'g'), arguments[i]);
     }
     return formatted;
+};
+
+String.prototype.isEmpty = function(): boolean {
+    return this == null || this.length == 0;
 };
 
 String.prototype.startsWith = function(searchString: string, position?: number): boolean {

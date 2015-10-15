@@ -72,6 +72,9 @@ module ibw {
                     copy.type = tag.content.match(/(.*) : (.*)/)[2];
                 } else {
                     switch (tag.category) {
+                        case "4802":
+                            copy.comment = tag.content;
+                            break;
                         case "7100":
                             var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
                             copy.location = m[1];

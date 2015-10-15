@@ -27,6 +27,14 @@ class IBWRCClient {
         }
     }
 
+    private clearMenuList(target: any, disabled: boolean) {
+        var ml: XULMenuListElement = typeof target == "string" ? <any>document.getElementById(target) : target;
+        ml.removeAllItems();
+        ml.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
+        ml.selectedIndex = 0;
+        ml.disabled = disabled;
+    }
+
     /**
      * Dispatches all Events.
      * 
@@ -66,8 +74,7 @@ class IBWRCClient {
                 var slot: rc.Slot = slots[i];
 
                 if (slot.eOnly || !slot.id.startsWith(this.userInfo.libId)) continue;
-
-                mlRC.appendItem("(" + slot.id + "|" + core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]) + ") " + slot.title, slot.id);
+                mlRC.appendItem("({0}|{1}) {2}".format(slot.id, core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]), slot.title), slot.id);
             }
         }
     }
@@ -83,10 +90,8 @@ class IBWRCClient {
         var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
         mlPPN.addEventListener("command", this, false);
 
-        mlPPN.removeAllItems();
-        mlPPN.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
-        mlPPN.selectedIndex = 0;
-        mlPPN.disabled = false;
+        this.clearMenuList(mlPPN, false);
+        this.clearMenuList("mlCopy", true);
 
         for (var i in slot.entries) {
             var entry: rc.Entry = slot.entries[i];
@@ -103,12 +108,12 @@ class IBWRCClient {
         var mlRC: XULMenuListElement = <any>ev.currentTarget;
         var slotId = mlRC.selectedItem.value;
 
-        if (core.Utils.isValid(slotId)) {
+        if (!slotId.isEmpty()) {
             this.rcClient.addListener(rc.Client.EVENT_SLOT_LOADED, this, this.onSlotLoaded);
             this.rcClient.loadSlot(slotId);
         } else {
-            var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
-            mlPPN.disabled = true;
+            this.clearMenuList("mlPPN", true);
+            this.clearMenuList("mlCopy", true);
         }
     }
 
@@ -121,22 +126,21 @@ class IBWRCClient {
         var mlPPN: XULMenuListElement = <any>ev.currentTarget;
         var PPN = mlPPN.selectedItem.value;
 
-        if (core.Utils.isValid(PPN)) {
+        var mlCopy: XULMenuListElement = <any>document.getElementById("mlCopy");
+        if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
             var copys: Array<ibw.Copy> = ibw.getCopys();
 
-            var mlCopy: XULMenuListElement = <any>document.getElementById("mlCopy");
             mlCopy.addEventListener("command", this, false);
 
-            mlCopy.removeAllItems();
-            mlCopy.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
-            mlCopy.selectedIndex = 0;
-            mlCopy.disabled = false;
+            this.clearMenuList(mlCopy, false);
 
             for (var i in copys) {
                 var copy: ibw.Copy = copys[i];
-                mlCopy.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark), "k e {0}".format(copy.num));
+                mlCopy.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), "k e {0}".format(copy.num));
             }
+        } else {
+            this.clearMenuList(mlCopy, true);
         }
     }
 }
