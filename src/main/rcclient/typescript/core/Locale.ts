@@ -23,11 +23,11 @@ module core {
                 propFile);
         }
 
-        getString(aProperty: string, aArgs?): string {
+        getString(aProperty: string, ...aArgs: Array<any>): string {
             try {
-                if (aArgs) {
-                    aArgs = Array.prototype.slice.call(arguments, 1);
-                    return this.stringBundle.formatStringFromName(aProperty, aArgs, aArgs.length);
+                if (aArgs !== null && aArgs.length > 0) {
+                    var args: Array<any> = Array.prototype.slice.call(arguments, 1);
+                    return this.stringBundle.formatStringFromName(aProperty, args, args.length);
                 } else {
                     return this.stringBundle.GetStringFromName(aProperty);
                 }

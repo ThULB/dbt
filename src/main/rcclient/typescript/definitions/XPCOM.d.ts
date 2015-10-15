@@ -327,7 +327,7 @@ interface nsIObserver extends nsISupports {
 
 interface nsIStringBundle extends nsISupports {
     formatStringFromID(aID: number, params: string, length: number): string;
-    formatStringFromName(aName: string, params: string, length: number): string;
+    formatStringFromName(aName: string, params: Array<any>, length: number): string;
     getSimpleEnumeration(): nsISimpleEnumerator;
     GetStringFromID(aID: number): string;
     GetStringFromName(aName: string): string;

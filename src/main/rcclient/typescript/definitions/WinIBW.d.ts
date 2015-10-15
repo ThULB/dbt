@@ -1,5 +1,14 @@
 /// <reference path="XPCOM.d.ts" />
 
+interface IError extends Error {
+    fileName?: string;
+    lineNumber?: number;
+    columnNumber?: number;
+    stack?: string;
+
+    toSource?();
+}
+
 interface IActiveWindow extends nsISupports {
     materialCode: string;
     windowID: number;

@@ -21,8 +21,8 @@ class IBWRCClient {
                 this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
                 this.rcClient.loadSlots();
             }
-        } catch (ex) {
-            ibw.showError(ex);
+        } catch (e) {
+            ibw.showError(e);
             window.close();
         }
     }
@@ -65,7 +65,7 @@ class IBWRCClient {
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
 
-                if (slot.eOnly || slot.id.indexOf(this.userInfo.libId) != 0) continue;
+                if (slot.eOnly || !slot.id.startsWith(this.userInfo.libId)) continue;
 
                 mlRC.appendItem("(" + slot.id + "|" + core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]) + ") " + slot.title, slot.id);
             }
@@ -123,6 +123,20 @@ class IBWRCClient {
 
         if (core.Utils.isValid(PPN)) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
+            var copys: Array<ibw.Copy> = ibw.getCopys();
+
+            var mlCopy: XULMenuListElement = <any>document.getElementById("mlCopy");
+            mlCopy.addEventListener("command", this, false);
+
+            mlCopy.removeAllItems();
+            mlCopy.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
+            mlCopy.selectedIndex = 0;
+            mlCopy.disabled = false;
+
+            for (var i in copys) {
+                var copy: ibw.Copy = copys[i];
+                mlCopy.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark), "k e {0}".format(copy.num));
+            }
         }
     }
 }

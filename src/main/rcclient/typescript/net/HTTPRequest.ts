@@ -37,7 +37,7 @@ module net {
             this.mURL = aURL;
 
             var ioService: nsIIOService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
-            this.mURI = ioService.newURI(this.mURL, core.Utils.CHARSET_UTF8, null);
+            this.mURI = ioService.newURI(this.mURL, String.prototype.defaultCharset, null);
             this.mChannel = ioService.newChannelFromURI(this.mURI);
         }
 
@@ -112,7 +112,7 @@ module net {
         }
 
         onStopRequest(aRequest: nsIRequest, aContext: nsISupports, aStatus: number) {
-            this.mCompleteFunc(this.mClass, core.Utils.toUnicode(this.mData), Components.isSuccessCode(aStatus));
+            this.mCompleteFunc(this.mClass, this.mData.toUnicode(), Components.isSuccessCode(aStatus));
 
             this.mChannel = null;
         }

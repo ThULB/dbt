@@ -2,24 +2,12 @@
 
 module core {
     export class Utils {
-        public static CHARSET_UTF8 = "UTF-8";
-
         public static isValid(aObj: any): boolean {
             return void 0 !== aObj && null !== aObj && "undefined" !== typeof aObj && !("null" === aObj && "string" == typeof aObj);
         }
 
         public static toBoolean(aObj: any): boolean {
             return (typeof aObj == "string" && aObj == "true") || aObj == true ? true : false;
-        }
-
-        public static toUnicode(str: string): string {
-            try {
-                var converter: nsIScriptableUnicodeConverter = Components.classes["@mozilla.org/intl/scriptableunicodeconverter"].createInstance(Components.interfaces.nsIScriptableUnicodeConverter);
-                converter.charset = Utils.CHARSET_UTF8;
-                return converter.ConvertToUnicode(str);
-            } catch (ex) {
-                return str;
-            }
         }
 
         public static generateUUID(): string {
