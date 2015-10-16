@@ -103,6 +103,25 @@ interface XULControlElement extends XULElement {
     tabIndex: number;
 }
 
+interface XULLabeledControlElement extends XULControlElement {
+    crop: string;
+    image: string;
+    label: string;
+    accessKey: string;
+    command: string;
+}
+
+interface XULCheckboxElement extends XULLabeledControlElement {
+    // constants
+    CHECKSTATE_UNCHECKED: number;
+    CHECKSTATE_CHECKED: number;
+    CHECKSTATE_MIXED: number;
+
+    checked: boolean;
+    checkState: number;
+    autoCheck: boolean;
+}
+
 interface XULSelectControlItemElement extends XULElement {
     disabled: boolean;
     crop: string;
@@ -135,4 +154,18 @@ interface XULMenuListElement extends XULSelectControlElement {
     crop: string;
     image: string;
     inputField: Node;
+}
+
+interface XULTextBoxElement extends XULControlElement {
+    inputField: Node;
+    textLength: number;
+    maxLength: number;
+    size: number;
+    selectionStart: number;
+    selectionEnd: number;
+    value: string;
+    type: string;
+
+    select();
+    setSelectionRange(selectionStart: number, selectionEnd: number);
 }
