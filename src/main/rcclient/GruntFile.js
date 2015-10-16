@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg : grunt.file.readJSON('package.json'),
+		buildNumber : parseInt(grunt.option('buildNumber')) || 0,
 		banner : '/*!\n' + ' * <%= pkg.name %> v${project.version}\n' + ' * Homepage: <%= pkg.homepage %>\n'
 				+ ' * (c) 2013-<%= grunt.template.today("yyyy") %> <%= pkg.author %> and others. All rights reserved.\n'
 				+ ' * Licensed under <%= pkg.license %>\n' + ' */\n',
@@ -99,7 +100,7 @@ module.exports = function(grunt) {
 				options : {
 					patterns : [ {
 						match : 'BUILDNUMBER',
-						replacement : grunt.option('buildNumber')
+						replacement : '<%= buildNumber %>'
 					} ]
 				},
 				files : [ {
@@ -112,6 +113,12 @@ module.exports = function(grunt) {
 			dist : {
 				options : {
 					patterns : [ {
+						match : 'VERSION',
+						replacement : '<%= pkg.version %>'
+					}, {
+						match : 'REVISION',
+						replacement : '<%= buildNumber %>'
+					}, {
 						match : /chrome:\/\/IBWRCClient\//g,
 						replacement : 'chrome://ibw/'
 					} ]

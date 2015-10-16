@@ -5,6 +5,9 @@
 /// <reference path="ibw/Application.ts" />
 
 class IBWRCClient {
+    public static VERSION: string = "@@VERSION";
+    public static REVISION: string = "@@REVISION";
+
     public static localURIPrefix: string = "chrome://IBWRCClient/";
 
     private rcClient: rc.Client;
@@ -176,6 +179,7 @@ class IBWRCClient {
 
         var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation".split("|");
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+
         if (!i.isEmpty()) {
             for (var e in elms) {
                 this.setDisabledState(elms[e], false);
