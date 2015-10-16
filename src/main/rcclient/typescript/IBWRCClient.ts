@@ -137,6 +137,9 @@ class IBWRCClient {
 
             for (var i in copys) {
                 var copy: ibw.Copy = copys[i];
+                
+                if (copy.type != "k") continue;
+                
                 mlCopy.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), "k e {0}".format(copy.num));
             }
         } else {

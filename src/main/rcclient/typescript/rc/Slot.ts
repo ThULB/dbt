@@ -57,7 +57,7 @@ module rc {
          * 
          * @param elm the Slot element to parse
          */
-        public static parseSlot(elm: Element): Slot {
+        public static parse(elm: Element): Slot {
             var slot: Slot = new Slot();
 
             slot.id = elm.getAttribute("id");
@@ -69,7 +69,7 @@ module rc {
             slot.entries = new Array<Entry>();
             var entries = elm.getElementsByTagName("entry");
             for (var i = 0; i < entries.length; i++) {
-                var entry: Entry = Entry.parseEntry(<Element>entries.item(i));
+                var entry: Entry = Entry.parse(<Element>entries.item(i));
                 (entry != null) && slot.entries.push(entry);
             }
 

@@ -124,7 +124,7 @@ module rc {
             if (core.Utils.isValid(doc)) {
                 var slots: NodeList = doc.getElementsByTagName("slot");
                 for (var c = 0; c < slots.length; c++) {
-                    var slot: Slot = Slot.parseSlot(<Element>slots.item(c));
+                    var slot: Slot = Slot.parse(<Element>slots.item(c));
                     this.mSlots.push(slot);
                 }
             }
@@ -149,7 +149,7 @@ module rc {
 
             if (core.Utils.isValid(doc)) {
                 var elm: Element = <Element>doc.getElementsByTagName("slot").item(0);
-                slot = Slot.parseSlot(elm);
+                slot = Slot.parse(elm);
                 this.setSlot(slot);
             }
 

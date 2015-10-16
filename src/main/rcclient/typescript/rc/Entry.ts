@@ -20,7 +20,7 @@ module rc {
          * 
          * @param elm the Entry element to parse
          */
-        public static parseEntry(elm: Element): Entry {
+        public static parse(elm: Element): Entry {
             var record: NodeList = elm.getElementsByTagName("opcrecord");
 
             if (record.length == 0)
