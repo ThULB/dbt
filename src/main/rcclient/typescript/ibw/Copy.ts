@@ -1,6 +1,49 @@
 /// <reference path="Tag.ts" />
 
 module ibw {
+    export class CopyBackup {
+        slotId: string;
+        location: string;
+        shelfmark: string;
+        loanIndicator: string;
+        isBundle: boolean;
+        bundleEPN: string;
+
+        public static parse(from: string): CopyBackup {
+            var m: Array<string> = from.match(/(.*) SSTold (.*)/);
+
+            if (m && m.length == 3) {
+                var backup: CopyBackup = new CopyBackup();
+                backup.slotId = m[1];
+
+                var tmp = m[2];
+                var exp = new RegExp("/(.*) \\ c:(.*)/");
+                if (exp.test(tmp)) {
+                    var p: Array<string> = tmp.match(exp);
+                    backup.isBundle = true;
+                    backup.bundleEPN = p[2];
+                } else {
+                    backup.isBundle = false;
+                }
+
+                var lsl = tmp.match(/!(.*)!(.*) @ (.*)/);
+                backup.location = lsl[1];
+                backup.shelfmark = lsl[2];
+                backup.loanIndicator = lsl[3];
+
+                return backup;
+            }
+
+            return null;
+        }
+
+        toString(): string {
+            return "CopyBackup: [slotId={0}, location={1}, shelfmark={2}, indicator={3}, isBundle={4}, bundleEPN={5}]".format(
+                this.slotId, this.location, this.shelfmark, this.loanIndicator, this.isBundle, this.bundleEPN
+            );
+        }
+    }
+
     export class Copy {
         num: number;
         type: string;
@@ -12,7 +55,8 @@ module ibw {
         isBundle: boolean;
 
         barcode: string;
-        comment: string;
+
+        backup: CopyBackup;
 
         public static parse(from: string): Copy {
             var lines: Array<string> = from.split("\n");
@@ -29,7 +73,7 @@ module ibw {
                 } else {
                     switch (tag.category) {
                         case "4802":
-                            copy.comment = tag.content;
+                            copy.backup = CopyBackup.parse(tag.content);
                             break;
                         case "7100":
                             var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);

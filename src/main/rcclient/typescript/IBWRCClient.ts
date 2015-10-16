@@ -159,7 +159,7 @@ class IBWRCClient {
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
-                if (copy.type != "k") continue;
+                if (!copy.type.startsWith("k")) continue;
 
                 mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
             }
