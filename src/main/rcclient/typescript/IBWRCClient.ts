@@ -10,6 +10,9 @@ class IBWRCClient {
     private rcClient: rc.Client;
     private userInfo: ibw.UserInfo;
 
+    private slot: rc.Slot;
+    private copys: Array<ibw.Copy>;
+
     constructor() {
         core.Locale.getInstance(IBWRCClient.localURIPrefix + "locale/ibwrcclient.properties");
 
@@ -35,6 +38,11 @@ class IBWRCClient {
         ml.disabled = disabled;
     }
 
+    private setDisabledState(target: any, disabled: boolean) {
+        var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
+        elm.disabled = disabled;
+    }
+
     /**
      * Dispatches all Events.
      * 
@@ -48,6 +56,9 @@ class IBWRCClient {
                     break;
                 case "mlPPN":
                     this.onSelectPPN(<XULCommandEvent>ev);
+                    break;
+                case "mlEPN":
+                    this.onSelectEPN(<XULCommandEvent>ev);
                     break;
             }
         }
@@ -91,12 +102,14 @@ class IBWRCClient {
         mlPPN.addEventListener("command", this, false);
 
         this.clearMenuList(mlPPN, false);
-        this.clearMenuList("mlCopy", true);
+        this.clearMenuList("mlEPN", true);
 
         for (var i in slot.entries) {
             var entry: rc.Entry = slot.entries[i];
             mlPPN.appendItem(entry.ppn, entry.ppn);
         }
+
+        this.slot = slot;
     }
 
     /**
@@ -113,7 +126,7 @@ class IBWRCClient {
             this.rcClient.loadSlot(slotId);
         } else {
             this.clearMenuList("mlPPN", true);
-            this.clearMenuList("mlCopy", true);
+            this.clearMenuList("mlEPN", true);
         }
     }
 
@@ -126,24 +139,56 @@ class IBWRCClient {
         var mlPPN: XULMenuListElement = <any>ev.currentTarget;
         var PPN = mlPPN.selectedItem.value;
 
-        var mlCopy: XULMenuListElement = <any>document.getElementById("mlCopy");
+        var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation".split("|");
+        for (var e in elms) {
+            this.setDisabledState(elms[e], true);
+        }
+
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
         if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
-            var copys: Array<ibw.Copy> = ibw.getCopys();
+            this.copys = ibw.getCopys();
 
-            mlCopy.addEventListener("command", this, false);
+            mlEPN.addEventListener("command", this, false);
 
-            this.clearMenuList(mlCopy, false);
+            this.clearMenuList(mlEPN, false);
 
-            for (var i in copys) {
-                var copy: ibw.Copy = copys[i];
-                
+            for (var i in this.copys) {
+                var copy: ibw.Copy = this.copys[i];
+
                 if (copy.type != "k") continue;
-                
-                mlCopy.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), "k e {0}".format(copy.num));
+
+                mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
             }
         } else {
-            this.clearMenuList(mlCopy, true);
+            this.clearMenuList(mlEPN, true);
+        }
+    }
+    
+    /**
+     * Callback method of selected EPN.
+     * 
+     * @param ev the command event
+     */
+    onSelectEPN(ev: XULCommandEvent) {
+        var mlEPN: XULMenuListElement = <any>ev.currentTarget;
+        var i = mlEPN.selectedItem.value;
+
+        var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation".split("|");
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+        if (!i.isEmpty()) {
+            for (var e in elms) {
+                this.setDisabledState(elms[e], false);
+            }
+
+            var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
+            tbShelfMark.value = this.copys[i].shelfmark;
+            var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
+            tbLocation.value = this.copys[i].location;
+        } else {
+            for (var e in elms) {
+                this.setDisabledState(elms[e], true);
+            }
         }
     }
 }

@@ -53,7 +53,7 @@
               </hbox>
               <hbox align="center">
                 <caption label="&lblExp.label;" width="100" />
-                <menulist id="mlCopy" width="270" disabled="true">
+                <menulist id="mlEPN" width="270" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -63,17 +63,17 @@
               <hbox align="center">
                 <caption label="" width="100" />
                 <vbox align="left,center">
-                  <checkbox id="cbSgn" label="&cbSgn.label;" checked="&amp;defaultSgnEdt" disabled="true" />
-                  <checkbox id="cbPre" label="&cbPre.label;" checked="&amp;defaultPre" disabled="true" onclick="onClick_Pre()" />
+                  <checkbox id="cbShelfMark" label="&cbSgn.label;" checked="&amp;defaultSgnEdt" disabled="true" />
+                  <checkbox id="cbPresence" label="&cbPre.label;" checked="&amp;defaultPre" disabled="true" onclick="onClick_Pre()" />
                 </vbox>
               </hbox>
               <hbox id="BundelBox" align="center" hidden="true">
                 <caption label="&lblBundelEPN.label;" width="100" />
                 <textbox id="tbBundelEPN" width="300" disabled="false" height="22" onkeydown="onChgBundelEPN(event);" />
               </hbox>
-              <hbox id="SgnBox" align="center" hidden="true">
+              <hbox id="ShelfMarkBox" align="center" hidden="true">
                 <caption label="&lblSgn.label;" width="100" />
-                <textbox id="tbSgn" width="300" disabled="true" height="22" />
+                <textbox id="tbShelfMark" width="300" disabled="true" height="22" />
               </hbox>
               <hbox align="center">
                 <caption label="&lblLoc.label;" width="100" />
