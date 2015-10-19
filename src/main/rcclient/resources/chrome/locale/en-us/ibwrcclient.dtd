@@ -1,10 +1,12 @@
+<!ENTITY defaultValues.PleaseSelect "(please select)">
+
 <!-- Main Windows -->
 <!ENTITY app.title	"Booking">
 
-<!ENTITY tabSingle.label "Single Copy">
-<!ENTITY tabSingle.accesskey "S">
-<!ENTITY tabMulti.label "Multiple Copys">
-<!ENTITY tabMulti.accesskey "M">
+<!ENTITY label.single "Single Copy">
+<!ENTITY accesskey.single "S">
+<!ENTITY label.multi "Multiple Copys">
+<!ENTITY accesskey.multi "M">
 
 <!ENTITY mOptions.label "Options">
 <!ENTITY mOptions.accesskey "O">
@@ -16,22 +18,20 @@
 <!ENTITY mHelp.About.label "About">
 <!ENTITY mHelp.About.accesskey "b">
 
-<!ENTITY defaultValues.PleaseSelect "(please select)">
+<!ENTITY label.slot "ESA Number:">
+<!ENTITY label.ppn "Title/PPN:">
+<!ENTITY label.epn "Copy:">
+<!ENTITY label.shelfmark "Signature:">
+<!ENTITY label.location "Location:">
+<!ENTITY label.bundleEPN "EPN first unit:">
 
-<!ENTITY lblESA.label "ESA Number:">
-<!ENTITY lblPPN.label "Title/PPN:">
-<!ENTITY lblExp.label "Copy:">
-<!ENTITY lblSgn.label "Signature:">
-<!ENTITY lblLoc.label "Location:">
-<!ENTITY lblBundelEPN.label "EPN first unit:">
+<!ENTITY label.shelfmark.change "Change Signature">
+<!ENTITY label.presence "Present Copy">
 
-<!ENTITY cbSgn.label "Change Signature">
-<!ENTITY cbPre.label "Present Copy">
-
-<!ENTITY btnUnRegister.label "Reverse">
-<!ENTITY btnUnRegister.accesskey "R">
-<!ENTITY btnRegister.label "Activate">
-<!ENTITY btnRegister.accesskey "A">
+<!ENTITY button.unregister "Reverse">
+<!ENTITY button.unregister.accesskey "R">
+<!ENTITY button.register "Activate">
+<!ENTITY button.register.accesskey "A">
 
 <!-- Options -->
 <!ENTITY dlg.title  "Settings">

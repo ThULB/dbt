@@ -22,21 +22,21 @@
 <!--   </menubar> -->
 
   <vbox flex="1" height="290">
-    <vbox align="start" height="100" style="background-color:#ffffff; border:2px outset #c0c0c0;">
+    <vbox id="header" align="start" height="100">
       <image src="chrome://IBWRCClient/content/images/dbt_logo.png" width="205" height="100" />
     </vbox>
 
     <vbox>
       <tabbox>
         <tabs>
-          <tab label="&tabSingle.label;" accesskey="&tabSingle.accesskey;" />
-          <tab label="&tabMulti.label;" accesskey="&tabMulti.accesskey;" />
+          <tab label="&label.single;" accesskey="&accesskey.single;" />
+          <tab label="&label.multi;" accesskey="&accesskey.multi;" />
         </tabs>
         <tabpanels>
-          <tabpanel id="tabExSingle">
+          <tabpanel id="tabSingleCopy">
             <vbox>
               <hbox align="center">
-                <caption label="&lblESA.label;" width="100" />
+                <caption label="&label.slot;" width="100" />
                 <menulist id="mlSlots" width="300">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
@@ -44,7 +44,7 @@
                 </menulist>
               </hbox>
               <hbox align="center">
-                <caption label="&lblPPN.label;" width="100" />
+                <caption label="&label.ppn;" width="100" />
                 <menulist id="mlPPN" width="300" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
@@ -52,45 +52,45 @@
                 </menulist>
               </hbox>
               <hbox align="center">
-                <caption label="&lblExp.label;" width="100" />
+                <caption label="&label.epn;" width="100" />
                 <menulist id="mlEPN" width="270" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
                 </menulist>
-                <image id="btnBar" src="chrome://IBWRCClient/content/images/barcode.png" onclick="onBarcode();" style="border:2px outset #c0c0c0; width:22px; height:22px" />
+                <image id="btnBar" src="chrome://IBWRCClient/content/images/barcode.png" />
               </hbox>
               <hbox align="center">
                 <caption label="" width="100" />
                 <vbox align="left,center">
-                  <checkbox id="cbShelfMark" label="&cbSgn.label;" checked="&amp;defaultSgnEdt" disabled="true" />
-                  <checkbox id="cbPresence" label="&cbPre.label;" checked="&amp;defaultPre" disabled="true" onclick="onClick_Pre()" />
+                  <checkbox id="cbShelfMark" label="&label.shelfmark;" disabled="true" />
+                  <checkbox id="cbPresence" label="&label.presence;" disabled="true" />
                 </vbox>
               </hbox>
               <hbox id="BundelBox" align="center" hidden="true">
-                <caption label="&lblBundelEPN.label;" width="100" />
-                <textbox id="tbBundelEPN" width="300" disabled="false" height="22" onkeydown="onChgBundelEPN(event);" />
+                <caption label="&label.bundleEPN;" width="100" />
+                <textbox id="tbBundelEPN" width="300" disabled="false" height="22" />
               </hbox>
               <hbox id="ShelfMarkBox" align="center" hidden="true">
-                <caption label="&lblSgn.label;" width="100" />
+                <caption label="&label.shelfmark.change;" width="100" />
                 <textbox id="tbShelfMark" width="300" disabled="true" height="22" />
               </hbox>
               <hbox align="center">
-                <caption label="&lblLoc.label;" width="100" />
+                <caption label="&label.location;" width="100" />
                 <textbox id="tbLocation" width="300" disabled="true" height="22" />
               </hbox>
               <hbox align="center" height="50">
-                <button id="btnUnRegister" accesskey="&btnUnRegister.accesskey;" label="&btnUnRegister.label;" oncommand="onUnRegister()" disabled="true" />
+                <button id="btnUnRegister" accesskey="&button.unregister.accesskey;" label="&button.unregister;" disabled="true" />
                 <space width="265" />
-                <button id="btnRegister" accesskey="&btnRegister.accesskey;" align="right" label="&btnRegister.label;" oncommand="onRegister()" disabled="true" />
+                <button id="btnRegister" accesskey="&button.register.accesskey;" align="right" label="&button.register;" disabled="true" />
               </hbox>
             </vbox>
           </tabpanel>
-          <tabpanel id="tabExMulti">
+          <tabpanel id="tabMultiCopy">
             <vbox>
               <hbox align="center">
-                <caption label="&lblESA.label;" width="100" />
-                <menulist id="mlSlotsBar" width="300" oncommand="onSelESABar()">
+                <caption label="&label.slot;" width="100" />
+                <menulist id="mlSlotsBar" width="300">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -100,7 +100,7 @@
                 <textbox id="tbBarcodes" multiline="true" rows="10" width="410" disbaled="false" />
               </hbox>
               <vbox align="right">
-                <button id="btnUnRegisterAll" accesskey="&btnUnRegister.accesskey;" label="&btnUnRegister.label;" oncommand="onUnRegisterAll()" disabled="true" />
+                <button id="btnUnRegisterAll" accesskey="&button.unregister.accesskey;" label="&button.unregister;" disabled="true" />
               </vbox>
             </vbox>
           </tabpanel>

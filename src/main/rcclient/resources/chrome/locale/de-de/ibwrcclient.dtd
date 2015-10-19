@@ -1,10 +1,12 @@
+<!ENTITY defaultValues.PleaseSelect "(bitte wählen)">
+
 <!-- Main Window -->
 <!ENTITY app.title	"Verbuchung auf Semesterapparat">
 
-<!ENTITY tabSingle.label "Einzelne Exemplare">
-<!ENTITY tabSingle.accesskey "E">
-<!ENTITY tabMulti.label "Mehrere Exemplare">
-<!ENTITY tabMulti.accesskey "M">
+<!ENTITY label.single "Einzelne Exemplare">
+<!ENTITY accesskey.single "E">
+<!ENTITY label.multi "Mehrere Exemplare">
+<!ENTITY accesskey.multi "M">
 
 <!ENTITY mOptions.label "Optionen">
 <!ENTITY mOptions.accesskey "O">
@@ -16,23 +18,20 @@
 <!ENTITY mHelp.About.label "Über IBW3ESA">
 <!ENTITY mHelp.About.accesskey "Ü">
 
+<!ENTITY label.slot "SemApp Nummer:">
+<!ENTITY label.ppn "Title/PPN:">
+<!ENTITY label.epn "Exemplar:">
+<!ENTITY label.shelfmark "Signatur:">
+<!ENTITY label.location "Standort:">
+<!ENTITY label.bundleEPN "EPN erster Band:">
 
-<!ENTITY defaultValues.PleaseSelect "(bitte wählen)">
+<!ENTITY label.shelfmark.change "Signatur ändern">
+<!ENTITY label.presence "Präsenzexemplar">
 
-<!ENTITY lblESA.label "SemApp Nummer:">
-<!ENTITY lblPPN.label "Title/PPN:">
-<!ENTITY lblExp.label "Exemplar:">
-<!ENTITY lblSgn.label "Signatur:">
-<!ENTITY lblLoc.label "Standort:">
-<!ENTITY lblBundelEPN.label "EPN erster Band:">
-
-<!ENTITY cbSgn.label "Signatur ändern">
-<!ENTITY cbPre.label "Präsenzexemplar">
-
-<!ENTITY btnUnRegister.label "Aufheben">
-<!ENTITY btnUnRegister.accesskey "A">
-<!ENTITY btnRegister.label "Freischalten">
-<!ENTITY btnRegister.accesskey "F">
+<!ENTITY button.unregister "Aufheben">
+<!ENTITY button.unregister.accesskey "A">
+<!ENTITY button.register "Freischalten">
+<!ENTITY button.register.accesskey "F">
 
 <!-- Options -->
 <!ENTITY dlg.title  "Einstellungen">
