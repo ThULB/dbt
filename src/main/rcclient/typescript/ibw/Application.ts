@@ -76,6 +76,34 @@ module ibw {
     }
 
     /**
+     * Search the tag in the given title and returns the category content.
+     * 
+     * @param title the title copy
+     * @param tag the tag to search
+     * @param occurrence the occurrence of the tag. by default the first
+     * @return the category content
+     */
+    export function findTag(title: string, tag: string, occurrence: number = 0) {
+        var lines: Array<string> = title.split("\n");
+        var occ: number = 0;
+
+        for (var i in lines) {
+            if (occ > occurrence) break;
+
+            var exp: RegExp = new RegExp(tag + "\\s(.*)");
+            if (lines[i].match(exp)) {
+                if (occurrence == occ) {
+                    var match = exp.exec(lines[i]);
+                    return match[1];
+                }
+                occ++;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Shows error message from given error object.
      * 
      * @param error the error object
