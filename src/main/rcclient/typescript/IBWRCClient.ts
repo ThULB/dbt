@@ -151,17 +151,27 @@ class IBWRCClient {
         if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
             this.copys = ibw.getCopys();
+            var entry = this.slot.getEntryForPPN(PPN);
 
             mlEPN.addEventListener("command", this, false);
 
             this.clearMenuList(mlEPN, false);
+            var selectedIndex: number = 0;
 
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
                 if (!copy.type.startsWith("k")) continue;
 
+                if (entry != null && entry.epn == copy.epn)
+                    selectedIndex = parseInt(i) + 1;
+
                 mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
+            }
+
+            if (selectedIndex != 0) {
+                mlEPN.selectedIndex = selectedIndex;
+                mlEPN.doCommand();
             }
         } else {
             this.clearMenuList(mlEPN, true);
@@ -174,21 +184,21 @@ class IBWRCClient {
      * @param ev the command event
      */
     onSelectEPN(ev: XULCommandEvent) {
-        var mlEPN: XULMenuListElement = <any>ev.currentTarget;
-        var i = mlEPN.selectedItem.value;
+        var mlEPN: XULMenuListElement = <any>ev.currentTarget || ev;
+        var copy: ibw.Copy = this.copys[mlEPN.selectedItem.value || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
 
         var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation".split("|");
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
 
-        if (!i.isEmpty()) {
+        if (core.Utils.isValid(copy)) {
             for (var e in elms) {
                 this.setDisabledState(elms[e], false);
             }
 
             var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
-            tbShelfMark.value = this.copys[i].shelfmark;
+            tbShelfMark.value = copy.shelfmark;
             var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
-            tbLocation.value = this.copys[i].location;
+            tbLocation.value = copy.location;
         } else {
             for (var e in elms) {
                 this.setDisabledState(elms[e], true);

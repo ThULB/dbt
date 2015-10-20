@@ -76,6 +76,15 @@ module rc {
             return slot;
         }
 
+        public getEntryForPPN(ppn: string): Entry {
+            for (var i in this.entries) {
+                if (this.entries[i].ppn == ppn)
+                    return this.entries[i];
+            }
+            
+            return null;
+        }
+
         /**
          * String presentation of the Slot object.
          * 
