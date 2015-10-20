@@ -41,7 +41,7 @@ module ibw {
                 backup.slotId = m[1];
 
                 var tmp = m[2];
-                var exp = new RegExp("/(.*) \\ c:(.*)/");
+                var exp: RegExp = /(.*) \\ c:(.*)/;
                 if (exp.test(tmp)) {
                     var p: Array<string> = tmp.match(exp);
                     backup.isBundle = true;
@@ -104,7 +104,8 @@ module ibw {
                             copy.location = m[1];
                             copy.shelfmark = m[2];
 
-                            var exp: RegExp = new RegExp("/(.*) \\ c/");
+                            var exp: RegExp = /(.*) \\ c/;
+
                             if (exp.test(m[3])) {
                                 copy.loanIndicator = m[3].match(exp)[1];
                                 copy.isBundle = true;
