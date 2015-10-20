@@ -1,6 +1,30 @@
 /// <reference path="Tag.ts" />
 
 module ibw {
+    export class Copys {
+        private copys: Array<Copy>;
+
+        constructor(copys: Array<Copy>) {
+            this.copys = copys;
+        }
+
+        length(): number {
+            return this.copys.length;
+        }
+
+        item(index: number): Copy {
+            return this.copys[index];
+        }
+
+        hasRegistered(): boolean {
+            for (var i in this.copys) {
+                if (core.Utils.isValid(this.copys[i].backup))
+                    return true;
+            }
+            return false;
+        }
+    }
+
     export class CopyBackup {
         slotId: string;
         location: string;

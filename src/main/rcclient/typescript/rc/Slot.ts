@@ -76,12 +76,33 @@ module rc {
             return slot;
         }
 
+        /**
+         * Returns a entry for given PPN or <code>null</code>.
+         * 
+         * @param ppn the PPN
+         * @return a entry or <code>null</code>.
+         */
         public getEntryForPPN(ppn: string): Entry {
             for (var i in this.entries) {
                 if (this.entries[i].ppn == ppn)
                     return this.entries[i];
             }
-            
+
+            return null;
+        }
+
+        /**
+         * Returns a entry for given EPN or <code>null</code>.
+         * 
+         * @param epn the EPN
+         * @return a entry or <code>null</code>.
+         */
+        public getEntryForEPN(epn: string): Entry {
+            for (var i in this.entries) {
+                if (this.entries[i].epn == epn)
+                    return this.entries[i];
+            }
+
             return null;
         }
 
