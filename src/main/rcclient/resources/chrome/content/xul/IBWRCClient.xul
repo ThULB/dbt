@@ -67,11 +67,11 @@
                   <checkbox id="cbPresence" label="&label.presence;" disabled="true" />
                 </vbox>
               </hbox>
-              <hbox id="BundelBox" align="center" hidden="true">
+              <hbox id="boxBundle" align="center" hidden="true">
                 <caption label="&label.bundleEPN;" width="100" />
                 <textbox id="tbBundelEPN" width="300" disabled="false" height="22" />
               </hbox>
-              <hbox id="ShelfMarkBox" align="center" hidden="true">
+              <hbox id="boxShelfmark" align="center" hidden="true">
                 <caption label="&label.shelfmark.change;" width="100" />
                 <textbox id="tbShelfMark" width="300" disabled="true" height="22" />
               </hbox>

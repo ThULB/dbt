@@ -11,10 +11,21 @@ class IBWRCClient {
     public static localURIPrefix: string = "chrome://IBWRCClient/";
 
     private rcClient: rc.Client;
-    private userInfo: ibw.UserInfo;
 
     private slot: rc.Slot;
+    private userInfo: ibw.UserInfo;
     private copys: ibw.Copys;
+
+    private elementStates = {
+        "cbShelfMark": { disabled: true, hidden: false },
+        "cbPresence": { disabled: true, hidden: false },
+        "tbShelfMark": { disabled: true, hidden: false },
+        "tbLocation": { disabled: true, hidden: false },
+        "btnRegister": { disabled: true, hidden: false },
+        "btnUnRegister": { disabled: true, hidden: false },
+        "boxBundle": { disabled: true, hidden: true },
+        "boxShelfmark": { disabled: true, hidden: false }
+    };
 
     constructor() {
         core.Locale.getInstance(IBWRCClient.localURIPrefix + "locale/ibwrcclient.properties");
@@ -46,6 +57,11 @@ class IBWRCClient {
     private setDisabledState(target: any, disabled: boolean) {
         var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
         elm.disabled = disabled;
+    }
+
+    private setHiddenState(target: any, hidden: boolean) {
+        var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
+        elm.hidden = hidden;
     }
 
     private addCommandListener(elms: Array<string>) {
@@ -139,6 +155,11 @@ class IBWRCClient {
         } else {
             this.clearMenuList("mlPPN", true);
             this.clearMenuList("mlEPN", true);
+
+            for (var e in this.elementStates) {
+                this.setDisabledState(e, this.elementStates[e].disabled);
+                this.setHiddenState(e, this.elementStates[e].hidden);
+            }
         }
     }
 
@@ -151,9 +172,9 @@ class IBWRCClient {
         var mlPPN: XULMenuListElement = <any>ev.currentTarget;
         var PPN = mlPPN.selectedItem.value;
 
-        var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation|btnRegister|btnUnRegister".split("|");
-        for (var e in elms) {
-            this.setDisabledState(elms[e], true);
+        for (var e in this.elementStates) {
+            this.setDisabledState(e, this.elementStates[e].disabled);
+            this.setHiddenState(e, this.elementStates[e].hidden);
         }
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
@@ -194,19 +215,24 @@ class IBWRCClient {
         var mlEPN: XULMenuListElement = <any>ev.currentTarget;
         var copy: ibw.Copy = this.copys.item(parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1);
 
-        var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation|btnRegister|btnUnRegister".split("|");
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
 
         if (core.Utils.isValid(copy)) {
-            for (var e in elms) {
-                var state: boolean = false;
-                if (("btnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) != null) ||
-                    ("btnUnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null) ||
-                    // disable checkbox "presence" if selected epn not matching one within slot and any copy has already registered 
-                    ("cbPresence" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null && this.copys.hasRegistered()))
-                    state = true;
+            for (var e in this.elementStates) {
+                var disabled: boolean = false;
+                var hidden: boolean = this.elementStates[e].hidden;
 
-                this.setDisabledState(elms[e], state);
+                if (("btnRegister" == e && this.slot.getEntryForEPN(copy.epn) != null) ||
+                    ("btnUnRegister" == e && this.slot.getEntryForEPN(copy.epn) == null) ||
+                    // disable checkbox "presence" if selected epn not matching one within slot and any copy has already registered 
+                    ("cbPresence" == e && this.slot.getEntryForEPN(copy.epn) == null && this.copys.hasRegistered()))
+                    disabled = true;
+
+                if (("boxBundle" == e && copy.isBundle))
+                    hidden = false;
+
+                this.setDisabledState(e, disabled);
+                this.setHiddenState(e, hidden);
             }
 
             var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
@@ -214,8 +240,9 @@ class IBWRCClient {
             var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
             tbLocation.value = copy.location;
         } else {
-            for (var e in elms) {
-                this.setDisabledState(elms[e], true);
+            for (var e in this.elementStates) {
+                this.setDisabledState(e, this.elementStates[e].disabled);
+                this.setHiddenState(e, this.elementStates[e].hidden);
             }
         }
     }
