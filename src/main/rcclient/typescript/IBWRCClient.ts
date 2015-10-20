@@ -184,7 +184,7 @@ class IBWRCClient {
      * @param ev the command event
      */
     onSelectEPN(ev: XULCommandEvent) {
-        var mlEPN: XULMenuListElement = <any>ev.currentTarget || ev;
+        var mlEPN: XULMenuListElement = <any>ev.currentTarget;
         var copy: ibw.Copy = this.copys[mlEPN.selectedItem.value || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
 
         var elms: Array<string> = "cbShelfMark|tbShelfMark|cbPresence|tbLocation".split("|");
