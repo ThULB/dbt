@@ -200,10 +200,11 @@ class IBWRCClient {
         if (core.Utils.isValid(copy)) {
             for (var e in elms) {
                 var state: boolean = false;
-                ("btnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) != null) && (state = true);
-                ("btnUnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null) && (state = true);
-                // disable checkbox "presence" if selected epn not matching one within slot and any copy has already registered 
-                ("cbPresence" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null && this.copys.hasRegistered()) && (state = true);
+                if (("btnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) != null) ||
+                    ("btnUnRegister" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null) ||
+                    // disable checkbox "presence" if selected epn not matching one within slot and any copy has already registered 
+                    ("cbPresence" == elms[e] && this.slot.getEntryForEPN(copy.epn) == null && this.copys.hasRegistered()))
+                    state = true;
 
                 this.setDisabledState(elms[e], state);
             }
