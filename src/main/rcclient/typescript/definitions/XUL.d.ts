@@ -1,5 +1,9 @@
 /// <reference path="XPCOM.d.ts" />
 
+interface XULWindow extends nsISupports, Window {
+    sizeToContent();
+}
+
 interface XULCommandDispatcher extends nsISupports {
     focusedElement: Element;
     focusedWindow: Window;

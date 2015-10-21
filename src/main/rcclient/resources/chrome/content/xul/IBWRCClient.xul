@@ -21,7 +21,7 @@
 <!--     </menu> -->
 <!--   </menubar> -->
 
-  <vbox flex="1" height="290">
+  <vbox flex="1">
     <vbox id="header" align="start" height="100">
       <image src="chrome://IBWRCClient/content/images/dbt_logo.png" width="205" height="100" />
     </vbox>
@@ -107,8 +107,9 @@
         </tabpanels>
       </tabbox>
     </vbox>
-    <hbox id="statusBar">
-      <caption id="sbStatusText" label="..." flex="4" />
+    
+    <hbox id="statusBar" hidden="false">
+      <textbox id="sbStatusText" disabled="true" flex="4" />
       <progressmeter id="sbProgress" mode="determined" flex="1" />
     </hbox>
   </vbox>

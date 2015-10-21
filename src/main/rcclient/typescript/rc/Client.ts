@@ -7,6 +7,8 @@ module rc {
         public static EVENT_SLOT_LIST_LOADED = "SLOT_LIST_LOADED";
         public static EVENT_SLOT_LOADED = "SLOT_LOADED";
 
+        public statusText: string;
+
         private mURL: string;
         private mUID: string;
         private mPWD: string;
@@ -25,10 +27,12 @@ module rc {
          * Method to login to RC servlet.
          */
         private login() {
+            this.statusText = core.Locale.getInstance().getString("client.status.doLogin");
+
             var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
             var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/servlets/MCRLoginServlet?action=login", net.HTTPRequest.METHOD_POST, data);
             request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onLoginComplete);
-            request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aDelegate: any, aProgress: number, aProgressMax: number) => {
+            request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) => {
                 this.dispatch(net.HTTPRequest.EVENT_PROGRESS, aProgress, aProgressMax);
             });
             request.execute();
@@ -41,6 +45,7 @@ module rc {
             this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
+                aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlots");
                 aRequest.setURL(this.mURL + "/rc?XSL.Style=xml");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
                 aRequest.execute();
@@ -57,6 +62,7 @@ module rc {
             this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
+                aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlot");
                 aRequest.setURL(this.mURL + "/rc/" + id + "?XSL.Style=xml");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
                 aRequest.execute();
@@ -112,6 +118,7 @@ module rc {
 
             if (!aSuccess) return;
 
+            this.statusText = core.Locale.getInstance().getString("client.status.doLogin.done");
             this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
         }
 
@@ -125,9 +132,9 @@ module rc {
          */
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
-            
-            if (!aSuccess) return;
 
+            if (!aSuccess) return;
+            
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
@@ -139,6 +146,7 @@ module rc {
                 }
             }
 
+            this.statusText = core.Locale.getInstance().getString("client.status.loadSlots.done");
             this.dispatch(Client.EVENT_SLOT_LIST_LOADED);
         }
 
@@ -152,9 +160,9 @@ module rc {
          */
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
-            
-            if (!aSuccess) return;
 
+            if (!aSuccess) return;
+            
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
             var slot: Slot = null;
@@ -165,6 +173,7 @@ module rc {
                 this.setSlot(slot);
             }
 
+            this.statusText = core.Locale.getInstance().getString("client.status.loadSlot.done");
             this.dispatch(Client.EVENT_SLOT_LOADED, slot);
         }
     }

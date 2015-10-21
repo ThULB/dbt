@@ -63,10 +63,8 @@ class IBWRCClient {
     private setHiddenState(target: any, hidden: boolean) {
         var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
         if (elm.hidden != hidden) {
-            var height: number = elm.boxObject.height;
             elm.hidden = hidden;
-            (!hidden) && (height = elm.boxObject.height);
-            window.resizeBy(0, (hidden ? -1 : 1) * height);
+            (<XULWindow>window).sizeToContent();
         }
     }
 
@@ -77,6 +75,15 @@ class IBWRCClient {
                 elm.addEventListener("command", this, false);
             }
         }
+    }
+
+    private updateStatusbar(status: string, progress: number = 100, progressMax: number = 100) {
+        var statusText: XULTextBoxElement = <any>document.getElementById("sbStatusText");
+        statusText.value = status;
+
+        var progressMeter: XULProgressMeterElement = <any>document.getElementById("sbProgress");
+        progressMeter.max = progressMax;
+        progressMeter.value = progress.toString();
     }
 
     /**
@@ -108,9 +115,7 @@ class IBWRCClient {
      * @param progressMax the progress max value
      */
     onProgress(delegate: rc.Client, progress: number, progressMax: number) {
-        var progressBar: XULProgressMeterElement = <any>document.getElementById("sbProgress");
-        progressBar.max = progressMax;
-        progressBar.value = progress.toString();
+        this.updateStatusbar(delegate.statusText, progress, progressMax);
     }
     
     /**
@@ -119,6 +124,8 @@ class IBWRCClient {
      * @param delegate the delegating rc.Client
      */
     onSlotListLoaded(delegate: rc.Client) {
+        this.updateStatusbar(delegate.statusText);
+
         var elms: string[] = ["mlSlots", "mlSlotsBar"];
         var slots: Array<rc.Slot> = delegate.getSlots();
 
@@ -145,6 +152,7 @@ class IBWRCClient {
      */
     onSlotLoaded(delegate: rc.Client, slot: rc.Slot) {
         delegate.clearListenersByEvent(rc.Client.EVENT_SLOT_LOADED);
+        this.updateStatusbar(delegate.statusText);
 
         var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
 
