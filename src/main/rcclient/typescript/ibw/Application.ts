@@ -11,12 +11,46 @@ module ibw {
     var application: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
 
     /**
+     * Runs command on activeWindow and returns <code>true</code> on success.
+     * 
+     * @param cmd the comamnd to run
+     * @return <code>true</code> on success otherwise <code>false</code>
+     */
+    export function command(cmd: string): boolean {
+        if (core.Utils.isValid(application.activeWindow.title))
+            throw new ibw.Error(ibw.ErrorCode.ACTIVE_TTILE);
+
+        application.activeWindow.command(cmd, false);
+        return application.activeWindow.status.toUpperCase() == "OK";
+    }
+
+    /**
+     * Simulates a keypress of given key.
+     * 
+     * @param key the key to press
+     * @return <code>true</code> on success otherwise <code>false</code>
+     */
+    export function simulateKey(key: string): boolean {
+        application.activeWindow.simulateIBWKey(key);
+        return application.activeWindow.status.toUpperCase() == "OK";
+    }
+    
+    /**
      * Returns the activeWindow interface.
      * 
      * @return the activeWindow interface
      */
     export function getActiveWindow(): IActiveWindow {
         return application.activeWindow;
+    }
+    
+    /**
+     * Returns the title from activeWindow.
+     * 
+     * @return the active title
+     */
+    export function getTitle(): IEditControl {
+        return application.activeWindow.title;
     }
 
     /**
@@ -25,13 +59,8 @@ module ibw {
      * @return the user information
      */
     export function getUserInfo(): UserInfo {
-        if (core.Utils.isValid(application.activeWindow.title))
-            throw new ibw.Error(ibw.ErrorCode.ACTIVE_TTILE);
-
-        application.activeWindow.command("s ben", false);
-        if (application.activeWindow.status.toUpperCase() == "OK") {
-            application.activeWindow.simulateIBWKey("F7");
-            if (application.activeWindow.status.toUpperCase() == "OK") {
+        if (ibw.command("s ben")) {
+            if (ibw.simulateKey("F7")) {
                 var userInfo: UserInfo = new UserInfo();
 
                 userInfo.uid = application.activeWindow.getVariable("P3VU1");
@@ -39,7 +68,7 @@ module ibw {
                 userInfo.libId = application.activeWindow.getVariable("P3VU3");
                 userInfo.description = application.activeWindow.getVariable("P3VUS");
 
-                application.activeWindow.simulateIBWKey("FE");
+                ibw.simulateKey("FE");
                 return userInfo;
             }
         }
@@ -113,8 +142,7 @@ module ibw {
         core.Utils.isValid(error.fileName) && (msg += " " + core.Locale.getInstance().getString("error.message.file", error.fileName));
         core.Utils.isValid(error.lineNumber) && (msg += " " + core.Locale.getInstance().getString("error.message.line", error.lineNumber));
 
-        // TODO enable messageBox isn't on WINE
-        // application.messageBox(error.name, msg, "error-icon");
-        alert(msg);
+        // TODO on WINE add *mfc71, *msvcp71 and *msvcr71 to use as native, before buildin
+        application.messageBox(error.name, msg, "error-icon");
     }
 }
