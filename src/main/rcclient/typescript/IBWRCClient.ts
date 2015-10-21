@@ -17,14 +17,14 @@ class IBWRCClient {
     private copys: ibw.Copys;
 
     private elementStates = {
-        "cbShelfMark": { disabled: true, hidden: false, extendHeight: false },
-        "cbPresence": { disabled: true, hidden: false, extendHeight: false },
-        "tbShelfMark": { disabled: true, hidden: false, extendHeight: false },
-        "tbLocation": { disabled: true, hidden: false, extendHeight: false },
-        "btnRegister": { disabled: true, hidden: false, extendHeight: false },
-        "btnUnRegister": { disabled: true, hidden: false, extendHeight: false },
-        "boxBundle": { disabled: true, hidden: true, extendHeight: true },
-        "boxShelfMark": { disabled: true, hidden: false, extendHeight: false }
+        "cbShelfMark": { disabled: true, hidden: true },
+        "cbPresence": { disabled: true, hidden: false },
+        "tbShelfMark": { disabled: true, hidden: false },
+        "tbLocation": { disabled: true, hidden: false },
+        "btnRegister": { disabled: true, hidden: false },
+        "btnUnRegister": { disabled: true, hidden: false },
+        "boxBundle": { disabled: true, hidden: true },
+        "boxShelfMark": { disabled: true, hidden: true }
     };
 
     constructor() {
@@ -36,6 +36,7 @@ class IBWRCClient {
                 //this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
                 this.rcClient = new rc.Client("http://141.24.167.11:8291/mir");
                 this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
+                this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
 
                 this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnUnRegister".split("|"));
@@ -59,13 +60,13 @@ class IBWRCClient {
         elm.disabled = disabled;
     }
 
-    private setHiddenState(target: any, hidden: boolean, extendHeight: boolean = true) {
+    private setHiddenState(target: any, hidden: boolean) {
         var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
         if (elm.hidden != hidden) {
             var height: number = elm.boxObject.height;
             elm.hidden = hidden;
             (!hidden) && (height = elm.boxObject.height);
-            extendHeight && window.resizeBy(0, (hidden ? -1 : 1) * height);
+            window.resizeBy(0, (hidden ? -1 : 1) * height);
         }
     }
 
@@ -99,6 +100,19 @@ class IBWRCClient {
         }
     }
 
+    /**
+     * Callback method to listen on HTTPRequest progress event.
+     * 
+     * @param delegate the delegating rc.Client
+     * @param progress the current progress value
+     * @param progressMax the progress max value
+     */
+    onProgress(delegate: rc.Client, progress: number, progressMax: number) {
+        var progressBar: XULProgressMeterElement = <any>document.getElementById("sbProgress");
+        progressBar.max = progressMax;
+        progressBar.value = progress.toString();
+    }
+    
     /**
      * Callback method of loaded Slot list. Used to display Slots in MenuListElement.
      * 
@@ -163,7 +177,7 @@ class IBWRCClient {
 
             for (var e in this.elementStates) {
                 this.setDisabledState(e, this.elementStates[e].disabled);
-                this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
+                this.setHiddenState(e, this.elementStates[e].hidden);
             }
         }
     }
@@ -179,7 +193,7 @@ class IBWRCClient {
 
         for (var e in this.elementStates) {
             this.setDisabledState(e, this.elementStates[e].disabled);
-            this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
+            this.setHiddenState(e, this.elementStates[e].hidden);
         }
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
@@ -237,7 +251,7 @@ class IBWRCClient {
                     hidden = false;
 
                 this.setDisabledState(e, disabled);
-                this.setHiddenState(e, hidden, this.elementStates[e].extendHeight);
+                this.setHiddenState(e, hidden);
             }
 
             var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
@@ -247,7 +261,7 @@ class IBWRCClient {
         } else {
             for (var e in this.elementStates) {
                 this.setDisabledState(e, this.elementStates[e].disabled);
-                this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
+                this.setHiddenState(e, this.elementStates[e].hidden);
             }
         }
     }

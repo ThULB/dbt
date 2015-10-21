@@ -63,7 +63,7 @@
               <hbox align="center">
                 <caption label="" width="100" />
                 <vbox align="left,center">
-                  <checkbox id="cbShelfMark" label="&label.shelfmark;" disabled="true" />
+                  <checkbox id="cbShelfMark" label="&label.shelfmark;" disabled="true" hidden="true" />
                   <checkbox id="cbPresence" label="&label.presence;" disabled="true" />
                 </vbox>
               </hbox>
@@ -97,7 +97,7 @@
                 </menulist>
               </hbox>
               <hbox align="center">
-                <textbox id="tbBarcodes" multiline="true" rows="10" width="410" disbaled="false" />
+                <textbox id="tbBarcodes" multiline="true" rows="10" width="410" disbaled="true" />
               </hbox>
               <vbox align="right">
                 <button id="btnUnRegisterAll" accesskey="&button.unregister.accesskey;" label="&button.unregister;" disabled="true" />
@@ -107,5 +107,9 @@
         </tabpanels>
       </tabbox>
     </vbox>
+    <hbox id="statusBar">
+      <caption id="sbStatusText" label="..." flex="4" />
+      <progressmeter id="sbProgress" mode="determined" flex="1" />
+    </hbox>
   </vbox>
 </window>

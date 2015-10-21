@@ -1,7 +1,10 @@
 /// <reference path="../definitions/XPCOM.d.ts" />
 
 module net {
-    export class HTTPRequest {
+    export class HTTPRequest extends core.EventDispatcher {
+        public static EVENT_COMPLETE = "COMPLETE";
+        public static EVENT_PROGRESS = "PROGRESS";
+
         public static METHOD_POST = "POST";
         public static METHOD_GET = "GET";
         public static METHOD_PUT = "PUT";
@@ -13,11 +16,9 @@ module net {
         private mURI: nsIURI;
         private mChannel: nsIChannel;
 
-        private mCallbackClass: any;
-        private mCompleteCallback: (aClass: HTTPRequest, aData: any, aSuccess: boolean) => void;
-        private mProgressCallback: (aClass: HTTPRequest, aProgress: number, aProgressMax: number) => void;
-
         constructor(aURL: string, aMethod?: string, aData?: string, aCache?: boolean) {
+            super();
+
             this.mMethod = aMethod != null ? aMethod.toUpperCase() : HTTPRequest.METHOD_GET;
             this.mData = aData;
 
@@ -45,7 +46,7 @@ module net {
             return this.mChannel;
         }
 
-        execute(aCallbackClass: any, aCompleteCallback, aProgressCallback?): void {
+        execute() {
             var httpChannel: nsIHttpChannel = this.mChannel.QueryInterface(Components.interfaces.nsIHttpChannel);
             httpChannel.referrer = this.mURI;
             httpChannel.requestMethod = this.mMethod;
@@ -61,10 +62,6 @@ module net {
                 (this.mMethod == HTTPRequest.METHOD_POST) && (httpChannel.requestMethod = this.mMethod);
             }
 
-            this.mCallbackClass = aCallbackClass;
-            this.mCompleteCallback = aCompleteCallback;
-            this.mProgressCallback = aProgressCallback;
-
             var listener: nsIStreamListener = new StreamListener(this, this.onComplete, this.onProgess);
 
             this.mChannel.notificationCallbacks = listener;
@@ -72,17 +69,11 @@ module net {
         }
 
         private onComplete(aHTTPRequest: net.HTTPRequest, aData: any, aSuccess: boolean) {
-            var cbClass: any = aHTTPRequest.mCallbackClass;
-            var callback: Function = aHTTPRequest.mCompleteCallback;
-
-            (callback != null) && callback.call(cbClass, aHTTPRequest, aData, aSuccess);
+            aHTTPRequest.dispatch(HTTPRequest.EVENT_COMPLETE, aData, aSuccess);
         }
 
         private onProgess(aHTTPRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) {
-            var cbClass: any = aHTTPRequest.mCallbackClass;
-            var callback: Function = aHTTPRequest.mProgressCallback;
-
-            (callback != null) && callback.call(cbClass, aHTTPRequest, aProgress, aProgressMax);
+            aHTTPRequest.dispatch(HTTPRequest.EVENT_PROGRESS, aProgress, aProgressMax);
         }
     }
 

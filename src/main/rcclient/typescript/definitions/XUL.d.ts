@@ -163,3 +163,10 @@ interface XULTextBoxElement extends XULControlElement {
     select();
     setSelectionRange(selectionStart: number, selectionEnd: number);
 }
+
+interface XULProgressMeterElement extends XULControlElement {
+    accessibleType: number;
+    max: number;
+    mode: string;
+    value: string;
+}

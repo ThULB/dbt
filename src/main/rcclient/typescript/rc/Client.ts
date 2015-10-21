@@ -27,7 +27,11 @@ module rc {
         private login() {
             var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
             var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/servlets/MCRLoginServlet?action=login", net.HTTPRequest.METHOD_POST, data);
-            request.execute(this, this.onLoginComplete);
+            request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onLoginComplete);
+            request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aDelegate: any, aProgress: number, aProgressMax: number) => {
+                this.dispatch(net.HTTPRequest.EVENT_PROGRESS, aProgress, aProgressMax);
+            });
+            request.execute();
         }
 
         /**
@@ -38,7 +42,8 @@ module rc {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 aRequest.setURL(this.mURL + "/rc?XSL.Style=xml");
-                aRequest.execute(this, this.onSlotsComplete);
+                aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
+                aRequest.execute();
             });
             this.login();
         }
@@ -53,7 +58,8 @@ module rc {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 aRequest.setURL(this.mURL + "/rc/" + id + "?XSL.Style=xml");
-                aRequest.execute(this, this.onSlotComplete);
+                aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
+                aRequest.execute();
             });
             this.login();
         }
@@ -102,6 +108,8 @@ module rc {
          * @param aSuccess the status of the HTTPRequest
          */
         private onLoginComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+
             if (!aSuccess) return;
 
             this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
@@ -116,6 +124,8 @@ module rc {
          * @param aSuccess the status of the HTTPRequest
          */
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+            
             if (!aSuccess) return;
 
             this.mSlots = new Array<Slot>();
@@ -140,7 +150,9 @@ module rc {
          * @param aData the response
          * @param aSuccess the status of the HTTPRequest
          */
-        private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean): void {
+        private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+            
             if (!aSuccess) return;
 
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
