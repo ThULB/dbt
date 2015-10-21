@@ -17,14 +17,14 @@ class IBWRCClient {
     private copys: ibw.Copys;
 
     private elementStates = {
-        "cbShelfMark": { disabled: true, hidden: false },
-        "cbPresence": { disabled: true, hidden: false },
-        "tbShelfMark": { disabled: true, hidden: false },
-        "tbLocation": { disabled: true, hidden: false },
-        "btnRegister": { disabled: true, hidden: false },
-        "btnUnRegister": { disabled: true, hidden: false },
-        "boxBundle": { disabled: true, hidden: true },
-        "boxShelfmark": { disabled: true, hidden: false }
+        "cbShelfMark": { disabled: true, hidden: false, extendHeight: false },
+        "cbPresence": { disabled: true, hidden: false, extendHeight: false },
+        "tbShelfMark": { disabled: true, hidden: false, extendHeight: false },
+        "tbLocation": { disabled: true, hidden: false, extendHeight: false },
+        "btnRegister": { disabled: true, hidden: false, extendHeight: false },
+        "btnUnRegister": { disabled: true, hidden: false, extendHeight: false },
+        "boxBundle": { disabled: true, hidden: true, extendHeight: true },
+        "boxShelfMark": { disabled: true, hidden: false, extendHeight: false }
     };
 
     constructor() {
@@ -59,9 +59,14 @@ class IBWRCClient {
         elm.disabled = disabled;
     }
 
-    private setHiddenState(target: any, hidden: boolean) {
+    private setHiddenState(target: any, hidden: boolean, extendHeight: boolean = true) {
         var elm: XULControlElement = typeof target == "string" ? <any>document.getElementById(target) : target;
-        elm.hidden = hidden;
+        if (elm.hidden != hidden) {
+            var height: number = elm.boxObject.height;
+            elm.hidden = hidden;
+            (!hidden) && (height = elm.boxObject.height);
+            extendHeight && window.resizeBy(0, (hidden ? -1 : 1) * height);
+        }
     }
 
     private addCommandListener(elms: Array<string>) {
@@ -158,7 +163,7 @@ class IBWRCClient {
 
             for (var e in this.elementStates) {
                 this.setDisabledState(e, this.elementStates[e].disabled);
-                this.setHiddenState(e, this.elementStates[e].hidden);
+                this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
             }
         }
     }
@@ -174,7 +179,7 @@ class IBWRCClient {
 
         for (var e in this.elementStates) {
             this.setDisabledState(e, this.elementStates[e].disabled);
-            this.setHiddenState(e, this.elementStates[e].hidden);
+            this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
         }
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
@@ -232,7 +237,7 @@ class IBWRCClient {
                     hidden = false;
 
                 this.setDisabledState(e, disabled);
-                this.setHiddenState(e, hidden);
+                this.setHiddenState(e, hidden, this.elementStates[e].extendHeight);
             }
 
             var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
@@ -242,7 +247,7 @@ class IBWRCClient {
         } else {
             for (var e in this.elementStates) {
                 this.setDisabledState(e, this.elementStates[e].disabled);
-                this.setHiddenState(e, this.elementStates[e].hidden);
+                this.setHiddenState(e, this.elementStates[e].hidden, this.elementStates[e].extendHeight);
             }
         }
     }

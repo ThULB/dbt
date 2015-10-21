@@ -71,7 +71,7 @@
                 <caption label="&label.bundleEPN;" width="100" />
                 <textbox id="tbBundelEPN" width="300" disabled="false" height="22" />
               </hbox>
-              <hbox id="boxShelfmark" align="center" hidden="true">
+              <hbox id="boxShelfMark" align="center" hidden="true">
                 <caption label="&label.shelfmark.change;" width="100" />
                 <textbox id="tbShelfMark" width="300" disabled="true" height="22" />
               </hbox>

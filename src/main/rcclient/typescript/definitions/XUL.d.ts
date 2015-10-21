@@ -51,6 +51,7 @@ interface XULDocument extends nsISupports, Document {
 interface XULElement extends Element {
     className: string;
     align: string;
+    boxObject: nsIBoxObject;
     dir: string;
     flex: string;
     flexGroup: string;
