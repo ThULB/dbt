@@ -1,12 +1,5 @@
 /// <reference path="XPCOM.d.ts" />
 
-interface nsIController extends nsISupports {
-    isCommandEnabled(command: string): boolean;
-    supportsCommand(command: string): boolean;
-    doCommand(command: string);
-    onEvent(eventName: string);
-}
-
 interface XULCommandDispatcher extends nsISupports {
     focusedElement: Element;
     focusedWindow: Window;

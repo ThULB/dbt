@@ -300,6 +300,13 @@ interface nsIFile extends nsISupports {
     setRelativeDescriptor(fromFile: nsIFile, relativeDesc: string);
 }
 
+interface nsIController extends nsISupports {
+    isCommandEnabled(command: string): boolean;
+    supportsCommand(command: string): boolean;
+    doCommand(command: string);
+    onEvent(eventName: string);
+}
+
 interface nsIBoxObject extends nsISupports {
     element: Element;
     parentBox: Element;
