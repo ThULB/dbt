@@ -1,30 +1,6 @@
 /// <reference path="Tag.ts" />
 
 module ibw {
-    export class Copys {
-        private copys: Array<Copy>;
-
-        constructor(copys: Array<Copy>) {
-            this.copys = copys;
-        }
-
-        length(): number {
-            return this.copys.length;
-        }
-
-        item(index: number): Copy {
-            return this.copys[index];
-        }
-
-        hasRegistered(): boolean {
-            for (var i in this.copys) {
-                if (core.Utils.isValid(this.copys[i].backup) && this.copys[i].backup.length != 0)
-                    return true;
-            }
-            return false;
-        }
-    }
-
     export class CopyBackup {
         slotId: string;
         location: string;
@@ -97,8 +73,11 @@ module ibw {
                 } else {
                     switch (tag.category) {
                         case "4802":
-                            (!core.Utils.isValid(copy.backup)) && (copy.backup = new Array<CopyBackup>());
-                            copy.backup.push(CopyBackup.parse(tag.content));
+                            var backup: CopyBackup = CopyBackup.parse(tag.content);
+                            if (core.Utils.isValid(backup)) {
+                                (!core.Utils.isValid(copy.backup)) && (copy.backup = new Array<CopyBackup>());
+                                copy.backup.push(backup);
+                            }
                             break;
                         case "7100":
                             var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
@@ -126,6 +105,10 @@ module ibw {
             }
 
             return copy;
+        }
+
+        hasRegistered(): boolean {
+            return core.Utils.isValid(this.backup) && this.backup.length != 0;
         }
 
         toString(): string {

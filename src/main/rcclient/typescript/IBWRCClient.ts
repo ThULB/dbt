@@ -18,7 +18,7 @@ class IBWRCClient {
 
     private slot: rc.Slot;
     private userInfo: ibw.UserInfo;
-    private copys: ibw.Copys;
+    private copys: Array<ibw.Copy>;
 
     private elementStates = {
         "cbShelfMark": { disabled: true, hidden: true },
@@ -224,21 +224,21 @@ class IBWRCClient {
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
         if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
-            this.copys = new ibw.Copys(ibw.getCopys());
+            this.copys = ibw.getCopys();
             var entry = this.slot.getEntryForPPN(PPN);
 
             this.clearMenuList(mlEPN, false);
             var selectedIndex: number = 0;
 
-            for (var i = 0; i < this.copys.length(); i++) {
-                var copy: ibw.Copy = this.copys.item(i);
+            for (var i in this.copys) {
+                var copy: ibw.Copy = this.copys[i];
 
                 if (!copy.type.startsWith("k")) continue;
 
                 if (entry != null && entry.epn == copy.epn)
-                    selectedIndex = i + 1;
+                    selectedIndex = parseInt(i) + 1;
 
-                mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i.toString());
+                mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
             }
 
             if (selectedIndex != 0) {
@@ -257,21 +257,30 @@ class IBWRCClient {
      */
     onSelectEPN(ev: XULCommandEvent) {
         var mlEPN: XULMenuListElement = <any>ev.currentTarget;
-        var copy: ibw.Copy = this.copys.item(parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1);
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
 
         if (core.Utils.isValid(copy)) {
             for (var e in this.elementStates) {
                 var disabled: boolean = false;
                 var hidden: boolean = this.elementStates[e].hidden;
 
-                if (("btnRegister" == e && this.slot.getEntryForEPN(copy.epn) != null) ||
-                    ("btnUnRegister" == e && this.slot.getEntryForEPN(copy.epn) == null) ||
-                    // disable checkbox "presence" if selected epn not matching one within slot and any copy has already registered 
-                    ("cbPresence" == e && this.slot.getEntryForEPN(copy.epn) == null && this.copys.hasRegistered()))
-                    disabled = true;
-
-                if (("boxBundle" == e && copy.isBundle))
-                    hidden = false;
+                switch (e) {
+                    case "btnRegister":
+                        disabled = this.slot.getEntryForEPN(copy.epn) != null;
+                        break;
+                    case "btnUnRegister":
+                        disabled = this.slot.getEntryForEPN(copy.epn) == null;
+                        break;
+                    case "cbShelfMark":
+                        disabled = this.slot.getEntryForEPN(copy.epn) == null && !copy.hasRegistered();
+                        break;
+                    case "boxBundle":
+                        hidden = !copy.isBundle;
+                        break;
+                    case "boxShelfMark":
+                        hidden = this.slot.getEntryForEPN(copy.epn) != null || copy.hasRegistered();
+                        break;
+                }
 
                 this.setDisabledState(e, disabled);
                 this.setHiddenState(e, hidden);
@@ -293,7 +302,7 @@ class IBWRCClient {
         var btn: XULMenuListElement = <any>ev.currentTarget;
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-        var copy: ibw.Copy = this.copys.item(parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1);
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
 
         var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
         var cbShelfMark: XULCheckboxElement = <any>document.getElementById("cbShelfMark");
