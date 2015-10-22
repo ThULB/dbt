@@ -125,10 +125,7 @@ module net {
                             httpChannel.responseStatus < 300) {
                             this.mCompleteFunc(this.mClass, this.mData.toUnicode(), true);
                         } else {
-                            var responseStatusCode = httpChannel.responseStatus;
-                            var responseStatusText = httpChannel.responseStatusText;
-
-                            error = new Error(ErrorCode.HTTP_ERROR, responseStatusCode, responseStatusText, channel.URI.spec);
+                            error = new Error(ErrorCode.HTTP_ERROR, httpChannel.responseStatusText, httpChannel.responseStatus, channel.URI.spec);
                         }
                     } catch (e) {
                         error = new Error(ErrorCode.OFFLINE, channel.URI.spec);
