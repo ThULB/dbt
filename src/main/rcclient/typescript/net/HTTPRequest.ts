@@ -2,8 +2,9 @@
 
 module net {
     export class HTTPRequest extends core.EventDispatcher {
-        public static EVENT_COMPLETE = "COMPLETE";
-        public static EVENT_PROGRESS = "PROGRESS";
+        public static EVENT_COMPLETE = "REQUEST_COMPLETE";
+        public static EVENT_ERROR = "REQUEST_ERROR";
+        public static EVENT_PROGRESS = "REQUEST_PROGRESS";
 
         public static METHOD_POST = "POST";
         public static METHOD_GET = "GET";
@@ -69,7 +70,10 @@ module net {
         }
 
         private onComplete(aHTTPRequest: net.HTTPRequest, aData: any, aSuccess: boolean) {
-            aHTTPRequest.dispatch(HTTPRequest.EVENT_COMPLETE, aData, aSuccess);
+            if (aSuccess)
+                aHTTPRequest.dispatch(HTTPRequest.EVENT_COMPLETE, aData);
+            else
+                aHTTPRequest.dispatch(HTTPRequest.EVENT_ERROR, aData);
         }
 
         private onProgess(aHTTPRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) {
@@ -81,11 +85,11 @@ module net {
         private mChannel: nsIChannel;
         private mData: string;
 
-        private mClass: any;
-        private mCompleteFunc: (aClass: any, aData: string, aSuccess: boolean) => void;
+        private mClass: HTTPRequest;
+        private mCompleteFunc: (aClass: any, aData: any, aSuccess: boolean) => void;
         private mProgressFunc: (aClass: any, aProgress: number, aProgressMax: number) => void;
 
-        constructor(aClass: any, aCompleteFunc, aProgressFunc?) {
+        constructor(aClass: HTTPRequest, aCompleteFunc, aProgressFunc?) {
             this.mClass = aClass;
             this.mCompleteFunc = aCompleteFunc;
             this.mProgressFunc = aProgressFunc;
@@ -103,9 +107,41 @@ module net {
         }
 
         onStopRequest(aRequest: nsIRequest, aContext: nsISupports, aStatus: number) {
-            this.mCompleteFunc(this.mClass, this.mData.toUnicode(), Components.isSuccessCode(aStatus));
+            var error: Error;
 
-            this.mChannel = null;
+            if (Components.isSuccessCode(aStatus) || aStatus == 0x80540008 || aStatus == 0x805D0021) {
+                var channel: nsIChannel = this.mChannel || this.mClass.getChannel();
+                // errors on protocol (HTTP) level give NS_OK on channel and
+                // the error in a protocol-specific way
+                if (channel instanceof Components.interfaces.nsIHttpChannel) {
+                    var httpChannel: nsIHttpChannel = channel.QueryInterface(Components.interfaces.nsIHttpChannel);
+
+                    /* nsIHttpChannel::responseStatus and nsIHttpChannel::responseStatusText
+                     * throw an NS_ERROR_NOT_AVAILABLE if the channel did not even
+                     * manage to connect to the remote server. */
+                    try {
+                        // HTTP 2xx is success
+                        if (200 <= httpChannel.responseStatus &&
+                            httpChannel.responseStatus < 300) {
+                            this.mCompleteFunc(this.mClass, this.mData.toUnicode(), true);
+                        } else {
+                            var responseStatusCode = httpChannel.responseStatus;
+                            var responseStatusText = httpChannel.responseStatusText;
+
+                            error = new Error(ErrorCode.HTTP_ERROR, responseStatusCode, responseStatusText, channel.URI.spec);
+                        }
+                    } catch (e) {
+                        error = new Error(ErrorCode.OFFLINE, channel.URI.spec);
+                    }
+                } else {
+                    error = new Error(ErrorCode.NOT_SUPPORTED);
+                }
+            } else {
+                error = new Error(ErrorCode.NSRESULT, aStatus.toString(16));
+            }
+
+            if (core.Utils.isValid(error))
+                this.mCompleteFunc(this.mClass, error, false);
         }
 
         // nsIChannelEventSink
@@ -125,6 +161,9 @@ module net {
         }
 
         onStatus(aRequest: nsIRequest, aContext: nsISupports, aStatus: number, aStatusArg: string) {
+            if (aStatus == 0x804B0007) {
+                this.mCompleteFunc(this.mClass, new Error(ErrorCode.OFFLINE, aStatusArg), false);
+            }
         }
 
         // nsIInterfaceRequestor

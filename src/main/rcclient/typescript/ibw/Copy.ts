@@ -18,7 +18,7 @@ module ibw {
 
         hasRegistered(): boolean {
             for (var i in this.copys) {
-                if (core.Utils.isValid(this.copys[i].backup))
+                if (core.Utils.isValid(this.copys[i].backup) && this.copys[i].backup.length != 0)
                     return true;
             }
             return false;
@@ -80,7 +80,7 @@ module ibw {
 
         barcode: string;
 
-        backup: CopyBackup;
+        backup: Array<CopyBackup>;
 
         public static parse(from: string): Copy {
             var lines: Array<string> = from.split("\n");
@@ -97,7 +97,8 @@ module ibw {
                 } else {
                     switch (tag.category) {
                         case "4802":
-                            copy.backup = CopyBackup.parse(tag.content);
+                            (!core.Utils.isValid(copy.backup)) && (copy.backup = new Array<CopyBackup>());
+                            copy.backup.push(CopyBackup.parse(tag.content));
                             break;
                         case "7100":
                             var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);

@@ -3,9 +3,10 @@
 
 module rc {
     export class Client extends core.EventDispatcher {
-        public static EVENT_LOGIN_SUCCESS = "LOGIN_SUCCESS";
-        public static EVENT_SLOT_LIST_LOADED = "SLOT_LIST_LOADED";
-        public static EVENT_SLOT_LOADED = "SLOT_LOADED";
+        public static EVENT_ERROR = "CLIENT_ERROR";
+        public static EVENT_LOGIN_SUCCESS = "CLIENT_LOGIN_SUCCESS";
+        public static EVENT_SLOT_LIST_LOADED = "CLIENT_SLOT_LIST_LOADED";
+        public static EVENT_SLOT_LOADED = "CLIENT_SLOT_LOADED";
 
         public statusText: string;
 
@@ -32,6 +33,7 @@ module rc {
             var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
             var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/servlets/MCRLoginServlet?action=login", net.HTTPRequest.METHOD_POST, data);
             request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onLoginComplete);
+            request.addListener(net.HTTPRequest.EVENT_ERROR, this, this.onError);
             request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) => {
                 this.dispatch(net.HTTPRequest.EVENT_PROGRESS, aProgress, aProgressMax);
             });
@@ -105,18 +107,25 @@ module rc {
 
             this.mSlots.push(slot);
         }
+        
+        /**
+         * Callback method if a error was triggered.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aError the error object
+         */
+        private onError(aRequest: net.HTTPRequest, aError: net.Error) {
+            this.dispatch(Client.EVENT_ERROR, aError);
+        }
 
         /**
          * Callback method after a successfully login. Triggers EVENT_LOGIN_SUCCESS event.
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
-         * @param aSuccess the status of the HTTPRequest
          */
-        private onLoginComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+        private onLoginComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
-
-            if (!aSuccess) return;
 
             this.statusText = core.Locale.getInstance().getString("client.status.doLogin.done");
             this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
@@ -128,13 +137,10 @@ module rc {
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
-         * @param aSuccess the status of the HTTPRequest
          */
-        private onSlotsComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+        private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            if (!aSuccess) return;
-            
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
@@ -156,13 +162,10 @@ module rc {
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
-         * @param aSuccess the status of the HTTPRequest
          */
-        private onSlotComplete(aRequest: net.HTTPRequest, aData: string, aSuccess: boolean) {
+        private onSlotComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            if (!aSuccess) return;
-            
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
             var slot: Slot = null;

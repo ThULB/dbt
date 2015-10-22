@@ -11,6 +11,10 @@ class IBWRCClient {
     public static localURIPrefix: string = "chrome://IBWRCClient/";
 
     private rcClient: rc.Client;
+    
+    // preference based or default variables
+    private clientURL: string = "http://141.24.167.11:8291/mir";
+    private defaultIndicator: string = "i";
 
     private slot: rc.Slot;
     private userInfo: ibw.UserInfo;
@@ -33,8 +37,8 @@ class IBWRCClient {
         try {
             this.userInfo = ibw.getUserInfo();
             if (core.Utils.isValid(this.userInfo)) {
-                //this.rcClient = new rc.Client("https://dbttest.thulb.uni-jena.de/mir");
-                this.rcClient = new rc.Client("http://141.24.167.11:8291/mir");
+                this.rcClient = new rc.Client(this.clientURL);
+                this.rcClient.addListener(rc.Client.EVENT_ERROR, this, this.onError);
                 this.rcClient.addListener(rc.Client.EVENT_SLOT_LIST_LOADED, this, this.onSlotListLoaded);
                 this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
@@ -103,10 +107,23 @@ class IBWRCClient {
                 case "mlEPN":
                     this.onSelectEPN(<XULCommandEvent>ev);
                     break;
+                case "btnRegister":
+                    this.onRegister(<XULCommandEvent>ev);
+                    break;
             }
         }
     }
 
+    /**
+     * Callback method if a error was triggered.
+     * 
+     * @param delegate the delegating HTTPRequest
+     * @param error the error object
+     */
+    private onError(delegate: any, error: Error) {
+        ibw.showError(error);
+    }
+    
     /**
      * Callback method to listen on HTTPRequest progress event.
      * 
@@ -242,8 +259,6 @@ class IBWRCClient {
         var mlEPN: XULMenuListElement = <any>ev.currentTarget;
         var copy: ibw.Copy = this.copys.item(parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1);
 
-        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-
         if (core.Utils.isValid(copy)) {
             for (var e in this.elementStates) {
                 var disabled: boolean = false;
@@ -270,6 +285,34 @@ class IBWRCClient {
             for (var e in this.elementStates) {
                 this.setDisabledState(e, this.elementStates[e].disabled);
                 this.setHiddenState(e, this.elementStates[e].hidden);
+            }
+        }
+    }
+
+    onRegister(ev: XULCommandEvent) {
+        var btn: XULMenuListElement = <any>ev.currentTarget;
+
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+        var copy: ibw.Copy = this.copys.item(parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1);
+
+        var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
+        var cbShelfMark: XULCheckboxElement = <any>document.getElementById("cbShelfMark");
+        var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
+        var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
+
+        if (ibw.command("k e" + copy.num)) {
+            if (core.Utils.isValid(copy.backup) && copy.backup.length != 0) {
+                // TODO make me work
+            } else {
+                var oldCat: string = ibw.getTitle().findTag("7100", 0, false, true, false);
+                var newCat: string = "!" + tbLocation.value + "!"
+                    + (cbPresence.checked || !cbShelfMark.checked ? copy.shelfmark : tbShelfMark.value) + " @ " + this.defaultIndicator
+                    + (copy.isBundle ? " \\ c" : "");
+
+                ibw.getTitle().insertText(newCat + "\n");
+                if (!cbPresence.checked)
+                    ibw.getTitle().insertText("4801 Band im Semesterapparat <a href=\"" + this.clientURL + "/rc/" + this.slot.id + "\" target=\"_blank\">" + this.slot.id + "</a>.\n");
+                ibw.getTitle().insertText("4802 " + this.slot.id + " SSTold " + oldCat);
             }
         }
     }

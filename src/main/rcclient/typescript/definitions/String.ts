@@ -15,9 +15,10 @@ String.prototype.trim = function(): string {
 
 String.prototype.format = function(...args: Array<any>): string {
     var formatted = this;
-    for (var i = 0; i < arguments.length; i++) {
+    (args.length == 1 && typeof args[0] == "object") && (args = args[0]);
+    for (var i = 0; i < args.length; i++) {
         formatted = formatted.replace(
-            RegExp("\\{" + i + "\\}", 'g'), arguments[i]);
+            RegExp("\\{" + i + "\\}", 'g'), args[i]);
     }
     return formatted;
 };

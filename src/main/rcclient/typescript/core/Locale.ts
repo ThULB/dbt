@@ -26,8 +26,7 @@ module core {
         getString(aProperty: string, ...aArgs: Array<any>): string {
             try {
                 if (aArgs !== null && aArgs.length > 0) {
-                    var args: Array<any> = Array.prototype.slice.call(arguments, 1);
-                    return this.stringBundle.formatStringFromName(aProperty, args, args.length);
+                    return this.stringBundle.GetStringFromName(aProperty).format(...aArgs);
                 } else {
                     return this.stringBundle.GetStringFromName(aProperty);
                 }
