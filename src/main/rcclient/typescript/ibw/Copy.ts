@@ -10,13 +10,13 @@ module ibw {
         bundleEPN: string;
 
         public static parse(from: string): CopyBackup {
-            var m: Array<string> = from.match(/(.*) SSTold (.*)/);
+            var m: Array<string> = from.match(/(.*) (SSTold|RC) (.*)/);
 
-            if (m && m.length == 3) {
+            if (m && m.length == 4) {
                 var backup: CopyBackup = new CopyBackup();
                 backup.slotId = m[1];
 
-                var tmp = m[2];
+                var tmp = m[3];
                 var exp: RegExp = /(.*) \\ c:(.*)/;
                 if (exp.test(tmp)) {
                     var p: Array<string> = tmp.match(exp);

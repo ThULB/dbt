@@ -185,7 +185,7 @@ class IBWRCClient {
     }
 
     /**
-     * Callback method of selected Slot. Used to trigger Entry loading.
+     * Event handler for Slot selection. Also used to trigger Entry loading.
      * 
      * @param ev the command event
      */
@@ -201,14 +201,14 @@ class IBWRCClient {
             this.clearMenuList("mlEPN", true);
 
             for (var e in this.elementStates) {
-                this.setDisabledState(e, this.elementStates[e].disabled);
+                this.setDisabledState(e, true);
                 this.setHiddenState(e, this.elementStates[e].hidden);
             }
         }
     }
 
     /**
-     * Callback method of selected PPN. Used to trigger EPN loading.
+     * Event handler for PPN selection. Also used to trigger EPN loading.
      * 
      * @param ev the command event
      */
@@ -217,7 +217,7 @@ class IBWRCClient {
         var PPN = mlPPN.selectedItem.value;
 
         for (var e in this.elementStates) {
-            this.setDisabledState(e, this.elementStates[e].disabled);
+            this.setDisabledState(e, true);
             this.setHiddenState(e, this.elementStates[e].hidden);
         }
 
@@ -251,7 +251,7 @@ class IBWRCClient {
     }
     
     /**
-     * Callback method of selected EPN.
+     * Event handler for EPN selection.
      * 
      * @param ev the command event
      */
@@ -271,6 +271,10 @@ class IBWRCClient {
                     case "btnUnRegister":
                         disabled = this.slot.getEntryForEPN(copy.epn) == null;
                         break;
+                    case "cbPresence":
+                        var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
+                        cbPresence.checked = disabled = copy.hasRegistered();
+                        break;
                     case "cbShelfMark":
                         disabled = this.slot.getEntryForEPN(copy.epn) == null && !copy.hasRegistered();
                         break;
@@ -278,7 +282,13 @@ class IBWRCClient {
                         hidden = !copy.isBundle;
                         break;
                     case "boxShelfMark":
-                        hidden = this.slot.getEntryForEPN(copy.epn) != null || copy.hasRegistered();
+                        hidden = false; // this.slot.getEntryForEPN(copy.epn) != null || copy.hasRegistered();
+                        break;
+                    case "tbLocation":
+                        disabled = copy.hasRegistered();
+                        break;
+                    case "tbShelfMark":
+                        disabled = copy.hasRegistered();
                         break;
                 }
 
@@ -292,12 +302,17 @@ class IBWRCClient {
             tbLocation.value = copy.location;
         } else {
             for (var e in this.elementStates) {
-                this.setDisabledState(e, this.elementStates[e].disabled);
+                this.setDisabledState(e, true);
                 this.setHiddenState(e, this.elementStates[e].hidden);
             }
         }
     }
 
+    /**
+     * Event handler for register button.
+     * 
+     * @param ev the command event
+     */
     onRegister(ev: XULCommandEvent) {
         var btn: XULMenuListElement = <any>ev.currentTarget;
 
@@ -309,19 +324,36 @@ class IBWRCClient {
         var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
         var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
 
-        if (ibw.command("k e" + copy.num)) {
-            if (core.Utils.isValid(copy.backup) && copy.backup.length != 0) {
-                // TODO make me work
-            } else {
-                var oldCat: string = ibw.getTitle().findTag("7100", 0, false, true, false);
-                var newCat: string = "!" + tbLocation.value + "!"
-                    + (cbPresence.checked || !cbShelfMark.checked ? copy.shelfmark : tbShelfMark.value) + " @ " + this.defaultIndicator
-                    + (copy.isBundle ? " \\ c" : "");
+        var format7100: string = "!{0}!{1} @ {2}\n";
+        var format4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
+        var format4802: string = "4802 {0} RC {1}\n";
 
-                ibw.getTitle().insertText(newCat + "\n");
+        if (ibw.command("k e" + copy.num)) {
+            if (copy.hasRegistered()) {
+                ibw.getTitle().findTag("4802", copy.backup.length - 1, true, true, false);
+                ibw.getTitle().lineDown(1, false);
+                ibw.getTitle().insertText(
+                    format4802.format(this.slot.id,
+                        format7100.format(
+                            copy.backup[0].location,
+                            copy.backup[0].shelfmark,
+                            copy.backup[0].loanIndicator + (copy.backup[0].isBundle ? " \\ c:" + copy.backup[0].bundleEPN : "")
+                        )
+                    )
+                );
+            } else {
+                var cat7100: string = ibw.getTitle().findTag("7100", 0, false, true, false);
+
+                ibw.getTitle().insertText(
+                    format7100.format(
+                        tbLocation.value,
+                        cbPresence.checked || !cbShelfMark.checked ? copy.shelfmark : tbShelfMark.value,
+                        this.defaultIndicator + (copy.isBundle ? " \\ c" : "")
+                    )
+                );
                 if (!cbPresence.checked)
-                    ibw.getTitle().insertText("4801 Band im Semesterapparat <a href=\"" + this.clientURL + "/rc/" + this.slot.id + "\" target=\"_blank\">" + this.slot.id + "</a>.\n");
-                ibw.getTitle().insertText("4802 " + this.slot.id + " SSTold " + oldCat);
+                    ibw.getTitle().insertText(format4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
+                ibw.getTitle().insertText(format4802.format(this.slot.id, cat7100));
             }
         }
     }
