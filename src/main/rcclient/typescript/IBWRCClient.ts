@@ -266,7 +266,7 @@ class IBWRCClient {
 
                 switch (e) {
                     case "btnRegister":
-                        disabled = this.slot.getEntryForEPN(copy.epn) != null;
+                        disabled = this.slot.getEntryForEPN(copy.epn) != null && copy.hasRegistered();
                         break;
                     case "btnUnRegister":
                         disabled = this.slot.getEntryForEPN(copy.epn) == null;
