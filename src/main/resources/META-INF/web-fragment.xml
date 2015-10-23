@@ -32,6 +32,15 @@
     <url-pattern>/servlets/RCSlotLocationServlet</url-pattern>
   </servlet-mapping>
 
+  <servlet id="RCClientServlet">
+    <servlet-name>RCClientServlet</servlet-name>
+    <servlet-class>org.urmel.dbt.rc.servlets.ClientServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RCClientServlet</servlet-name>
+    <url-pattern>/rcclient/*</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>OPCServlet</servlet-name>
     <servlet-class>org.urmel.dbt.opc.servlets.OPCServlet</servlet-class>
