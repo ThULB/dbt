@@ -58,7 +58,6 @@ public class ClientServlet extends MCRServlet {
 
         final MCRSession session = MCRSessionMgr.getCurrentSession();
 
-        // checks path and return the file content.
         final String path = req.getPathInfo();
         final String token = req.getParameter("token");
 
