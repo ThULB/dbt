@@ -62,6 +62,7 @@ module ibw {
             var lines: Array<string> = from.split("\n");
 
             var copy: Copy = new Copy();
+            var has7100: boolean = false;
 
             for (var i in lines) {
                 var tag: Tag = Tag.parse(lines[i]);
@@ -80,6 +81,7 @@ module ibw {
                             }
                             break;
                         case "7100":
+                            has7100 = true;
                             var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
                             copy.location = m[1];
                             copy.shelfmark = m[2];
@@ -104,7 +106,7 @@ module ibw {
                 }
             }
 
-            return copy;
+            return has7100 ? copy : null;
         }
 
         hasRegistered(): boolean {
