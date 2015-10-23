@@ -11,27 +11,22 @@ module rc {
         public statusText: string;
 
         private mURL: string;
-        private mUID: string;
-        private mPWD: string;
-
         private mSlots: Array<Slot>;
+        private mToken: string;
 
         constructor(aURL: string) {
             super();
 
             this.mURL = aURL;
-            this.mUID = "rcclient";
-            this.mPWD = "G?4(<#EeTqn*Tu)F";
         }
 
         /**
          * Method to login to RC servlet.
          */
-        private login() {
+        private doLogin() {
             this.statusText = core.Locale.getInstance().getString("client.status.doLogin");
 
-            var data = "action=login&real=local&uid=" + this.mUID + "&pwd=" + this.mPWD;
-            var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/servlets/MCRLoginServlet?action=login", net.HTTPRequest.METHOD_POST, data);
+            var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/rcclient/token");
             request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onLoginComplete);
             request.addListener(net.HTTPRequest.EVENT_ERROR, this, this.onError);
             request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) => {
@@ -48,11 +43,15 @@ module rc {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlots");
-                aRequest.setURL(this.mURL + "/rc?XSL.Style=xml");
+
+                aRequest.setMethod(net.HTTPRequest.METHOD_POST);
+                aRequest.setData("token=" + this.mToken);
+                
+                aRequest.setURL(this.mURL + "/rcclient/list");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
                 aRequest.execute();
             });
-            this.login();
+            this.doLogin();
         }
 
         /**
@@ -65,11 +64,15 @@ module rc {
                 aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlot");
-                aRequest.setURL(this.mURL + "/rc/" + id + "?XSL.Style=xml");
+                
+                aRequest.setMethod(net.HTTPRequest.METHOD_POST);
+                aRequest.setData("token=" + this.mToken);
+
+                aRequest.setURL(this.mURL + "/rcclient/" + id);
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
                 aRequest.execute();
             });
-            this.login();
+            this.doLogin();
         }
 
         /**
@@ -127,8 +130,20 @@ module rc {
         private onLoginComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            this.statusText = core.Locale.getInstance().getString("client.status.doLogin.done");
-            this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
+            var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
+
+            if (core.Utils.isValid(doc)) {
+                var elm: Element = <Element>doc.getElementsByTagName("token").item(0);
+                this.mToken = core.Utils.isValid(elm) ? elm.textContent : null;
+
+                if (!this.mToken.isEmpty()) {
+                    this.statusText = core.Locale.getInstance().getString("client.status.doLogin.done");
+                    this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
+                    return;
+                }
+            }
+
+            this.dispatch(Client.EVENT_ERROR, "blah");
         }
 
         /**

@@ -43,6 +43,22 @@ module net {
             this.mChannel = ioService.newChannelFromURI(this.mURI);
         }
 
+        getMethod(): string {
+            return this.mMethod;
+        }
+
+        setMethod(aMethod: string) {
+            this.mMethod = aMethod;
+        }
+
+        getData(): string {
+            return this.mData;
+        }
+
+        setData(aData: string) {
+            this.mData = aData;
+        }
+
         getChannel(): nsIChannel {
             return this.mChannel;
         }
