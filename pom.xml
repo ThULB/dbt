@@ -99,6 +99,7 @@
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
+              <goal>bower</goal>
               <goal>grunt</goal>
             </goals>
             <configuration>
@@ -146,6 +147,7 @@
                   <filtering>true</filtering>
                   <directory>${basedir}/src/main/rcclient</directory>
                   <includes>
+                    <include>bower.json</include>
                     <include>GruntFile.js</include>
                     <include>package.json</include>
                   </includes>

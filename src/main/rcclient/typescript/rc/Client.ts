@@ -1,18 +1,23 @@
+/// <reference path="../definitions/crypto-js.d.ts" />
+
 /// <reference path="../core/EventDispatcher.ts" />
 /// <reference path="../net/HTTPRequest.ts" />
 
 module rc {
     export class Client extends core.EventDispatcher {
         public static EVENT_ERROR = "CLIENT_ERROR";
-        public static EVENT_LOGIN_SUCCESS = "CLIENT_LOGIN_SUCCESS";
+        public static EVENT_SESSION_SUCCESS = "CLIENT_SESSION_SUCCESS";
         public static EVENT_SLOT_LIST_LOADED = "CLIENT_SLOT_LIST_LOADED";
         public static EVENT_SLOT_LOADED = "CLIENT_SLOT_LOADED";
 
         public statusText: string;
+        private numTries: number = 0;
 
         private mURL: string;
         private mSlots: Array<Slot>;
+
         private mToken: string;
+        private mSessionToken: string;
 
         constructor(aURL: string) {
             super();
@@ -23,11 +28,11 @@ module rc {
         /**
          * Method to login to RC servlet.
          */
-        private doLogin() {
-            this.statusText = core.Locale.getInstance().getString("client.status.doLogin");
+        private requestToken() {
+            this.statusText = core.Locale.getInstance().getString("client.status.registerSession");
 
             var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/rcclient/token");
-            request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onLoginComplete);
+            request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRequestTokenComplete);
             request.addListener(net.HTTPRequest.EVENT_ERROR, this, this.onError);
             request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) => {
                 this.dispatch(net.HTTPRequest.EVENT_PROGRESS, aProgress, aProgressMax);
@@ -39,19 +44,19 @@ module rc {
          * Loads Slots after successfully login.
          */
         loadSlots() {
-            this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
-                aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
+            this.addListener(Client.EVENT_SESSION_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_SESSION_SUCCESS);
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlots");
 
                 aRequest.setMethod(net.HTTPRequest.METHOD_POST);
                 aRequest.setData("token=" + this.mToken);
-                
+
                 aRequest.setURL(this.mURL + "/rcclient/list");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
                 aRequest.execute();
             });
-            this.doLogin();
+            this.requestToken();
         }
 
         /**
@@ -60,11 +65,11 @@ module rc {
          * @param id the Slot id to load
          */
         loadSlot(id: string) {
-            this.addListener(Client.EVENT_LOGIN_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
-                aDelegate.clearListenersByEvent(Client.EVENT_LOGIN_SUCCESS);
+            this.addListener(Client.EVENT_SESSION_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_SESSION_SUCCESS);
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlot");
-                
+
                 aRequest.setMethod(net.HTTPRequest.METHOD_POST);
                 aRequest.setData("token=" + this.mToken);
 
@@ -72,7 +77,7 @@ module rc {
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
                 aRequest.execute();
             });
-            this.doLogin();
+            this.requestToken();
         }
 
         /**
@@ -118,16 +123,27 @@ module rc {
          * @param aError the error object
          */
         private onError(aRequest: net.HTTPRequest, aError: net.Error) {
+            if (aError instanceof net.Error && aError.errorCode == net.ErrorCode.HTTP_ERROR) {
+                switch (aError.attributes[1]) {
+                    case 401:
+                        if (this.numTries < 3) {
+                            this.requestToken();
+                            this.numTries++;
+                            return;
+                        }
+                        break;
+                }
+            }
             this.dispatch(Client.EVENT_ERROR, aError);
         }
 
         /**
-         * Callback method after a successfully login. Triggers EVENT_LOGIN_SUCCESS event.
+         * Callback method after a successfully retrieve of token.
          * 
          * @param aRequest the delegating HTTPRequest
          * @param aData the response
          */
-        private onLoginComplete(aRequest: net.HTTPRequest, aData: string) {
+        private onRequestTokenComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
@@ -137,13 +153,34 @@ module rc {
                 this.mToken = core.Utils.isValid(elm) ? elm.textContent : null;
 
                 if (!this.mToken.isEmpty()) {
-                    this.statusText = core.Locale.getInstance().getString("client.status.doLogin.done");
-                    this.dispatch(Client.EVENT_LOGIN_SUCCESS, aRequest);
+                    this.numTries = 0;
+
+                    this.mSessionToken = core.Utils.generateUUID();
+
+                    aRequest.setURL(this.mURL + "/rcclient/session");
+                    aRequest.setMethod(net.HTTPRequest.METHOD_POST);
+                    aRequest.setData("session=" + encodeURIComponent(ClientData.encrypt(this.mToken, this.mSessionToken)));
+                    aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterSessionComplete);
+                    aRequest.execute();
+
                     return;
                 }
             }
 
             this.dispatch(Client.EVENT_ERROR, "blah");
+        }
+
+        /**
+         * Callback method after successfully register client session.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         */
+        private onRegisterSessionComplete(aRequest: net.HTTPRequest, aData: string) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+
+            this.statusText = core.Locale.getInstance().getString("client.status.registerSession.done");
+            this.dispatch(Client.EVENT_SESSION_SUCCESS, aRequest);
         }
 
         /**
@@ -155,6 +192,12 @@ module rc {
          */
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+
+            try {
+                aData = ClientData.decrypt(this.mSessionToken, aData);
+            } catch (e) {
+                ibw.showError(e);
+            }
 
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
@@ -181,6 +224,12 @@ module rc {
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
+            try {
+                aData = ClientData.decrypt(this.mSessionToken, aData);
+            } catch (e) {
+                ibw.showError(e);
+            }
+
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
             var slot: Slot = null;
@@ -193,6 +242,37 @@ module rc {
 
             this.statusText = core.Locale.getInstance().getString("client.status.loadSlot.done");
             this.dispatch(Client.EVENT_SLOT_LOADED, slot);
+        }
+    }
+
+    class ClientData {
+        private static KEY_SIZE: number = 128;
+        private static ITERATIONS: number = 100;
+
+        public static encrypt(passphrase: string, data: string): string {
+            var salt = CryptoJS.lib.WordArray.random(ClientData.KEY_SIZE / 32);
+            var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
+            var iv = CryptoJS.MD5(passphrase);
+
+            var encrypted = CryptoJS.AES.encrypt(data, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+
+            return CryptoJS.lib.WordArray.create().concat(salt).concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+        }
+
+        public static decrypt(passphrase: string, encrypted: string) {
+            var ciphertext = CryptoJS.enc.Base64.parse(encrypted);
+
+            var ciphertextWords = ciphertext.words;
+
+            var salt = CryptoJS.lib.WordArray.create(ciphertextWords.slice(0, ClientData.KEY_SIZE / 32 / 4));
+            ciphertext = CryptoJS.lib.WordArray.create(ciphertextWords.slice(ClientData.KEY_SIZE / 32 / 4));
+
+            var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
+            var iv = CryptoJS.MD5(passphrase);
+
+            var decrypt = CryptoJS.AES.decrypt(CryptoJS.lib.CipherParams.create({ ciphertext: ciphertext }), key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+
+            return decrypt.toString(CryptoJS.enc.Utf8);
         }
     }
 }
