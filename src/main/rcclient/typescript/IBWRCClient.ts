@@ -8,12 +8,12 @@ class IBWRCClient {
     public static VERSION: string = "@@VERSION";
     public static REVISION: string = "@@REVISION";
 
-    public static localURIPrefix: string = "chrome://IBWRCClient/";
+    public static LOCAL_URI_PREFIX: string = "chrome://IBWRCClient/";
 
     private rcClient: rc.Client;
     
     // preference based or default variables
-    private clientURL: string = "http://127.0.0.1:8291/mir"; // "http://dbttest.thulb.uni-jena.de/mir";
+    private clientURL: string = "http://127.0.0.1:8291/mir"; //"http://dbttest.thulb.uni-jena.de/mir";
     private defaultIndicator: string = "i";
 
     private slot: rc.Slot;
@@ -32,7 +32,7 @@ class IBWRCClient {
     };
 
     constructor() {
-        core.Locale.getInstance(IBWRCClient.localURIPrefix + "locale/ibwrcclient.properties");
+        core.Locale.getInstance(IBWRCClient.LOCAL_URI_PREFIX + "locale/ibwrcclient.properties");
 
         try {
             this.userInfo = ibw.getUserInfo();
