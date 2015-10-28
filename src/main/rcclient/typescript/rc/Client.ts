@@ -49,11 +49,9 @@ module rc {
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlots");
 
-                aRequest.setMethod(net.HTTPRequest.METHOD_POST);
-                aRequest.setData("token=" + this.mToken);
-
                 aRequest.setURL(this.mURL + "/rcclient/list");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
+
                 aRequest.execute();
             });
             this.requestToken();
@@ -69,9 +67,6 @@ module rc {
                 aDelegate.clearListenersByEvent(Client.EVENT_SESSION_SUCCESS);
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlot");
-
-                aRequest.setMethod(net.HTTPRequest.METHOD_POST);
-                aRequest.setData("token=" + this.mToken);
 
                 aRequest.setURL(this.mURL + "/rcclient/" + id);
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
@@ -123,8 +118,8 @@ module rc {
          * @param aError the error object
          */
         private onError(aRequest: net.HTTPRequest, aError: net.Error) {
-            if (aError instanceof net.Error && aError.errorCode == net.ErrorCode.HTTP_ERROR) {
-                switch (aError.attributes[1]) {
+            if (aError instanceof net.HTTPError) {
+                switch (aError.errorCode) {
                     case 401:
                         if (this.numTries < 3) {
                             this.requestToken();
@@ -158,10 +153,12 @@ module rc {
                     this.mSessionToken = core.Utils.generateUUID();
 
                     aRequest.setURL(this.mURL + "/rcclient/session");
-                    aRequest.setMethod(net.HTTPRequest.METHOD_POST);
-                    aRequest.setData("session=" + encodeURIComponent(ClientData.encrypt(this.mToken, this.mSessionToken)));
                     aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterSessionComplete);
-                    aRequest.execute();
+
+                    var params: net.HTTPParameters<string> = new net.HTTPParameters<string>();
+                    params.setParameter("session", ClientData.encrypt(this.mToken, this.mSessionToken));
+
+                    aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: params });
 
                     return;
                 }

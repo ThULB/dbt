@@ -10,79 +10,61 @@ module net {
         public static METHOD_GET = "GET";
         public static METHOD_PUT = "PUT";
 
-        private mURL: string;
-        private mMethod: string;
-        private mData: string;
+        private URL: string;
+        private URI: nsIURI;
+        private channel: nsIChannel;
 
-        private mURI: nsIURI;
-        private mChannel: nsIChannel;
+        private options: HTTPOptions;
 
-        constructor(aURL: string, aMethod?: string, aData?: string, aCache?: boolean) {
+        constructor(URL: string, options?: IHTTPOptions) {
             super();
 
-            this.mMethod = aMethod != null ? aMethod.toUpperCase() : HTTPRequest.METHOD_GET;
-            this.mData = aData;
-
-            this.setURL(aURL);
-
-            if (aCache == null || aCache == false) {
-                // bypass cache
-                this.mChannel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
-            }
+            this.setURL(URL);
+            this.options = new HTTPOptions(options);
         }
 
         getURL(): string {
-            return this.mURL;
+            return this.URL;
         }
 
-        setURL(aURL: string) {
-            this.mURL = aURL;
+        setURL(URL: string) {
+            this.URL = URL;
 
             var ioService: nsIIOService = Components.classes["@mozilla.org/network/io-service;1"].getService(Components.interfaces.nsIIOService);
-            this.mURI = ioService.newURI(this.mURL, String.prototype.defaultCharset, null);
-            this.mChannel = ioService.newChannelFromURI(this.mURI);
-        }
-
-        getMethod(): string {
-            return this.mMethod;
-        }
-
-        setMethod(aMethod: string) {
-            this.mMethod = aMethod;
-        }
-
-        getData(): string {
-            return this.mData;
-        }
-
-        setData(aData: string) {
-            this.mData = aData;
+            this.URI = ioService.newURI(this.URL, String.prototype.defaultCharset, null);
+            this.channel = ioService.newChannelFromURI(this.URI);
         }
 
         getChannel(): nsIChannel {
-            return this.mChannel;
+            return this.channel;
         }
 
-        execute() {
-            var httpChannel: nsIHttpChannel = this.mChannel.QueryInterface(Components.interfaces.nsIHttpChannel);
-            httpChannel.referrer = this.mURI;
-            httpChannel.requestMethod = this.mMethod;
+        execute(options?: IHTTPOptions) {
+            core.Utils.isValid(options) && (this.options = new HTTPOptions(options));
 
-            if (core.Utils.isValid(this.mData) && (this.mMethod == HTTPRequest.METHOD_POST || this.mMethod == HTTPRequest.METHOD_PUT)) {
+            if (this.options.bypassCache) {
+                this.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+            }
+
+            var httpChannel: nsIHttpChannel = this.channel.QueryInterface(Components.interfaces.nsIHttpChannel);
+            httpChannel.referrer = this.URI;
+            httpChannel.requestMethod = this.options.method;
+
+            if (core.Utils.isValid(this.options.data) && (this.options.method == HTTPRequest.METHOD_POST || this.options.method == HTTPRequest.METHOD_PUT)) {
                 var inputStream: nsIStringInputStream = Components.classes["@mozilla.org/io/string-input-stream;1"].createInstance(Components.interfaces.nsIStringInputStream);
-                inputStream.setData(this.mData, this.mData.length);
+                inputStream.setData(this.options.data.toString(), this.options.data.toString().length);
 
-                var uploadChannel: nsIUploadChannel = this.mChannel.QueryInterface(Components.interfaces.nsIUploadChannel);
-                uploadChannel.setUploadStream(inputStream, "application/x-www-form-urlencoded", this.mData.length);
+                var uploadChannel: nsIUploadChannel = this.channel.QueryInterface(Components.interfaces.nsIUploadChannel);
+                uploadChannel.setUploadStream(inputStream, this.options.contentType, this.options.data.toString().length);
 
                 // order important - setUploadStream resets to PUT
-                (this.mMethod == HTTPRequest.METHOD_POST) && (httpChannel.requestMethod = this.mMethod);
+                (this.options.method == HTTPRequest.METHOD_POST) && (httpChannel.requestMethod = this.options.method);
             }
 
             var listener: nsIStreamListener = new StreamListener(this, this.onComplete, this.onProgess);
 
-            this.mChannel.notificationCallbacks = listener;
-            this.mChannel.asyncOpen(listener, null);
+            this.channel.notificationCallbacks = listener;
+            this.channel.asyncOpen(listener, null);
         }
 
         private onComplete(aHTTPRequest: net.HTTPRequest, aData: any, aSuccess: boolean) {
@@ -141,7 +123,7 @@ module net {
                             httpChannel.responseStatus < 300) {
                             this.mCompleteFunc(this.mClass, this.mData.toUnicode(), true);
                         } else {
-                            error = new Error(ErrorCode.HTTP_ERROR, httpChannel.responseStatusText, httpChannel.responseStatus, channel.URI.spec);
+                            error = new HTTPError(httpChannel.responseStatus, httpChannel.responseStatusText, channel.URI.spec);
                         }
                     } catch (e) {
                         error = new Error(ErrorCode.OFFLINE, channel.URI.spec);
@@ -199,6 +181,58 @@ module net {
                 return this;
 
             throw Components.results.NS_NOINTERFACE;
+        }
+    }
+
+
+    interface IHTTPData {
+        toString(): string;
+    }
+
+    interface IHTTPOptions {
+        method: string;
+        data?: IHTTPData;
+        contentType?: string;
+        bypassCache?: boolean;
+    }
+
+    class HTTPOptions implements IHTTPOptions {
+        method: string;
+        data: IHTTPData;
+        contentType: string;
+        bypassCache: boolean;
+
+        constructor(options?: IHTTPOptions) {
+            this.method = options && options.method || HTTPRequest.METHOD_GET,
+            this.data = options && options.data || null,
+            this.contentType = options && options.contentType || "application/x-www-form-urlencoded",
+            this.bypassCache = options && options.bypassCache || true
+        }
+    }
+
+    interface IHTTPParameters<T> {
+        [name: string]: T;
+    }
+
+    export class HTTPParameters<T> implements IHTTPData {
+        private params: IHTTPParameters<T> = {};
+
+        setParameter(name: string, value?: T) {
+            this.params[name] = value;
+        }
+
+        getParameter(name: string): T {
+            return this.params[name];
+        }
+
+        toString(): string {
+            var arr: Array<string> = new Array<string>();
+
+            for (var name in this.params) {
+                arr.push(encodeURIComponent(name) + (this.params[name] && "=" + encodeURIComponent(this.params[name].toString()) || ""));
+            }
+
+            return arr.join("&");
         }
     }
 }
