@@ -50,12 +50,14 @@ module net {
             httpChannel.referrer = this.URI;
             httpChannel.requestMethod = this.options.method;
 
-            if (core.Utils.isValid(this.options.data) && (this.options.method == HTTPRequest.METHOD_POST || this.options.method == HTTPRequest.METHOD_PUT)) {
+            var data: String = new String(this.options.data || null);
+
+            if (!data.isEmpty() && (this.options.method == HTTPRequest.METHOD_POST || this.options.method == HTTPRequest.METHOD_PUT)) {
                 var inputStream: nsIStringInputStream = Components.classes["@mozilla.org/io/string-input-stream;1"].createInstance(Components.interfaces.nsIStringInputStream);
-                inputStream.setData(this.options.data.toString(), this.options.data.toString().length);
+                inputStream.setData(data.toString(), data.length);
 
                 var uploadChannel: nsIUploadChannel = this.channel.QueryInterface(Components.interfaces.nsIUploadChannel);
-                uploadChannel.setUploadStream(inputStream, this.options.contentType, this.options.data.toString().length);
+                uploadChannel.setUploadStream(inputStream, this.options.contentType, data.length);
 
                 // order important - setUploadStream resets to PUT
                 (this.options.method == HTTPRequest.METHOD_POST) && (httpChannel.requestMethod = this.options.method);
