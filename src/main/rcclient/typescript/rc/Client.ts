@@ -84,6 +84,12 @@ module rc {
             return this.mSlots;
         }
 
+        /**
+         * Returns a Slot by given id.
+         * 
+         * @param id the slot id
+         * @return the slot or <code>null</code> if nothing was found
+         */
         getSlot(id: string): Slot {
             for (var i in this.mSlots) {
                 if (this.mSlots[i].id == id)
@@ -164,7 +170,7 @@ module rc {
                 }
             }
 
-            this.dispatch(Client.EVENT_ERROR, "blah");
+            this.dispatch(Client.EVENT_ERROR, ErrorCode.NO_TOKEN);
         }
 
         /**
