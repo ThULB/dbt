@@ -22,7 +22,9 @@
  */
 package org.urmel.dbt.rc.servlets;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -32,6 +34,7 @@ import java.security.spec.KeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
@@ -44,13 +47,10 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRSession;
-import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
@@ -96,40 +96,29 @@ public class ClientServlet extends MCRServlet {
 
                 session.put(TOKEN, newToken);
 
-                final Element root = new Element("token");
-                root.setText(newToken);
-
-                getLayoutService().sendXML(req, res, new MCRJDOMContent(root));
+                writeToResponse(res, Base64.getEncoder().encode(newToken.getBytes(StandardCharsets.UTF_8)), null);
                 return;
             } else if (token != null && !token.isEmpty() && "session".equals(action)) {
-                final String encrypted = req.getParameter("session");
-
-                if (encrypted != null && !encrypted.isEmpty()) {
+                if ("text/plain".equals(req.getContentType()) && req.getInputStream() != null) {
                     LOGGER.info("Register session...");
-                    session.put(SESSION_TOKEN, ClientData.decrypt(token, encrypted));
+                    session.put(SESSION_TOKEN, ClientData.decrypt(token, req.getInputStream()));
 
                     res.setStatus(HttpServletResponse.SC_ACCEPTED);
                     return;
                 }
             } else if (sessionToken != null && !sessionToken.isEmpty()) {
                 if ("list".equals(action)) {
-                    final String encrypted = ClientData.encrypt(sessionToken, new XMLOutputter()
-                            .outputString(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
-
-                    if (!encrypted.isEmpty()) {
-                        res.getOutputStream().write(encrypted.getBytes(StandardCharsets.UTF_8));
-                        res.getOutputStream().flush();
-                        return;
-                    }
+                    writeToResponse(res, ClientData.encrypt(sessionToken,
+                            new XMLOutputter()
+                                    .outputString(SlotListTransformer.buildExportableXML(slotList.getBasicSlots()))),
+                            null);
+                    return;
                 } else if (action != null) {
-                    final String encrypted = ClientData.encrypt(sessionToken, new XMLOutputter()
-                            .outputString(SlotTransformer.buildExportableXML(SLOT_MGR.getSlotById(action))));
-
-                    if (!encrypted.isEmpty()) {
-                        res.getOutputStream().write(encrypted.getBytes(StandardCharsets.UTF_8));
-                        res.getOutputStream().flush();
-                        return;
-                    }
+                    writeToResponse(res, ClientData.encrypt(sessionToken,
+                            new XMLOutputter()
+                                    .outputString(SlotTransformer.buildExportableXML(SLOT_MGR.getSlotById(action)))),
+                            null);
+                    return;
                 }
             } else {
                 res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -138,6 +127,16 @@ public class ClientServlet extends MCRServlet {
         }
 
         res.sendError(HttpServletResponse.SC_NOT_IMPLEMENTED);
+    }
+
+    private static void writeToResponse(HttpServletResponse res, String data, String contentType) throws IOException {
+        writeToResponse(res, data.getBytes(StandardCharsets.UTF_8), contentType);
+    }
+
+    private static void writeToResponse(HttpServletResponse res, byte[] data, String contentType) throws IOException {
+        res.setContentType(contentType != null ? contentType : "text/plain");
+        res.getOutputStream().write(data);
+        res.getOutputStream().flush();
     }
 
     private static class ClientData {
@@ -156,6 +155,16 @@ public class ClientServlet extends MCRServlet {
             SecretKey secretKey = keyFactory.generateSecret(keySpec);
 
             return new SecretKeySpec(secretKey.getEncoded(), "AES");
+        }
+
+        private static String convertStreamToString(InputStream is) {
+            final StringBuffer sb = new StringBuffer();
+            final Scanner s = new Scanner(is);
+            while (s.hasNext()) {
+                sb.append(s.next());
+            }
+            s.close();
+            return sb.toString();
         }
 
         public static String encrypt(String passphrase, String data) throws GeneralSecurityException, IOException {
@@ -198,6 +207,10 @@ public class ClientServlet extends MCRServlet {
             c.init(Cipher.DECRYPT_MODE, sKey, ivParameterSpec);
 
             return new String(c.doFinal(cipherBytes), StandardCharsets.UTF_8);
+        }
+
+        public static String decrypt(String passphrase, InputStream is) throws GeneralSecurityException, IOException {
+            return decrypt(passphrase, convertStreamToString(is));
         }
     }
 }

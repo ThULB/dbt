@@ -147,27 +147,20 @@ module rc {
         private onRequestTokenComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
+            var token: string = CryptoJS.enc.Base64.parse(aData).toString(CryptoJS.enc.Utf8);
 
-            if (core.Utils.isValid(doc)) {
-                var elm: Element = <Element>doc.getElementsByTagName("token").item(0);
-                this.mToken = core.Utils.isValid(elm) ? elm.textContent : null;
+            if (!token.isEmpty()) {
+                this.numTries = 0;
+                this.mToken = token;
 
-                if (!this.mToken.isEmpty()) {
-                    this.numTries = 0;
+                this.mSessionToken = core.Utils.generateUUID();
 
-                    this.mSessionToken = core.Utils.generateUUID();
+                aRequest.setURL(this.mURL + "/rcclient/session");
+                aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterSessionComplete);
 
-                    aRequest.setURL(this.mURL + "/rcclient/session");
-                    aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterSessionComplete);
+                aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: ClientData.encrypt(this.mToken, this.mSessionToken), contentType: "text/plain" });
 
-                    var params: net.HTTPParameters<string> = new net.HTTPParameters<string>();
-                    params.setParameter("session", ClientData.encrypt(this.mToken, this.mSessionToken));
-
-                    aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: params });
-
-                    return;
-                }
+                return;
             }
 
             this.dispatch(Client.EVENT_ERROR, ErrorCode.NO_TOKEN);
