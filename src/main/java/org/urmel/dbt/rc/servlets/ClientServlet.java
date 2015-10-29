@@ -51,6 +51,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
@@ -92,6 +94,7 @@ public class ClientServlet extends MCRServlet {
 
             if ("token".equals(action)) {
                 LOGGER.info("Request token...");
+
                 final String newToken = UUID.randomUUID().toString();
 
                 session.put(TOKEN, newToken);
@@ -101,7 +104,11 @@ public class ClientServlet extends MCRServlet {
             } else if (token != null && !token.isEmpty() && "session".equals(action)) {
                 if ("text/plain".equals(req.getContentType()) && req.getInputStream() != null) {
                     LOGGER.info("Register session...");
+
                     session.put(SESSION_TOKEN, ClientData.decrypt(token, req.getInputStream()));
+                    
+                    LOGGER.info("...impersonate superuser");
+                    session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
 
                     res.setStatus(HttpServletResponse.SC_ACCEPTED);
                     return;
