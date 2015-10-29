@@ -189,11 +189,7 @@ module rc {
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            try {
-                aData = ClientData.decrypt(this.mSessionToken, aData);
-            } catch (e) {
-                ibw.showError(e);
-            }
+            aData = ClientData.decrypt(this.mSessionToken, aData);
 
             this.mSlots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
@@ -220,11 +216,7 @@ module rc {
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            try {
-                aData = ClientData.decrypt(this.mSessionToken, aData);
-            } catch (e) {
-                ibw.showError(e);
-            }
+            aData = ClientData.decrypt(this.mSessionToken, aData);
 
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
