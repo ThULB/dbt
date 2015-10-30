@@ -147,18 +147,20 @@ class IBWRCClient {
         var slots: Array<rc.Slot> = delegate.getSlots();
 
         for (var i in elms) {
-            var mlRC: XULMenuListElement = <any>document.getElementById(elms[i]);
+            var ml: XULMenuListElement = <any>document.getElementById(elms[i]);
 
-            mlRC.removeAllItems();
-            mlRC.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
-            mlRC.selectedIndex = 0;
+            ml.removeAllItems();
+            ml.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
+            ml.selectedIndex = 0;
 
             for (var i in slots) {
                 var slot: rc.Slot = slots[i];
 
                 if (slot.eOnly || !slot.id.startsWith(this.userInfo.libId)) continue;
-                mlRC.appendItem("({0}|{1}) {2}".format(slot.id, core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]), slot.title), slot.id);
+                ml.appendItem("({0}|{1}) {2}".format(slot.id, core.Locale.getInstance().getString("slot.status." + rc.Status[slot.status]), slot.title), slot.id);
             }
+
+            ml.disabled = false;
         }
     }
 

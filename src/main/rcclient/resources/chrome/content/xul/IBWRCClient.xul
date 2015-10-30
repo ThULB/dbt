@@ -37,7 +37,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&label.slot;" width="100" />
-                <menulist id="mlSlots" width="300">
+                <menulist id="mlSlots" width="300" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -90,7 +90,7 @@
             <vbox>
               <hbox align="center">
                 <caption label="&label.slot;" width="100" />
-                <menulist id="mlSlotsBar" width="300">
+                <menulist id="mlSlotsBar" width="300" disabled="true">
                   <menupopup>
                     <menuitem label="&defaultValues.PleaseSelect;" />
                   </menupopup>
@@ -107,7 +107,7 @@
         </tabpanels>
       </tabbox>
     </vbox>
-    
+
     <hbox id="statusBar" hidden="false">
       <textbox id="sbStatusText" disabled="true" flex="4" />
       <progressmeter id="sbProgress" mode="determined" flex="1" />
