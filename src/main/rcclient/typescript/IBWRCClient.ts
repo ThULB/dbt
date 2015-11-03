@@ -26,7 +26,7 @@ class IBWRCClient {
         "tbShelfMark": { disabled: true, hidden: false },
         "tbLocation": { disabled: true, hidden: false },
         "btnRegister": { disabled: true, hidden: false },
-        "btnUnRegister": { disabled: true, hidden: false },
+        "btnDeregister": { disabled: true, hidden: false },
         "boxBundle": { disabled: true, hidden: true },
         "boxShelfMark": { disabled: true, hidden: true }
     };

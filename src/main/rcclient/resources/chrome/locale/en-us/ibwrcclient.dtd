@@ -28,8 +28,8 @@
 <!ENTITY label.shelfmark.change "Change Signature">
 <!ENTITY label.presence "Present Copy">
 
-<!ENTITY button.unregister "Reverse">
-<!ENTITY button.unregister.accesskey "R">
+<!ENTITY button.deregister "Reverse">
+<!ENTITY button.deregister.accesskey "R">
 <!ENTITY button.register "Activate">
 <!ENTITY button.register.accesskey "A">
 

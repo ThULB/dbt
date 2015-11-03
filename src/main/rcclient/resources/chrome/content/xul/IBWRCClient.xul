@@ -80,7 +80,7 @@
                 <textbox id="tbLocation" width="300" disabled="true" height="22" />
               </hbox>
               <hbox align="center" height="50">
-                <button id="btnUnRegister" accesskey="&button.unregister.accesskey;" label="&button.unregister;" disabled="true" />
+                <button id="btnDeregister" accesskey="&button.deregister.accesskey;" label="&button.deregister;" disabled="true" />
                 <space width="265" />
                 <button id="btnRegister" accesskey="&button.register.accesskey;" align="right" label="&button.register;" disabled="true" />
               </hbox>
@@ -100,7 +100,7 @@
                 <textbox id="tbBarcodes" multiline="true" rows="10" width="410" disbaled="true" />
               </hbox>
               <vbox align="right">
-                <button id="btnUnRegisterAll" accesskey="&button.unregister.accesskey;" label="&button.unregister;" disabled="true" />
+                <button id="btnDeregisterAll" accesskey="&button.deregister.accesskey;" label="&button.deregister;" disabled="true" />
               </vbox>
             </vbox>
           </tabpanel>

@@ -28,8 +28,8 @@
 <!ENTITY label.shelfmark.change "Signatur ändern">
 <!ENTITY label.presence "Präsenzexemplar">
 
-<!ENTITY button.unregister "Aufheben">
-<!ENTITY button.unregister.accesskey "A">
+<!ENTITY button.deregister "Aufheben">
+<!ENTITY button.deregister.accesskey "A">
 <!ENTITY button.register "Freischalten">
 <!ENTITY button.register.accesskey "F">
 
