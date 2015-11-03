@@ -47,6 +47,7 @@ module ibw {
     export class Copy {
         num: number;
         type: string;
+        ppn: string;
         epn: string;
 
         location: string;
@@ -114,8 +115,8 @@ module ibw {
         }
 
         toString(): string {
-            return "Copy: [num={0}, type={1}, epn={2}, isBundle={3}]".format(
-                this.num, this.type, this.epn, this.isBundle
+            return "Copy: [num={0}, type={1}, ppn={2}, epn={3}, isBundle={4}]".format(
+                this.num, this.type, this.ppn, this.epn, this.isBundle
             );
         }
     }

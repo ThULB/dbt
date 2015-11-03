@@ -9,20 +9,22 @@ module rc {
         public static EVENT_SESSION_SUCCESS = "CLIENT_SESSION_SUCCESS";
         public static EVENT_SLOT_LIST_LOADED = "CLIENT_SLOT_LIST_LOADED";
         public static EVENT_SLOT_LOADED = "CLIENT_SLOT_LOADED";
+        public static EVENT_COPY_REGISTERED = "CLIENT_COPY_REGISTERED";
+        public static EVENT_COPY_DEREGISTERED = "CLIENT_COPY_DEREGISTERED";
 
         public statusText: string;
         private numTries: number = 0;
 
-        private mURL: string;
-        private mSlots: Array<Slot>;
+        private URL: string;
+        private slots: Array<Slot>;
 
-        private mToken: string;
-        private mSessionToken: string;
+        private token: string;
+        private sessionToken: string;
 
         constructor(aURL: string) {
             super();
 
-            this.mURL = aURL;
+            this.URL = aURL;
         }
 
         /**
@@ -31,7 +33,7 @@ module rc {
         private requestToken() {
             this.statusText = core.Locale.getInstance().getString("client.status.registerSession");
 
-            var request: net.HTTPRequest = new net.HTTPRequest(this.mURL + "/rcclient/token");
+            var request: net.HTTPRequest = new net.HTTPRequest(this.URL + "/rcclient/token");
             request.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRequestTokenComplete);
             request.addListener(net.HTTPRequest.EVENT_ERROR, this, this.onError);
             request.addListener(net.HTTPRequest.EVENT_PROGRESS, this, (aRequest: net.HTTPRequest, aProgress: number, aProgressMax: number) => {
@@ -49,10 +51,10 @@ module rc {
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlots");
 
-                aRequest.setURL(this.mURL + "/rcclient/list");
+                aRequest.setURL(this.URL + "/rcclient/list");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotsComplete);
 
-                aRequest.execute();
+                aRequest.execute({ method: net.HTTPRequest.METHOD_GET });
             });
             this.requestToken();
         }
@@ -68,9 +70,53 @@ module rc {
 
                 aDelegate.statusText = core.Locale.getInstance().getString("client.status.loadSlot");
 
-                aRequest.setURL(this.mURL + "/rcclient/" + id);
+                aRequest.setURL(this.URL + "/rcclient/" + id);
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onSlotComplete);
-                aRequest.execute();
+                aRequest.execute({ method: net.HTTPRequest.METHOD_GET });
+            });
+            this.requestToken();
+        }
+
+        /**
+         * Registers copy with given parameters.
+         * 
+         * @param slotId the Slot id
+         * @param entryId the entry id
+         * @param epn the EPN to register on entry 
+         */
+        registerCopy(slotId: string, entryId: string, epn: string) {
+            this.addListener(Client.EVENT_SESSION_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_SESSION_SUCCESS);
+
+                aDelegate.statusText = core.Locale.getInstance().getString("client.status.registerCopy");
+
+                aRequest.setURL(this.URL + "/rcclient/" + slotId);
+                aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterCopyComplete);
+
+                var job = { action: "register", entryId: entryId, epn: epn };
+                aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: ClientData.encrypt(this.sessionToken, JSON2.stringify(job)), contentType: "text/plain" });
+            });
+            this.requestToken();
+        }
+        
+        /**
+         * Deregisters copy with given parameters.
+         * 
+         * @param slotId the Slot id
+         * @param entryId the entry id
+         * @param epn the EPN to register on entry 
+         */
+        deregisterCopy(slotId: string, entryId: string, epn: string) {
+            this.addListener(Client.EVENT_SESSION_SUCCESS, this, (aDelegate: Client, aRequest: net.HTTPRequest) => {
+                aDelegate.clearListenersByEvent(Client.EVENT_SESSION_SUCCESS);
+
+                aDelegate.statusText = core.Locale.getInstance().getString("client.status.deregisterCopy");
+
+                aRequest.setURL(this.URL + "/rcclient/" + slotId);
+                aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onDeregisterCopyComplete);
+
+                var job = { action: "deregister", entryId: entryId, epn: epn };
+                aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: ClientData.encrypt(this.sessionToken, JSON2.stringify(job)), contentType: "text/plain" });
             });
             this.requestToken();
         }
@@ -81,7 +127,7 @@ module rc {
          * @return a Slot array
          */
         getSlots(): Array<Slot> {
-            return this.mSlots;
+            return this.slots;
         }
 
         /**
@@ -91,9 +137,9 @@ module rc {
          * @return the slot or <code>null</code> if nothing was found
          */
         getSlot(id: string): Slot {
-            for (var i in this.mSlots) {
-                if (this.mSlots[i].id == id)
-                    return this.mSlots[i];
+            for (var i in this.slots) {
+                if (this.slots[i].id == id)
+                    return this.slots[i];
             }
 
             return null;
@@ -107,14 +153,14 @@ module rc {
         setSlot(slot: Slot) {
             if (!core.Utils.isValid(slot)) return;
 
-            for (var i in this.mSlots) {
-                if (this.mSlots[i].id == slot.id) {
-                    this.mSlots[i] = slot;
+            for (var i in this.slots) {
+                if (this.slots[i].id == slot.id) {
+                    this.slots[i] = slot;
                     return;
                 }
             }
 
-            this.mSlots.push(slot);
+            this.slots.push(slot);
         }
         
         /**
@@ -151,14 +197,14 @@ module rc {
 
             if (!token.isEmpty()) {
                 this.numTries = 0;
-                this.mToken = token;
+                this.token = token;
 
-                this.mSessionToken = core.Utils.generateUUID();
+                this.sessionToken = core.Utils.generateUUID();
 
-                aRequest.setURL(this.mURL + "/rcclient/session");
+                aRequest.setURL(this.URL + "/rcclient/session");
                 aRequest.addListener(net.HTTPRequest.EVENT_COMPLETE, this, this.onRegisterSessionComplete);
 
-                aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: ClientData.encrypt(this.mToken, this.mSessionToken), contentType: "text/plain" });
+                aRequest.execute({ method: net.HTTPRequest.METHOD_POST, data: ClientData.encrypt(this.token, this.sessionToken), contentType: "text/plain" });
 
                 return;
             }
@@ -189,16 +235,16 @@ module rc {
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            aData = ClientData.decrypt(this.mSessionToken, aData);
+            aData = ClientData.decrypt(this.sessionToken, aData);
 
-            this.mSlots = new Array<Slot>();
+            this.slots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
             if (core.Utils.isValid(doc)) {
                 var slots: NodeList = doc.getElementsByTagName("slot");
                 for (var c = 0; c < slots.length; c++) {
                     var slot: Slot = Slot.parse(<Element>slots.item(c));
-                    this.mSlots.push(slot);
+                    this.slots.push(slot);
                 }
             }
 
@@ -216,7 +262,7 @@ module rc {
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            aData = ClientData.decrypt(this.mSessionToken, aData);
+            aData = ClientData.decrypt(this.sessionToken, aData);
 
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
@@ -230,6 +276,32 @@ module rc {
 
             this.statusText = core.Locale.getInstance().getString("client.status.loadSlot.done");
             this.dispatch(Client.EVENT_SLOT_LOADED, slot);
+        }
+
+        /**
+         * Callback method after successfully registered a copy.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         */
+        private onRegisterCopyComplete(aRequest: net.HTTPRequest, aData: string) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+
+            this.statusText = core.Locale.getInstance().getString("client.status.registerCopy.done");
+            this.dispatch(Client.EVENT_COPY_REGISTERED);
+        }
+        
+        /**
+         * Callback method after successfully deregistered a copy.
+         * 
+         * @param aRequest the delegating HTTPRequest
+         * @param aData the response
+         */
+        private onDeregisterCopyComplete(aRequest: net.HTTPRequest, aData: string) {
+            aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
+
+            this.statusText = core.Locale.getInstance().getString("client.status.deregisterCopy.done");
+            this.dispatch(Client.EVENT_COPY_DEREGISTERED);
         }
     }
 

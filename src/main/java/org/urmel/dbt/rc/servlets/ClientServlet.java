@@ -54,10 +54,16 @@ import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.urmel.dbt.rc.datamodel.slot.Slot;
+import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
+import org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotListTransformer;
 import org.urmel.dbt.rc.utils.SlotTransformer;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -105,11 +111,11 @@ public class ClientServlet extends MCRServlet {
                     LOGGER.info("Register session...");
 
                     session.put(SESSION_TOKEN, ClientData.decrypt(token, req.getInputStream()));
-                    
+
                     LOGGER.info("...impersonate superuser");
                     session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
 
-                    res.setStatus(HttpServletResponse.SC_ACCEPTED);
+                    res.setStatus(HttpServletResponse.SC_OK);
                     return;
                 }
             } else if (sessionToken != null && !sessionToken.isEmpty()) {
@@ -120,11 +126,42 @@ public class ClientServlet extends MCRServlet {
                             null);
                     return;
                 } else if (action != null) {
-                    writeToResponse(res, ClientData.encrypt(sessionToken,
-                            new XMLOutputter()
-                                    .outputString(SlotTransformer.buildExportableXML(SLOT_MGR.getSlotById(action)))),
-                            null);
-                    return;
+                    final Slot slot = SLOT_MGR.getSlotById(action);
+
+                    String jsonStr = ClientData.decrypt(sessionToken, req.getInputStream());
+                    if (jsonStr != null) {
+                        final JsonParser jsonParser = new JsonParser();
+                        final JsonObject jsonObj = jsonParser.parse(jsonStr).getAsJsonObject();
+
+                        final String jobAction = jsonObj.get("action").getAsString();
+
+                        if (jobAction.contains("register")) {
+                            final String entryId = jsonObj.get("entryId").getAsString();
+                            String epn = jsonObj.get("epn").getAsString();
+
+                            if ("register".equals(jobAction)) {
+                                LOGGER.info("Register copy with EPN " + epn + " on entry with id " + entryId + ".");
+                            } else if ("deregister".equals(jobAction)) {
+                                LOGGER.info("Deregister copy with EPN " + epn + " on entry with id " + entryId + ".");
+                                epn = null;
+                            }
+
+                            final SlotEntry<?> entry = slot.getEntryById(entryId);
+                            final OPCRecordEntry record = (OPCRecordEntry) entry.getEntry();
+
+                            record.setEPN(epn);
+                            SLOT_MGR.saveOrUpdate(slot);
+
+                            res.setStatus(HttpServletResponse.SC_OK);
+                            return;
+                        }
+                    } else {
+                        writeToResponse(res,
+                                ClientData.encrypt(sessionToken,
+                                        new XMLOutputter().outputString(SlotTransformer.buildExportableXML(slot))),
+                                null);
+                        return;
+                    }
                 }
             } else {
                 res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -200,6 +237,9 @@ public class ClientServlet extends MCRServlet {
         }
 
         public static String decrypt(String passphrase, String encrypted) throws GeneralSecurityException {
+            if (encrypted == null || encrypted.isEmpty())
+                return null;
+
             byte[] cipherBytes = Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.ISO_8859_1));
 
             byte[] ivBytes = generateIV(passphrase);

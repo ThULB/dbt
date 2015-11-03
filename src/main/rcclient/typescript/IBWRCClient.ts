@@ -43,7 +43,7 @@ class IBWRCClient {
                 this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
 
-                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnUnRegister".split("|"));
+                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnDeregister".split("|"));
             }
         } catch (e) {
             ibw.showError(e);
@@ -110,6 +110,9 @@ class IBWRCClient {
                 case "btnRegister":
                     this.onRegister(<XULCommandEvent>ev);
                     break;
+                case "btnDeregister":
+                    this.onDeregister(<XULCommandEvent>ev);
+                    break;
             }
         }
     }
@@ -168,6 +171,7 @@ class IBWRCClient {
      * Callback method of loaded Slot. Used to display Entry (OPC records) in MenuListElement.
      * 
      * @param delegate the delegating rc.CLient
+     * @param slot the loaded slot
      */
     onSlotLoaded(delegate: rc.Client, slot: rc.Slot) {
         delegate.clearListenersByEvent(rc.Client.EVENT_SLOT_LOADED);
@@ -227,6 +231,7 @@ class IBWRCClient {
         if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
             this.copys = ibw.getCopys();
+
             var entry = this.slot.getEntryForPPN(PPN);
 
             this.clearMenuList(mlEPN, false);
@@ -235,7 +240,7 @@ class IBWRCClient {
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
-                if (!copy.type.startsWith("k")) continue;
+                if (copy == null || !copy.type.startsWith("k")) continue;
 
                 if (entry != null && entry.epn == copy.epn)
                     selectedIndex = parseInt(i) + 1;
@@ -270,7 +275,7 @@ class IBWRCClient {
                     case "btnRegister":
                         disabled = this.slot.getEntryForEPN(copy.epn) != null && copy.hasRegistered();
                         break;
-                    case "btnUnRegister":
+                    case "btnDeregister":
                         disabled = this.slot.getEntryForEPN(copy.epn) == null;
                         break;
                     case "cbPresence":
@@ -357,7 +362,52 @@ class IBWRCClient {
                     ibw.getTitle().insertText(format4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
                 ibw.getTitle().insertText(format4802.format(this.slot.id, cat7100));
             }
+
+            // save title
+            //            if (ibw.simulateKey("FR")) {
+            this.rcClient.addListener(rc.Client.EVENT_COPY_REGISTERED, this, this.onRegisterComplete)
+            this.rcClient.registerCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
+            //            }
         }
+    }
+
+    /**
+     * Callback method after successfully registration of copy.
+     * 
+     * @param delegate the delegating rc.CLient
+     */
+    onRegisterComplete(delegate: rc.Client) {
+        delegate.clearListenersByEvent(rc.Client.EVENT_COPY_REGISTERED);
+        this.updateStatusbar(delegate.statusText);
+
+        ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.registerCopy.done"), ibw.MESSAGE_INFO);
+    }
+       
+    /**
+     * Event handler for deregister button.
+     * 
+     * @param ev the command event
+     */
+    onDeregister(ev: XULCommandEvent) {
+        var btn: XULMenuListElement = <any>ev.currentTarget;
+
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
+
+        this.rcClient.addListener(rc.Client.EVENT_COPY_DEREGISTERED, this, this.onDeregisterComplete)
+        this.rcClient.deregisterCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
+    }
+    
+    /**
+    * Callback method after successfully deregistration of copy.
+    * 
+    * @param delegate the delegating rc.CLient
+    */
+    onDeregisterComplete(delegate: rc.Client) {
+        delegate.clearListenersByEvent(rc.Client.EVENT_COPY_DEREGISTERED);
+        this.updateStatusbar(delegate.statusText);
+
+        ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.deregisterCopy.done"), ibw.MESSAGE_INFO);
     }
 }
 

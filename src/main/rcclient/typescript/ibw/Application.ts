@@ -81,10 +81,11 @@ module ibw {
      * 
      * @return a list of copys
      */
-    export function getCopys(title?: string): Array<Copy> {
+    export function getCopys(ppn?: string, title?: string): Array<Copy> {
         if (!core.Utils.isValid(title) && core.Utils.isValid(application.activeWindow.title))
             throw new ibw.Error(ibw.ErrorCode.ACTIVE_TTILE);
 
+        ppn = ppn || application.activeWindow.getVariable("P3GPP");
         title = title || application.activeWindow.copyTitle();
 
         var copys: Array<Copy> = new Array<Copy>();
@@ -92,12 +93,15 @@ module ibw {
         var c: Array<string> = title.match(/\n(70.+)\s(.*)\n/g);
         for (var i = 0; i < c.length; i++) {
             var copyTag: Tag = Tag.parse(c[i]);
+
             if (copyTag == null) continue;
 
             var sOffset = title.indexOf(c[i].trim());
             var eOffset = (i < c.length - 1 ? title.indexOf(c[i + 1].trim()) : title.length);
 
             var copy: Copy = Copy.parse(title.substring(sOffset, eOffset));
+            (copy != null) && (copy.ppn = ppn);
+
             copys.push(copy);
         }
 
@@ -143,6 +147,21 @@ module ibw {
         core.Utils.isValid(error.lineNumber) && (msg += " " + core.Locale.getInstance().getString("error.message.line", error.lineNumber));
 
         // TODO on WINE add *mfc71, *msvcp71 and *msvcr71 to use as native, before buildin
-        application.messageBox(error.name, msg, "error-icon");
+        ibw.messageBox(error.name, msg, ibw.MESSAGE_ERROR);
+    }
+
+    export var MESSAGE_INFO: string = "info-icon";
+    export var MESSAGE_WARNING: string = "warning-icon";
+    export var MESSAGE_ERROR: string = "error-icon";
+    
+    /**
+     * Displays an message box.
+     * 
+     * @param title the title
+     * @param msg the message
+     * @param icon the icon, valid values are <code>info-icon</code>, <code>warning-icon</code> and <code>error-icon</code>
+     */
+    export function messageBox(title: string, msg: string, icon: string) {
+        application.messageBox(title, msg, icon);
     }
 }
