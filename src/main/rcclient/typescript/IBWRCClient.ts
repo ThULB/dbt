@@ -245,8 +245,10 @@ class IBWRCClient {
 
                 var item = mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
 
-                if (entry != null && entry.epn == copy.epn)
+                if (entry != null && entry.epn == copy.epn) {
                     selectedItem = item;
+                    selectedItem.value = i;
+                }
             }
 
             if (selectedItem != null) {
