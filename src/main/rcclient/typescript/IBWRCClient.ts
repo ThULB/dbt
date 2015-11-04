@@ -236,24 +236,21 @@ class IBWRCClient {
 
             this.clearMenuList(mlEPN, false);
 
-            var currentIndex: number = 0;
-            var selectedIndex: number = 0;
+            var selectedItem: XULSelectControlItemElement = null;
 
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
                 if (copy == null || !copy.type.startsWith("k")) continue;
 
-                if (entry != null && entry.epn == copy.epn)
-                    selectedIndex = currentIndex + 1;
+                var item = mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
 
-                mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
-                
-                currentIndex++;
+                if (entry != null && entry.epn == copy.epn)
+                    selectedItem = item;
             }
 
-            if (selectedIndex != 0) {
-                mlEPN.selectedIndex = selectedIndex;
+            if (selectedItem != null) {
+                mlEPN.selectedItem = selectedItem;
                 mlEPN.doCommand();
             }
         } else {
@@ -268,7 +265,7 @@ class IBWRCClient {
      */
     onSelectEPN(ev: XULCommandEvent) {
         var mlEPN: XULMenuListElement = <any>ev.currentTarget;
-        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
 
         if (core.Utils.isValid(copy)) {
             for (var e in this.elementStates) {
