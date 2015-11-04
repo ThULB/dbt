@@ -10,6 +10,10 @@ class IBWRCClient {
 
     public static LOCAL_URI_PREFIX: string = "chrome://IBWRCClient/";
 
+    private static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
+    private static FORMAT_4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
+    private static FORMAT_4802: string = "4802 {0} RC {1}\n";
+
     private rcClient: rc.Client;
     
     // preference based or default variables
@@ -334,17 +338,13 @@ class IBWRCClient {
         var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
         var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
 
-        var format7100: string = "!{0}!{1} @ {2}\n";
-        var format4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
-        var format4802: string = "4802 {0} RC {1}\n";
-
         if (ibw.command("k e" + copy.num)) {
             if (copy.hasRegistered()) {
                 ibw.getTitle().findTag("4802", copy.backup.length - 1, true, true, false);
                 ibw.getTitle().lineDown(1, false);
                 ibw.getTitle().insertText(
-                    format4802.format(this.slot.id,
-                        format7100.format(
+                    IBWRCClient.FORMAT_4802.format(this.slot.id,
+                        IBWRCClient.FORMAT_7100.format(
                             copy.backup[0].location,
                             copy.backup[0].shelfmark,
                             copy.backup[0].loanIndicator + (copy.backup[0].isBundle ? " \\ c:" + copy.backup[0].bundleEPN : "")
@@ -355,15 +355,15 @@ class IBWRCClient {
                 var cat7100: string = ibw.getTitle().findTag("7100", 0, false, true, false);
 
                 ibw.getTitle().insertText(
-                    format7100.format(
+                    IBWRCClient.FORMAT_7100.format(
                         tbLocation.value,
                         cbPresence.checked || !cbShelfMark.checked ? copy.shelfmark : tbShelfMark.value,
                         this.defaultIndicator + (copy.isBundle ? " \\ c" : "")
                     )
                 );
                 if (!cbPresence.checked)
-                    ibw.getTitle().insertText(format4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
-                ibw.getTitle().insertText(format4802.format(this.slot.id, cat7100));
+                    ibw.getTitle().insertText(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
+                ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100));
             }
 
             // save title
@@ -395,10 +395,33 @@ class IBWRCClient {
         var btn: XULMenuListElement = <any>ev.currentTarget;
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
 
-        this.rcClient.addListener(rc.Client.EVENT_COPY_DEREGISTERED, this, this.onDeregisterComplete)
-        this.rcClient.deregisterCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
+        if (ibw.command("k e" + copy.num)) {
+            var backup = copy.getBackup(this.slot.id);
+            if (backup != null) {
+                var cat7100 = IBWRCClient.FORMAT_7100.format(backup.location, backup.shelfmark, backup.loanIndicator);
+
+                if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
+                    ibw.getTitle().deleteToEndOfLine();
+
+                if (ibw.getTitle().find(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100).trim(), true, false, false))
+                    ibw.getTitle().deleteToEndOfLine();
+
+                if (copy.backup.length == 1) {
+                    ibw.getTitle().findTag("7100", 0, false, true, false);
+                    ibw.getTitle().deleteToEndOfLine();
+
+                    ibw.getTitle().insertText(cat7100);
+                }
+            }
+            
+            // save title
+            if (ibw.simulateKey("FR")) {
+                this.rcClient.addListener(rc.Client.EVENT_COPY_DEREGISTERED, this, this.onDeregisterComplete);
+                this.rcClient.deregisterCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
+            }
+        }
     }
     
     /**

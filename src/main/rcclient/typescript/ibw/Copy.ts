@@ -114,6 +114,17 @@ module ibw {
             return core.Utils.isValid(this.backup) && this.backup.length != 0;
         }
 
+        getBackup(slotId: string): CopyBackup {
+            if (core.Utils.isValid(this.backup)) {
+                for (var i in this.backup) {
+                    if (slotId == this.backup[i].slotId)
+                        return this.backup[i];
+                }
+            }
+
+            return null;
+        }
+
         toString(): string {
             return "Copy: [num={0}, type={1}, ppn={2}, epn={3}, isBundle={4}]".format(
                 this.num, this.type, this.ppn, this.epn, this.isBundle
