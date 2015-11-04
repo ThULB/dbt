@@ -200,20 +200,20 @@ class IBWRCClient {
      * @param ev the command event
      */
     onSelectSlot(ev: XULCommandEvent) {
-        var mlRC: XULMenuListElement = <any>ev.currentTarget;
-        var slotId = mlRC.selectedItem.value;
+        var mlSlots: XULMenuListElement = <any>ev.currentTarget;
+        var slotId = mlSlots.selectedItem.value;
+
+        this.clearMenuList("mlPPN", true);
+        this.clearMenuList("mlEPN", true);
+
+        for (var e in this.elementStates) {
+            this.setDisabledState(e, true);
+            this.setHiddenState(e, this.elementStates[e].hidden);
+        }
 
         if (!slotId.isEmpty()) {
             this.rcClient.addListener(rc.Client.EVENT_SLOT_LOADED, this, this.onSlotLoaded);
             this.rcClient.loadSlot(slotId);
-        } else {
-            this.clearMenuList("mlPPN", true);
-            this.clearMenuList("mlEPN", true);
-
-            for (var e in this.elementStates) {
-                this.setDisabledState(e, true);
-                this.setHiddenState(e, this.elementStates[e].hidden);
-            }
         }
     }
 
@@ -384,6 +384,9 @@ class IBWRCClient {
         this.updateStatusbar(delegate.statusText);
 
         ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.registerCopy.done"), ibw.MESSAGE_INFO);
+
+        var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
+        mlSlots.doCommand();
     }
        
     /**
@@ -434,6 +437,9 @@ class IBWRCClient {
         this.updateStatusbar(delegate.statusText);
 
         ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.deregisterCopy.done"), ibw.MESSAGE_INFO);
+
+        var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
+        mlSlots.doCommand();
     }
 }
 
