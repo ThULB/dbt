@@ -235,6 +235,8 @@ class IBWRCClient {
             var entry = this.slot.getEntryForPPN(PPN);
 
             this.clearMenuList(mlEPN, false);
+
+            var currentIndex: number = 0;
             var selectedIndex: number = 0;
 
             for (var i in this.copys) {
@@ -243,9 +245,11 @@ class IBWRCClient {
                 if (copy == null || !copy.type.startsWith("k")) continue;
 
                 if (entry != null && entry.epn == copy.epn)
-                    selectedIndex = parseInt(i) + 1;
+                    selectedIndex = currentIndex + 1;
 
                 mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
+                
+                currentIndex++;
             }
 
             if (selectedIndex != 0) {
@@ -364,10 +368,10 @@ class IBWRCClient {
             }
 
             // save title
-            //            if (ibw.simulateKey("FR")) {
-            this.rcClient.addListener(rc.Client.EVENT_COPY_REGISTERED, this, this.onRegisterComplete)
-            this.rcClient.registerCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
-            //            }
+            if (ibw.simulateKey("FR")) {
+                this.rcClient.addListener(rc.Client.EVENT_COPY_REGISTERED, this, this.onRegisterComplete)
+                this.rcClient.registerCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
+            }
         }
     }
 
