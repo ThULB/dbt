@@ -439,10 +439,10 @@ class IBWRCClient {
     }
     
     /**
-    * Callback method after successfully deregistration of copy.
-    * 
-    * @param delegate the delegating rc.CLient
-    */
+     * Callback method after successfully deregistration of copy.
+     * 
+     * @param delegate the delegating rc.CLient
+     */
     onDeregisterComplete(delegate: rc.Client) {
         delegate.clearListenersByEvent(rc.Client.EVENT_COPY_DEREGISTERED);
         this.updateStatusbar(delegate.statusText);
