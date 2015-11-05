@@ -70,7 +70,7 @@ public class SlotLocationServlet extends MCRServlet {
         final MCRCategory category = categoryDao.getCategory(categID, 0);
 
         if (category != null) {
-            location.setAttribute("label", category.getCurrentLabel().getText());
+            category.getCurrentLabel().ifPresent(label -> location.setAttribute("label", label.getText()));
             list.add(location);
         }
 
@@ -90,8 +90,8 @@ public class SlotLocationServlet extends MCRServlet {
             categoryID = MCRCategoryID.fromString(categID);
         } else {
             final String rootID = getProperty(request, "classID");
-            categoryID = (rootID == null) ? MCRCategoryID.rootID(Slot.CLASSIF_ROOT_LOCATION) : MCRCategoryID
-                    .rootID(rootID);
+            categoryID = (rootID == null) ? MCRCategoryID.rootID(Slot.CLASSIF_ROOT_LOCATION)
+                    : MCRCategoryID.rootID(rootID);
         }
         final Element rootElement = getRootElement(request);
         rootElement.setAttribute("classID", categoryID.getRootID());
