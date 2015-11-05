@@ -29,6 +29,7 @@ class IBWRCClient {
         "cbPresence": { hidden: false },
         "tbShelfMark": { hidden: false },
         "tbLocation": { hidden: false },
+        "tbBundleEPN": { hidden: false },
         "btnRegister": { hidden: false },
         "btnDeregister": { hidden: false },
         "boxBundle": { hidden: true },
@@ -304,6 +305,9 @@ class IBWRCClient {
                     case "tbShelfMark":
                         disabled = copy.hasRegistered();
                         break;
+                    case "tbBundleEPN":
+                        disabled = copy.hasRegistered();
+                        break;
                 }
 
                 this.setDisabledState(e, disabled);
@@ -314,6 +318,8 @@ class IBWRCClient {
             tbShelfMark.value = copy.shelfmark;
             var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
             tbLocation.value = copy.location;
+            var tbBundleEPN: XULTextBoxElement = <any>document.getElementById("tbBundleEPN");
+            tbBundleEPN.value = copy.hasRegistered() ? copy.backup[0].bundleEPN : "";
         } else {
             for (var e in this.elementStates) {
                 this.setDisabledState(e, true);
@@ -322,7 +328,7 @@ class IBWRCClient {
         }
     }
 
-    private register(copy: ibw.Copy, presence: boolean, location?: string, shelfmark?: string) {
+    private register(copy: ibw.Copy, presence: boolean, bundleEPN: string, location?: string, shelfmark?: string) {
         if (ibw.command("k e" + copy.num)) {
             if (copy.hasRegistered()) {
                 ibw.getTitle().findTag("4802", copy.backup.length - 1, true, true, false);
@@ -348,7 +354,7 @@ class IBWRCClient {
                 );
                 if (!presence)
                     ibw.getTitle().insertText(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
-                ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100));
+                ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100 + (copy.isBundle ? ":" + bundleEPN : "")));
             }
 
             // save title
@@ -368,17 +374,24 @@ class IBWRCClient {
         var btn: XULMenuListElement = <any>ev.currentTarget;
 
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
 
         var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
         var cbShelfMark: XULCheckboxElement = <any>document.getElementById("cbShelfMark");
         var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
         var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
+        var tbBundleEPN: XULTextBoxElement = <any>document.getElementById("tbBundleEPN");
+
+        if (copy.isBundle && tbBundleEPN.value.isEmpty()) {
+            var locale = core.Locale.getInstance();
+            ibw.messageBox(locale.getString("msg.title.error"), locale.getString("error.noBundleEPN"), ibw.MESSAGE_ERROR);
+            return;
+        }
 
         if (cbShelfMark.checked)
-            this.register(copy, cbPresence.checked, tbLocation.value, tbShelfMark.value);
+            this.register(copy, cbPresence.checked, tbBundleEPN.value, tbLocation.value, tbShelfMark.value);
         else
-            this.register(copy, cbPresence.checked);
+            this.register(copy, cbPresence.checked, tbBundleEPN.value);
     }
 
     /**
@@ -400,7 +413,11 @@ class IBWRCClient {
         if (ibw.command("k e" + copy.num)) {
             var backup = copy.getBackup(this.slot.id);
             if (backup != null) {
-                var cat7100 = IBWRCClient.FORMAT_7100.format(backup.location, backup.shelfmark, backup.loanIndicator);
+                var cat7100 = IBWRCClient.FORMAT_7100.format(
+                    backup.location,
+                    backup.shelfmark,
+                    backup.loanIndicator + (backup.isBundle ? " \\ c" : "")
+                );
 
                 if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
                     ibw.getTitle().deleteToEndOfLine();

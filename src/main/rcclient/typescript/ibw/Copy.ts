@@ -22,6 +22,7 @@ module ibw {
                     var p: Array<string> = tmp.match(exp);
                     backup.isBundle = true;
                     backup.bundleEPN = p[2];
+                    tmp = p[1];
                 } else {
                     backup.isBundle = false;
                 }
@@ -126,8 +127,8 @@ module ibw {
         }
 
         toString(): string {
-            return "Copy: [num={0}, type={1}, ppn={2}, epn={3}, isBundle={4}]".format(
-                this.num, this.type, this.ppn, this.epn, this.isBundle
+            return "Copy: [num={0}, type={1}, ppn={2}, epn={3}, isBundle={4}, location={5}, shelfmark={6}, indicator={7}]".format(
+                this.num, this.type, this.ppn, this.epn, this.isBundle, this.location, this.shelfmark, this.loanIndicator
             );
         }
     }
