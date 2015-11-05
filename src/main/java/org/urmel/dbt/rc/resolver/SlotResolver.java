@@ -105,8 +105,8 @@ public class SlotResolver implements URIResolver {
 
                 String catalogId = null;
                 for (MCRCategory category : categories) {
-                    if (category.getLabel("x-catid") != null) {
-                        catalogId = category.getLabel("x-catid").getText();
+                    if (category.getLabel("x-catid").isPresent()) {
+                        catalogId = category.getLabel("x-catid").get().getText();
                         break;
                     }
                 }
