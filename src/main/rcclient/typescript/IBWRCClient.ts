@@ -25,14 +25,14 @@ class IBWRCClient {
     private copys: Array<ibw.Copy>;
 
     private elementStates = {
-        "cbShelfMark": { disabled: true, hidden: false },
-        "cbPresence": { disabled: true, hidden: false },
-        "tbShelfMark": { disabled: true, hidden: false },
-        "tbLocation": { disabled: true, hidden: false },
-        "btnRegister": { disabled: true, hidden: false },
-        "btnDeregister": { disabled: true, hidden: false },
-        "boxBundle": { disabled: true, hidden: true },
-        "boxShelfMark": { disabled: true, hidden: true }
+        "cbShelfMark": { hidden: false },
+        "cbPresence": { hidden: false },
+        "tbShelfMark": { hidden: false },
+        "tbLocation": { hidden: false },
+        "btnRegister": { hidden: false },
+        "btnDeregister": { hidden: false },
+        "boxBundle": { hidden: true },
+        "boxShelfMark": { hidden: true }
     };
 
     constructor() {
