@@ -25,7 +25,7 @@ class IBWRCClient {
     private copys: Array<ibw.Copy>;
 
     private elementStates = {
-        "cbShelfMark": { disabled: true, hidden: true },
+        "cbShelfMark": { disabled: true, hidden: false },
         "cbPresence": { disabled: true, hidden: false },
         "tbShelfMark": { disabled: true, hidden: false },
         "tbLocation": { disabled: true, hidden: false },
@@ -290,7 +290,7 @@ class IBWRCClient {
                         cbPresence.checked = disabled = copy.hasRegistered();
                         break;
                     case "cbShelfMark":
-                        disabled = this.slot.getEntryForEPN(copy.epn) == null && !copy.hasRegistered();
+                        disabled = copy.hasRegistered();
                         break;
                     case "boxBundle":
                         hidden = !copy.isBundle;
@@ -322,22 +322,7 @@ class IBWRCClient {
         }
     }
 
-    /**
-     * Event handler for register button.
-     * 
-     * @param ev the command event
-     */
-    onRegister(ev: XULCommandEvent) {
-        var btn: XULMenuListElement = <any>ev.currentTarget;
-
-        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
-
-        var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
-        var cbShelfMark: XULCheckboxElement = <any>document.getElementById("cbShelfMark");
-        var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
-        var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
-
+    private register(copy: ibw.Copy, presence: boolean, location?: string, shelfmark?: string) {
         if (ibw.command("k e" + copy.num)) {
             if (copy.hasRegistered()) {
                 ibw.getTitle().findTag("4802", copy.backup.length - 1, true, true, false);
@@ -356,12 +341,12 @@ class IBWRCClient {
 
                 ibw.getTitle().insertText(
                     IBWRCClient.FORMAT_7100.format(
-                        tbLocation.value,
-                        cbPresence.checked || !cbShelfMark.checked ? copy.shelfmark : tbShelfMark.value,
+                        location || copy.location,
+                        shelfmark || copy.shelfmark,
                         this.defaultIndicator + (copy.isBundle ? " \\ c" : "")
                     )
                 );
-                if (!cbPresence.checked)
+                if (!presence)
                     ibw.getTitle().insertText(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
                 ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100));
             }
@@ -372,6 +357,28 @@ class IBWRCClient {
                 this.rcClient.registerCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
             }
         }
+    }
+    
+    /**
+     * Event handler for register button.
+     * 
+     * @param ev the command event
+     */
+    onRegister(ev: XULCommandEvent) {
+        var btn: XULMenuListElement = <any>ev.currentTarget;
+
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value) || mlEPN.selectedIndex != 0 && mlEPN.selectedIndex - 1];
+
+        var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
+        var cbShelfMark: XULCheckboxElement = <any>document.getElementById("cbShelfMark");
+        var tbLocation: XULTextBoxElement = <any>document.getElementById("tbLocation");
+        var tbShelfMark: XULTextBoxElement = <any>document.getElementById("tbShelfMark");
+
+        if (cbShelfMark.checked)
+            this.register(copy, cbPresence.checked, tbLocation.value, tbShelfMark.value);
+        else
+            this.register(copy, cbPresence.checked);
     }
 
     /**
@@ -388,18 +395,8 @@ class IBWRCClient {
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
         mlSlots.doCommand();
     }
-       
-    /**
-     * Event handler for deregister button.
-     * 
-     * @param ev the command event
-     */
-    onDeregister(ev: XULCommandEvent) {
-        var btn: XULMenuListElement = <any>ev.currentTarget;
 
-        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
-        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
-
+    private deregister(copy: ibw.Copy) {
         if (ibw.command("k e" + copy.num)) {
             var backup = copy.getBackup(this.slot.id);
             if (backup != null) {
@@ -425,6 +422,20 @@ class IBWRCClient {
                 this.rcClient.deregisterCopy(this.slot.id, this.slot.getEntryForPPN(copy.ppn).id, copy.epn);
             }
         }
+    }
+       
+    /**
+     * Event handler for deregister button.
+     * 
+     * @param ev the command event
+     */
+    onDeregister(ev: XULCommandEvent) {
+        var btn: XULMenuListElement = <any>ev.currentTarget;
+
+        var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
+        var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
+
+        this.deregister(copy);
     }
     
     /**
