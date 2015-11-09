@@ -2,8 +2,10 @@
 /// <reference path="../definitions/WinIBW.d.ts" />
 
 /// <reference path="../core/Utils.ts" />
+
 /// <reference path="Copy.ts" />
 /// <reference path="Error.ts" />
+/// <reference path="ErrorCode.ts" />
 /// <reference path="Tag.ts" />
 /// <reference path="UserInfo.ts" />
 

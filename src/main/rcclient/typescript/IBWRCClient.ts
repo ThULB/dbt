@@ -1,4 +1,5 @@
 /// <reference path="definitions/XUL.d.ts" />
+/// <reference path="libs/String.ts" />
 
 /// <reference path="core/Locale.ts" />
 /// <reference path="rc/Client.ts" />
@@ -472,9 +473,5 @@ class IBWRCClient {
 }
 
 function onLoad() {
-    try {
-        new IBWRCClient();
-    } catch (e) {
-        ibw.showError(e);
-    }
+    new IBWRCClient();
 }

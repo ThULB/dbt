@@ -13,18 +13,22 @@ module.exports = function(grunt) {
 					},
 				},
 				typescript : {
-					base : {
-						src : [ '<%= pkg.src %>/typescript/**/*.ts' ],
-						dest : 'build/js/<%= pkg.name %>.js',
-						options : {
-							module : 'commonjs', // or amd, commonjs
-							target : 'es3', // or es3
-							rootDir : 'src',
-							sourceMap : true,
-							comments : true,
-							ignoreError : false,
-							declaration : false
-						}
+					options : {
+						module : 'commonjs', // or amd, commonjs
+						target : 'es3', // or es3
+						rootDir : 'src',
+						sourceMap : true,
+						comments : true,
+						ignoreError : false,
+						declaration : false
+					},
+					client : {
+						src : [ '<%= pkg.src %>/typescript/IBWRCClient.ts' ],
+						dest : 'build/js/<%= pkg.name %>.js'
+					},
+					startup : {
+						src : [ '<%= pkg.src %>/typescript/IBWRCClientStartup.ts' ],
+						dest : 'build/js/<%= pkg.name %>Startup.js'
 					}
 				},
 				concat : {
@@ -45,7 +49,8 @@ module.exports = function(grunt) {
 						},
 						files : {
 							'build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js' : [ 'bower_components/crypto-js/crypto-js.js',
-									'build/js/<%= pkg.name %>.js' ]
+									'build/js/<%= pkg.name %>.js' ],
+							'build/<%= pkg.name %>/scripts/<%= pkg.name %>.js' : [ 'build/js/<%= pkg.name %>Startup.js' ]
 						}
 					}
 				},
@@ -86,6 +91,11 @@ module.exports = function(grunt) {
 							cwd : 'build/<%= pkg.name %>/chrome',
 							src : [ 'content/**/*', 'locale/**/*' ],
 							dest : 'chrome/ibw'
+						}, {
+							expand : true,
+							cwd : 'build/<%= pkg.name %>',
+							src : [ 'scripts/*' ],
+							dest : ''
 						} ]
 					}
 				},

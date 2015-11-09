@@ -1,5 +1,9 @@
 /// <reference path="../definitions/XPCOM.d.ts" />
 
+/// <reference path="Error.ts" />
+/// <reference path="ErrorCode.ts" />
+/// <reference path="HTTPError.ts" />
+
 module net {
     export class HTTPRequest extends core.EventDispatcher {
         public static EVENT_COMPLETE = "REQUEST_COMPLETE";

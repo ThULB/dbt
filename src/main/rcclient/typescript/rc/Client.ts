@@ -1,7 +1,13 @@
 /// <reference path="../definitions/crypto-js.d.ts" />
+/// <reference path="../libs/JSON2.ts" />
 
 /// <reference path="../core/EventDispatcher.ts" />
 /// <reference path="../net/HTTPRequest.ts" />
+
+/// <reference path="Entry.ts" />
+/// <reference path="Error.ts" />
+/// <reference path="ErrorCode.ts" />
+/// <reference path="Slot.ts" />
 
 module rc {
     export class Client extends core.EventDispatcher {
