@@ -9,6 +9,7 @@ class IBWRCClient {
     public static VERSION: string = "@@VERSION";
     public static REVISION: string = "@@REVISION";
 
+    public static CFG_PREFIX: string = "RC";
     public static LOCAL_URI_PREFIX: string = "chrome://IBWRCClient/";
 
     private static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
@@ -41,6 +42,9 @@ class IBWRCClient {
         core.Locale.getInstance(IBWRCClient.LOCAL_URI_PREFIX + "locale/ibwrcclient.properties");
 
         try {
+            this.clientURL = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "URL", this.clientURL);
+            this.defaultIndicator = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "LoanIndicator", this.defaultIndicator);
+
             this.userInfo = ibw.getUserInfo();
             if (core.Utils.isValid(this.userInfo)) {
                 this.rcClient = new rc.Client(this.clientURL);
