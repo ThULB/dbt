@@ -10,7 +10,7 @@
 /// <reference path="UserInfo.ts" />
 
 module ibw {
-    var application: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
+    export var application: IApplication = Components.classes["@oclcpica.nl/kitabapplication;1"].getService(Components.interfaces.IApplication);
 
     /**
      * Runs command on activeWindow and returns <code>true</code> on success.
