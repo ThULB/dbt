@@ -5,7 +5,7 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n"
+  xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n"
 >
   <!-- ************************************************************ -->
   <!-- *                  additional stylesheets                  * -->
@@ -416,7 +416,7 @@
       <p>
         <xsl:value-of select="i18n:translate('dbt.copyright')" />
       </p>
-      <p>
+      <p title="{concat('MIR ',mirver:getCompleteVersion())}">
         <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
       </p>
     </div>
