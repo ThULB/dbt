@@ -8,18 +8,18 @@
 
   <script src="IBWRCClient.js" />
 
-<!--   <menubar> -->
-<!--     <menu label="&mOptions.label;" accesskey="&mOptions.accesskey;"> -->
-<!--       <menupopup> -->
-<!--         <menuitem label="&mOptions.Settings.label;" accesskey="&mOptions.Settings.accesskey;" oncommand="onOptions();" /> -->
-<!--       </menupopup> -->
-<!--     </menu> -->
-<!--     <menu label="&mHelp.label;" accesskey="&mHelp.accesskey;"> -->
-<!--       <menupopup> -->
-<!--         <menuitem label="&mHelp.About.label;" accesskey="&mHelp.About.accesskey;" oncommand="onAbout();" /> -->
-<!--       </menupopup> -->
-<!--     </menu> -->
-<!--   </menubar> -->
+  <menubar>
+    <menu label="&mOptions.label;" accesskey="&mOptions.accesskey;">
+      <menupopup>
+        <menuitem id="miSettings" label="&mOptions.Settings.label;" accesskey="&mOptions.Settings.accesskey;" />
+      </menupopup>
+    </menu>
+    <menu label="&mHelp.label;" accesskey="&mHelp.accesskey;">
+      <menupopup>
+        <menuitem id="miAbout" label="&mHelp.About.label;" accesskey="&mHelp.About.accesskey;" />
+      </menupopup>
+    </menu>
+  </menubar>
 
   <vbox flex="1">
     <vbox id="header" align="start" height="100">
@@ -63,7 +63,7 @@
               <hbox align="center">
                 <caption label="" width="100" />
                 <vbox align="left,center">
-                  <checkbox id="cbShelfMark" label="&label.shelfmark;" disabled="true" hidden="true" />
+                  <checkbox id="cbShelfMark" label="&label.shelfmark.change;" disabled="true" hidden="true" />
                   <checkbox id="cbPresence" label="&label.presence;" disabled="true" />
                 </vbox>
               </hbox>
@@ -72,7 +72,7 @@
                 <textbox id="tbBundleEPN" width="300" disabled="true" height="22" />
               </hbox>
               <hbox id="boxShelfMark" align="center" hidden="true">
-                <caption label="&label.shelfmark.change;" width="100" />
+                <caption label="&label.shelfmark;" width="100" />
                 <textbox id="tbShelfMark" width="300" disabled="true" height="22" />
               </hbox>
               <hbox align="center">

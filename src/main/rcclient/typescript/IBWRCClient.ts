@@ -21,6 +21,8 @@ class IBWRCClient {
     // preference based or default variables
     private clientURL: string = "http://127.0.0.1:8291/mir"; //"http://dbttest.thulb.uni-jena.de/mir";
     private defaultIndicator: string = "i";
+    private defaultPresence: boolean = false;
+    private shelfmarkChangeable: boolean = true;
 
     private slot: rc.Slot;
     private userInfo: ibw.UserInfo;
@@ -44,6 +46,8 @@ class IBWRCClient {
         try {
             this.clientURL = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "URL", this.clientURL);
             this.defaultIndicator = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "LoanIndicator", this.defaultIndicator);
+            this.defaultPresence = ibw.application.getProfileInt(IBWRCClient.CFG_PREFIX, "Presence", this.defaultPresence ? 1 : 0) == 1;
+            this.shelfmarkChangeable = ibw.application.getProfileInt(IBWRCClient.CFG_PREFIX, "ShelfmarkChangeable", this.shelfmarkChangeable ? 1 : 0) == 1;
 
             this.userInfo = ibw.getUserInfo();
             if (core.Utils.isValid(this.userInfo)) {
@@ -53,7 +57,7 @@ class IBWRCClient {
                 this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
 
-                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnDeregister".split("|"));
+                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnDeregister|miSettings|miAbout".split("|"));
             }
         } catch (e) {
             ibw.showError(e);
@@ -123,9 +127,58 @@ class IBWRCClient {
                 case "btnDeregister":
                     this.onDeregister(<XULCommandEvent>ev);
                     break;
+                case "miSettings":
+                    this.onSettings();
+                    break;
             }
         }
     }
+
+    private onSettings() {
+        (<XULWindow>window).openDialog("IBWRCClientSettings.xul", "_blank", "chrome,close,modal,centerscreen", this);
+    }
+
+    onSettingsLoad(window: XULWindow) {
+        var document = window.document;
+
+        var tbURL: XULTextBoxElement = <any>document.getElementById("tbURL");
+        var tbInd: XULTextBoxElement = <any>document.getElementById("tbInd");
+        var cbPre: XULCheckboxElement = <any>document.getElementById("cbPre");
+
+        tbURL.value = this.clientURL;
+        tbInd.value = this.defaultIndicator;
+        cbPre.checked = this.defaultPresence;
+    }
+
+    onSettingsAccept(window: XULWindow) {
+        try {
+            var document = window.document;
+
+            var tbURL: XULTextBoxElement = <any>document.getElementById("tbURL");
+            var tbInd: XULTextBoxElement = <any>document.getElementById("tbInd");
+            var cbPre: XULCheckboxElement = <any>document.getElementById("cbPre");
+            var cbShelfmark: XULCheckboxElement = <any>document.getElementById("cbShelfmark");
+
+            this.clientURL = tbURL.value;
+            this.defaultIndicator = tbInd.value;
+            this.defaultPresence = cbPre.checked;
+            this.shelfmarkChangeable = cbShelfmark.checked;
+
+            ibw.application.writeProfileString(IBWRCClient.CFG_PREFIX, "URL", this.clientURL);
+            ibw.application.writeProfileString(IBWRCClient.CFG_PREFIX, "LoanIndicator", this.defaultIndicator);
+            ibw.application.writeProfileInt(IBWRCClient.CFG_PREFIX, "Presence", this.defaultPresence ? 1 : 0);
+            ibw.application.writeProfileInt(IBWRCClient.CFG_PREFIX, "ShelfmarkChangeable", this.shelfmarkChangeable ? 1 : 0);
+
+            this.rcClient.setURL(this.clientURL);
+            this.rcClient.loadSlots();
+
+            return true;
+        } catch (e) {
+            this.onError(this, e);
+            return false;
+        }
+    }
+
 
     /**
      * Callback method if a error was triggered.
@@ -155,6 +208,14 @@ class IBWRCClient {
      */
     onSlotListLoaded(delegate: rc.Client) {
         this.updateStatusbar(delegate.statusText);
+
+        this.clearMenuList("mlPPN", true);
+        this.clearMenuList("mlEPN", true);
+
+        for (var e in this.elementStates) {
+            this.setDisabledState(e, true);
+            this.setHiddenState(e, this.elementStates[e].hidden);
+        }
 
         var elms: string[] = ["mlSlots", "mlSlotsBar"];
         var slots: Array<rc.Slot> = delegate.getSlots();
@@ -251,7 +312,7 @@ class IBWRCClient {
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
-                if (copy == null || !copy.type.startsWith("k")) continue;
+                if (copy == null || copy.epn.isEmpty()) continue;
 
                 var item = mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
 
@@ -293,16 +354,17 @@ class IBWRCClient {
                         break;
                     case "cbPresence":
                         var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
-                        cbPresence.checked = disabled = copy.hasRegistered();
+                        disabled = copy.hasRegistered();
+                        cbPresence.checked = copy.hasRegistered() || this.defaultPresence;
                         break;
                     case "cbShelfMark":
-                        disabled = copy.hasRegistered();
+                        hidden = disabled = copy.hasRegistered() || !this.shelfmarkChangeable;
                         break;
                     case "boxBundle":
                         hidden = !copy.isBundle;
                         break;
                     case "boxShelfMark":
-                        hidden = false; // this.slot.getEntryForEPN(copy.epn) != null || copy.hasRegistered();
+                        hidden = !this.shelfmarkChangeable;
                         break;
                     case "tbLocation":
                         disabled = copy.hasRegistered();

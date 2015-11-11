@@ -2,6 +2,7 @@
 
 interface XULWindow extends nsISupports, Window {
     sizeToContent();
+    openDialog(url: string, name: string, features: string, ...args): XULWindow;
 }
 
 interface XULCommandDispatcher extends nsISupports {

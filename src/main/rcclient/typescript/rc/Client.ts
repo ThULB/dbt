@@ -33,6 +33,14 @@ module rc {
             this.URL = aURL;
         }
 
+        getURL(): string {
+            return this.URL;
+        }
+
+        setURL(aURL: string) {
+            this.URL = aURL;
+        }
+
         /**
          * Method to login to RC servlet.
          */
