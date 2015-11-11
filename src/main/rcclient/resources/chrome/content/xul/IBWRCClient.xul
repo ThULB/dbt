@@ -14,11 +14,6 @@
         <menuitem id="miSettings" label="&mOptions.Settings.label;" accesskey="&mOptions.Settings.accesskey;" />
       </menupopup>
     </menu>
-    <menu label="&mHelp.label;" accesskey="&mHelp.accesskey;">
-      <menupopup>
-        <menuitem id="miAbout" label="&mHelp.About.label;" accesskey="&mHelp.About.accesskey;" />
-      </menupopup>
-    </menu>
   </menubar>
 
   <vbox flex="1">

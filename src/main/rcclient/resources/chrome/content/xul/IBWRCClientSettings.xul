@@ -4,22 +4,22 @@
 
 <!DOCTYPE window SYSTEM "chrome://IBWRCClient/locale/ibwrcclient.dtd">
 
-<dialog title="&dlg.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="window.arguments[0].onSettingsLoad(this)"
+<dialog title="&settings.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="window.arguments[0].onSettingsLoad(this)"
   ondialogaccept="return window.arguments[0].onSettingsAccept(this)" buttons="accept,cancel" buttonorient="right"
 >
   <vbox align="start">
     <vbox align="left">
       <hbox align="center">
-        <caption label="&lblWebSrv.label;" width="100" />
+        <caption label="&label.url;" width="100" />
         <textbox id="tbURL" width="200" />
       </hbox>
       <hbox align="center">
-        <caption label="&lblInd.label;" width="100" />
+        <caption label="&label.indicator;" width="100" />
         <textbox id="tbInd" width="20" maxlength="1" />
       </hbox>
       <vbox align="left,center">
-        <checkbox id="cbPre" label="&cbPre.label;" />
-        <checkbox id="cbShelfmark" label="&cbSgn.label;" />
+        <checkbox id="cbPre" label="&label.defaultPresence;" />
+        <checkbox id="cbShelfmark" label="&label.shelfmarkChangeable;" />
       </vbox>
     </vbox>
   </vbox>

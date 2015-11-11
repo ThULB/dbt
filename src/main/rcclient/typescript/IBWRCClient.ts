@@ -19,7 +19,7 @@ class IBWRCClient {
     private rcClient: rc.Client;
     
     // preference based or default variables
-    private clientURL: string = "http://127.0.0.1:8291/mir"; //"http://dbttest.thulb.uni-jena.de/mir";
+    private clientURL: string = "http://dbttest.thulb.uni-jena.de/mir";
     private defaultIndicator: string = "i";
     private defaultPresence: boolean = false;
     private shelfmarkChangeable: boolean = true;
