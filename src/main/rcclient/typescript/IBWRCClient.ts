@@ -142,12 +142,12 @@ class IBWRCClient {
         var document = window.document;
 
         var tbURL: XULTextBoxElement = <any>document.getElementById("tbURL");
-        var tbInd: XULTextBoxElement = <any>document.getElementById("tbInd");
-        var cbPre: XULCheckboxElement = <any>document.getElementById("cbPre");
+        var tbIndicator: XULTextBoxElement = <any>document.getElementById("tbIndicator");
+        var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
 
         tbURL.value = this.clientURL;
-        tbInd.value = this.defaultIndicator;
-        cbPre.checked = this.defaultPresence;
+        tbIndicator.value = this.defaultIndicator;
+        cbPresence.checked = this.defaultPresence;
     }
 
     onSettingsAccept(window: XULWindow) {
@@ -155,13 +155,13 @@ class IBWRCClient {
             var document = window.document;
 
             var tbURL: XULTextBoxElement = <any>document.getElementById("tbURL");
-            var tbInd: XULTextBoxElement = <any>document.getElementById("tbInd");
-            var cbPre: XULCheckboxElement = <any>document.getElementById("cbPre");
+            var tbIndicator: XULTextBoxElement = <any>document.getElementById("tbIndicator");
+            var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
             var cbShelfmark: XULCheckboxElement = <any>document.getElementById("cbShelfmark");
 
             this.clientURL = tbURL.value;
-            this.defaultIndicator = tbInd.value;
-            this.defaultPresence = cbPre.checked;
+            this.defaultIndicator = tbIndicator.value;
+            this.defaultPresence = cbPresence.checked;
             this.shelfmarkChangeable = cbShelfmark.checked;
 
             ibw.application.writeProfileString(IBWRCClient.CFG_PREFIX, "URL", this.clientURL);

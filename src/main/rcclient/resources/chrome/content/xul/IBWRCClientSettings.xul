@@ -15,10 +15,10 @@
       </hbox>
       <hbox align="center">
         <caption label="&label.indicator;" width="100" />
-        <textbox id="tbInd" width="20" maxlength="1" />
+        <textbox id="tbIndicator" width="20" maxlength="1" />
       </hbox>
       <vbox align="left,center">
-        <checkbox id="cbPre" label="&label.defaultPresence;" />
+        <checkbox id="cbPresence" label="&label.defaultPresence;" />
         <checkbox id="cbShelfmark" label="&label.shelfmarkChangeable;" />
       </vbox>
     </vbox>
