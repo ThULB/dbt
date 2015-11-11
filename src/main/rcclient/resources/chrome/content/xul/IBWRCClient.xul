@@ -17,9 +17,10 @@
   </menubar>
 
   <vbox flex="1">
-    <vbox id="header" align="start" height="100">
-      <image src="chrome://IBWRCClient/content/images/dbt_logo.png" width="205" height="100" />
-    </vbox>
+    <hbox id="header" align="start" height="100">
+      <image src="chrome://IBWRCClient/content/images/dbt_logo.png" width="200" height="100" />
+      <label id="version" align="end" flex="1" />
+    </hbox>
 
     <vbox>
       <tabbox>

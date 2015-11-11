@@ -44,6 +44,9 @@ class IBWRCClient {
         core.Locale.getInstance(IBWRCClient.LOCAL_URI_PREFIX + "locale/ibwrcclient.properties");
 
         try {
+            var version: XULLabelElement = <any>document.getElementById("version");
+            version.value = "{0} r{1}".format(IBWRCClient.VERSION, IBWRCClient.REVISION);
+
             this.clientURL = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "URL", this.clientURL);
             this.defaultIndicator = ibw.application.getProfileString(IBWRCClient.CFG_PREFIX, "LoanIndicator", this.defaultIndicator);
             this.defaultPresence = ibw.application.getProfileInt(IBWRCClient.CFG_PREFIX, "Presence", this.defaultPresence ? 1 : 0) == 1;

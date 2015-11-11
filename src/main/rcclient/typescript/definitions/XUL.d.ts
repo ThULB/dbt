@@ -175,3 +175,14 @@ interface XULProgressMeterElement extends XULControlElement {
     mode: string;
     value: string;
 }
+
+interface XULDescriptionElement extends XULElement {
+    disabled: boolean;
+    crop: boolean;
+    value: string;
+}
+
+interface XULLabelElement extends XULDescriptionElement {
+    accessKey: string;
+    control: string;
+}
