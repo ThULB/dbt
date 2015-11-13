@@ -57,10 +57,22 @@
         <artifactId>buildnumber-maven-plugin</artifactId>
         <executions>
           <execution>
+            <id>default-cli</id>
             <phase>validate</phase>
             <goals>
               <goal>create</goal>
             </goals>
+          </execution>
+          <execution>
+            <id>rcclient</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>create</goal>
+            </goals>
+            <configuration>
+              <scmDirectory>src/main/rcclient</scmDirectory>
+              <buildNumberPropertyName>rcclientBuildNumber</buildNumberPropertyName>
+            </configuration>
           </execution>
         </executions>
         <configuration>
@@ -108,7 +120,7 @@
               <ignoreAllErrors>false</ignoreAllErrors>
               <gruntOptions>
                 <gruntOption>--verbose</gruntOption>
-                <gruntOption>--buildNumber ${buildNumber}</gruntOption>
+                <gruntOption>--buildNumber ${rcclientBuildNumber}</gruntOption>
               </gruntOptions>
             </configuration>
           </execution>
