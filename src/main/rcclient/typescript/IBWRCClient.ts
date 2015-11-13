@@ -34,6 +34,7 @@ class IBWRCClient {
         "tbShelfMark": { hidden: false },
         "tbLocation": { hidden: false },
         "tbBundleEPN": { hidden: false },
+        "tbBarcode": { hidden: false },
         "btnRegister": { hidden: false },
         "btnDeregister": { hidden: false },
         "boxBundle": { hidden: true },
@@ -60,7 +61,13 @@ class IBWRCClient {
                 this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
 
-                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnRegister|btnDeregister|miSettings|miAbout".split("|"));
+                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnBarcode|btnRegister|btnDeregister|miSettings|miAbout".split("|"));
+
+                document.getElementById("tbBarcode").addEventListener("keyup", (ev: KeyboardEvent) => {
+                    if (ev.keyCode == 13) {
+                        this.onBarcodeEntered((<XULTextBoxElement>ev.currentTarget).value);
+                    }
+                }, true);
             }
         } catch (e) {
             ibw.showError(e);
@@ -68,12 +75,20 @@ class IBWRCClient {
         }
     }
 
-    private clearMenuList(target: any, disabled: boolean) {
+    private clearMenuList(target: any, disabled: boolean): XULMenuListElement {
         var ml: XULMenuListElement = typeof target == "string" ? <any>document.getElementById(target) : target;
         ml.removeAllItems();
         ml.appendItem(core.Locale.getInstance().getString("defaultValues.pleaseSelect"), null);
         ml.selectedIndex = 0;
         ml.disabled = disabled;
+        return ml;
+    }
+
+    private clearTextBox(target: any, disabled: boolean): XULTextBoxElement {
+        var tb: XULTextBoxElement = typeof target == "string" ? <any>document.getElementById(target) : target;
+        tb.value = "";
+        tb.disabled = disabled;
+        return tb;
     }
 
     private setDisabledState(target: any, disabled: boolean) {
@@ -123,6 +138,9 @@ class IBWRCClient {
                     break;
                 case "mlEPN":
                     this.onSelectEPN(<XULCommandEvent>ev);
+                    break;
+                case "btnBarcode":
+                    this.onBarcode(<XULCommandEvent>ev);
                     break;
                 case "btnRegister":
                     this.onRegister(<XULCommandEvent>ev);
@@ -256,6 +274,11 @@ class IBWRCClient {
         this.clearMenuList(mlPPN, false);
         this.clearMenuList("mlEPN", true);
 
+        var elms: string[] = ["btnBarcode", "tbBarcode"];
+        for (var i in elms) {
+            this.setDisabledState(elms[i], false);
+        }
+
         for (var i in slot.entries) {
             var entry: rc.Entry = slot.entries[i];
             mlPPN.appendItem(entry.ppn, entry.ppn);
@@ -275,6 +298,7 @@ class IBWRCClient {
 
         this.clearMenuList("mlPPN", true);
         this.clearMenuList("mlEPN", true);
+        this.clearTextBox("tbBarcode", true);
 
         for (var e in this.elementStates) {
             this.setDisabledState(e, true);
@@ -301,10 +325,13 @@ class IBWRCClient {
             this.setHiddenState(e, this.elementStates[e].hidden);
         }
 
+        var tbBarcode: XULTextBoxElement = <any>document.getElementById("tbBarcode");
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
         if (!PPN.isEmpty()) {
             ibw.getActiveWindow().command("f ppn " + PPN, false);
             this.copys = ibw.getCopys();
+
+            var barcode = tbBarcode.value;
 
             var entry = this.slot.getEntryForPPN(PPN);
 
@@ -319,7 +346,7 @@ class IBWRCClient {
 
                 var item = mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
 
-                if (entry != null && entry.epn == copy.epn) {
+                if (entry != null && entry.epn == copy.epn || !barcode.isEmpty() && barcode == copy.barcode) {
                     selectedItem = item;
                     selectedItem.value = i;
                 }
@@ -331,6 +358,7 @@ class IBWRCClient {
             }
         } else {
             this.clearMenuList(mlEPN, true);
+            this.clearTextBox(tbBarcode, false);
         }
     }
     
@@ -398,6 +426,37 @@ class IBWRCClient {
         }
     }
 
+    onBarcode(ev?: XULCommandEvent) {
+        var boxEPN: XULElement = <any>document.getElementById("boxEPN");
+        var boxBarcode: XULElement = <any>document.getElementById("boxBarcode");
+
+        boxEPN.hidden = boxBarcode.hidden;
+        boxBarcode.hidden = !boxBarcode.hidden;
+    }
+
+    private onBarcodeEntered(barcode: string) {
+        if (!barcode.isEmpty()) {
+            if (ibw.command("f bar " + barcode)) {
+                var PPN: string = ibw.getActiveWindow().getVariable("P3GPP");
+
+                if (this.slot.getEntryForPPN(PPN) != null) {
+                    // FIXME if u know how to use itemCount on XULMenuListElement
+                    for (var i = 0; i < this.slot.entries.length; i++) {
+                        if (this.slot.entries[i].ppn == PPN) {
+                            this.onBarcode();
+
+                            var mlPPN: XULMenuListElement = <any>document.getElementById("mlPPN");
+                            mlPPN.selectedIndex = i + 1;
+                            mlPPN.selectedItem.value = PPN;
+                            mlPPN.doCommand();
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private register(copy: ibw.Copy, presence: boolean, bundleEPN: string, location?: string, shelfmark?: string) {
         if (ibw.command("k e" + copy.num)) {
             if (copy.hasRegistered()) {
@@ -441,8 +500,6 @@ class IBWRCClient {
      * @param ev the command event
      */
     onRegister(ev: XULCommandEvent) {
-        var btn: XULMenuListElement = <any>ev.currentTarget;
-
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
         var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
 
@@ -517,8 +574,6 @@ class IBWRCClient {
      * @param ev the command event
      */
     onDeregister(ev: XULCommandEvent) {
-        var btn: XULMenuListElement = <any>ev.currentTarget;
-
         var mlEPN: XULMenuListElement = <any>document.getElementById("mlEPN");
         var copy: ibw.Copy = this.copys[parseInt(mlEPN.selectedItem.value)];
 

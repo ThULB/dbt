@@ -48,13 +48,19 @@
                 </menulist>
               </hbox>
               <hbox align="center">
-                <caption label="&label.epn;" width="100" />
-                <menulist id="mlEPN" width="270" disabled="true">
-                  <menupopup>
-                    <menuitem label="&defaultValues.PleaseSelect;" />
-                  </menupopup>
-                </menulist>
-                <image id="btnBar" src="chrome://IBWRCClient/content/images/barcode.png" />
+                <box id="boxEPN">
+                  <caption label="&label.epn;" width="100" />
+                  <menulist id="mlEPN" width="270" disabled="true">
+                    <menupopup>
+                      <menuitem label="&defaultValues.PleaseSelect;" />
+                    </menupopup>
+                  </menulist>
+                </box>
+                <box id="boxBarcode" hidden="true">
+                  <caption label="&label.barcode;" width="100" />
+                  <textbox id="tbBarcode" width="270" disabled="true" height="22" />
+                </box>
+                <button id="btnBarcode" image="chrome://IBWRCClient/content/images/barcode.png" />
               </hbox>
               <hbox align="center">
                 <caption label="" width="100" />

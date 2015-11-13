@@ -21,6 +21,7 @@
 <!ENTITY label.slot "SemApp Nummer:">
 <!ENTITY label.ppn "Title/PPN:">
 <!ENTITY label.epn "Exemplar:">
+<!ENTITY label.barcode "Barcode:">
 <!ENTITY label.shelfmark "Signatur:">
 <!ENTITY label.location "Standort:">
 <!ENTITY label.bundleEPN "EPN erster Band:">

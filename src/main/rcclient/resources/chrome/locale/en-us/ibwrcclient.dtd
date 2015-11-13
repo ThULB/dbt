@@ -21,6 +21,7 @@
 <!ENTITY label.slot "ESA Number:">
 <!ENTITY label.ppn "Title/PPN:">
 <!ENTITY label.epn "Copy:">
+<!ENTITY label.barcode "Barcode:">
 <!ENTITY label.shelfmark "Signature:">
 <!ENTITY label.location "Location:">
 <!ENTITY label.bundleEPN "EPN first unit:">
