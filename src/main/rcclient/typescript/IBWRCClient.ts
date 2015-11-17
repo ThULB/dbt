@@ -159,6 +159,11 @@ class IBWRCClient {
         (<XULWindow>window).openDialog("IBWRCClientSettings.xul", "_blank", "chrome,close,modal,centerscreen", this);
     }
 
+    /**
+     * Callback method used on load of settings dialog.
+     * 
+     * @param window the dialog window
+     */
     onSettingsLoad(window: XULWindow) {
         var document = window.document;
 
@@ -171,6 +176,11 @@ class IBWRCClient {
         cbPresence.checked = this.defaultPresence;
     }
 
+    /**
+     * Callback method of settings dialog if "Ok" was pressed.
+     * 
+     * @param window the dialog window
+     */
     onSettingsAccept(window: XULWindow) {
         try {
             var document = window.document;
@@ -199,7 +209,6 @@ class IBWRCClient {
             return false;
         }
     }
-
 
     /**
      * Callback method if a error was triggered.
@@ -426,6 +435,11 @@ class IBWRCClient {
         }
     }
 
+    /**
+     * Event handler for barcode button.
+     * 
+     * @param ev the event
+     */
     onBarcode(ev?: XULCommandEvent) {
         var boxEPN: XULElement = <any>document.getElementById("boxEPN");
         var boxBarcode: XULElement = <any>document.getElementById("boxBarcode");
