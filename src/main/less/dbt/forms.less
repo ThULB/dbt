@@ -10,14 +10,76 @@ form {
   pointer-events: auto;
 }
 
-.personExtended_box .search-person {
-    width: 93%;
-    margin-right: 2px;
-}
-
 .center-vertical > div {
     float:none;
     display:inline-block;
     vertical-align:middle;
     margin-right:-4px;
+}
+
+.required:before {
+  content:"* ";
+}
+
+.required > label:before {
+  content:"* ";
+}
+
+// --------------------------------------------------
+//    mir-fieldset
+// --------------------------------------------------
+
+.mir-fieldset-content {
+    margin-bottom: 15px;
+}
+
+.mir-fieldset-content > .form-group {
+    margin-bottom: 0px;
+}
+
+.mir-fieldset-legend {
+    border-style: solid;
+    border-width: 0px 0px 2px;
+    border-color: #CCC;
+    border-bottom-left-radius: 10px;
+    padding: 3px 3px 3px 21px;
+    margin-bottom: 0px;
+}
+
+.mir-fieldset-legend.hiddenDetail {
+    border: 0;
+}
+
+.personExtended_box .mir-fieldset-legend {
+    padding-left: 0;
+}
+
+.personExtended_box .search-person {
+    width: 93%;
+    margin-right: 2px;
+}
+
+div.mir-fieldset-content {
+  & > div.form-group {
+    & > div.col-md-6 {
+      border-style: solid;
+      border-width: 0px 0px 0px 2px;
+      border-color: #CCC;
+      padding-left: 13px;
+      padding-bottom: 5px;
+    }
+    &:first-of-type {
+      & > div {
+        padding-top: 6px;
+      }
+    }
+    &:last-of-type {
+      & > div {
+        padding-bottom: 6px;
+      }
+      & > div.col-md-6 {
+        border-bottom-left-radius: 10px;
+      }
+    }
+  }
 }
