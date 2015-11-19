@@ -150,9 +150,15 @@ public class ClientServlet extends MCRServlet {
                             final OPCRecordEntry record = (OPCRecordEntry) entry.getEntry();
 
                             record.setEPN(epn);
-                            SLOT_MGR.saveOrUpdate(slot);
+                            try {
+                                SLOT_MGR.saveOrUpdate(slot);
+                                res.setStatus(HttpServletResponse.SC_OK);
+                            } catch (Exception e) {
+                                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                                LOGGER.error(e);
+                            }
 
-                            res.setStatus(HttpServletResponse.SC_OK);
+                            writeToResponse(res, ClientData.encrypt(sessionToken, jsonStr), "application/json");
                             return;
                         }
                     } else {
