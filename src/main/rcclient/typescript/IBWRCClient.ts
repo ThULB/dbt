@@ -12,9 +12,9 @@ class IBWRCClient {
     public static CFG_PREFIX: string = "RC";
     public static LOCAL_URI_PREFIX: string = "chrome://IBWRCClient/";
 
-    private static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
-    private static FORMAT_4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
-    private static FORMAT_4802: string = "4802 {0} RC {1}\n";
+    public static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
+    public static FORMAT_4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
+    public static FORMAT_4802: string = "4802 {0} RC {1}\n";
 
     private rcClient: rc.Client;
     
@@ -35,6 +35,7 @@ class IBWRCClient {
         "tbLocation": { hidden: false },
         "tbBundleEPN": { hidden: false },
         "tbBarcode": { hidden: false },
+        "tbBarcodes": { hidden: false },
         "btnRegister": { hidden: false },
         "btnDeregister": { hidden: false },
         "boxBundle": { hidden: true },
@@ -61,12 +62,15 @@ class IBWRCClient {
                 this.rcClient.addListener(net.HTTPRequest.EVENT_PROGRESS, this, this.onProgress);
                 this.rcClient.loadSlots();
 
-                this.addCommandListener("mlSlots|mlPPN|mlEPN|btnBarcode|btnRegister|btnDeregister|miSettings|miAbout".split("|"));
+                this.addCommandListener("mlSlots|mlSlotsBar|mlPPN|mlEPN|btnBarcode|btnRegister|btnDeregister|btnDeregisterAll|miSettings|miAbout".split("|"));
 
                 document.getElementById("tbBarcode").addEventListener("keyup", (ev: KeyboardEvent) => {
                     if (ev.keyCode == 13) {
                         this.onBarcodeEntered((<XULTextBoxElement>ev.currentTarget).value);
                     }
+                }, true);
+                document.getElementById("tbBarcodes").addEventListener("keyup", (ev: KeyboardEvent) => {
+                    this.setDisabledState("btnDeregisterAll", (<XULTextBoxElement>ev.currentTarget).value.isEmpty())
                 }, true);
             }
         } catch (e) {
@@ -133,6 +137,9 @@ class IBWRCClient {
                 case "mlSlots":
                     this.onSelectSlot(<XULCommandEvent>ev);
                     break;
+                case "mlSlotsBar":
+                    this.onSelectSlot(<XULCommandEvent>ev);
+                    break;
                 case "mlPPN":
                     this.onSelectPPN(<XULCommandEvent>ev);
                     break;
@@ -147,6 +154,9 @@ class IBWRCClient {
                     break;
                 case "btnDeregister":
                     this.onDeregister(<XULCommandEvent>ev);
+                    break;
+                case "btnDeregisterAll":
+                    this.onDeregisterAll(<XULCommandEvent>ev);
                     break;
                 case "miSettings":
                     this.onSettings();
@@ -283,7 +293,7 @@ class IBWRCClient {
         this.clearMenuList(mlPPN, false);
         this.clearMenuList("mlEPN", true);
 
-        var elms: string[] = ["btnBarcode", "tbBarcode"];
+        var elms: string[] = ["btnBarcode", "tbBarcode", "tbBarcodes"];
         for (var i in elms) {
             this.setDisabledState(elms[i], false);
         }
@@ -308,6 +318,7 @@ class IBWRCClient {
         this.clearMenuList("mlPPN", true);
         this.clearMenuList("mlEPN", true);
         this.clearTextBox("tbBarcode", true);
+        this.clearTextBox("tbBarcodes", true);
 
         for (var e in this.elementStates) {
             this.setDisabledState(e, true);
@@ -552,6 +563,7 @@ class IBWRCClient {
 
     private deregister(copy: ibw.Copy) {
         if (ibw.command("k e" + copy.num)) {
+            var clientURL = this.clientURL || this.rcClient.getURL();
             var backup = copy.getBackup(this.slot.id);
             if (backup != null) {
                 var cat7100 = IBWRCClient.FORMAT_7100.format(
@@ -560,7 +572,7 @@ class IBWRCClient {
                     backup.loanIndicator + (backup.isBundle ? " \\ c" : "")
                 );
 
-                if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
+                if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
                     ibw.getTitle().deleteToEndOfLine();
 
                 if (ibw.getTitle().find(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100).trim(), true, false, false))
@@ -607,6 +619,121 @@ class IBWRCClient {
 
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
         mlSlots.doCommand();
+    }
+    
+    /**
+     * Event handler for deregister all button.
+     * 
+     * @param ev the command event
+     */
+    onDeregisterAll(ev: XULCommandEvent) {
+        var tbBarcodes: XULTextBoxElement = <any>document.getElementById("tbBarcodes");
+        var barcodes: Array<string> = tbBarcodes.value.trim().split("\n");
+
+        var chain = new DeregisterChain(this.rcClient, this.slot, this.deregister, barcodes);
+        chain.addListener(DeregisterChain.COMPLETE, this, this.onDeregisterChainComplete);
+        chain.addListener(DeregisterChain.PROGRESS, this, this.onProgress);
+        chain.execute();
+    }
+    
+    /**
+     * Callback method after successfully deregistration of multiple copys.
+     * 
+     * @param delegate the delegating DeregisterChain
+     */
+    onDeregisterChainComplete(chain: DeregisterChain) {
+        chain.clearListenersByScope(this);
+        chain.destroy();
+
+        if (chain.copys.length == chain.completed.length)
+            ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.deregisterCopys.done"), ibw.MESSAGE_INFO);
+        else
+            ibw.messageBox("Warning", core.Locale.getInstance().getString("client.status.deregisterCopys.failure"), ibw.MESSAGE_WARNING);
+
+        var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlotsBar");
+        mlSlots.doCommand();
+    }
+}
+
+class DeregisterChain extends core.EventDispatcher {
+    public static PROGRESS: string = "DEREGISTER_CHAIN_PROGRESS";
+    public static COMPLETE: string = "DEREGISTER_CHAIN_COMPLETE";
+
+    private numDeregistered: number = 0;
+
+    public statusText: string;
+    public copys: Array<ibw.Copy> = [];
+    public completed: Array<ibw.Copy> = [];
+
+    constructor(public rcClient: rc.Client, public slot: rc.Slot, public deregister: (copy: ibw.Copy) => void, public barcodes: Array<string>) {
+        super();
+
+        this.rcClient.addListener(rc.Client.EVENT_ERROR, this, this.onError);
+    }
+
+    execute() {
+        this.numDeregistered = 0;
+
+        if (this.barcodes.length == 0)
+            this.incrementNumDeregistered();
+        else
+            this.deregisterNext(this.numDeregistered);
+    }
+
+    destroy() {
+        this.rcClient.clearListenersByScope(this);
+    }
+
+    onError(delegate: rc.Client, error: Error) { }
+
+    onDeregisterComplete(delegate: rc.Client, job: any) {
+        delegate.clearListenersByEvent(rc.Client.EVENT_COPY_DEREGISTERED);
+
+        for (var i in this.copys) {
+            var copy = this.copys[i];
+            if (job.epn == copy.epn) {
+                this.completed.push(copy);
+            }
+        }
+
+        this.statusText = core.Locale.getInstance().getString("client.status.deregisterCopy.done");
+        this.dispatch(DeregisterChain.PROGRESS, this.numDeregistered + (this.barcodes.length == 0 ? 0 : 1), this.barcodes.length);
+        this.incrementNumDeregistered();
+    }
+
+    private deregisterNext(index: number) {
+        var barcode: string = this.barcodes[index].trim();
+
+        if (!barcode.isEmpty()) {
+            if (ibw.command("f bar " + barcode)) {
+                var PPN: string = ibw.getActiveWindow().getVariable("P3GPP");
+
+                if (this.slot.getEntryForPPN(PPN) != null) {
+                    for (var i = 0; i < this.slot.entries.length; i++) {
+                        var entry = this.slot.entries[i];
+                        if (entry.ppn == PPN) {
+                            var copys = ibw.getCopys();
+                            for (var c in copys) {
+                                if (core.Utils.isValid(copys[c]) && copys[c].barcode == barcode) {
+                                    this.copys.push(copys[c]);
+                                    this.deregister.apply(this, [copys[c]]);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.incrementNumDeregistered();
+    }
+
+    private incrementNumDeregistered() {
+        this.numDeregistered++;
+
+        this.numDeregistered < this.barcodes.length && this.deregisterNext(this.numDeregistered);
+        this.numDeregistered >= this.barcodes.length && this.dispatch(DeregisterChain.COMPLETE);
     }
 }
 

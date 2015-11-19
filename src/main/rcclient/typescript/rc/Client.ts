@@ -301,8 +301,10 @@ module rc {
         private onRegisterCopyComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
+            aData = ClientData.decrypt(this.sessionToken, aData);
+
             this.statusText = core.Locale.getInstance().getString("client.status.registerCopy.done");
-            this.dispatch(Client.EVENT_COPY_REGISTERED);
+            this.dispatch(Client.EVENT_COPY_REGISTERED, JSON2.parse(aData));
         }
         
         /**
@@ -314,8 +316,10 @@ module rc {
         private onDeregisterCopyComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
+            aData = ClientData.decrypt(this.sessionToken, aData);
+
             this.statusText = core.Locale.getInstance().getString("client.status.deregisterCopy.done");
-            this.dispatch(Client.EVENT_COPY_DEREGISTERED);
+            this.dispatch(Client.EVENT_COPY_DEREGISTERED, JSON2.parse(aData));
         }
     }
 
