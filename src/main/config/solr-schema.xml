@@ -183,6 +183,7 @@
   <field name="mods.title" type="text_general" multiValued="true" />
   <field name="mods.title.host" type="text_general" multiValued="true" />
   <field name="mods.title.main" type="text_de" />
+  <field name="mods.title.subtitle" type="text_de" />
   <field name="mods.gnd" type="string" multiValued="true" />
   <field name="mods.gnd.top" type="string" multiValued="true" />
   <field name="mods.name" type="namesType" multiValued="true" />
@@ -202,7 +203,7 @@
   <field name="mods.embargo" type="date" />
   <dynamicField name="mods.relatedItem*" type="string" multiValued="true" />
 
-      <!-- dbt rc slot -->
+    <!-- dbt rc slot -->
   <field name="slotId" type="string" indexed="true" multiValued="false" />
   <field name="slot.status" type="string" indexed="true" multiValued="false" />
   <field name="slot.location" type="text_general" indexed="true" multiValued="true" />
@@ -210,9 +211,9 @@
   <field name="slot.title" type="text_de" indexed="true" />
   <field name="slot.lecturer" type="namesType" indexed="true" multiValued="true" />
   <field name="slot.validTo" type="string" indexed="true" multiValued="false" />
-  <!-- used for sorting -->
+    <!-- used for sorting -->
   <field name="slot.lecturers" type="string" indexed="true" multiValued="false" />
-  
+
     <!-- ******************************************** -->
     <!-- * SEARCH -->
     <!-- ******************************************** -->
