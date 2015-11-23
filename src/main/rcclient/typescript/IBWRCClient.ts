@@ -555,7 +555,7 @@ class IBWRCClient {
         delegate.clearListenersByEvent(rc.Client.EVENT_COPY_REGISTERED);
         this.updateStatusbar(delegate.statusText);
 
-        ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.registerCopy.done"), ibw.MESSAGE_INFO);
+        ibw.messageBox(core.Locale.getInstance().getString("client.status.registerCopy.done"), ibw.MESSAGE_INFO);
 
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
         mlSlots.doCommand();
@@ -615,7 +615,7 @@ class IBWRCClient {
         delegate.clearListenersByEvent(rc.Client.EVENT_COPY_DEREGISTERED);
         this.updateStatusbar(delegate.statusText);
 
-        ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.deregisterCopy.done"), ibw.MESSAGE_INFO);
+        ibw.messageBox(core.Locale.getInstance().getString("client.status.deregisterCopy.done"), ibw.MESSAGE_INFO);
 
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
         mlSlots.doCommand();
@@ -646,9 +646,9 @@ class IBWRCClient {
         chain.destroy();
 
         if (chain.copys.length == chain.completed.length)
-            ibw.messageBox("Info", core.Locale.getInstance().getString("client.status.deregisterCopys.done"), ibw.MESSAGE_INFO);
+            ibw.messageBox(core.Locale.getInstance().getString("client.status.deregisterCopys.done"), ibw.MESSAGE_INFO);
         else
-            ibw.messageBox("Warning", core.Locale.getInstance().getString("client.status.deregisterCopys.failure"), ibw.MESSAGE_WARNING);
+            ibw.messageBox(core.Locale.getInstance().getString("client.status.deregisterCopys.failure"), ibw.MESSAGE_WARNING);
 
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlotsBar");
         mlSlots.doCommand();

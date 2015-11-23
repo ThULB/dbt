@@ -159,11 +159,18 @@ module ibw {
     /**
      * Displays an message box.
      * 
-     * @param title the title
-     * @param msg the message
-     * @param icon the icon, valid values are <code>info-icon</code>, <code>warning-icon</code> and <code>error-icon</code>
+     * Syntax:
+     * <code>
+     *  messageBox([title], msg, icon)
+     * </code>
+     * 
+     * @param ...args the arguments
      */
-    export function messageBox(title: string, msg: string, icon: string) {
+    export function messageBox(...args: Array<string>) {
+        var msg: string = args.length == 3 ? args[1] : args[0];
+        var icon: string = args.length == 3 ? args[2] : args[1];
+        var title: string = args.length == 3 ? args[0] : core.Locale.getInstance().getString("msg.title." + icon.replace("-icon", ""));
+
         application.messageBox(title, msg, icon);
     }
 }
