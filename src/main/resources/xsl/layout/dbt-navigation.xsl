@@ -161,7 +161,7 @@
     </xsl:message>
 
     <xsl:if
-      test="(string-length($referItem) &gt; 0 or string-length($prevItem) &gt; 0 or string-length($currentItem) &gt; 0) and $currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*) != 0 or count($prevItem/ancestor-or-self::*) != 0 or count($currentItem/ancestor-or-self::*) != 0)"
+      test="$currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*[name() != 'group']) != 0 or count($prevItem/ancestor-or-self::*[name() != 'group']) != 0 or count($currentItem/ancestor-or-self::*[name() != 'group']) != 0)"
     >
       <ol class="breadcrumb">
         <xsl:choose>
@@ -170,18 +170,18 @@
               <xsl:with-param name="navigation" select="$navigation" />
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:when test="count($prevItem/ancestor-or-self::*) != 0">
+          <xsl:when test="count($prevItem/ancestor-or-self::*[name() != 'group']) != 0">
             <xsl:apply-templates select="$prevItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
               <xsl:with-param name="navigation" select="$navigation" />
             </xsl:apply-templates>
           </xsl:when>
-          <xsl:otherwise>
-            <xsl:apply-templates select="$referItem/ancestor-or-self::*[name() != 'group']" mode="breadcrumbItem">
+          <xsl:when test="count($referItem) != 0">
+            <xsl:apply-templates select="$referItem[1]" mode="breadcrumbItem">
               <xsl:with-param name="navigation" select="$navigation" />
             </xsl:apply-templates>
-          </xsl:otherwise>
+          </xsl:when>
         </xsl:choose>
-        <xsl:if test="count($prevItem/ancestor-or-self::*) != 0 and count($currentItem/ancestor-or-self::*) = 0">
+        <xsl:if test="count($prevItem/ancestor-or-self::*[name() != 'group']) != 0 and count($currentItem/ancestor-or-self::*[name() != 'group']) = 0">
           <xsl:variable name="activeItem">
             <item href="{concat('/', substring-after($RequestURL, $WebApplicationBaseURL))}">
               <label xml:lang="{$CurrentLang}">
