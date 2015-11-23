@@ -161,7 +161,7 @@
     </xsl:message>
 
     <xsl:if
-      test="$currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*) != 0 or count($prevItem/ancestor-or-self::*) != 0 or count($currentItem/ancestor-or-self::*) != 0)"
+      test="(string-length($referItem) &gt; 0 or string-length($prevItem) &gt; 0 or string-length($currentItem) &gt; 0) and $currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*) != 0 or count($prevItem/ancestor-or-self::*) != 0 or count($currentItem/ancestor-or-self::*) != 0)"
     >
       <ol class="breadcrumb">
         <xsl:choose>
