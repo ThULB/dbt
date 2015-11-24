@@ -22,8 +22,11 @@
  */
 package org.urmel.dbt.rc.datamodel.slot.entries;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -35,7 +38,21 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.pdfbox.cos.COSDocument;
+import org.apache.pdfbox.exceptions.COSVisitorException;
+import org.apache.pdfbox.exceptions.CryptographyException;
+import org.apache.pdfbox.pdfparser.PDFParser;
+import org.apache.pdfbox.pdfwriter.COSWriter;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
+import org.apache.pdfbox.pdmodel.encryption.BadSecurityHandlerException;
+import org.apache.pdfbox.pdmodel.encryption.StandardDecryptionMaterial;
+import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import org.mycore.common.content.MCRByteContent;
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRStreamContent;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -49,6 +66,17 @@ public class FileEntry implements Serializable {
 
     private static final long serialVersionUID = 2749951822001215240L;
 
+    private static final Logger LOGGER = LogManager.getLogger(FileEntry.class);
+
+    // Error code: for a empty file or empty file parameter
+    private static final int ERROR_EMPTY_FILE = 100;
+
+    // Error code: for a PDF document with exceeded page limit
+    private static final int ERROR_PAGE_LIMIT_EXCEEDED = 101;
+
+    // Error code: for a unsupported PDF document
+    private static final int ERROR_NOT_SUPPORTED = 102;
+
     private String name;
 
     private boolean copyrighted;
@@ -57,9 +85,177 @@ public class FileEntry implements Serializable {
 
     private long size = 0;
 
-    private byte[] content;
+    private MCRContent content;
 
     private String comment;
+
+    /**
+     * Creates an {@link FileEntry} from given {@link InputStream}.
+     * If is copyrighted material, extra processing of content happens.
+     * 
+     * @param entryId the SlotEntry id
+     * @param fileName the file name
+     * @param comment the comment
+     * @param isCopyrighted <code>true</code> if material is copyrighted
+     * @param is the file {@link InputStream}
+     * @return the {@link FileEntry}
+     * @throws FileEntryProcessingException
+     * @throws IOException
+     */
+    public static FileEntry createFileEntry(final String entryId, final String fileName, final String comment,
+            boolean isCopyrighted, final InputStream is) throws FileEntryProcessingException, IOException {
+        if (fileName == null || fileName.length() == 0) {
+            throw new FileEntryProcessingException("empty file name", ERROR_EMPTY_FILE);
+        }
+
+        final FileEntry fileEntry = new FileEntry();
+
+        fileEntry.setName(fileName);
+        fileEntry.setComment(comment);
+        fileEntry.setCopyrighted(isCopyrighted);
+
+        if (isCopyrighted) {
+            processContent(entryId, fileEntry, is);
+        } else {
+            fileEntry.setContent(is);
+        }
+
+        return fileEntry;
+    }
+
+    private static void processContent(final String entryId, final FileEntry fileEntry, final InputStream is)
+            throws FileEntryProcessingException, IOException {
+        if (isPDF(is)) {
+            final String fileName = fileEntry.getName();
+
+            ByteArrayOutputStream pdfCopy = null;
+            ByteArrayOutputStream pdfEncrypted = null;
+
+            try {
+                final int numPages = getNumPagesFromPDF(is);
+
+                LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
+                if (numPages == -1 || numPages > 50) {
+                    throw new FileEntryProcessingException("page limit exceede", ERROR_PAGE_LIMIT_EXCEEDED);
+                }
+
+                LOGGER.info("Make an supported copy for \"" + fileName + "\".");
+                pdfCopy = new ByteArrayOutputStream();
+                copyPDF(is, pdfCopy);
+
+                LOGGER.info("Encrypt \"" + fileName + "\".");
+                pdfEncrypted = new ByteArrayOutputStream();
+                encryptPDF(entryId, new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
+
+                fileEntry.setContent(pdfEncrypted.toByteArray());
+            } catch (Exception e) {
+                throw new FileEntryProcessingException(e.getMessage(), ERROR_NOT_SUPPORTED);
+            } finally {
+                if (pdfCopy != null) {
+                    pdfCopy.close();
+                }
+                if (pdfEncrypted != null) {
+                    pdfEncrypted.close();
+                }
+            }
+        } else {
+            fileEntry.setContent(is);
+        }
+    }
+
+    private static boolean isPDF(final InputStream is) {
+        try {
+            PDDocument doc = PDDocument.load(is);
+            return doc != null;
+        } catch (IOException ioex) {
+            return false;
+        }
+    }
+
+    /**
+     * Returns the number of pages from given PDF {@link InputStream}.
+     * 
+     * @param pdfInput the {@link InputStream}
+     * @return the number of pages
+     * @throws IOException
+     */
+    private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
+        PDDocument doc = PDDocument.load(pdfInput);
+        return doc.getNumberOfPages();
+    }
+
+    /**
+     * Makes an save copy of given PDF {@link InputStream} to an new {@link OutputStram}.
+     * 
+     * @param pdfInput the PDF {@link InputStream}
+     * @param pdfOutput the PDF {@link OutputStram}
+     * @throws IOException
+     * @throws COSVisitorException
+     */
+    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
+            throws IOException, COSVisitorException {
+        COSWriter writer = null;
+        try {
+            PDFParser parser = new PDFParser(pdfInput);
+            parser.parse();
+
+            COSDocument doc = parser.getDocument();
+
+            writer = new COSWriter(pdfOutput);
+
+            writer.write(doc);
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
+        }
+    }
+
+    /**
+     * Secures the PDF document and set the password.
+     * 
+     * @param password the password
+     * @param pdfInput the PDF {@link InputStream}
+     * @param pdfOutput the PDF {@link OutputStram}
+     * @throws IOException
+     * @throws BadSecurityHandlerException
+     * @throws COSVisitorException
+     */
+    private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
+            throws IOException, BadSecurityHandlerException, COSVisitorException {
+        PDDocument doc = PDDocument.load(pdfInput);
+
+        AccessPermission ap = new AccessPermission();
+
+        ap.setCanAssembleDocument(false);
+        ap.setCanExtractContent(false);
+        ap.setCanExtractForAccessibility(false);
+        ap.setCanFillInForm(false);
+        ap.setCanModify(false);
+        ap.setCanModifyAnnotations(false);
+        ap.setCanPrint(false);
+        ap.setCanPrintDegraded(false);
+        ap.setReadOnly();
+
+        if (!doc.isEncrypted()) {
+            StandardProtectionPolicy spp = new StandardProtectionPolicy(password, null, ap);
+            doc.protect(spp);
+
+            doc.save(pdfOutput);
+        }
+    }
+
+    private static void decryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
+            throws IOException, BadSecurityHandlerException, COSVisitorException, CryptographyException {
+        PDDocument doc = PDDocument.load(pdfInput);
+
+        if (doc.isEncrypted()) {
+            doc.openProtection(new StandardDecryptionMaterial(password));
+
+            doc.setAllSecurityToBeRemoved(true);
+            doc.save(pdfOutput);
+        }
+    }
 
     /**
      * @return the name
@@ -124,34 +320,58 @@ public class FileEntry implements Serializable {
     /**
      * @return the content
      */
-    public byte[] getContent() {
+    public MCRContent getContent() {
+        return content;
+    }
+
+    public MCRContent getExportableContent(final String entryId) {
+        if (this.copyrighted) {
+            try {
+                if (isPDF(content.getInputStream())) {
+                    ByteArrayOutputStream pdf = new ByteArrayOutputStream();
+
+                    decryptPDF(entryId, content.getInputStream(), pdf);
+                    final byte[] pdfBytes = pdf.toByteArray();
+                    pdf.close();
+
+                    return new MCRByteContent(pdfBytes);
+                }
+            } catch (COSVisitorException | IOException | BadSecurityHandlerException | CryptographyException e) {
+                LOGGER.error(e);
+            }
+        }
+
         return content;
     }
 
     /**
      * @param content the content to set
      */
-    public void setContent(final byte[] content) {
-        this.content = content;
-        this.size = content.length;
-
+    public void setContent(final MCRContent content) {
         try {
+            this.content = content;
+            this.size = content.length();
+
             MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
-            this.hash = String.format("%032X", new BigInteger(1, md.digest(content)));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            this.hash = String.format("%032X", new BigInteger(1, md.digest(content.asByteArray())));
+        } catch (NoSuchAlgorithmException | IOException e) {
+            LOGGER.error(e);
         }
     }
 
     /**
-     * @param is the InputStream
+     * @param content the byte array
      */
-    public void setContent(final InputStream is) {
-        try {
-            setContent(IOUtils.toByteArray(is));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setContent(final byte[] content) {
+        setContent(new MCRByteContent(content));
+    }
+
+    /**
+     * @param is the InputStream
+     * @throws IOException 
+     */
+    public void setContent(final InputStream is) throws IOException {
+        setContent(new MCRStreamContent(is).asByteArray());
     }
 
     /**
@@ -233,4 +453,18 @@ public class FileEntry implements Serializable {
         return true;
     }
 
+    public static class FileEntryProcessingException extends Exception {
+        private static final long serialVersionUID = 1L;
+
+        private int errorCode;
+
+        public FileEntryProcessingException(final String message, int errorCode) {
+            super(message);
+            this.errorCode = errorCode;
+        }
+
+        public int getErrorCode() {
+            return errorCode;
+        }
+    }
 }

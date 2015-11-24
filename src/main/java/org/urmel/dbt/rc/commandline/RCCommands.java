@@ -54,6 +54,7 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
+import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry.FileEntryProcessingException;
 import org.urmel.dbt.rc.persistency.FileEntryManager;
 import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotTransformer;
@@ -88,15 +89,16 @@ public class RCCommands extends MCRAbstractCommands {
             if (slot.getEntries() != null) {
                 for (SlotEntry<?> entry : slot.getEntries()) {
                     if (entry.getEntry() instanceof FileEntry) {
-                        SlotEntry<FileEntry> fileEntry = (SlotEntry<FileEntry>) entry;
+                        SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) entry;
 
-                        File fileDir = new File(dirname + File.separator + fileEntry.getId());
+                        File fileDir = new File(dir, slotEntry.getId());
                         if (fileDir.isDirectory() || fileDir.mkdirs()) {
                             try {
-                                MCRContent c = FileEntryManager.retrieve(slot, fileEntry);
-                                File f = new File(fileDir, fileEntry.getEntry().getName());
-                                c.sendTo(f);
-                                LOGGER.info("File \"" + fileEntry.getEntry().getName() + "\" saved to "
+                                FileEntryManager.retrieve(slot, slotEntry);
+                                File f = new File(fileDir, slotEntry.getEntry().getName());
+                                MCRContent content = slotEntry.getEntry().getExportableContent(entry.getId());
+                                content.sendTo(f);
+                                LOGGER.info("File \"" + slotEntry.getEntry().getName() + "\" saved to "
                                         + f.getCanonicalPath() + ".");
                             } catch (Exception ex) {
                                 LOGGER.error(ex.getMessage());
@@ -170,31 +172,36 @@ public class RCCommands extends MCRAbstractCommands {
         if (slot.getEntries() != null) {
             for (SlotEntry<?> entry : slot.getEntries()) {
                 if (entry.getEntry() instanceof FileEntry) {
-                    SlotEntry<FileEntry> fileEntry = (SlotEntry<FileEntry>) entry;
+                    final SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) entry;
+                    final FileEntry fileEntry = ((SlotEntry<FileEntry>) entry).getEntry();
 
-                    File f = new File(file.getParent(),
-                            fileEntry.getId() + File.separator + fileEntry.getEntry().getName());
+                    File f = new File(file.getParent(), entry.getId() + File.separator + fileEntry.getName());
                     if (f.isFile()) {
                         InputStream is = null;
                         try {
                             is = new FileInputStream(f);
-                            fileEntry.getEntry().setContent(is);
+                            slotEntry.setEntry(FileEntry.createFileEntry(entry.getId(), fileEntry.getName(),
+                                    fileEntry.getComment(), fileEntry.isCopyrighted(), is));
                         } catch (FileNotFoundException e) {
                             LOGGER.error("Couldn't not read file \"" + f.getCanonicalPath() + "\" for file entry.");
+                            return;
+                        } catch (FileEntryProcessingException e) {
+                            LOGGER.error("File processing returns error code " + e.getErrorCode() + " for file \""
+                                    + f.getCanonicalPath() + "\".");
                             return;
                         } finally {
                             if (is != null)
                                 is.close();
                         }
+
+                        if (update) {
+                            LOGGER.info(
+                                    "Update File \"" + fileEntry.getName() + "\" from " + f.getCanonicalPath() + ".");
+                            FileEntryManager.update(slot, slotEntry);
+                        }
                     } else {
                         LOGGER.error("Couldn't find file for file entry.");
                         return;
-                    }
-
-                    if (update) {
-                        LOGGER.info("Update File \"" + fileEntry.getEntry().getName() + "\" from "
-                                + f.getCanonicalPath() + ".");
-                        FileEntryManager.update(slot, fileEntry);
                     }
                 }
             }

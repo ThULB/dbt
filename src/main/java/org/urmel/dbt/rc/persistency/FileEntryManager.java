@@ -24,8 +24,6 @@ package org.urmel.dbt.rc.persistency;
 
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.content.MCRByteContent;
-import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.ifs2.MCRDirectory;
 import org.mycore.datamodel.ifs2.MCRFile;
 import org.mycore.datamodel.ifs2.MCRFileCollection;
@@ -122,7 +120,7 @@ public final class FileEntryManager {
 
             MCRDirectory dir = col.createDir(slotEntry.getId());
             MCRFile file = dir.createFile(fileEntry.getName());
-            file.setContent(new MCRByteContent(fileEntry.getContent()));
+            file.setContent(fileEntry.getContent());
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;
@@ -204,8 +202,7 @@ public final class FileEntryManager {
         }
     }
 
-    public static MCRContent retrieve(final Slot slot, final SlotEntry<FileEntry> slotEntry)
-            throws MCRPersistenceException {
+    public static void retrieve(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         if (!exists(slot, slotEntry)) {
             throw new MCRPersistenceException("Couldn't retrieve non existence fileEntry.");
         }
@@ -219,7 +216,7 @@ public final class FileEntryManager {
             MCRFileCollection col = store.retrieve(id);
             MCRStoredNode dir = (MCRStoredNode) col.getNodeByPath(slotEntry.getId());
             MCRStoredNode fileNode = (MCRStoredNode) dir.getNodeByPath(fileEntry.getName());
-            return fileNode.getContent();
+            fileEntry.setContent(fileNode.getContent());
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;

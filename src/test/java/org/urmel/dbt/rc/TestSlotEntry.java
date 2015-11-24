@@ -126,7 +126,7 @@ public class TestSlotEntry extends MCRTestCase {
         return slotEntry;
     }
 
-    private SlotEntry<FileEntry> newFileEntry() {
+    private SlotEntry<FileEntry> newFileEntry() throws IOException {
         SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
 
         FileEntry fileEntry = new FileEntry();

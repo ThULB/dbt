@@ -22,11 +22,8 @@
  */
 package org.urmel.dbt.rc.servlets;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,14 +38,6 @@ import javax.servlet.http.Part;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.pdfbox.cos.COSDocument;
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.pdfparser.PDFParser;
-import org.apache.pdfbox.pdfwriter.COSWriter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
-import org.apache.pdfbox.pdmodel.encryption.BadSecurityHandlerException;
-import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
@@ -64,6 +53,7 @@ import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
+import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry.FileEntryProcessingException;
 import org.urmel.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import org.urmel.dbt.rc.persistency.FileEntryManager;
 import org.urmel.dbt.rc.persistency.SlotManager;
@@ -79,15 +69,6 @@ public class SlotServlet extends MCRServlet {
     private static final long serialVersionUID = -3138681111200495882L;
 
     private static final Logger LOGGER = LogManager.getLogger(SlotServlet.class);
-
-    // Error code: for a empty file or empty file parameter
-    private static final int ERROR_EMPTY_FILE = 100;
-
-    // Error code: for a PDF document with exceeded page limit
-    private static final int ERROR_PAGE_LIMIT_EXCEEDED = 101;
-
-    // Error code: for a unsupported PDF document
-    private static final int ERROR_NOT_SUPPORTED = 102;
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 
@@ -120,7 +101,8 @@ public class SlotServlet extends MCRServlet {
                 if (slotEntry != null) {
                     final FileEntry fileEntry = (FileEntry) slotEntry.getEntry();
                     if (fileEntry != null && fileName.equals(fileEntry.getName())) {
-                        MCRContent content = FileEntryManager.retrieve(slot, slotEntry);
+                        FileEntryManager.retrieve(slot, slotEntry);
+                        MCRContent content = fileEntry.getContent();
                         content.sendTo(res.getOutputStream());
                         return;
                     }
@@ -184,69 +166,20 @@ public class SlotServlet extends MCRServlet {
                     params.put("invalid", "true");
 
                     final Part filePart = req.getPart("file");
-                    final String fileName = getFilename(filePart);
-                    final boolean isCopyrighted = Boolean.parseBoolean(getParameter(req, "copyrighted"));
 
-                    if (fileName == null || fileName.length() == 0) {
-                        params.put("errorcode", Integer.toString(ERROR_EMPTY_FILE));
+                    slotEntry = new SlotEntry<FileEntry>();
+                    try {
+                        final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(), getFilename(filePart),
+                                getParameter(req, "comment"), Boolean.parseBoolean(getParameter(req, "copyrighted")),
+                                filePart.getInputStream());
+                        ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
+                    } catch (FileEntryProcessingException pe) {
+                        params.put("errorcode", Integer.toString(pe.getErrorCode()));
 
                         res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
                                 + toQueryString(params, false));
                         return;
                     }
-
-                    slotEntry = new SlotEntry<FileEntry>();
-
-                    final FileEntry fe = new FileEntry();
-                    fe.setName(fileName);
-                    fe.setCopyrighted(isCopyrighted);
-
-                    if (isCopyrighted && "application/pdf".equals(filePart.getContentType())) {
-                        ByteArrayOutputStream pdfCopy = null;
-                        ByteArrayOutputStream pdfEncrypted = null;
-
-                        try {
-                            final int numPages = getNumPagesFromPDF(filePart.getInputStream());
-
-                            LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
-                            if (numPages == -1 || numPages > 50) {
-                                params.put("errorcode", Integer.toString(ERROR_PAGE_LIMIT_EXCEEDED));
-
-                                res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                        + toQueryString(params, false));
-                                return;
-                            }
-
-                            LOGGER.info("Make an supported copy for \"" + fileName + "\".");
-                            pdfCopy = new ByteArrayOutputStream();
-                            copyPDF(filePart.getInputStream(), pdfCopy);
-
-                            LOGGER.info("Encrypt \"" + fileName + "\".");
-                            pdfEncrypted = new ByteArrayOutputStream();
-                            encryptPDF(slotEntry.getId(), new ByteArrayInputStream(pdfCopy.toByteArray()),
-                                    pdfEncrypted);
-
-                            fe.setContent(pdfEncrypted.toByteArray());
-                        } catch (Exception e) {
-                            LOGGER.error(e);
-                            params.put("errorcode", Integer.toString(ERROR_NOT_SUPPORTED));
-
-                            res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                    + toQueryString(params, false));
-                            return;
-                        } finally {
-                            if (pdfCopy != null) {
-                                pdfCopy.close();
-                            }
-                            if (pdfEncrypted != null) {
-                                pdfEncrypted.close();
-                            }
-                        }
-                    } else
-                        fe.setContent(filePart.getInputStream());
-                    fe.setComment(getParameter(req, "comment"));
-
-                    ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                 }
 
                 MCREvent evt = null;
@@ -375,78 +308,5 @@ public class SlotServlet extends MCRServlet {
         }
 
         return req.getParameter(name);
-    }
-
-    /**
-     * Returns the number of pages from given PDF {@link InputStream}.
-     * 
-     * @param pdfInput the {@link InputStream}
-     * @return the number of pages
-     * @throws IOException
-     */
-    private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
-        PDDocument doc = PDDocument.load(pdfInput);
-        return doc.getNumberOfPages();
-    }
-
-    /**
-     * Makes an save copy of given PDF {@link InputStream} to an new {@link OutputStram}.
-     * 
-     * @param pdfInput the PDF {@link InputStream}
-     * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException
-     * @throws COSVisitorException
-     */
-    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException, COSVisitorException {
-        COSWriter writer = null;
-        try {
-            PDFParser parser = new PDFParser(pdfInput);
-            parser.parse();
-
-            COSDocument doc = parser.getDocument();
-
-            writer = new COSWriter(pdfOutput);
-
-            writer.write(doc);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
-
-    /**
-     * Secures the PDF document and set the password.
-     * 
-     * @param password the password
-     * @param pdfInput the PDF {@link InputStream}
-     * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException
-     * @throws BadSecurityHandlerException
-     * @throws COSVisitorException
-     */
-    private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException, BadSecurityHandlerException, COSVisitorException {
-        PDDocument doc = PDDocument.load(pdfInput);
-
-        AccessPermission ap = new AccessPermission();
-
-        ap.setCanAssembleDocument(false);
-        ap.setCanExtractContent(false);
-        ap.setCanExtractForAccessibility(false);
-        ap.setCanFillInForm(false);
-        ap.setCanModify(false);
-        ap.setCanModifyAnnotations(false);
-        ap.setCanPrint(false);
-        ap.setCanPrintDegraded(false);
-        ap.setReadOnly();
-
-        if (!doc.isEncrypted()) {
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(password, null, ap);
-            doc.protect(spp);
-
-            doc.save(pdfOutput);
-        }
     }
 }
