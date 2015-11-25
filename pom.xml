@@ -84,45 +84,73 @@
       </plugin>
 
       <plugin>
-        <groupId>pl.allegro</groupId>
-        <artifactId>grunt-maven-plugin</artifactId>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>0.0.26</version>
+
+        <configuration>
+          <installDirectory>target</installDirectory>
+        </configuration>
+
         <executions>
           <execution>
-            <id>grunt-webapp</id>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v4.2.2</nodeVersion>
+              <npmVersion>3.5.0</npmVersion>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>webapp-deps</id>
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
               <goal>bower</goal>
-              <goal>grunt</goal>
             </goals>
             <configuration>
-              <gruntBuildDirectory>${grunt.projectBase}</gruntBuildDirectory>
-              <ignoreTasksErrors>false</ignoreTasksErrors>
-              <ignoreAllErrors>false</ignoreAllErrors>
-              <gruntOptions>
-                <gruntOption>--verbose</gruntOption>
-                <gruntOption>--lessFile ${basedir}/src/main/less/build.less</gruntOption>
-                <gruntOption>--targetDirectory ${template.cssdir}</gruntOption>
-                <gruntOption>--assetsDirectory ${template.assetsdir}</gruntOption>
-              </gruntOptions>
+              <workingDirectory>${grunt.projectBase}</workingDirectory>
+              <arguments>install</arguments>
             </configuration>
           </execution>
           <execution>
-            <id>default-cli</id>
+            <id>webapp-build</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>grunt</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${grunt.projectBase}</workingDirectory>
+              <arguments>--verbose --lessFile ${basedir}/src/main/less/build.less --targetDirectory ${template.cssdir} --assetsDirectory
+                ${template.assetsdir}</arguments>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>rcclient-deps</id>
             <phase>process-resources</phase>
             <goals>
               <goal>npm</goal>
               <goal>bower</goal>
+            </goals>
+            <configuration>
+              <workingDirectory>${rcclient.projectBase}</workingDirectory>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <!-- invoke goal with mvn frontend:grunt -->
+            <id>default-cli</id>
+            <phase>process-resources</phase>
+            <goals>
               <goal>grunt</goal>
             </goals>
             <configuration>
-              <gruntBuildDirectory>${rcclient.projectBase}</gruntBuildDirectory>
-              <ignoreTasksErrors>false</ignoreTasksErrors>
-              <ignoreAllErrors>false</ignoreAllErrors>
-              <gruntOptions>
-                <gruntOption>--verbose</gruntOption>
-                <gruntOption>--buildNumber ${rcclientBuildNumber}</gruntOption>
-              </gruntOptions>
+              <workingDirectory>${rcclient.projectBase}</workingDirectory>
+              <arguments>--verbose --buildNumber ${rcclientBuildNumber}</arguments>
             </configuration>
           </execution>
         </executions>
