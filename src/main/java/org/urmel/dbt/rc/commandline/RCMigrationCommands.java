@@ -24,7 +24,9 @@ package org.urmel.dbt.rc.commandline;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,6 +126,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     LOGGER.info("Slot " + slot.getSlotId() + " saved to " + xmlOutput.getCanonicalPath() + ".");
 
                     if (slot.getEntries() != null) {
+                        List<SlotEntry<?>> migEntries = new ArrayList<SlotEntry<?>>();
                         for (SlotEntry<?> entry : slot.getEntries()) {
                             if (entry.getEntry() instanceof FileEntry) {
                                 SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) entry;
@@ -139,14 +142,16 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                                         Files.copy(oldFile, newFile);
                                     } else {
                                         LOGGER.warn("Couldn't found old file entry " + oldFile.getAbsolutePath() + ".");
-                                        slot.removeEntry(entry);
+                                        continue;
                                     }
                                 } else {
                                     LOGGER.error("Couldn't create a directory for file entry.");
-                                    return;
+                                    continue;
                                 }
                             }
+                            migEntries.add(entry);
                         }
+                        slot.setEntries(migEntries);
                     }
                 } catch (IOException | JDOMException | SAXException e) {
                     LOGGER.error("Couldn't migrate slot from file " + file.getAbsolutePath() + ".", e);
@@ -156,5 +161,45 @@ public class RCMigrationCommands extends MCRAbstractCommands {
         } catch (MCRException | IOException | SAXException e) {
             LOGGER.error("Couldn't process slot file " + file.getAbsolutePath() + ".", e);
         }
+    }
+
+    @MCRCommand(syntax = "migrate all slots from directory {0} to directory {1}", help = "migrates all rc slots from given directory {0} to directory {1}")
+    public static List<String> migrateAllSlots(final String from, final String to) throws IOException {
+        final File fromDir = new File(from);
+        if (!fromDir.isDirectory()) {
+            LOGGER.error(from + " is not a dirctory.");
+            return Collections.emptyList();
+        }
+
+        final File toDir = new File(to);
+        if (!toDir.isDirectory()) {
+            LOGGER.error(to + " is not a dirctory.");
+            return Collections.emptyList();
+        }
+
+        final String[] list = fromDir.list();
+
+        if (list.length == 0) {
+            LOGGER.warn("No files found in directory " + from);
+            return Collections.emptyList();
+        }
+
+        List<String> cmds = new ArrayList<String>();
+        for (final String r : list) {
+            final File fr = new File(fromDir, r);
+            if (fr.isDirectory()) {
+                for (final String c : fr.list()) {
+                    if (c.endsWith(".xml") && c.contains("slot")) {
+                        final File ft = new File(toDir, r);
+                        if (ft.isDirectory() || ft.mkdirs()) {
+                            String command = MessageFormat.format("migrate slot from file {0} to directory {1}",
+                                    new File(fr, c).getAbsolutePath(), ft.getAbsolutePath());
+                            cmds.add(command);
+                        }
+                    }
+                }
+            }
+        }
+        return cmds;
     }
 }
