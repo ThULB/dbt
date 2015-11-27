@@ -121,9 +121,6 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                             .transform(new MCRJDOMContent(slotXML.clone()), params);
 
                     final Slot slot = SlotTransformer.buildSlot(xml.asXML());
-                    File xmlOutput = new File(dir, "slot-" + slot.getSlotId() + ".xml");
-                    SlotTransformer.sendTo(slot, xmlOutput);
-                    LOGGER.info("Slot " + slot.getSlotId() + " saved to " + xmlOutput.getCanonicalPath() + ".");
 
                     if (slot.getEntries() != null) {
                         List<SlotEntry<?>> migEntries = new ArrayList<SlotEntry<?>>();
@@ -153,6 +150,10 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                         }
                         slot.setEntries(migEntries);
                     }
+
+                    File xmlOutput = new File(dir, "slot-" + slot.getSlotId() + ".xml");
+                    SlotTransformer.sendTo(slot, xmlOutput);
+                    LOGGER.info("Slot " + slot.getSlotId() + " saved to " + xmlOutput.getCanonicalPath() + ".");
                 } catch (IOException | JDOMException | SAXException e) {
                     LOGGER.error("Couldn't migrate slot from file " + file.getAbsolutePath() + ".", e);
                     return;
