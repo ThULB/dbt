@@ -40,6 +40,7 @@ import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRVFSContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xml.MCRXMLParserFactory;
+import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
@@ -113,9 +114,11 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                 }
 
                 try {
+                    final MCRParameterCollector params = new MCRParameterCollector();
+                    params.setParameter("dirname", file.getParent());
+
                     MCRContent xml = MCRXSLTransformer.getInstance("xsl/migrate/slot.xsl")
-                            .transform(new MCRJDOMContent(slotXML.clone()));
-                    LOGGER.info(new XMLOutputter(Format.getPrettyFormat()).outputString(xml.asXML()));
+                            .transform(new MCRJDOMContent(slotXML.clone()), params);
 
                     final Slot slot = SlotTransformer.buildSlot(xml.asXML());
                     File xmlOutput = new File(dir, "slot-" + slot.getSlotId() + ".xml");

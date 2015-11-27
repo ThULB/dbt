@@ -5,20 +5,28 @@
 
   <xsl:output method="xml" />
 
+  <xsl:param name="dirname" />
+
   <xsl:variable name="slotId" select="translate(/slot/@ID, ':', '.')" />
   
    <!-- OPC vars -->
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />
   <xsl:variable name="catalogId" select="document(concat('slot:slotId=',$slotId,'&amp;catalogId'))" />
-  <xsl:variable name="opcURL" select="$catalogues/catalog[@identifier=$catalogId]/opc/text()" />
-  <xsl:variable name="opcDB" select="$catalogues/catalog[@identifier=$catalogId]/opc/@db" />
-
-  <!-- set XMLPRS to Y to get PICA longtitle - /XMLPRS=N -->
-  <xsl:variable name="recordURLPrefix" select="concat($opcURL,'/DB=', $opcDB, '/PPN?PPN=')" />
-
-  <xsl:param name="RecordIdSource" select="$catalogues/catalog[@identifier=$catalogId]/ISIL[1]/text()" />
 
   <xsl:template match="slot">
+    <xsl:message>
+      -------------------------------------------------
+      Migration slot...
+      -------------------------------------------------
+      slotId:
+      <xsl:value-of select="$slotId" />
+
+      dirname:
+      <xsl:value-of select="$dirname" />
+      catalogId:
+      <xsl:value-of select="$catalogId" />
+      -------------------------------------------------
+    </xsl:message>
     <slot>
       <xsl:apply-templates select="@*" />
       <xsl:call-template name="lecturers" />
@@ -51,13 +59,37 @@
   </xsl:template>
 
   <xsl:template match="contact">
-    <contact name="{@name}" email="{@email}" />
+    <xsl:variable name="email">
+      <xsl:choose>
+        <xsl:when test="(string-length(@email) = 0) and (string-length(@ID) &gt; 0)">
+          <xsl:call-template name="getEMailFromLE">
+            <xsl:with-param name="leId" select="@ID" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@email" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <contact name="{@name}" email="{$email}" />
   </xsl:template>
 
   <xsl:template name="lecturers">
     <lecturers>
       <xsl:for-each select="lecturer">
-        <lecturer name="{@name}" email="{@email}" />
+        <xsl:variable name="email">
+          <xsl:choose>
+            <xsl:when test="(string-length(@email) = 0) and (string-length(@ID) &gt; 0)">
+              <xsl:call-template name="getEMailFromLE">
+                <xsl:with-param name="leId" select="@ID" />
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@email" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <lecturer name="{@name}" email="{$email}" />
       </xsl:for-each>
     </lecturers>
   </xsl:template>
@@ -131,6 +163,16 @@
     <webLink url="{url}">
       <xsl:value-of select="label" />
     </webLink>
+  </xsl:template>
+  
+  <!-- helper -->
+
+  <xsl:template name="getEMailFromLE">
+    <xsl:param name="leId" />
+
+    <xsl:variable name="le" select="document(concat('notnull:file://',$dirname,'/legalentities/legalentity-', $leId,'.xml'))" />
+
+    <xsl:value-of select="$le/legalEntity/contact[@type='office']/email" />
   </xsl:template>
 
   <!-- copy template -->
