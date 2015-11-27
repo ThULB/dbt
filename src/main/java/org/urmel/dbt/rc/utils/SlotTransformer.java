@@ -62,6 +62,10 @@ public abstract class SlotTransformer {
         }
     }
 
+    public static Slot buildSlot(final Document document) {
+        return buildSlot(document.getRootElement());
+    }
+
     public static Slot buildSlot(final Element element) {
         if (!element.getName().equals(ROOT_ELEMENT_NAME)) {
             throw new IllegalArgumentException("Element is not a rc slot element.");

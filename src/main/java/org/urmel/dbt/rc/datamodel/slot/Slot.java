@@ -48,14 +48,14 @@ public class Slot implements Serializable {
      */
     public static final String CLASSIF_ROOT_LOCATION = "RCLOC";
 
+    // valid spacers are [._-] and should match classification spacer
+    public static final String DEFAULT_ID_SPACER = ".";
+    
+    public static final String DEFAULT_ID_FORMAT = "%04d";
+
     private static final long serialVersionUID = -3222935202548968539L;
 
     private static final String DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
-
-    private static final String DEFAULT_ID_FORMAT = "%04d";
-
-    // valid spacers are [._-] and should match classification spacer
-    private static final String DEFAULT_ID_SPACER = ".";
 
     private int id;
 
