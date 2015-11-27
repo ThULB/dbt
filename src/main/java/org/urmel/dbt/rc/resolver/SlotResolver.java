@@ -34,7 +34,9 @@ import org.jdom2.Element;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
+import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
+import org.mycore.datamodel.metadata.MCRObjectID;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntryTypes;
@@ -101,7 +103,8 @@ public class SlotResolver implements URIResolver {
 
                 return new JDOMSource(SlotEntryTransformer.buildExportableXML(entry));
             } else if (params.get("catalogId") != null) {
-                List<MCRCategory> categories = DAO.getParents(slot.getLocation());
+                List<MCRCategory> categories = DAO
+                        .getParents(slot != null ? slot.getLocation() : getMCRCategoryForSlotId(slotId));
 
                 String catalogId = null;
                 for (MCRCategory category : categories) {
@@ -131,5 +134,21 @@ public class SlotResolver implements URIResolver {
         } catch (final Exception ex) {
             throw new TransformerException("Exception resolving " + href, ex);
         }
+    }
+
+    private MCRCategoryID getMCRCategoryForSlotId(String slotId) {
+        final StringTokenizer st = new StringTokenizer(slotId, Slot.DEFAULT_ID_SPACER);
+
+        String loc = null;
+        for (int c = 0; c <= st.countTokens(); c++) {
+            loc = loc == null ? st.nextToken() : loc + Slot.DEFAULT_ID_SPACER + st.nextToken();
+        }
+        final String id = st.nextToken();
+
+        if (id != null && loc != null) {
+            return new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, loc);
+        }
+
+        return null;
     }
 }
