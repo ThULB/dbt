@@ -71,6 +71,10 @@
   <xsl:template match="slot" mode="slotHead">
     <div id="slot-head">
       <h1>
+        <xsl:if test="contains($RequestURL, '/attendees')">
+          <xsl:value-of select="i18n:translate('component.rc.attendees')" />
+          <xsl:text> - </xsl:text>
+        </xsl:if>
         <xsl:value-of select="title" />
         <xsl:if test="$readPermission">
           <div class="dropdown pull-right">
