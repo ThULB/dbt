@@ -164,6 +164,12 @@
       <xsl:value-of select="label" />
     </webLink>
   </xsl:template>
+
+  <xsl:template match="milessLink">
+    <mcrobject id="{@documentID}">
+      <xsl:value-of select="comment" />
+    </mcrobject>
+  </xsl:template>
   
   <!-- helper -->
 
