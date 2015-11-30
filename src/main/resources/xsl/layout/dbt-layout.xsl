@@ -5,7 +5,8 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n"
+  xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" xmlns:encoder="xalan://java.net.URLEncoder"
+  exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n encoder"
 >
   <!-- ************************************************************ -->
   <!-- *                  additional stylesheets                  * -->
@@ -180,7 +181,7 @@
       <xsl:otherwise>
         <ul class="nav nav-userinfo pull-right">
           <li>
-            <a class="login" href="{$ServletsBaseURL}MCRLoginServlet?url={$RequestURL}">
+            <a class="login" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
               <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
             </a>
           </li>
@@ -519,7 +520,7 @@
           </xsl:choose>
           <xsl:value-of select="@name" />
           <xsl:value-of select="'='" />
-          <xsl:value-of xmlns:encoder="xalan://java.net.URLEncoder" select="encoder:encode(string(@value),'UTF-8')" />
+          <xsl:value-of select="encoder:encode(string(@value),'UTF-8')" />
         </xsl:for-each>
       </xsl:attribute>
       <xsl:choose>
