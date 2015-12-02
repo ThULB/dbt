@@ -229,7 +229,7 @@
         <category ID="0027.40.03" counter="0">
           <label xml:lang="en" text="Sportwissenschaft" />
           <label xml:lang="de" text="Sportwissenschaft" />
-          <label xml:lang="x-mail" text="thulb_esa_tbmedst@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_spowi@thulb.uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_medst.html" xlink:type="locator" />
         </category>
       </category>
