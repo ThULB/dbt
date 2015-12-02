@@ -66,6 +66,8 @@
           Send Mail for:
           <xsl:value-of select="name()" />
         </xsl:message>
+<!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail'))/mail" /> -->
+<!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail&amp;parent=true'))/mail" /> -->
         <xsl:for-each select="lecturers/lecturer">
           <to>
             <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />

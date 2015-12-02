@@ -54,6 +54,7 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
  * <li><code>slot:slotId={slotId}[&rev=revision]</code> to resolve an {@link Slot}</li>
  * <li><code>slot:slotId={slotId}&entryId={entryId}[&rev=revision]</code> to resolve an {@link SlotEntry}</li>
  * <li><code>slot:slotId={slotId}&catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
+ * <li><code>slot:slotId={slotId}&mail[&parent=true|false]</code> to get the mail address for slot (from RCLOC classification)</li>
  * <li><code>slot:slotId={slotId}&objectId</code> to get the {@link MCRObjectID} for slot</li>
  * <li><code>slot:slotId={slotId}&isActive</code> to get information about a slot is active</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
@@ -118,6 +119,17 @@ public class SlotResolver implements URIResolver {
                 root.setText(catalogId);
 
                 return new JDOMSource(root);
+            } else if (params.get("mail") != null) {
+                final MCRCategory category = DAO
+                        .getCategory(slot != null ? slot.getLocation() : getMCRCategoryForSlotId(slotId), 0);
+
+                final String mailAddress = getLabelText(category, "x-mail", Boolean.parseBoolean(params.get("parent")));
+
+                final Element root = new Element("mail");
+                if (mailAddress != null)
+                    root.setText(mailAddress);
+
+                return new JDOMSource(root);
             } else if (params.get("objectId") != null) {
                 final Element root = new Element("mcrobject");
                 root.setText(slot.getMCRObjectID().toString());
@@ -134,6 +146,28 @@ public class SlotResolver implements URIResolver {
         } catch (final Exception ex) {
             throw new TransformerException("Exception resolving " + href, ex);
         }
+    }
+
+    private String getLabelText(final MCRCategory category, final String label, boolean parent) {
+        String text = null;
+
+        if (category.getLabel(label).isPresent()) {
+            text = category.getLabel(label).get().getText();
+        }
+
+        if (text == null || parent) {
+            List<MCRCategory> parents = DAO.getParents(category.getId());
+            for (MCRCategory c : parents) {
+                String t = getLabelText(c, label, parent);
+                if (t != null) {
+                    text = t;
+                    if (!parent)
+                        break;
+                }
+            }
+        }
+
+        return text;
     }
 
     private MCRCategoryID getMCRCategoryForSlotId(String slotId) {
