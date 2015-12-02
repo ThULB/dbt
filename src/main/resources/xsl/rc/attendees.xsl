@@ -27,7 +27,7 @@
     <col sortBy="name">
       <xsl:value-of select="i18n:translate('component.rc.attendees.name')" />
     </col>
-    <col>
+    <col sortBy="owner" width="20%">
       <xsl:value-of select="i18n:translate('component.rc.attendees.type')" />
     </col>
   </xsl:template>
