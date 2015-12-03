@@ -212,15 +212,15 @@
   <xsl:template match="text">
     <xsl:choose>
       <xsl:when test="@format = 'plain'">
+        <div>
+          <xsl:value-of select="." />
+        </div>
+      </xsl:when>
+      <xsl:when test="@format = 'preformatted'">
         <pre class="pre-scrollable">
           <code>
             <xsl:value-of select="." />
           </code>
-        </pre>
-      </xsl:when>
-      <xsl:when test="@format = 'preformatted'">
-        <pre class="pre-scrollable">
-          <xsl:value-of select="." />
         </pre>
       </xsl:when>
       <xsl:otherwise>
