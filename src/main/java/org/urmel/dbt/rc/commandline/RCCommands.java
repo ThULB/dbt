@@ -44,6 +44,8 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
+import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 import org.urmel.dbt.common.MailQueue;
 import org.urmel.dbt.rc.datamodel.Period;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
@@ -80,6 +82,12 @@ public class RCCommands extends MCRAbstractCommands {
             if (!dir.isDirectory()) {
                 LOGGER.error(dirname + " is not a dirctory.");
                 return;
+            }
+
+            final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(slot.getMCRObjectID());
+            if (accKP != null) {
+                slot.setReadKey(accKP.getReadKey());
+                slot.setWriteKey(accKP.getWriteKey());
             }
 
             File xmlOutput = new File(dir, "slot-" + slotId + ".xml");
