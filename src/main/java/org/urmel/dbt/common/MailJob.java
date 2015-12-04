@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.jdom2.Element;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
@@ -70,29 +72,9 @@ public class MailJob extends MCRJobAction {
     @Override
     public void execute() throws ExecutionException {
         try {
-            final Map<String, String> params = job.getParameters();
-
-            StringBuilder sb = new StringBuilder();
-            if (params.containsKey("uri")) {
-                sb.append(params.get("uri"));
-            } else {
-                List<String> up = new ArrayList<String>();
-                for (String key : params.keySet()) {
-                    if (key.startsWith("uri_")) {
-                        int i = Integer.parseInt(key.split("_")[1]);
-                        up.add(i, params.get(key));
-                    }
-                }
-
-                if (!up.isEmpty()) {
-                    for (String p : up) {
-                        sb.append(p);
-                    }
-                }
-            }
-
-            final String uri = sb.toString();
-            final Element xml = MCRURIResolver.instance().resolve(uri);
+            MCRSessionMgr.getCurrentSession().setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
+            
+            final Element xml = MCRURIResolver.instance().resolve(buildURI(job.getParameters()));
 
             if (!xml.getChildren("to").isEmpty()) {
                 Mailer.send(xml, true);
@@ -110,4 +92,26 @@ public class MailJob extends MCRJobAction {
         // nothing to do
     }
 
+    private String buildURI(final Map<String, String> params) {
+        StringBuilder sb = new StringBuilder();
+        if (params.containsKey("uri")) {
+            sb.append(params.get("uri"));
+        } else {
+            List<String> up = new ArrayList<String>();
+            for (String key : params.keySet()) {
+                if (key.startsWith("uri_")) {
+                    int i = Integer.parseInt(key.split("_")[1]);
+                    up.add(i, params.get(key));
+                }
+            }
+
+            if (!up.isEmpty()) {
+                for (String p : up) {
+                    sb.append(p);
+                }
+            }
+        }
+
+        return sb.toString();
+    }
 }
