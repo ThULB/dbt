@@ -18,6 +18,9 @@
 
   <xed:template id="source">
     <xed:choose>
+      <xed:when test="($action = 'ownerTransfer') and (string-length($slotId) &gt; 0)">
+        <xed:source uri="xslStyle:rc/slot-ownerTransfer-preprocessor:slot:slotId={$slotId}" />
+      </xed:when>
       <xed:when test="string-length($slotId) &gt; 0">
         <xed:source uri="xslStyle:rc/slot-edit-preprocessor:slot:slotId={$slotId}" />
       </xed:when>
@@ -36,6 +39,9 @@
           </xed:when>
           <xed:when test="($action = 'reactivate') or ($action = 'reactivateComplete')">
             <xed:output i18n="component.rc.slot.reactivate" />
+          </xed:when>
+          <xed:when test="$action = 'ownerTransfer'">
+            <xed:output i18n="component.rc.slot.ownerTransfer" />
           </xed:when>
           <xed:otherwise>
             <xed:output i18n="component.rc.slot.edit" />
@@ -98,6 +104,17 @@
                 test="not(xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isMatchPreviousAccessKeys', /slot))" i18n="component.rc.slot.accesskey.matchesPrevious" />
             </fieldset>
           </xed:when>
+          <xed:when test="$action = 'ownerTransfer'">
+            <xed:bind xpath="@pendingStatus" set="" />
+
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+
+            <fieldset class="{$xed-validation-marker}">
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
+            </fieldset>
+
+            <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
+          </xed:when>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
             <hr />
@@ -113,6 +130,7 @@
                 <xed:output i18n="component.rc.slot.lecturer" />
               </legend>
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="ownerTransfer" />
             </fieldset>
             <fieldset class="{$xed-validation-marker}">
               <legend>
@@ -158,8 +176,8 @@
   </xed:template>
 
   <xed:template id="buttons">
-<!--     <mir:template name="submitButton" i18n="button.debug" target="debug" /> -->
-<!--     <span>&#160;</span> -->
+    <mir:template name="submitButton" i18n="button.debug" target="debug" />
+    <span>&#160;</span>
     <xed:choose>
       <xed:when test="($action = 'reactivate') or ($action = 'reactivateComplete')">
         <mir:template name="submitButton" i18n="component.rc.slot.reactivate.button" target="servlet" href="RCSlotListServlet" />
@@ -190,6 +208,12 @@
   <xed:template id="onlineOnly">
     <mir:template name="checkboxList" xpath="@onlineOnly" id="onlineOnly" inline="true">
       <option value="true" i18n="component.rc.slot.onlineOnly" />
+    </mir:template>
+  </xed:template>
+
+  <xed:template id="ownerTransfer">
+    <mir:template name="checkboxList" xpath="@pendingStatus" id="ownerTransfer" inline="true">
+      <option value="ownerTransfer" i18n="component.rc.slot.ownerTransfer" />
     </mir:template>
   </xed:template>
 

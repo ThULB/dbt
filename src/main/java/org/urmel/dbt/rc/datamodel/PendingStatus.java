@@ -48,7 +48,14 @@ public enum PendingStatus {
      */
     @EnumValue(visible = false)
     @XmlEnumValue("validating")
-    VALIDATING("validating");
+    VALIDATING("validating"),
+    
+    /**
+     * Stands for a slot with pending ownership transfer.
+     */
+    @EnumValue(visible = false)
+    @XmlEnumValue("ownerTransfer")
+    OWNER_TRANSFER("ownerTransfer");
 
     private final String value;
 

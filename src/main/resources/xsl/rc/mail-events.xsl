@@ -48,6 +48,17 @@
   </xsl:template>
 
   <xsl:template match="slot" mode="email">
+    <xsl:choose>
+      <xsl:when test="($action = 'inactivate') or ($action = 'reactivate')">
+        <xsl:apply-templates select="." mode="emailActivate" />
+      </xsl:when>
+      <xsl:when test="$action = 'ownerTransfer'">
+        <xsl:apply-templates select="." mode="emailOwnerTransfer" />
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="slot" mode="emailActivate">
     <xsl:variable name="date">
       <xsl:choose>
         <xsl:when test="string-length(validTo) &gt; 0">
@@ -60,85 +71,116 @@
     </xsl:variable>
     <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
 
-    <xsl:if test="($action = 'inactivate') or ($action = 'reactivate')">
-      <xsl:if test="count(//opcrecord) &gt; 0">
-        <xsl:message>
-          Send Mail for:
-          <xsl:value-of select="name()" />
-        </xsl:message>
+    <xsl:if test="count(//opcrecord) &gt; 0">
+      <xsl:message>
+        Send Mail for:
+        <xsl:value-of select="$action" />
+      </xsl:message>
 <!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail'))/mail" /> -->
 <!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail&amp;parent=true'))/mail" /> -->
-        <xsl:for-each select="lecturers/lecturer">
-          <to>
-            <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
-          </to>
+      <xsl:for-each select="lecturers/lecturer">
+        <to>
+          <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
+        </to>
+      </xsl:for-each>
+      <subject>
+        <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
+        <xsl:choose>
+          <xsl:when test="$action = 'inactivate'">
+            <xsl:text>wurde inaktiviert</xsl:text>
+          </xsl:when>
+          <xsl:when test="$action = 'reactivate'">
+            <xsl:text>wurde reaktiviert</xsl:text>
+          </xsl:when>
+        </xsl:choose>
+      </subject>
+      <body>
+        <xsl:text>Sehr geehrt(e) Mitarbeiter(in),</xsl:text>
+        <xsl:value-of select="$newline" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>der nachfolgende Online-Semesterapparat </xsl:text>
+        <xsl:choose>
+          <xsl:when test="$action = 'inactivate'">
+            <xsl:text>wurde inaktiviert</xsl:text>
+          </xsl:when>
+          <xsl:when test="$action = 'reactivate'">
+            <xsl:text>wurde reaktiviert</xsl:text>
+          </xsl:when>
+        </xsl:choose>
+        <xsl:text>:</xsl:text>
+        <xsl:value-of select="$newline" />
+        <xsl:value-of select="$newline" />
+
+        <xsl:text>Titel  : </xsl:text>
+        <xsl:value-of select="title" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>Standort  : </xsl:text>
+        <xsl:apply-templates select="@id" mode="rcLocationText" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>Semester  : </xsl:text>
+        <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
+        <xsl:value-of select="$newline" />
+        <xsl:text>Gültig bis: </xsl:text>
+        <xsl:value-of select="validTo" />
+
+        <xsl:for-each select="//entry">
+          <xsl:if test="opcrecord">
+            <xsl:apply-templates select="opcrecord" mode="output">
+              <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
+              <xsl:with-param name="entryId" select="@id" />
+            </xsl:apply-templates>
+          </xsl:if>
         </xsl:for-each>
-        <subject>
-          <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
-          <xsl:choose>
-            <xsl:when test="$action = 'inactivate'">
-              <xsl:text>wurde inaktiviert</xsl:text>
-            </xsl:when>
-            <xsl:when test="$action = 'reactivate'">
-              <xsl:text>wurde reaktiviert</xsl:text>
-            </xsl:when>
-          </xsl:choose>
-        </subject>
-        <body>
-          <xsl:text>Sehr geehrt(e) Mitarbeiter(in),</xsl:text>
-          <xsl:value-of select="$newline" />
-          <xsl:value-of select="$newline" />
-          <xsl:text>der nachfolgende Online-Semesterapparat </xsl:text>
-          <xsl:choose>
-            <xsl:when test="$action = 'inactivate'">
-              <xsl:text>wurde inaktiviert</xsl:text>
-            </xsl:when>
-            <xsl:when test="$action = 'reactivate'">
-              <xsl:text>wurde reaktiviert</xsl:text>
-            </xsl:when>
-          </xsl:choose>
-          <xsl:text>:</xsl:text>
-          <xsl:value-of select="$newline" />
-          <xsl:value-of select="$newline" />
 
-          <xsl:text>Titel  : </xsl:text>
-          <xsl:value-of select="title" />
-          <xsl:value-of select="$newline" />
-          <xsl:text>Standort  : </xsl:text>
-          <xsl:apply-templates select="@id" mode="rcLocationText" />
-          <xsl:value-of select="$newline" />
-          <xsl:text>Semester  : </xsl:text>
-          <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
-          <xsl:value-of select="$newline" />
-          <xsl:text>Gültig bis: </xsl:text>
-          <xsl:value-of select="validTo" />
-
-          <xsl:for-each select="//entry">
-            <xsl:if test="opcrecord">
-              <xsl:apply-templates select="opcrecord" mode="output">
-                <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
-                <xsl:with-param name="entryId" select="@id" />
-              </xsl:apply-templates>
-            </xsl:if>
-          </xsl:for-each>
-
-          <xsl:value-of select="$newline" />
-          <xsl:value-of select="$newline" />
-          <xsl:choose>
-            <xsl:when test="$action = 'inactivate'">
-              <xsl:text>- Buchen Sie bitte alle Exemplare in PICA/DBT zurück</xsl:text>
-              <xsl:value-of select="$newline" />
-            </xsl:when>
-            <xsl:when test="$action = 'reactivate'">
-              <xsl:text>- Stellen Sie alle Exemplare in das Präsenz-Regal im Lesesaal</xsl:text>
-              <xsl:value-of select="$newline" />
-              <xsl:text>- Schalten Sie alle Einträge frei (GBV-Kat. u. DBT)</xsl:text>
-              <xsl:value-of select="$newline" />
-            </xsl:when>
-          </xsl:choose>
-        </body>
-      </xsl:if>
+        <xsl:value-of select="$newline" />
+        <xsl:value-of select="$newline" />
+        <xsl:choose>
+          <xsl:when test="$action = 'inactivate'">
+            <xsl:text>- Buchen Sie bitte alle Exemplare in PICA/DBT zurück</xsl:text>
+            <xsl:value-of select="$newline" />
+          </xsl:when>
+          <xsl:when test="$action = 'reactivate'">
+            <xsl:text>- Stellen Sie alle Exemplare in das Präsenz-Regal im Lesesaal</xsl:text>
+            <xsl:value-of select="$newline" />
+            <xsl:text>- Schalten Sie alle Einträge frei (GBV-Kat. u. DBT)</xsl:text>
+            <xsl:value-of select="$newline" />
+          </xsl:when>
+        </xsl:choose>
+      </body>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="slot" mode="emailOwnerTransfer">
+    <xsl:variable name="objectId" select="document(concat('slot:slotId=', @id, '&amp;objectId'))/mcrobject" />
+    <xsl:variable name="accessKeys" select="document(concat('accesskeys:', $objectId))/accesskeys" />
+
+    <xsl:message>
+      Send Mail for:
+      <xsl:value-of select="$action" />
+
+      MCRObjectId:
+      <xsl:value-of select="$objectId" />
+      
+      AccessKeys:
+      <xsl:value-of select="$accessKeys" />
+    </xsl:message>
+
+    <xsl:for-each select="lecturers/lecturer">
+      <to>
+        rene.adler@tu-ilmenau.de
+<!--         <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" /> -->
+      </to>
+    </xsl:for-each>
+    <subject>
+      <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
+    </subject>
+    <body>
+      <xsl:text>Um den Eigentümerwechsel abzuschließen melden Sie sich mit ihrem Benutzer Ihrer Heimeinrichtung an der Digitalen Bibliothek Thüringen an.</xsl:text>
+      <xsl:value-of select="$newline" />
+      <xsl:text>Und benutzen Sie folgenden Zugriffsschlüssel </xsl:text>
+      <xsl:value-of select="$accessKeys/@writekey" />
+      <xsl:text> um mit Eigentümerwechsel fortzufahren.</xsl:text>
+    </body>
   </xsl:template>
 
   <xsl:template match="entry" mode="email">

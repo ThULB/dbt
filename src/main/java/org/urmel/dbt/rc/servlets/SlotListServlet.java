@@ -48,6 +48,7 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.urmel.dbt.rc.datamodel.Attendee;
+import org.urmel.dbt.rc.datamodel.PendingStatus;
 import org.urmel.dbt.rc.datamodel.RCCalendar;
 import org.urmel.dbt.rc.datamodel.Status;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -119,6 +120,17 @@ public class SlotListServlet extends MCRServlet {
 
                 if (s.getStatus() != slot.getStatus() && slot.getStatus() == Status.ARCHIVED) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                } else if (slot.getPendingStatus() == PendingStatus.OWNER_TRANSFER
+                        && s.getPendingStatus() != slot.getPendingStatus()) {
+                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
+
+                    String readKey = buildKey();
+                    String writeKey = null;
+                    while ((writeKey = buildKey()).equals(readKey))
+                        ;
+
+                    slot.setReadKey(readKey);
+                    slot.setWriteKey(writeKey);
                 } else if ("reactivateComplete".equals(action)) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
@@ -142,6 +154,10 @@ public class SlotListServlet extends MCRServlet {
                 MCREventManager.instance().handleEvent(evt);
             }
 
+            if ("ownerTransfer".equals(action)) {
+                SlotManager.setOwner(slot.getMCRObjectID().toString());
+            }
+            
             if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
             }
@@ -203,5 +219,11 @@ public class SlotListServlet extends MCRServlet {
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
         }
+    }
+
+    private static String buildKey() {
+        final StringBuffer buf = new StringBuffer();
+        buf.append(Long.toString(System.nanoTime(), 36));
+        return buf.reverse().toString();
     }
 }

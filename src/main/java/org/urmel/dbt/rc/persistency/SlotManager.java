@@ -95,6 +95,8 @@ public final class SlotManager {
 
     public static final String REACTIVATE_EVENT = "reactivate";
 
+    public static final String OWNER_TRANSFER_EVENT = "ownerTransfer";
+
     private static final Logger LOGGER = LogManager.getLogger(SlotManager.class);
 
     private static SlotManager singelton;
@@ -197,6 +199,21 @@ public final class SlotManager {
             return true;
 
         return false;
+    }
+
+    public static void setOwner(final String objId) throws MCRPersistenceException, MCRActiveLinkException {
+        setOwner(objId, MCRSessionMgr.getCurrentSession().getUserInformation());
+    }
+
+    public static void setOwner(final String objId, final MCRUserInformation user)
+            throws MCRPersistenceException, MCRActiveLinkException {
+        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
+        final MCRObjectService os = obj.getService();
+
+        os.removeFlags("createdby");
+        os.addFlag("createdby", user.getUserID());
+
+        MCRMetadataManager.update(obj);
     }
 
     /**

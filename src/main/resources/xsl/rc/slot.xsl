@@ -10,7 +10,7 @@
   <xsl:include href="slot-entries.xsl" />
 
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', /slot/@id))" />
-  
+
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
     <div id="slot-body">
@@ -31,6 +31,16 @@
             <p>
               <a href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}">
                 <xsl:value-of select="i18n:translate('component.rc.slot.enter_accesskey')" />
+              </a>
+            </p>
+          </div>
+        </xsl:when>
+        <xsl:when test="@pendingStatus = 'ownerTransfer'">
+          <div class="alert alert-warning" role="alert">
+            <xsl:value-of select="i18n:translate('component.rc.slot.message.ownerTransfer')" />
+            <p>
+              <a href="{$WebApplicationBaseURL}content/rc/slot.xed?action=ownerTransfer&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
+                <xsl:value-of select="i18n:translate('component.rc.slot.ownerTransfer')" />
               </a>
             </p>
           </div>

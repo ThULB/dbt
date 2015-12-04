@@ -50,7 +50,7 @@ public class Slot implements Serializable {
 
     // valid spacers are [._-] and should match classification spacer
     public static final String DEFAULT_ID_SPACER = ".";
-    
+
     public static final String DEFAULT_ID_FORMAT = "%04d";
 
     private static final long serialVersionUID = -3222935202548968539L;
@@ -226,7 +226,7 @@ public class Slot implements Serializable {
      * @param pendingStatus the pendingStatus to set
      */
     public void setPendingStatus(final PendingStatus pendingStatus) {
-        if (this.status != Status.PENDING)
+        if (pendingStatus != PendingStatus.OWNER_TRANSFER && this.status != Status.PENDING)
             this.pendingStatus = null;
         else
             this.pendingStatus = pendingStatus;
