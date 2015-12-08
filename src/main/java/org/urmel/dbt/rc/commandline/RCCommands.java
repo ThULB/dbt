@@ -383,6 +383,6 @@ public class RCCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "sync slot list", help = "sync slot list")
     public static void syncSlotList() throws IOException {
         final SlotManager mgr = SlotManager.instance();
-        mgr.loadList();
+        mgr.syncList();
     }
 }

@@ -76,7 +76,7 @@
           <xsl:text> - </xsl:text>
         </xsl:if>
         <xsl:value-of select="title" />
-        <xsl:if test="$readPermission">
+        <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and $readPermission">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />

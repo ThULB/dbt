@@ -15,7 +15,7 @@
     <xsl:apply-templates mode="slotHead" select="." />
     <div id="slot-body">
       <xsl:choose>
-        <xsl:when test="mcrxsl:isCurrentUserGuestUser()">
+        <xsl:when test="mcrxsl:isCurrentUserGuestUser() and not($readPermission)">
           <xsl:variable name="loginURL" select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )" />
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_access')" />

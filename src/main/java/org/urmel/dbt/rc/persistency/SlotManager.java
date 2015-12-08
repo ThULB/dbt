@@ -236,6 +236,14 @@ public final class SlotManager {
     }
 
     /**
+     * Synchronize the {@link SlotList}.
+     */
+    public synchronized void syncList() {
+        slotList.getSlots().clear();
+        loadList();
+    }
+
+    /**
      * Loads the {@link Slot} metadata from content store.
      * You have to clear the {@link SlotManager#slotList} before.
      */
