@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.jdom2.Element;
+import org.mycore.common.MCRMailer;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.xml.MCRURIResolver;
@@ -77,7 +78,7 @@ public class MailJob extends MCRJobAction {
             final Element xml = MCRURIResolver.instance().resolve(buildURI(job.getParameters()));
 
             if (!xml.getChildren("to").isEmpty()) {
-                Mailer.send(xml, true);
+                MCRMailer.send(xml, true);
             }
         } catch (Exception ex) {
             throw new ExecutionException(ex);
