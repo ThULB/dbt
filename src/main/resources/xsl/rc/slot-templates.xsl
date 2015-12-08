@@ -180,7 +180,7 @@
 
         <xsl:for-each select="lecturers/lecturer">
           <xsl:choose>
-            <xsl:when test="$readPermission and string-length(/slot/contact/@email) = 0">
+            <xsl:when test="not(mcrxsl:isCurrentUserGuestUser()) and $readPermission and string-length(/slot/contact/@email) = 0">
               <a href="mailto:{@email}">
                 <xsl:value-of select="@name" />
               </a>
