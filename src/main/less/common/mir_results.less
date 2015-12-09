@@ -2,10 +2,10 @@
  * hit list
  *****************************************************************************/
 
-@dark_neutral:      #999;       // dark gray
-@light_neutral:     #ccc;       // light gray
-@link_color:        @brand-primary;    // blue
-@highlight:         @brand-primary;    // orange
+@dark_neutral:      @gray;          // dark gray #999
+@light_neutral:     @gray-light;    // light gray #ccc
+@link_color:        @brand-primary;    // blue  #4b8fbc
+@highlight:         @brand-primary;        // orange
 
 @filter_back:       #ECF0F1;
 @filter_border:     #ccc;
@@ -161,6 +161,29 @@
         float: left;
         color: @dark_neutral;
       }
+      .hit_state {
+        float: left;
+        margin-left: 5px;
+        color: @dark_neutral;
+        .mir-published {
+          background-color: @label-success-bg;
+        }
+        .mir-submitted, .mir-new, .mir-imported {
+          background-color: @label-warning-bg;
+        }
+        .mir-review {
+          background-color: @label-primary-bg;
+        }
+        .mir-blocked {
+          background-color: @label-danger-bg;
+        }
+        .mir-deleted {
+          background-color: @label-default-bg;
+        }
+        span {
+          background-color: @label-default-bg;
+        }
+      }
       .hit_title {
         font-size: 20px;
         margin: 15px 0 5px 0;
@@ -298,7 +321,7 @@
             }
             .options {
                 .dropdown-menu > li > a:hover {
-                  background: @brand-primary;
+                  background-color: @brand-primary;
                 }
                 .btn {
                   border: none;
@@ -469,6 +492,24 @@
     content: ")";
 }
 
+.mir-date-arrowTop::before {
+	border-color: transparent transparent rgba(0, 0, 0, 0.15);
+	border-style: solid;
+	border-width: 6px;
+	content: " ";
+	left: 11em;
+	position: absolute;
+	top: -13px;
+}
+.mir-date-arrowTop::after {
+	border-color: transparent transparent white;
+	border-style: solid;
+	border-width: 6px;
+	content: " ";
+	left: 11em;
+	position: absolute;
+	top: -11px;
+}
 
 /* xs: default up to 750px ***************************************************/
 

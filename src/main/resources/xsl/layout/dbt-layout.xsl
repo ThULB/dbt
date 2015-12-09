@@ -106,12 +106,39 @@
   <!-- Load JavaScripts -->
 
   <xsl:template name="layout.scripts">
+    <script type="text/javascript">
+      <!-- Bootstrap & Query-Ui button conflict workaround  -->
+      if (jQuery.fn.button){jQuery.fn.btn = jQuery.fn.button.noConflict();}
+    </script>
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/jquery.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
+
+    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.js"></script>
+    <script>
+      $( document ).ready(function() {
+        $('.overtext').tooltip();
+        $.confirm.options = {
+          title: "<xsl:value-of select="i18n:translate('mir.confirm.title')" />",
+          confirmButton: "<xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />",
+          cancelButton: "<xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />",
+          post: false,
+          confirmButtonClass: "btn-danger",
+          cancelButtonClass: "btn-default",
+          dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
+        }
+      });
+    </script>
+    <script src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+    <script>
+      jQuery("input[placeholder]").placeholder();
+      jQuery("textarea[placeholder]").placeholder();
+    </script>
 
     <script type="text/javascript">
       <xsl:value-of select="concat('var webApplicationBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
