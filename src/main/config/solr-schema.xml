@@ -201,9 +201,12 @@
   <field name="mods.pindexname" type="string" multiValued="true" />
   <field name="mods.pindexname.published" type="string" multiValued="true" />
   <field name="mods.embargo" type="date" />
+  <field name="mods.relatedItem.part" type="string" />
   <dynamicField name="mods.relatedItem*" type="string" multiValued="true" />
-
-    <!-- dbt rc slot -->
+    
+    <!-- ******************************************** -->
+    <!-- * DBT RC slot -->
+    <!-- ******************************************** -->
   <field name="slotId" type="string" indexed="true" multiValued="false" />
   <field name="slot.status" type="string" indexed="true" multiValued="false" />
   <field name="slot.location" type="text_general" indexed="true" multiValued="true" />
