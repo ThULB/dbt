@@ -106,12 +106,12 @@
   <!-- Load JavaScripts -->
 
   <xsl:template name="layout.scripts">
+    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/jquery.min.js" />
     <script type="text/javascript">
       <!-- Bootstrap & Query-Ui button conflict workaround  -->
       if (jQuery.fn.button){jQuery.fn.btn = jQuery.fn.button.noConflict();}
     </script>
-
-    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/jquery.min.js" />
+    
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
