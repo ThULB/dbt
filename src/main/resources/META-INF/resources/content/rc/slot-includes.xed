@@ -121,10 +121,10 @@
               <legend />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="changeLocation" />
 
-              <xed:validate xpath="slot" display="local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)" i18n="component.rc.slot.id.notFree" />
+              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)" i18n="component.rc.slot.id.notFree" />
             </fieldset>
 
-            <fieldset class="{$xed-validation-marker}">
+            <fieldset>
               <legend />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
@@ -141,7 +141,7 @@
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="singleLecturer" />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="ownerTransfer" />
             </fieldset>
-            <fieldset class="{$xed-validation-marker}">
+            <fieldset>
               <legend>
                 <xed:output i18n="component.rc.slot.contact" />
               </legend>
