@@ -117,13 +117,22 @@
           </xed:when>
           <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
-            <hr />
-            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
-            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
+            <fieldset class="{$xed-validation-marker}">
+              <legend />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="changeLocation" />
 
-            <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true"
-              uri="xslStyle:rc/periods2options:period:areacode=0&amp;date={.}&amp;onlySetable=false&amp;list=true" i18n="component.rc.slot.validTo" i18n.error="component.rc.slot.validTo.required"
-              required="true" />
+              <xed:validate xpath="slot" display="local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)" i18n="component.rc.slot.id.notFree" />
+            </fieldset>
+
+            <fieldset class="{$xed-validation-marker}">
+              <legend />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="rcTitle" />
+              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="onlineOnly" />
+
+              <mir:template name="selectInput" xpath="validTo" id="validTo" inlcudeOnly="true"
+                uri="xslStyle:rc/periods2options:period:areacode=0&amp;date={.}&amp;onlySetable=false&amp;list=true" i18n="component.rc.slot.validTo"
+                i18n.error="component.rc.slot.validTo.required" required="true" />
+            </fieldset>
 
             <fieldset>
               <legend>
@@ -206,7 +215,7 @@
   </xed:template>
 
   <xed:template id="onlineOnly">
-    <mir:template name="checkboxList" xpath="@onlineOnly" id="onlineOnly" inline="true">
+    <mir:template name="checkboxList" xpath="@onlineOnly" default="false" id="onlineOnly" inline="true">
       <option value="true" i18n="component.rc.slot.onlineOnly" />
     </mir:template>
   </xed:template>
@@ -223,7 +232,7 @@
         <label class="col-md-3 control-label" for="locationSelect">
           <xed:output i18n="component.rc.slot.location" />
         </label>
-        <div class="col-md-9">
+        <div class="col-md-7">
           <mir:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
             href="RCSlotLocationServlet?categID=RCLOC&amp;action=chooseCategory" />
           <xed:choose>
@@ -241,6 +250,34 @@
       </div>
     </xed:bind>
 
+    <xed:validate xpath="slot" display="global" test="string-length(location/@id) &gt; 0" i18n="component.rc.location.required" />
+  </xed:template>
+
+  <xed:template id="changeLocation">
+    <xed:bind xpath="location">
+      <div class="form-group {$xed-validation-marker}">
+        <label class="col-md-3 control-label" for="locationSelect">
+          <xed:output i18n="component.rc.slot.location" />
+        </label>
+        <div class="col-md-7 text-ellipsis">
+          <mir:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
+            href="RCSlotLocationServlet?categID=RCLOC&amp;action=chooseCategory" />
+          <xed:choose>
+            <xed:when test="string-length(label/@text) &gt; 0">
+              <xed:output value="label/@text" />
+            </xed:when>
+            <xed:otherwise>
+              <xed:multi-lang>
+                <xed:lang xml:lang="de">bitte wählen</xed:lang>
+                <xed:lang xml:lang="en">please select</xed:lang>
+              </xed:multi-lang>
+            </xed:otherwise>
+          </xed:choose>
+        </div>
+        <mir:template name="textInput" xpath="@newId" id="newId" class="text-right" inline="true" colsize="md" colwidth="2"
+          i18n.error="component.rc.slot.id.required" required="true" />
+      </div>
+    </xed:bind>
     <xed:validate xpath="slot" display="global" test="string-length(location/@id) &gt; 0" i18n="component.rc.location.required" />
   </xed:template>
 

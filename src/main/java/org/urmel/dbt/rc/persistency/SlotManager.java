@@ -51,6 +51,7 @@ import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRVersionedMetadata;
@@ -236,6 +237,31 @@ public final class SlotManager {
     }
 
     /**
+     * Checks if given slot location and new number is free.
+     * 
+     * @param nodes the location element
+     * @return <code>true</code> if slot number is free
+     */
+    public static boolean isFreeId(List<Element> nodes) {
+        if (nodes != null && !nodes.isEmpty()) {
+            final Element xml = nodes.get(0);
+            final Element location = xml.getChild("location");
+            final String locId = location != null ? location.getAttributeValue("id") : null;
+            final String newId = location != null ? location.getAttributeValue("newId") : null;
+
+            if (locId != null && newId != null) {
+                final Slot slot = SlotTransformer.buildSlot(xml);
+                final MCRCategoryID locCat = new MCRCategoryDAOImpl()
+                        .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
+                int id = Integer.parseInt(newId);
+
+                return slot.getLocation().equals(locCat) && slot.getId() == id || instance().isFreeId(locCat, id);
+            }
+        }
+        return false;
+    }
+
+    /**
      * Synchronize the {@link SlotList}.
      */
     public synchronized void syncList() {
@@ -350,6 +376,20 @@ public final class SlotManager {
         }
 
         return nextId == -1 ? lastId == -1 ? 1 : lastId : nextId;
+    }
+
+    /**
+     * Validates a given location and id if it is unused.
+     * 
+     * @param rcLocation the reserve collection location
+     * @param id the id to validate
+     * @return <code>true</code> if id currently unused
+     */
+    public synchronized boolean isFreeId(final MCRCategoryID rcLocation, int id) {
+        final Slot a = new Slot(rcLocation, id);
+        final Slot b = getSlotById(a.getSlotId());
+
+        return b == null || b.getStatus() == Status.FREE;
     }
 
     /**

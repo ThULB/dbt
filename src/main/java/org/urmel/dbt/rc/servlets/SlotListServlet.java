@@ -35,11 +35,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
-import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
@@ -88,20 +88,18 @@ public class SlotListServlet extends MCRServlet {
             final String slotId = xml.getAttributeValue("id");
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                     : null;
+            final Integer newId = location != null ? new Integer(xml.getChild("location").getAttributeValue("newId"))
+                    : null;
 
             MCREvent evt = null;
-
-            if (location != null) {
-                final MCRCategory category = DAO.getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location),
-                        0);
-                slot.setLocation(category.getId());
-            }
 
             if (slotId == null) {
                 if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_CREATE_SLOT)) {
                     job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
+
+                slot.setLocation(getLocationId(location));
 
                 SLOT_MGR.addSlot(slot);
 
@@ -124,8 +122,10 @@ public class SlotListServlet extends MCRServlet {
                         && s.getPendingStatus() != slot.getPendingStatus()) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
 
+                    // rebuild new keys
                     String readKey = buildKey();
                     String writeKey = null;
+                    // rebuild write key if match with read key 
                     while ((writeKey = buildKey()).equals(readKey))
                         ;
 
@@ -143,7 +143,22 @@ public class SlotListServlet extends MCRServlet {
                     slot.setWarningDates(null);
                 }
 
-                SLOT_MGR.setSlot(slot);
+                if (location != null && newId != null
+                        && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
+                    if (SLOT_MGR.isFreeId(getLocationId(location), newId)) {
+                        LOGGER.info("Change slot location from " + s.getLocation().getID() + " to " + location);
+
+                        slot.setLocation(getLocationId(location));
+                        slot.setId(newId);
+
+                        SLOT_MGR.removeSlot(s);
+                        SLOT_MGR.addSlot(slot);
+                    } else {
+                        throw new MCRException("Couldn't change slot location, because slot number not free.");
+                    }
+                } else {
+                    SLOT_MGR.setSlot(slot);
+                }
 
                 evt.put(SlotManager.SLOT_TYPE, slot);
             }
@@ -157,7 +172,7 @@ public class SlotListServlet extends MCRServlet {
             if ("ownerTransfer".equals(action)) {
                 SlotManager.setOwner(slot.getMCRObjectID().toString());
             }
-            
+
             if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
             }
@@ -165,10 +180,15 @@ public class SlotListServlet extends MCRServlet {
             String redirectURL = job.getRequest().getParameter("url");
             if (redirectURL == null || redirectURL.length() == 0) {
                 redirectURL = MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId();
+            } else {
+                // fix changed slotId
+                redirectURL = redirectURL.replaceAll(slotId, slot.getSlotId());
             }
 
             job.getResponse().sendRedirect(redirectURL);
-        } else {
+        } else
+
+        {
             final String path = req.getPathInfo();
 
             if (path != null) {
@@ -219,9 +239,14 @@ public class SlotListServlet extends MCRServlet {
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
         }
+
     }
 
-    private static String buildKey() {
+    private MCRCategoryID getLocationId(final String location) {
+        return DAO.getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location), 0).getId();
+    }
+
+    private String buildKey() {
         final StringBuffer buf = new StringBuffer();
         buf.append(Long.toString(System.nanoTime(), 36));
         return buf.reverse().toString();
