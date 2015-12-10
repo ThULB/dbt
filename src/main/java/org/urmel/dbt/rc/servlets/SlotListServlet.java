@@ -146,8 +146,6 @@ public class SlotListServlet extends MCRServlet {
                 if (location != null && newId != null
                         && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
                     if (SLOT_MGR.isFreeId(getLocationId(location), newId)) {
-                        LOGGER.info("Change slot location from " + s.getLocation().getID() + " to " + location);
-
                         slot.setLocation(getLocationId(location));
                         slot.setId(newId);
 
