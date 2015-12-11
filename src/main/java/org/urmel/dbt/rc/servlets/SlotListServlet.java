@@ -122,6 +122,11 @@ public class SlotListServlet extends MCRServlet {
                         && s.getPendingStatus() != slot.getPendingStatus()) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
 
+                    if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {
+                        job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                        return;
+                    }
+
                     // rebuild new keys
                     String readKey = buildKey();
                     String writeKey = null;
@@ -145,6 +150,12 @@ public class SlotListServlet extends MCRServlet {
 
                 if (location != null && newId != null
                         && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
+
+                    if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {
+                        job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+                        return;
+                    }
+
                     if (SLOT_MGR.isFreeId(getLocationId(location), newId)) {
                         slot.setLocation(getLocationId(location));
                         slot.setId(newId);
