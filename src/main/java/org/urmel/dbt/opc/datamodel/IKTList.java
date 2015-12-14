@@ -1,5 +1,5 @@
 /*
- * $Id: IKTList.java 2160 2014-12-11 12:45:09Z adler $ 
+ * $Id$ 
  * $Revision$
  *
  * This file is part of ***  M y C o R e  ***

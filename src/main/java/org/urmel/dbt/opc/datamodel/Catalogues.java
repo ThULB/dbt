@@ -1,5 +1,5 @@
 /*
- * $Id: Catalogues.java 2165 2014-12-12 10:05:09Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

@@ -1,5 +1,5 @@
 /*
- * $Id: SlotEntryTransformer.java 2126 2014-11-25 09:20:21Z adler $
+ * $Id$
  */
 package org.urmel.dbt.rc.utils;
 

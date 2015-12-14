@@ -1,5 +1,5 @@
 /*
- * $Id: SlotEntry.java 2137 2014-12-09 09:46:26Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

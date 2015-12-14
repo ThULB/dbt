@@ -1,5 +1,5 @@
 /*
- * $Id: DateUtils.java 2126 2014-11-25 09:20:21Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

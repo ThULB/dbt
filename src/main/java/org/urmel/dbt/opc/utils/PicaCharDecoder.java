@@ -1,5 +1,5 @@
 /*
- * $Id: PicaCharDecoder.java 2148 2014-12-10 09:43:12Z adler $ 
+ * $Id$ 
  * $Revision$
  *
  * This file is part of ***  M y C o R e  ***

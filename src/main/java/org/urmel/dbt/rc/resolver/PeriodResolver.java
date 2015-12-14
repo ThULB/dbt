@@ -1,5 +1,5 @@
 /*
- * $Id: PeriodResolver.java 2116 2014-10-01 12:14:43Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

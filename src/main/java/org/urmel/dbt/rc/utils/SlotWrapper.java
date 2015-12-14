@@ -1,5 +1,5 @@
 /*
- * $Id: SlotWrapper.java 2124 2014-10-07 11:44:50Z adler $ 
+ * $Id$ 
  */
 package org.urmel.dbt.rc.utils;
 

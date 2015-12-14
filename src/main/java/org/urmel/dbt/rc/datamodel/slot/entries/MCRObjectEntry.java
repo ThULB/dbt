@@ -1,5 +1,5 @@
 /*
- * $Id: MCRObjectEntry.java 2145 2014-12-09 12:56:27Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

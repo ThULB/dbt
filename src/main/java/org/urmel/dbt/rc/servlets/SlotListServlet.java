@@ -120,12 +120,12 @@ public class SlotListServlet extends MCRServlet {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 } else if (slot.getPendingStatus() == PendingStatus.OWNER_TRANSFER
                         && s.getPendingStatus() != slot.getPendingStatus()) {
-                    
+
                     if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {
                         job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
                         return;
                     }
-                    
+
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
 
                     // rebuild new keys
@@ -196,9 +196,7 @@ public class SlotListServlet extends MCRServlet {
             }
 
             job.getResponse().sendRedirect(redirectURL);
-        } else
-
-        {
+        } else {
             final String path = req.getPathInfo();
 
             if (path != null) {

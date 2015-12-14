@@ -1,5 +1,5 @@
 /*
- * $Id: HeadlineEntry.java 2129 2014-11-25 09:57:01Z adler $ 
+ * $Id$ 
  * $Revision$ $Date$
  *
  * This file is part of ***  M y C o R e  ***

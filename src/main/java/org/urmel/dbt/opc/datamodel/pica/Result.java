@@ -1,5 +1,5 @@
 /*
- * $Id: Result.java 2167 2014-12-15 14:17:18Z adler $ 
+ * $Id$ 
  * $Revision$
  *
  * This file is part of ***  M y C o R e  ***

@@ -1,5 +1,5 @@
 /*
- * $Id: SlotManager.java 2117 2014-10-01 12:39:12Z adler $ 
+ * $Id$ 
  * $Revision$
  *
  * This file is part of ***  M y C o R e  ***

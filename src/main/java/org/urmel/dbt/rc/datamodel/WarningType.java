@@ -1,5 +1,5 @@
 /*
- * $Id: WarningType.java 2116 2014-10-01 12:14:43Z adler $
+ * $Id$
  */
 package org.urmel.dbt.rc.datamodel;
 
