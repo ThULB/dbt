@@ -118,7 +118,7 @@ public class SlotListServlet extends MCRServlet {
 
                 if (s.getStatus() != slot.getStatus() && slot.getStatus() == Status.ARCHIVED) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
-                } else if (slot.getPendingStatus() == PendingStatus.OWNER_TRANSFER
+                } else if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER
                         && s.getPendingStatus() != slot.getPendingStatus()) {
 
                     if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOTS)) {

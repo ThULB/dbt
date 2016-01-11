@@ -226,7 +226,7 @@ public class Slot implements Serializable {
      * @param pendingStatus the pendingStatus to set
      */
     public void setPendingStatus(final PendingStatus pendingStatus) {
-        if (pendingStatus != PendingStatus.OWNER_TRANSFER && this.status != Status.PENDING)
+        if (pendingStatus != PendingStatus.OWNERTRANSFER && this.status != Status.PENDING)
             this.pendingStatus = null;
         else
             this.pendingStatus = pendingStatus;

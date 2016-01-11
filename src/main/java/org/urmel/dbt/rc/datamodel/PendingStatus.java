@@ -55,7 +55,7 @@ public enum PendingStatus {
      */
     @EnumValue(visible = false)
     @XmlEnumValue("ownerTransfer")
-    OWNER_TRANSFER("ownerTransfer");
+    OWNERTRANSFER("ownerTransfer");
 
     private final String value;
 
