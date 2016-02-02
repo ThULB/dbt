@@ -111,7 +111,7 @@
       <!-- Bootstrap & Query-Ui button conflict workaround  -->
       if (jQuery.fn.button){jQuery.fn.btn = jQuery.fn.button.noConflict();}
     </script>
-    
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
@@ -122,16 +122,22 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.js"></script>
     <script>
       $( document ).ready(function() {
-        $('.overtext').tooltip();
-        $.confirm.options = {
-          title: "<xsl:value-of select="i18n:translate('mir.confirm.title')" />",
-          confirmButton: "<xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />",
-          cancelButton: "<xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />",
-          post: false,
-          confirmButtonClass: "btn-danger",
-          cancelButtonClass: "btn-default",
-          dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
-        }
+      $('.overtext').tooltip();
+      $.confirm.options = {
+      title: "
+      <xsl:value-of select="i18n:translate('mir.confirm.title')" />
+      ",
+      confirmButton: "
+      <xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />
+      ",
+      cancelButton: "
+      <xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />
+      ",
+      post: false,
+      confirmButtonClass: "btn-danger",
+      cancelButtonClass: "btn-default",
+      dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
+      }
       });
     </script>
     <script src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
@@ -375,8 +381,8 @@
     <xsl:variable name="basketType" select="'objects'" />
     <xsl:variable name="basket" select="document(concat('basket:',$basketType))/basket" />
     <xsl:variable name="entryCount" select="count($basket/entry)" />
-    <li class="dropdown" data-toggle="dropdown" id="basket-list-item">
-      <a class="dropdown-toggle" href="#" title="{i18n:translate('basket.title.objects')}">
+    <li class="dropdown" id="basket-list-item">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
         <i class="fa fa-bookmark" />
         <sup>
           <xsl:value-of select="$entryCount" />
