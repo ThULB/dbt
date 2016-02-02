@@ -9,14 +9,16 @@
   <xsl:template match="mods:abstract">
     <xsl:choose>
       <xsl:when test="contains(text(), '/Derivate-')">
-        <xsl:variable name="derId" select="substring-before(substring-after(text(), '/Derivate-'), '/')" />
-        <xsl:variable name="file" select="substring-before(substring-after(text(), concat('/Derivate-', $derId)), '&quot;')" />
+        <xsl:variable name="derId" select="number(substring-before(substring-after(text(), '/Derivate-'), '/'))" />
+        <xsl:variable name="file" select="substring-before(substring-after(substring-after(text(), '/Derivate-'), $derId), '&quot;')" />
         <xsl:choose>
-          <xsl:when test="substring($file, string-length($file) - 3) = '.txt'">
+          <xsl:when test="translate(substring($file, string-length($file) - 3),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = '.txt'">
             <xsl:variable name="text" select="migutils:getContentOfFile(concat('mir_derivate_', $derId, $file))" />
-            <xsl:variable name="lang" select="mcrld:detectLanguage($text)" />
-            <xsl:copy>
-              <xsl:attribute name="xml:lang">
+            <xsl:choose>
+              <xsl:when test="string-length($text) &gt; 0">
+                <xsl:variable name="lang" select="mcrld:detectLanguage($text)" />
+                <xsl:copy>
+                  <xsl:attribute name="xml:lang">
                 <xsl:choose>
                   <xsl:when test="string-length($lang) &gt; 0">
                     <xsl:value-of select="$lang" />
@@ -26,9 +28,17 @@
                   </xsl:otherwise>
                 </xsl:choose>
               </xsl:attribute>
-              <xsl:apply-templates select="@*[name(.) != 'xml:lang']" />
-              <xsl:value-of select="$text" />
-            </xsl:copy>
+                  <xsl:apply-templates select="@*[name(.) != 'xml:lang']" />
+                  <xsl:value-of select="$text" />
+                </xsl:copy>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:copy>
+                  <xsl:apply-templates select="@*" />
+                  <xsl:apply-templates />
+                </xsl:copy>
+              </xsl:otherwise>
+            </xsl:choose>
           </xsl:when>
           <xsl:otherwise>
             <xsl:copy>

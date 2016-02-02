@@ -22,8 +22,6 @@
  */
 package org.urmel.dbt.migration;
 
-import javax.xml.transform.TransformerException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRException;
@@ -50,7 +48,7 @@ public class MigrationUtils {
         return str.replaceAll(XMLPATTERN, "");
     }
 
-    public static String getContentOfFile(final String fileLink) throws TransformerException {
+    public static String getContentOfFile(final String fileLink) {
         MCRPath file = null;
         if (fileLink.contains("/")) {
             // assume thats a derivate with path
@@ -63,7 +61,7 @@ public class MigrationUtils {
             }
         }
         if (file == null) {
-            throw new TransformerException("Couldn't read file for " + fileLink);
+            LOGGER.error("Couldn't read file for " + fileLink);
         }
         try {
             final MCRContent content = new MCRPathContent(file);
@@ -89,7 +87,8 @@ public class MigrationUtils {
 
             return stripIlegalChars(content.asString());
         } catch (Exception e) {
-            throw new TransformerException(e);
+            LOGGER.error(e);
+            return "";
         }
     }
 
