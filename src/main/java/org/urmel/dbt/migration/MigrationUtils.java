@@ -24,10 +24,16 @@ package org.urmel.dbt.migration;
 
 import javax.xml.transform.TransformerException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRException;
+import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+
+import com.ibm.icu.text.CharsetDetector;
+import com.ibm.icu.text.CharsetMatch;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -35,14 +41,16 @@ import org.mycore.datamodel.niofs.MCRPath;
  */
 public class MigrationUtils {
 
-    /**
-     * 
-     */
-    public MigrationUtils() {
-        // TODO Auto-generated constructor stub
+    private static final Logger LOGGER = LogManager.getLogger(MigrationUtils.class);
+
+    private static final String XMLPATTERN = "[^" + "\u0009\r\n" + "\u0020-\uD7FF" + "\uE000-\uFFFD"
+            + "\ud800\udc00-\udbff\udfff" + "]";
+
+    public static String stripIlegalChars(final String str) {
+        return str.replaceAll(XMLPATTERN, "");
     }
 
-    public static String getContentOfFile(String fileLink) throws TransformerException {
+    public static String getContentOfFile(final String fileLink) throws TransformerException {
         MCRPath file = null;
         if (fileLink.contains("/")) {
             // assume thats a derivate with path
@@ -58,7 +66,28 @@ public class MigrationUtils {
             throw new TransformerException("Couldn't read file for " + fileLink);
         }
         try {
-            return new MCRPathContent(file).asString();
+            final MCRContent content = new MCRPathContent(file);
+            final byte[] textBytes = content.asByteArray();
+
+            CharsetDetector detector = new CharsetDetector();
+            detector.setText(textBytes);
+            CharsetMatch cm = detector.detect();
+
+            if (cm != null) {
+                int confidence = cm.getConfidence();
+                LOGGER.info("Encoding: " + cm.getName() + " - Confidence: " + confidence + "%");
+
+                String str = null;
+                if (confidence > 50) {
+                    str = new String(new String(textBytes, cm.getName()).getBytes("UTF-8"), "UTF-8");
+                } else {
+                    str = new String(new String(textBytes, "ISO-8859-1").getBytes("UTF-8"), "UTF-8");
+                }
+
+                return stripIlegalChars(str);
+            }
+
+            return stripIlegalChars(content.asString());
         } catch (Exception e) {
             throw new TransformerException(e);
         }
