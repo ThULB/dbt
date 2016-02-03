@@ -66,7 +66,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                 final OPCConnector opc = new OPCConnector();
                 final List<Element> titles = mods.getElements("mods:titleInfo/mods:title");
                 for (final Element title : titles) {
-                    final Result result = opc.search(title.getTextNormalize());
+                    final Result result = opc.search("tit " + title.getTextNormalize());
                     if (result.getRecords().isEmpty()) {
                         LOGGER.info("Nothing was found for title " + title.getTextNormalize());
                     } else {
