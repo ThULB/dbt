@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.events;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -149,7 +150,11 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
             List<String> nameParts = Arrays.asList(displayForm.getTextTrim().split(" "));
             nameParts.replaceAll(s -> s.replaceAll(",", "").trim());
 
-            for (final PPField f : record.getFieldsByTag("028A")) {
+            List<PPField> nameFields = new ArrayList<PPField>();
+            Arrays.asList("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(",")).stream()
+                    .forEach(tag -> nameFields.addAll(record.getFieldsByTag(tag)));
+
+            for (final PPField f : nameFields) {
                 final Optional<PPSubField> pn = Optional.ofNullable(f.getSubfieldByCode("d"));
                 final Optional<PPSubField> sn = Optional.ofNullable(f.getSubfieldByCode("a"));
 
