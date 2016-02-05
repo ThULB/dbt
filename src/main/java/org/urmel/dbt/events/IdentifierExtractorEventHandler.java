@@ -206,22 +206,4 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         return Math.round(100 / (n1Parts.size() > n2Parts.size() ? n1Parts.size() : n2Parts.size())
                 * n1Parts.stream().filter(s -> n2Parts.contains(s)).count());
     }
-
-    public static void main(String[] args) {
-        String displayForm = "Silva, Ricardo Ezequiel, da";
-        List<String> nameParts = Arrays.stream(displayForm.split("[,\\s]")).filter(s -> !s.isEmpty())
-                .map(String::toLowerCase).map(IdentifierExtractorEventHandler::normalizeAccents)
-                .collect(Collectors.toList());
-
-        List<String> namePartsComp = Arrays.asList(Arrays.stream(new String[] { "Ricardo Ezequiel", "da", "Silva" })
-                .map(String::toLowerCase).map(IdentifierExtractorEventHandler::normalizeAccents)
-                .collect(Collectors.joining(", ")).split("[,\\s]")).stream().filter(s -> !s.isEmpty())
-                .collect(Collectors.toList());
-
-        int confidence = Math
-                .round(100 / namePartsComp.size() * nameParts.stream().filter(s -> namePartsComp.contains(s)).count());
-
-        System.out.println(
-                "confidence: " + confidence + ": " + nameParts.stream().filter(s -> namePartsComp.contains(s)).count());
-    }
 }
