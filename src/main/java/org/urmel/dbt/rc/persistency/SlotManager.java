@@ -41,6 +41,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
@@ -192,7 +193,7 @@ public final class SlotManager {
      * @return <code>true</code> is owner
      */
     public static boolean isOwner(final String objId, final MCRUserInformation user) {
-        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
+        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
         final MCRObjectService os = obj.getService();
         final String owner = (os.isFlagTypeSet("createdby") ? os.getFlags("createdby").get(0) : null);
 
@@ -202,13 +203,14 @@ public final class SlotManager {
         return false;
     }
 
-    public static void setOwner(final String objId) throws MCRPersistenceException, MCRActiveLinkException {
+    public static void setOwner(final String objId)
+            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         setOwner(objId, MCRSessionMgr.getCurrentSession().getUserInformation());
     }
 
     public static void setOwner(final String objId, final MCRUserInformation user)
-            throws MCRPersistenceException, MCRActiveLinkException {
-        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
+            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
         final MCRObjectService os = obj.getService();
 
         os.removeFlags("createdby");
@@ -280,7 +282,7 @@ public final class SlotManager {
         for (String objId : ids) {
             try {
                 if (MCRMetadataManager.exists(MCRObjectID.getInstance(objId))) {
-                    final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objId);
+                    final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
                     final Slot slot = SlotWrapper.unwrapMCRObject(obj);
                     slotList.addSlot(slot);
                 }
@@ -414,9 +416,11 @@ public final class SlotManager {
      * @param slot the slot
      * @throws MCRActiveLinkException 
      * @throws MCRPersistenceException 
+     * @throws MCRAccessException 
      */
     @SuppressWarnings("unchecked")
-    public synchronized void saveOrUpdate(final Slot slot) throws MCRPersistenceException, MCRActiveLinkException {
+    public synchronized void saveOrUpdate(final Slot slot)
+            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
         if (objID != null && MCRMetadataManager.exists(objID)) {
@@ -447,9 +451,11 @@ public final class SlotManager {
      * @param slot the slot
      * @throws MCRPersistenceException
      * @throws MCRActiveLinkException
+     * @throws MCRAccessException 
      */
     @SuppressWarnings("unchecked")
-    public synchronized void delete(final Slot slot) throws MCRPersistenceException, MCRActiveLinkException {
+    public synchronized void delete(final Slot slot)
+            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
         if (objID != null && MCRMetadataManager.exists(objID)) {

@@ -36,6 +36,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.events.MCREvent;
@@ -155,7 +156,7 @@ public class RCCommands extends MCRAbstractCommands {
     @SuppressWarnings("unchecked")
     @MCRCommand(syntax = "import slot from file {0}", help = "imports a slot from given file")
     public static void importSlot(final String filename)
-            throws IOException, MCRPersistenceException, MCRActiveLinkException {
+            throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
 
         File file = new File(filename);
@@ -258,7 +259,7 @@ public class RCCommands extends MCRAbstractCommands {
     }
 
     @MCRCommand(syntax = "rc inactivator", help = "send warning mails for reserve collections or inactivate, set new status")
-    public static void rcInactivator() throws IOException {
+    public static void rcInactivator() throws IOException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
 
