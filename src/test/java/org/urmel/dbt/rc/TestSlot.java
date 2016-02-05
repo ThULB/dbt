@@ -43,6 +43,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRHibTestCase;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
@@ -261,7 +262,7 @@ public class TestSlot extends MCRHibTestCase {
 
     @Test
     public void testSaveSlot()
-            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -303,7 +304,7 @@ public class TestSlot extends MCRHibTestCase {
 
     @Test
     public void testSaveSlotWithFileEntry()
-            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -345,7 +346,7 @@ public class TestSlot extends MCRHibTestCase {
 
     @Test
     public void testDeleteSlot()
-            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -381,7 +382,7 @@ public class TestSlot extends MCRHibTestCase {
     
     @Test
     public void testDeleteSlotWithFileEntry()
-            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException {
+            throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setTitle("Test ESA");
         slot.setStatus(Status.ACTIVE);
@@ -417,7 +418,7 @@ public class TestSlot extends MCRHibTestCase {
 
     @Test
     public void testSaveSlotList()
-            throws IOException, MCRPersistenceException, MCRActiveLinkException, JDOMException, SAXException {
+            throws IOException, MCRPersistenceException, MCRActiveLinkException, JDOMException, SAXException, MCRAccessException {
         Slot slot1 = new Slot("3400.01.01.0001");
         slot1.setStatus(Status.ACTIVE);
         SLOT_MANAGER.addSlot(slot1);
