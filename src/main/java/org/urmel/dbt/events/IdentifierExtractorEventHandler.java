@@ -22,10 +22,12 @@
  */
 package org.urmel.dbt.events;
 
-import java.util.ArrayList;
+import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -88,7 +90,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                     for (final Element person : persons) {
                                         if (buildXPath("mods:nameIdentifier[@type='gnd']")
                                                 .evaluateFirst(person) == null) {
-                                            final String gnd = getGND(
+                                            final String gnd = extractPersonIdentifier("gnd",
                                                     buildXPath("mods:displayForm").evaluateFirst(person), record, opc);
                                             if (gnd != null) {
                                                 final Element mNId = new Element("nameIdentifier",
@@ -145,36 +147,28 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                 MCRConstants.XLINK_NAMESPACE);
     }
 
-    private String getGND(final Element displayForm, final Record record, final OPCConnector opc) {
+    private String extractPersonIdentifier(final String idType, final Element displayForm, final Record record,
+            final OPCConnector opc) {
         if (displayForm != null && record != null) {
-            List<String> nameParts = Arrays.asList(displayForm.getTextTrim().split(" "));
-            nameParts.replaceAll(s -> s.replaceAll(",", "").trim());
-
-            List<PPField> nameFields = new ArrayList<PPField>();
-            Arrays.asList("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(",")).stream()
-                    .forEach(tag -> nameFields.addAll(record.getFieldsByTag(tag)));
+            List<PPField> nameFields = Arrays.stream("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(","))
+                    .map(tag -> record.getFieldsByTag(tag)).flatMap(l -> l.stream()).collect(Collectors.toList());
 
             for (final PPField f : nameFields) {
-                final Optional<PPSubField> pn = Optional.ofNullable(f.getSubfieldByCode("d"));
-                final Optional<PPSubField> sn = Optional.ofNullable(f.getSubfieldByCode("a"));
+                int confidence = namesCompare(displayForm.getTextTrim(),
+                        Arrays.stream("d,a,c".split(",")).map(s -> f.getSubfieldByCode(s)).filter(sc -> sc != null)
+                                .map(sc -> sc.getContent()).collect(Collectors.joining(", ")));
 
-                if (pn.isPresent() && sn.isPresent()) {
-                    if (nameParts.contains(pn.get().getContent()) && nameParts.contains(sn.get().getContent())) {
-                        final Optional<PPSubField> idn = Optional.ofNullable(f.getSubfieldByCode("9"));
-                        if (idn.isPresent()) {
-                            try {
-                                final Record pr = opc.getRecord(idn.get().getContent());
-                                final Optional<PPField> gndF = Optional.ofNullable(pr.getFieldByTag("007K"))
-                                        .filter(x -> x.getSubfieldByCode("a").getContent().equals("gnd"));
-                                if (gndF.isPresent()) {
-                                    final String gnd = gndF.get().getSubfieldByCode("0").getContent();
-                                    LOGGER.info("Found GND " + gnd + " for person \"" + sn.get().getContent() + ", "
-                                            + pn.get().getContent() + "\".");
-                                    return gnd;
-                                }
-                            } catch (Exception e) {
-                                LOGGER.error("Couldn't read record for idn " + idn.get().getContent(), e);
-                            }
+                if (confidence > 50) {
+                    LOGGER.info("Person \"" + displayForm.getTextTrim() + "\" matches with a confidence of "
+                            + confidence + "%.");
+
+                    final Optional<PPSubField> idn = Optional.ofNullable(f.getSubfieldByCode("9"));
+                    if (idn.isPresent()) {
+                        final String id = getIdentifier(idType, opc, idn.get().getContent());
+                        if (id != null) {
+                            LOGGER.info("Found " + idType + " " + id + " for person \"" + displayForm.getTextTrim()
+                                    + "\".");
+                            return id;
                         }
                     }
                 }
@@ -182,5 +176,52 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         }
 
         return null;
+    }
+
+    private String getIdentifier(final String idType, final OPCConnector opc, final String idn) {
+        try {
+            final Record record = opc.getRecord(idn);
+            List<String> ids = Stream.of(record.getFieldsByTag("007K"), record.getFieldsByTag("007N"))
+                    .flatMap(l -> l.stream())
+                    .filter(f -> f.getSubfieldByCode("a").getContent().equalsIgnoreCase(idType))
+                    .map(f -> f.getSubfieldByCode("0").getContent()).collect(Collectors.toList());
+
+            return ids.isEmpty() ? null : ids.get(0);
+        } catch (Exception e) {
+            LOGGER.error("Couldn't read record for idn " + idn, e);
+            return null;
+        }
+    }
+
+    private static String normalizeAccents(final String str) {
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+    }
+
+    private static int namesCompare(final String n1, final String n2) {
+        List<String> n1Parts = Arrays.stream(n1.split("[,\\s]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
+                .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
+        List<String> n2Parts = Arrays.stream(n2.split("[,\\s]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
+                .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
+
+        return Math.round(100 / (n1Parts.size() > n2Parts.size() ? n1Parts.size() : n2Parts.size())
+                * n1Parts.stream().filter(s -> n2Parts.contains(s)).count());
+    }
+
+    public static void main(String[] args) {
+        String displayForm = "Silva, Ricardo Ezequiel, da";
+        List<String> nameParts = Arrays.stream(displayForm.split("[,\\s]")).filter(s -> !s.isEmpty())
+                .map(String::toLowerCase).map(IdentifierExtractorEventHandler::normalizeAccents)
+                .collect(Collectors.toList());
+
+        List<String> namePartsComp = Arrays.asList(Arrays.stream(new String[] { "Ricardo Ezequiel", "da", "Silva" })
+                .map(String::toLowerCase).map(IdentifierExtractorEventHandler::normalizeAccents)
+                .collect(Collectors.joining(", ")).split("[,\\s]")).stream().filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
+
+        int confidence = Math
+                .round(100 / namePartsComp.size() * nameParts.stream().filter(s -> namePartsComp.contains(s)).count());
+
+        System.out.println(
+                "confidence: " + confidence + ": " + nameParts.stream().filter(s -> namePartsComp.contains(s)).count());
     }
 }
