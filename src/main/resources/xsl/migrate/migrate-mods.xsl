@@ -76,6 +76,28 @@
     </xsl:choose>
 
   </xsl:template>
+
+  <xsl:template match="mods:relatedItem">
+    <!--
+     - extract relatedItem's for processing from single file
+     - cat miless_mods_00017936.xml|grep 'mods:identifier type="local"'|grep -o '[0-9]*'| awk {'printf("xslt mir_mods_%08d with file ~/migrate-mods.xsl\n",$1)'} 
+     -->
+    <xsl:if test="not(contains('constituent|succeeding', @type))">
+      <xsl:copy>
+        <xsl:apply-templates select="@*" />
+        <xsl:choose>
+          <xsl:when test="mods:identifier[@type='local']">
+            <xsl:attribute name="xlink:href">
+            <xsl:value-of select="concat('mir_mods_', format-number(number(mods:identifier[@type='local']/text()), '00000000'))" />
+          </xsl:attribute>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:copy>
+    </xsl:if>
+  </xsl:template>
     
 	<!-- standard copy template -->
   <xsl:template match="@*|node()">
