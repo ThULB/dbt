@@ -22,6 +22,18 @@
  */
 package org.urmel.dbt.migration;
 
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.regex.Pattern;
+
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRException;
@@ -29,6 +41,7 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.w3c.dom.NodeList;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
@@ -41,13 +54,32 @@ public class MigrationUtils {
 
     private static final Logger LOGGER = LogManager.getLogger(MigrationUtils.class);
 
+    public final static String tagStart = "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
+    public final static String tagEnd = "\\</\\w+\\>";
+    public final static String tagSelfClosing = "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>";
+    public final static String htmlEntity = "&[a-zA-Z][a-zA-Z0-9]+;";
+    public final static Pattern htmlPattern = Pattern.compile(
+            "(" + tagStart + ".*" + tagEnd + ")|(" + tagSelfClosing + ")|(" + htmlEntity + ")", Pattern.DOTALL);
+
     private static final String XMLPATTERN = "[^" + "\u0009\r\n" + "\u0020-\uD7FF" + "\uE000-\uFFFD"
             + "\ud800\udc00-\udbff\udfff" + "]";
 
-    public static String stripIlegalChars(final String str) {
+    /**
+     * Strips illegal XML chars from string.
+     *  
+     * @param str the string
+     * @return the plain string
+     */
+    public static String stripIllegalChars(final String str) {
         return str.replaceAll(XMLPATTERN, "");
     }
 
+    /**
+     * Returns the content of file link. And try to detect charset and encode to UTF-8.
+     * 
+     * @param fileLink the file link
+     * @return the file content
+     */
     public static String getContentOfFile(final String fileLink) {
         MCRPath file = null;
         if (fileLink.contains("/")) {
@@ -82,14 +114,56 @@ public class MigrationUtils {
                     str = new String(new String(textBytes, "ISO-8859-1").getBytes("UTF-8"), "UTF-8");
                 }
 
-                return stripIlegalChars(str);
+                return stripIllegalChars(str);
             }
 
-            return stripIlegalChars(content.asString());
+            return stripIllegalChars(content.asString());
         } catch (Exception e) {
             LOGGER.error(e);
             return "";
         }
+    }
+
+    /**
+     * Return <code>true</code> if s contains HTML markup tags or entities.
+     *
+     * @param s String to test
+     * @return true if string contains HTML
+     */
+    public static boolean isHtml(final String s) {
+        boolean ret = false;
+        if (s != null) {
+            ret = htmlPattern.matcher(s).find();
+        }
+        return ret;
+    }
+
+    /**
+     * Encodes a given {@link org.w3c.dom.Node} and return as {@link String}.
+     *  
+     * @param doc the node to encode
+     * @return the encoded string
+     * @throws TransformerException
+     * @throws UnsupportedEncodingException
+     */
+    public static String encodeNode(final NodeList doc) throws TransformerException, UnsupportedEncodingException {
+        if (doc.item(0).getNodeName().equals("#document")) {
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+
+            transformer.setOutputProperty(OutputKeys.INDENT, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+            DOMSource source = new DOMSource(doc.item(0).getFirstChild());
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            transformer.transform(source, result);
+
+            return URLEncoder.encode(writer.toString(), "UTF-8").replace("+", "%20");
+        }
+
+        return null;
     }
 
 }
