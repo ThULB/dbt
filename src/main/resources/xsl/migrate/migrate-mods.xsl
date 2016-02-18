@@ -19,21 +19,12 @@
           </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:variable name="detectedLang" select="mcrld:detectLanguage($text)" />
-          <xsl:variable name="lang">
-            <xsl:choose>
-              <xsl:when test="string-length($detectedLang) &gt; 0">
-                <xsl:value-of select="$detectedLang" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="@xml:lang" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-
           <xsl:copy>
             <xsl:attribute name="xml:lang">
-            <xsl:value-of select="$lang" />
+            <xsl:call-template name="detectLanguage">
+              <xsl:with-param name="text" select="$text" />
+              <xsl:with-param name="defaultLang" select="@xml:lang" />
+            </xsl:call-template>
           </xsl:attribute>
             <xsl:apply-templates select="@*[name(.) != 'xml:lang']" />
             <xsl:value-of select="$text" />
@@ -63,22 +54,13 @@
             </xsl:apply-templates>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:variable name="detectedLang" select="mcrld:detectLanguage($processedContent)" />
-            <xsl:variable name="lang">
-              <xsl:choose>
-                <xsl:when test="string-length($detectedLang) &gt; 0">
-                  <xsl:value-of select="$detectedLang" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="@xml:lang" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:variable>
-
             <xsl:copy>
               <xsl:attribute name="xml:lang">
-              <xsl:value-of select="$lang" />
-            </xsl:attribute>
+                <xsl:call-template name="detectLanguage">
+                  <xsl:with-param name="text" select="$processedContent" />
+                  <xsl:with-param name="defaultLang" select="@xml:lang" />
+                </xsl:call-template>
+              </xsl:attribute>
               <xsl:apply-templates select="@*[not(contains('xml:lang|altRepGroup|altFormat|contentType', name()))]" />
               <xsl:value-of select="$processedContent" />
             </xsl:copy>
@@ -144,16 +126,11 @@
       </xsl:choose>
     </xsl:variable>
 
-    <xsl:variable name="detectedLang" select="mcrld:detectLanguage($cleanContent)" />
     <xsl:variable name="lang">
-      <xsl:choose>
-        <xsl:when test="string-length($detectedLang) &gt; 0">
-          <xsl:value-of select="$detectedLang" />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@xml:lang" />
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="detectLanguage">
+        <xsl:with-param name="text" select="$cleanContent" />
+        <xsl:with-param name="defaultLang" select="@xml:lang" />
+      </xsl:call-template>
     </xsl:variable>
     
     <!-- plain text -->
@@ -221,6 +198,23 @@
     </xsl:if>
   </xsl:template>
 
+  <!-- detect language from text -->
+  <xsl:template name="detectLanguage">
+    <xsl:param name="text" />
+    <xsl:param name="defaultLang" select="'de'" />
+
+    <xsl:variable name="detectedLang" select="mcrld:detectLanguage($text)" />
+    <xsl:choose>
+      <xsl:when test="string-length($detectedLang) &gt; 0">
+        <xsl:value-of select="$detectedLang" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$defaultLang" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- fix wrong br's <br> to <br /> -->
   <xsl:template name="fixBRs">
     <xsl:param name="text" />
 
