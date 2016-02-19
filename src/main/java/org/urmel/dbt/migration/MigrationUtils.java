@@ -22,17 +22,7 @@
  */
 package org.urmel.dbt.migration;
 
-import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.regex.Pattern;
-
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +31,6 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
-import org.w3c.dom.NodeList;
 
 import com.ibm.icu.text.CharsetDetector;
 import com.ibm.icu.text.CharsetMatch;
@@ -137,33 +126,4 @@ public class MigrationUtils {
         }
         return ret;
     }
-
-    /**
-     * Encodes a given {@link org.w3c.dom.Node} and return as {@link String}.
-     *  
-     * @param doc the node to encode
-     * @return the encoded string
-     * @throws TransformerException
-     * @throws UnsupportedEncodingException
-     */
-    public static String encodeNode(final NodeList doc) throws TransformerException, UnsupportedEncodingException {
-        if (doc.item(0).getNodeName().equals("#document")) {
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-
-            transformer.setOutputProperty(OutputKeys.INDENT, "no");
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-
-            DOMSource source = new DOMSource(doc.item(0).getFirstChild());
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            transformer.transform(source, result);
-
-            return URLEncoder.encode(writer.toString(), "UTF-8").replace("+", "%20");
-        }
-
-        return null;
-    }
-
 }
