@@ -62,6 +62,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
      */
     @Override
     synchronized protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
+        if (!obj.getId().getTypeId().equals("mods"))
+            return;
+
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
         try {
