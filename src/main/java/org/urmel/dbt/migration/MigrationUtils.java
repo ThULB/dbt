@@ -22,13 +22,16 @@
  */
 package org.urmel.dbt.migration;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRPathContent;
+import org.mycore.common.xml.MCRXMLHelper;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
 
@@ -42,26 +45,6 @@ import com.ibm.icu.text.CharsetMatch;
 public class MigrationUtils {
 
     private static final Logger LOGGER = LogManager.getLogger(MigrationUtils.class);
-
-    public final static String tagStart = "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)\\>";
-    public final static String tagEnd = "\\</\\w+\\>";
-    public final static String tagSelfClosing = "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>";
-    public final static String htmlEntity = "&[a-zA-Z][a-zA-Z0-9]+;";
-    public final static Pattern htmlPattern = Pattern.compile(
-            "(" + tagStart + ".*" + tagEnd + ")|(" + tagSelfClosing + ")|(" + htmlEntity + ")", Pattern.DOTALL);
-
-    private static final String XMLPATTERN = "[^" + "\u0009\r\n" + "\u0020-\uD7FF" + "\uE000-\uFFFD"
-            + "\ud800\udc00-\udbff\udfff" + "]";
-
-    /**
-     * Strips illegal XML chars from string.
-     *  
-     * @param str the string
-     * @return the plain string
-     */
-    public static String stripIllegalChars(final String str) {
-        return str.replaceAll(XMLPATTERN, "");
-    }
 
     /**
      * Returns the content of file link. And try to detect charset and encode to UTF-8.
@@ -103,27 +86,13 @@ public class MigrationUtils {
                     str = new String(new String(textBytes, "ISO-8859-1").getBytes("UTF-8"), "UTF-8");
                 }
 
-                return stripIllegalChars(str);
+                return MCRXMLHelper.removeIllegalChars(str);
             }
 
-            return stripIllegalChars(content.asString());
+            return MCRXMLHelper.removeIllegalChars(content.asString());
         } catch (Exception e) {
             LOGGER.error(e);
             return "";
         }
-    }
-
-    /**
-     * Return <code>true</code> if s contains HTML markup tags or entities.
-     *
-     * @param s String to test
-     * @return true if string contains HTML
-     */
-    public static boolean isHtml(final String s) {
-        boolean ret = false;
-        if (s != null) {
-            ret = htmlPattern.matcher(s).find();
-        }
-        return ret;
     }
 }

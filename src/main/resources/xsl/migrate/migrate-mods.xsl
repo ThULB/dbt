@@ -14,7 +14,7 @@
 
     <xsl:if test="string-length($text) &gt; 0">
       <xsl:choose>
-        <xsl:when test="migutils:isHtml($text)">
+        <xsl:when test="mcrxml:isHtml($text)">
           <xsl:apply-templates select="." mode="buildWithAltFormat">
             <xsl:with-param name="htmlContent" select="$text" />
           </xsl:apply-templates>
@@ -49,7 +49,7 @@
 
       <xsl:if test="string-length($processedContent) &gt; 0">
         <xsl:choose>
-          <xsl:when test="migutils:isHtml($processedContent)">
+          <xsl:when test="mcrxml:isHtml($processedContent)">
             <xsl:apply-templates select="." mode="buildWithAltFormat">
               <xsl:with-param name="htmlContent" select="$processedContent" />
             </xsl:apply-templates>
@@ -144,9 +144,7 @@
       </xsl:attribute>
       <xsl:apply-templates select="@*[not(contains('xml:lang|altRepGroup|altFormat|contentType', name()))]" />
 
-      <xsl:call-template name="stripTags">
-        <xsl:with-param name="text" select="$cleanContent" />
-      </xsl:call-template>
+      <xsl:value-of select="mcrxml:stripHtml($cleanContent)" />
     </xsl:copy>
     
     <!-- html text -->
@@ -220,22 +218,6 @@
     <xsl:param name="text" />
 
     <xsl:value-of select="mcrxml:regexp($text,'&lt;br&gt;', '&lt;br /&gt;')" />
-  </xsl:template>
-  
-  <!-- html tag striper -->
-  <xsl:template name="stripTags">
-    <xsl:param name="text" />
-    <xsl:choose>
-      <xsl:when test="contains($text, '&lt;')">
-        <xsl:value-of select="substring-before($text, '&lt;')" />
-        <xsl:call-template name="stripTags">
-          <xsl:with-param name="text" select="substring-after($text, '&gt;')" />
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$text" />
-      </xsl:otherwise>
-    </xsl:choose>
   </xsl:template>
   
   <!-- nodeset to string serializer -->
