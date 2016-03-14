@@ -161,13 +161,13 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         final Element subTitle = buildXPath("mods:subTitle").evaluateFirst(titleInfo);
 
         if (title != null && title.getTextNormalize().length() > 3) {
-            sb.append("tit " + title.getTextNormalize().replace("-", ""));
+            sb.append("tit \"" + title.getTextNormalize() + "\"");
         }
         if (subTitle != null) {
             if (sb.length() > 0) {
                 sb.append(" or ");
             }
-            sb.append("tit " + subTitle.getTextNormalize().replace("-", ""));
+            sb.append("tit \"" + subTitle.getTextNormalize() + "\"");
         }
 
         return sb.toString();
