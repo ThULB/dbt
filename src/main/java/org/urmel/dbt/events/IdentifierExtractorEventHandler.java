@@ -68,7 +68,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
         try {
-            if (obj.isImportMode() || mods.getElements("mods:identifier[@type='ppn']").isEmpty()) {
+            if (obj.isImportMode() || mods.getElements("mods:identifier[@type='ppn']").isEmpty() || true) {
                 final OPCConnector opc = new OPCConnector();
                 final List<Element> titleInfos = mods.getElements("mods:titleInfo");
                 for (final Element titleInfo : titleInfos) {
