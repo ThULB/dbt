@@ -68,16 +68,20 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
         try {
-            if (mods.getElements("mods:identifier[@type='ppn']").isEmpty()) {
+            if (obj.isImportMode() || mods.getElements("mods:identifier[@type='ppn']").isEmpty()) {
                 final OPCConnector opc = new OPCConnector();
-                final List<Element> titles = mods.getElements("mods:titleInfo/mods:title");
-                for (final Element title : titles) {
-                    final Result result = opc.search("tit " + title.getTextNormalize());
+                final List<Element> titleInfos = mods.getElements("mods:titleInfo");
+                for (final Element titleInfo : titleInfos) {
+                    final String query = buildQuery(titleInfo);
+                    final Result result = opc.search(query);
                     if (result.getRecords().isEmpty()) {
-                        LOGGER.info("Nothing was found for title " + title.getTextNormalize());
+                        LOGGER.info("Nothing was found for title " + query);
                     } else {
                         for (final Record record : result.getRecords()) {
                             record.load(true); // load full record
+
+                            if (!matchTitle(titleInfo, record))
+                                continue;
 
                             final PPField f = record.getFieldByTag("002@");
                             if (f != null) {
@@ -150,6 +154,61 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                 MCRConstants.XLINK_NAMESPACE);
     }
 
+    private String buildQuery(final Element titleInfo) throws JDOMException {
+        final StringBuffer sb = new StringBuffer();
+
+        final Element title = buildXPath("mods:title").evaluateFirst(titleInfo);
+        final Element subTitle = buildXPath("mods:subTitle").evaluateFirst(titleInfo);
+
+        if (title != null && title.getTextNormalize().length() > 3) {
+            sb.append("tit " + title.getTextNormalize());
+        }
+        if (subTitle != null) {
+            if (sb.length() > 0) {
+                sb.append(" or ");
+            }
+            sb.append("tit " + subTitle.getTextNormalize());
+        }
+
+        return sb.toString();
+    }
+
+    private boolean matchTitle(final Element titleInfo, final Record record) throws JDOMException {
+        if (titleInfo != null && record != null) {
+            final List<PPField> titFields = record.getFieldsByTag("021A");
+            if (!titFields.isEmpty()) {
+                final StringBuffer sb = new StringBuffer();
+
+                final Element title = buildXPath("mods:title").evaluateFirst(titleInfo);
+                final Element subTitle = buildXPath("mods:subTitle").evaluateFirst(titleInfo);
+
+                if (title != null && title.getTextNormalize().length() > 3) {
+                    sb.append(title.getTextNormalize());
+                }
+                if (subTitle != null) {
+                    if (sb.length() > 0) {
+                        sb.append(" ");
+                    }
+                    sb.append(subTitle.getTextNormalize());
+                }
+
+                for (final PPField titField : titFields) {
+                    int confidence = partsCompare(sb.toString(),
+                            Arrays.stream("a,d".split(",")).map(s -> titField.getSubfieldByCode(s))
+                                    .filter(sc -> sc != null).map(sc -> sc.getContent())
+                                    .collect(Collectors.joining(", ")));
+                    if (confidence > 75) {
+                        LOGGER.info(
+                                "Title \"" + sb.toString() + "\" matches with a confidence of " + confidence + "%.");
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
     private String extractPersonIdentifier(final String idType, final Element displayForm, final Record record,
             final OPCConnector opc) {
         if (displayForm != null && record != null) {
@@ -157,7 +216,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                     .map(tag -> record.getFieldsByTag(tag)).flatMap(l -> l.stream()).collect(Collectors.toList());
 
             for (final PPField f : nameFields) {
-                int confidence = namesCompare(displayForm.getTextTrim(),
+                int confidence = partsCompare(displayForm.getTextTrim(),
                         Arrays.stream("d,a,c".split(",")).map(s -> f.getSubfieldByCode(s)).filter(sc -> sc != null)
                                 .map(sc -> sc.getContent()).collect(Collectors.joining(", ")));
 
@@ -200,10 +259,10 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
     }
 
-    private static int namesCompare(final String n1, final String n2) {
-        List<String> n1Parts = Arrays.stream(n1.split("[,\\s]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
+    private static int partsCompare(final String n1, final String n2) {
+        List<String> n1Parts = Arrays.stream(n1.split("[,\\s:]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
                 .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
-        List<String> n2Parts = Arrays.stream(n2.split("[,\\s]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
+        List<String> n2Parts = Arrays.stream(n2.split("[,\\s:]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
                 .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
 
         return Math.round(100 / (n1Parts.size() > n2Parts.size() ? n1Parts.size() : n2Parts.size())
