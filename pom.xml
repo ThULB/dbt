@@ -62,25 +62,13 @@
             <goals>
               <goal>create</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>rcclient</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
             <configuration>
-              <scmDirectory>src/main/rcclient</scmDirectory>
-              <buildNumberPropertyName>rcclientBuildNumber</buildNumberPropertyName>
-              <useLastCommittedRevision>true</useLastCommittedRevision>
+              <doCheck>false</doCheck>
+              <doUpdate>true</doUpdate>
+              <revisionOnScmFailure>0</revisionOnScmFailure>
             </configuration>
           </execution>
         </executions>
-        <configuration>
-          <doCheck>false</doCheck>
-          <doUpdate>true</doUpdate>
-          <revisionOnScmFailure>0</revisionOnScmFailure>
-        </configuration>
       </plugin>
 
       <plugin>
@@ -149,7 +137,7 @@
             </goals>
             <configuration>
               <workingDirectory>${rcclient.projectBase}</workingDirectory>
-              <arguments>--verbose --buildNumber ${rcclientBuildNumber}</arguments>
+              <arguments>--verbose</arguments>
             </configuration>
           </execution>
         </executions>

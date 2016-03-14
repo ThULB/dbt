@@ -3,13 +3,17 @@ module.exports = function(grunt) {
 	grunt
 			.initConfig({
 				pkg : grunt.file.readJSON('package.json'),
-				buildNumber : parseInt(grunt.option('buildNumber')) || 0,
-				banner : '/*!\n' + ' * <%= pkg.name %> v${project.version}\n' + ' * Homepage: <%= pkg.homepage %>\n'
+				banner : '/*!\n' + ' * <%= pkg.name %> v${project.version} (<%= svninfo.last.rev %>)\n' + ' * Homepage: <%= pkg.homepage %>\n'
 						+ ' * (c) 2013-<%= grunt.template.today("yyyy") %> <%= pkg.author %> and others. All rights reserved.\n'
 						+ ' * Licensed under <%= pkg.license %>\n' + ' */\n',
 				clean : {
 					build : {
 						src : [ "build", "dist" ]
+					},
+				},
+				svninfo : {
+					options : {
+						cwd : '<%= pkg.src %>'
 					},
 				},
 				typescript : {
@@ -113,7 +117,7 @@ module.exports = function(grunt) {
 						options : {
 							patterns : [ {
 								match : 'BUILDNUMBER',
-								replacement : '<%= buildNumber %>'
+								replacement : '<%= svninfo.last.rev %>'
 							} ]
 						},
 						files : [ {
@@ -130,7 +134,7 @@ module.exports = function(grunt) {
 								replacement : '<%= pkg.version %>'
 							}, {
 								match : 'REVISION',
-								replacement : '<%= buildNumber %>'
+								replacement : '<%= svninfo.last.rev %>'
 							}, {
 								match : /chrome:\/\/IBWRCClient\//g,
 								replacement : 'chrome://ibw/'
@@ -157,9 +161,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-replace');
 	grunt.loadNpmTasks('grunt-typescript');
+	grunt.loadNpmTasks('grunt-svninfo');
 
 	// Build task(s).
-	grunt.registerTask('build', [ 'typescript', 'uglify', 'less', 'copy:build', 'replace:version' ]);
+	grunt.registerTask('build', [ 'svninfo', 'typescript', 'uglify', 'less', 'copy:build', 'replace:version' ]);
 
 	// Default task
 	grunt.registerTask('default', [ 'clean', 'build', 'replace:dist', 'compress' ]);
