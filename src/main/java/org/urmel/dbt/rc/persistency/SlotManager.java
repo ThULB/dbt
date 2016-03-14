@@ -316,7 +316,7 @@ public final class SlotManager {
     }
 
     /**
-     * Remove a {@link SLot} from {@link SlotList}.
+     * Remove a {@link Slot} from {@link SlotList}.
      * 
      * @param slot the slot
      */
@@ -337,8 +337,8 @@ public final class SlotManager {
     /**
      * Returns a slot for given id and revision.
      * 
-     * @param slotId
-     * @param revision
+     * @param slotId the slot id
+     * @param revision the revision
      * @return the slot
      */
     public Slot getSlotById(final String slotId, final Long revision) {
@@ -414,9 +414,9 @@ public final class SlotManager {
      * Saves or updates the metadata of given {@link Slot}.
      * 
      * @param slot the slot
-     * @throws MCRActiveLinkException 
-     * @throws MCRPersistenceException 
-     * @throws MCRAccessException 
+     * @throws MCRActiveLinkException thrown from underlying classes
+     * @throws MCRPersistenceException thrown from underlying classes
+     * @throws MCRAccessException thrown from underlying classes
      */
     @SuppressWarnings("unchecked")
     public synchronized void saveOrUpdate(final Slot slot)
@@ -449,9 +449,9 @@ public final class SlotManager {
      * Delete a given {@link Slot}.
      * 
      * @param slot the slot
-     * @throws MCRPersistenceException
-     * @throws MCRActiveLinkException
-     * @throws MCRAccessException 
+     * @throws MCRPersistenceException thrown from underlying classes
+     * @throws MCRActiveLinkException thrown from underlying classes
+     * @throws MCRAccessException thrown from underlying classes
      */
     @SuppressWarnings("unchecked")
     public synchronized void delete(final Slot slot)
@@ -527,8 +527,8 @@ public final class SlotManager {
      * @param sortBy the field to sort
      * @param sortOrder the sort order
      * @return the slot list
-     * @throws IOException
-     * @throws SolrServerException
+     * @throws IOException thrown on wrong query
+     * @throws SolrServerException thrown on SOLR error
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
             final String sortBy, final String sortOrder) throws SolrServerException, IOException {

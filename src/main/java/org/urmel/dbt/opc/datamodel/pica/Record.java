@@ -105,7 +105,7 @@ public class Record {
     /**
      * Search field by given tag.
      * 
-     * @param tag
+     * @param tag the pica plus tag
      * @return PPField
      */
     public PPField getFieldByTag(final String tag) {
@@ -121,7 +121,7 @@ public class Record {
     /**
      * Search fields by given tag.
      * 
-     * @param tag
+     * @param tag the pica plus tag
      * @return a List of PPField
      */
     public List<PPField> getFieldsByTag(final String tag) {

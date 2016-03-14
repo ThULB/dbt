@@ -450,8 +450,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @return The {@link Date} of the end of the lecture if one could be found,
      *         <code>null</code> otherwise
-     * @throws ParseException
-     * @see getLectureEndDate(Date)
+     * @throws ParseException should never occur
+     * @see #getLectureEndDate(Date)
      */
     public Date getLectureEndDate() throws ParseException {
         return getLectureEndDate(getBaseDate());
@@ -465,10 +465,10 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * lecture end of a period. The lecture is validated against <b>from</b> and
      * <b>to</b> calculated by {@link #getFrom()} and {@link #getTo()}.
      * 
-     * @param date
+     * @param date the date
      * @return The {@link Date} of the end of the lecture if one could be found,
      *         <code>null</code> otherwise
-     * @throws ParseException
+     * @throws ParseException should never occur
      */
     public Date getLectureEndDate(final Date date) throws ParseException {
         Date result = null;
@@ -552,7 +552,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
     /**
      * @return the labels
-     * @throws ParseException 
+     * @throws ParseException  should never occur
      */
     @XmlElement(name = "label")
     public List<Label> getLabels() throws ParseException {
@@ -714,9 +714,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * Checks if target is in the interval of start and end including these
      * dates. Validation of given dates is not done.
      * 
-     * @param start
-     * @param end
-     * @param target
+     * @param start the start date
+     * @param end the end date
+     * @param target the target date
      * @return <code>true</code> if target is inside start and end,
      *         <code>false</code> otherwise.
      */
@@ -733,9 +733,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * Checks if target is in the interval of start and end excluding these
      * dates. Validation of given dates is not done.
      * 
-     * @param start
-     * @param end
-     * @param target
+     * @param start the start date
+     * @param end the end date
+     * @param target the target date
      * @return <code>true</code> if target is inside start and end,
      *         <code>false</code> otherwise.
      */
@@ -746,13 +746,13 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     /**
      * See {@linkplain #getPeriodDate(Date, String, String, boolean)}.
      * 
-     * @param base
+     * @param base the base date
      * @param end
      *            <code>true</code> if the end of the period should be returned,
      *            <code>false</code> for the beginning
      * @return A new {@link Date} with the begin or the end of a period if one
      *         could be calculated, <code>null</code> otherwise
-     * @throws ParseException
+     * @throws ParseException should never occur
      */
     private Date getPeriodDate(final Date base, final boolean end) throws ParseException {
         return getPeriodDate(base, fromShort, toShort, end);
@@ -781,9 +781,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * </ol>
      * If no date could be calculated, target date is not inside a period.
      * 
-     * @param base
-     * @param from
-     * @param to
+     * @param base the base date
+     * @param from the from date part
+     * @param to the to date part
      * @param end
      *            <code>true</code> if the end of the period should be returned,
      *            <code>false</code> for the beginning

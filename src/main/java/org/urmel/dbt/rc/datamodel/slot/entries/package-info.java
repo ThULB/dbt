@@ -1,5 +1,5 @@
 /**
- * The Reserve collection {@link Slot} entries.
+ * The Reserve collection slot entries.
  * 
  * @author Ren\u00E9 Adler (eagle)
  *

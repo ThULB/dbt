@@ -38,11 +38,15 @@ public @interface EnumValue {
 
     /**
      * Specified if a {@link Enum} value is visible.
+     * 
+     * @return default is <code>true</code>
      */
     boolean visible() default true;
 
     /**
      * Specified if a {@link Enum} value is disabled.
+     * 
+     * @return default is <code>false</code>
      */
     boolean disabled() default false;
 

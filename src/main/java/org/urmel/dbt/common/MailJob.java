@@ -45,7 +45,7 @@ public class MailJob extends MCRJobAction {
     }
 
     /**
-     * @param job
+     * @param job the mail job
      */
     public MailJob(MCRJob job) {
         super(job);

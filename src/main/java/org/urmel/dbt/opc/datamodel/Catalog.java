@@ -149,7 +149,7 @@ public class Catalog {
     /**
      * @param url the URL to set
      * @param db the db to set
-     * @throws MalformedURLException
+     * @throws MalformedURLException thrown on malformed url
      */
     public void setOPC(final String url, final String db) throws MalformedURLException {
         this.opc = new OPACURL(url, db);

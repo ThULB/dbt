@@ -148,7 +148,7 @@ public abstract class EventHandlerBase implements MCREventHandler {
         }
     }
 
-    /** This method does nothing. It is very useful for debugging events. */
+    // This method does nothing. It is very useful for debugging events.
     public void doNothing(MCREvent evt, Object obj) {
         LOGGER.info(getClass().getName() + " does nothing on " + evt.getEventType() + " " + evt.getObjectType() + " "
                 + obj.toString());

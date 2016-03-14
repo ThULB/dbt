@@ -50,7 +50,7 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
  * </p>
  * <p>
  * Use the following example to define a warning:
- * 
+ * </p>
  * <pre>
  * {@code
  * <period>
@@ -60,7 +60,7 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
  * </period>
  * }
  * </pre>
- * 
+ * <p>
  * The "at"-attribute should contain a number or a date with the given format. A
  * number is used in combination with the expiration date of a {@link Slot}. X
  * days, where x is the number, before expiration a warning can be generated.
@@ -121,9 +121,9 @@ public class Warning implements Serializable {
 
     /**
      * @return the at
-     * @throws CloneNotSupportedException 
-     * @throws ParseException 
-     * @throws IllegalArgumentException 
+     * @throws CloneNotSupportedException thrown to indicate clone is not supported 
+     * @throws ParseException thrown if date couldn't constructed
+     * @throws IllegalArgumentException thrown on missing argument
      */
     @XmlAttribute(name = "at")
     public String getAt() throws IllegalArgumentException, ParseException, CloneNotSupportedException {
@@ -169,11 +169,11 @@ public class Warning implements Serializable {
 
     /**
      * Creates the warning date according to the format of this objects
-     * {@link #atShort} and the different dates of the period this warning belongs to.
+     * {@link #at} and the different dates of the period this warning belongs to.
      * 
-     * @return Date
-     * @throws ParseException
-     * @throws CloneNotSupportedException 
+     * @return Date the warning date
+     * @throws ParseException thrown if date couldn't parsed
+     * @throws CloneNotSupportedException thrown to indicate clone is not supported
      */
     public Date getWarningDate() throws IllegalArgumentException, ParseException, CloneNotSupportedException {
         Date result = null;

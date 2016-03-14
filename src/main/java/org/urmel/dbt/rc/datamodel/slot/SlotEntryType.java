@@ -76,7 +76,7 @@ public class SlotEntryType implements Serializable {
 
     /**
      * @return the entry class
-     * @throws ClassNotFoundException 
+     * @throws ClassNotFoundException thrown if class was not found
      */
     public Class<?> getEntryClass() throws ClassNotFoundException {
         return this.getClass().getClassLoader().loadClass(getCls());

@@ -70,7 +70,7 @@ public final class FileEntryManager {
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
      * @return <code>true</code> if exists or <code>false</code>
-     * @throws MCRPersistenceException
+     * @throws MCRPersistenceException thrown if {@link FileEntry} not found
      */
     public static boolean exists(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         final int id = slot.getMCRObjectID().getNumberAsInteger();
@@ -104,7 +104,7 @@ public final class FileEntryManager {
      * 
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
-     * @throws MCRPersistenceException
+     * @throws MCRPersistenceException thrown if {@link FileEntry} couldn't stored
      */
     public static void create(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         final int id = slot.getMCRObjectID().getNumberAsInteger();
@@ -136,7 +136,7 @@ public final class FileEntryManager {
      * 
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
-     * @throws MCRPersistenceException
+     * @throws MCRPersistenceException thrown if {@link FileEntry} coudln't stored
      */
     public static void update(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         if (!exists(slot, slotEntry)) {
@@ -173,7 +173,7 @@ public final class FileEntryManager {
      * 
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
-     * @throws MCRPersistenceException
+     * @throws MCRPersistenceException thrown if {@link FileEntry} couldn't deleted
      */
     public static void delete(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         if (!exists(slot, slotEntry)) {

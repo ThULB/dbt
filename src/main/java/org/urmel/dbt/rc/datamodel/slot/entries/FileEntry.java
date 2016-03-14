@@ -99,8 +99,8 @@ public class FileEntry implements Serializable {
      * @param isCopyrighted <code>true</code> if material is copyrighted
      * @param is the file {@link InputStream}
      * @return the {@link FileEntry}
-     * @throws FileEntryProcessingException
-     * @throws IOException
+     * @throws FileEntryProcessingException thrown if file entry couldn't processed
+     * @throws IOException thrown if file not found or other
      */
     public static FileEntry createFileEntry(final String entryId, final String fileName, final String comment,
             boolean isCopyrighted, final InputStream is) throws FileEntryProcessingException, IOException {
@@ -368,7 +368,7 @@ public class FileEntry implements Serializable {
 
     /**
      * @param is the InputStream
-     * @throws IOException 
+     * @throws IOException thrown if couldn't write to inputstream.
      */
     public void setContent(final InputStream is) throws IOException {
         setContent(new MCRStreamContent(is).asByteArray());

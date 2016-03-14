@@ -47,16 +47,16 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
 
 /**
  * This resolver can be used to resolve a {@link Slot}, {@link SlotEntry}, {@link SlotEntryTypes} and also the set catalogId. 
- * <br />
- * <br />
+ * <br>
+ * <br>
  * Syntax:
  * <ul> 
- * <li><code>slot:slotId={slotId}[&rev=revision]</code> to resolve an {@link Slot}</li>
- * <li><code>slot:slotId={slotId}&entryId={entryId}[&rev=revision]</code> to resolve an {@link SlotEntry}</li>
- * <li><code>slot:slotId={slotId}&catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
- * <li><code>slot:slotId={slotId}&mail[&parent=true|false]</code> to get the mail address for slot (from RCLOC classification)</li>
- * <li><code>slot:slotId={slotId}&objectId</code> to get the {@link MCRObjectID} for slot</li>
- * <li><code>slot:slotId={slotId}&isActive</code> to get information about a slot is active</li>
+ * <li><code>slot:slotId={slotId}[&amp;rev=revision]</code> to resolve an {@link Slot}</li>
+ * <li><code>slot:slotId={slotId}&amp;entryId={entryId}[&amp;rev=revision]</code> to resolve an {@link SlotEntry}</li>
+ * <li><code>slot:slotId={slotId}&amp;catalogId</code> to get the catalogId for slot (from RCLOC classification)</li>
+ * <li><code>slot:slotId={slotId}&amp;mail[&amp;parent=true|false]</code> to get the mail address for slot (from RCLOC classification)</li>
+ * <li><code>slot:slotId={slotId}&amp;objectId</code> to get the {@link MCRObjectID} for slot</li>
+ * <li><code>slot:slotId={slotId}&amp;isActive</code> to get information about a slot is active</li>
  * <li><code>slot:entryTypes</code> to resolve {@link SlotEntryTypes}</li>
  * </ul>
  * 

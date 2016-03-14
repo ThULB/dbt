@@ -89,7 +89,7 @@ public class OPCConnector {
      * 
      * @param url the URL
      * @param db the database
-     * @throws Exception
+     * @throws Exception thrown on malformed url
      */
     public OPCConnector(final URL url, final String db) throws Exception {
         this.url = url;
@@ -101,7 +101,7 @@ public class OPCConnector {
      * 
      * @param url the URL
      * @param db the database
-     * @throws Exception
+     * @throws Exception thrown on malformed url
      */
     public OPCConnector(final String url, final String db) throws Exception {
         try {
@@ -118,7 +118,7 @@ public class OPCConnector {
      * Creates a new OPC connection with default values.
      * 
      * @see #OPCConnector(String, String)
-     * @throws Exception
+     * @throws Exception thrown on malformed url
      */
     public OPCConnector() throws Exception {
         try {
@@ -153,7 +153,7 @@ public class OPCConnector {
      * Set the URL.
      * 
      * @param url the URL
-     * @throws MalformedURLException 
+     * @throws MalformedURLException thrown on malformed url 
      */
     public void setURL(final String url) throws MalformedURLException {
         this.url = new URL(url);
@@ -236,7 +236,7 @@ public class OPCConnector {
      * 
      * @return the list of ikts
      * @see IKTList#IKTList()
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public IKTList getIKTList() throws Exception {
         try {
@@ -291,7 +291,7 @@ public class OPCConnector {
      * @param ikt the ikt key
      * @return the result
      * @see Result#Result(OPCConnector)
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public Result search(final String trm, final String ikt) throws Exception {
         try {
@@ -331,7 +331,7 @@ public class OPCConnector {
      * @return the result
      * @see OPCConnector#search(String, String)
      * @see Result#Result(OPCConnector)
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public Result search(final String trm) throws Exception {
         return search(trm, "1016");
@@ -343,7 +343,7 @@ public class OPCConnector {
      * @param PPN the PPN
      * @return the result
      * @see Result#Result(OPCConnector)
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public Result family(final String PPN) throws Exception {
         try {
@@ -469,7 +469,7 @@ public class OPCConnector {
      * 
      * @param PPN the PPN
      * @return a set of PICA+ fields
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public List<PPField> getPPFields(final String PPN) throws Exception {
         try {
@@ -522,7 +522,7 @@ public class OPCConnector {
      * 
      * @param PPN the PPN
      * @return a new {@link Record#Record()}
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public Record getRecord(final String PPN) throws Exception {
         try {
@@ -540,7 +540,7 @@ public class OPCConnector {
      * 
      * @param barcode the barcode
      * @return the PPN
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public String getPPNFromBarcode(final String barcode) throws Exception {
         final Result result = search("bar " + barcode);
@@ -583,7 +583,7 @@ public class OPCConnector {
      * @param shelfMark the shelf mark
      * @param withLoc true to search with location within sehlfMark
      * @return the PPN
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public String getPPNFromShelfMark(final String shelfMark, final boolean withLoc) throws Exception {
         String shelf = shelfMark;
@@ -621,7 +621,7 @@ public class OPCConnector {
      * @param withLoc true to search with location within sehlfMark
      * @param title the title
      * @return the PPN
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public String getPPNFromShelfMarkAndTitle(final String shelfMark, final boolean withLoc, final String title)
             throws Exception {
@@ -658,7 +658,7 @@ public class OPCConnector {
      * @param withLoc true to search with location within sehlfMark
      * @param title the title
      * @return the PPN
-     * @throws Exception
+     * @throws Exception throws parent exceptions
      */
     public String getPPNFromShelfMarkOrTitle(final String shelfMark, final boolean withLoc, final String title)
             throws Exception {

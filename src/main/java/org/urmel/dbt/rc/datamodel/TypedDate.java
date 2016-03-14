@@ -153,7 +153,7 @@ public class TypedDate implements Serializable {
 
     /**
      * @param date the formated date
-     * @throws ParseException
+     * @throws ParseException should never occurs
      */
     public void setFormatedDate(final String date) throws ParseException {
         if (date == null) {
