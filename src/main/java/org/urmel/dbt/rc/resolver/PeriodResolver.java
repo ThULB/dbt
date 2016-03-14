@@ -47,9 +47,9 @@ import org.urmel.dbt.rc.utils.RCCalendarTransformer;
  * <br>
  * Syntax:
  * <ul>
- * <li><code>period:areacode=areaCode[&date={now|31.12.2011}]</code> get (set able) period for given date</li>
- * <li><code>period:areacode=areaCode[&date={now|31.12.2011}][&fq=true]</code> get (fq = full qualified) period for given date</li>
- * <li><code>period:areacode=areaCode[&date={now|31.12.2011}][&list=true][&onlySetable=true][&numnext=1]</code> get periods (+ next) for given date</li>
+ * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}]</code> get (set able) period for given date</li>
+ * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;fq=true]</code> get (fq = full qualified) period for given date</li>
+ * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;list=true][&amp;onlySetable=true][&amp;numnext=1]</code> get periods (+ next) for given date</li>
  * </ul>
  * 
  * @author Ren\u00E9 Adler (eagle)

@@ -42,9 +42,9 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
 /**
  * <p>
  * This object represents a warning within or outside a period to be send as
- * mail to the lecturer and/or the library staff.<br />
+ * mail to the lecturer and/or the library staff.<br>
  * It held informations about the warning Date btw. an Integer value to be
- * subtract, as day(s), from the period end date of the Reserve Collection.<br />
+ * subtract, as day(s), from the period end date of the Reserve Collection.<br>
  * Also an XSL template can be defined witch is used to build an mail from given
  * XML Element.
  * </p>
