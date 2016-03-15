@@ -57,6 +57,8 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
+    private static final String QUERY_FILTER = "[-+]";
+
     /* (non-Javadoc)
      * @see org.mycore.common.events.MCREventHandlerBase#handleObjectCreated(org.mycore.common.events.MCREvent, org.mycore.datamodel.metadata.MCRObject)
      */
@@ -161,13 +163,13 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         final Element subTitle = buildXPath("mods:subTitle").evaluateFirst(titleInfo);
 
         if (title != null && title.getTextNormalize().length() > 3) {
-            sb.append("tit \"" + title.getTextNormalize() + "\"");
+            sb.append("tit " + title.getTextNormalize().replaceAll(QUERY_FILTER, ""));
         }
         if (subTitle != null) {
             if (sb.length() > 0) {
                 sb.append(" or ");
             }
-            sb.append("tit \"" + subTitle.getTextNormalize() + "\"");
+            sb.append("tit " + subTitle.getTextNormalize().replaceAll(QUERY_FILTER, ""));
         }
 
         return sb.toString();
