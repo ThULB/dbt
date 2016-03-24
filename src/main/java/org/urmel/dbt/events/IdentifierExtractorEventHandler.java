@@ -72,6 +72,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         try {
             if (mods.getElements("mods:identifier[@type='ppn']").isEmpty()) {
                 final OPCConnector opc = new OPCConnector();
+                opc.setMaxHits(50);
+                opc.setMaxRead(25);
+                
                 final List<Element> titleInfos = mods.getElements("mods:titleInfo");
                 for (final Element titleInfo : titleInfos) {
                     final String query = buildQuery(titleInfo);
