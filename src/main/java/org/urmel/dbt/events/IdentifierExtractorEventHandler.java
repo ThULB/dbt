@@ -59,8 +59,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
-    private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance().getSingleInstanceOf(
-            "MIR.IdentifierExtractor.Prefix.Class", IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
+    private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance()
+            .getSingleInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
+                    IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
 
     private static final String URI_SYNTAX = "http://uri.gbv.de/document/{0}:ppn:{1}";
 
@@ -77,9 +78,6 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
         try {
-            // TODO
-            // http://reposis-test.gbv.de/noa/receive/mir_mods_00000263?XSL.Style=xml
-
             final String prefix = PREFIX_SINGELTON.getPrefix(mods);
 
             if (mods.getElements("mods:identifier[@type='uri']").stream()
