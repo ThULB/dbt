@@ -84,7 +84,6 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                     .filter(e -> e.getText().contains(MessageFormat.format(URI_SYNTAX, prefix, ""))).count() == 0) {
                 final OPCConnector opc = new OPCConnector();
                 opc.setMaxHits(50);
-                opc.setMaxRead(25);
 
                 final List<Element> titleInfos = mods.getElements("mods:titleInfo");
                 for (final Element titleInfo : titleInfos) {
