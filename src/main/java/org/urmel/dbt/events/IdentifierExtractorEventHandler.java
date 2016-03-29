@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.events;
 
+import java.text.MessageFormat;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,7 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -57,6 +59,11 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
+    private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance().getSingleInstanceOf(
+            "MIR.IdentifierExtractor.Prefix.Class", IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
+
+    private static final String URI_SYNTAX = "http://uri.gbv.de/document/{0}:ppn:{1}";
+
     private static final String QUERY_FILTER = "[-+]";
 
     /* (non-Javadoc)
@@ -70,11 +77,17 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
         try {
-            if (mods.getElements("mods:identifier[@type='ppn']").isEmpty()) {
+            // TODO
+            // http://reposis-test.gbv.de/noa/receive/mir_mods_00000263?XSL.Style=xml
+
+            final String prefix = PREFIX_SINGELTON.getPrefix(mods);
+
+            if (mods.getElements("mods:identifier[@type='uri']").stream()
+                    .filter(e -> e.getText().contains(MessageFormat.format(URI_SYNTAX, prefix, ""))).count() == 0) {
                 final OPCConnector opc = new OPCConnector();
                 opc.setMaxHits(50);
                 opc.setMaxRead(25);
-                
+
                 final List<Element> titleInfos = mods.getElements("mods:titleInfo");
                 for (final Element titleInfo : titleInfos) {
                     final String query = buildQuery(titleInfo);
@@ -95,8 +108,8 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                     LOGGER.info("Found PPN " + record.getPPN());
 
                                     final Element mId = mods.addElement("identifier");
-                                    mId.setAttribute("type", "ppn");
-                                    mId.addContent(record.getPPN());
+                                    mId.setAttribute("type", "uri");
+                                    mId.addContent(MessageFormat.format(URI_SYNTAX, prefix, record.getPPN()));
 
                                     final List<Element> persons = mods.getElements("mods:name[@type='personal']");
                                     for (final Element person : persons) {
