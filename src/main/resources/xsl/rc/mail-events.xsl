@@ -80,7 +80,8 @@
 <!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail&amp;parent=true'))/mail" /> -->
       <xsl:for-each select="lecturers/lecturer">
         <to>
-          <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
+          rene.adler@tu-ilmenau.de
+<!--           <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" /> -->
         </to>
       </xsl:for-each>
       <subject>
