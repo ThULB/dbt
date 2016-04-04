@@ -13,7 +13,10 @@
   <!-- ************************************************************ -->
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
   <xsl:include href="resource:xsl/layout/dbt-navigation.xsl" />
-
+  
+  <xsl:param name="MIR.migration.id" />
+  <xsl:param name="MIR.migration.url" />
+  
   <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" encoding="UTF-8" />
   <xsl:strip-space elements="*" />
 
@@ -56,6 +59,8 @@
   <xsl:template name="HTML.Body">
     <body>
       <header>
+      <div id="migrationId" data-migration-id="{$MIR.migration.id}"></div>
+      <div id="migrationUrl" data-migration-url="{$MIR.migration.url}"></div>
         <xsl:call-template name="layout.head" />
       </header>
       <xsl:call-template name="layout.content" />
@@ -117,6 +122,7 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/migrationAlert.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.js"></script>
