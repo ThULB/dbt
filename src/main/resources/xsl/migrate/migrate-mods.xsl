@@ -7,6 +7,18 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
+  <xsl:param name="MIR.projectid.default" />
+
+  <xsl:variable name="ProjectId">
+    <xsl:choose>
+      <xsl:when test="string-length($MIR.projectid.default) &gt; 0">
+        <xsl:value-of select="$MIR.projectid.default" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="'dbt'" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:variable name="GVK_URL" select="'http://uri.gbv.de/document/gvk:ppn:'" />
 
   <xsl:template match="mods:abstract[not(@altRepGroup)]">
@@ -80,7 +92,7 @@
         <xsl:variable name="file" select="mcrxml:trim(substring-before(substring-after(substring-after(text(), '/Derivate-'), $derId), '&quot;'))" />
         <xsl:choose>
           <xsl:when test="translate(substring($file, string-length($file) - 3),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = '.txt'">
-            <xsl:value-of select="migutils:getContentOfFile(concat('mir_derivate_', format-number($derId, '00000000'), $file))" />
+            <xsl:value-of select="migutils:getContentOfFile(concat($ProjectId, '_derivate_', format-number($derId, '00000000'), $file))" />
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="text()" />
@@ -188,7 +200,7 @@
         <xsl:choose>
           <xsl:when test="mods:identifier[@type='local']">
             <xsl:attribute name="xlink:href">
-            <xsl:value-of select="concat('mir_mods_', format-number(number(mods:identifier[@type='local']/text()), '00000000'))" />
+            <xsl:value-of select="concat($ProjectId, '_mods_', format-number(number(mods:identifier[@type='local']/text()), '00000000'))" />
           </xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
