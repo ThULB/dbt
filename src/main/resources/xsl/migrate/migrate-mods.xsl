@@ -7,6 +7,8 @@
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
+  <xsl:variable name="GVK_URL" select="'http://uri.gbv.de/document/gvk:ppn:'" />
+
   <xsl:template match="mods:abstract[not(@altRepGroup)]">
     <xsl:variable name="text">
       <xsl:apply-templates select="." mode="processAbstract" />
@@ -193,6 +195,17 @@
             <xsl:apply-templates />
           </xsl:otherwise>
         </xsl:choose>
+      </xsl:copy>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="mods:identifier[@type='ppn']">
+    <xsl:if test="count(..//mods:identifier[@type='uri' and contains(text(), concat($GVK_URL, text()))]) = 0">
+      <xsl:copy>
+        <xsl:attribute name="type">
+        <xsl:text>uri</xsl:text>
+      </xsl:attribute>
+        <xsl:value-of select="concat($GVK_URL, text())" />
       </xsl:copy>
     </xsl:if>
   </xsl:template>
