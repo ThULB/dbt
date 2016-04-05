@@ -212,12 +212,14 @@
   </xsl:template>
 
   <xsl:template match="mods:identifier[@type='ppn']">
-    <xsl:if test="count(..//mods:identifier[@type='uri' and contains(text(), concat($GVK_URL, text()))]) = 0">
+    <xsl:variable name="ppn" select="text()" />
+
+    <xsl:if test="count(..//mods:identifier[@type='uri' and contains(text(), concat($GVK_URL, $ppn))]) = 0">
       <xsl:copy>
         <xsl:attribute name="type">
         <xsl:text>uri</xsl:text>
       </xsl:attribute>
-        <xsl:value-of select="concat($GVK_URL, text())" />
+        <xsl:value-of select="concat($GVK_URL, $ppn)" />
       </xsl:copy>
     </xsl:if>
   </xsl:template>
