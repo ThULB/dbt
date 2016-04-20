@@ -435,6 +435,8 @@
 <!--           <xsl:call-template name="action.buttons" /> -->
 
           <xsl:call-template name="print.writeProtectionMessage" />
+          <xsl:call-template name="print.statusMessage" />
+          
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
               <xsl:copy-of select="*[not(name()='head')]" />
