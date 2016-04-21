@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <faq>
+   <category>
+     <categoryTitle href="allgemein">
+       Allgemeines zur DBT
+     </categoryTitle>
+     <entry href="veroeffentlichungWarum">
+       <question>
+         Warum ist eine Veröffentlichung in der DBT sinnvoll?
+       </question>
+       <answer>
+         <p>Eine Publikation in der DBT bietet u.a. folgende Vorteile:</p>
+         <ul>
+           <li>schnelle und kostenfreie Veröffentlichung</li>
+           <li>weltweite Auffindbarkeit und Verfügbarkeit der Volltexte über das Internet</li>
+           <li>standardisierte Schnittstellen für eine weltweite Recherche</li>
+           <li>dauerhaften Zugriff durch langfristige Archivierung</li>
+           <li>Zitierfähigkeit durch konstante Adresse (Persistent Identifier)</li>
+           <li>Nachweis der Dokumente in Bibliothekskatalogen, Suchmaschinen und Fachportalen</li>
+           <li>das Recht zu einer weiteren Verwendung oder anderweitigen Veröffentlichung des Werks verbleibt bei den Autorinnen und Autoren</li>
+         </ul>
+       </answer>
+     </entry>
+     <entry href="veroeffentlichungWer">
+       <question>
+         Wer darf in der DBT veröffentlichen?
+       </question>
+       <answer>
+         <p>Alle Angehörigen der FSU Jena, der TU Ilmenau und der Universität Erfurt sowie Angehörige der übrigen Thüringer Universitäten und Fachhochschulen können wissenschaftliche Dokumente in der DBT publizieren. In Einzelfällen können auch Landesnutzer (über die ThULB Jena) Dokumente in der DBT archivieren.</p>
+       </answer>
+     </entry>
+     <entry href="auffindbar">
+       <question>
+         Sind die Texte im Internet auffindbar?
+       </question>
+       <answer>
+         <p>Sämtliche in die DBT integrierten Dokumente sind über regionale und überregionale Bibliothekskataloge, Suchmaschinen (z.B. Google, Base) und Nachweissysteme recherchierbar.</p>
+       </answer>
+     </entry>
+     <entry href="nachtraeglich">
+       <question>
+         Können Dokumente in der DBT nachträglich geändert oder gelöscht werden?
+       </question>
+       <answer>
+         <p>Für Dokumente wird eine Mindestarchivierungsfrist von zehn Jahren garantiert (davon mindestens fünf Jahre in demjenigen Formt, in dem das Dokument eingereicht wurde). Gegenwärtig besteht nicht die Absicht, Dokumente nach Ablauf dieser Fristen zu löschen.</p>
+       </answer>
+     </entry>
+     <entry href="spaeter">
+       <question>
+         Ist es möglich, ein Dokument in die DBT hochzuladen und es erst zu einem späteren Zeitpunkt für die Öffentlichkeit freischalten zu lassen?
+       </question>
+       <answer>
+         <p>Wenn Sie ein Dokument (z.B. aufgrund einer Patentanmeldung oder aus anderen rechtlichen Gründen) erst zu einem späteren Zeitpunkt in der DBT publizieren möchten oder dürfen, es jedoch schon dort hochladen wollen, können Sie dies tun. Wir schalten dann zunächst nur die Metadaten frei. Die Freigabe des Volltextes erfolgt erst nach Ablauf der von Ihnen angegebenen Sperrfrist.</p>
+       </answer>
+     </entry>
+   </category>
+   <category>
+     <categoryTitle href="hochschulschriften">
+       Hochschulschriften
+     </categoryTitle>
+     <entry href="hochschulschriftenRegelungen">
+       <question>
+         Regelungen zur Erfassung von elektronischen Dissertationen/Habilitationen und studentischen Abschlussarbeiten
+       </question>
+       <answer>
+         <p>Die Regelungen zur Erfassung elektronischer Dissertationen und Habilitationen unterliegen aufgrund der verschiedenen Promotionsordnungen der einzelnen Hochschulen unterschiedlichen Bestimmungen. Die Aufnahme dieser Dokumenttypen in die DBT obliegt der Kontrolle der jeweiligen Bibliothek. Auch die Erfassung elektronischer Abschlussarbeiten von Studierenden ist über die Prüfungsordnungen der einzelnen Hochschulen geregelt.</p>
+         <ul>
+           <li><b>Friedrich-Schiller-Universität Jena</b>
+             <ul>
+               <li><a href="http://www.thulb.uni-jena.de/EPubOA.html#DissHabil">Dissertationen und Habilitationsschriften</a></li>
+               <li><a href="http://www.thulb.uni-jena.de/EPubOA.html#Bachelorarbeiten">Bachelor- und Masterarbeiten, sonstige Abschlussarbeiten</a></li>
+             </ul>
+           </li>
+           <li><b>Universität Erfurt</b>
+             <ul>
+               <li><a href="http://www.uni-erfurt.de/target/abschlussarbeiten/informationen/">Informationen</a></li>
+               <li><a href="http://www.db-thueringen.de/servlets/WorkflowServlet?step=checkWorkflowGroups">Registrieren und Qualifikationsarbeit online abgeben</a></li>
+             </ul>
+           </li>
+           <li><b>TU Ilmenau</b>
+             <ul>
+               <li><a href="http://www.tu-ilmenau.de/ub/service/dissertationsabgabe/">Dissertationen</a></li>
+               <li><a href="http://www.tu-ilmenau.de/ilmedia/elektr-publizieren/abschlussarbeiten/">Master-, Bachelor- und Diplomarbeiten</a></li>
+             </ul>
+           </li>
+         </ul>
+       </answer>
+     </entry>
+   </category>
+   <category>
+     <categoryTitle href="openAccess">
+       Open Access
+     </categoryTitle>
+     <entry href="openAccessWas">
+       <question>
+         Was bedeutet Open Access?
+       </question>
+       <answer>
+         <p>Gemäß der <a href="http://www.budapestopenaccessinitiative.org/">Budapester Open Access Initiative</a> bedeutet Open Access, „dass [wissenschaftliche] Literatur kostenfrei und öffentlich im Internet zugänglich sein sollte, so dass Interessierte die Volltexte lesen, herunterladen, kopieren, verteilen, drucken, in ihnen suchen, auf sie verweisen und sie auch sonst auf jede denkbare legale Weise benutzen können, ohne finanzielle, gesetzliche oder technische Barrieren jenseits von denen, die mit dem Internet-Zugang selbst verbunden sind. In allen Fragen des Wiederabdrucks und der Verteilung und in allen Fragen des Copyright überhaupt sollte die einzige Einschränkung darin bestehen, den jeweiligen Autorinnen und Autoren Kontrolle über ihre Arbeit zu belassen und deren Recht zu sichern, dass ihre Arbeit angemessen anerkannt und zitiert wird."</p>
+         <p>Ausführliche Informationen zu Open Access finden Sie auf der Informationsplattform <a href="http://open-access.net/de/startseite/">open-access.net</a>.</p>
+       </answer>
+     </entry>
+     <entry href="openAccessMoeglichkeiten">
+       <question>
+         Welche Möglichkeiten des Open-Access-Publizierens gibt es?
+       </question>
+       <answer>
+         <h4>Goldener Weg:</h4>
+         <p>Erstveröffentlichung wissenschaftlicher Arbeiten in Open-Access-Zeitschriften oder anderen Open-Access-Medien. Die eingereichten Manuskripte durchlaufen in der Regel einen Qualitätssicherungsprozess (Peer-Review).</p>
+         <h4>Grüner Weg:</h4>
+         <p>Zeitgleiche oder nachträgliche Archivierung bereits publizierter Arbeiten oder Preprints auf einem Repositorium, wie z.B. der DBT. Wie der Zugriff für Nutzerinnen und Nutzer ist auch die Bereitstellung der wissenschaftlichen Arbeiten in einem Repositorium für Autorinnen und Autoren in der Regel kostenfrei.</p>
+         <p>Viele Verlage gestatten eine parallele oder verzögerte Open-Access-Veröffentlichung zumindest der akzeptierten Manuskriptversion. Eine Übersicht über die Konditionen zahlreicher wissenschaftlicher Verlage bietet die SHERPA/RoMEO-Datenbank. Rechtsverbindlich sind stets die Bestimmungen des jeweiligen Verlags.</p>
+       </answer>
+     </entry>
+     <entry href="zitierbar">
+       <question>
+         Sind Open-Acccess-Publikationen zitierbar?
+       </question>
+       <answer>
+         <p>Elektronische Veröffentlichungen sind konventionellen Veröffentlichungen prinzipiell gleichwertig und damit auch zitierfähig. Die dauerhafte und stabile Adressierung wird in der DBT durch die Vergabe eines URN (Uniform Resource Name) gewährleistet. Ein URN ist ein so genannter Persistent Identifier, d.h. ein eindeutiger Bezeichner für Objekte zur dauerhaften Identifizierung und zuverlässigen Zitierfähigkeit von Online-Ressourcen.</p>
+       </answer>
+     </entry>
+   </category>
+   <category>
+     <categoryTitle href="rechtlich">
+       Rechtliche Aspekte
+     </categoryTitle>
+     <entry href="urheberrecht">
+       <question>
+         Welche urheberrechtlichen Bestimmungen müssen beachtet werden?
+       </question>
+       <answer>
+         <p>Für im Internet veröffentlichte Arbeiten gelten dieselben gesetzlichen Bestimmungen wie auch für "konventionelle" Veröffentlichungen. Fremde Inhalte innerhalb einer Arbeit dürfen nur mit Zustimmung des jeweiligen Urhebers bzw. Verlages oder im Rahmen eines Zitats verwendet werden. Im Veröffentlichungsvertrag bestätigen Sie gegenüber der Bibliothek, dass Sie keine Rechte Dritter verletzen. Dazu zählen neben den Urheberrechten ggf. auch weitere Rechte, wie z.B. Persönlichkeits-, Datenschutz-, Marken- und Patentrechte.</p>
+       </answer>
+     </entry>
+     <entry href="nutzungsrechte">
+       <question>
+         Welche Nutzungsrechte können anderen Personen eingeräumt werden?
+       </question>
+       <answer>
+         <p>Als Urheberin oder Urheber können Sie festlegen, wie Ihre digitale Publikation von anderen Personen nachgenutzt werden darf. Eine Möglichkeit dazu bieten die <a href="http://de.creativecommons.org/">Creative-Commons-Lizenzen</a>. Dabei handelt es sich um standardisierte Lizenzverträge.</p>
+         <p>Folgende Creative-Commons-Lizenzen sind wählbar:</p>
+         <ul>
+           <li><a href="http://creativecommons.org/licenses/by/3.0/de/">Namensnennung</a> (CC-BY)</li>
+           <li><a href="http://creativecommons.org/licenses/by-nd/3.0/de/">Namensnennung – Keine Bearbeitung</a> (CC-BY-ND)</li>
+           <li><a href="http://creativecommons.org/licenses/by-nc/3.0/de/">Namensnennung – Nicht Kommerziell</a> (CC-BY-NC)</li>
+           <li><a href="http://creativecommons.org/licenses/by-nc-nd/3.0/de/">Namensnennung – Nicht Kommerziell – Keine Bearbeitung</a> (CC-BY-NC-ND)</li>
+           <li><a href="http://creativecommons.org/licenses/by-nc-sa/3.0/de/">Namensnennung – Nicht Kommerziell – Weitergabe unter gleichen Bedingungen</a> (CC-BY-NC-SA)</li>
+           <li><a href="http://creativecommons.org/licenses/by-sa/3.0/de/">Namensnennung – Weitergabe unter gleichen Bedingungen</a> (CC-BY-SA)</li>
+         </ul>
+         <p><b>Im Sinne des Open Access empfehlen wir ausdrücklich CC-BY.</b></p>
+         <p>Des Weiteren stehen Ihnen bei einer Veröffentlichung in der DBT folgende Optionen zur Auswahl:</p>
+         <ul>
+           <li>Alle Rechte vorbehalten</li>
+           <li><a href="https://de.wikipedia.org/wiki/Open_Data_Commons">ODC-By – Attribution License</a></li>
+           <li><a href="https://de.wikipedia.org/wiki/Open_Data_Commons">ODC ODbL – Open Database License</a></li>
+           <li><a href="https://www.nationallizenzen.de/open-access">Open Access im Zuge einer Allianz- oder Nationallizenz</a></li>
+           <li><a href="http://opendatacommons.org/licenses/pddl/1-0/">PDDL – Public Domain Dedication and License</a></li>
+         </ul>
+       </answer>
+     </entry>
+     <entry href="zweitveroeffentlichung">
+       <question>
+         Was ist bei einer Zweitveröffentlichung einer bereits in einem Verlag erschienenen Publikation zu beachten?
+       </question>
+       <answer>
+         <p>Sie sollten vorab prüfen, ob der Verlag, in dem Sie die Erstveröffentlichung vorgenommen haben, eine Zweitveröffentlichung auf einem Repositorium (zum Beispiel in der DBT) erlaubt und unter welchen Konditionen dies ggf. möglich ist. Häufig muss eine so genannte Embargofrist eingehalten werden. Nähere Auskünfte hierzu finden Sie in dem von Ihnen unterzeichneten Autorenvertrag oder auf den Webseiten des jeweiligen Verlages.</p>
+         <p>Eine Übersicht zu den Konditionen vieler Verlage bzgl. Zweitveröffentlichungen gibt die <a href="http://www.sherpa.ac.uk/romeo/">SHERPA/RoMEO-Webseite</a>. Ferner bietet die Allianz der deutschen Wissenschaftsorganisa-tionen einen <a href="http://www.iuwis.de/dossier/faq-zu-open-access-und-zweitveröffentlichungsrecht">FAQ-Bereich</a> zu Open Access und Zweitveröffentlichungsrecht an.</p>
+       </answer>
+     </entry>
+     <entry href="zweitveroeffentlichungVerlag">
+       <question>
+         Dürfen in der DBT publizierte Texte in einem Verlag zweitveröffentlicht werden?
+       </question>
+       <answer>
+         <p>Wenn Sie Ihr Dokument zuerst in der DBT veröffentlichen, bleiben Ihre Urheberrechte gewahrt. Einer weiteren Publikation Ihrer Arbeit in Fachzeitschriften, als Buch oder in anderen Repositorien steht grundsätzlich nichts entgegen.</p>
+       </answer>
+     </entry>
+   </category>
+ </faq>
