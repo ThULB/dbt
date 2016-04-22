@@ -2,6 +2,11 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:template match="/faq">
     <site>
+      <script>
+        var shiftWindow = function() { scrollBy(0, -110) };
+        if (location.hash) shiftWindow();
+        window.addEventListener("hashchange", shiftWindow);
+      </script>
       <h1>Digitale Bibliothek Thüringen (DBT) – FAQ</h1>
       <div id="faqCategHead">
         <xsl:for-each select="category">
