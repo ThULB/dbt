@@ -76,7 +76,7 @@ pre.no-style {
 }
 
 // anchor scroll fix
-*[id] , a[name] {
+*[id]:not([href]) {
   & , &:hover , &:active , &:focus {
     outline: 0;
   }
