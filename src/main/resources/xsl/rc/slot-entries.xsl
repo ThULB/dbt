@@ -202,7 +202,7 @@
   
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
-    <a name="{../@id}" />
+    <a id="{../@id}" />
     <h2>
       <xsl:value-of select="." />
     </h2>

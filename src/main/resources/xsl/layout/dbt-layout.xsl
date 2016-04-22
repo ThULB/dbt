@@ -433,7 +433,7 @@
 
   <xsl:template name="layout.content">
     <div id="containerBackground">
-      <a name="All" />
+      <a id="All" />
       <div class="container">
         <div id="main">
           <xsl:call-template name="navigation.breadcrumbPath">
