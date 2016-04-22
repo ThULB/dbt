@@ -13,10 +13,10 @@
   <!-- ************************************************************ -->
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
   <xsl:include href="resource:xsl/layout/dbt-navigation.xsl" />
-  
+
   <xsl:param name="MIR.migration.id" />
   <xsl:param name="MIR.migration.url" />
-  
+
   <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" encoding="UTF-8" />
   <xsl:strip-space elements="*" />
 
@@ -49,6 +49,7 @@
       <xsl:call-template name="layout.headMicrosoft" />
       <xsl:call-template name="layout.htmlContentType" />
       <xsl:call-template name="layout.noCaching" />
+      <link rel="icon" href="{$WebApplicationBaseURL}favicon.ico" />
       <xsl:call-template name="layout.cssLinks" />
       <xsl:call-template name="layout.scripts" />
 
@@ -59,8 +60,8 @@
   <xsl:template name="HTML.Body">
     <body>
       <header>
-      <div id="migrationId" data-migration-id="{$MIR.migration.id}"></div>
-      <div id="migrationUrl" data-migration-url="{$MIR.migration.url}"></div>
+        <div id="migrationId" data-migration-id="{$MIR.migration.id}"></div>
+        <div id="migrationUrl" data-migration-url="{$MIR.migration.url}"></div>
         <xsl:call-template name="layout.head" />
       </header>
       <xsl:call-template name="layout.content" />
@@ -130,9 +131,15 @@
       $( document ).ready(function() {
       $('.overtext').tooltip();
       $.confirm.options = {
-      title: "<xsl:value-of select="i18n:translate('mir.confirm.title')" />",
-      confirmButton: "<xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />",
-      cancelButton: "<xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />",
+      title: "
+      <xsl:value-of select="i18n:translate('mir.confirm.title')" />
+      ",
+      confirmButton: "
+      <xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />
+      ",
+      cancelButton: "
+      <xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />
+      ",
       post: false,
       confirmButtonClass: "btn-danger",
       cancelButtonClass: "btn-default",
@@ -185,7 +192,8 @@
     </nav>
     <noscript>
       <div class="mir-no-script alert alert-warning text-center" style="border-radius: 0;">
-        <xsl:value-of select="i18n:translate('mir.noScript.text')" />&#160;
+        <xsl:value-of select="i18n:translate('mir.noScript.text')" />
+        &#160;
         <a href="http://www.enable-javascript.com/de/" target="_blank">
           <xsl:value-of select="i18n:translate('mir.noScript.link')" />
         </a>
@@ -436,7 +444,7 @@
 
           <xsl:call-template name="print.writeProtectionMessage" />
           <xsl:call-template name="print.statusMessage" />
-          
+
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
               <xsl:copy-of select="*[not(name()='head')]" />
