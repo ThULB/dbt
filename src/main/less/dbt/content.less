@@ -56,20 +56,5 @@ body {
       .text-overflow ();
     }
   }
-
-  *[id]:not([href]) , a[name] {
-    & , &:hover , &:active , &:focus {
-      outline: 0;
-    }
-
-    &:before {
-      display: block;
-      content: " ";
-      position: relative;
-      margin-top: ((@dbt-navbar-height + @dbt-navbar-margin) * -1);
-      height: (@dbt-navbar-height + @dbt-navbar-margin);
-      visibility: hidden;
-    }
-  }
 }
 
