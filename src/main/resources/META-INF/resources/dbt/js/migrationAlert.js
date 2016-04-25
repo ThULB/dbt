@@ -14,7 +14,7 @@ $(document).ready(function() {
 	      				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	      				Dieses Dokument wurde migriert. Falls Sie Probleme mit der Anzeige des Dokumentes haben, können Sie das Dokument auf dem <a href="`
 	      				+ migrationUrl
-	      				+ migrationNumber
+	      				+ idNumber
 	      				+ `" class="alert-link">alten DBT Server</a> ansehen.
 	      			</div>
     			`);
