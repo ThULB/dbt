@@ -6,7 +6,7 @@
   xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
   xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://org.urmel.dbt.common.DBTVersion" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver dbtver mcrxsl i18n encoder"
+  exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver mirver dbtver mcrxsl i18n encoder"
 >
   <!-- ************************************************************ -->
   <!-- *                  additional stylesheets                  * -->
@@ -131,15 +131,9 @@
       $( document ).ready(function() {
       $('.overtext').tooltip();
       $.confirm.options = {
-      title: "
-      <xsl:value-of select="i18n:translate('mir.confirm.title')" />
-      ",
-      confirmButton: "
-      <xsl:value-of select="i18n:translate('mir.confirm.confirmButton')" />
-      ",
-      cancelButton: "
-      <xsl:value-of select="i18n:translate('mir.confirm.cancelButton')" />
-      ",
+      <xsl:value-of select="concat('title: &quot;', i18n:translate('mir.confirm.title'), '&quot;,')" />
+      <xsl:value-of select="concat('confirmButton: &quot;',i18n:translate('mir.confirm.confirmButton'), '&quot;,')" />
+      <xsl:value-of select="concat('cancelButton: &quot;',i18n:translate('mir.confirm.cancelButton'), '&quot;,')" />
       post: false,
       confirmButtonClass: "btn-danger",
       cancelButtonClass: "btn-default",
