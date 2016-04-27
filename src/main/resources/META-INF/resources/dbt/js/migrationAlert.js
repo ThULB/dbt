@@ -10,12 +10,12 @@ $(document).ready(function() {
 			var migrationNumber = parseInt(migrationId.replace(/\D/g, ""));
     		if (idNumber <= migrationNumber) {
     			$("body").append(`
-	      			<div class="alert alert-warning alert-dismissible text-center" role="alert" style="position: fixed; bottom: 0; left: 0; width: 100%; margin-bottom: 0; border-radius: 0;">
+	      			<div class="alert alert-warning alert-dismissible text-center" role="alert" style="position: fixed; bottom: 0; left: 0; width: 100%; margin-bottom: 0; border-radius: 0; z-index: 1000;">
 	      				<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	      				Dieses Dokument wurde migriert. Falls Sie Probleme mit der Anzeige des Dokumentes haben, können Sie das Dokument auf dem <a href="`
 	      				+ migrationUrl
 	      				+ idNumber
-	      				+ `" class="alert-link">alten DBT Server</a> ansehen.
+	      				+ `" class="alert-link" target="_blank">alten DBT Server</a> ansehen.
 	      			</div>
     			`);
     		}
