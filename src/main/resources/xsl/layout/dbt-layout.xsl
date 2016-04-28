@@ -162,9 +162,9 @@
   <xsl:template name="layout.page.title">
     <title>
       <xsl:if test="$PageTitle">
-        <xsl:value-of select="$PageTitle" />
+        <xsl:value-of select="concat($PageTitle,' – ')" />
       </xsl:if>
-      <xsl:text> - Digitale Bibliothek Thüringen</xsl:text>
+      <xsl:text>Digitale Bibliothek Thüringen</xsl:text>
     </title>
   </xsl:template>
 
