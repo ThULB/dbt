@@ -152,6 +152,8 @@
     <dynamicField name="ignored_*" type="ignored" />
 
     <!-- MCRDerivate related metadata -->
+    <field name="derivateURN" type="string" />
+    <field name="derivateDisplay" type="boolean" />
     <field name="urn" type="string" multiValued="true" />
     <field name="fileURN" type="string" />
     <field name="fileCategory" type="string" multiValued="true"/>
@@ -203,7 +205,7 @@
     <field name="mods.embargo" type="date" />
     <field name="mods.part" type="string" />
     <dynamicField name="mods.relatedItem*" type="string" multiValued="true" />
-
+    
     <!-- ******************************************** -->
     <!-- * DBT RC slot -->
     <!-- ******************************************** -->
@@ -216,7 +218,7 @@
     <field name="slot.validTo" type="string" indexed="true" multiValued="false" />
     <!-- used for sorting -->
     <field name="slot.lecturers" type="string" indexed="true" multiValued="false" />
-  
+
     <!-- ******************************************** -->
     <!-- * SEARCH -->
     <!-- ******************************************** -->
