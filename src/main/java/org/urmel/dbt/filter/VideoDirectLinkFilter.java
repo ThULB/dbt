@@ -23,10 +23,12 @@
 package org.urmel.dbt.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Optional;
@@ -95,8 +97,8 @@ public class VideoDirectLinkFilter implements Filter {
                 try {
                     final URI uri = token.toURI(MCRFrontendUtil.getBaseURL() + "servlets/MCRFileNodeServlet/",
                             hashParameter);
-                    LOGGER.info("Redirect to " + uri.toASCIIString());
-                    httpServletResponse.sendRedirect(uri.toASCIIString());
+                    LOGGER.info("Redirect to " + uri.toString());
+                    httpServletResponse.sendRedirect(uri.toString());
                     return;
                 } catch (URISyntaxException e) {
                     throw new ServletException(e);
@@ -118,11 +120,12 @@ public class VideoDirectLinkFilter implements Filter {
 
                     if (optDerId.isPresent()) {
                         final String derivateId = optDerId.get();
-                        final String fileName = pathInfo.substring(pathInfo.indexOf(derivateId) + derivateId.length());
+                        final String fileName = URLDecoder.decode(
+                                pathInfo.substring(pathInfo.indexOf(derivateId) + derivateId.length()), "UTF-8");
                         return Files.exists(MCRPath.getPath(derivateId, fileName));
                     }
                 }
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException | UnsupportedEncodingException e) {
                 LOGGER.error("Couldn't parse referrer " + referrer + ".", e);
             }
         }
