@@ -24,6 +24,7 @@ package org.urmel.dbt.filter;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -54,6 +55,8 @@ import org.mycore.frontend.support.MCRSecureTokenV2;
 public class VideoDirectLinkFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();
+
+    private static final Pattern PATTERN_ALLOWED_REFERRER = Pattern.compile("(?i).*\\.(htm|html)$");
 
     private static final Pattern PATTERN_DERIVATE_ID = Pattern.compile(".+_derivate_[0-9]+");
 
@@ -90,9 +93,10 @@ public class VideoDirectLinkFilter implements Filter {
                 MCRSecureTokenV2 token = new MCRSecureTokenV2(httpServletRequest.getPathInfo().substring(1),
                         MCRFrontendUtil.getRemoteAddr(httpServletRequest), sharedSecret);
                 try {
-                    httpServletResponse.sendRedirect(
-                            token.toURI(MCRFrontendUtil.getBaseURL() + "servlets/MCRFileNodeServlet/", hashParameter)
-                                    .toASCIIString());
+                    final URI uri = token.toURI(MCRFrontendUtil.getBaseURL() + "servlets/MCRFileNodeServlet/",
+                            hashParameter);
+                    LOGGER.info("Redirect to " + uri.toASCIIString());
+                    httpServletResponse.sendRedirect(uri.toASCIIString());
                     return;
                 } catch (URISyntaxException e) {
                     throw new ServletException(e);
@@ -107,7 +111,7 @@ public class VideoDirectLinkFilter implements Filter {
         if (referrer != null) {
             try {
                 final String pathInfo = new URL(referrer).getPath();
-                if (pathInfo.endsWith(".html")) {
+                if (PATTERN_ALLOWED_REFERRER.matcher(pathInfo).matches()) {
                     Optional<String> optDerId = Arrays.stream(pathInfo.split("/"))
                             .filter(f -> PATTERN_DERIVATE_ID.matcher(f).matches())
                             .findFirst();
