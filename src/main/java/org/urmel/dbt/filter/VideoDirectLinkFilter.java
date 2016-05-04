@@ -84,7 +84,8 @@ public class VideoDirectLinkFilter implements Filter {
             final HttpServletResponse httpServletResponse = (HttpServletResponse) response;
             final String pathInfo = httpServletRequest.getPathInfo();
 
-            if (pathInfo != null && validateReferrer(httpServletRequest)
+            if (pathInfo != null && httpServletRequest.getParameter(hashParameter) == null
+                    && validateReferrer(httpServletRequest)
                     && MCRSecureTokenV2FilterConfig.requireHash(pathInfo)) {
                 MCRSecureTokenV2 token = new MCRSecureTokenV2(httpServletRequest.getPathInfo().substring(1),
                         MCRFrontendUtil.getRemoteAddr(httpServletRequest), sharedSecret);
@@ -107,8 +108,6 @@ public class VideoDirectLinkFilter implements Filter {
             try {
                 final String pathInfo = new URL(referrer).getPath();
                 if (pathInfo.endsWith(".html")) {
-                    LOGGER.info("pathInfo: " + pathInfo.substring(1));
-
                     Optional<String> optDerId = Arrays.stream(pathInfo.split("/"))
                             .filter(f -> PATTERN_DERIVATE_ID.matcher(f).matches())
                             .findFirst();
