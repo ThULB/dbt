@@ -3,6 +3,17 @@
 >
   <name>dbt</name>
 
+  <filter>
+    <filter-name>VideoDirectLinkFilter</filter-name>
+    <filter-class>org.urmel.dbt.filter.VideoDirectLinkFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>VideoDirectLinkFilter</filter-name>
+    <servlet-name>MCRFileNodeServlet</servlet-name>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
   <servlet id="RCSlotListServlet">
     <servlet-name>RCSlotListServlet</servlet-name>
     <servlet-class>org.urmel.dbt.rc.servlets.SlotListServlet</servlet-class>
