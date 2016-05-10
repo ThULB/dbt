@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Neues Dokument einreichen">
+    <div>
+      <h1>Anmeldeverfahren</h1>
+      <p>
+        Wenn Sie Dokumente abliefern möchten, benötigen Sie für das Login eine Benutzerkennung
+        und ein Passwort. Mitarbeiter der Universität Jena, Erfurt oder
+        der TU-Ilmenau benutzen bitte
+        das Login der jeweiligen Heimateinrichtung und den Link oben auf dieser Seite.
+      </p>
+      <p>
+        Sie sind kein Mitarbeiter oder haben kein Login bei den oben genannten Einrichtungen, dann wenden
+        Sie sich bitte an das
+        <a href="http://www.thulb.uni-jena.de/EPubOA.html#Kontakt">Team E-Publizieren</a>.
+      </p>
+    </div>
+  </section>
+</MyCoReWebPage>
