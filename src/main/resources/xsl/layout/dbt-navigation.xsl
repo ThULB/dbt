@@ -9,9 +9,11 @@
   </xsl:template>
 
   <xsl:template match="/navigation//menu[@id and (group[item] or item)]">
+    <xsl:param name="class" select="''" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress]" />
+
     <xsl:variable name="menuId" select="generate-id(.)" />
-    <li class="dropdown">
+    <li class="dropdown {$class}">
       <xsl:if test="$active">
         <xsl:attribute name="class">
           <xsl:value-of select="'dropdown active'" />
@@ -38,7 +40,9 @@
       </li>
     </xsl:if>
     <xsl:apply-templates />
-    <li role="presentation" class="divider" />
+    <xsl:if test="position() != last()">
+      <li role="presentation" class="divider" />
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="/navigation//item[@href]">
