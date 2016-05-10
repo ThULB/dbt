@@ -7,6 +7,10 @@
       <label xml:lang="de">Start</label>
       <label xml:lang="en">Home</label>
     </item>
+    <item href="/servlets/MCRLoginServlet" type="extern">
+      <label xml:lang="de">Anmelden</label>
+      <label xml:lang="en">Login</label>
+    </item>
   </menu>
   <menu id="footer" dir="/content/footer">
     <label xml:lang="de">Fußzeilen-Menü</label>
