@@ -272,7 +272,7 @@
           <span class="glyphicon glyphicon-tasks" />
           <span class="caret" />
         </a>
-        <ul class="dropdown-menu pull-right no-padding" role="menu">
+        <ul class="dropdown-menu pull-right" role="menu">
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']/*" />
         </ul>
       </li>
