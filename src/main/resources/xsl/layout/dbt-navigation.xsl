@@ -106,10 +106,7 @@
           <xsl:with-param name="par" select="'url'" />
         </xsl:call-template>
       </xsl:variable>
-      <xsl:message>
-        URLParam:
-        <xsl:value-of select="decoder:decode(string($URLParam),'UTF-8')" />
-      </xsl:message>
+
       <xsl:variable name="address">
         <xsl:choose>
           <xsl:when test="string-length($URLParam) &gt; 0">
@@ -147,6 +144,7 @@
       select="$navigation/descendant-or-self::item[starts-with($currentAddress, @href)]|$navigation/descendant-or-self::item[starts-with($referAddress, @href)]" />
     <xsl:variable name="currentItem" select="$navigation/descendant-or-self::item[starts-with(@href, $currentAddress)]" />
 
+    <!--
     <xsl:message>
       RequestURL:
       <xsl:value-of select="$RequestURL" />
@@ -163,6 +161,7 @@
       currentItem:
       <xsl:value-of select="$currentItem" />
     </xsl:message>
+    -->
 
     <xsl:if
       test="$currentAddress != $navigation/@hrefStartingPage and (count($referItem/ancestor-or-self::*[name() != 'group']) != 0 or count($prevItem/ancestor-or-self::*[name() != 'group']) != 0 or count($currentItem/ancestor-or-self::*[name() != 'group']) != 0)"
