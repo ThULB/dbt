@@ -3,31 +3,19 @@
   <menu id="main" dir="/content/main">
     <label xml:lang="de">Hauptmenü</label>
     <label xml:lang="en">Main menu</label>
-  </menu>
-  <menu id="brand" dir="/content/brand">
-    <label xml:lang="de">DBT-Menü</label>
-    <label xml:lang="en">DBT menu</label>
     <item href="/content/index.xml" type="intern">
       <label xml:lang="de">Start</label>
-      <label xml:lang="en">Start</label>
-    </item>
-    <item href="/content/brand/impressum.xml" type="intern">
-      <label xml:lang="de">Impressum</label>
-      <label xml:lang="en">Impressum</label>
-    </item>
-    <item href="/content/brand/contact.xml" type="intern">
-      <label xml:lang="de">Kontakt</label>
-      <label xml:lang="en">Contact</label>
+      <label xml:lang="en">Home</label>
     </item>
   </menu>
-  <menu id="below" dir="/content/below">
-    <label xml:lang="de">Footer-Menü</label>
+  <menu id="footer" dir="/content/footer">
+    <label xml:lang="de">Fußzeilen-Menü</label>
     <label xml:lang="en">Footer menu</label>
-    <item href="/content/brand/impressum.xml" type="intern">
+    <item href="/content/footer/impressum.xml" type="intern">
       <label xml:lang="de">Impressum</label>
-      <label xml:lang="en">Impressum</label>
+      <label xml:lang="en">Imprint</label>
     </item>
-    <item href="/content/brand/contact.xml" type="intern">
+    <item href="/content/footer/contact.xml" type="intern">
       <label xml:lang="de">Kontakt</label>
       <label xml:lang="en">Contact</label>
     </item>
@@ -58,7 +46,7 @@
     </item>
   </menu>
   <menu id="browse">
-  <!-- search menu  -->
+    <!-- search menu  -->
     <label xml:lang="de">Blättern</label>
     <label xml:lang="en">Browse</label>
     <item href="/content/browse/institutes.xml" type="intern">
@@ -105,24 +93,14 @@
       <label xml:lang="de">Vertragsbedingungen</label>
       <label xml:lang="en">Terms &amp; Conditions</label>
     </item>
+    <item href="/content/footer/faq.xml" type="intern">
+      <label xml:lang="de">FAQ</label>
+      <label xml:lang="en">FAQ</label>
+    </item>
   </menu>
   <menu id="user">
     <label xml:lang="de">Nutzermenü</label>
     <label xml:lang="en">User menu</label>
-<!--     <group id="thisuser"> -->
-<!--       <item href="/authorization/change-password.xed?action=password" type="extern"> -->
-<!--         <label xml:lang="de">Passwort ändern</label> -->
-<!--         <label xml:lang="en">Change Password</label> -->
-<!--       </item> -->
-<!--       <item href="/servlets/MCRUserServlet?action=show" type="extern"> -->
-<!--         <label xml:lang="de">Benutzerdaten anzeigen</label> -->
-<!--         <label xml:lang="en">Show User Data</label> -->
-<!--       </item> -->
-<!--       <item href="/authorization/change-current-user.xed?action=saveCurrentUser" type="extern"> -->
-<!--         <label xml:lang="de">Kontaktdaten ändern</label> -->
-<!--         <label xml:lang="en">Change user contact</label> -->
-<!--       </item> -->
-<!--     </group> -->
     <group id="contentadmin">
       <item href="/modules/classeditor/classificationEditor.xml" type="extern">
         <label xml:lang="de">Klassifikationseditor</label>
@@ -152,7 +130,7 @@
         <label xml:lang="de">WebCLI</label>
         <label xml:lang="en">WebCLI</label>
       </item>
-      <item href="/servlets/MCRSessionListingServlet" type="extern">
+      <item href="/modules/session-listing/sessionListing.xml" type="extern">
         <label xml:lang="de">Aktive Sitzungen</label>
         <label xml:lang="en">Session Management</label>
       </item>
@@ -161,9 +139,5 @@
         <label xml:lang="en">WCMS</label>
       </item>
     </group>
-<!--     <item href="/servlets/logout" type="extern"> -->
-<!--       <label xml:lang="de">Abmelden</label> -->
-<!--       <label xml:lang="en">Logout</label> -->
-<!--     </item> -->
   </menu>
 </navigation>

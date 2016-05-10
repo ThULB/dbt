@@ -369,7 +369,6 @@
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='main']" />
           <xsl:call-template name="layout.head.basketMenu" />
         </ul>
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find?qry={0}" class="navbar-form navbar-right visible-xs visible-md visible-lg"
@@ -433,15 +432,14 @@
           <xsl:call-template name="navigation.breadcrumbPath">
             <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
           </xsl:call-template>
-<!--         <xsl:call-template name="layout.breadcrumbPath" /> -->
-<!--           <xsl:call-template name="action.buttons" /> -->
 
+<!--           <xsl:call-template name="action.buttons" /> -->
           <xsl:call-template name="print.writeProtectionMessage" />
           <xsl:call-template name="print.statusMessage" />
 
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
-              <xsl:copy-of select="*[not(name()='head')]" />
+              <xsl:copy-of select="*[not(contains('head|breadcrumb', name()))]" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="printNotLoggedIn" />
@@ -455,7 +453,7 @@
   <xsl:template name="layout.footer">
     <div id="nav" class="col-xs-12 col-sm-12 col-md-12">
       <ul class="nav-footer">
-        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='below']//item" />
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='footer']//item" />
       </ul>
     </div>
 

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Kontakt">
+    <h2>Redaktionelle Fragen und Autorenbetreuung</h2>
+    <h3>Gesamtleitung und Koordinierung:</h3>
+    <address>
+      <strong>Michael Lörzer</strong>
+      <br />
+      Zweiter Stellvertretender Direktor und Leiter der Abteilung Informationsmanagement der ThULB Jena
+      <br />
+      <a href="mailto:Loerzer@thulb.uni-jena.de">loerzer@thulb.uni-jena.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3641 940020
+    </address>
+    <strong>Vertreter:</strong>
+    <address>
+      <strong>Dr. Hans-Martin Moderow</strong>
+      <br />
+      ThULB Jena
+      <br />
+      <a href="mailto:hans-martin.moderow@thulb.uni-jena.de">hans-martin.moderow@thulb.uni-jena.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3641 940046
+    </address>
+    <h3>Für die teilnehmenden Einrichtungen:</h3>
+    <address>
+      <strong>Ute Winter</strong>
+      <br />
+      Universitätsbibliothek Erfurt
+      <br />
+      <a href="mailto:ute.winter@uni-erfurt.de">ute.winter@uni-erfurt.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 361 7375651
+    </address>
+    <address>
+      <strong>Dr. Johannes Wilken</strong>
+      <br />
+      Universitätsbibliothek Ilmenau
+      <br />
+      <a href="mailto:johannes.wilken@tu-ilmenau.de">johannes.wilken@tu-ilmenau.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3677 694594
+    </address>
+    <h2>Technische Fragen:</h2>
+    <address>
+      <strong>Ulrike Krönert</strong>
+      <br />
+      <a href="mailto:ulrike.kroenert@uni-jena.de">ulrike.kroenert@uni-jena.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3641 940534
+    </address>
+    <address>
+      <strong>René Adler</strong>
+      <br />
+      <a href="mailto:rene.adler@tu-ilmenau.de">rene.adler@tu-ilmenau.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3677 694626
+    </address>
+    <h2>Einstellung und Bearbeitung von Videomaterials:</h2>
+    <address>
+      <strong>Tino Tschiesche</strong>
+      <br />
+      Multimediazentrum
+      <br />
+      <a href="mailto:tino.tschiesche@uni-jena.de">tino.tschiesche@uni-jena.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>
+      +49 (0) 3641 940551
+    </address>
+    <p class="lead">
+      Sie haben auch die Möglichkeit eine Mail an das DBT Team
+      <a href="mailto:dbtadmin@uni-jena.de">dbtadmin@uni-jena.de</a>
+      zu senden. Wir leiten dann diese Mail an den verantwortlichen Mitarbeiter weiter.
+    </p>
+  </section>
+</MyCoReWebPage>
