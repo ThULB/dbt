@@ -369,12 +369,12 @@
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
-          <xsl:call-template name="layout.head.basketMenu" />
           <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
             <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
               <xsl:with-param name="class" select="'hidden-md hidden-lg'" />
             </xsl:apply-templates>
           </xsl:if>
+          <xsl:call-template name="layout.head.basketMenu" />
         </ul>
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find?qry={0}" class="navbar-form navbar-right visible-xs visible-md visible-lg"
           role="search"
