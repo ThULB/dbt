@@ -93,7 +93,7 @@
       <label xml:lang="de">Vertragsbedingungen</label>
       <label xml:lang="en">Terms &amp; Conditions</label>
     </item>
-    <item href="/content/footer/faq.xml" type="intern">
+    <item href="/content/publish/faq.xml" type="intern">
       <label xml:lang="de">FAQ</label>
       <label xml:lang="en">FAQ</label>
     </item>
