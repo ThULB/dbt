@@ -314,16 +314,6 @@
           border-radius: 0px;
           margin-bottom: 30px;
           
-          .file_box_pagination {
-            .pagination-info, .pagination {
-              margin: 5px 0;
-            }
-            
-            .pagination-info {
-              line-height: @line-height-small;  
-            } 
-          }
-          
         .filelist-loading {
           position: absolute;
           width: 100%;
@@ -351,7 +341,7 @@
           }
         }
         .file_box_breadcrumbs {
-          padding-left: 4px;
+          padding: 5px 0;
           overflow: hidden;
           .derivate_folder {
             padding-right: 5px;
@@ -432,7 +422,6 @@
           }
         }
         .body {
-          margin-top: 5px;
           div:nth-child(odd) {
             .file_set {
               background-color: #F5F5F5;
@@ -443,15 +432,19 @@
               background-color: #F9F9F9;
             }
           }
+          .table {
+            margin-bottom: 0;
+          }
           .file_set {
-            > .glyphicon-star {
+            .file_name > .glyphicon-star {
                 color: #fafafa;
-                padding-right: 5px;
-                padding-left: 5px;
             }
             &.active_file {
-              > .glyphicon-star {
-                color: @brand-success;
+              .file_name {
+              	font-weight: bold;
+              	> .glyphicon-star {
+                  color: @brand-success;
+                }
               }
             }
             border-top: 0px solid @file_box_color;
@@ -500,27 +493,32 @@
             }
             .file_date {
                 color: @gray;
-                padding-right: 10px;
             }
-            .file_preview {
-                padding-right: 10px;
-                img {
-                  border: 1 px solid #ccc;
-                  width: 16px;
-                  height: 16px;
-                  background-color: #eee;
-                }
-            }
+            .file_preview {}
             .file_name {}
+            .derivate_folder {
+              cursor: pointer;
+            }
+            .go_back {
+              padding-left: 140px;
+            }
             .file_urn {
                 padding-left: 2px;
             }
             .file_size {
                 color: @gray;
-                padding: 0 10px 0 10px;
-                float: right;
             }
           }
+        }
+
+        .file_box_pagination {
+          .pagination-info, .pagination {
+            margin: 5px 0;
+          }
+            
+          .pagination-info {
+            line-height: @line-height-small;  
+          } 
         }
       }
 
