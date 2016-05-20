@@ -376,11 +376,11 @@
           </xsl:if>
           <xsl:call-template name="layout.head.basketMenu" />
         </ul>
-        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find?qry={0}" class="navbar-form navbar-right visible-xs visible-md visible-lg"
+        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find?q={0}" class="navbar-form navbar-right visible-xs visible-md visible-lg"
           role="search"
         >
           <div class="input-group input-group-sm">
-            <input class="form-control" type="text" id="searchTerm" name="qry" placeholder="{i18n:translate('dbt.search.placeholder')}" />
+            <input class="form-control" type="text" id="searchTerm" name="q" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit" name="search">
                 <span class="glyphicon glyphicon-search" />
