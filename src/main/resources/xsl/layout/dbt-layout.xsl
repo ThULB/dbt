@@ -382,7 +382,7 @@
           <div class="input-group input-group-sm">
             <input class="form-control" type="text" id="searchTerm" name="q" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <div class="input-group-btn">
-              <button class="btn btn-default" type="submit" name="search">
+              <button class="btn btn-default" type="submit">
                 <span class="glyphicon glyphicon-search" />
               </button>
             </div>
