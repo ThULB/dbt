@@ -1,28 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyCoReWebPage>
   <section xml:lang="de" title="Kontakt">
-    <h2>Redaktionelle Fragen und Autorenbetreuung</h2>
-    <h3>Gesamtleitung und Koordinierung:</h3>
+    <h2>Ansprechpartner</h2>
     <address>
-      <strong>Michael Lörzer</strong>
+      <strong>ThULB Jena</strong>
       <br />
-      Zweiter Stellvertretender Direktor und Leiter der Abteilung Informationsmanagement der ThULB Jena
+      Team E-Publizieren
       <br />
-      <a href="mailto:Loerzer@thulb.uni-jena.de">loerzer@thulb.uni-jena.de</a>
+      <a href="mailto:epublizieren@thulb.uni-jena.de">epublizieren@thulb.uni-jena.de</a>
       <br />
       <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 940020
-    </address>
-    <strong>Vertreter:</strong>
-    <address>
-      <strong>Dr. Hans-Martin Moderow</strong>
-      <br />
-      ThULB Jena
-      <br />
-      <a href="mailto:hans-martin.moderow@thulb.uni-jena.de">hans-martin.moderow@thulb.uni-jena.de</a>
-      <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 940046
+      +49 (0) 3641 940049
     </address>
     <h3>Für die teilnehmenden Einrichtungen:</h3>
     <address>
@@ -62,7 +50,7 @@
       <abbr title="Telefon">Tel:</abbr>
       +49 (0) 3677 694626
     </address>
-    <h2>Einstellung und Bearbeitung von Videomaterials:</h2>
+    <h2>Einstellung und Bearbeitung von Videomaterial:</h2>
     <address>
       <strong>Tino Tschiesche</strong>
       <br />
@@ -73,10 +61,5 @@
       <abbr title="Telefon">Tel:</abbr>
       +49 (0) 3641 940551
     </address>
-    <p class="lead">
-      Sie haben auch die Möglichkeit eine Mail an das DBT Team
-      <a href="mailto:dbtadmin@uni-jena.de">dbtadmin@uni-jena.de</a>
-      zu senden. Wir leiten dann diese Mail an den verantwortlichen Mitarbeiter weiter.
-    </p>
   </section>
 </MyCoReWebPage>
