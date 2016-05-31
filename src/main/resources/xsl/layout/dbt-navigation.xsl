@@ -46,6 +46,7 @@
   </xsl:template>
 
   <xsl:template match="/navigation//item[@href]">
+    <xsl:param name="class" select="''" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
     <xsl:param name="url">
       <xsl:choose>
@@ -63,11 +64,15 @@
     <xsl:choose>
       <xsl:when test="string-length($url) &gt; 0">
         <li>
-          <xsl:if test="$active">
-            <xsl:attribute name="class">
+          <xsl:attribute name="class">
+            <xsl:value-of select="$class" />
+            <xsl:if test="$active">
+              <xsl:if test="string-length($class) &gt; 0">
+                <xsl:text> </xsl:text>
+              </xsl:if>
               <xsl:value-of select="'active'" />
-            </xsl:attribute>
-          </xsl:if>
+            </xsl:if>
+          </xsl:attribute>
           <a href="{$url}">
             <xsl:apply-templates select="." mode="linkText" />
           </a>

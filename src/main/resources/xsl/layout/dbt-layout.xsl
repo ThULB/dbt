@@ -224,6 +224,7 @@
       </xsl:when>
       <xsl:otherwise>
         <ul class="nav nav-userinfo pull-right">
+          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item" />
           <li>
             <a class="login" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
               <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
@@ -267,6 +268,8 @@
     </xsl:variable>
 
     <ul class="nav nav-userinfo pull-right">
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item" />
+
       <li class="dropdown">
         <a id="userActions" class="dropdown-toggle" data-toggle="dropdown" href="#">
           <span class="glyphicon glyphicon-tasks" />
@@ -369,6 +372,9 @@
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
           <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
+          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
+            <xsl:with-param name="class" select="'hidden-md hidden-lg'" />
+          </xsl:apply-templates>
           <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
             <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
               <xsl:with-param name="class" select="'hidden-md hidden-lg'" />
