@@ -41,16 +41,16 @@
       <label xml:lang="en">simple</label>
     </item>
     <item href="/content/search/simple_intern.xed" type="intern">
-      <label xml:lang="de">einfach</label>
-      <label xml:lang="en">simple</label>
+      <label xml:lang="de">einfach (intern)</label>
+      <label xml:lang="en">simple (intern)</label>
     </item>
     <item href="/content/search/complex.xed" type="intern">
       <label xml:lang="de">komplex</label>
       <label xml:lang="en">complex</label>
     </item>
     <item href="/content/search/complex_intern.xed" type="intern">
-      <label xml:lang="de">komplex</label>
-      <label xml:lang="en">complex</label>
+      <label xml:lang="de">komplex (intern)</label>
+      <label xml:lang="en">complex (intern)</label>
     </item>
     <item href="/search/search-expert.xed" type="intern">
       <label xml:lang="de">expert</label>
@@ -110,7 +110,7 @@
     <label xml:lang="de">Nutzermenü</label>
     <label xml:lang="en">User menu</label>
     <group id="contentadmin">
-      <item href="/modules/classeditor/classificationEditor.xml" type="extern">
+      <item href="/modules/classeditor/classificationEditor.xml?XSL.classeditor.showId=true" type="extern">
         <label xml:lang="de">Klassifikationseditor</label>
         <label xml:lang="en">Edit Classifications</label>
       </item>
