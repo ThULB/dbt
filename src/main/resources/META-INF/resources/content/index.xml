@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="glyphicon glyphicon-check" />
+            <span class="fa fa-graduation-cap" />
             Wissenschaftliche Abschlussarbeiten
           </h3>
           <p>In der DBT werden alle digital abgegebenen Dissertationen und Habilitationen sowie bestimmten Kriterien genügende Studienabschlussarbeiten
@@ -15,25 +15,22 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="glyphicon glyphicon-flash" />
+            <span class="fa fa-globe" />
             E-Publikationen
           </h3>
           <p>
             <img alt="Logo Open Access" src="../dbt/images/logo_open_access.png" style="width: 80px; height: 74px; margin-left: 20px; margin-right: 20px; float: left;" />
-            Ein Grundprinzip der Veröffentlichung der Dokumente in der DBT ist der
-            <b>Open-Access</b>
-            -Gedanke.
+            Ein Grundprinzip der Veröffentlichung der Dokumente in der DBT ist der <b>Open-Access</b>-Gedanke.
             Bis auf wenige Dokumente sind die Volltexte der Publikationen frei zugänglich. Auch Sie können Ihre elektronischen
-            Publikationen in der DBT
-            veröffentlichen. Neben der weltweiten Verfügbarkeit im Internet wird auch die Langzeitverfügbarkeit Ihrer
-            Publikation gewährleistet.
+            Publikationen <a href="top/faq.xml#veroeffentlichungWarum">in der DBT veröffentlichen</a>. Neben der <a href="top/faq.xml#auffindbar">weltweiten Verfügbarkeit</a>
+            im Internet wird auch die Langzeitverfügbarkeit Ihrer Publikation gewährleistet.
           </p>
         </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="glyphicon glyphicon-heart" />
+            <span class="fa fa-th-list" />
             Semesterapparate Online
           </h3>
           <p>Ein elektronischer Semesterapparat enthält Bücher aus dem Bestand der Bibliothek, wichtige Internet-Links und andere Materialien zu einer
@@ -52,15 +49,7 @@
               <b>Multimediazentrum</b>
             </a>
             werden aktuelle Vorlesungsmitschnitte mit synchron ablaufender Präsentation angefertigt und in der DBT abgelegt. Es ist bereits eine große Anzahl
-            aus vielen
-            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=VREIHE" shape="rect">
-              <b>Fachgebieten</b>
-            </a>
-            verfügbar. Außerdem werden
-            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=KONFERENZEN" shape="rect">Tagungen, Workshops</a>
-            und
-            <a href="http://www.db-thueringen.de/servlets/NavigationServlet?classification=VERANST" shape="rect">universitäre Veranstaltungen</a>
-            aufgezeichnet
+            aus vielen Fachgebieten verfügbar. Außerdem werden Tagungen, Workshops und universitäre Veranstaltungen aufgezeichnet
           </p>
         </div>
       </div>
