@@ -88,7 +88,8 @@ public class DerivateServletFilter implements Filter {
                         final String redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
                                 + objectId.toString();
                         LOGGER.info("Redirect to " + redirectURL);
-                        httpServletResponse.sendRedirect(redirectURL);
+                        httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                        httpServletResponse.setHeader("Location", redirectURL);
                         return;
                     }
                 }
