@@ -41,14 +41,9 @@ import javax.xml.bind.annotation.XmlValue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.cos.COSDocument;
-import org.apache.pdfbox.exceptions.COSVisitorException;
-import org.apache.pdfbox.exceptions.CryptographyException;
-import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
-import org.apache.pdfbox.pdmodel.encryption.BadSecurityHandlerException;
-import org.apache.pdfbox.pdmodel.encryption.StandardDecryptionMaterial;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
 import org.mycore.common.content.MCRByteContent;
 import org.mycore.common.content.MCRContent;
@@ -193,13 +188,11 @@ public class FileEntry implements Serializable {
      * @throws COSVisitorException
      */
     private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException, COSVisitorException {
+            throws IOException {
         COSWriter writer = null;
         try {
-            PDFParser parser = new PDFParser(pdfInput);
-            parser.parse();
-
-            COSDocument doc = parser.getDocument();
+            PDDocument document = PDDocument.load(pdfInput);
+            COSDocument doc = document.getDocument();
 
             writer = new COSWriter(pdfOutput);
 
@@ -222,7 +215,7 @@ public class FileEntry implements Serializable {
      * @throws COSVisitorException
      */
     private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException, BadSecurityHandlerException, COSVisitorException {
+            throws IOException {
         PDDocument doc = PDDocument.load(pdfInput);
 
         AccessPermission ap = new AccessPermission();
@@ -246,12 +239,10 @@ public class FileEntry implements Serializable {
     }
 
     private static void decryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException, BadSecurityHandlerException, COSVisitorException, CryptographyException {
-        PDDocument doc = PDDocument.load(pdfInput);
+            throws IOException {
+        PDDocument doc = PDDocument.load(pdfInput, password);
 
         if (doc.isEncrypted()) {
-            doc.openProtection(new StandardDecryptionMaterial(password));
-
             doc.setAllSecurityToBeRemoved(true);
             doc.save(pdfOutput);
         }
@@ -336,7 +327,7 @@ public class FileEntry implements Serializable {
 
                     return new MCRByteContent(pdfBytes);
                 }
-            } catch (COSVisitorException | IOException | BadSecurityHandlerException | CryptographyException e) {
+            } catch (IOException e) {
                 LOGGER.error(e);
             }
         }
