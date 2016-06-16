@@ -13,6 +13,17 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
+  
+  <filter>
+    <filter-name>DerivateFilter</filter-name>
+    <filter-class>org.urmel.dbt.filter.DerivateServletFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>DerivateFilter</filter-name>
+    <url-pattern>/servlets/DerivateServlet/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
 
   <servlet id="RCSlotListServlet">
     <servlet-name>RCSlotListServlet</servlet-name>
