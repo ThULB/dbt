@@ -50,9 +50,10 @@ public class DerivateServletFilter implements Filter {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Pattern PATTERN_DERIVATE_XML = Pattern.compile(".*/Derivate-[0-9]+\\.xml$");
+    private static final Pattern PATTERN_DERIVATE_XML = Pattern
+            .compile(".*/Derivate-[0-9]+\\.xml$|.*/Derivate-[0-9]+$");
 
-    private static final Pattern PATTERN_DERIVATE_ID = Pattern.compile("^Derivate-([0-9]+)\\.xml");
+    private static final Pattern PATTERN_DERIVATE_ID = Pattern.compile("^Derivate-([0-9]+).*");
 
     /* (non-Javadoc)
      * @see javax.servlet.Filter#init(javax.servlet.FilterConfig)
@@ -74,20 +75,33 @@ public class DerivateServletFilter implements Filter {
 
         if (requestURL != null) {
             if (PATTERN_DERIVATE_XML.matcher(requestURL).matches()) {
-                LOGGER.info(requestURL.substring(requestURL.lastIndexOf("/") + 1));
-                final Matcher matcher = PATTERN_DERIVATE_ID
-                        .matcher(requestURL.substring(requestURL.lastIndexOf("/") + 1));
+                final String lp = requestURL.substring(requestURL.lastIndexOf("/") + 1);
+                final Matcher matcher = PATTERN_DERIVATE_ID.matcher(lp);
                 if (matcher.find()) {
                     final String derId = matcher.group(1);
                     MCRObjectID derivateId = MCRObjectID.getInstance("dbt_derivate_" + derId);
-                    MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
-                    if (objectId != null) {
-                        final String redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
-                                + objectId.toString();
-                        LOGGER.info("Redirect to " + redirectURL);
-                        httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                        httpServletResponse.setHeader("Location", redirectURL);
-                        return;
+                    if (MCRMetadataManager.exists(derivateId)) {
+                        String redirectURL = null;
+                        if (lp.endsWith(".xml")) {
+                            MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
+                            if (objectId != null) {
+                                redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
+                                        + objectId.toString();
+
+                            }
+                        } else {
+                            redirectURL = MCRFrontendUtil.getBaseURL(request) + "servlets/MCRFileNodeServlet/"
+                                    + derivateId.toString() + "/"
+                                    + MCRMetadataManager.retrieveMCRDerivate(derivateId).getDerivate().getInternals()
+                                            .getMainDoc();
+                        }
+
+                        if (redirectURL != null && !redirectURL.isEmpty()) {
+                            LOGGER.info("Redirect to " + redirectURL);
+                            httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                            httpServletResponse.setHeader("Location", redirectURL);
+                            return;
+                        }
                     }
                 }
             }
