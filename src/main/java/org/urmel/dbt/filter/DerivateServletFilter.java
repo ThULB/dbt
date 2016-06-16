@@ -73,8 +73,6 @@ public class DerivateServletFilter implements Filter {
         final String requestURL = httpServletRequest.getRequestURI();
 
         if (requestURL != null) {
-            LOGGER.info(requestURL);
-
             if (PATTERN_DERIVATE_XML.matcher(requestURL).matches()) {
                 LOGGER.info(requestURL.substring(requestURL.lastIndexOf("/") + 1));
                 final Matcher matcher = PATTERN_DERIVATE_ID
