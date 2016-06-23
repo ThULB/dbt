@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -78,29 +79,36 @@ public class DerivateServletFilter implements Filter {
                 final String lp = requestURL.substring(requestURL.lastIndexOf("/") + 1);
                 final Matcher matcher = PATTERN_DERIVATE_ID.matcher(lp);
                 if (matcher.find()) {
-                    final String derId = matcher.group(1);
-                    MCRObjectID derivateId = MCRObjectID.getInstance("dbt_derivate_" + derId);
-                    if (MCRMetadataManager.exists(derivateId)) {
-                        String redirectURL = null;
-                        if (lp.endsWith(".xml")) {
-                            MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
-                            if (objectId != null) {
-                                redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
-                                        + objectId.toString();
+                    try {
+                        final String derId = matcher.group(1);
+                        MCRObjectID derivateId = MCRObjectID.getInstance("dbt_derivate_" + derId);
+                        if (MCRMetadataManager.exists(derivateId)) {
+                            String redirectURL = null;
+                            if (lp.endsWith(".xml")) {
+                                MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
+                                if (objectId != null) {
+                                    redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
+                                            + objectId.toString();
 
+                                }
+                            } else {
+                                redirectURL = MCRFrontendUtil.getBaseURL(request) + "servlets/MCRFileNodeServlet/"
+                                        + derivateId.toString() + "/"
+                                        + MCRMetadataManager.retrieveMCRDerivate(derivateId).getDerivate()
+                                                .getInternals()
+                                                .getMainDoc();
                             }
-                        } else {
-                            redirectURL = MCRFrontendUtil.getBaseURL(request) + "servlets/MCRFileNodeServlet/"
-                                    + derivateId.toString() + "/"
-                                    + MCRMetadataManager.retrieveMCRDerivate(derivateId).getDerivate().getInternals()
-                                            .getMainDoc();
-                        }
 
-                        if (redirectURL != null && !redirectURL.isEmpty()) {
-                            LOGGER.info("Redirect to " + redirectURL);
-                            httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                            httpServletResponse.setHeader("Location", redirectURL);
-                            return;
+                            if (redirectURL != null && !redirectURL.isEmpty()) {
+                                LOGGER.info("Redirect to " + redirectURL);
+                                httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                                httpServletResponse.setHeader("Location", redirectURL);
+                                return;
+                            }
+                        }
+                    } finally {
+                        if (MCRSessionMgr.hasCurrentSession()) {
+                            MCRSessionMgr.releaseCurrentSession();
                         }
                     }
                 }
