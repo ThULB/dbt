@@ -5,6 +5,38 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
+            <span class="fa fa-globe" />
+            E-Publikationen
+          </h3>
+          <p>
+            <img alt="Logo Open Access" src="../dbt/images/logo_open_access.png" style="width: 50px; height: 44px; margin: 10px 10px 0 10px; float: left;" />
+            Ein Grundprinzip der Veröffentlichung der Dokumente in der DBT ist der
+            <b>Open-Access</b>-Gedanke. Auch Sie können Ihre elektronischen Publikationen
+            <a href="top/faq.xml#veroeffentlichungWarum">in der DBT veröffentlichen</a>. Neben der
+            <a href="top/faq.xml#auffindbar">weltweiten Verfügbarkeit</a>
+            im Internet wird auch die Langzeitverfügbarkeit Ihrer Publikation gewährleistet.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h3>
+            <span class="fa fa-th-list" />
+            Elektronischen Semesterapparate
+          </h3>
+          <p>
+            Die Elektronischen Semesterapparate (ESA) sind <span class="text-danger">bis auf Weiteres über die alte DBT-Oberfläche</span>
+            mit den dort angelegten Zugangskennungen für die Dozenten und Teilnehmer der Lehrveranstaltungen nutzbar.
+            Hier geht es zu den Elektronischen Semesterapparaten:
+            <a href="http://www3.db-thueringen.de/esa">Gesamtliste</a>
+            /
+            <a href="http://www3.db-thueringen.de/semapp/edit-searchSemApp.xml">Suche</a>
+            /
+            <a href="http://www3.db-thueringen.de/semapp/new-semapp.xml?cancel=/semapp/index.xml">Neu beantragen</a>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h3>
             <span class="fa fa-graduation-cap" />
             Wissenschaftliche Abschlussarbeiten
           </h3>
@@ -15,62 +47,67 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-th-list" />
-            Semesterapparate Online
-          </h3>
-          <p class="text-primary">
-            <strong>
-              Die Elektronischen Semesterapparate (ESA) sind bis auf Weiteres über die alte DBT-Oberfläche mit den dort angelegten Zugangskennungen für die
-              Dozenten und
-              Teilnehmer der Lehrveranstaltungen nutzbar. Hier geht es zu den Elektronischen Semesterapparaten:
-              <a href="http://www3.db-thueringen.de/esa">Gesamtliste</a>
-              /
-              <a href="http://www3.db-thueringen.de/semapp/edit-searchSemApp.xml">Suche</a>
-              /
-              <a href="http://www3.db-thueringen.de/semapp/new-semapp.xml?cancel=/semapp/index.xml">Neu beantragen</a>
-            </strong>
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-<!--           <h3> -->
-<!--             <span class="fa fa-th-list" /> -->
-<!--             Semesterapparate Online -->
-<!--           </h3> -->
-<!--           <p>Ein elektronischer Semesterapparat stellt alle vom Dozenten ausgewählten Materialien, digitalisierte Kopiervorlagen und Links zu weiteren Ressourcen mittels -->
-<!--           passwortgeschütztem Zugang für die studentischen Teilnehmer einer Lehrveranstaltung online bereit. Die in den Apparaten gelisteten Bücher aus dem Bestand der -->
-<!--           Bibliothek stehen zur Präsenznutzung vor Ort zur Verfügung. -->
-<!--           </p> -->
-          <h3>
-            <span class="fa fa-globe" />
-            E-Publikationen
-          </h3>
-          <p>
-            <img alt="Logo Open Access" src="../dbt/images/logo_open_access.png" style="width: 80px; height: 74px; margin-left: 20px; margin-right: 20px; float: left;" />
-            Ein Grundprinzip der Veröffentlichung der Dokumente in der DBT ist der
-            <b>Open-Access</b>
-            -Gedanke.
-            Bis auf wenige Dokumente sind die Volltexte der Publikationen frei zugänglich. Auch Sie können Ihre elektronischen
-            Publikationen
-            <a href="top/faq.xml#veroeffentlichungWarum">in der DBT veröffentlichen</a>
-            . Neben der
-            <a href="top/faq.xml#auffindbar">weltweiten Verfügbarkeit</a>
-            im Internet wird auch die Langzeitverfügbarkeit Ihrer Publikation gewährleistet.
-          </p>
-        </div>
-        <div class="col-md-6">
-          <h3>
             <span class="glyphicon glyphicon-facetime-video" />
             Vorlesungsmitschnitte
           </h3>
           <p>
             Durch das
-            <a href="http://www.uni-jena.de/Multimediazentrum.html" shape="rect" target="_blank">
-              <b>Multimediazentrum</b>
-            </a>
+            <a href="http://www.uni-jena.de/Multimediazentrum.html" shape="rect" target="_blank">Multimediazentrum</a>
             werden aktuelle Vorlesungsmitschnitte mit synchron ablaufender Präsentation angefertigt und in der DBT abgelegt. Es ist bereits eine große Anzahl
             aus vielen Fachgebieten verfügbar. Außerdem werden Tagungen, Workshops und universitäre Veranstaltungen aufgezeichnet
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section xml:lang="en" title="Welcome!">
+    <div class="jumbotwo">
+      <div class="row">
+        <div class="col-md-6">
+          <h3>
+            <span class="fa fa-globe" />
+            E-publications
+          </h3>
+          <p>
+            <img alt="Logo Open Access" src="../dbt/images/logo_open_access.png" style="width: 50px; height: 44px; margin: 10px 10px 0 10px; float: left;" />
+            A fundamental principle of the publication of documents is the idea of <b>open access</b>.
+            Apart from a few exceptions, all full texts are publicly available. You can publish your electronical documents 
+            <a href="top/faq.xml#veroeffentlichungWarum">in the DBT</a>, too.
+            Your publication is not only <a href="top/faq.xml#auffindbar">worldwide available</a> on the internet, its long-term availability is also guaranteed.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h3>
+            <span class="fa fa-th-list" />
+            Electronic course reserve collection
+          </h3>
+          <p>
+            Selected materials, digitised copy templates and links to more resources can be stored in an electronic course reserve collection and secured with a password.
+            The lecturer or professor gives the password to the participants of his course so that they can access the material.
+            The listed books in this collection can be found and used in the library but cannot be borrowed.
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <h3>
+            <span class="fa fa-graduation-cap" />
+            Scientific dissertations
+          </h3>
+          <p>
+            All dissertations and habilitations as a digital version as well as final theses meeting certain criteria are stored in the DBT.
+            You find here all necessary information for submitting your dissertation/habilitation and final thesis at your own university.
+          </p>
+        </div>
+        <div class="col-md-6">
+          <h3>
+            <span class="glyphicon glyphicon-facetime-video" />
+            Recordings of lectures
+          </h3>
+          <p>
+            The <a href="http://www.uni-jena.de/Multimediazentrum.html" target="_blank">multimedia center</a> provides current recordings of lectures with a synchronized presentation and stores it in the DBT.
+            A large number of presentations from many departments are already available. Furthermore, conferences, workshops and events of the university are also recorded.
           </p>
         </div>
       </div>
