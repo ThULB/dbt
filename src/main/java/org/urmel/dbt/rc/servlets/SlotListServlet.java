@@ -24,7 +24,6 @@ package org.urmel.dbt.rc.servlets;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -87,10 +86,11 @@ public class SlotListServlet extends MCRServlet {
 
             final String action = req.getParameter("action");
             final String slotId = xml.getAttributeValue("id");
-            final String location = Optional.ofNullable(xml.getChild("location").getAttributeValue("id"))
-                    .orElseGet(null);
-            final Optional<String> nId = Optional.ofNullable(xml.getChild("location").getAttributeValue("newId"));
-            final Integer newId = location != null && nId.isPresent() ? new Integer(nId.get()) : null;
+            final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
+                    : null;
+            final String nId = xml.getChild("location") != null
+                    ? xml.getChild("location").getAttributeValue("newId") : null;
+            final Integer newId = location != null && nId != null ? new Integer(nId) : null;
 
             MCREvent evt = null;
 
