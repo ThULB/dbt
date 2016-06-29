@@ -34,21 +34,21 @@
         <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
       </col>
     </xsl:if>
+    <col sortBy="slot.lecturers" width="15%">
+      <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
+    </col>
+    <col sortBy="slot.title" width="*">
+      <xsl:value-of select="i18n:translate('component.rc.slot.title')" />
+    </col>
+    <col sortBy="slot.validTo" width="15%">
+      <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
+    </col>
     <col width="25%">
       <xsl:if test="not($hasAdminPermission)">
         <xsl:attribute name="sortBy">slotId</xsl:attribute>
         <xsl:attribute name="sortOrder">asc</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
-    </col>
-    <col sortBy="slot.validTo" width="15%">
-      <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
-    </col>
-    <col sortBy="slot.lecturers" width="15%">
-      <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
-    </col>
-    <col sortBy="slot.title" width="*">
-      <xsl:value-of select="i18n:translate('component.rc.slot.title')" />
     </col>
   </xsl:template>
 
@@ -89,11 +89,18 @@
         </xsl:if>
       </col>
     </xsl:if>
-    <col class="text-ellipsis" valign="top">
-      <xsl:attribute name="title">
-        <xsl:apply-templates select="@id" mode="rcLocationText" />
-      </xsl:attribute>
-      <xsl:apply-templates select="@id" mode="rcLocation" />
+    <col valign="top">
+      <xsl:for-each select="lecturers/lecturer">
+        <xsl:value-of select="@name" />
+        <xsl:if test="position() != last()">
+          <xsl:text>, </xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </col>
+    <col valign="top">
+      <a href="{$WebApplicationBaseURL}rc/{@id}" title="{title}">
+        <xsl:value-of select="title" />
+      </a>
     </col>
     <col class="text-ellipsis" valign="top">
       <xsl:variable name="date">
@@ -110,18 +117,14 @@
       <xsl:value-of
         select="concat($period//label[lang($CurrentLang)]/@shortText, '&#160;', substring-after($period//label[lang($CurrentLang)]/@description, concat($period//label[lang($CurrentLang)]/@text, ' ')))" />
     </col>
-    <col valign="top">
-      <xsl:for-each select="lecturers/lecturer">
-        <xsl:value-of select="@name" />
-        <xsl:if test="position() != last()">
-          <xsl:text>, </xsl:text>
-        </xsl:if>
-      </xsl:for-each>
-    </col>
-    <col valign="top">
-      <a href="{$WebApplicationBaseURL}rc/{@id}" title="{title}">
-        <xsl:value-of select="title" />
-      </a>
+    <col class="text-ellipsis" valign="top">
+      <xsl:variable name="text">
+        <xsl:apply-templates select="@id" mode="rcLocationText" />
+      </xsl:variable>
+      <xsl:attribute name="title">
+        <xsl:value-of select="$text" />
+      </xsl:attribute>
+      <xsl:value-of select="$text" />
     </col>
   </xsl:template>
 
