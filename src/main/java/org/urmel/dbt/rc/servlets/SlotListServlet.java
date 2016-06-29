@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.rc.servlets;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -31,12 +32,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.MCRUserInformation;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
@@ -240,10 +244,19 @@ public class SlotListServlet extends MCRServlet {
                     ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage) : 0;
             final Integer rows = numPerPage != null ? Integer.parseInt(numPerPage) : null;
 
+            final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
+
+            final List<SortClause> sortClauses = new ArrayList<>();
+            sortClauses.add(new SortClause("if(exists(query({!v='createdby:" + currentUser.getUserID() + "'})),100,0)",
+                    "desc"));
+            if (sortBy != null && !sortBy.isEmpty() && sortOrder != null && !sortOrder.isEmpty()) {
+                sortClauses.add(new SortClause(sortBy, ORDER.valueOf(sortOrder)));
+            }
+
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
                     !SlotManager.hasAdminPermission() ? "slot.status:active or createdby:"
-                            + MCRSessionMgr.getCurrentSession().getUserInformation().getUserID() : null,
-                    start, rows, sortBy, sortOrder);
+                            + currentUser.getUserID() : null,
+                    start, rows, sortClauses);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                     new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));

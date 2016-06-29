@@ -31,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -531,7 +532,7 @@ public final class SlotManager {
      * @throws SolrServerException thrown on SOLR error
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
-            final String sortBy, final String sortOrder) throws SolrServerException, IOException {
+            final List<SortClause> sortClauses) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
         final SolrClient client = new HttpSolrClient(
@@ -546,13 +547,7 @@ public final class SlotManager {
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE,
                 filter != null && !filter.isEmpty() ? filter : "");
         query.setFields("slotId");
-
-        if (sortBy != null && !sortBy.isEmpty() && sortOrder != null && !sortOrder.isEmpty()) {
-            query.setSort(sortBy, ORDER.valueOf(sortOrder));
-        } else {
-            query.setSort("slotId", ORDER.asc);
-        }
-
+        query.setSorts(sortClauses);
         query.setStart(start);
         query.setRows(rows);
 
