@@ -180,9 +180,35 @@
             </xsl:choose>
           </xsl:variable>
 
+          <xsl:if test="$disableFilter = false()">
+            <!-- entries filter -->
+            <div class="col-xs-{$colWidth}">
+              <div class="form-group no-margin" id="{$id}_filter">
+                <label>
+                  <span class="glyphicon glyphicon-filter" aria-hidden="true" />
+                  <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filter'))" />
+                  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+                  <input class="form-control input-sm" type="search" name="Filter">
+                    <xsl:attribute name="value">
+                      <xsl:if test="string-length($Filter) &gt; 0">
+                        <xsl:value-of select="$Filter" />
+                      </xsl:if>
+                    </xsl:attribute>
+                  </input>
+                </label>
+              </div>
+            </div>
+          </xsl:if>
+          
           <!-- numPerPage selector -->
-          <div class="col-xs-{$colWidth}">
-            <div id="{$id}_length" class="form-group no-margin">
+          <div>
+            <xsl:attribute name="class">
+              <xsl:if test="$disableFilter = true()">
+                <xsl:value-of select="concat('col-xs-offset-', $colWidth)" />
+              </xsl:if>
+              <xsl:value-of select="concat(' col-xs-', $colWidth)" />
+            </xsl:attribute>
+            <div id="{$id}_length" class="form-group pull-right no-margin">
               <label>
                 <select class="form-control input-sm" name="numPerPage" size="1" onchange="this.form.submit()">
                   <xsl:variable name="tokens">
@@ -208,24 +234,6 @@
               </label>
             </div>
           </div>
-          <xsl:if test="$disableFilter = false()">
-            <!-- entries filter -->
-            <div class="col-xs-{$colWidth}">
-              <div class="form-group pull-right no-margin" id="{$id}_filter">
-                <label>
-                  <xsl:value-of select="i18n:translate(concat($i18nprefix, '.search'))" />
-                  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                  <input class="form-control input-sm" type="search" name="Filter">
-                    <xsl:attribute name="value">
-                      <xsl:if test="string-length($Filter) &gt; 0">
-                        <xsl:value-of select="$Filter" />
-                      </xsl:if>
-                    </xsl:attribute>
-                  </input>
-                </label>
-              </div>
-            </div>
-          </xsl:if>
         </form>
       </div>
       <!-- build DataTable -->
