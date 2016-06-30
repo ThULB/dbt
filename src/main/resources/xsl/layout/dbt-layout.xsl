@@ -343,7 +343,7 @@
               </xsl:if>
             </div>
             <div class="panel-footer">
-              <a href="{$ServletsBaseURL}logout" class="btn btn-primary btn-sm">
+              <a href="{$ServletsBaseURL}logout?url={encoder:encode(string($WebApplicationBaseURL),'UTF-8')}" class="btn btn-primary btn-sm">
                 <span class="btn-label">
                   <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
                 </span>
