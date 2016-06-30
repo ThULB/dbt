@@ -38,6 +38,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.cos.COSDocument;
@@ -120,14 +121,16 @@ public class FileEntry implements Serializable {
 
     private static void processContent(final String entryId, final FileEntry fileEntry, final InputStream is)
             throws FileEntryProcessingException, IOException {
-        if (isPDF(is)) {
+
+        final MCRContent content = new MCRByteContent(IOUtils.toByteArray(is));
+        if (isPDF(content.getInputStream())) {
             final String fileName = fileEntry.getName();
 
             ByteArrayOutputStream pdfCopy = null;
             ByteArrayOutputStream pdfEncrypted = null;
 
             try {
-                final int numPages = getNumPagesFromPDF(is);
+                final int numPages = getNumPagesFromPDF(content.getInputStream());
 
                 LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
                 if (numPages == -1 || numPages > 50) {
@@ -136,7 +139,7 @@ public class FileEntry implements Serializable {
 
                 LOGGER.info("Make an supported copy for \"" + fileName + "\".");
                 pdfCopy = new ByteArrayOutputStream();
-                copyPDF(is, pdfCopy);
+                copyPDF(content.getInputStream(), pdfCopy);
 
                 LOGGER.info("Encrypt \"" + fileName + "\".");
                 pdfEncrypted = new ByteArrayOutputStream();
@@ -154,7 +157,7 @@ public class FileEntry implements Serializable {
                 }
             }
         } else {
-            fileEntry.setContent(is);
+            fileEntry.setContent(content.getInputStream());
         }
     }
 
@@ -162,7 +165,7 @@ public class FileEntry implements Serializable {
         try {
             PDDocument doc = PDDocument.load(is);
             return doc != null;
-        } catch (IOException ioex) {
+        } catch (IOException e) {
             return false;
         }
     }
