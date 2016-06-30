@@ -104,6 +104,14 @@
       </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
+  
+  <!-- =============================================================================== -->
+
+  <xsl:template match="section">
+    <xsl:for-each select="node()">
+      <xsl:apply-templates select="." />
+    </xsl:for-each>
+  </xsl:template>
 
   <!-- =============================================================================== -->
 
