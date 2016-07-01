@@ -16,7 +16,7 @@
     <li class="dropdown {$class}">
       <xsl:if test="$active">
         <xsl:attribute name="class">
-          <xsl:value-of select="'dropdown active'" />
+          <xsl:value-of select="concat($class,' dropdown active')" />
         </xsl:attribute>
       </xsl:if>
       <a id="{$menuId}" class="dropdown-toggle" data-toggle="dropdown" href="#">
