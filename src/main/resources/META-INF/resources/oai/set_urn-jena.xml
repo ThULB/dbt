@@ -4,6 +4,6 @@
     xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
   <set>
     <setSpec>urn-jena</setSpec>
-    <setName>URNs der FSU-Jena</setName>
+    <setName>URNs documents of University of Jena</setName>
   </set>
 </ListSets>
