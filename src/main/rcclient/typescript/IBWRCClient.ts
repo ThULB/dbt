@@ -17,7 +17,7 @@ class IBWRCClient {
     public static FORMAT_4802: string = "4802 {0} RC {1}\n";
 
     private rcClient: rc.Client;
-    
+
     // preference based or default variables
     private clientURL: string = "http://dbttest.thulb.uni-jena.de/mir";
     private defaultIndicator: string = "i";
@@ -229,7 +229,7 @@ class IBWRCClient {
     private onError(delegate: any, error: Error) {
         ibw.showError(error);
     }
-    
+
     /**
      * Callback method to listen on HTTPRequest progress event.
      * 
@@ -240,7 +240,7 @@ class IBWRCClient {
     onProgress(delegate: rc.Client, progress: number, progressMax: number) {
         this.updateStatusbar(delegate.statusText, progress, progressMax);
     }
-    
+
     /**
      * Callback method of loaded Slot list. Used to display Slots in MenuListElement.
      * 
@@ -381,7 +381,7 @@ class IBWRCClient {
             this.clearTextBox(tbBarcode, false);
         }
     }
-    
+
     /**
      * Event handler for EPN selection.
      * 
@@ -457,6 +457,7 @@ class IBWRCClient {
 
         boxEPN.hidden = boxBarcode.hidden;
         boxBarcode.hidden = !boxBarcode.hidden;
+        this.setDisabledState(boxBarcode, boxBarcode.hidden);
     }
 
     private onBarcodeEntered(barcode: string) {
@@ -518,7 +519,7 @@ class IBWRCClient {
             }
         }
     }
-    
+
     /**
      * Event handler for register button.
      * 
@@ -585,7 +586,7 @@ class IBWRCClient {
                     ibw.getTitle().insertText(cat7100);
                 }
             }
-            
+
             // save title
             if (ibw.simulateKey("FR")) {
                 this.rcClient.addListener(rc.Client.EVENT_COPY_DEREGISTERED, this, this.onDeregisterComplete);
@@ -593,7 +594,7 @@ class IBWRCClient {
             }
         }
     }
-       
+
     /**
      * Event handler for deregister button.
      * 
@@ -605,7 +606,7 @@ class IBWRCClient {
 
         this.deregister(copy);
     }
-    
+
     /**
      * Callback method after successfully deregistration of copy.
      * 
@@ -620,7 +621,7 @@ class IBWRCClient {
         var mlSlots: XULMenuListElement = <any>document.getElementById("mlSlots");
         mlSlots.doCommand();
     }
-    
+
     /**
      * Event handler for deregister all button.
      * 
@@ -635,7 +636,7 @@ class IBWRCClient {
         chain.addListener(DeregisterChain.PROGRESS, this, this.onProgress);
         chain.execute();
     }
-    
+
     /**
      * Callback method after successfully deregistration of multiple copys.
      * 
