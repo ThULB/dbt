@@ -24,6 +24,7 @@ package org.urmel.dbt.rc.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -147,7 +148,8 @@ public class SlotServlet extends MCRServlet {
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "opc/"
                         + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
                                 ? catalog.getISIL().get(0) : catalogId)
-                        + "/search/" + firstChild.getTextTrim() + toQueryString(params, true));
+                        + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), "UTF-8")
+                        + toQueryString(params, true));
             } else {
                 SlotEntry<?> slotEntry = xml != null ? SlotEntryTransformer.buildSlotEntry(xml) : null;
 
