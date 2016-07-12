@@ -20,18 +20,6 @@ import org.urmel.dbt.rc.datamodel.slot.Slot;
 public enum PendingStatus {
 
     /**
-     * Stands for an free and unused slot.
-     */
-    @XmlEnumValue("free")
-    FREE("free"),
-
-    /**
-     * Stands for an reserved slot.
-     */
-    @XmlEnumValue("reserved")
-    RESERVED("reserved"),
-
-    /**
      * Stands for a active slot.
      */
     @XmlEnumValue("active")
@@ -42,6 +30,18 @@ public enum PendingStatus {
      */
     @XmlEnumValue("archived")
     ARCHIVED("archived"),
+    
+    /**
+     * Stands for an reserved slot.
+     */
+    @XmlEnumValue("reserved")
+    RESERVED("reserved"),
+    
+    /**
+     * Stands for an free and unused slot.
+     */
+    @XmlEnumValue("free")
+    FREE("free"),
     
     /**
      * Stands for a archived slot for late reactivation.
