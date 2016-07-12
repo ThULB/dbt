@@ -91,7 +91,7 @@
             <div class="col-xs-{$colwidth} col-sm-{$colwidth} col-md-{$colwidth}">
               <xsl:apply-templates select="$fullRecord" mode="isbd" />
             </div>
-            <xsl:if test="string-length($slotId) &gt; 0">
+            <xsl:if test="(string-length($slotId) &gt; 0) and (count(pica:field[@tag='002@' and pica:subfield[@code='0' and not(starts-with(text(), 'As'))]]) = 0)">
               <div class="col-xs-{12 - $colwidth} col-sm-{12 - $colwidth} col-md-{12 - $colwidth} text-center">
                 <a class="btn btn-default">
                   <xsl:attribute name="href">
