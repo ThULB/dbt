@@ -121,7 +121,8 @@
               <legend />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="changeLocation" />
 
-              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)" i18n="component.rc.slot.id.notFree" />
+              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)"
+                i18n="component.rc.slot.id.notFree" />
             </fieldset>
 
             <fieldset>
@@ -317,12 +318,12 @@
   <xed:template id="accesskeys">
     <xed:bind xpath="accesskeys">
       <mir:template name="textInput" xpath="@readkey" id="readKey" i18n="component.rc.slot.accesskey.read" i18n.error="component.rc.slot.accesskey.read.required"
-        required="true" maxlength="64"
+        required="true" validate="true" test="(string-length(.) &gt; 0) and (. != ../@writekey)" maxlength="64"
       >
         <action id="readKeyGenerator" i18n="component.rc.slot.accesskey.generate" icon="fa fa-cogs" iconOnly="true" />
       </mir:template>
       <mir:template name="textInput" xpath="@writekey" id="writeKey" i18n="component.rc.slot.accesskey.write" i18n.error="component.rc.slot.accesskey.write.required"
-        required="true" maxlength="64"
+        required="true" validate="true" test="(string-length(.) &gt; 0) and (. != ../@readkey)" maxlength="64"
       >
         <action id="writeKeyGenerator" i18n="component.rc.slot.accesskey.generate" icon="fa fa-cogs" iconOnly="true" />
       </mir:template>
