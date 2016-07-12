@@ -5,6 +5,7 @@
 
   <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
 
+  <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="slot-templates.xsl" />
 
   <xsl:param name="MCR.RC.MailSender" />
@@ -161,7 +162,7 @@
 
       MCRObjectId:
       <xsl:value-of select="$objectId" />
-      
+
       AccessKeys:
       <xsl:value-of select="$accessKeys" />
     </xsl:message>

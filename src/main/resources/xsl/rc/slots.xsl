@@ -91,9 +91,11 @@
     </xsl:if>
     <col valign="top">
       <xsl:for-each select="lecturers/lecturer">
-        <xsl:value-of select="@name" />
+        <xsl:call-template name="formatName">
+          <xsl:with-param name="name" select="@name" />
+        </xsl:call-template>
         <xsl:if test="position() != last()">
-          <xsl:text>, </xsl:text>
+          <xsl:text>; </xsl:text>
         </xsl:if>
       </xsl:for-each>
     </col>

@@ -3,6 +3,7 @@
   xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
 >
 
+  <xsl:include href="coreFunctions.xsl" />
   <xsl:include href="slot-templates.xsl" />
 
   <xsl:param name="MCR.RC.MailSender" />

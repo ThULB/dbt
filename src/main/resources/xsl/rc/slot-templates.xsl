@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="acl encoder i18n mcrxsl xlink"
+  xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="acl encoder i18n mcrxsl xlink xalan"
 >
 
   <xsl:param name="CurrentLang" />
@@ -182,11 +182,15 @@
           <xsl:choose>
             <xsl:when test="not(mcrxsl:isCurrentUserGuestUser()) and $readPermission and string-length(/slot/contact/@email) = 0">
               <a href="mailto:{@email}">
-                <xsl:value-of select="@name" />
+                <xsl:call-template name="formatName">
+                  <xsl:with-param name="name" select="@name" />
+                </xsl:call-template>
               </a>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="@name" />
+              <xsl:call-template name="formatName">
+                <xsl:with-param name="name" select="@name" />
+              </xsl:call-template>
             </xsl:otherwise>
           </xsl:choose>
           <xsl:if test="position() != last()">
@@ -209,17 +213,42 @@
             <xsl:choose>
               <xsl:when test="$readPermission">
                 <a href="mailto:{contact/@email}">
-                  <xsl:value-of select="contact/@name" />
+                  <xsl:call-template name="formatName">
+                    <xsl:with-param name="name" select="contact/@name" />
+                  </xsl:call-template>
                 </a>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="contact/@name" />
+                <xsl:call-template name="formatName">
+                  <xsl:with-param name="name" select="contact/@name" />
+                </xsl:call-template>
               </xsl:otherwise>
             </xsl:choose>
           </div>
         </xsl:if>
       </div>
     </div>
+  </xsl:template>
+
+  <xsl:template name="formatName">
+    <xsl:param name="name" />
+
+    <xsl:choose>
+      <xsl:when test="not(contains($name, ',')) and contains($name, ' ')">
+        <xsl:variable name="parts">
+          <xsl:call-template name="Tokenizer">
+            <xsl:with-param name="string" select="$name" />
+            <xsl:with-param name="delimiter" select="' '" />
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:variable name="last" select="xalan:nodeset($parts)/token[count(../token)]" />
+        <xsl:variable name="first" select="substring-before($name, $last)" />
+        <xsl:value-of select="concat($last, ', ', $first)" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$name" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>
