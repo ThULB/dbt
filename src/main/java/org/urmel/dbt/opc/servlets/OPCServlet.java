@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.opc.servlets;
 
+import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,7 +80,7 @@ public class OPCServlet extends MCRServlet {
             if (catalog != null) {
                 final OPCConnector opc = catalog.getOPCConnector();
                 if ("search".equals(action)) {
-                    final Result result = opc.search(request);
+                    final Result result = opc.search(URLDecoder.decode(request, "UTF-8"));
                     result.setCatalog(catalog);
 
                     getLayoutService().doLayout(req, res,
