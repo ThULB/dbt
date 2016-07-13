@@ -31,22 +31,22 @@ module rc {
          *  The Slot Id
          */
         id: string;
-        
+
         /**
          * The Slot status
          */
         status: Status;
-        
+
         /**
          *  The eOnly state
          */
         eOnly: boolean;
-        
+
         /**
          * The Slot title
          */
         title: string;
-        
+
         /**
          * The Slot entries (only OPCRecord)
          */
@@ -61,7 +61,7 @@ module rc {
             var slot: Slot = new Slot();
 
             slot.id = elm.getAttribute("id");
-            slot.status = Status[elm.getAttribute("status").toUpperCase()];
+            slot.status = elm.getAttribute("status") ? Status[elm.getAttribute("status").toUpperCase()] : "";
             slot.eOnly = (elm.hasAttribute("onlineOnly") ? core.Utils.toBoolean(elm.getAttribute("onlineOnly")) : false);
 
             slot.title = (<Text>elm.getElementsByTagName("title").item(0).firstChild).data;
