@@ -457,7 +457,6 @@ class IBWRCClient {
 
         boxEPN.hidden = boxBarcode.hidden;
         boxBarcode.hidden = !boxBarcode.hidden;
-        this.setDisabledState(boxBarcode, boxBarcode.hidden);
     }
 
     private onBarcodeEntered(barcode: string) {
