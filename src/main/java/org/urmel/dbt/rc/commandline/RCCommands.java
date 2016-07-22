@@ -265,16 +265,17 @@ public class RCCommands extends MCRAbstractCommands {
 
         if (!slotList.getSlots().isEmpty()) {
             for (final Slot slot : slotList.getSlots()) {
-                if (slot.isActive()) {
-                    LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
+                LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
 
-                    final Date today = new Date();
-                    final Date validTo = slot.getValidToAsDate();
-                    final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
+                try {
+                    MCREvent evt = null;
 
-                    try {
+                    if (slot.isActive()) {
+                        final Date today = new Date();
+                        final Date validTo = slot.getValidToAsDate();
+                        final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
+
                         if (today.after(validTo)) {
-                            MCREvent evt = null;
                             boolean save = true;
 
                             switch (slot.getStatus()) {
@@ -369,13 +370,22 @@ public class RCCommands extends MCRAbstractCommands {
                                     continue;
                                 }
                             }
+                        } else if (slot.getStatus() == Status.FREE) {
+                            LOGGER.info("...delete slot.");
+
+                            mgr.delete(slot);
+
+                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                            evt.put(SlotManager.SLOT_TYPE, slot);
+                            MCREventManager.instance().handleEvent(evt);
+                            continue;
                         }
 
                         LOGGER.info("...nothing to do.");
-                    } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
-                            | MCRPersistenceException | MCRActiveLinkException e) {
-                        LOGGER.error(e.getMessage());
                     }
+                } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
+                        | MCRPersistenceException | MCRActiveLinkException e) {
+                    LOGGER.error(e.getMessage());
                 }
             }
         }
