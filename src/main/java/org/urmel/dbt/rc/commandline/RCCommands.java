@@ -370,19 +370,19 @@ public class RCCommands extends MCRAbstractCommands {
                                     continue;
                                 }
                             }
-                        } else if (slot.getStatus() == Status.FREE) {
-                            LOGGER.info("...delete slot.");
-
-                            mgr.delete(slot);
-
-                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                            evt.put(SlotManager.SLOT_TYPE, slot);
-                            MCREventManager.instance().handleEvent(evt);
-                            continue;
                         }
+                    } else if (slot.getStatus() == Status.FREE) {
+                        LOGGER.info("...delete slot.");
 
-                        LOGGER.info("...nothing to do.");
+                        mgr.delete(slot);
+
+                        evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                        evt.put(SlotManager.SLOT_TYPE, slot);
+                        MCREventManager.instance().handleEvent(evt);
+                        continue;
                     }
+                    
+                    LOGGER.info("...nothing to do.");
                 } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
                         | MCRPersistenceException | MCRActiveLinkException e) {
                     LOGGER.error(e.getMessage());
