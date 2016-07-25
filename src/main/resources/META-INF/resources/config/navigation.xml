@@ -97,6 +97,10 @@
       <label xml:lang="de">Dokumente einreichen</label>
       <label xml:lang="en">Submit Document</label>
     </item>
+    <item href="/content/publish/importPPN.xml" type="intern">
+      <label xml:lang="de">PPN Import</label>
+      <label xml:lang="en">PPN Import</label>
+    </item>
     <item href="/content/publish/guidelines.xml" type="intern">
       <label xml:lang="de">Leitlinien</label>
       <label xml:lang="en">Guidelines</label>
