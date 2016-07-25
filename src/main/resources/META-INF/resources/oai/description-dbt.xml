@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <oai_dc:dc xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+    xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+    <dc:title>Digitale Bibliothek Thüringen (Digital Library of Thuringia)</dc:title>
+
+    <dc:description>A fundamental principle of the publication of documents is the idea of open access.
+    Apart from a few exceptions, all full texts are publicly available.
+    You can publish your electronical documents in the DBT, too.
+    Your publication is not only worldwide available on the internet, its long-term availability is also guaranteed.
+    
+    All dissertations and habilitations as a digital version as well as final theses meeting certain criteria are stored in the DBT.
+    You find here all necessary information for submitting your dissertation/habilitation and final thesis at your own university. 
+    
+    The multimedia center provides current recordings of lectures with a synchronized presentation and stores it in the DBT.
+    A large number of presentations from many departments are already available.
+    Furthermore, conferences, workshops and events of the university are also recorded.
+    </dc:description>
+  </oai_dc:dc>
+</description>
