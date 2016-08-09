@@ -29,6 +29,26 @@
 
   <xsl:variable name="newline" select="'&#xA;'" />
 
+  <xsl:variable name="editorTo">
+    <xsl:variable name="m" select="document(concat('slot:slotId=', $slotId, '&amp;mail'))/mail" />
+    <xsl:choose>
+      <xsl:when test="string-length($m) &gt; 0">
+        <xsl:value-of select="$m" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="mp" select="document(concat('slot:slotId=', $slotId, '&amp;mail&amp;parent=true'))/mail" />
+        <xsl:choose>
+          <xsl:when test="string-length($mp) &gt; 0">
+            <xsl:value-of select="$mp" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$MCR.RC.MailSender" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:template match="/">
     <xsl:message>
       type:
@@ -76,15 +96,12 @@
       <xsl:message>
         Send Mail for:
         <xsl:value-of select="$action" />
+        To:
+        <xsl:value-of select="$editorTo" />
       </xsl:message>
-<!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail'))/mail" /> -->
-<!--         <xsl:value-of select="document(concat('slot:slotId=', $slotId, '&amp;mail&amp;parent=true'))/mail" /> -->
-      <xsl:for-each select="lecturers/lecturer">
-        <to>
-          rene.adler@tu-ilmenau.de
-<!--           <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" /> -->
-        </to>
-      </xsl:for-each>
+      <to>
+        <xsl:value-of select="$editorTo" />
+      </to>
       <subject>
         <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
         <xsl:choose>
@@ -169,8 +186,7 @@
 
     <xsl:for-each select="lecturers/lecturer">
       <to>
-        rene.adler@tu-ilmenau.de
-<!--         <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" /> -->
+        <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
       </to>
     </xsl:for-each>
     <subject>
@@ -198,12 +214,12 @@
       <xsl:message>
         Send Mail for:
         <xsl:value-of select="name()" />
+        To:
+        <xsl:value-of select="$editorTo" />
       </xsl:message>
-      <xsl:for-each select="$slot/lecturers/lecturer">
-        <to>
-          <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
-        </to>
-      </xsl:for-each>
+      <to>
+        <xsl:value-of select="$editorTo" />
+      </to>
       <subject>
         <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
         <xsl:choose>
