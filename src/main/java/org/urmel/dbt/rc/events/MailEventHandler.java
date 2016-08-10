@@ -33,7 +33,7 @@ import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
  */
 public class MailEventHandler extends EventHandlerBase {
 
-    private static final String MAIL_STYLESHEET = "rc/mail-events";
+    private static final String MAIL_STYLESHEET = "layout/dbt-email-layout:xslStyle:rc/mail-events";
 
     /* (non-Javadoc)
      * @see org.urmel.dbt.rc.events.EventHandlerBase#handleSlotCreated(org.mycore.common.events.MCREvent, org.urmel.dbt.rc.datamodel.slot.Slot)

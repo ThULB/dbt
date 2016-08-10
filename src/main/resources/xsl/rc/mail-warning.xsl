@@ -55,28 +55,39 @@
       <xsl:value-of select="concat('ESA ', @id, ': Ablauf Ihres Semesterapparats')" />
     </subject>
     <body>
-      <xsl:text>Sehr geehrte/r Benutzer/in,</xsl:text>
-      <xsl:value-of select="$newline" />
-      <xsl:value-of select="$newline" />
-      <xsl:text>folgender Semesterapparat wird ablaufen:</xsl:text>
-      <xsl:value-of select="$newline" />
-      <xsl:value-of select="$newline" />
+      <strong>Sehr geehrte/r Benutzer/in,</strong>
+      <br />
+      <p>folgender Semesterapparat wird ablaufen:</p>
 
-      <xsl:text>Titel  : </xsl:text>
-      <xsl:value-of select="title" />
-      <xsl:value-of select="$newline" />
-      <xsl:text>Standort  : </xsl:text>
-      <xsl:apply-templates select="@id" mode="rcLocationText" />
-      <xsl:value-of select="$newline" />
-      <xsl:text>Semester  : </xsl:text>
-      <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
-      <xsl:value-of select="$newline" />
-      <xsl:text>Gültig bis: </xsl:text>
-      <xsl:value-of select="validTo" />
-      <xsl:value-of select="$newline" />
-      <xsl:value-of select="$newline" />
+      <dl>
+        <dt>Titel</dt>
+        <dd>
+          <xsl:value-of select="title" />
+        </dd>
+        <dt>Standort</dt>
+        <dd>
+          <xsl:apply-templates select="@id" mode="rcLocationText" />
+        </dd>
+        <dt>Semester</dt>
+        <dd>
+          <xsl:value-of select="$period//label[lang($CurrentLang)]/@description" />
+        </dd>
+        <dt>Gültig bis</dt>
+        <dd>
+          <xsl:value-of select="validTo" />
+        </dd>
+      </dl>
+
       <!-- TODO mail text -->
-      <xsl:text>Benutzen Sie bitte nachfolgenden Link um uns mitzuteilen was mit Ihrem Semesterapparat geschehen soll.</xsl:text>
+      <p>
+        Benutzen Sie bitte nachfolgenden Link um uns mitzuteilen was mit Ihrem Semesterapparat geschehen soll.
+        <br />
+        <xsl:variable name="sLink" select="concat($WebApplicationBaseURL, 'content/rc/slot.xed?action=status&amp;slotId=', @id)" />
+        <a href="{$sLink}">
+          <xsl:value-of select="$sLink" />
+        </a>
+      </p>
+      <xsl:text></xsl:text>
       <xsl:value-of select="$newline" />
       <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/slot.xed?action=status&amp;slotId=', @id)" />
       <xsl:value-of select="$newline" />
