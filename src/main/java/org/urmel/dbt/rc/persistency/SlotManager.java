@@ -123,6 +123,12 @@ public final class SlotManager {
         return singelton;
     }
 
+    public static String buildKey() {
+        final StringBuffer buf = new StringBuffer();
+        buf.append(Long.toString(System.nanoTime(), 36));
+        return buf.reverse().toString();
+    }
+
     /**
      * Returns the base id of the MCRObject.
      * 

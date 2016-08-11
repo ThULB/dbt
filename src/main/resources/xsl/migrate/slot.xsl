@@ -27,7 +27,7 @@
       <xsl:value-of select="$catalogId" />
       -------------------------------------------------
     </xsl:message>
-    <slot>
+    <slot pendingStatus="ownerTransfer">
       <xsl:apply-templates select="@*" />
       <xsl:call-template name="lecturers" />
       <xsl:apply-templates select="*" />

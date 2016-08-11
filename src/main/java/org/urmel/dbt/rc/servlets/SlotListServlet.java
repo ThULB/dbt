@@ -134,10 +134,10 @@ public class SlotListServlet extends MCRServlet {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
 
                     // rebuild new keys
-                    String readKey = buildKey();
+                    String readKey = SlotManager.buildKey();
                     String writeKey = null;
                     // rebuild write key if match with read key 
-                    while ((writeKey = buildKey()).equals(readKey))
+                    while ((writeKey = SlotManager.buildKey()).equals(readKey))
                         ;
 
                     slot.setReadKey(readKey);
@@ -266,11 +266,5 @@ public class SlotListServlet extends MCRServlet {
 
     private MCRCategoryID getLocationId(final String location) {
         return DAO.getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, location), 0).getId();
-    }
-
-    private String buildKey() {
-        final StringBuffer buf = new StringBuffer();
-        buf.append(Long.toString(System.nanoTime(), 36));
-        return buf.reverse().toString();
     }
 }
