@@ -239,8 +239,7 @@
         <xsl:value-of select="$editorTo" />
       </xsl:message>
       <to>
-<!--         <xsl:value-of select="$editorTo" /> -->
-        rene.adler@tu-ilmenau.de
+        <xsl:value-of select="$editorTo" />
       </to>
       <subject>
         <xsl:value-of select="concat('ESA ', $slotId, ': ')" />
