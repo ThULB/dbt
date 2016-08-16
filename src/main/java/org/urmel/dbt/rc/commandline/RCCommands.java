@@ -286,7 +286,8 @@ public class RCCommands extends MCRAbstractCommands {
         final SlotList slotList = mgr.getSlotList();
 
         if (!slotList.getSlots().isEmpty()) {
-            for (final Slot slot : slotList.getSlots()) {
+            for (int i = 0; i < slotList.getSlots().size(); i++) {
+                final Slot slot = slotList.getSlots().get(i);
                 LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
 
                 try {
