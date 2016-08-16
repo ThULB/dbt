@@ -217,6 +217,21 @@ public class RCCommands extends MCRAbstractCommands {
             }
         }
 
+        MCREvent evt = null;
+
+        if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER) {
+            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
+            // rebuild new keys
+            String readKey = SlotManager.buildKey();
+            String writeKey = null;
+            // rebuild write key if match with read key 
+            while ((writeKey = SlotManager.buildKey()).equals(readKey))
+                ;
+
+            slot.setReadKey(readKey);
+            slot.setWriteKey(writeKey);
+        }
+
         if (update) {
             LOGGER.info("Update Slot " + slot.getSlotId() + " from " + file.getCanonicalPath() + ".");
             mgr.setSlot(slot);
@@ -227,23 +242,11 @@ public class RCCommands extends MCRAbstractCommands {
             mgr.saveOrUpdate(slot);
         }
 
-        if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER) {
-            final MCREvent evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
-
-            // rebuild new keys
-            String readKey = SlotManager.buildKey();
-            String writeKey = null;
-            // rebuild write key if match with read key 
-            while ((writeKey = SlotManager.buildKey()).equals(readKey))
-                ;
-
-            slot.setReadKey(readKey);
-            slot.setWriteKey(writeKey);
-
+        if (evt != null) {
             evt.put(SlotManager.SLOT_TYPE, slot);
-
             MCREventManager.instance().handleEvent(evt);
         }
+
     }
 
     @MCRCommand(syntax = "import all slots from directory {0}", help = "imports all rc slots from given directory {0}")
