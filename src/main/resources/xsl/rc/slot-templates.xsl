@@ -102,6 +102,7 @@
                   </a>
                 </li>
                 <xsl:if test="$hasAdminPermission or $isOwner">
+                  <li class="divider" />
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1"
                       href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
