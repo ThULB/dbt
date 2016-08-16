@@ -91,25 +91,25 @@
                     <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
                   </a>
                 </li>
-                <xsl:if test="$hasAdminPermission">
-                  <li class="divider" />
-                </xsl:if>
               </xsl:if>
               <xsl:if test="$hasAdminPermission or ($writePermission and (@status != 'archived'))">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
-                    <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
-                  </a>
-                </li>
-                <xsl:if test="$hasAdminPermission or $isOwner">
-                  <li class="divider" />
+                <xsl:if test="($hasAdminPermission or $writePermission) and (@status != 'archived') and not(contains($RequestURL, '/attendees'))">
                   <li role="presentation">
-                    <a role="menuitem" tabindex="-1"
-                      href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
-                    >
-                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
-                    </a>
+                    <xsl:choose>
+                      <xsl:when test="$effectiveMode = 'view'">
+                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
+                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
+                        </a>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
+                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
+                        </a>
+                      </xsl:otherwise>
+                    </xsl:choose>
                   </li>
+                </xsl:if>
+                <xsl:if test="$hasAdminPermission or $isOwner">
                   <xsl:if test="not(contains($RequestURL, '/attendees'))">
                     <li class="divider" />
                     <li role="presentation">
@@ -126,24 +126,21 @@
                       </a>
                     </li>
                   </xsl:if>
-                </xsl:if>
-                <xsl:if test="($hasAdminPermission or $writePermission) and (@status != 'archived') and not(contains($RequestURL, '/attendees'))">
                   <li class="divider" />
                   <li role="presentation">
-                    <xsl:choose>
-                      <xsl:when test="$effectiveMode = 'view'">
-                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
-                        </a>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
-                        </a>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <a role="menuitem" tabindex="-1"
+                      href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                    >
+                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                    </a>
                   </li>
                 </xsl:if>
+                <li class="divider" />
+                <li role="presentation">
+                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                  </a>
+                </li>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($writePermission)">
                 <li role="presentation">
