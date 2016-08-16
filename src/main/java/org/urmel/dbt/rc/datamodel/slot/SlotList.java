@@ -5,6 +5,7 @@ package org.urmel.dbt.rc.datamodel.slot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,7 +25,7 @@ public class SlotList implements Serializable {
 
     private static final long serialVersionUID = 8484254848235412462L;
 
-    private List<Slot> slots = new ArrayList<Slot>();
+    private List<Slot> slots = Collections.synchronizedList(new ArrayList<Slot>());
 
     private Long total;
 
@@ -40,7 +41,7 @@ public class SlotList implements Serializable {
      */
     @XmlElement(name = "slot")
     public void setSlots(final List<Slot> slots) {
-        this.slots = slots;
+        this.slots = Collections.synchronizedList(slots);
     }
 
     /**
