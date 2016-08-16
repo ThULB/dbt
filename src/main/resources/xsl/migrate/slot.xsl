@@ -20,6 +20,8 @@
       -------------------------------------------------
       slotId:
       <xsl:value-of select="$slotId" />
+      status
+      <xsl:value-of select="@status" />
 
       dirname:
       <xsl:value-of select="$dirname" />
@@ -27,10 +29,16 @@
       <xsl:value-of select="$catalogId" />
       -------------------------------------------------
     </xsl:message>
-    <slot pendingStatus="ownerTransfer">
+    <slot>
       <xsl:apply-templates select="@*" />
+      <xsl:attribute name="pendingStatus">
+        <xsl:text>ownerTransfer</xsl:text>
+      </xsl:attribute>
       <xsl:call-template name="lecturers" />
       <xsl:apply-templates select="*" />
+      <xsl:if test="count(validTo) = 0">
+        <validTo>30.09.2016</validTo>
+      </xsl:if>
     </slot>
   </xsl:template>
 
@@ -42,7 +50,14 @@
 
   <xsl:template match="slot/@status">
     <xsl:attribute name="status">
-      <xsl:value-of select="." />
+      <xsl:choose>
+        <xsl:when test="(. = 'inactive') or (. = 'validating')">
+          <xsl:value-of select="'archived'" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="." />
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:attribute>
   </xsl:template>
 
