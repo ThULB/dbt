@@ -138,11 +138,6 @@
                     </a>
                   </li>
                 </xsl:if>
-                <xsl:message>
-                  hasEditorPermission:
-                  <xsl:value-of select="$hasEditorPermission" />
-                  <xsl:value-of select="not($hasEditorPermission)" />
-                </xsl:message>
                 <xsl:if test="not($hasEditorPermission)">
                   <li class="divider" />
                   <li role="presentation">
