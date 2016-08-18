@@ -83,9 +83,13 @@ public final class SlotManager {
 
     public static final String POOLPRIVILEGE_ADMINISTRATE_SLOTS = "administrate-slots";
 
+    public static final String POOLPRIVILEGE_EDIT_SLOTS = "edit-slots";
+
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
     public static final String ADMIN_GROUP = MCRConfiguration.instance().getString("DBT.RC.Administrator.GroupName");
+
+    public static final String EDITOR_GROUP = MCRConfiguration.instance().getString("DBT.RC.Editor.GroupName");
 
     public static final String PROJECT_ID = "rc";
 
@@ -179,6 +183,17 @@ public final class SlotManager {
         return currentUser.getUserID().equals(MCRSystemUserInformation.getSuperUserInstance().getUserID())
                 || currentUser.isUserInRole(ADMIN_GROUP)
                         && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
+    }
+
+    /**
+     * Checks if current user is reserve collection editor.
+     * 
+     * @return <code>true</code> if is editor
+     */
+    public static boolean hasEditorPermission() {
+        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
+        return currentUser.isUserInRole(EDITOR_GROUP)
+                && MCRAccessManager.checkPermission(POOLPRIVILEGE_EDIT_SLOTS);
     }
 
     /**

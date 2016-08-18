@@ -14,6 +14,10 @@
       <label xml:lang="en" text="RC Administrator" />
       <label xml:lang="de" text="ESA Administrator" />
     </category>
+    <category ID="rceditor">
+      <label xml:lang="en" text="RC Editor" />
+      <label xml:lang="de" text="ESA Bearbeiter" />
+    </category>
     <category ID="editor">
       <label xml:lang="en" text="Editor" />
       <label xml:lang="de" text="Bearbeiter" />
