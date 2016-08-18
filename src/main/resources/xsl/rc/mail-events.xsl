@@ -196,6 +196,9 @@
         <xsl:value-of select="concat(@name, ' &lt;', @email, '&gt;')" />
       </to>
     </xsl:for-each>
+    <bcc>
+      elektronische_semesterapparate@thulb.uni-jena.de
+    </bcc>
     <subject>
       <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
     </subject>
