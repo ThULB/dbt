@@ -269,7 +269,7 @@
       </p>
       <ul>
         <li>
-          Kopieren Sie den folgenden Zugriffsschlüssel in die Zwischenablage [Strg+C|CMD+C]:
+          Kopieren Sie den folgenden Zugriffsschlüssel in die Zwischenablage:
           <strong>
             <xsl:value-of select="$accessKeys/@writekey" />
           </strong>
@@ -284,7 +284,7 @@
             <li>Auswahl: Uni-Login</li>
             <li>Auswahl Organisation: Friedrich-Schiller-Universität Jena / Technische Universität Ilmenau</li>
             <li>Eingabe Ihrer persönlichen URZ-Nutzerkennung</li>
-            <li>Eingabe Zugriffsschlüssel [Strg+V|CMD+V]. Damit erhalten Sie die Berechtigung zur Bearbeitung dieses ESA</li>
+            <li>Eingabe Zugriffsschlüsse. Damit erhalten Sie die Berechtigung zur Bearbeitung dieses ESA</li>
           </ul>
         </li>
         <li>
