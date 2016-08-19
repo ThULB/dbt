@@ -31,6 +31,11 @@
     </xsl:message>
     <slot>
       <xsl:apply-templates select="@*" />
+      <xsl:if test="not(@status)">
+        <xsl:attribute name="status">
+          <xsl:value-of select="'archived'" />
+        </xsl:attribute>
+      </xsl:if>
       <xsl:attribute name="pendingStatus">
         <xsl:text>ownerTransfer</xsl:text>
       </xsl:attribute>
@@ -51,7 +56,7 @@
   <xsl:template match="slot/@status">
     <xsl:attribute name="status">
       <xsl:choose>
-        <xsl:when test="(. = 'inactive') or (. = 'validating')">
+        <xsl:when test="(string-length(.) = 0) or (. = 'inactive') or (. = 'validating')">
           <xsl:value-of select="'archived'" />
         </xsl:when>
         <xsl:otherwise>
