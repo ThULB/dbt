@@ -197,12 +197,13 @@
       </to>
     </xsl:for-each>
     <bcc>
-      elektronische_semesterapparate@thulb.uni-jena.de
+      <xsl:value-of select="concat('Elektronische Semesterapparate', ' &lt;', 'elektronische_semesterapparate@thulb.uni-jena.de', '&gt;')" />
     </bcc>
     <subject>
       <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
     </subject>
     <body>
+      <!-- 
       <strong>Sehr geehrte/r Benutzer/in,</strong>
       <br />
       <p>
@@ -222,6 +223,104 @@
         entspricht dem Status des ESA vor der
         Übernahme (aktiv / inaktiv).
       </p>
+       -->
+      <strong>Sehr geehrte Damen und Herren,</strong>
+      <br />
+      <p>
+        mit diesem Schreiben erhalten Sie alle erforderlichen Schritte zur Übernahme des folgenden Elektronischen Semesterapparates (ESA) in die neue Digitale
+        Bibliothek (DBT):
+      </p>
+      <dl>
+        <dt>Titel</dt>
+        <dd>
+          <xsl:value-of select="title" />
+        </dd>
+        <dt>Apparate-Inhaber</dt>
+        <dd>
+          <xsl:for-each select="lecturers/lecturer">
+            <xsl:call-template name="formatName">
+              <xsl:with-param name="name" select="@name" />
+            </xsl:call-template>
+            <xsl:if test="position() != last()">
+              <xsl:text>; </xsl:text>
+            </xsl:if>
+          </xsl:for-each>
+        </dd>
+        <dt>Status</dt>
+        <dd>
+          <xsl:value-of select="@status" />
+        </dd>
+        <dt>Gültig bis</dt>
+        <dd>
+          <xsl:value-of select="validTo" />
+        </dd>
+      </dl>
+      <p>
+        Haben Sie diese E-Mail als
+        <i>beauftragte Person</i>
+        und nicht als Apparate-Inhaber erhalten, so leiten Sie die E-Mail bitte an den Apparate-Inhaber weiter. Nur der
+        Apparate-Inhaber persönlich kann die
+        nachfolgend aufgeführten Schritte zur Übernahme ausführen. Nach der Übernahme kann der Apparate-Inhaber Sie wieder
+        als beauftragte Person /
+        Ansprechpartner benennen und mit der Betreuung des Elektronischen Semesterapparates beauftragen.
+      </p>
+      <p>
+        Als Apparate-Inhaber gehen Sie für die Übernahme dieses Elektronischen Semesterapparates in die neue DBT bitte wie folgt vor:
+      </p>
+      <ul>
+        <li>
+          Kopieren Sie den folgenden Zugriffsschlüssel in die Zwischenablage [Strg+C|CMD+C]:
+          <strong>
+            <xsl:value-of select="$accessKeys/@writekey" />
+          </strong>
+        </li>
+        <li>
+          Melden Sie sich
+          <strong>
+            <a href="{concat($WebApplicationBaseURL, 'rc/', $slotId)}"> hier </a>
+          </strong>
+          wie folgt an:
+          <ul>
+            <li>Auswahl: Uni-Login</li>
+            <li>Auswahl Organisation: Friedrich-Schiller-Universität Jena / Technische Universität Ilmenau</li>
+            <li>Eingabe Ihrer persönlichen URZ-Nutzerkennung</li>
+            <li>Eingabe Zugriffsschlüssel [Strg+V|CMD+V]. Damit erhalten Sie die Berechtigung zur Bearbeitung dieses ESA</li>
+          </ul>
+        </li>
+        <li>
+          Abschließende Zuordnung des ESA zu Ihrer Person mittels „Eigentümerwechsel“ durchführen:
+          <ul>
+            <li>Eingabe Leseschlüssel (für Teilnehmer der Lehrveranstaltung)</li>
+            <li>Eingabe Schreibschlüssel (für beauftragte Person / Ansprechpartner)</li>
+            <li>Mit „Speichern“ wird der Elektronische Semesterapparat in die neue DBT übernommen</li>
+          </ul>
+        </li>
+        <li>
+          Ansprechpartner / beauftragte Person festlegen:
+          <ul>
+            <li>Wechsel in den Bearbeitungsmodus</li>
+            <li>Auswahl „Semesterapparat verwalten“ (ggf. muss der ESA zuerst reaktiviert werden)</li>
+            <li>Eingabe Name und E-Mail-Adresse für den Ansprechpartner / die beauftragte Person</li>
+          </ul>
+        </li>
+      </ul>
+      <br />
+      <strong>Hinweise:</strong>
+      <p>Der Status des ESA nach der Übernahme in die neue DBT entspricht dem Status des ESA vor der Übernahme (aktiv / inaktiv). Mit Wechsel in den
+        Bearbeitungsmodus können Sie inaktive ESA jederzeit reaktivieren bzw. aktive ESA sofort bearbeiten.</p>
+      <p>Die gesetzten Schreib- bzw. Leseschlüssel teilen Sie bitte ausschließlich den jeweils berechtigten Personen mit. Diese melden sich für den Zugriff auf
+        den ESA mit ihrer persönlichen URZ-Nutzerkennung in der DBT mit anschließender Eingabe des Schreibschlüssels an.
+        Denken Sie daran, die Links zu Ihren
+        Elektronischen Semesterapparaten an allen erforderlichen Stellen zu aktualisieren.</p>
+      <p>
+        Bei Problemen mit der Übernahme eines Semesterapparates in die neue DBT leiten Sie diese Mail bitte mit einem kurzen Kommentar weiter an
+        <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
+        Informationen rund um die Elektronischen Semesterapparate finden Sie unter den neu zusammengestellten FAQ direkt auf der Seite der DBT.
+      </p>
+      <br />
+      Mit freundlichen Grüßen
+      <br />
+      Ihr Team Elektronische Semesterapparate
     </body>
   </xsl:template>
 
