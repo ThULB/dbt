@@ -19,7 +19,7 @@
                 <![CDATA[
 body {
   font-family: "lucida grande", "lucida sans unicode", arial, sans-serif;
-  margin: 0;
+  margin: 0 0 20px 0;
   padding: 0;
 }
 
