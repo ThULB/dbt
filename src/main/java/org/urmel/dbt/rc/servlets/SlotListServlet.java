@@ -254,8 +254,10 @@ public class SlotListServlet extends MCRServlet {
             }
 
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
-                    !SlotManager.hasAdminPermission() ? "slot.status:active or createdby:"
-                            + currentUser.getUserID() : null,
+                    !SlotManager.hasAdminPermission() && !SlotManager.hasEditorPermission()
+                            ? "slot.status:active or createdby:"
+                                    + currentUser.getUserID()
+                            : null,
                     start, rows, sortClauses);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
