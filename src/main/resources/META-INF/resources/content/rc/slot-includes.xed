@@ -186,8 +186,8 @@
   </xed:template>
 
   <xed:template id="buttons">
-    <mir:template name="submitButton" i18n="button.debug" target="debug" />
-    <span>&#160;</span>
+<!--     <mir:template name="submitButton" i18n="button.debug" target="debug" /> -->
+<!--     <span>&#160;</span> -->
     <xed:choose>
       <xed:when test="($action = 'reactivate') or ($action = 'reactivateComplete')">
         <mir:template name="submitButton" i18n="component.rc.slot.reactivate.button" target="servlet" href="RCSlotListServlet" />
