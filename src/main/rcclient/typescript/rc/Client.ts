@@ -248,9 +248,9 @@ module rc {
          */
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
-
+alert(aData);
             aData = ClientData.decrypt(this.sessionToken, aData);
-
+alert(aData);
             this.slots = new Array<Slot>();
             var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
@@ -325,7 +325,7 @@ module rc {
 
     class ClientData {
         private static KEY_SIZE: number = 128;
-        private static ITERATIONS: number = 100;
+        private static ITERATIONS: number = 0;
 
         public static encrypt(passphrase: string, data: string): string {
             var salt = CryptoJS.lib.WordArray.random(ClientData.KEY_SIZE / 32);
