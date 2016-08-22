@@ -22,15 +22,10 @@
             <span class="fa fa-th-list" />
             Elektronische Semesterapparate
           </h3>
-          <p>
-            Die Elektronischen Semesterapparate (ESA) sind <span class="text-danger">bis auf Weiteres über die alte DBT-Oberfläche</span>
-            mit den dort angelegten Zugangskennungen für die Dozenten und Teilnehmer der Lehrveranstaltungen nutzbar.
-            Hier geht es zu den Elektronischen Semesterapparaten:
-            <a href="http://www3.db-thueringen.de/esa">Gesamtliste</a>
-            /
-            <a href="http://www3.db-thueringen.de/semapp/edit-searchSemApp.xml">Suche</a>
-            /
-            <a href="http://www3.db-thueringen.de/semapp/new-semapp.xml?cancel=/semapp/index.xml">Neu beantragen</a>
+          <p>Ein elektronischer Semesterapparat stellt alle vom Dozenten ausgewählten Materialien, digitalisierte Kopiervorlagen und Links zu weiteren Ressourcen
+            mittels
+            passwortgeschütztem Zugang für die studentischen Teilnehmer einer Lehrveranstaltung online bereit. Die in den Apparaten gelisteten Bücher aus dem Bestand der
+            Bibliothek stehen zur Präsenznutzung vor Ort zur Verfügung.
           </p>
         </div>
       </div>
