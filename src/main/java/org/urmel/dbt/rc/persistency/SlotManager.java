@@ -81,9 +81,9 @@ import org.xml.sax.SAXException;
  */
 public final class SlotManager {
 
-    public static final String POOLPRIVILEGE_ADMINISTRATE_SLOTS = "administrate-slots";
+    public static final String POOLPRIVILEGE_ADMINISTRATE_SLOT = "administrate-slot";
 
-    public static final String POOLPRIVILEGE_EDIT_SLOTS = "edit-slots";
+    public static final String POOLPRIVILEGE_EDIT_SLOT = "edit-slot";
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
@@ -182,7 +182,7 @@ public final class SlotManager {
         final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
         return currentUser.getUserID().equals(MCRSystemUserInformation.getSuperUserInstance().getUserID())
                 || currentUser.isUserInRole(ADMIN_GROUP)
-                        && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOTS);
+                        && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOT);
     }
 
     /**
@@ -193,7 +193,7 @@ public final class SlotManager {
     public static boolean hasEditorPermission() {
         final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
         return currentUser.isUserInRole(EDITOR_GROUP)
-                && MCRAccessManager.checkPermission(POOLPRIVILEGE_EDIT_SLOTS);
+                && MCRAccessManager.checkPermission(POOLPRIVILEGE_EDIT_SLOT);
     }
 
     /**
