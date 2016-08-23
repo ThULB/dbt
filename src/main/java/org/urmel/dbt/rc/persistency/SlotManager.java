@@ -559,7 +559,7 @@ public final class SlotManager {
                 MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL"));
 
         final SolrQuery query = new SolrQuery();
-        final String searchStr = "slotId:%filter% or slot.title:%filter% or slot.lecturer:%filter% or slot.location:%filter% or slot.validTo:%filter%"
+        final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"
                 .replace("%filter%",
                         search != null && !search.isEmpty() ? MCRSolrUtils.escapeSearchValue(search) : "*");
 
