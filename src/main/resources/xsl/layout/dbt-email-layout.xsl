@@ -13,9 +13,7 @@
         </body>
         <body type="html">
           <xsl:variable name="html">
-            <html>
-              <head>
-                <style type="text/css">
+            <style type="text/css">
                 <![CDATA[
 body {
   font-family: "lucida grande", "lucida sans unicode", arial, sans-serif;
@@ -35,31 +33,6 @@ a:hover {
   text-decoration: underline;
 }
 
-header {
-  padding: 10px;
-  position: relative;
-  display: block;
-  height: 80px;
-  border-bottom: 1px solid #008855;
-  position: relative;
-  margin-bottom: 15px;
-}
-
-#logo {
-  position: absolute;
-  right: 10px;
-  display: block;
-}
-
-#logo>img {
-  height: 80px;
-  display: block;
-}
-
-section.content {
-  margin: 0 10px;
-}
-
 .pica-record>h4, .pica-record>p {
   margin: 0;
 }
@@ -68,21 +41,18 @@ section.content {
   margin-top: 0;
 }
                 ]]>
-                </style>
-              </head>
-              <body>
-                <header>
-                  <a id="logo" href="{$WebApplicationBaseURL}">
-                    <img src="{$WebApplicationBaseURL}dbt/images/logo.png" />
-                  </a>
-                </header>
-                <section class="content">
-                  <xsl:apply-templates select="child::node()" />
-                </section>
-              </body>
-            </html>
+            </style>
+            <div id="header"
+              style="padding: 10px; position: relative; display: block; height: 80px; border-bottom: 1px solid #008855; position: relative; margin-bottom: 15px;"
+            >
+              <a id="logo" href="{$WebApplicationBaseURL}" style="position: absolute; right: 10px; display: block;">
+                <img src="{$WebApplicationBaseURL}dbt/images/logo.png" style="height: 80px; display: block;" />
+              </a>
+            </div>
+            <div id="content" style="margin: 0 10px;">
+              <xsl:apply-templates select="child::node()" />
+            </div>
           </xsl:variable>
-          <xsl:value-of select="'&lt;!DOCTYPE html&gt;'" />
           <xsl:apply-templates select="xalan:nodeset($html)" mode="html" />
         </body>
       </xsl:when>
