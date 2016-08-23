@@ -325,7 +325,7 @@ module rc {
 
     class ClientData {
         private static KEY_SIZE: number = 128;
-        private static ITERATIONS: number = 1;
+        private static ITERATIONS: number = 100;
 
         public static encrypt(passphrase: string, data: string): string {
             var salt = CryptoJS.lib.WordArray.random(ClientData.KEY_SIZE / 32);

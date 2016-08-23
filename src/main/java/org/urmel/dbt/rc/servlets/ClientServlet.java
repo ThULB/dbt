@@ -191,7 +191,7 @@ public class ClientServlet extends MCRServlet {
     private static class ClientData {
         private static String CIPHER_TRANSFORMATION = "AES/CBC/PKCS5Padding";
         private static int KEY_SIZE = 128;
-        private static int ITERATIONS = 1;
+        private static int ITERATIONS = 100;
 
         private static byte[] generateIV(String passphrase) throws NoSuchAlgorithmException {
             final MessageDigest md = MessageDigest.getInstance("MD5");
