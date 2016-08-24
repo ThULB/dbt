@@ -64,7 +64,7 @@ module rc {
             slot.status = elm.getAttribute("status") ? Status[elm.getAttribute("status").toUpperCase()] : "";
             slot.eOnly = (elm.hasAttribute("onlineOnly") ? core.Utils.toBoolean(elm.getAttribute("onlineOnly")) : false);
 
-            slot.title = (<Text>elm.getElementsByTagName("title").item(0).firstChild).data;
+            slot.title = elm.getElementsByTagName("title").length > 0 && core.Utils.isValid(elm.getElementsByTagName("title").item(0).firstChild) ? (<Text>elm.getElementsByTagName("title").item(0).firstChild).data : slot.id;
 
             slot.entries = new Array<Entry>();
             var entries = elm.getElementsByTagName("entry");

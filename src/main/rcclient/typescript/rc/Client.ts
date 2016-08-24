@@ -112,7 +112,7 @@ module rc {
             });
             this.requestToken();
         }
-        
+
         /**
          * Deregisters copy with given parameters.
          * 
@@ -176,7 +176,7 @@ module rc {
 
             this.slots.push(slot);
         }
-        
+
         /**
          * Callback method if a error was triggered.
          * 
@@ -249,17 +249,22 @@ module rc {
         private onSlotsComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            aData = ClientData.decrypt(this.sessionToken, aData);
+            try {
+                aData = ClientData.decrypt(this.sessionToken, aData);
 
-            this.slots = new Array<Slot>();
-            var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
+                this.slots = new Array<Slot>();
+                var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
-            if (core.Utils.isValid(doc)) {
-                var slots: NodeList = doc.getElementsByTagName("slot");
-                for (var c = 0; c < slots.length; c++) {
-                    var slot: Slot = Slot.parse(<Element>slots.item(c));
-                    this.slots.push(slot);
+                if (core.Utils.isValid(doc)) {
+                    var slots: NodeList = doc.getElementsByTagName("slot");
+                    for (var c = 0; c < slots.length; c++) {
+                        var slot: Slot = Slot.parse(<Element>slots.item(c));
+                        this.slots.push(slot);
+                    }
                 }
+            } catch (e) {
+                this.dispatch(Client.EVENT_ERROR, new rc.Error(rc.ErrorCode.PARSE_ERROR_SLOTS, e));
+                return;
             }
 
             this.statusText = core.Locale.getInstance().getString("client.status.loadSlots.done");
@@ -276,16 +281,21 @@ module rc {
         private onSlotComplete(aRequest: net.HTTPRequest, aData: string) {
             aRequest.clearListenersByEvent(net.HTTPRequest.EVENT_COMPLETE);
 
-            aData = ClientData.decrypt(this.sessionToken, aData);
+            try {
+                aData = ClientData.decrypt(this.sessionToken, aData);
 
-            var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
+                var doc: Document = new DOMParser().parseFromString(aData, "text/xml");
 
-            var slot: Slot = null;
+                var slot: Slot = null;
 
-            if (core.Utils.isValid(doc)) {
-                var elm: Element = <Element>doc.getElementsByTagName("slot").item(0);
-                slot = Slot.parse(elm);
-                this.setSlot(slot);
+                if (core.Utils.isValid(doc)) {
+                    var elm: Element = <Element>doc.getElementsByTagName("slot").item(0);
+                    slot = Slot.parse(elm);
+                    this.setSlot(slot);
+                }
+            } catch (e) {
+                this.dispatch(Client.EVENT_ERROR, new rc.Error(rc.ErrorCode.PARSE_ERROR_SLOT, e));
+                return;
             }
 
             this.statusText = core.Locale.getInstance().getString("client.status.loadSlot.done");
@@ -306,7 +316,7 @@ module rc {
             this.statusText = core.Locale.getInstance().getString("client.status.registerCopy.done");
             this.dispatch(Client.EVENT_COPY_REGISTERED, JSON2.parse(aData));
         }
-        
+
         /**
          * Callback method after successfully deregistered a copy.
          * 
@@ -324,33 +334,42 @@ module rc {
     }
 
     class ClientData {
+        private static ENCRYPT_ENABLED = false;
         private static KEY_SIZE: number = 128;
         private static ITERATIONS: number = 100;
 
         public static encrypt(passphrase: string, data: string): string {
-            var salt = CryptoJS.lib.WordArray.random(ClientData.KEY_SIZE / 32);
-            var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
-            var iv = CryptoJS.MD5(passphrase);
+            if (ClientData.ENCRYPT_ENABLED) {
+                var salt = CryptoJS.lib.WordArray.random(ClientData.KEY_SIZE / 32);
+                var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
+                var iv = CryptoJS.MD5(passphrase);
 
-            var encrypted = CryptoJS.AES.encrypt(data, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                var encrypted = CryptoJS.AES.encrypt(data, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
 
-            return CryptoJS.lib.WordArray.create().concat(salt).concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+                return CryptoJS.lib.WordArray.create().concat(salt).concat(encrypted.ciphertext).toString(CryptoJS.enc.Base64);
+            } else {
+                return window.btoa(data);
+            }
         }
 
         public static decrypt(passphrase: string, encrypted: string) {
-            var ciphertext = CryptoJS.enc.Base64.parse(encrypted);
+            if (ClientData.ENCRYPT_ENABLED) {
+                var ciphertext = CryptoJS.enc.Base64.parse(encrypted);
 
-            var ciphertextWords = ciphertext.words;
+                var ciphertextWords = ciphertext.words;
 
-            var salt = CryptoJS.lib.WordArray.create(ciphertextWords.slice(0, ClientData.KEY_SIZE / 32 / 4));
-            ciphertext = CryptoJS.lib.WordArray.create(ciphertextWords.slice(ClientData.KEY_SIZE / 32 / 4));
+                var salt = CryptoJS.lib.WordArray.create(ciphertextWords.slice(0, ClientData.KEY_SIZE / 32 / 4));
+                ciphertext = CryptoJS.lib.WordArray.create(ciphertextWords.slice(ClientData.KEY_SIZE / 32 / 4));
 
-            var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
-            var iv = CryptoJS.MD5(passphrase);
+                var key = CryptoJS.PBKDF2(passphrase, salt, { keySize: ClientData.KEY_SIZE / 32, iterations: ClientData.ITERATIONS });
+                var iv = CryptoJS.MD5(passphrase);
 
-            var decrypt = CryptoJS.AES.decrypt(CryptoJS.lib.CipherParams.create({ ciphertext: ciphertext }), key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
+                var decrypt = CryptoJS.AES.decrypt(CryptoJS.lib.CipherParams.create({ ciphertext: ciphertext }), key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
 
-            return decrypt.toString(CryptoJS.enc.Utf8);
+                return decrypt.toString(CryptoJS.enc.Utf8);
+            } else {
+                return window.atob(encrypted);
+            }
         }
     }
 }

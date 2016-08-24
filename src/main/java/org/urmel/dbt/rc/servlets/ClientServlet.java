@@ -189,6 +189,7 @@ public class ClientServlet extends MCRServlet {
     }
 
     private static class ClientData {
+        private static boolean ENCRYPT_ENABLED = false;
         private static String CIPHER_TRANSFORMATION = "AES/CBC/PKCS5Padding";
         private static int KEY_SIZE = 128;
         private static int ITERATIONS = 100;
@@ -217,28 +218,32 @@ public class ClientServlet extends MCRServlet {
         }
 
         public static String encrypt(String passphrase, String data) throws GeneralSecurityException, IOException {
-            final ByteArrayOutputStream bao = new ByteArrayOutputStream();
-            final Random rnd = new SecureRandom();
+            if (ENCRYPT_ENABLED) {
+                final ByteArrayOutputStream bao = new ByteArrayOutputStream();
+                final Random rnd = new SecureRandom();
 
-            byte[] ivBytes = generateIV(passphrase);
-            byte[] saltBytes = new byte[KEY_SIZE / 32];
-            rnd.nextBytes(saltBytes);
+                byte[] ivBytes = generateIV(passphrase);
+                byte[] saltBytes = new byte[KEY_SIZE / 32];
+                rnd.nextBytes(saltBytes);
 
-            try {
-                IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
-                SecretKeySpec sKey = (SecretKeySpec) generateKey(passphrase, saltBytes);
+                try {
+                    IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
+                    SecretKeySpec sKey = (SecretKeySpec) generateKey(passphrase, saltBytes);
 
-                Cipher c = Cipher.getInstance(CIPHER_TRANSFORMATION);
-                c.init(Cipher.ENCRYPT_MODE, sKey, ivParameterSpec);
+                    Cipher c = Cipher.getInstance(CIPHER_TRANSFORMATION);
+                    c.init(Cipher.ENCRYPT_MODE, sKey, ivParameterSpec);
 
-                byte[] cipherBytes = c.doFinal(data.getBytes(StandardCharsets.UTF_8));
+                    byte[] cipherBytes = c.doFinal(data.getBytes(StandardCharsets.UTF_8));
 
-                bao.write(saltBytes);
-                bao.write(cipherBytes);
+                    bao.write(saltBytes);
+                    bao.write(cipherBytes);
 
-                return new String(Base64.getEncoder().encode(bao.toByteArray()), StandardCharsets.ISO_8859_1);
-            } finally {
-                bao.close();
+                    return new String(Base64.getEncoder().encode(bao.toByteArray()), StandardCharsets.ISO_8859_1);
+                } finally {
+                    bao.close();
+                }
+            } else {
+                return new String(Base64.getEncoder().encode(data.getBytes()), StandardCharsets.ISO_8859_1);
             }
         }
 
@@ -246,19 +251,24 @@ public class ClientServlet extends MCRServlet {
             if (encrypted == null || encrypted.isEmpty())
                 return null;
 
-            byte[] cipherBytes = Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.ISO_8859_1));
+            if (ENCRYPT_ENABLED) {
+                byte[] cipherBytes = Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.ISO_8859_1));
 
-            byte[] ivBytes = generateIV(passphrase);
-            byte[] saltBytes = Arrays.copyOf(cipherBytes, KEY_SIZE / 32);
-            cipherBytes = Arrays.copyOfRange(cipherBytes, KEY_SIZE / 32, cipherBytes.length);
+                byte[] ivBytes = generateIV(passphrase);
+                byte[] saltBytes = Arrays.copyOf(cipherBytes, KEY_SIZE / 32);
+                cipherBytes = Arrays.copyOfRange(cipherBytes, KEY_SIZE / 32, cipherBytes.length);
 
-            IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
-            SecretKeySpec sKey = (SecretKeySpec) generateKey(passphrase, saltBytes);
+                IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
+                SecretKeySpec sKey = (SecretKeySpec) generateKey(passphrase, saltBytes);
 
-            Cipher c = Cipher.getInstance(CIPHER_TRANSFORMATION);
-            c.init(Cipher.DECRYPT_MODE, sKey, ivParameterSpec);
+                Cipher c = Cipher.getInstance(CIPHER_TRANSFORMATION);
+                c.init(Cipher.DECRYPT_MODE, sKey, ivParameterSpec);
 
-            return new String(c.doFinal(cipherBytes), StandardCharsets.UTF_8);
+                return new String(c.doFinal(cipherBytes), StandardCharsets.UTF_8);
+            } else {
+                return new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.ISO_8859_1)),
+                        StandardCharsets.UTF_8);
+            }
         }
 
         public static String decrypt(String passphrase, InputStream is) throws GeneralSecurityException, IOException {
