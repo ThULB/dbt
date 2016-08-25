@@ -25,6 +25,7 @@ package org.urmel.dbt.rc.persistency;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,13 +48,13 @@ import org.mycore.backend.hibernate.MCRHIBConnection;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
-import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRCreatorCache;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRVersionedMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
@@ -211,12 +212,11 @@ public final class SlotManager {
      * @return <code>true</code> is owner
      */
     public static boolean isOwner(final String objId, final MCRUserInformation user) {
-        final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
-        final MCRObjectService os = obj.getService();
-        final String owner = (os.isFlagTypeSet("createdby") ? os.getFlags("createdby").get(0) : null);
-
-        if (owner.equals(user.getUserID()))
-            return true;
+        try {
+            return MCRCreatorCache.getCreator(objId).equals(user.getUserID());
+        } catch (ExecutionException e) {
+            LOGGER.error(e.getMessage(), e);
+        }
 
         return false;
     }
