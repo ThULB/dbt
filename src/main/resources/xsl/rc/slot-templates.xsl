@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="acl encoder i18n mcrxsl xlink xalan"
+<xsl:stylesheet version="1.0" xmlns:mgr="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+  xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan"
+  exclude-result-prefixes="mgr acl encoder i18n mcrxsl xlink xalan"
 >
 
   <xsl:param name="CurrentLang" />
@@ -13,7 +14,25 @@
   <xsl:variable name="onlineOnly" select="/slot/@onlineOnly" />
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
 
+  <xsl:variable name="hasAdminPermission" select="acl:checkPermission('administrate-slot')" />
+  <xsl:variable name="hasEditorPermission" select="acl:checkPermission('edit-slot')" />
+  <xsl:variable name="isOwner" select="mgr:isOwner($objectId)" />
+  <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
+  <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
+
   <xsl:variable name="effectiveMode">
+    <xsl:message>
+      readPermission:
+      <xsl:value-of select="$readPermission" />
+      writePermission:
+      <xsl:value-of select="$writePermission" />
+      isOwner:
+      <xsl:value-of select="$isOwner" />
+      hasAdminPermission:
+      <xsl:value-of select="$hasAdminPermission" />
+      hasEditorPermission:
+      <xsl:value-of select="$hasEditorPermission" />
+    </xsl:message>
     <xsl:choose>
       <xsl:when test="$Mode = 'edit' and ($writePermission and (/slot/@status != 'archived'))">
         <xsl:text>edit</xsl:text>
@@ -23,12 +42,6 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:variable>
-
-  <xsl:variable name="hasAdminPermission" select="acl:hasAdminPermission()" />
-  <xsl:variable name="hasEditorPermission" select="acl:hasEditorPermission()" />
-  <xsl:variable name="isOwner" select="acl:isOwner($objectId)" />
-  <xsl:variable name="readPermission" select="acl:checkPermission($objectId, 'read')" />
-  <xsl:variable name="writePermission" select="acl:checkPermission($objectId, 'writedb')" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 
@@ -77,7 +90,7 @@
           <xsl:text> - </xsl:text>
         </xsl:if>
         <xsl:value-of select="title" />
-        <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and $readPermission">
+        <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and ($readPermission or $writePermission)">
           <div class="dropdown pull-right">
             <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
               <span class="glyphicon glyphicon-cog" aria-hidden="true" />
@@ -122,7 +135,6 @@
                     </li>
                   </xsl:if>
                   <xsl:if test="contains($RequestURL, '/attendees')">
-                    <li class="divider" />
                     <li role="presentation">
                       <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
                         <xsl:value-of select="i18n:translate('component.rc.slot.show.entries')" />
@@ -137,8 +149,6 @@
                       <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
                     </a>
                   </li>
-                </xsl:if>
-                <xsl:if test="not($hasEditorPermission)">
                   <li class="divider" />
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">

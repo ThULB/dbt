@@ -163,14 +163,16 @@ public final class SlotManager {
      * @return <code>true</code> if allowed or <code>false</code> if not
      */
     public static boolean checkPermission(final String objId, final String permission) {
-        if (hasAdminPermission()) {
+        if (permission.equals(MCRAccessManager.PERMISSION_READ)
+                || permission.equals(MCRAccessManager.PERMISSION_WRITE)) {
+            if (hasAdminPermission() || hasEditorPermission() || isOwner(objId)) {
+                return true;
+            }
+        } else if (permission.equals(MCRAccessManager.PERMISSION_DELETE) && hasAdminPermission()) {
             return true;
         }
 
-        if (isOwner(objId))
-            return true;
-
-        return MCRAccessManager.checkPermission(objId, permission);
+        return false;
     }
 
     /**
@@ -179,10 +181,7 @@ public final class SlotManager {
      * @return <code>true</code> if is administrator
      */
     public static boolean hasAdminPermission() {
-        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
-        return currentUser.getUserID().equals(MCRSystemUserInformation.getSuperUserInstance().getUserID())
-                || currentUser.isUserInRole(ADMIN_GROUP)
-                        && MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOT);
+        return MCRAccessManager.checkPermission(POOLPRIVILEGE_ADMINISTRATE_SLOT);
     }
 
     /**
@@ -191,9 +190,7 @@ public final class SlotManager {
      * @return <code>true</code> if is editor
      */
     public static boolean hasEditorPermission() {
-        final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
-        return currentUser.isUserInRole(EDITOR_GROUP)
-                && MCRAccessManager.checkPermission(POOLPRIVILEGE_EDIT_SLOT);
+        return MCRAccessManager.checkPermission(POOLPRIVILEGE_EDIT_SLOT);
     }
 
     /**

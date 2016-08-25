@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:acl="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<xsl:stylesheet version="1.0" xmlns:mgr="xalan://org.urmel.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
-  exclude-result-prefixes="acl encoder i18n mcrxsl xlink"
+  exclude-result-prefixes="mgr encoder i18n mcrxsl xlink"
 >
 
   <xsl:include href="MyCoReLayout.xsl" />
@@ -25,7 +25,7 @@
             </a>
           </div>
         </xsl:when>
-        <xsl:when test="not($readPermission)">
+        <xsl:when test="not($readPermission or $writePermission)">
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_accesskey')" />
             <p>
@@ -46,7 +46,7 @@
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:if test="$effectiveMode = 'edit' and @pendingStatus = 'validating'">
+          <xsl:if test="($effectiveMode = 'edit') and (@pendingStatus = 'validating')">
             <div class="alert alert-warning">
               <p>
                 <xsl:value-of disable-output-escaping="yes" select="i18n:translate('component.rc.slot.message.validating')" />

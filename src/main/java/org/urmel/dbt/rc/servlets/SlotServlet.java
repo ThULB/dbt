@@ -91,8 +91,9 @@ public class SlotServlet extends MCRServlet {
             if (slotId != null && entryId != null && fileName != null) {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        || !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
+                                MCRAccessManager.PERMISSION_WRITE)) {
                     res.sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -130,7 +131,7 @@ public class SlotServlet extends MCRServlet {
         if (slotId != null) {
             final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-            if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+            if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                 res.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }
@@ -204,7 +205,8 @@ public class SlotServlet extends MCRServlet {
                 } else if ("delete".equals(action)) {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
-                        if (se.getEntry() instanceof OPCRecordEntry && !SlotManager.hasAdminPermission()
+                        if (se.getEntry() instanceof OPCRecordEntry
+                                && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
                                 && ((OPCRecordEntry) se.getEntry()).getEPN() != null) {
                             LOGGER.debug("Set deletion mark: " + se);
                             ((OPCRecordEntry) se.getEntry()).setDeletionMark(true);

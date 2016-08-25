@@ -114,7 +114,7 @@ public class SlotListServlet extends MCRServlet {
                 final Slot s = SLOT_MGR.getSlotById(slotId);
 
                 if (s.getMCRObjectID() != null
-                        && !SlotManager.checkPermission(s.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                        && !MCRAccessManager.checkPermission(s.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                     job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -188,7 +188,8 @@ public class SlotListServlet extends MCRServlet {
                 SlotManager.setOwner(slot.getMCRObjectID().toString());
             }
 
-            if (slot.getWriteKey() != null && !SlotManager.hasAdminPermission()) {
+            if (slot.getWriteKey() != null
+                    && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
             }
 
@@ -212,7 +213,8 @@ public class SlotListServlet extends MCRServlet {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
                 if (option != null) {
-                    if ("attendees".equals(option) && SlotManager.hasAdminPermission()
+                    if ("attendees".equals(option)
+                            && MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
                             || SlotManager.isOwner(slot.getMCRObjectID().toString())) {
                         List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
 
@@ -222,8 +224,9 @@ public class SlotListServlet extends MCRServlet {
                     }
                 }
 
-                if (!SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        && !SlotManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
+                        && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
+                                MCRAccessManager.PERMISSION_WRITE)) {
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
                             new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
                     return;
@@ -256,10 +259,11 @@ public class SlotListServlet extends MCRServlet {
             }
 
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
-                    !SlotManager.hasAdminPermission() && !SlotManager.hasEditorPermission()
-                            ? "slot.status:active or createdby:"
-                                    + currentUser.getUserID()
-                            : null,
+                    !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
+                            && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_EDIT_SLOT)
+                                    ? "slot.status:active or createdby:"
+                                            + currentUser.getUserID()
+                                    : null,
                     start, rows, sortClauses);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
