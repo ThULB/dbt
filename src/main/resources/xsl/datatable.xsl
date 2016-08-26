@@ -203,10 +203,14 @@
           <!-- numPerPage selector -->
           <div>
             <xsl:attribute name="class">
-              <xsl:if test="$disableFilter = true()">
-                <xsl:value-of select="concat('col-xs-offset-', $colWidth div 2)" />
-              </xsl:if>
-              <xsl:value-of select="concat(' col-xs-', $colWidth div 2)" />
+              <xsl:choose>
+                <xsl:when test="$disableFilter = true()">
+                  <xsl:value-of select="concat('col-xs-offset-', $colWidth div 2, ' col-xs', $colWidth div 2)" />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="concat(' col-xs-', $colWidth)" />
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:attribute>
             <div id="{$id}_length" class="form-group pull-right no-margin">
               <label>
