@@ -25,6 +25,7 @@ package org.urmel.dbt.rc.persistency;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.logging.log4j.LogManager;
@@ -213,7 +214,8 @@ public final class SlotManager {
      */
     public static boolean isOwner(final String objId, final MCRUserInformation user) {
         try {
-            return MCRCreatorCache.getCreator(objId).equals(user.getUserID());
+            return Optional.ofNullable(MCRCreatorCache.getCreator(objId)).map(o -> o.equals(user.getUserID()))
+                    .orElse(false);
         } catch (ExecutionException e) {
             LOGGER.error(e.getMessage(), e);
         }
