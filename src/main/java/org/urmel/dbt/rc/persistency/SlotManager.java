@@ -237,6 +237,8 @@ public final class SlotManager {
         os.addFlag("createdby", user.getUserID());
 
         MCRMetadataManager.update(obj);
+
+        MCRCreatorCache.invalidate(objId);
     }
 
     /**
