@@ -139,17 +139,21 @@ public class ClientServlet extends MCRServlet {
                             final String entryId = jsonObj.get("entryId").getAsString();
                             String epn = jsonObj.get("epn").getAsString();
 
+                            final SlotEntry<?> entry = slot.getEntryById(entryId);
+                            final OPCRecordEntry record = (OPCRecordEntry) entry.getEntry();
+
                             if ("register".equals(jobAction)) {
                                 LOGGER.info("Register copy with EPN " + epn + " on entry with id " + entryId + ".");
                             } else if ("deregister".equals(jobAction)) {
                                 LOGGER.info("Deregister copy with EPN " + epn + " on entry with id " + entryId + ".");
                                 epn = null;
+                                if (record.getDeletionMark()) {
+                                    slot.removeEntry(entry);
+                                }
                             }
 
-                            final SlotEntry<?> entry = slot.getEntryById(entryId);
-                            final OPCRecordEntry record = (OPCRecordEntry) entry.getEntry();
-
                             record.setEPN(epn);
+
                             try {
                                 SLOT_MGR.saveOrUpdate(slot);
                                 res.setStatus(HttpServletResponse.SC_OK);
