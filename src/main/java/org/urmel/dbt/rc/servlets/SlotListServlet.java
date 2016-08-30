@@ -255,7 +255,7 @@ public class SlotListServlet extends MCRServlet {
             if (sortBy != null && !sortBy.isEmpty() && sortOrder != null && !sortOrder.isEmpty()) {
                 sortClauses.add(new SortClause(sortBy, ORDER.valueOf(sortOrder)));
             } else {
-                sortClauses.add(new SortClause("slotId", ORDER.asc));
+                sortClauses.add(new SortClause("slot.lecturer", ORDER.asc));
             }
 
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
