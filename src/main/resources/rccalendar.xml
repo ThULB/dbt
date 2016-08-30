@@ -7,7 +7,7 @@
       <!-- type: periodEnd|lectureEnd|validTo -->
       <warning type="periodEnd" at="11.01." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
       <warning type="periodEnd" at="01.03." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
-      <warning type="periodEnd" at="31.03." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
+<!--       <warning type="periodEnd" at="31.03." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" /> -->
     </warnings>
   </period>
   <period from="01.04." to="30.09." lectureEnd="04.08." matchingLocation=".*" setableFrom="04.02." setableTo="01.08.">
@@ -16,7 +16,7 @@
     <warnings>
       <warning type="periodEnd" at="10.06." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
       <warning type="periodEnd" at="01.09." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
-      <warning type="periodEnd" at="30.09." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" />
+<!--       <warning type="periodEnd" at="30.09." template="layout/dbt-email-layout:xslStyle:rc/mail-warning" groupTemplate="layout/dbt-email-layout:xslStyle:rc/mail-warning-group" /> -->
     </warnings>
   </period>
 </calendar>
