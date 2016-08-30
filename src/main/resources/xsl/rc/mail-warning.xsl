@@ -80,17 +80,17 @@
 
       <!-- TODO mail text -->
       <p>
-        Benutzen Sie bitte nachfolgenden Link um uns mitzuteilen was mit Ihrem Semesterapparat geschehen soll.
+        Falls Sie die Übernahme Ihres Semestersapparates in die neue DBT noch nicht abgeschlossen haben (vgl. Mail "Aufforderung zu Übernahme" vom 22.08.2016),
+        vollziehen Sie bitte zuerst diesen Schritt.
+      </p>
+      <p>
+        Benutzen Sie nach erfolgter Übernahme nachfolgenden Link, um uns mitzuteilen, was mit Ihrem Semesterapparat geschehen soll.
         <br />
         <xsl:variable name="sLink" select="concat($WebApplicationBaseURL, 'content/rc/slot.xed?action=status&amp;slotId=', @id)" />
         <a href="{$sLink}">
           <xsl:value-of select="$sLink" />
         </a>
       </p>
-      <xsl:text></xsl:text>
-      <xsl:value-of select="$newline" />
-      <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/slot.xed?action=status&amp;slotId=', @id)" />
-      <xsl:value-of select="$newline" />
     </body>
   </xsl:template>
 </xsl:stylesheet>
