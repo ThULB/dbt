@@ -201,10 +201,10 @@
     </bcc>
     <subject>
       <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
-      <xsl:value-of select="concat('ESA ', $slotId, ': Aufforderung zur Übernahme in die neue DBT')" />
+<!--       <xsl:value-of select="concat('ESA ', $slotId, ': Aufforderung zur Übernahme in die neue DBT')" /> -->
     </subject>
     <body>
-      
+
       <strong>Sehr geehrte/r Benutzer/in,</strong>
       <br />
       <p>
