@@ -680,7 +680,7 @@
     <xsl:param name="sortBy" select="$SortBy" />
     <xsl:param name="sortOrder" select="$SortOrder" />
     <xsl:param name="sortType" select="$SortType" />
-    <xsl:param name="page" select="$Page" />
+    <xsl:param name="page" select="1" />
 
     <xsl:variable name="queryString">
       <xsl:choose>
