@@ -22,6 +22,7 @@
  */
 package org.urmel.dbt.rc.datamodel;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,13 +43,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.content.MCRSourceContent;
-import org.mycore.common.xml.MCRXMLParserFactory;
 import org.urmel.dbt.rc.utils.RCCalendarTransformer;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -84,16 +84,16 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
                 if (xml != null) {
                     singleton = RCCalendarTransformer.buildRCCalendar(xml);
                 }
-            } catch (TransformerException | SAXException e) {
+            } catch (TransformerException | SAXException | MCRException | JDOMException | IOException e) {
                 LOGGER.error(e.getMessage(), e);
             }
         }
         return singleton;
     }
 
-    private static Document getCalendar() throws MCRException, SAXParseException, TransformerException {
-        return MCRXMLParserFactory.getNonValidatingParser()
-                .parseXML(MCRSourceContent.getInstance(MCRConfigurationDir.getConfigResource(RESOURCE_URI).toString()));
+    private static Document getCalendar()
+            throws MCRException, TransformerException, JDOMException, IOException, SAXException {
+        return MCRSourceContent.getInstance(MCRConfigurationDir.getConfigResource(RESOURCE_URI).toString()).asXML();
     }
 
     /**
