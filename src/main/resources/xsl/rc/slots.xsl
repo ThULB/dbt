@@ -56,7 +56,7 @@
     <xsl:if test="$hasAdminPermission" xmlns:encoder="xalan://java.net.URLEncoder">
       <class>
         <xsl:choose>
-          <xsl:when test="@status = 'pending'">
+          <xsl:when test="(@status = 'pending') or (@pendingStatus = 'ownerTransfer')">
             <xsl:value-of select="concat('slot-', @status, '-', @pendingStatus)" />
           </xsl:when>
           <xsl:otherwise>
