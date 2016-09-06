@@ -450,7 +450,7 @@
 
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
-              <xsl:copy-of select="*[not(contains('head|breadcrumb', name()))]" />
+              <xsl:copy-of select="@*|node()[not(contains('|head|breadcrumb|', concat('|', name(), '|')))]" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="printNotLoggedIn" />
@@ -462,13 +462,13 @@
   </xsl:template>
 
   <xsl:template name="layout.footer">
-    <div id="nav" class="col-xs-12 col-sm-12 col-md-12">
+    <div id="nav" class="col-xs-12">
       <ul class="nav-footer">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='footer']//item" />
       </ul>
     </div>
 
-    <div id="info" class="col-xs-10 col-sm-10 col-md-10">
+    <div id="info" class="col-xs-10">
       <p>
         <xsl:value-of select="i18n:translate('dbt.copyright')" />
       </p>
@@ -476,7 +476,7 @@
         <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
       </p>
     </div>
-    <div class="col-xs-2 col-sm-2 col-md-2">
+    <div class="col-xs-2">
       <form id="langSelect" method="get">
         <input type="hidden" name="lang" value="{$CurrentLang}" />
         <div class="btn-group dropup pull-right">
@@ -523,7 +523,7 @@
     </div>
 
     <xsl:variable name="mcr_version" select="concat('MyCoRe ',mcrver:getCompleteVersion())" />
-    <div id="powered_by" class="col-xs-12 col-sm-12 col-md-12">
+    <div id="powered_by" class="col-xs-12">
       <a href="http://www.mycore.de">
         <img src="{$WebApplicationBaseURL}dbt/images/mycore_logo_small_invert.png" class="img-responsive center-block" title="{$mcr_version}" alt="powered by MyCoRe" />
       </a>
