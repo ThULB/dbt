@@ -92,7 +92,7 @@ public class SlotServlet extends MCRServlet {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
                 if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        || !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
+                        && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
                                 MCRAccessManager.PERMISSION_WRITE)) {
                     res.sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
