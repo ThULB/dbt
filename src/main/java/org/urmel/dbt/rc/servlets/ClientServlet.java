@@ -147,7 +147,7 @@ public class ClientServlet extends MCRServlet {
                             } else if ("deregister".equals(jobAction)) {
                                 LOGGER.info("Deregister copy with EPN " + epn + " on entry with id " + entryId + ".");
                                 epn = null;
-                                if (record.getDeletionMark()) {
+                                if (record.getDeletionMark() != null && record.getDeletionMark().booleanValue()) {
                                     slot.removeEntry(entry);
                                 }
                             }
