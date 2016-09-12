@@ -124,6 +124,7 @@
    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
 
     <!-- Start: MyCoRe specific schema definition -->
+    <field name="objectKind" type="string" />
     <field name="objectType" type="string" />
     <field name="objectProject" type="string" />
     <field name="returnId" type="string" />
@@ -198,6 +199,7 @@
     <field name="mods.abstract" type="text_de" multiValued="true" />
     <field name="mods.abstract.result" type="text_de" indexed="false" />
     <field name="mods.dateIssued" type="string"/>
+    <field name="mods.yearIssued" type="int"/>
     <field name="mods.publisher" type="text_de" multiValued="true"/>
     <field name="mods.place" type="text_de" multiValued="true"/>
     <field name="mods.pindexname" type="string" multiValued="true" />
