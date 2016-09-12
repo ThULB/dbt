@@ -261,6 +261,8 @@ module rc {
                         var slot: Slot = Slot.parse(<Element>slots.item(c));
                         this.slots.push(slot);
                     }
+
+                    this.slots.sort(Slot.compare);
                 }
             } catch (e) {
                 this.dispatch(Client.EVENT_ERROR, new rc.Error(rc.ErrorCode.PARSE_ERROR_SLOTS, e));

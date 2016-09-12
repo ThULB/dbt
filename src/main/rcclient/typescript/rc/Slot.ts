@@ -56,6 +56,7 @@ module rc {
          * Parse Slot from given Element.
          * 
          * @param elm the Slot element to parse
+         * @return the parsed Slot
          */
         public static parse(elm: Element): Slot {
             var slot: Slot = new Slot();
@@ -74,6 +75,17 @@ module rc {
             }
 
             return slot;
+        }
+
+        /**
+         * Compares given Slots.
+         * 
+         * @param s1 the Slot to compare
+         * @param s2 the Slot to compare
+         * @return a number between -1 and 1
+         */
+        public static compare(s1: Slot, s2: Slot): number {
+            return (s1.id < s2.id ? -1 : (s1.id > s2.id ? 1 : 0));
         }
 
         /**
@@ -112,7 +124,7 @@ module rc {
          * @return the string 
          */
         toString(): string {
-            return "Slot [id=" + this.id + ", status=" + this.status + ", eOnly=" + this.eOnly + ", title=" + this.title + ", numEntries=" + this.entries.length + "]";
+            return "Slot [id=" + this.id + ", status=" + this.status + ", eOnly=" + this.eOnly + ", title=" + this.title + ", numEntries=" + (core.Utils.isValid(this.entries) ? this.entries.length : 0) + "]";
         }
     }
 }
