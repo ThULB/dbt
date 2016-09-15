@@ -308,11 +308,11 @@
       <mir:template name="textInput" xpath="@name" id="name" i18n="component.rc.slot.person.name" />
       <mir:template name="textInput" xpath="@email" id="email" i18n="component.rc.slot.person.email" i18n.error="component.rc.slot.person.email.required"
         validate="true" matches="\S+@\S+\.\S+" maxlength="64" />
-    </xed:bind>
 
-    <xed:validate xpath="slot" display="global local"
-      test="((string-length(contact/@name) = 0) and (string-length(contact/@email) = 0)) or ((string-length(contact/@name) &gt; 0) and (string-length(contact/@email) &gt; 0))"
-      i18n="component.rc.slot.person.email.required" />
+      <xed:validate xpath="slot" display="global"
+        test="((string-length(contact/@name) = 0) and (string-length(contact/@email) = 0)) or ((string-length(contact/@name) &gt; 0) and (string-length(contact/@email) &gt; 0))"
+        i18n="component.rc.slot.person.email.required" />
+    </xed:bind>
   </xed:template>
 
   <xed:template id="accesskeys">
