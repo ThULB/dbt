@@ -92,7 +92,7 @@
     </xsl:variable>
     <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
 
-    <xsl:if test="count(//opcrecord) &gt; 0">
+    <xsl:if test="(count(//opcrecord) &gt; 0) and (onlineOnly = 'false')">
       <xsl:message>
         Send Mail for:
         <xsl:value-of select="$action" />
@@ -449,6 +449,10 @@
           </dd>
         </xsl:for-each>
       </dl>
+    </xsl:if>
+
+    <xsl:if test="position() != last()">
+      <hr />
     </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
