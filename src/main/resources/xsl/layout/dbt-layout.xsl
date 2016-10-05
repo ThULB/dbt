@@ -124,6 +124,7 @@
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/migrationAlert.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.js"></script>
