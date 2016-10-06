@@ -46,7 +46,7 @@ a:hover {
               style="padding: 10px; position: relative; display: block; height: 80px; border-bottom: 1px solid #008855; position: relative; margin-bottom: 15px;"
             >
               <a id="logo" href="{$WebApplicationBaseURL}" style="position: absolute; right: 10px; display: block;">
-                <img src="{$WebApplicationBaseURL}dbt/images/logo.png" style="height: 80px; display: block;" />
+                <img src="{$WebApplicationBaseURL}dbt/images/logo-mail.png" style="height: 80px; display: block;" />
               </a>
             </div>
             <div id="content" style="margin: 0 10px;">
