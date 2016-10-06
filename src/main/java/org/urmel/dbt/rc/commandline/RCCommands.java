@@ -288,7 +288,6 @@ public class RCCommands extends MCRAbstractCommands {
         if (!slotList.getSlots().isEmpty()) {
             for (int i = 0; i < slotList.getSlots().size(); i++) {
                 final Slot slot = slotList.getSlots().get(i);
-                LOGGER.info("Check slot with id \"" + slot.getSlotId() + "\"...");
 
                 try {
                     MCREvent evt = null;
@@ -308,7 +307,7 @@ public class RCCommands extends MCRAbstractCommands {
                                 save = false;
                                 break;
                             case ACTIVE:
-                                LOGGER.info("...archive slot");
+                                LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
 
                                 slot.setStatus(Status.ARCHIVED);
 
@@ -318,7 +317,7 @@ public class RCCommands extends MCRAbstractCommands {
                             case PENDING:
                                 switch (slot.getPendingStatus()) {
                                 case ACTIVE:
-                                    LOGGER.info("...reactivate slot");
+                                    LOGGER.info("reactivate slot with id \"" + slot.getSlotId() + "\"");
 
                                     slot.setStatus(Status.ACTIVE);
                                     slot.setValidTo(RCCalendar
@@ -327,14 +326,14 @@ public class RCCommands extends MCRAbstractCommands {
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                                     break;
                                 case ARCHIVED:
-                                    LOGGER.info("...archive slot");
-
+                                    LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
+                                    
                                     slot.setStatus(Status.ARCHIVED);
 
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                                     break;
                                 case FREE:
-                                    LOGGER.info("...delete slot.");
+                                    LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
 
                                     mgr.delete(slot);
 
@@ -343,7 +342,7 @@ public class RCCommands extends MCRAbstractCommands {
                                     MCREventManager.instance().handleEvent(evt);
                                     continue;
                                 case RESERVED:
-                                    LOGGER.info("...empty slot.");
+                                    LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
 
                                     slot.setStatus(Status.RESERVED);
                                     slot.getEntries().clear();
@@ -375,7 +374,7 @@ public class RCCommands extends MCRAbstractCommands {
                                         : new WarningDate(pWarning.getWarningDate());
 
                                 if (sWarning != null) {
-                                    LOGGER.info("...add warning");
+                                    LOGGER.info("Add warning to slot with id \"" + slot.getSlotId() + "\"...");
 
                                     slot.addWarningDate(sWarning);
                                     mgr.saveOrUpdate(slot);
@@ -395,7 +394,7 @@ public class RCCommands extends MCRAbstractCommands {
                             }
                         }
                     } else if (slot.getStatus() == Status.FREE) {
-                        LOGGER.info("...delete slot.");
+                        LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
 
                         mgr.delete(slot);
 
@@ -404,8 +403,6 @@ public class RCCommands extends MCRAbstractCommands {
                         MCREventManager.instance().handleEvent(evt);
                         continue;
                     }
-
-                    LOGGER.info("...nothing to do.");
                 } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
                         | MCRPersistenceException | MCRActiveLinkException e) {
                     LOGGER.error(e.getMessage());
