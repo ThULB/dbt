@@ -46,7 +46,7 @@
           </div>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:if test="($effectiveMode = 'edit') and (@pendingStatus = 'validating')">
+          <xsl:if test="$writePermission and (@pendingStatus = 'validating')">
             <div class="alert alert-warning">
               <p>
                 <xsl:value-of disable-output-escaping="yes" select="i18n:translate('component.rc.slot.message.validating')" />
