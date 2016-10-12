@@ -417,8 +417,8 @@ public class RCCommands extends MCRAbstractCommands {
         mgr.syncList();
     }
 
-    @MCRCommand(syntax = "rc resend mails", help = "resend mails for reserve collections")
-    public static void rcResendMails() throws IOException, MCRAccessException {
+    @MCRCommand(syntax = "rc resend mails {0}", help = "resend mails for reserve collections")
+    public static void rcResendMails(String slotPrefix) throws IOException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
 
@@ -428,7 +428,8 @@ public class RCCommands extends MCRAbstractCommands {
 
                 MCREvent evt = null;
 
-                if (slot.getStatus() == Status.ARCHIVED) {
+                if ((slot.getStatus() == Status.ARCHIVED)
+                        && (slotPrefix == null || slot.getSlotId().startsWith(slotPrefix))) {
                     LOGGER.info("resend mails for archived slot " + slot.getSlotId());
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 }
