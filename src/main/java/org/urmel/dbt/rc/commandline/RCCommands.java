@@ -327,7 +327,7 @@ public class RCCommands extends MCRAbstractCommands {
                                     break;
                                 case ARCHIVED:
                                     LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
-                                    
+
                                     slot.setStatus(Status.ARCHIVED);
 
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
@@ -415,5 +415,29 @@ public class RCCommands extends MCRAbstractCommands {
     public static void syncSlotList() throws IOException {
         final SlotManager mgr = SlotManager.instance();
         mgr.syncList();
+    }
+
+    @MCRCommand(syntax = "rc resend mails", help = "resend mails for reserve collections")
+    public static void rcResendMails() throws IOException, MCRAccessException {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        if (!slotList.getSlots().isEmpty()) {
+            for (int i = 0; i < slotList.getSlots().size(); i++) {
+                final Slot slot = slotList.getSlots().get(i);
+
+                MCREvent evt = null;
+
+                if (slot.getStatus() == Status.ARCHIVED) {
+                    LOGGER.info("resend mails for archived slot " + slot.getSlotId());
+                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                }
+
+                if (evt != null) {
+                    evt.put(SlotManager.SLOT_TYPE, slot);
+                    MCREventManager.instance().handleEvent(evt);
+                }
+            }
+        }
     }
 }
