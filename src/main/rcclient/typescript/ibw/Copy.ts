@@ -8,6 +8,7 @@ module ibw {
         loanIndicator: string;
         isBundle: boolean;
         bundleEPN: string;
+        migrate: boolean;
 
         public static parse(from: string): CopyBackup {
             var m: Array<string> = from.match(/(.*) (SSTold|RC) (.*)/);
@@ -15,6 +16,10 @@ module ibw {
             if (m && m.length == 4) {
                 var backup: CopyBackup = new CopyBackup();
                 backup.slotId = m[1];
+                backup.migrate = m[2] === "SSTold";
+
+                if (backup.migrate)
+                    backup.slotId = backup.slotId.replaceAll(":", ".");
 
                 var tmp = m[3];
                 var exp: RegExp = /(.*) \\ c:(.*)/;
@@ -39,8 +44,8 @@ module ibw {
         }
 
         toString(): string {
-            return "CopyBackup: [slotId={0}, location={1}, shelfmark={2}, indicator={3}, isBundle={4}, bundleEPN={5}]".format(
-                this.slotId, this.location, this.shelfmark, this.loanIndicator, this.isBundle, this.bundleEPN
+            return "CopyBackup: [slotId={0}, location={1}, shelfmark={2}, indicator={3}, isBundle={4}, bundleEPN={5}, migrate={6}]".format(
+                this.slotId, this.location, this.shelfmark, this.loanIndicator, this.isBundle, this.bundleEPN, this.migrate
             );
         }
     }

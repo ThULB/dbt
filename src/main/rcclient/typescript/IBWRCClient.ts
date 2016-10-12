@@ -15,6 +15,7 @@ class IBWRCClient {
     public static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
     public static FORMAT_4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
     public static FORMAT_4802: string = "4802 {0} RC {1}\n";
+    public static FORMAT_4802_MIGRATE: string = "4802 {0} SSTold {1}\n";
 
     private rcClient: rc.Client;
 
@@ -364,7 +365,7 @@ class IBWRCClient {
 
                 if (copy == null || copy.epn.isEmpty()) continue;
 
-                var item = mlEPN.appendItem("({0}) {1}".format(copy.epn, copy.shelfmark || ""), i);
+                var item = mlEPN.appendItem("({0}|{1}) {2}".format(copy.epn, copy.backup == null ? "-" : "v", copy.shelfmark || ""), i);
 
                 if (entry != null && entry.epn == copy.epn || !barcode.isEmpty() && barcode == copy.barcode) {
                     selectedItem = item;
@@ -401,7 +402,7 @@ class IBWRCClient {
                         disabled = this.slot.getEntryForEPN(copy.epn) != null && copy.hasRegistered();
                         break;
                     case "btnDeregister":
-                        disabled = this.slot.getEntryForEPN(copy.epn) == null;
+                        disabled = this.slot.getEntryForEPN(copy.epn) == null && !copy.hasRegistered();
                         break;
                     case "cbPresence":
                         var cbPresence: XULCheckboxElement = <any>document.getElementById("cbPresence");
@@ -565,6 +566,7 @@ class IBWRCClient {
         if (ibw.command("k e" + copy.num)) {
             var clientURL = this.clientURL || this.rcClient.getURL();
             var backup = copy.getBackup(this.slot.id);
+            
             if (backup != null) {
                 var cat7100 = IBWRCClient.FORMAT_7100.format(
                     backup.location,
@@ -575,9 +577,13 @@ class IBWRCClient {
                 if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
                     ibw.getTitle().deleteToEndOfLine();
 
-                if (ibw.getTitle().find(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100).trim(), true, false, false))
-                    ibw.getTitle().deleteToEndOfLine();
-
+                if (backup.migrate) {
+                    if (ibw.getTitle().find(IBWRCClient.FORMAT_4802_MIGRATE.format(this.slot.id.replaceAll(".", ":"), cat7100).trim(), true, false, false))
+                        ibw.getTitle().deleteToEndOfLine();
+                } else {
+                    if (ibw.getTitle().find(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100).trim(), true, false, false))
+                        ibw.getTitle().deleteToEndOfLine();
+                }
                 if (copy.backup.length == 1) {
                     ibw.getTitle().findTag("7100", 0, false, true, false);
                     ibw.getTitle().deleteToEndOfLine();

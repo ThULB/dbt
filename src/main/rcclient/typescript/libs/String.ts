@@ -4,6 +4,8 @@ interface String {
     format: (...args: Array<any>) => string;
     isEmpty: () => boolean;
     startsWith: (searchString: string, position?: number) => boolean;
+    escapeRegExp: () => string;
+    replaceAll: (search: string, replacement: string) => string;
     toUnicode: () => string;
 }
 
@@ -30,6 +32,14 @@ String.prototype.isEmpty = function(): boolean {
 String.prototype.startsWith = function(searchString: string, position?: number): boolean {
     position = position || 0;
     return this.indexOf(searchString, position) === position;
+};
+
+String.prototype.escapeRegExp = function(): string {
+    return this.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
+String.prototype.replaceAll = function(search: string, replacement: string): string {
+    return this.replace(new RegExp(search.escapeRegExp(), 'g'), replacement);
 };
 
 String.prototype.toUnicode = function(): string {
