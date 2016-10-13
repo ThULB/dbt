@@ -51,9 +51,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRSession;
-import org.mycore.common.MCRSystemUserInformation;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserManager;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
 import org.urmel.dbt.rc.datamodel.slot.SlotList;
@@ -74,6 +76,8 @@ public class ClientServlet extends MCRServlet {
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger(ClientServlet.class);
+
+    private static final String CLIENT_USER = MCRConfiguration.instance().getString("DBT.RC.ClientUser", "rc-client");
 
     private static final String TOKEN = "rctoken";
     private static final String SESSION_TOKEN = "rcsession";
@@ -112,8 +116,9 @@ public class ClientServlet extends MCRServlet {
 
                     session.put(SESSION_TOKEN, ClientData.decrypt(token, req.getInputStream()));
 
-                    LOGGER.info("...impersonate superuser");
-                    session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
+                    MCRUser clientUser = MCRUserManager.getUser(CLIENT_USER);
+                    LOGGER.info("...impersonate client user with uid \"" + clientUser.getUserID() + "\"");
+                    session.setUserInformation(clientUser);
 
                     res.setStatus(HttpServletResponse.SC_OK);
                     return;
