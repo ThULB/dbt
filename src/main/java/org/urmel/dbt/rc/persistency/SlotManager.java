@@ -560,8 +560,8 @@ public final class SlotManager {
             final List<SortClause> sortClauses) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
-        final SolrClient client = new HttpSolrClient(
-                MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL"));
+        final SolrClient client = new HttpSolrClient.Builder(
+                MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL")).build();
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"
