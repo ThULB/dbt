@@ -28,6 +28,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.MapJoin;
+import javax.persistence.criteria.Root;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -38,14 +45,11 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.backend.hibernate.MCRHIBConnection;
+import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
@@ -512,16 +516,16 @@ public final class SlotManager {
         final List<Attendee> attendees = new ArrayList<Attendee>();
 
         final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
-        Session session = MCRHIBConnection.instance().getSession();
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
-        Criteria criteria = session.createCriteria(MCRUser.class);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<MCRUser> cq = cb.createQuery(MCRUser.class);
+        Root<MCRUser> root = cq.from(MCRUser.class);
+        MapJoin<MCRUser, String, String> attribs = root.joinMap("attributes");
+        cq.where(cb.equal(attribs.key(), filterStr));
 
-        criteria = criteria.createCriteria("attributes");
-        criteria.add(Restrictions.eq("indices", filterStr));
-
-        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        @SuppressWarnings("unchecked")
-        final List<MCRUser> results = criteria.list();
+        TypedQuery<MCRUser> q = em.createQuery(cq);
+        final List<MCRUser> results = q.getResultList();
 
         for (MCRUser user : results) {
             attendees.add(new Attendee(slot, user));
