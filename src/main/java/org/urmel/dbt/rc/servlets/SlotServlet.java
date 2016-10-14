@@ -162,7 +162,6 @@ public class SlotServlet extends MCRServlet {
                         res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
                         return;
                     }
-                    LOGGER.info(MCRUserManager.getCurrentUser().getUserID());
 
                     final Map<String, String> params = new HashMap<String, String>();
                     params.put("entry", entry);
@@ -185,8 +184,6 @@ public class SlotServlet extends MCRServlet {
                                 + toQueryString(params, false));
                         return;
                     }
-                    
-                    LOGGER.info(MCRUserManager.getCurrentUser().getUserID());
                 }
 
                 MCREvent evt = null;
@@ -269,8 +266,6 @@ public class SlotServlet extends MCRServlet {
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
                         + slotEntry.getId());
-                
-                LOGGER.info("after redirect: " + MCRUserManager.getCurrentUser().getUserID());
             }
         }
     }
