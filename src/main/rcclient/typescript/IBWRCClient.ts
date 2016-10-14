@@ -301,7 +301,7 @@ class IBWRCClient {
 
         for (var i in slot.entries) {
             var entry: rc.Entry = slot.entries[i];
-            mlPPN.appendItem(entry.ppn, entry.ppn);
+            mlPPN.appendItem("(" + entry.ppn + ") " + entry.title, entry.ppn);
         }
 
         this.slot = slot;
@@ -566,7 +566,7 @@ class IBWRCClient {
         if (ibw.command("k e" + copy.num)) {
             var clientURL = this.clientURL || this.rcClient.getURL();
             var backup = copy.getBackup(this.slot.id);
-            
+
             if (backup != null) {
                 var cat7100 = IBWRCClient.FORMAT_7100.format(
                     backup.location,

@@ -4,16 +4,21 @@ module rc {
          * The Entry Id 
          */
         id: string;
-        
+
         /**
          * The PPN
          */
         ppn: string;
-        
+
         /**
          * The EPN
          */
         epn: string;
+
+        /**
+         * The title
+         */
+        title: string;
 
         /**
          * Parse Entry from given Element.
@@ -36,6 +41,18 @@ module rc {
             entry.epn = (<Element>record.item(0)).getAttribute("epn");
             entry.ppn = (<Element>picaRecord.item(0)).getAttribute("ppn");
 
+            var fields: NodeList = (<Element>picaRecord.item(0)).getElementsByTagNameNS("http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", "field");
+            for (var i = 0; i < fields.length; i++) {
+                if (fields.item(i).attributes.getNamedItem("tag").value == "021A") {
+                    var subfields = fields.item(i).childNodes;
+                    for (var j = 0; j < subfields.length; j++) {
+                        if (subfields.item(j).nodeName == "pica:subfield" && subfields.item(j).attributes.getNamedItem("code").value == "a") {
+                            entry.title = subfields.item(j).textContent.toUnicode();
+                        }
+                    }
+                }
+            }
+
             return entry;
         }
 
@@ -45,7 +62,7 @@ module rc {
          * @return the string 
          */
         toString(): string {
-            return "Entry [id=" + this.id + ", ppn=" + this.ppn + ", epn=" + this.epn + "]";
+            return "Entry [id=" + this.id + ", ppn=" + this.ppn + ", epn=" + this.epn + ", title=" + this.title + "]";
         }
     }
 }
