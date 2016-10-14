@@ -24,10 +24,7 @@ package org.urmel.dbt.common;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobQueue;
 
@@ -36,8 +33,6 @@ import org.mycore.services.queuedjob.MCRJobQueue;
  *
  */
 public class MailQueue {
-
-    private static Logger LOGGER = LogManager.getLogger();
 
     private static final MCRJobQueue MAIL_QUEUE = MCRJobQueue.getInstance(MailJob.class);
 
@@ -58,14 +53,6 @@ public class MailQueue {
         if (job == null) {
             job = new MCRJob(MailJob.class);
             job.setParameters(params);
-
-            try {
-                MailJob mjob = new MailJob(job);
-                mjob.execute();
-                return;
-            } catch (ExecutionException ex) {
-                LOGGER.warn(ex.getMessage(), ex);
-            }
         }
 
         MAIL_QUEUE.offer(job);
