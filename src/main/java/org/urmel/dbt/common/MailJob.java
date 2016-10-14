@@ -73,8 +73,6 @@ public class MailJob extends MCRJobAction {
     @Override
     public void execute() throws ExecutionException {
         try {
-            MCRSessionMgr.getCurrentSession().setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
-
             final Element xml = MCRURIResolver.instance().resolve(buildURI(job.getParameters()));
 
             if (!xml.getChildren("to").isEmpty()) {
