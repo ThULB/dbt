@@ -6,7 +6,7 @@
   <xsl:param name="CurrentLang" />
 
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', /slot/@id, '&amp;objectId'))/mcrobject" />
-  <xsl:variable name="accessKeys" select="document(concat('accesskeys:', $objectId))/accesskeys" />
+  <xsl:variable name="accessKeys" select="document(concat('xslStyle:accesskeys-filter:accesskeys:', $objectId))/accesskeys" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 
