@@ -43,14 +43,17 @@ module rc {
 
             var fields: NodeList = (<Element>picaRecord.item(0)).getElementsByTagNameNS("http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", "field");
             for (var i = 0; i < fields.length; i++) {
-                if (fields.item(i).attributes.getNamedItem("tag").value == "021A") {
+                if (fields.item(i).attributes.getNamedItem("tag").value == "021A" || fields.item(i).attributes.getNamedItem("tag").value == "036C") {
                     var subfields = fields.item(i).childNodes;
                     for (var j = 0; j < subfields.length; j++) {
                         if (subfields.item(j).nodeName == "pica:subfield" && subfields.item(j).attributes.getNamedItem("code").value == "a") {
                             entry.title = subfields.item(j).textContent.toUnicode();
+                            break;
                         }
                     }
                 }
+
+                if (core.Utils.isValid(entry.title)) break;
             }
 
             return entry;
