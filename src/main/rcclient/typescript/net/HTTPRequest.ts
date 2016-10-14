@@ -150,7 +150,7 @@ module net {
             // if redirecting, store the new channel
             this.mChannel = aNewChannel;
         }
-        
+
         // nsIHttpEventSink (not implementing will cause annoying exceptions)
         onRedirect(aOldChannel: nsIChannel, aNewChannel: nsIChannel) {
             this.mChannel = aNewChannel;
@@ -162,9 +162,10 @@ module net {
         }
 
         onStatus(aRequest: nsIRequest, aContext: nsISupports, aStatus: number, aStatusArg: string) {
-            if (aStatus == 0x804B0007) {
-                this.mCompleteFunc(this.mClass, new Error(ErrorCode.OFFLINE, aStatusArg), false);
-            }
+            // ignore status because of false fails
+            // if (aStatus == 0x804B0007) {
+            //     this.mCompleteFunc(this.mClass, new Error(ErrorCode.OFFLINE, aStatusArg), false);
+            // }
         }
 
         // nsIInterfaceRequestor
@@ -175,7 +176,7 @@ module net {
                 throw Components.results.NS_NOINTERFACE;
             }
         }
-        
+
         // we are faking an XPCOM interface, so we need to implement QI
         QueryInterface(aIID) {
             if (aIID.equals(Components.interfaces.nsISupports) ||
@@ -210,9 +211,9 @@ module net {
 
         constructor(options?: IHTTPOptions) {
             this.method = options && options.method || HTTPRequest.METHOD_GET,
-            this.data = options && options.data || null,
-            this.contentType = options && options.contentType || "application/x-www-form-urlencoded",
-            this.bypassCache = options && options.bypassCache || true
+                this.data = options && options.data || null,
+                this.contentType = options && options.contentType || "application/x-www-form-urlencoded",
+                this.bypassCache = options && options.bypassCache || true
         }
     }
 
