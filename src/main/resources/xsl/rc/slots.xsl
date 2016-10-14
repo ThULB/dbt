@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="i18n xlink"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="i18n xlink encoder"
 >
   <xsl:include href="MyCoReLayout.xsl" />
 
@@ -34,6 +34,11 @@
         <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
       </col>
     </xsl:if>
+    <xsl:if test="$hasEditorPermission and not($hasAdminPermission)">
+      <col align="center" width="5%">
+        <xsl:value-of select="i18n:translate('component.rc.slot.actions')" />
+      </col>
+    </xsl:if>
     <col sortBy="slot.lecturers" width="15%">
       <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
@@ -53,7 +58,7 @@
   </xsl:template>
 
   <xsl:template mode="dataTableRow" match="slot">
-    <xsl:if test="$hasAdminPermission" xmlns:encoder="xalan://java.net.URLEncoder">
+    <xsl:if test="$hasAdminPermission or $hasEditorPermission">
       <class>
         <xsl:choose>
           <xsl:when test="(@status = 'pending') or (@pendingStatus = 'ownerTransfer')">
@@ -64,30 +69,41 @@
           </xsl:otherwise>
         </xsl:choose>
       </class>
-      <col align="center" valign="top">
-        <div class="btn-group btn-group-xs">
-          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
-            title="{i18n:translate('component.rc.slot.edit')}"
-          >
-            <span class="glyphicon glyphicon-pencil" />
+      <xsl:if test="$hasEditorPermission and not($hasAdminPermission)">
+        <col align="center" valign="top">
+          <div class="btn-group btn-group-xs">
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit" title="{i18n:translate('component.rc.slot.edit')}">
+              <span class="glyphicon glyphicon-pencil" />
+            </a>
+          </div>
+        </col>
+      </xsl:if>
+      <xsl:if test="$hasAdminPermission">
+        <col align="center" valign="top">
+          <div class="btn-group btn-group-xs">
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+              title="{i18n:translate('component.rc.slot.edit')}"
+            >
+              <span class="glyphicon glyphicon-pencil" />
+            </a>
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+              title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
+            >
+              <span class="glyphicon glyphicon-lock" />
+            </a>
+          </div>
+        </col>
+        <col align="center" valign="top">
+          <a href="{$WebApplicationBaseURL}rc/{@id}">
+            <xsl:value-of select="@id" />
           </a>
-          <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
-            title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
-          >
-            <span class="glyphicon glyphicon-lock" />
-          </a>
-        </div>
-      </col>
-      <col align="center" valign="top">
-        <a href="{$WebApplicationBaseURL}rc/{@id}">
-          <xsl:value-of select="@id" />
-        </a>
-        <xsl:if test="@status = 'new'">
-          <span class="label label-danger pull-right">
-            <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
-          </span>
-        </xsl:if>
-      </col>
+          <xsl:if test="@status = 'new'">
+            <span class="label label-danger pull-right">
+              <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
+            </span>
+          </xsl:if>
+        </col>
+      </xsl:if>
     </xsl:if>
     <col valign="top">
       <xsl:for-each select="lecturers/lecturer">
