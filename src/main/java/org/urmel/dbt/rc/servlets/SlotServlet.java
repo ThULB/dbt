@@ -49,6 +49,7 @@ import org.mycore.common.events.MCREventManager;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
+import org.mycore.user2.MCRUserManager;
 import org.urmel.dbt.opc.datamodel.Catalog;
 import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
@@ -161,6 +162,7 @@ public class SlotServlet extends MCRServlet {
                         res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
                         return;
                     }
+                    LOGGER.info(MCRUserManager.getCurrentUser().getUserID());
 
                     final Map<String, String> params = new HashMap<String, String>();
                     params.put("entry", entry);
@@ -183,6 +185,8 @@ public class SlotServlet extends MCRServlet {
                                 + toQueryString(params, false));
                         return;
                     }
+                    
+                    LOGGER.info(MCRUserManager.getCurrentUser().getUserID());
                 }
 
                 MCREvent evt = null;
@@ -265,6 +269,8 @@ public class SlotServlet extends MCRServlet {
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
                         + slotEntry.getId());
+                
+                LOGGER.info("after redirect: " + MCRUserManager.getCurrentUser().getUserID());
             }
         }
     }
