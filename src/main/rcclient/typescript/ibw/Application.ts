@@ -55,6 +55,11 @@ module ibw {
         return application.activeWindow.title;
     }
 
+    /**
+     * Returns the matching tag on active title.
+     * 
+     * @return the matching tag or <code>null</code> if nothing was found
+     */
     export function titleFindRegExp(tag: string, exp: RegExp, withCat: boolean, jumpTo: boolean): string {
         if (core.Utils.isValid(exp)) {
             var content: string = null;
