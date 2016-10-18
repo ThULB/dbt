@@ -301,7 +301,7 @@ class IBWRCClient {
 
         for (var i in slot.entries) {
             var entry: rc.Entry = slot.entries[i];
-            mlPPN.appendItem("(" + entry.ppn + ") " + core.Utils.isValid(entry.title) ? entry.title : "", entry.ppn);
+            mlPPN.appendItem("(" + entry.ppn + ") " + (core.Utils.isValid(entry.title) ? entry.title : ""), entry.ppn);
         }
 
         this.slot = slot;
