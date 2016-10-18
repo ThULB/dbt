@@ -36,7 +36,7 @@ module ibw {
         application.activeWindow.simulateIBWKey(key);
         return application.activeWindow.status.toUpperCase() == "OK";
     }
-    
+
     /**
      * Returns the activeWindow interface.
      * 
@@ -45,7 +45,7 @@ module ibw {
     export function getActiveWindow(): IActiveWindow {
         return application.activeWindow;
     }
-    
+
     /**
      * Returns the title from activeWindow.
      * 
@@ -53,6 +53,21 @@ module ibw {
      */
     export function getTitle(): IEditControl {
         return application.activeWindow.title;
+    }
+
+    export function titleFindRegExp(tag: string, exp: RegExp, withCat: boolean, jumpTo: boolean): string {
+        if (core.Utils.isValid(exp)) {
+            var content: string = null;
+            var count: number = 0;
+            while ((content = getTitle().findTag(tag, count, withCat, jumpTo, false)).length !== 0) {
+                if (content.match(exp)) {
+                    return content;
+                }
+                count++;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -155,7 +170,7 @@ module ibw {
     export var MESSAGE_INFO: string = "info-icon";
     export var MESSAGE_WARNING: string = "warning-icon";
     export var MESSAGE_ERROR: string = "error-icon";
-    
+
     /**
      * Displays an message box.
      * 

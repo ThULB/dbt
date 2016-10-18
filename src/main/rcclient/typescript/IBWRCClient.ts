@@ -574,16 +574,19 @@ class IBWRCClient {
                     backup.loanIndicator + (backup.isBundle ? " \\ c" : "")
                 );
 
-                if (ibw.getTitle().find(IBWRCClient.FORMAT_4801.format(clientURL + "/rc/" + this.slot.id, this.slot.id).trim(), true, false, false))
+                var f4802 = IBWRCClient.FORMAT_4802;
+                var slotId = this.slot.id.escapeRegExp();
+                if (backup.migrate) {
+                    slotId = this.slot.id.replaceAll(".", ":");
+                    f4802 = IBWRCClient.FORMAT_4802_MIGRATE;
+                }
+
+                if (ibw.titleFindRegExp("4801", new RegExp(IBWRCClient.FORMAT_4801.replaceAll(".", "\.").format(".*" + "\/rc\/" + slotId, slotId).trim()), true, true))
                     ibw.getTitle().deleteToEndOfLine();
 
-                if (backup.migrate) {
-                    if (ibw.getTitle().find(IBWRCClient.FORMAT_4802_MIGRATE.format(this.slot.id.replaceAll(".", ":"), cat7100).trim(), true, false, false))
-                        ibw.getTitle().deleteToEndOfLine();
-                } else {
-                    if (ibw.getTitle().find(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100).trim(), true, false, false))
-                        ibw.getTitle().deleteToEndOfLine();
-                }
+                if (ibw.titleFindRegExp("4802", new RegExp(f4802.format(slotId, cat7100).trim()), true, true))
+                    ibw.getTitle().deleteToEndOfLine();
+
                 if (copy.backup.length == 1) {
                     ibw.getTitle().findTag("7100", 0, false, true, false);
                     ibw.getTitle().deleteToEndOfLine();

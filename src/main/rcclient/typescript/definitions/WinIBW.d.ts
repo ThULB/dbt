@@ -180,8 +180,8 @@ interface IEditControl extends nsISupports {
     setRTLEnabled(b: boolean);
     getUserWantedLangCode(): string;
     setUserWantedLangCode(code: string);
-    findTag(tag: string, num: number, withCat: boolean, b2: boolean, b3: boolean): string;
-    findTag2(tag: string, num: number, withCat: boolean, b2: boolean, b3: boolean): string;
+    findTag(tag: string, num: number, withCat: boolean, jumpTo: boolean, b3: boolean): string;
+    findTag2(tag: string, num: number, withCat: boolean, jumpTo: boolean, b3: boolean): string;
     hasFocus(): boolean;
     setFocus();
     getDOMElement(): Element;
