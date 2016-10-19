@@ -319,8 +319,8 @@
           Semesterapparat anlegen“ mit den Angaben für Ihre Veranstaltung aus. Über den Button "Standort" ordnen Sie Ihren Semesterapparat einem
           Fachbereich zu.
           Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren diesen über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+          <button type="button" class="btn btn-default btn-xs">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
             <span class="caret"></span>
           </button>
           . Der Leseschlüssel stellt sicher,
@@ -399,7 +399,7 @@
           </div>
           <div class="col-md-9">
             Hier können Sie beliebige Webseiten verlinken und diese kurz beschreiben, z. B. Datenbanken, Internetportale usw. Möchten Sie digitale
-            Bestände der Bibliothek (Aufsätze aus elektro-nischen Zeitschriften oder E-Books) in Ihren Semesterapparat aufnehmen, so geben Sie hier den Link zum
+            Bestände der Bibliothek (Aufsätze aus elektronischen Zeitschriften oder E-Books) in Ihren Semesterapparat aufnehmen, so geben Sie hier den Link zum
             Volltext an. Lizenzierte digitale Bestände sind im Hochschulnetz aufrufbar oder für Hochschulangehörige auch über den externen Zugriff (VPN)
             zugänglich.
           </div>
@@ -423,10 +423,10 @@
             <strong>„Datei“</strong>
           </div>
           <div class="col-md-9">
-            Hier können Sie eigene Dateien (z. B. Übungsblätter, Seminar-pläne oder digitalisierte Kopiervorlagen) in beliebigen Formaten hochladen
+            Hier können Sie eigene Dateien (z. B. Übungsblätter, Seminarpläne oder digitalisierte Kopiervorlagen) in beliebigen Formaten hochladen
             und
             kommentieren. Bitte beachten Sie die Hinweise zum geltenden
-            <u>Urheberrecht</u>
+            <a href="#rcLecturerCopyright">Urheberrecht</a>
             .
           </div>
         </div>
@@ -513,7 +513,7 @@
         </p>
         <ul>
           <li>„kleine Teile eines Werkes“: max. 12% eines Werkes, dabei dürfen 100 Seiten nicht überschritten werden</li>
-          <li>„einzelne Beiträge aus Zeitungen oder Zeitschriften“: z. B. Aufsätze aus Fach-zeitschriften</li>
+          <li>„einzelne Beiträge aus Zeitungen oder Zeitschriften“: z. B. Aufsätze aus Fachzeitschriften</li>
           <li>„Werke geringen Umfangs“: z. B. Gedichte, Kurzgeschichten, auch: Bilder</li>
           <li>Diese Regelungen dürfen nicht umgangen werden.</li>
           <li>Es dürfen nur Teile von Werken aus dem Bestand der jeweiligen Hochschulbibliothek für Elektronische Semesterapparate verwendet werden.</li>
@@ -526,7 +526,7 @@
         </ul>
         <p>Folgende Bedingung ist bei der Bereitstellung zu erfüllen:</p>
         <ul>
-          <li>Die Dokumente sind nur für einen geschlossenen Nutzerkreis – also die Teilneh-menden an der entsprechenden Lehrveranstaltung - zugänglich. Jeder
+          <li>Die Dokumente sind nur für einen geschlossenen Nutzerkreis – also die Teilnehmenden an der entsprechenden Lehrveranstaltung - zugänglich. Jeder
             ESA ist grundsätzlich durch ein Passwort (Leseschlüssel) zu schützen, so dass nur die Teilnehmenden Zugang zu den Inhalten erhalten. Geben Sie
             diesen daher ausschließlich an die Teilnehmer Ihrer Veranstaltung weiter.
           </li>
@@ -576,6 +576,21 @@
           Bitte wenden Sie sich in diesen Fällen an:
           <a href="mailto:dbtadmin@thulb.uni-jena.de@thulb.uni-jena.de">dbtadmin@thulb.uni-jena.de</a>
           .
+        </p>
+      </answer>
+    </entry>
+    <entry href="rcLecturerAccesskeyChange">
+      <question>
+        Wie kann ich Lese- und Schreibschlüssel meiner Semesterapparate ansehen / ändern?
+      </question>
+      <answer>
+        <p>
+          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und öffnen Sie den entsprechenden Semesterapparat. Über die Schaltfläche
+          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
+            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+            <span class="caret"></span>
+          </button>
+          &gt; „Zugriffsschlüssel bearbeiten“ haben Sie die Möglichkeit, Lese- und Schreibschlüssel einzusehen und ggf. zu ändern.
         </p>
       </answer>
     </entry>
