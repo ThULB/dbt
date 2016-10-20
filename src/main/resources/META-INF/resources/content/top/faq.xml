@@ -321,7 +321,6 @@
           Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren diesen über die Schaltfläche
           <button type="button" class="btn btn-default btn-xs">
             <span aria-hidden="true" class="fa fa-cogs"></span>
-            <span class="caret"></span>
           </button>
           . Der Leseschlüssel stellt sicher,
           dass nur die an der Veranstaltung Teilnehmenden Zugriff auf den ESA erhalten; Sie geben ihn in Ihrer Veranstaltung
