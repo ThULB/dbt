@@ -205,7 +205,7 @@
             <xsl:attribute name="class">
               <xsl:choose>
                 <xsl:when test="$disableFilter = true()">
-                  <xsl:value-of select="concat('col-xs-offset-', $colWidth div 2, ' col-xs', $colWidth div 2)" />
+                  <xsl:value-of select="concat('col-xs-offset-', $colWidth div 2, ' col-xs-', $colWidth div 2)" />
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="concat(' col-xs-', $colWidth)" />
@@ -379,32 +379,49 @@
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
-          <tr class="{$trClass}">
-            <xsl:variable name="row">
-              <xsl:apply-templates mode="dataTableRow" select="." />
-            </xsl:variable>
-            <!-- extra css class for row -->
-            <xsl:if test="xalan:nodeset($row)/class">
-              <xsl:attribute name="class">
-                <xsl:value-of select="concat($trClass, ' ', xalan:nodeset($row)/class)" />
-              </xsl:attribute>
-            </xsl:if>
-            <xsl:for-each select="xalan:nodeset($row)/col|xalan:nodeset($row)/td">
-              <xsl:variable name="tdClass">
-                <xsl:if test="$sortedCol = position()">
-                  <xsl:text>sorting_1</xsl:text>
-                </xsl:if>
-              </xsl:variable>
-              <td>
-                <xsl:if test="string-length($tdClass) &gt; 0">
-                  <xsl:attribute name="class">
+          <xsl:variable name="drow">
+            <xsl:apply-templates mode="dataTableRow" select="." />
+          </xsl:variable>
+
+          <xsl:variable name="row">
+            <xsl:choose>
+              <xsl:when test="count(xalan:nodeset($drow)/row|xalan:nodeset($drow)/tr) &gt; 0">
+                <xsl:copy-of select="$drow" />
+              </xsl:when>
+              <xsl:otherwise>
+                <row>
+                  <xsl:copy-of select="$drow" />
+                </row>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:variable>
+
+          <xsl:for-each select="xalan:nodeset($row)/row|xalan:nodeset($row)/tr">
+            <tr class="{$trClass}">
+              <!-- extra css class for row -->
+              <xsl:if test="./class">
+                <xsl:attribute name="class">
+                  <xsl:value-of select="concat($trClass, ' ', ./class)" />
+                </xsl:attribute>
+              </xsl:if>
+              <xsl:apply-templates select="@*" />
+              <xsl:for-each select="./col|./td">
+                <xsl:variable name="tdClass">
+                  <xsl:if test="$sortedCol = position()">
+                    <xsl:text>sorting_1</xsl:text>
+                  </xsl:if>
+                </xsl:variable>
+                <td>
+                  <xsl:if test="string-length($tdClass) &gt; 0">
+                    <xsl:attribute name="class">
                     <xsl:value-of select="$tdClass" />
                   </xsl:attribute>
-                </xsl:if>
-                <xsl:apply-templates select="@*|node()" />
-              </td>
-            </xsl:for-each>
-          </tr>
+                  </xsl:if>
+                  <xsl:apply-templates select="@*|node()" />
+                </td>
+              </xsl:for-each>
+            </tr>
+          </xsl:for-each>
         </xsl:if>
       </xsl:for-each>
     </tbody>
