@@ -52,6 +52,8 @@ module.exports = function(grunt) {
 					destPrefix : '<%=globalConfig.assetsDirectory%>/'
 				},
 				files : {
+					'angular/js' : [ 'angular/*.min.*', 'angular-translate/*.min.*', 'angular-translate-loader-partial/*.min.*',
+							'angular-modal-service/dst/*.min.*' ],
 					'bootstrap-fileinput/css' : 'bootstrap-fileinput/css',
 					'bootstrap-fileinput/img' : 'bootstrap-fileinput/img',
 					'bootstrap-fileinput/js' : 'bootstrap-fileinput/js/*min.js',

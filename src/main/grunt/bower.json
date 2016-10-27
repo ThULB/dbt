@@ -15,7 +15,11 @@
   "dependencies": {
   },
   "devDependencies": {
-    "bootstrap": "~3.3.5",
+	"angular": "~1.5.8",
+	"angular-translate": "~2.11.0",
+    "angular-translate-loader-partial": "~2.11.0",
+    "angular-modal-service": "~0.10.1",
+    "bootstrap": "~3.3.6",
     "bootstrap-fileinput": "~4.2.5",
     "summernote": "~0.6.13",
     "jquery-sortable": "~0.9.12"

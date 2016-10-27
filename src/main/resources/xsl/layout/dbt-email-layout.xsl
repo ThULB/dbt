@@ -15,12 +15,6 @@
           <xsl:variable name="html">
             <style type="text/css">
                 <![CDATA[
-body {
-  font-family: "lucida grande", "lucida sans unicode", arial, sans-serif;
-  margin: 0 0 20px 0;
-  padding: 0;
-}
-
 a {
   color: #008855;
 }
@@ -43,13 +37,13 @@ a:hover {
                 ]]>
             </style>
             <div id="header"
-              style="padding: 10px; position: relative; display: block; height: 80px; border-bottom: 1px solid #008855; position: relative; margin-bottom: 15px;"
+              style="padding: 10px; position: relative; display: block; height: 100px; border-bottom: 1px solid #008855; position: relative; margin-bottom: 15px; font-family: 'lucida grande', 'lucida sans unicode', arial, sans-serif;"
             >
               <a id="logo" href="{$WebApplicationBaseURL}" style="position: absolute; right: 10px; display: block;">
                 <img src="{$WebApplicationBaseURL}dbt/images/logo-mail.png" style="height: 80px; display: block;" />
               </a>
             </div>
-            <div id="content" style="margin: 0 10px;">
+            <div id="content" style="margin: 0 10px; font-family: 'lucida grande', 'lucida sans unicode', arial, sans-serif;">
               <xsl:apply-templates select="child::node()" />
             </div>
           </xsl:variable>
