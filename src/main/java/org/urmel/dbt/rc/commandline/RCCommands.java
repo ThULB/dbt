@@ -471,7 +471,8 @@ public class RCCommands extends MCRAbstractCommands {
 
                 es.getValue().stream().collect(Collectors.groupingBy(e -> {
                     String name = ((SlotEntry<FileEntry>) e).getEntry().getName();
-                    return name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT);
+                    return name.lastIndexOf(".") != -1 ? name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT)
+                            : name;
                 })).forEach((ext, se) -> {
                     long copy = se.stream().filter(e -> ((SlotEntry<FileEntry>) e).getEntry().isCopyrighted())
                             .count();
