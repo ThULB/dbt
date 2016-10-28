@@ -146,7 +146,7 @@ public class FileEntry implements Serializable {
                 encryptPDF(entryId, new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
 
                 fileEntry.setContent(pdfEncrypted.toByteArray());
-            } catch (Exception e) {
+            } catch (IOException e) {
                 throw new FileEntryProcessingException(e.getMessage(), ERROR_NOT_SUPPORTED);
             } finally {
                 if (pdfCopy != null) {
@@ -188,7 +188,6 @@ public class FileEntry implements Serializable {
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
      * @throws IOException
-     * @throws COSVisitorException
      */
     private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
             throws IOException {
@@ -214,8 +213,6 @@ public class FileEntry implements Serializable {
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
      * @throws IOException
-     * @throws BadSecurityHandlerException
-     * @throws COSVisitorException
      */
     private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
             throws IOException {
