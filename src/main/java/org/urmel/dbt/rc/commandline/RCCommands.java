@@ -33,6 +33,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -439,6 +443,43 @@ public class RCCommands extends MCRAbstractCommands {
                     MCREventManager.instance().handleEvent(evt);
                 }
             }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @MCRCommand(syntax = "rc stats", help = "build stats of fileentries for rc")
+    public static void rcStats() {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        if (!slotList.getSlots().isEmpty()) {
+            Map<Slot, List<SlotEntry<?>>> feMap = slotList.getSlots().stream()
+                    .filter(s -> s.getStatus() == Status.ACTIVE)
+                    .collect(Collectors.toMap(s -> s, s -> s.getEntries().stream()
+                            .filter(e -> e.getEntry().getClass() == FileEntry.class).collect(Collectors.toList())));
+
+            final AtomicInteger total = new AtomicInteger();
+            final AtomicInteger copyTotal = new AtomicInteger();
+
+            feMap.entrySet().stream().forEach(es -> {
+                Slot slot = es.getKey();
+                System.out.println(slot.getSlotId() + " : " + slot.getTitle() + " / "
+                        + slot.getLecturers().stream().map(l -> l.getName()).collect(Collectors.joining("; ")));
+
+                es.getValue().stream().collect(Collectors.groupingBy(e -> {
+                    String name = ((SlotEntry<FileEntry>) e).getEntry().getName();
+                    return name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT);
+                })).forEach((ext, se) -> {
+                    long copy = se.stream().filter(e -> ((SlotEntry<FileEntry>) e).getEntry().isCopyrighted())
+                            .count();
+                    System.out.println("\t" + ext + ": " + copy + "/" + se.size());
+                    total.addAndGet(se.size());
+                    copyTotal.addAndGet((int) copy);
+                });
+            });
+
+            System.out.println("Count copyrighted files (total): " + copyTotal.get());
+            System.out.println("Count files (total): " + total.get());
         }
     }
 }
