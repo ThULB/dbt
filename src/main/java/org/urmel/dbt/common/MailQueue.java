@@ -25,6 +25,8 @@ package org.urmel.dbt.common;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jdom2.Element;
+import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobQueue;
 
@@ -37,6 +39,11 @@ public class MailQueue {
     private static final MCRJobQueue MAIL_QUEUE = MCRJobQueue.getInstance(MailJob.class);
 
     public static void addJob(final String uri) {
+        final Element xml = MCRURIResolver.instance().resolve(uri);
+        if (xml.getChildren("to").isEmpty()) {
+            return;
+        }
+
         final Map<String, String> params = new HashMap<String, String>();
 
         if (uri.length() > 254) {
