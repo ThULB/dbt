@@ -34,6 +34,11 @@
       </div>
 
       <div ng-controller="queueCtrl">
+        <div ng-hide="!jobs.loading">
+          <span class="glyphicon glyphicon-refresh spinning"></span>
+          <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
+          <xsl:value-of select="i18n:translate('component.rc.mailqueue.loading')" />
+        </div>
         <div class="datatable panel panel-default" ng-show="jobs.job &amp;&amp; jobs.job.length != 0">
           <div class="panel-heading clearfix">
             <form role="form" class="row form-inline">

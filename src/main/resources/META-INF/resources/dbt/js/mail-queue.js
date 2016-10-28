@@ -3,6 +3,17 @@
 var appName = "MailQueue";
 var app = angular.module(appName, [ "pascalprecht.translate", "angularModalService" ]);
 
+app.formatI18N = function(str, args) {
+	args = Array.prototype.slice.call(arguments, 1);
+	var formatted = str;
+	if (formatted !== undefined) {
+		for (var i = 0; i < args.length; i++) {
+			formatted = formatted.replace(RegExp("\\{" + i + "\\}", 'g'), args[i]);
+		}
+	}
+	return formatted;
+};
+
 app.config(function($translateProvider, $translatePartialLoaderProvider) {
 	$translatePartialLoaderProvider.addPart("alert.*");
 	$translatePartialLoaderProvider.addPart("button.*");
@@ -32,11 +43,16 @@ app.controller("alertCtrl", function($rootScope, $scope, $sce, $translate) {
 			$scope.alertObj.headline = $translate.instant("alert.type." + type);
 			$scope.alertObj.message = obj;
 		} else {
-			$scope.alertObj.headline = obj.localizedHeadline ? $translate.instant(obj.localizedHeadline) : undefined || obj.status ? $translate
-					.instant("mir.error.headline." + obj.status) : undefined || $translate.instant("alert.type." + type);
-			$scope.alertObj.message = $sce.trustAsHtml(obj.localizedMessage ? $translate.instant(obj.localizedMessage) : undefined || obj.status ? $translate
-					.instant("mir.error.codes." + obj.status) : undefined || obj.message);
-			$scope.alertObj.stackTrace = obj.stackTrace;
+			if (obj.status) {
+				$scope.alertObj.headline = $translate.instant("mir.error.headline." + obj.status);
+				$scope.alertObj.message = $sce.trustAsHtml(app.formatI18N($translate.instant("mir.error.codes." + obj.status), obj.config.url.replace(
+						webApplicationBaseURL, "/")));
+			} else {
+				$scope.alertObj.headline = obj.localizedHeadline ? $translate.instant(obj.localizedHeadline) : undefined ||
+						$translate.instant("alert.type." + type);
+				$scope.alertObj.message = $sce.trustAsHtml(obj.localizedMessage ? $translate.instant(obj.localizedMessage) : undefined || obj.message);
+				$scope.alertObj.stackTrace = obj.stackTrace;
+			}
 		}
 	});
 
@@ -47,7 +63,9 @@ app.controller("alertCtrl", function($rootScope, $scope, $sce, $translate) {
 
 app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http, ModalService) {
 	$scope.Math = window.Math;
-	$scope.jobs = {};
+	$scope.jobs = {
+		loading : true
+	};
 
 	$scope.sort = {
 		by : [ "id" ],
@@ -55,6 +73,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 	};
 
 	$scope.load = function() {
+		$scope.jobs.loading = true;
 		$http.get(webApplicationBaseURL + "rsc/jobqueue/org.urmel.dbt.common.MailJob").then(function(result) {
 			if (result.status == 200) {
 				$scope.jobs = result.data;
@@ -62,9 +81,11 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 				$scope.jobs.limit = $scope.jobs.limit || 50;
 				$scope.jobs.start = 0;
 			}
+			$scope.jobs.loading = false;
 		}, function(error) {
 			$rootScope.$emit("alertEvent", "error", error);
 			$log.error(error);
+			$scope.jobs.loading = false;
 		});
 	};
 
@@ -162,17 +183,6 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 		return page <= 0 || page > total;
 	};
 
-	$scope.formatI18N = function(i18n, args) {
-		args = Array.prototype.slice.call(arguments, 1);
-		var formatted = $translate.instant(i18n);
-		if (formatted !== undefined) {
-			for (var i = 0; i < args.length; i++) {
-				formatted = formatted.replace(RegExp("\\{" + i + "\\}", 'g'), args[i]);
-			}
-		}
-		return formatted;
-	};
-
 	$scope.date = function(job, type) {
 		for ( var i in job.date) {
 			if (job.date[i].type == type) {
@@ -205,13 +215,17 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 
 app.controller("mailDialogCtrl", function($scope, $http, $log, $sce, parameters, close) {
 	$scope.parameters = parameters;
-	$scope.mail = {};
+	$scope.mail = {
+		loading : true
+	};
 
 	$scope.close = function(result) {
 		close(result, 500);
 	};
 
 	$scope.load = function() {
+		$scope.mail.loading = true;
+
 		var uriParts = [];
 		for ( var i in $scope.parameters) {
 			var param = $scope.parameters[i];
@@ -234,9 +248,11 @@ app.controller("mailDialogCtrl", function($scope, $http, $log, $sce, parameters,
 			if (result.status == 200) {
 				$scope.mail = result.data;
 			}
+			$scope.mail.loading = false;
 		}, function(e) {
 			$rootScope.$emit("alertEvent", "error", e.data);
 			$log.error(e);
+			$scope.mail.loading = false;
 		});
 	};
 

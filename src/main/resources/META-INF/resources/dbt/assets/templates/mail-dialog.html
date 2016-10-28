@@ -1,52 +1,55 @@
 <div class="modal fade" id="mail-dialog" tabindex="-1" role="dialog" aria-labelledby="mail-label">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title" id="mail-label">{{'component.rc.mailqueue.dialogTitle' | translate}}</h4>
-      </div>
-      <div class="modal-body" ng-if="!mail || mail.to.length == 0">
-        <p class="text-center">
-          <strong> {{'component.rc.mailqueue.job.mail.noBody' | translate}} </strong>
-        </p>
-      </div>
-      <div class="modal-body" ng-if="mail.to.length != 0">
-        <div class="row">
-          <div class="col-xs-3">
-            <strong>{{'component.rc.mailqueue.job.mail.from' | translate}}</strong>
-          </div>
-          <div class="col-xs-9">{{mail.from}}</div>
-        </div>
-        <div class="row">
-          <div class="col-xs-3">
-            <strong>{{'component.rc.mailqueue.job.mail.to' | translate}}</strong>
-          </div>
-          <div class="col-xs-9">{{mail.to}}</div>
-        </div>
-        <div class="row">
-          <div class="col-xs-3">
-            <strong>{{'component.rc.mailqueue.job.mail.subject' | translate}}</strong>
-          </div>
-          <div class="col-xs-9">{{mail.subject}}</div>
-        </div>
-        <div class="mail-content">
-          <ul class="nav nav-tabs" role="tablist" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
-            <li role="presentation" class="active" ng-if="mail.body.html.length != 0"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML</a></li>
-            <li role="presentation" ng-if="mail.body.plain.length != 0"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Text</a></li>
-          </ul>
-          <div class="tab-content" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
-            <div role="tabpanel" class="tab-pane active" id="html" ng-bind-html="mail.body.html" ng-if="mail.body.html.length != 0"></div>
-            <div role="tabpanel" class="tab-pane" id="plain" ng-if="mail.body.plain.length != 0">
-              <pre>{{ mail.body.plain }}</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">{{'button.close' | translate}}</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" ng-click="close()" data-dismiss="modal" aria-label="{{'btn.close' | translate}}">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="modal-title" id="mail-label">{{'component.rc.mailqueue.dialogTitle' | translate}}</h4>
+			</div>
+			<div class="modal-body" ng-if="!mail || (mail.to.length == 0 && !mail.loading)">
+				<p class="text-center">
+					<strong> {{'component.rc.mailqueue.job.mail.noBody' | translate}} </strong>
+				</p>
+			</div>
+			<div class="modal-body" ng-hide="!mail.loading">
+				<span class="glyphicon glyphicon-refresh spinning"></span> {{ 'component.rc.mailqueue.loading' | translate }}
+			</div>
+			<div class="modal-body" ng-if="!mail.loading && mail.to.length != 0">
+				<div class="row">
+					<div class="col-xs-3">
+						<strong>{{'component.rc.mailqueue.job.mail.from' | translate}}</strong>
+					</div>
+					<div class="col-xs-9">{{mail.from}}</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-3">
+						<strong>{{'component.rc.mailqueue.job.mail.to' | translate}}</strong>
+					</div>
+					<div class="col-xs-9">{{mail.to}}</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-3">
+						<strong>{{'component.rc.mailqueue.job.mail.subject' | translate}}</strong>
+					</div>
+					<div class="col-xs-9">{{mail.subject}}</div>
+				</div>
+				<div class="mail-content">
+					<ul class="nav nav-tabs" role="tablist" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
+						<li role="presentation" class="active" ng-if="mail.body.html.length != 0"><a href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML</a></li>
+						<li role="presentation" ng-if="mail.body.plain.length != 0"><a href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Text</a></li>
+					</ul>
+					<div class="tab-content" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
+						<div role="tabpanel" class="tab-pane active" id="html" ng-bind-html="mail.body.html" ng-if="mail.body.html.length != 0"></div>
+						<div role="tabpanel" class="tab-pane" id="plain" ng-if="mail.body.plain.length != 0">
+							<pre>{{ mail.body.plain }}</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" ng-click="close()" class="btn btn-primary" data-dismiss="modal">{{'button.close' | translate}}</button>
+			</div>
+		</div>
+	</div>
 </div>
