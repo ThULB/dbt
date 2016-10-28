@@ -49,7 +49,6 @@ import org.mycore.common.events.MCREventManager;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.user2.MCRUserManager;
 import org.urmel.dbt.opc.datamodel.Catalog;
 import org.urmel.dbt.opc.datamodel.Catalogues;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
