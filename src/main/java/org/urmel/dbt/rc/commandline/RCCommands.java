@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -455,8 +456,10 @@ public class RCCommands extends MCRAbstractCommands {
         if (!slotList.getSlots().isEmpty()) {
             Map<Slot, List<SlotEntry<?>>> feMap = slotList.getSlots().stream()
                     .filter(s -> s.getStatus() == Status.ACTIVE)
-                    .collect(Collectors.toMap(s -> s, s -> s.getEntries().stream()
-                            .filter(e -> e.getEntry().getClass() == FileEntry.class).collect(Collectors.toList())));
+                    .collect(Collectors.toMap(s -> s,
+                            s -> Optional.ofNullable(s.getEntries()).orElse(Collections.emptyList()).stream()
+                                    .filter(e -> e.getEntry().getClass() == FileEntry.class)
+                                    .collect(Collectors.toList())));
 
             final AtomicInteger total = new AtomicInteger();
             final AtomicInteger copyTotal = new AtomicInteger();
