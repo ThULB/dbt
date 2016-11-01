@@ -77,6 +77,9 @@
                       </span>
                     </a>
                   </th>
+                  <th>
+                    <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.slotId')" />
+                  </th>
                   <th class="text-right">
                     <a ng-click="setSort('date', 'added')">
                       <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.added')" />
@@ -113,6 +116,7 @@
                 <tr ng-repeat="job in jobs.job | orderBy:sortBy:sort.reverse | limitTo:jobs.limit:jobs.start track by job.id" ng-click="showMailDialog(job)">
                   <td class="text-right">{{ job.id }}</td>
                   <td>{{ 'component.rc.mailqueue.job.status.' + job.status | translate }}</td>
+                  <td class="text-right">{{ slotId(job) }}</td>
                   <td class="text-right">{{ date(job, "added") | date:'dd.MM.yyyy HH:mm:ss' }}</td>
                   <td class="text-right">{{ date(job, "start") | date:'dd.MM.yyyy HH:mm:ss' }}</td>
                   <td class="text-right">{{ date(job, "finished") | date:'dd.MM.yyyy HH:mm:ss' }}</td>

@@ -14,6 +14,20 @@ app.formatI18N = function(str, args) {
 	return formatted;
 };
 
+app.joinURI = function(parameters) {
+	var uriParts = [];
+	for ( var i in parameters) {
+		var param = parameters[i];
+		if (param.name == "uri") {
+			uriParts.push(param.value);
+		} else if (param.name.indexOf("uri_") == "uri") {
+			var ind = param.name.split("uri_")[1];
+			uriParts[ind] = param.value;
+		}
+	}
+	return uriParts.join();
+};
+
 app.config(function($translateProvider, $translatePartialLoaderProvider) {
 	$translatePartialLoaderProvider.addPart("alert.*");
 	$translatePartialLoaderProvider.addPart("button.*");
@@ -193,6 +207,13 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 		return null;
 	};
 
+	$scope.slotId = function(job) {
+		var regex = new RegExp("slotId=([0-9\.]+)");
+		var uri = app.joinURI(job.parameter);
+		var m = uri.match(regex);
+		return m[1];
+	};
+
 	$scope.showMailDialog = function(job) {
 		ModalService.showModal({
 			templateUrl : webApplicationBaseURL + "dbt/assets/templates/mail-dialog.html",
@@ -226,18 +247,7 @@ app.controller("mailDialogCtrl", function($scope, $http, $log, $sce, parameters,
 	$scope.load = function() {
 		$scope.mail.loading = true;
 
-		var uriParts = [];
-		for ( var i in $scope.parameters) {
-			var param = $scope.parameters[i];
-			if (param.name == "uri") {
-				uriParts.push(param.value);
-			} else if (param.name.indexOf("uri_") == "uri") {
-				var ind = param.name.split("uri_")[1];
-				uriParts[ind] = param.value;
-			}
-		}
-
-		$http.post(webApplicationBaseURL + "rsc/rcmail", uriParts.join(), {
+		$http.post(webApplicationBaseURL + "rsc/rcmail", app.joinURI($scope.parameters), {
 			headers : {
 				"Content-Type" : undefined
 			},
