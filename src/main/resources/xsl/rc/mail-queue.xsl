@@ -77,7 +77,7 @@
                       </span>
                     </a>
                   </th>
-                  <th>
+                  <th class="text-right">
                     <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.slotId')" />
                   </th>
                   <th class="text-right">
