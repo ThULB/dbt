@@ -110,6 +110,26 @@
 
     .entry-mcrobject {
       margin: 5px 0;
+      .hit_download_box , .hit_tnd_container , .hit_source , .hit_abstract , .hit_pub_name {
+        display: none;
+      }
+
+      .hit_title , .hit_author {
+        padding-left: 0;
+      }
+
+      > h3 , .hit_title {
+        font-size: 15px;
+        margin: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .hit_author span[itemprop="name"]::before {
+        content: "/ ";
+      }
+
       > .comment {
         font-style: italic;
       }
