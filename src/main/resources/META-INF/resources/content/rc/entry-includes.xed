@@ -70,7 +70,7 @@
 
   <xed:template id="mcrobject-edit">
     <xed:bind xpath="mcrobject">
-      <mir:template name="textInput" xpath="@id" id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
+      <mir:template name="textInput" xpath="@id" placeholder='dbt_mods_12345678' id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
         required="true" />
       <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
     </xed:bind>
