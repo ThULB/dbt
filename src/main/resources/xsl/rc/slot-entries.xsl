@@ -267,7 +267,14 @@
   <xsl:template match="file">
     <h4>
       <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
-        <xsl:value-of select="@name" />
+        <xsl:choose>
+          <xsl:when test="string-length(.) &gt; 0">
+            <xsl:value-of select="." />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@name" />
+          </xsl:otherwise>
+        </xsl:choose>
       </a>
       <xsl:if test="not($hasAdminPermission)">
         <small>
@@ -289,11 +296,6 @@
           <xsl:with-param name="size" select="@size" />
         </xsl:call-template>
       </p>
-    </xsl:if>
-    <xsl:if test="string-length(.) &gt; 0">
-      <span class="comment">
-        <xsl:value-of select="." />
-      </span>
     </xsl:if>
   </xsl:template>
   
