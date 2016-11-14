@@ -271,7 +271,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
     }
 
     private static String normalizeAccents(final String str) {
-        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{M}", "");
+        return Normalizer.normalize(str, Normalizer.Form.NFD).replaceAll("\\p{M}|´", "");
     }
 
     private static int partsCompare(final String n1, final String n2) {
