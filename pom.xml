@@ -202,6 +202,11 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-media</artifactId>
+      <version>${mycore.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.mycore.mir</groupId>
       <artifactId>mir-parent</artifactId>
       <version>${project.parent.version}</version>
