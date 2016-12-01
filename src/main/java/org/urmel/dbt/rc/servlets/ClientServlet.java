@@ -80,6 +80,7 @@ public class ClientServlet extends MCRServlet {
     private static final String CLIENT_USER = MCRConfiguration.instance().getString("DBT.RC.ClientUser", "rc-client");
 
     private static final String TOKEN = "rctoken";
+
     private static final String SESSION_TOKEN = "rcsession";
 
     private static final SlotManager SLOT_MGR = SlotManager.instance();
@@ -126,9 +127,9 @@ public class ClientServlet extends MCRServlet {
             } else if (sessionToken != null && !sessionToken.isEmpty()) {
                 if ("list".equals(action)) {
                     writeToResponse(res, ClientData.encrypt(sessionToken,
-                            new XMLOutputter()
-                                    .outputString(SlotListTransformer.buildExportableXML(slotList.getBasicSlots()))),
-                            null);
+                        new XMLOutputter()
+                            .outputString(SlotListTransformer.buildExportableXML(slotList.getBasicSlots()))),
+                        null);
                     return;
                 } else if (action != null) {
                     final Slot slot = SLOT_MGR.getSlotById(action);
@@ -172,9 +173,9 @@ public class ClientServlet extends MCRServlet {
                         }
                     } else {
                         writeToResponse(res,
-                                ClientData.encrypt(sessionToken,
-                                        new XMLOutputter().outputString(SlotTransformer.buildExportableXML(slot))),
-                                null);
+                            ClientData.encrypt(sessionToken,
+                                new XMLOutputter().outputString(SlotTransformer.buildExportableXML(slot))),
+                            null);
                         return;
                     }
                 }
@@ -199,8 +200,11 @@ public class ClientServlet extends MCRServlet {
 
     private static class ClientData {
         private static boolean ENCRYPT_ENABLED = false;
+
         private static String CIPHER_TRANSFORMATION = "AES/CBC/PKCS5Padding";
+
         private static int KEY_SIZE = 128;
+
         private static int ITERATIONS = 100;
 
         private static byte[] generateIV(String passphrase) throws NoSuchAlgorithmException {
@@ -218,7 +222,7 @@ public class ClientServlet extends MCRServlet {
 
         private static String convertStreamToString(InputStream is) {
             final StringBuffer sb = new StringBuffer();
-            final Scanner s = new Scanner(is);
+            final Scanner s = new Scanner(is, StandardCharsets.UTF_8.name());
             while (s.hasNext()) {
                 sb.append(s.next());
             }
@@ -252,7 +256,8 @@ public class ClientServlet extends MCRServlet {
                     bao.close();
                 }
             } else {
-                return new String(Base64.getEncoder().encode(data.getBytes()), StandardCharsets.ISO_8859_1);
+                return new String(Base64.getEncoder().encode(data.getBytes(StandardCharsets.UTF_8)),
+                    StandardCharsets.ISO_8859_1);
             }
         }
 
@@ -276,7 +281,7 @@ public class ClientServlet extends MCRServlet {
                 return new String(c.doFinal(cipherBytes), StandardCharsets.UTF_8);
             } else {
                 return new String(Base64.getDecoder().decode(encrypted.getBytes(StandardCharsets.ISO_8859_1)),
-                        StandardCharsets.UTF_8);
+                    StandardCharsets.UTF_8);
             }
         }
 

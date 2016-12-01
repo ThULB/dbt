@@ -114,7 +114,7 @@ public class RCCommands extends MCRAbstractCommands {
                                 MCRContent content = slotEntry.getEntry().getExportableContent(entry.getId());
                                 content.sendTo(f);
                                 LOGGER.info("File \"" + slotEntry.getEntry().getName() + "\" saved to "
-                                        + f.getCanonicalPath() + ".");
+                                    + f.getCanonicalPath() + ".");
                             } catch (Exception ex) {
                                 LOGGER.error(ex.getMessage());
                                 LOGGER.error("Exception while store file to " + fileDir.getAbsolutePath());
@@ -148,8 +148,9 @@ public class RCCommands extends MCRAbstractCommands {
             for (final Slot slot : slotList.getSlots()) {
                 File slotDir = new File(dir, slot.getSlotId());
                 if (slotDir.isDirectory() || slotDir.mkdirs()) {
-                    String command = MessageFormat.format("export slot {0} to directory {1}", slot.getSlotId(),
-                            slotDir.getAbsolutePath());
+                    String command = new MessageFormat("export slot {0} to directory {1}", Locale.ROOT)
+                        .format(new Object[] { slot.getSlotId(),
+                            slotDir.getAbsolutePath() });
                     cmds.add(command);
                 }
             }
@@ -162,7 +163,7 @@ public class RCCommands extends MCRAbstractCommands {
     @SuppressWarnings("unchecked")
     @MCRCommand(syntax = "import slot from file {0}", help = "imports a slot from given file")
     public static void importSlot(final String filename)
-            throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
 
         File file = new File(filename);
@@ -196,13 +197,13 @@ public class RCCommands extends MCRAbstractCommands {
                         try {
                             is = new FileInputStream(f);
                             slotEntry.setEntry(FileEntry.createFileEntry(entry.getId(), fileEntry.getName(),
-                                    fileEntry.getComment(), fileEntry.isCopyrighted(), is));
+                                fileEntry.getComment(), fileEntry.isCopyrighted(), is));
                         } catch (FileNotFoundException e) {
                             LOGGER.error("Couldn't not read file \"" + f.getCanonicalPath() + "\" for file entry.");
                             return;
                         } catch (FileEntryProcessingException e) {
                             LOGGER.error("File processing returns error code " + e.getErrorCode() + " for file \""
-                                    + f.getCanonicalPath() + "\".");
+                                + f.getCanonicalPath() + "\".");
                             return;
                         } finally {
                             if (is != null)
@@ -211,7 +212,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                         if (update) {
                             LOGGER.info(
-                                    "Update File \"" + fileEntry.getName() + "\" from " + f.getCanonicalPath() + ".");
+                                "Update File \"" + fileEntry.getName() + "\" from " + f.getCanonicalPath() + ".");
                             FileEntryManager.update(slot, slotEntry);
                         }
                     } else {
@@ -275,8 +276,8 @@ public class RCCommands extends MCRAbstractCommands {
             if (fr.isDirectory()) {
                 for (final String c : fr.list()) {
                     if (c.endsWith(".xml") && c.contains("slot")) {
-                        String command = MessageFormat.format("import slot from file {0}",
-                                new File(fr, c).getAbsolutePath());
+                        String command = new MessageFormat("import slot from file {0}", Locale.ROOT)
+                            .format(new File(fr, c).getAbsolutePath());
                         cmds.add(command);
                     }
                 }
@@ -306,58 +307,59 @@ public class RCCommands extends MCRAbstractCommands {
                             boolean save = true;
 
                             switch (slot.getStatus()) {
-                            case ARCHIVED:
-                            case FREE:
-                            case RESERVED:
-                                save = false;
-                                break;
-                            case ACTIVE:
-                                LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
-
-                                slot.setStatus(Status.ARCHIVED);
-
-                                evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
-
-                                break;
-                            case PENDING:
-                                switch (slot.getPendingStatus()) {
-                                case ACTIVE:
-                                    LOGGER.info("reactivate slot with id \"" + slot.getSlotId() + "\"");
-
-                                    slot.setStatus(Status.ACTIVE);
-                                    slot.setValidTo(RCCalendar
-                                            .getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
-
-                                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
-                                    break;
                                 case ARCHIVED:
+                                case FREE:
+                                case RESERVED:
+                                    save = false;
+                                    break;
+                                case ACTIVE:
                                     LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
 
                                     slot.setStatus(Status.ARCHIVED);
 
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+
                                     break;
-                                case FREE:
-                                    LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+                                case PENDING:
+                                    switch (slot.getPendingStatus()) {
+                                        case ACTIVE:
+                                            LOGGER.info("reactivate slot with id \"" + slot.getSlotId() + "\"");
 
-                                    mgr.delete(slot);
+                                            slot.setStatus(Status.ACTIVE);
+                                            slot.setValidTo(RCCalendar
+                                                .getPeriodBySetable(slot.getLocation().toString(), new Date())
+                                                .getToDate());
 
-                                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                                    evt.put(SlotManager.SLOT_TYPE, slot);
-                                    MCREventManager.instance().handleEvent(evt);
-                                    continue;
-                                case RESERVED:
-                                    LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
+                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                                            break;
+                                        case ARCHIVED:
+                                            LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
 
-                                    slot.setStatus(Status.RESERVED);
-                                    slot.getEntries().clear();
+                                            slot.setStatus(Status.ARCHIVED);
 
-                                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                                    break;
-                                case VALIDATING:
-                                default:
-                                    save = false;
-                                }
+                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                            break;
+                                        case FREE:
+                                            LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+
+                                            mgr.delete(slot);
+
+                                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                            evt.put(SlotManager.SLOT_TYPE, slot);
+                                            MCREventManager.instance().handleEvent(evt);
+                                            continue;
+                                        case RESERVED:
+                                            LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
+
+                                            slot.setStatus(Status.RESERVED);
+                                            slot.getEntries().clear();
+
+                                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                            break;
+                                        case VALIDATING:
+                                        default:
+                                            save = false;
+                                    }
                             }
 
                             if (save) {
@@ -376,7 +378,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                             if (pWarning != null) {
                                 final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
-                                        : new WarningDate(pWarning.getWarningDate());
+                                    : new WarningDate(pWarning.getWarningDate());
 
                                 if (sWarning != null) {
                                     LOGGER.info("Add warning to slot with id \"" + slot.getSlotId() + "\"...");
@@ -409,7 +411,7 @@ public class RCCommands extends MCRAbstractCommands {
                         continue;
                     }
                 } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
-                        | MCRPersistenceException | MCRActiveLinkException e) {
+                    | MCRPersistenceException | MCRActiveLinkException e) {
                     LOGGER.error(e.getMessage());
                 }
             }
@@ -434,7 +436,7 @@ public class RCCommands extends MCRAbstractCommands {
                 MCREvent evt = null;
 
                 if ((slot.getStatus() == Status.ARCHIVED)
-                        && (slotPrefix == null || slot.getSlotId().startsWith(slotPrefix))) {
+                    && (slotPrefix == null || slot.getSlotId().startsWith(slotPrefix))) {
                     LOGGER.info("resend mails for archived slot " + slot.getSlotId());
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 }
@@ -455,11 +457,11 @@ public class RCCommands extends MCRAbstractCommands {
 
         if (!slotList.getSlots().isEmpty()) {
             Map<Slot, List<SlotEntry<?>>> feMap = slotList.getSlots().stream()
-                    .filter(s -> s.getStatus() == Status.ACTIVE)
-                    .collect(Collectors.toMap(s -> s,
-                            s -> Optional.ofNullable(s.getEntries()).orElse(Collections.emptyList()).stream()
-                                    .filter(e -> e.getEntry().getClass() == FileEntry.class)
-                                    .collect(Collectors.toList())));
+                .filter(s -> s.getStatus() == Status.ACTIVE)
+                .collect(Collectors.toMap(s -> s,
+                    s -> Optional.ofNullable(s.getEntries()).orElse(Collections.emptyList()).stream()
+                        .filter(e -> e.getEntry().getClass() == FileEntry.class)
+                        .collect(Collectors.toList())));
 
             final AtomicInteger total = new AtomicInteger();
             final AtomicInteger copyTotal = new AtomicInteger();
@@ -467,15 +469,15 @@ public class RCCommands extends MCRAbstractCommands {
             feMap.entrySet().stream().forEach(es -> {
                 Slot slot = es.getKey();
                 System.out.println(slot.getSlotId() + " : " + slot.getTitle() + " / "
-                        + slot.getLecturers().stream().map(l -> l.getName()).collect(Collectors.joining("; ")));
+                    + slot.getLecturers().stream().map(l -> l.getName()).collect(Collectors.joining("; ")));
 
                 es.getValue().stream().collect(Collectors.groupingBy(e -> {
                     String name = ((SlotEntry<FileEntry>) e).getEntry().getName();
                     return name.lastIndexOf(".") != -1 ? name.substring(name.lastIndexOf(".")).toLowerCase(Locale.ROOT)
-                            : name;
+                        : name;
                 })).forEach((ext, se) -> {
                     long copy = se.stream().filter(e -> ((SlotEntry<FileEntry>) e).getEntry().isCopyrighted())
-                            .count();
+                        .count();
                     System.out.println("\t" + ext + ": " + copy + "/" + se.size());
                     total.addAndGet(se.size());
                     copyTotal.addAndGet((int) copy);

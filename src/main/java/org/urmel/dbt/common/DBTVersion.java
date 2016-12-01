@@ -24,12 +24,11 @@ package org.urmel.dbt.common;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.logging.log4j.LogManager;
-import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfigurationDir;
 
 /**
@@ -42,9 +41,13 @@ public class DBTVersion {
 
     public static final String VERSION = prop.getProperty("dbt.version");
 
-    public static final int REVISION = getRevisionFromProperty();
+    public static final String BRANCH = prop.getProperty("git.branch");
 
-    public static final String COMPLETE = VERSION + " r" + REVISION;
+    public static final String HASH = prop.getProperty("git.hash");
+
+    public static final String HASH_SHORT = prop.getProperty("git.hash-short");
+
+    public static final String COMPLETE = VERSION + " " + BRANCH + ":" + HASH;
 
     public static String getVersion() {
         return VERSION;
@@ -61,13 +64,17 @@ public class DBTVersion {
                 propStream.close();
             }
         } catch (IOException e) {
-            throw new MCRException("Error while initializing DBTVersion.", e);
+            throw new UncheckedIOException("Error while initializing DBTVersion.", e);
         }
         return props;
     }
 
-    public static int getRevision() {
-        return REVISION;
+    public static String getHash() {
+        return HASH;
+    }
+    
+    public static String getShortHash() {
+        return HASH_SHORT;
     }
 
     public static String getCompleteVersion() {
@@ -75,17 +82,7 @@ public class DBTVersion {
     }
 
     public static void main(String arg[]) {
-        System.out.printf(Locale.ROOT, "DBT\tver: %s\trev: %d\n", VERSION, REVISION);
+        System.out.printf(Locale.ROOT, "DBT\tver: %s\tbranch: %s\tcommit: %s%n", VERSION, BRANCH, HASH);
         System.out.printf(Locale.ROOT, "Config directory: %s\n", MCRConfigurationDir.getConfigurationDirectory());
-    }
-
-    private static int getRevisionFromProperty() {
-        try {
-            return Integer.parseInt(prop.getProperty("revision.number"));
-        } catch (NumberFormatException e) {
-            LogManager.getLogger(DBTVersion.class).error(
-                    "Error parsing revisionnumber: " + prop.getProperty("revision.number"));
-            return -1;
-        }
     }
 }

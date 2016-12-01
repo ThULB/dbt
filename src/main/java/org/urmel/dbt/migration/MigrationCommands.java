@@ -33,6 +33,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
@@ -85,7 +86,8 @@ public class MigrationCommands extends MCRAbstractCommands {
         Iterator<Integer> IDs = store.listIDs(true);
         while (IDs.hasNext()) {
             final String id = MCRObjectID.formatID(base, IDs.next());
-            cmds.add(MessageFormat.format("xslt {0} with file {1}", id, styleFile.toString()));
+            cmds.add(new MessageFormat("xslt {0} with file {1}", Locale.ROOT)
+                .format(new Object[] { id, styleFile.toString() }));
         }
 
         return cmds;
@@ -93,7 +95,7 @@ public class MigrationCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "repair derivate from file {0}", help = "try to repair a derivate from given file {0}")
     public static boolean repairDerivate(final String from)
-            throws SAXParseException, IOException, MCRPersistenceException, MCRAccessException {
+        throws SAXParseException, IOException, MCRPersistenceException, MCRAccessException {
         File file = new File(from);
 
         if (!file.getName().endsWith(".xml")) {
@@ -142,7 +144,7 @@ public class MigrationCommands extends MCRAbstractCommands {
     }
 
     private static void repairDerivate(final MCRDerivate mcrDerivate)
-            throws MCRPersistenceException, IOException {
+        throws MCRPersistenceException, IOException {
         if (!mcrDerivate.isValid()) {
             throw new MCRPersistenceException("The derivate " + mcrDerivate.getId() + " is not valid.");
         }
@@ -187,7 +189,7 @@ public class MigrationCommands extends MCRAbstractCommands {
                 BasicFileAttributes attrs = Files.readAttributes(rootPath, BasicFileAttributes.class);
                 if (!(attrs.fileKey() instanceof String)) {
                     throw new MCRPersistenceException(
-                            "Cannot get ID from newely created directory, as it is not a String." + rootPath);
+                        "Cannot get ID from newely created directory, as it is not a String." + rootPath);
                 }
                 mcrDerivate.getDerivate().getInternals().setIFSID(attrs.fileKey().toString());
             } else {
@@ -200,7 +202,7 @@ public class MigrationCommands extends MCRAbstractCommands {
                         BasicFileAttributes attrs = Files.readAttributes(rootPath, BasicFileAttributes.class);
                         if (!(attrs.fileKey() instanceof String)) {
                             throw new MCRPersistenceException(
-                                    "Cannot get ID from newely created directory, as it is not a String." + rootPath);
+                                "Cannot get ID from newely created directory, as it is not a String." + rootPath);
                         }
                         mcrDerivate.getDerivate().getInternals().setIFSID(attrs.fileKey().toString());
                     } catch (final Exception e) {
@@ -233,7 +235,7 @@ public class MigrationCommands extends MCRAbstractCommands {
             evt.put(MCREvent.DERIVATE_KEY, base);
         }
         Optional.ofNullable(oldBase)
-                .ifPresent(b -> evt.put(objectEvent ? MCREvent.OBJECT_OLD_KEY : MCREvent.DERIVATE_OLD_KEY, b));
+            .ifPresent(b -> evt.put(objectEvent ? MCREvent.OBJECT_OLD_KEY : MCREvent.DERIVATE_OLD_KEY, b));
         if (MCREvent.DELETE_EVENT.equals(eventType)) {
             MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
         } else {
