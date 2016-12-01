@@ -8,7 +8,7 @@ app.formatI18N = function(str, args) {
 	var formatted = str;
 	if (formatted !== undefined) {
 		for (var i = 0; i < args.length; i++) {
-			formatted = formatted.replace(RegExp("\\{" + i + "\\}", 'g'), args[i]);
+			formatted = formatted.replace(RegExp("\\{" + i + "\\}", "g"), args[i]);
 		}
 	}
 	return formatted;
@@ -18,9 +18,9 @@ app.joinURI = function(parameters) {
 	var uriParts = [];
 	for ( var i in parameters) {
 		var param = parameters[i];
-		if (param.name == "uri") {
+		if (param.name === "uri") {
 			uriParts.push(param.value);
-		} else if (param.name.indexOf("uri_") == "uri") {
+		} else if (param.name.indexOf("uri_") === "uri") {
 			var ind = param.name.split("uri_")[1];
 			uriParts[ind] = param.value;
 		}
@@ -89,7 +89,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 	$scope.load = function() {
 		$scope.jobs.loading = true;
 		$http.get(webApplicationBaseURL + "rsc/jobqueue/org.urmel.dbt.common.MailJob").then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.jobs = result.data;
 				$scope.jobs.total = $scope.jobs.job.length;
 				$scope.jobs.limit = $scope.jobs.limit || 50;
@@ -176,7 +176,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 			return;
 		}
 
-		if (typeof page === 'string') {
+		if (typeof page === "string") {
 			page = page[0] === "-" ? (pagination.start / pagination.limit) + 1 - parseInt(page.substring(1))
 					: page[0] === "+" ? page = (pagination.start / pagination.limit) + 1 + parseInt(page.substring(1)) : 0;
 		}
@@ -189,7 +189,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 	};
 
 	$scope.paginationDisabled = function(pagination, page) {
-		if (typeof page === 'string') {
+		if (typeof page === "string") {
 			page = page[0] === "-" ? (pagination.start / pagination.limit) + 1 - parseInt(page.substring(1))
 					: page[0] === "+" ? page = (pagination.start / pagination.limit) + 1 + parseInt(page.substring(1)) : 0;
 		}
@@ -199,7 +199,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 
 	$scope.date = function(job, type) {
 		for ( var i in job.date) {
-			if (job.date[i].type == type) {
+			if (job.date[i].type === type) {
 				return job.date[i].value;
 			}
 		}
@@ -255,7 +255,7 @@ app.controller("mailDialogCtrl", function($scope, $http, $log, $sce, parameters,
 				return $scope.parseData(data);
 			} ]
 		}).then(function(result) {
-			if (result.status == 200) {
+			if (result.status === 200) {
 				$scope.mail = result.data;
 			}
 			$scope.mail.loading = false;

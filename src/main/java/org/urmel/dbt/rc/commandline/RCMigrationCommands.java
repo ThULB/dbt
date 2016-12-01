@@ -28,6 +28,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -83,7 +84,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
 
         try {
             final Element slotXML = MCRXMLParserFactory.getParser(false).parseXML(new MCRVFSContent(file.toURI()))
-                    .getRootElement();
+                .getRootElement();
 
             Optional.ofNullable(slotXML.getChild("derivate").getAttributeValue("ID")).ifPresent(derId -> {
                 final File derDir = new File(new File(file.getParent(), "derivates"), "derivate-" + derId);
@@ -92,7 +93,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     if (msaFile.exists()) {
                         try {
                             final Element msaXML = MCRXMLParserFactory.getParser(false)
-                                    .parseXML(new MCRVFSContent(msaFile.toURI())).getRootElement();
+                                .parseXML(new MCRVFSContent(msaFile.toURI())).getRootElement();
 
                             Optional.ofNullable(msaXML.getChildren("entry")).ifPresent(x -> {
                                 final Element root = new Element("entries");
@@ -118,7 +119,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     params.setParameter("dirname", file.getParent());
 
                     MCRContent xml = MCRXSLTransformer.getInstance("xsl/migrate/slot.xsl")
-                            .transform(new MCRJDOMContent(slotXML.clone()), params);
+                        .transform(new MCRJDOMContent(slotXML.clone()), params);
 
                     final Slot slot = SlotTransformer.buildSlot(xml.asXML());
 
@@ -193,8 +194,9 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     if (c.endsWith(".xml") && c.contains("slot")) {
                         final File ft = new File(toDir, r);
                         if (ft.isDirectory() || ft.mkdirs()) {
-                            String command = MessageFormat.format("migrate slot from file {0} to directory {1}",
-                                    new File(fr, c).getAbsolutePath(), ft.getAbsolutePath());
+                            String command = new MessageFormat("migrate slot from file {0} to directory {1}",
+                                Locale.ROOT).format(new Object[] {
+                                    new File(fr, c).getAbsolutePath(), ft.getAbsolutePath() });
                             cmds.add(command);
                         }
                     }

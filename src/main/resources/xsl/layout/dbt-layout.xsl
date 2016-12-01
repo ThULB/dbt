@@ -118,8 +118,6 @@
       if (jQuery.fn.button){jQuery.fn.btn = jQuery.fn.button.noConflict();}
     </script>
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery.selection.js" />
-
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
@@ -474,7 +472,7 @@
         <xsl:value-of select="i18n:translate('dbt.copyright')" />
       </p>
       <p title="{concat('MIR ',mirver:getCompleteVersion())}">
-        <xsl:value-of select="concat('Version ',dbtver:getCompleteVersion())" />
+        <xsl:value-of select="concat('Version ', dbtver:getVersion(), ' (',dbtver:getShortHash(), ')')" />
       </p>
     </div>
     <div class="col-xs-2">

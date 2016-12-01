@@ -25,9 +25,11 @@ package org.urmel.dbt.rc.servlets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -92,8 +94,8 @@ public class SlotServlet extends MCRServlet {
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
                 if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
-                                MCRAccessManager.PERMISSION_WRITE)) {
+                    && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
+                        MCRAccessManager.PERMISSION_WRITE)) {
                     res.sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -147,10 +149,10 @@ public class SlotServlet extends MCRServlet {
                 params.put("afterId", afterId);
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "opc/"
-                        + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
-                                ? catalog.getISIL().get(0) : catalogId)
-                        + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), "UTF-8")
-                        + toQueryString(params, true));
+                    + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
+                        ? catalog.getISIL().get(0) : catalogId)
+                    + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), "UTF-8")
+                    + toQueryString(params, true));
             } else {
                 SlotEntry<?> slotEntry = xml != null ? SlotEntryTransformer.buildSlotEntry(xml) : null;
 
@@ -173,14 +175,14 @@ public class SlotServlet extends MCRServlet {
                     slotEntry = new SlotEntry<FileEntry>();
                     try {
                         final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(), getFilename(filePart),
-                                getParameter(req, "comment"), Boolean.parseBoolean(getParameter(req, "copyrighted")),
-                                filePart.getInputStream());
+                            getParameter(req, "comment"), Boolean.parseBoolean(getParameter(req, "copyrighted")),
+                            filePart.getInputStream());
                         ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                     } catch (FileEntryProcessingException pe) {
                         params.put("errorcode", Integer.toString(pe.getErrorCode()));
 
                         res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                                + toQueryString(params, false));
+                            + toQueryString(params, false));
                         return;
                     }
                 }
@@ -206,8 +208,8 @@ public class SlotServlet extends MCRServlet {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
                     if (se != null) {
                         if (se.getEntry() instanceof OPCRecordEntry
-                                && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
-                                && ((OPCRecordEntry) se.getEntry()).getEPN() != null) {
+                            && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
+                            && ((OPCRecordEntry) se.getEntry()).getEPN() != null) {
                             LOGGER.debug("Set deletion mark: " + se);
                             ((OPCRecordEntry) se.getEntry()).setDeletionMark(true);
                             slot.setEntry(se);
@@ -264,7 +266,7 @@ public class SlotServlet extends MCRServlet {
                 }
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit#"
-                        + slotEntry.getId());
+                    + slotEntry.getId());
             }
         }
     }
@@ -293,7 +295,8 @@ public class SlotServlet extends MCRServlet {
     }
 
     private static String getParameter(final HttpServletRequest req, final String name) {
-        if (req.getContentType() != null && req.getContentType().toLowerCase().indexOf("multipart/form-data") > -1) {
+        if (req.getContentType() != null
+            && req.getContentType().toLowerCase(Locale.ROOT).indexOf("multipart/form-data") > -1) {
             try {
                 Part part = req.getPart(name);
 
@@ -301,7 +304,7 @@ public class SlotServlet extends MCRServlet {
                     return null;
 
                 InputStream is = part.getInputStream();
-                try (java.util.Scanner s = new java.util.Scanner(is)) {
+                try (java.util.Scanner s = new java.util.Scanner(is, StandardCharsets.UTF_8.name())) {
                     return s.useDelimiter("\\A").hasNext() ? s.next() : "";
                 } finally {
                     is.close();

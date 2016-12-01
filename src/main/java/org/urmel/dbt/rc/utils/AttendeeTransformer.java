@@ -45,9 +45,6 @@ public class AttendeeTransformer {
 
     public static final JAXBContext JAXB_CONTEXT = initContext();
 
-    public AttendeeTransformer() {
-    }
-
     private static JAXBContext initContext() {
         try {
             return JAXBContext.newInstance(Attendee.class.getPackage().getName(), Attendee.class.getClassLoader());

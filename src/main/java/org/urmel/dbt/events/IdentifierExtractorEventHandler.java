@@ -26,6 +26,7 @@ import java.text.MessageFormat;
 import java.text.Normalizer;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,8 +61,8 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
     private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance()
-            .getSingleInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
-                    IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
+        .getSingleInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
+            IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
 
     private static final String URI_SYNTAX = "http://uri.gbv.de/document/{0}:ppn:{1}";
 
@@ -81,7 +82,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
             final String prefix = PREFIX_SINGELTON.getPrefix(mods);
 
             if (mods.getElements("mods:identifier[@type='uri']").stream()
-                    .filter(e -> e.getText().contains(MessageFormat.format(URI_SYNTAX, prefix, ""))).count() == 0) {
+                .filter(e -> e.getText()
+                    .contains(new MessageFormat(URI_SYNTAX, Locale.ROOT).format(new Object[] { prefix, "" })))
+                .count() == 0) {
                 final OPCConnector opc = new OPCConnector();
                 opc.setMaxHits(50);
 
@@ -106,17 +109,18 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
                                     final Element mId = mods.addElement("identifier");
                                     mId.setAttribute("type", "uri");
-                                    mId.addContent(MessageFormat.format(URI_SYNTAX, prefix, record.getPPN()));
+                                    mId.addContent(new MessageFormat(URI_SYNTAX, Locale.ROOT)
+                                        .format(new Object[] { prefix, record.getPPN() }));
 
                                     final List<Element> persons = mods.getElements("mods:name[@type='personal']");
                                     for (final Element person : persons) {
                                         if (buildXPath("mods:nameIdentifier[@type='gnd']")
-                                                .evaluateFirst(person) == null) {
+                                            .evaluateFirst(person) == null) {
                                             final String gnd = extractPersonIdentifier("gnd",
-                                                    buildXPath("mods:displayForm").evaluateFirst(person), record, opc);
+                                                buildXPath("mods:displayForm").evaluateFirst(person), record, opc);
                                             if (gnd != null) {
                                                 final Element mNId = new Element("nameIdentifier",
-                                                        MCRConstants.MODS_NAMESPACE);
+                                                    MCRConstants.MODS_NAMESPACE);
                                                 mNId.setAttribute("type", "gnd");
                                                 mNId.addContent(gnd);
                                                 person.addContent(mNId);
@@ -126,7 +130,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
                                     if (LOGGER.isDebugEnabled()) {
                                         LOGGER.debug(new XMLOutputter(Format.getPrettyFormat())
-                                                .outputString(obj.createXML()));
+                                            .outputString(obj.createXML()));
                                     }
                                     return;
                                 }
@@ -166,7 +170,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
     private XPathExpression<Element> buildXPath(String xPath) throws JDOMException {
         return XPathFactory.instance().compile(xPath, Filters.element(), null, MCRConstants.MODS_NAMESPACE,
-                MCRConstants.XLINK_NAMESPACE);
+            MCRConstants.XLINK_NAMESPACE);
     }
 
     private String buildQuery(final Element titleInfo) throws JDOMException {
@@ -209,12 +213,12 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
                 for (final PPField titField : titFields) {
                     int confidence = partsCompare(sb.toString(),
-                            Arrays.stream("a,d".split(",")).map(s -> titField.getSubfieldByCode(s))
-                                    .filter(sc -> sc != null).map(sc -> sc.getContent())
-                                    .collect(Collectors.joining(", ")));
+                        Arrays.stream("a,d".split(",")).map(s -> titField.getSubfieldByCode(s))
+                            .filter(sc -> sc != null).map(sc -> sc.getContent())
+                            .collect(Collectors.joining(", ")));
                     if (confidence > 75) {
                         LOGGER.info(
-                                "Title \"" + sb.toString() + "\" matches with a confidence of " + confidence + "%.");
+                            "Title \"" + sb.toString() + "\" matches with a confidence of " + confidence + "%.");
                         return true;
                     }
                 }
@@ -225,26 +229,26 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
     }
 
     private String extractPersonIdentifier(final String idType, final Element displayForm, final Record record,
-            final OPCConnector opc) {
+        final OPCConnector opc) {
         if (displayForm != null && record != null) {
             List<PPField> nameFields = Arrays.stream("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(","))
-                    .map(tag -> record.getFieldsByTag(tag)).flatMap(l -> l.stream()).collect(Collectors.toList());
+                .map(tag -> record.getFieldsByTag(tag)).flatMap(l -> l.stream()).collect(Collectors.toList());
 
             for (final PPField f : nameFields) {
                 int confidence = partsCompare(displayForm.getTextTrim(),
-                        Arrays.stream("d,a,c".split(",")).map(s -> f.getSubfieldByCode(s)).filter(sc -> sc != null)
-                                .map(sc -> sc.getContent()).collect(Collectors.joining(", ")));
+                    Arrays.stream("d,a,c".split(",")).map(s -> f.getSubfieldByCode(s)).filter(sc -> sc != null)
+                        .map(sc -> sc.getContent()).collect(Collectors.joining(", ")));
 
                 if (confidence > 50) {
                     LOGGER.info("Person \"" + displayForm.getTextTrim() + "\" matches with a confidence of "
-                            + confidence + "%.");
+                        + confidence + "%.");
 
                     final Optional<PPSubField> idn = Optional.ofNullable(f.getSubfieldByCode("9"));
                     if (idn.isPresent()) {
                         final String id = getIdentifier(idType, opc, idn.get().getContent());
                         if (id != null) {
                             LOGGER.info("Found " + idType + " " + id + " for person \"" + displayForm.getTextTrim()
-                                    + "\".");
+                                + "\".");
                             return id;
                         }
                     }
@@ -259,9 +263,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         try {
             final Record record = opc.getRecord(idn);
             List<String> ids = Stream.of(record.getFieldsByTag("007K"), record.getFieldsByTag("007N"))
-                    .flatMap(l -> l.stream())
-                    .filter(f -> f.getSubfieldByCode("a").getContent().equalsIgnoreCase(idType))
-                    .map(f -> f.getSubfieldByCode("0").getContent()).collect(Collectors.toList());
+                .flatMap(l -> l.stream())
+                .filter(f -> f.getSubfieldByCode("a").getContent().equalsIgnoreCase(idType))
+                .map(f -> f.getSubfieldByCode("0").getContent()).collect(Collectors.toList());
 
             return ids.isEmpty() ? null : ids.get(0);
         } catch (Exception e) {
@@ -275,12 +279,14 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
     }
 
     private static int partsCompare(final String n1, final String n2) {
-        List<String> n1Parts = Arrays.stream(n1.split("[,\\s:]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
-                .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
-        List<String> n2Parts = Arrays.stream(n2.split("[,\\s:]")).filter(s -> !s.isEmpty()).map(String::toLowerCase)
-                .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
+        List<String> n1Parts = Arrays.stream(n1.split("[,\\s:]")).filter(s -> !s.isEmpty())
+            .map(s -> s.toLowerCase(Locale.ROOT))
+            .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
+        List<String> n2Parts = Arrays.stream(n2.split("[,\\s:]")).filter(s -> !s.isEmpty())
+            .map(s -> s.toLowerCase(Locale.ROOT))
+            .map(IdentifierExtractorEventHandler::normalizeAccents).collect(Collectors.toList());
 
         return Math.round(100 / (n1Parts.size() > n2Parts.size() ? n1Parts.size() : n2Parts.size())
-                * n1Parts.stream().filter(s -> n2Parts.contains(s)).count());
+            * n1Parts.stream().filter(s -> n2Parts.contains(s)).count());
     }
 }

@@ -149,85 +149,11 @@ components.dropDownAnimationComponent = function() {
 	})();
 };
 
-NamespaceManager.Register("components");
-components.CopyToClipboardComponent = function() {
-	var that = this;
-
-	this.copyToClipboard = function(aSelector) {
-		var selector = aSelector.split("@");
-
-		var text = selector.length == 1 ? jQuery(selector[0]).text() : jQuery(selector[0]).attr(selector[1]);
-
-		if (window.clipboardData) {
-			window.clipboardData.setData('text', text);
-			return true;
-		} else {
-			try {
-				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-			} catch (e) {
-				return false;
-			}
-			try {
-				e = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
-			} catch (e) {
-				return false;
-			}
-			try {
-				b = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
-			} catch (e) {
-				return false;
-			}
-			b.addDataFlavor("text/unicode");
-			o = Components.classes['@mozilla.org/supports-string;1'].createInstance(Components.interfaces.nsISupportsString);
-			o.data = text;
-			b.setTransferData("text/unicode", o, text.length * 2);
-			try {
-				t = Components.interfaces.nsIClipboard;
-			} catch (e) {
-				return false;
-			}
-			e.setData(b, null, t.kGlobalClipboard);
-			return true;
-		}
-
-		return false;
-	};
-
-	function isAllowed() {
-		if (window.clipboardData) {
-			return true;
-		} else {
-			try {
-				netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
-				return true;
-			} catch (e) {
-				return false;
-			}
-		}
-	}
-
-	(function() {
-		jQuery("*[data-action='copyToClipboard']").each(function() {
-			if (isAllowed()) {
-				var target = jQuery(this).attr("data-target");
-				if (utils.JS.isValid(target)) {
-					jQuery(this).on("click", function() {
-						that.copyToClipboard(target);
-					})
-				}
-			} else {
-				jQuery(this).hide();
-			}
-		});
-	})();
-};
-
 jQuery(document).ready(function() {
 	// init layout helpers
 	new components.ModalDialogComponent();
 
 	new components.textCollapseComponent();
-	new components.CopyToClipboardComponent();
 
 	// new components.dropDownAnimationComponent();
 

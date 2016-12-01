@@ -31,6 +31,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Locale;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -99,7 +100,7 @@ public class FileEntry implements Serializable {
      * @throws IOException thrown if file not found or other
      */
     public static FileEntry createFileEntry(final String entryId, final String fileName, final String comment,
-            boolean isCopyrighted, final InputStream is) throws FileEntryProcessingException, IOException {
+        boolean isCopyrighted, final InputStream is) throws FileEntryProcessingException, IOException {
         if (fileName == null || fileName.length() == 0) {
             throw new FileEntryProcessingException("empty file name", ERROR_EMPTY_FILE);
         }
@@ -120,7 +121,7 @@ public class FileEntry implements Serializable {
     }
 
     private static void processContent(final String entryId, final FileEntry fileEntry, final InputStream is)
-            throws FileEntryProcessingException, IOException {
+        throws FileEntryProcessingException, IOException {
 
         final MCRContent content = new MCRByteContent(IOUtils.toByteArray(is));
         if (isPDF(content.getInputStream())) {
@@ -190,7 +191,7 @@ public class FileEntry implements Serializable {
      * @throws IOException
      */
     private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException {
+        throws IOException {
         COSWriter writer = null;
         try {
             PDDocument document = PDDocument.load(pdfInput);
@@ -215,7 +216,7 @@ public class FileEntry implements Serializable {
      * @throws IOException
      */
     private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException {
+        throws IOException {
         PDDocument doc = PDDocument.load(pdfInput);
 
         AccessPermission ap = new AccessPermission();
@@ -239,7 +240,7 @@ public class FileEntry implements Serializable {
     }
 
     private static void decryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-            throws IOException {
+        throws IOException {
         PDDocument doc = PDDocument.load(pdfInput, password);
 
         if (doc.isEncrypted()) {
@@ -344,7 +345,7 @@ public class FileEntry implements Serializable {
             this.size = content.length();
 
             MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
-            this.hash = String.format("%032X", new BigInteger(1, md.digest(content.asByteArray())));
+            this.hash = String.format(Locale.ROOT, "%032X", new BigInteger(1, md.digest(content.asByteArray())));
         } catch (NoSuchAlgorithmException | IOException e) {
             LOGGER.error(e);
         }

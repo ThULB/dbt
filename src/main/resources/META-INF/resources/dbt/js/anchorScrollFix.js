@@ -12,8 +12,8 @@
 		 */
 		init : function() {
 			this.scrollToCurrent();
-			$(window).on('hashchange', $.proxy(this, 'scrollToCurrent'));
-			$('body').on('click', 'a', $.proxy(this, 'delegateAnchors'));
+			$(window).on("hashchange", $.proxy(this, "scrollToCurrent"));
+			$("body").on("click", "a", $.proxy(this, "delegateAnchors"));
 		},
 
 		/**
@@ -39,11 +39,11 @@
 				return false;
 			}
 
-			match = document.querySelector("#" + href.slice(1)) || document.querySelector("*[name='" + href.slice(1) + "']");
+			match = document.querySelector("#" + href.slice(1)) || document.querySelector("*[name=\"" + href.slice(1) + "\"]");
 
 			if (match) {
 				anchorOffset = $(match).offset().top - this.getFixedOffset() - this.OFFSET_SPACER_PX;
-				$('html, body').animate({
+				$("html, body").animate({
 					scrollTop : anchorOffset
 				});
 
@@ -57,7 +57,7 @@
 		},
 
 		/**
-		 * Attempt to scroll to the current location's hash.
+		 * Attempt to scroll to the current location"s hash.
 		 */
 		scrollToCurrent : function(e) {
 			if (this.scrollIfAnchor(window.location.hash) && e) {
@@ -66,16 +66,16 @@
 		},
 
 		/**
-		 * If the click event's target was an anchor, fix the scroll position.
+		 * If the click event"s target was an anchor, fix the scroll position.
 		 */
 		delegateAnchors : function(e) {
 			var elem = e.target;
 
-			if (this.scrollIfAnchor(elem.getAttribute('href'), true)) {
+			if (this.scrollIfAnchor(elem.getAttribute("href"), true)) {
 				e.preventDefault();
 			}
 		}
 	};
 
-	$(document).ready($.proxy(anchorScrolls, 'init'));
+	$(document).ready($.proxy(anchorScrolls, "init"));
 })(window.document, window.history, window.location);
