@@ -142,57 +142,64 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testHeadlineEntry() throws IOException {
         SlotEntry<HeadlineEntry> slotEntry = newHeadLineEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testMCRObjectEntry() throws IOException {
         SlotEntry<MCRObjectEntry> slotEntry = newMCRObjectEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testTextEntryPlain() throws IOException {
         SlotEntry<TextEntry> slotEntry = newPlainTextEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testTextEntryHTML() throws IOException {
         SlotEntry<TextEntry> slotEntry = newHtmlTextEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testWebLinkEntry() throws IOException {
         SlotEntry<WebLinkEntry> slotEntry = newWebLinkEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testOPCRecordEntry() throws Exception {
         SlotEntry<OPCRecordEntry> slotEntry = newOPCRecordEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testFileEntry() throws IOException {
         SlotEntry<FileEntry> slotEntry = newFileEntry();
+        assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-                System.out);
+            System.out);
     }
 
     @Test
@@ -250,8 +257,9 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testSlotEntryTypes() throws IOException {
         SlotEntryTypes entryTypes = SlotEntryTypes.instance();
+        assertNotNull(entryTypes);
 
         new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTypesTransformer.buildExportableXML(entryTypes),
-                System.out);
+            System.out);
     }
 }

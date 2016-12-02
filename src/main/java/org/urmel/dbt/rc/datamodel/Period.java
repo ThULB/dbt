@@ -48,7 +48,7 @@ import org.urmel.dbt.rc.utils.DateUtils;
 @XmlRootElement(name = "period")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "period", propOrder = { "from", "to", "lectureEnd", "matchingLocation", "setableFrom", "setableTo",
-        "labels", "warnings" })
+    "labels", "warnings" })
 public class Period implements Serializable, Comparable<Period>, Cloneable {
 
     private static final long serialVersionUID = -1389892190013532300L;
@@ -619,12 +619,10 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
             try {
                 Warning warning = null;
                 for (Warning w : getWarnings()) {
-                    if (warningType == null || w.getType() == warningType) {
-                        if (date.after(w.getWarningDate()) || date.equals(w.getWarningDate())) {
-                            if (warning == null || w.getWarningDate().after(warning.getWarningDate())) {
-                                warning = w;
-                            }
-                        }
+                    if ((warningType == null || w.getType() == warningType)
+                        && (date.after(w.getWarningDate()) || date.equals(w.getWarningDate()))
+                        && (warning == null || w.getWarningDate().after(warning.getWarningDate()))) {
+                        warning = w;
                     }
                 }
                 return warning;
@@ -653,7 +651,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
             int toYear = toDate.get(Calendar.YEAR);
 
             result = fromYear < toYear ? Integer.toString(fromYear) + "/" + Integer.toString(toYear)
-                    : Integer.toString(fromYear);
+                : Integer.toString(fromYear);
         } else {
             Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
             c.setTime(date);
@@ -792,7 +790,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * @throws ParseException should never occurs
      */
     private static Date getPeriodDate(final Date base, final String from, final String to, final boolean end)
-            throws ParseException {
+        throws ParseException {
         Date result = null;
 
         final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());

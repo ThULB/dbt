@@ -75,47 +75,45 @@ public class DerivateServletFilter implements Filter {
 
         final String requestURL = httpServletRequest.getRequestURI();
 
-        if (requestURL != null) {
-            if (PATTERN_DERIVATE_XML.matcher(requestURL).matches()) {
-                final String lp = requestURL.substring(requestURL.lastIndexOf("/") + 1);
-                final Matcher matcher = PATTERN_DERIVATE_ID.matcher(lp);
-                if (matcher.find()) {
-                    try {
-                        final String derId = matcher.group(1);
-                        MCRObjectID derivateId = MCRObjectID.getInstance("dbt_derivate_" + derId);
-                        if (MCRMetadataManager.exists(derivateId)) {
-                            String redirectURL = null;
-                            if (lp.endsWith(".xml")) {
-                                MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
-                                if (objectId != null) {
-                                    redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
-                                        + objectId.toString();
+        if (requestURL != null && PATTERN_DERIVATE_XML.matcher(requestURL).matches()) {
+            final String lp = requestURL.substring(requestURL.lastIndexOf("/") + 1);
+            final Matcher matcher = PATTERN_DERIVATE_ID.matcher(lp);
+            if (matcher.find()) {
+                try {
+                    final String derId = matcher.group(1);
+                    MCRObjectID derivateId = MCRObjectID.getInstance("dbt_derivate_" + derId);
+                    if (MCRMetadataManager.exists(derivateId)) {
+                        String redirectURL = null;
+                        if (lp.endsWith(".xml")) {
+                            MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
+                            if (objectId != null) {
+                                redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
+                                    + objectId.toString();
 
-                                }
-                            } else {
-                                redirectURL = MCRFrontendUtil.getBaseURL(request) + "servlets/MCRFileNodeServlet/"
-                                    + derivateId.toString() + "/"
-                                    + MCRMetadataManager.retrieveMCRDerivate(derivateId).getDerivate()
-                                        .getInternals()
-                                        .getMainDoc();
                             }
-
-                            if (redirectURL != null && !redirectURL.isEmpty()) {
-                                LOGGER.info("Redirect to " + redirectURL);
-                                httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                                httpServletResponse.setHeader("Location", redirectURL);
-                                return;
-                            }
+                        } else {
+                            redirectURL = MCRFrontendUtil.getBaseURL(request) + "servlets/MCRFileNodeServlet/"
+                                + derivateId.toString() + "/"
+                                + MCRMetadataManager.retrieveMCRDerivate(derivateId).getDerivate()
+                                    .getInternals()
+                                    .getMainDoc();
                         }
-                    } finally {
-                        if (MCRSessionMgr.hasCurrentSession()) {
-                            if (httpServletRequest.getSession(false) == null) {
-                                MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
-                                MCRSessionMgr.releaseCurrentSession();
-                                mcrSession.close();
-                            } else {
-                                MCRSessionMgr.releaseCurrentSession();
-                            }
+
+                        if (redirectURL != null && !redirectURL.isEmpty()) {
+                            LOGGER.info("Redirect to " + redirectURL);
+                            httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                            httpServletResponse.setHeader("Location", redirectURL);
+                            return;
+                        }
+                    }
+                } finally {
+                    if (MCRSessionMgr.hasCurrentSession()) {
+                        if (httpServletRequest.getSession(false) == null) {
+                            MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+                            MCRSessionMgr.releaseCurrentSession();
+                            mcrSession.close();
+                        } else {
+                            MCRSessionMgr.releaseCurrentSession();
                         }
                     }
                 }

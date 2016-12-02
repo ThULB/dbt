@@ -75,7 +75,7 @@ public class SlotEntryTypes implements Serializable {
     /**
      * @param entryTypes the entryTypes to set
      */
-    void setEntryTypes(final List<SlotEntryType> entryTypes) {
+    protected void setEntryTypes(final List<SlotEntryType> entryTypes) {
         this.entryTypes = entryTypes;
     }
 

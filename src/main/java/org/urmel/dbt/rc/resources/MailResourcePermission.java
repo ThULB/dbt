@@ -46,17 +46,13 @@ public class MailResourcePermission implements MCRResourceAccessChecker {
     public boolean isPermitted(ContainerRequest request) {
         String uri = request.getEntity(String.class);
         try {
-            if (!MCRAccessManager.checkPermission(PERMISSION_MAIL)) {
-                return false;
-            }
-
-            return true;
+            return MCRAccessManager.checkPermission(PERMISSION_MAIL);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
-                    Response.status(Status.INTERNAL_SERVER_ERROR)
-                            .entity("Unable to check permission for request " + request.getRequestUri()
-                                    + " containing entity value " + uri)
-                            .build());
+                Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Unable to check permission for request " + request.getRequestUri()
+                        + " containing entity value " + uri)
+                    .build());
         }
     }
 }

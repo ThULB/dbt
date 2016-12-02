@@ -46,12 +46,14 @@ import org.urmel.dbt.opc.utils.ResultTransformer;
 public class TestOPCConnector extends MCRTestCase {
 
     private final String OPC_URL = "http://opac.lbs-ilmenau.gbv.de";
+
     private final String OPC_DB = "1";
 
     @Test
     public void testIKTList() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         IKTList iktList = opc.getIKTList();
+        assertNotNull(iktList);
 
         new XMLOutputter(Format.getPrettyFormat()).output(IKTListTransformer.buildExportableXML(iktList), System.out);
     }
@@ -60,6 +62,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testSearchWoIKT() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.search("papula");
+        assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
     }
@@ -68,6 +71,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testSearchWIKT() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.search("papula", "1004");
+        assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
     }
@@ -76,6 +80,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testFamily() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.family("785761829");
+        assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
     }
@@ -84,6 +89,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testRecord() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Record record = opc.getRecord("785761829");
+        assertNotNull(record);
 
         new XMLOutputter(Format.getPrettyFormat()).output(RecordTransformer.buildExportableXML(record), System.out);
     }
@@ -92,17 +98,19 @@ public class TestOPCConnector extends MCRTestCase {
     public void testRecordBasicCopy() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Record record = opc.getRecord("785761829");
+        assertNotNull(record);
 
         new XMLOutputter(Format.getPrettyFormat()).output(RecordTransformer.buildExportableXML(record.getBasicCopy()),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testCatalogues() throws Exception {
         Catalogues catalogues = Catalogues.instance();
+        assertNotNull(catalogues);
 
         new XMLOutputter(Format.getPrettyFormat()).output(CataloguesTransformer.buildExportableXML(catalogues),
-                System.out);
+            System.out);
     }
 
     @Test

@@ -17,12 +17,14 @@ app.formatI18N = function(str, args) {
 app.joinURI = function(parameters) {
 	var uriParts = [];
 	for ( var i in parameters) {
-		var param = parameters[i];
-		if (param.name === "uri") {
-			uriParts.push(param.value);
-		} else if (param.name.indexOf("uri_") === "uri") {
-			var ind = param.name.split("uri_")[1];
-			uriParts[ind] = param.value;
+		if ({}.hasOwnProperty.call(parameters, i)) {
+			var param = parameters[i];
+			if (param.name === "uri") {
+				uriParts.push(param.value);
+			} else if (param.name.indexOf("uri_") === "uri") {
+				var ind = param.name.split("uri_")[1];
+				uriParts[ind] = param.value;
+			}
 		}
 	}
 	return uriParts.join();
@@ -72,7 +74,7 @@ app.controller("alertCtrl", function($rootScope, $scope, $sce, $translate) {
 
 	$scope.clear = function() {
 		$scope.alertObj.show = false;
-	}
+	};
 });
 
 app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http, ModalService) {
@@ -106,7 +108,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 	$scope.isSort = function(args) {
 		args = Array.prototype.slice.call(arguments);
 		return angular.toJson($scope.sort.by) === angular.toJson(args);
-	}
+	};
 
 	$scope.setSort = function(args) {
 		args = Array.prototype.slice.call(arguments);
@@ -118,7 +120,9 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 		function objValues(obj) {
 			var values = [];
 			for ( var i in obj) {
-				values.push(obj[i]);
+				if ({}.hasOwnProperty.call(obj, i)) {
+					values.push(obj[i]);
+				}
 			}
 			return values;
 		}
@@ -137,7 +141,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 
 			if (parsed < by.length) {
 				for ( var c in obj) {
-					if (objValues(obj[c]).indexOf(by[parsed]) != -1) {
+					if (objValues(obj[c]).indexOf(by[parsed]) !== -1) {
 						obj = obj[c].value || obj[c];
 						break;
 					}

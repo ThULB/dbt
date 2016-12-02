@@ -7,7 +7,7 @@ module.exports = function(grunt) {
 	var util = require("util");
 	var getAbsoluteDir = function(dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
-	}
+	};
 	var globalConfig = {
 		lessFile : grunt.option("lessFile"),
 		lessDirectory : function() {
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 		var destModified = fs.existsSync(dest) ? fs.statSync(dest).mtime : new Date(0);
 		var srcModified = grunt.config("globalConfig.lastModified");
 		return srcModified.getTime() > destModified.getTime();
-	}
+	};
 
 	grunt.initConfig({
 		globalConfig : globalConfig,
@@ -105,7 +105,7 @@ module.exports = function(grunt) {
 	grunt.registerTask("build", "build a regular theme", function(theme, compress) {
 		var target = grunt.config("globalConfig.targetDirectory") + "/" + theme + ".css";
 		if (needRebuild(target)) {
-			var compress = compress == undefined ? true : compress;
+			compress = compress === undefined ? true : compress;
 
 			var concatSrc;
 			var concatDest;
@@ -159,5 +159,4 @@ module.exports = function(grunt) {
 				dirLastModified("bower_components"))));
 		grunt.task.run("build:layout");
 	});
-
-}
+};

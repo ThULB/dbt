@@ -91,9 +91,9 @@ public class SlotListServlet extends MCRServlet {
             final String action = req.getParameter("action");
             final String slotId = xml.getAttributeValue("id");
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
-                    : null;
+                : null;
             final String nId = xml.getChild("location") != null
-                    ? xml.getChild("location").getAttributeValue("newId") : null;
+                ? xml.getChild("location").getAttributeValue("newId") : null;
             final Integer newId = location != null && nId != null ? new Integer(nId) : null;
 
             MCREvent evt = null;
@@ -114,7 +114,7 @@ public class SlotListServlet extends MCRServlet {
                 final Slot s = SLOT_MGR.getSlotById(slotId);
 
                 if (s.getMCRObjectID() != null
-                        && !MCRAccessManager.checkPermission(s.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
+                    && !MCRAccessManager.checkPermission(s.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE)) {
                     job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
                     return;
                 }
@@ -124,7 +124,7 @@ public class SlotListServlet extends MCRServlet {
                 if (s.getStatus() != slot.getStatus() && slot.getStatus() == Status.ARCHIVED) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 } else if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER
-                        && s.getPendingStatus() != slot.getPendingStatus()) {
+                    && s.getPendingStatus() != slot.getPendingStatus()) {
 
                     if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
                         job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -145,7 +145,7 @@ public class SlotListServlet extends MCRServlet {
                 } else if ("reactivateComplete".equals(action)) {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
-                            RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
+                        RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
                 } else
                     evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
 
@@ -155,7 +155,7 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 if (location != null && newId != null
-                        && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
+                    && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
 
                     if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
                         job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -189,7 +189,7 @@ public class SlotListServlet extends MCRServlet {
             }
 
             if (slot.getWriteKey() != null
-                    && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
+                && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
                 MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
             }
 
@@ -212,28 +212,26 @@ public class SlotListServlet extends MCRServlet {
                 final String option = st.hasMoreTokens() ? st.nextToken() : null;
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                if (option != null) {
-                    if ("attendees".equals(option)
-                            && MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
-                            || SlotManager.isOwner(slot.getMCRObjectID().toString())) {
-                        List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
+                if (option != null && "attendees".equals(option)
+                    && MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
+                    || SlotManager.isOwner(slot.getMCRObjectID().toString())) {
+                    List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
 
-                        getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                                new MCRJDOMContent(AttendeeTransformer.buildExportableXML(slotId, attendees)));
-                        return;
-                    }
+                    getLayoutService().doLayout(job.getRequest(), job.getResponse(),
+                        new MCRJDOMContent(AttendeeTransformer.buildExportableXML(slotId, attendees)));
+                    return;
                 }
 
                 if (!MCRAccessManager.checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ)
-                        && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
-                                MCRAccessManager.PERMISSION_WRITE)) {
+                    && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
+                        MCRAccessManager.PERMISSION_WRITE)) {
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                            new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
+                        new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
                     return;
                 }
 
                 getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                        new MCRJDOMContent(SlotTransformer.buildExportableXML(slot)));
+                    new MCRJDOMContent(SlotTransformer.buildExportableXML(slot)));
                 return;
             }
 
@@ -244,14 +242,14 @@ public class SlotListServlet extends MCRServlet {
             final String sortOrder = req.getParameter("SortOrder");
 
             final Integer start = page != null && numPerPage != null
-                    ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage) : 0;
+                ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage) : 0;
             final Integer rows = numPerPage != null ? Integer.parseInt(numPerPage) : null;
 
             final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
 
             final List<SortClause> sortClauses = new ArrayList<>();
             sortClauses.add(new SortClause("if(exists(query({!v='createdby:" + currentUser.getUserID() + "'})),100,0)",
-                    "desc"));
+                "desc"));
             if (sortBy != null && !sortBy.isEmpty() && sortOrder != null && !sortOrder.isEmpty()) {
                 sortClauses.add(new SortClause(sortBy, ORDER.valueOf(sortOrder)));
             } else {
@@ -259,15 +257,15 @@ public class SlotListServlet extends MCRServlet {
             }
 
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
-                    !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
-                            && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_EDIT_SLOT)
-                                    ? "slot.status:active or createdby:"
-                                            + currentUser.getUserID()
-                                    : null,
-                    start, rows, sortClauses);
+                !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
+                    && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_EDIT_SLOT)
+                        ? "slot.status:active or createdby:"
+                            + currentUser.getUserID()
+                        : null,
+                start, rows, sortClauses);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
+                new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
         }
 
     }

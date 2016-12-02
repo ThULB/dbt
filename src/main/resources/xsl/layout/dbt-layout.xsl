@@ -120,7 +120,6 @@
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/migrationAlert.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.js" />
 
@@ -138,6 +137,7 @@
       cancelButtonClass: "btn-default",
       dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
       }
+      $('*[data-toggle="tooltip"]').tooltip();
       });
     </script>
     <script src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>

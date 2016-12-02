@@ -28,8 +28,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringEscapeUtils;
 
 public class PicaCharDecoder {
-    static final int ISO_8859_1 = 0x1000;
-    static final int UTF_8 = 0x1001;
+    private static final int ISO_8859_1 = 0x1000;
+    private static final int UTF_8 = 0x1001;
 
     @SuppressWarnings("serial")
     private static final Map<String, Map<Integer, String>> PICA_CHARS = new HashMap<String, Map<Integer, String>>() {
