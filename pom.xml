@@ -3,7 +3,7 @@
   <parent>
     <groupId>org.mycore.mir</groupId>
     <artifactId>mir-parent</artifactId>
-    <version>2016.06.0.1</version>
+    <version>2016.06.0.2-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
   <version>2016.07-SNAPSHOT</version>
@@ -76,6 +76,7 @@
             <manifestEntries>
               <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
               <MCR-Application-Module>${project.name}</MCR-Application-Module>
+              <MCR-Auto-Deploy>true</MCR-Auto-Deploy>
             </manifestEntries>
           </archive>
         </configuration>

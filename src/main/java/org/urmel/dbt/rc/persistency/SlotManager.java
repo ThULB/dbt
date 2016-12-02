@@ -549,8 +549,7 @@ public final class SlotManager {
      * @param filter the extra filter
      * @param start the start position
      * @param rows the number of rows to return
-     * @param sortBy the field to sort
-     * @param sortOrder the sort order
+     * @param sortClauses the clauses for sort
      * @return the slot list
      * @throws IOException thrown on wrong query
      * @throws SolrServerException thrown on SOLR error
