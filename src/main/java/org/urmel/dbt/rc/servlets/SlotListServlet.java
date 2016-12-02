@@ -212,9 +212,9 @@ public class SlotListServlet extends MCRServlet {
                 final String option = st.hasMoreTokens() ? st.nextToken() : null;
                 final Slot slot = SLOT_MGR.getSlotById(slotId);
 
-                if (option != null && "attendees".equals(option)
+                if (option != null && ("attendees".equals(option)
                     && MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
-                    || SlotManager.isOwner(slot.getMCRObjectID().toString())) {
+                    || SlotManager.isOwner(slot.getMCRObjectID().toString()))) {
                     List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
 
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
