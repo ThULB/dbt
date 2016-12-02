@@ -91,6 +91,11 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
+          <dateFormatTimeZone>UTC</dateFormatTimeZone>
+          <commitIdGenerationMode>full</commitIdGenerationMode>
+        </configuration>
       </plugin>
       
       <plugin>
