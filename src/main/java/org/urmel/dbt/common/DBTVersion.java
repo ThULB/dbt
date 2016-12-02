@@ -29,8 +29,6 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.mycore.common.config.MCRConfigurationDir;
-
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
@@ -43,11 +41,13 @@ public class DBTVersion {
 
     public static final String BRANCH = prop.getProperty("git.branch");
 
-    public static final String HASH = prop.getProperty("git.hash");
+    public static final String HASH = prop.getProperty("git.commit.id.full");
 
-    public static final String HASH_SHORT = prop.getProperty("git.hash-short");
+    public static final String HASH_SHORT = prop.getProperty("git.commit.id.abbrev");
 
-    public static final String COMPLETE = VERSION + " " + BRANCH + ":" + HASH;
+    public static final String DESCRIBE = prop.getProperty("git.commit.id.describe");
+
+    public static final String COMPLETE = VERSION + " " + BRANCH + ":" + DESCRIBE;
 
     public static String getVersion() {
         return VERSION;
@@ -81,8 +81,8 @@ public class DBTVersion {
         return COMPLETE;
     }
 
-    public static void main(String arg[]) {
-        System.out.printf(Locale.ROOT, "DBT\tver: %s\tbranch: %s\tcommit: %s%n", VERSION, BRANCH, HASH);
-        System.out.printf(Locale.ROOT, "Config directory: %s\n", MCRConfigurationDir.getConfigurationDirectory());
+    public static void main(String arg[]) throws IOException {
+        System.out.printf(Locale.ROOT, "DBT\tver: %s\tbranch: %s\tcommit: %s%n", VERSION, BRANCH, DESCRIBE);
+        prop.store(System.out, "Content of dbt version.properties");
     }
 }
