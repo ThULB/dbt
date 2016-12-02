@@ -58,7 +58,7 @@ import org.xml.sax.SAXException;
 @XmlAccessorType(XmlAccessType.NONE)
 public final class RCCalendar implements Serializable, Iterable<Period> {
 
-    static final String RESOURCE_URI = "rccalendar.xml";
+    protected static final String RESOURCE_URI = "rccalendar.xml";
 
     private static final long serialVersionUID = -812825621316872737L;
 

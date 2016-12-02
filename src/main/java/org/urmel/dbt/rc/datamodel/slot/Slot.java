@@ -276,11 +276,11 @@ public class Slot implements Serializable {
     }
 
     @XmlElement(name = "accesskeys")
-    AccessKeys getAccessKeys() {
+    protected AccessKeys getAccessKeys() {
         return AccessKeys.buildAccessKeys(readKey, writeKey);
     }
 
-    void setAccessKeys(final AccessKeys accKeys) {
+    protected void setAccessKeys(final AccessKeys accKeys) {
         readKey = accKeys.readKey;
         writeKey = accKeys.writeKey;
     }

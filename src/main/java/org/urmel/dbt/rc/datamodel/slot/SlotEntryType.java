@@ -55,7 +55,7 @@ public class SlotEntryType implements Serializable {
     /**
      * @param cls the cls to set
      */
-    void setCls(final String cls) {
+    protected void setCls(final String cls) {
         this.cls = cls;
     }
 
@@ -93,12 +93,12 @@ public class SlotEntryType implements Serializable {
     /**
      * @param i18n the i18n to set
      */
-    void setI18n(final I18N i18n) {
+    protected void setI18n(final I18N i18n) {
         this.i18n = i18n;
     }
 
     @XmlRootElement(name = "i18n")
-    static class I18N {
+    protected static class I18N {
         @XmlAttribute
         public String single;
         @XmlAttribute

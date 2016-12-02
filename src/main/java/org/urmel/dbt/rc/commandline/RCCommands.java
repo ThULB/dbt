@@ -360,6 +360,8 @@ public class RCCommands extends MCRAbstractCommands {
                                         default:
                                             save = false;
                                     }
+                                default:
+                                    save = false;
                             }
 
                             if (save) {

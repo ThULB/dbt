@@ -61,12 +61,13 @@ public class TestRCCalendar extends MCRTestCase {
     @Test
     public void testRCCalendarExport() throws IOException {
         new XMLOutputter(Format.getPrettyFormat()).output(RCCalendarTransformer.buildExportableXML(calendar),
-                System.out);
+            System.out);
     }
 
     @Test
     public void testRCCalendarGetPeriod() throws IOException {
         Period period = RCCalendar.getPeriod("2700", new Date());
+        assertNotNull(period);
 
         new XMLOutputter(Format.getPrettyFormat()).output(PeriodTransformer.buildExportableXML(period), System.out);
     }
@@ -74,6 +75,7 @@ public class TestRCCalendar extends MCRTestCase {
     @Test
     public void testRCCalendarGetSetable() throws IOException {
         Period period = RCCalendar.getPeriodBySetable("2700", new Date());
+        assertNotNull(period);
 
         new XMLOutputter(Format.getPrettyFormat()).output(PeriodTransformer.buildExportableXML(period), System.out);
     }
@@ -95,7 +97,7 @@ public class TestRCCalendar extends MCRTestCase {
     @Test
     public void testPeriodResolverListAll() throws IOException {
         Element input = MCRURIResolver.instance()
-                .resolve("period:areacode=0&date=31.03.2015&onlySetable=false&list=true");
+            .resolve("period:areacode=0&date=31.03.2015&onlySetable=false&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
@@ -109,7 +111,7 @@ public class TestRCCalendar extends MCRTestCase {
         p.setFullyQualified(true);
 
         Element input = MCRURIResolver.instance()
-                .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
+            .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertEquals(2, input.getChildren("period").size());
@@ -123,7 +125,7 @@ public class TestRCCalendar extends MCRTestCase {
         p.setFullyQualified(true);
 
         Element input = MCRURIResolver.instance()
-                .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
+            .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertTrue(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
@@ -141,7 +143,7 @@ public class TestRCCalendar extends MCRTestCase {
     @Test
     public void testPeriodResolverListMoreAll() throws IOException {
         Element input = MCRURIResolver.instance()
-                .resolve("period:areacode=0&date=30.09.2014&list=true&onlySetable=false&numnext=1");
+            .resolve("period:areacode=0&date=30.09.2014&list=true&onlySetable=false&numnext=1");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));

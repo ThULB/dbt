@@ -170,7 +170,7 @@ public final class SlotManager {
      */
     public static boolean checkPermission(final String objId, final String permission) {
         if (permission.equals(MCRAccessManager.PERMISSION_READ)
-                || permission.equals(MCRAccessManager.PERMISSION_WRITE)) {
+            || permission.equals(MCRAccessManager.PERMISSION_WRITE)) {
             if (hasAdminPermission() || hasEditorPermission() || isOwner(objId)) {
                 return true;
             }
@@ -219,7 +219,7 @@ public final class SlotManager {
     public static boolean isOwner(final String objId, final MCRUserInformation user) {
         try {
             return Optional.ofNullable(MCRCreatorCache.getCreator(objId)).map(o -> o.equals(user.getUserID()))
-                    .orElse(false);
+                .orElse(false);
         } catch (ExecutionException e) {
             LOGGER.error(e.getMessage(), e);
         }
@@ -228,12 +228,12 @@ public final class SlotManager {
     }
 
     public static void setOwner(final String objId)
-            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         setOwner(objId, MCRSessionMgr.getCurrentSession().getUserInformation());
     }
 
     public static void setOwner(final String objId, final MCRUserInformation user)
-            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
         final MCRObjectService os = obj.getService();
 
@@ -259,7 +259,7 @@ public final class SlotManager {
             final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
 
             return accKP != null
-                    && (accKP.getReadKey().equals(slot.getReadKey()) || accKP.getWriteKey().equals(slot.getWriteKey()));
+                && (accKP.getReadKey().equals(slot.getReadKey()) || accKP.getWriteKey().equals(slot.getWriteKey()));
         }
         return false;
     }
@@ -280,7 +280,7 @@ public final class SlotManager {
             if (locId != null && newId != null) {
                 final Slot slot = SlotTransformer.buildSlot(xml);
                 final MCRCategoryID locCat = new MCRCategoryDAOImpl()
-                        .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
+                    .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
                 int id = Integer.parseInt(newId);
 
                 return slot.getLocation().equals(locCat) && slot.getId() == id || instance().isFreeId(locCat, id);
@@ -446,7 +446,7 @@ public final class SlotManager {
      */
     @SuppressWarnings("unchecked")
     public synchronized void saveOrUpdate(final Slot slot)
-            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
         if (objID != null && MCRMetadataManager.exists(objID)) {
@@ -481,16 +481,15 @@ public final class SlotManager {
      */
     @SuppressWarnings("unchecked")
     public synchronized void delete(final Slot slot)
-            throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
         if (objID != null && MCRMetadataManager.exists(objID)) {
             if (slot.getEntries() != null) {
                 for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                    if (slotEntry.getEntry() instanceof FileEntry) {
-                        if (!FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                            FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry);
-                        }
+                    if (slotEntry.getEntry() instanceof FileEntry
+                        && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
+                        FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry);
                     }
                 }
             }
@@ -557,20 +556,20 @@ public final class SlotManager {
      * @throws SolrServerException thrown on SOLR error
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
-            final List<SortClause> sortClauses) throws SolrServerException, IOException {
+        final List<SortClause> sortClauses) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
         final SolrClient client = new HttpSolrClient.Builder(
-                MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL")).build();
+            MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL")).build();
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"
-                .replace("%filter%",
-                        search != null && !search.isEmpty() ? MCRSolrUtils.escapeSearchValue(search) : "*");
+            .replace("%filter%",
+                search != null && !search.isEmpty() ? MCRSolrUtils.escapeSearchValue(search) : "*");
 
         query.setQuery(searchStr);
         query.addFilterQuery("objectProject:" + PROJECT_ID, "objectType:" + SLOT_TYPE,
-                filter != null && !filter.isEmpty() ? filter : "");
+            filter != null && !filter.isEmpty() ? filter : "");
         query.setFields("slotId");
         query.setSorts(sortClauses);
         query.setStart(start);

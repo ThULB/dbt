@@ -281,7 +281,7 @@ public class SlotServlet extends MCRServlet {
                 queryStr.append((withXSLPrefix ? "XSL." : "") + name + "=" + parameters.get(name));
             }
         }
-        return queryStr.toString().length() > 0 ? "?" + queryStr.toString() : queryStr.toString();
+        return queryStr.length() > 0 ? "?" + queryStr.toString() : queryStr.toString();
     }
 
     private static String getFilename(final Part part) {

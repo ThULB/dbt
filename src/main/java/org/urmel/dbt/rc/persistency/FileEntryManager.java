@@ -84,17 +84,13 @@ public final class FileEntryManager {
             MCRFileCollection col = store.retrieve(id);
             MCRNode dir = col.getNodeByPath(slotEntry.getId());
 
-            if (dir == null || !dir.isDirectory()) {
-                return false;
-            }
-
-            return true;
+            return dir != null && dir.isDirectory();
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;
             }
             final String msg = "Exception while checking existence of fileEntry " + slotEntry.getId()
-                    + " with filename " + fileEntry.getName();
+                + " with filename " + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
         }
     }
@@ -126,7 +122,7 @@ public final class FileEntryManager {
                 throw (MCRException) ex;
             }
             final String msg = "Exception while storing of fileEntry " + slotEntry.getId() + " with filename "
-                    + fileEntry.getName();
+                + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
         }
     }
@@ -158,12 +154,11 @@ public final class FileEntryManager {
                 dir.renameTo(slotEntry.getId() + (lastRev != null ? "-" + lastRev.toString() : ""));
                 create(slot, slotEntry);
             }
+        } catch (MCRException ex) {
+            throw ex;
         } catch (Exception ex) {
-            if (ex instanceof MCRException) {
-                throw (MCRException) ex;
-            }
             final String msg = "Exception while storing of fileEntry " + slotEntry.getId() + " with filename "
-                    + fileEntry.getName();
+                + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
         }
     }
@@ -197,7 +192,7 @@ public final class FileEntryManager {
                 throw (MCRException) ex;
             }
             final String msg = "Exception while deleting of fileEntry " + slotEntry.getId() + " with filename "
-                    + fileEntry.getName();
+                + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
         }
     }
@@ -222,7 +217,7 @@ public final class FileEntryManager {
                 throw (MCRException) ex;
             }
             final String msg = "Exception while retrieving of fileEntry " + slotEntry.getId() + " with filename "
-                    + fileEntry.getName();
+                + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
         }
     }

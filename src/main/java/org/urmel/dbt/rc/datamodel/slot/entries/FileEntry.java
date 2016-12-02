@@ -290,7 +290,7 @@ public class FileEntry implements Serializable {
     /**
      * @param hash the hash to set
      */
-    void setHash(String hash) {
+    protected void setHash(String hash) {
         this.hash = hash;
     }
 
@@ -305,7 +305,7 @@ public class FileEntry implements Serializable {
     /**
      * @param size the size to set
      */
-    void setSize(long size) {
+    protected void setSize(long size) {
         this.size = size;
     }
 
