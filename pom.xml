@@ -3,10 +3,9 @@
   <parent>
     <groupId>org.mycore.mir</groupId>
     <artifactId>mir-parent</artifactId>
-    <version>2016.06.0.2-SNAPSHOT</version>
+    <version>2016.07-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2016.07-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -99,7 +98,7 @@
           <commitIdGenerationMode>full</commitIdGenerationMode>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
@@ -392,34 +391,28 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-solr</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-media</artifactId>
       <version>${mycore.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-urn</artifactId>
       <version>${mycore.version}</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.mycore.mir</groupId>
@@ -501,12 +494,8 @@
     </dependency>
 
     <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-server</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.ws.rs</groupId>
-      <artifactId>jsr311-api</artifactId>
+      <artifactId>javax.ws.rs-api</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.xml.bind</groupId>

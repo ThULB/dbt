@@ -23,13 +23,12 @@
 package org.urmel.dbt.rc.resources;
 
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
-
-import com.sun.jersey.spi.container.ContainerRequest;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -40,17 +39,17 @@ public class MailResourcePermission implements MCRResourceAccessChecker {
     private static final String PERMISSION_MAIL = "rcmail";
 
     /* (non-Javadoc)
-     * @see org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker#isPermitted(com.sun.jersey.spi.container.ContainerRequest)
+     * @see org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker#isPermitted(javax.ws.rs.container.ContainerRequestContext)
      */
     @Override
-    public boolean isPermitted(ContainerRequest request) {
-        String uri = request.getEntity(String.class);
+    public boolean isPermitted(ContainerRequestContext context) {
+        String uri = convertStreamToString(context.getEntityStream());
         try {
             return MCRAccessManager.checkPermission(PERMISSION_MAIL);
         } catch (Exception exc) {
             throw new WebApplicationException(exc,
                 Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Unable to check permission for request " + request.getRequestUri()
+                    .entity("Unable to check permission for request " + context.getUriInfo().getPath()
                         + " containing entity value " + uri)
                     .build());
         }
