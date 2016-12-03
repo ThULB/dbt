@@ -39,14 +39,11 @@ import org.mycore.common.content.MCRSourceContent;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
-import com.sun.jersey.spi.resource.Singleton;
-
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
 @Path("rcmail")
-@Singleton
 public class MailResource {
 
     @POST()
