@@ -44,7 +44,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRHibTestCase;
+import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
@@ -74,18 +74,11 @@ import org.urmel.dbt.rc.utils.SlotTransformer;
 import org.urmel.dbt.rc.utils.SlotWrapper;
 import org.xml.sax.SAXException;
 
-public class TestSlot extends MCRHibTestCase {
+public class TestSlot extends MCRJPATestCase {
 
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     private static SlotManager SLOT_MANAGER;
-
-    static {
-        MCRSession session = MCRSessionMgr.getCurrentSession();
-        session.setCurrentIP("127.0.0.1");
-        session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
-        MCRSessionMgr.setCurrentSession(session);
-    }
 
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
@@ -94,6 +87,11 @@ public class TestSlot extends MCRHibTestCase {
     public void setUp() throws Exception {
         super.setUp();
         config.set("MCR.datadir", folder.newFolder("data").getAbsolutePath());
+
+        MCRSession session = MCRSessionMgr.getCurrentSession();
+        session.setCurrentIP("127.0.0.1");
+        session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
+        MCRSessionMgr.setCurrentSession(session);
 
         // Clears all stores
         MCRStoreCenter.instance().clear();

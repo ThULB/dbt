@@ -51,14 +51,12 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
-import com.sun.jersey.spi.resource.Singleton;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
 @Path("video")
-@Singleton
 public class VideoSourceResource {
 
     private static final String[] EMPTY_ARRAY = new String[0];
