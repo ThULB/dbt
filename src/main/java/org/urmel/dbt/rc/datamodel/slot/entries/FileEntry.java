@@ -47,6 +47,7 @@ import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
+import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.content.MCRByteContent;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStreamContent;
@@ -78,6 +79,8 @@ public class FileEntry implements Serializable {
 
     private boolean copyrighted;
 
+    private boolean accepted;
+
     private String hash;
 
     private long size = 0;
@@ -94,13 +97,15 @@ public class FileEntry implements Serializable {
      * @param fileName the file name
      * @param comment the comment
      * @param isCopyrighted <code>true</code> if material is copyrighted
+     * @param isAccepted <code>true</code> if Para. 52a UrhG accepted
      * @param is the file {@link InputStream}
      * @return the {@link FileEntry}
      * @throws FileEntryProcessingException thrown if file entry couldn't processed
      * @throws IOException thrown if file not found or other
      */
     public static FileEntry createFileEntry(final String entryId, final String fileName, final String comment,
-        boolean isCopyrighted, final InputStream is) throws FileEntryProcessingException, IOException {
+        boolean isCopyrighted, boolean isAccepted, final InputStream is)
+        throws FileEntryProcessingException, IOException {
         if (fileName == null || fileName.length() == 0) {
             throw new FileEntryProcessingException("empty file name", ERROR_EMPTY_FILE);
         }
@@ -110,6 +115,7 @@ public class FileEntry implements Serializable {
         fileEntry.setName(fileName);
         fileEntry.setComment(comment);
         fileEntry.setCopyrighted(isCopyrighted);
+        fileEntry.setAccepted(isAccepted);
 
         if (isCopyrighted) {
             processContent(entryId, fileEntry, is);
@@ -138,15 +144,19 @@ public class FileEntry implements Serializable {
                     throw new FileEntryProcessingException("page limit exceede", ERROR_PAGE_LIMIT_EXCEEDED);
                 }
 
-                LOGGER.info("Make an supported copy for \"" + fileName + "\".");
-                pdfCopy = new ByteArrayOutputStream();
-                copyPDF(content.getInputStream(), pdfCopy);
+                if (MCRConfiguration.instance().getBoolean("DBT.RC.FileEntry.Copyrighted.Encyrpt", false)) {
+                    LOGGER.info("Make an supported copy for \"" + fileName + "\".");
+                    pdfCopy = new ByteArrayOutputStream();
+                    copyPDF(content.getInputStream(), pdfCopy);
 
-                LOGGER.info("Encrypt \"" + fileName + "\".");
-                pdfEncrypted = new ByteArrayOutputStream();
-                encryptPDF(entryId, new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
+                    LOGGER.info("Encrypt \"" + fileName + "\".");
+                    pdfEncrypted = new ByteArrayOutputStream();
+                    encryptPDF(entryId, new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
 
-                fileEntry.setContent(pdfEncrypted.toByteArray());
+                    fileEntry.setContent(pdfEncrypted.toByteArray());
+                } else {
+                    fileEntry.setContent(content.getInputStream());
+                }
             } catch (IOException e) {
                 throw new FileEntryProcessingException(e.getMessage(), ERROR_NOT_SUPPORTED);
             } finally {
@@ -165,7 +175,11 @@ public class FileEntry implements Serializable {
     private static boolean isPDF(final InputStream is) {
         try {
             PDDocument doc = PDDocument.load(is);
-            return doc != null;
+            try {
+                return doc != null;
+            } finally {
+                doc.close();
+            }
         } catch (IOException e) {
             return false;
         }
@@ -180,7 +194,11 @@ public class FileEntry implements Serializable {
      */
     private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
         PDDocument doc = PDDocument.load(pdfInput);
-        return doc.getNumberOfPages();
+        try {
+            return doc.getNumberOfPages();
+        } finally {
+            doc.close();
+        }
     }
 
     /**
@@ -198,8 +216,10 @@ public class FileEntry implements Serializable {
             COSDocument doc = document.getDocument();
 
             writer = new COSWriter(pdfOutput);
-
             writer.write(doc);
+
+            doc.close();
+            document.close();
         } finally {
             if (writer != null) {
                 writer.close();
@@ -237,6 +257,8 @@ public class FileEntry implements Serializable {
 
             doc.save(pdfOutput);
         }
+
+        doc.close();
     }
 
     private static void decryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
@@ -247,6 +269,8 @@ public class FileEntry implements Serializable {
             doc.setAllSecurityToBeRemoved(true);
             doc.save(pdfOutput);
         }
+
+        doc.close();
     }
 
     /**
@@ -277,6 +301,21 @@ public class FileEntry implements Serializable {
      */
     public void setCopyrighted(boolean copyrighted) {
         this.copyrighted = copyrighted;
+    }
+
+    /**
+     * @return the accepted
+     */
+    @XmlAttribute(name = "accepted")
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    /**
+     * @param accepted the accepted to set
+     */
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 
     /**
@@ -439,12 +478,16 @@ public class FileEntry implements Serializable {
         } else if (!name.equals(other.name)) {
             return false;
         }
-        if (size != other.size) {
-            return false;
-        }
-        return true;
+
+        return size != other.size;
     }
 
+    /**
+     * Holds error message for file entry processing.
+     * 
+     * @author Ren\u00E9 Adler (eagle)
+     *
+     */
     public static class FileEntryProcessingException extends Exception {
         private static final long serialVersionUID = 1L;
 

@@ -197,7 +197,7 @@ public class RCCommands extends MCRAbstractCommands {
                         try {
                             is = new FileInputStream(f);
                             slotEntry.setEntry(FileEntry.createFileEntry(entry.getId(), fileEntry.getName(),
-                                fileEntry.getComment(), fileEntry.isCopyrighted(), is));
+                                fileEntry.getComment(), fileEntry.isCopyrighted(), fileEntry.isAccepted(), is));
                         } catch (FileNotFoundException e) {
                             LOGGER.error("Couldn't not read file \"" + f.getCanonicalPath() + "\" for file entry.");
                             return;
@@ -289,6 +289,7 @@ public class RCCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "rc inactivator", help = "send warning mails for reserve collections or inactivate, set new status")
     public static void rcInactivator() throws IOException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
+        mgr.syncList();
         final SlotList slotList = mgr.getSlotList();
 
         if (!slotList.getSlots().isEmpty()) {

@@ -265,37 +265,44 @@
   
   <!-- File -->
   <xsl:template match="file">
-    <h4>
-      <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
-        <xsl:choose>
-          <xsl:when test="string-length(.) &gt; 0">
-            <xsl:value-of select="." />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@name" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </a>
-      <xsl:if test="not($hasAdminPermission)">
-        <small>
+    <xsl:if test="@accepted = 'true' or $writePermission or $hasEditorPermission">
+      <h4>
+        <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
+          <xsl:choose>
+            <xsl:when test="string-length(.) &gt; 0">
+              <xsl:value-of select="." />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="@name" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
+        <xsl:if test="not($hasAdminPermission)">
+          <small>
+            <xsl:text> - </xsl:text>
+            <xsl:call-template name="formatFileSize">
+              <xsl:with-param name="size" select="@size" />
+            </xsl:call-template>
+          </small>
+        </xsl:if>
+      </h4>
+      <xsl:if test="$hasAdminPermission">
+        <p>
+          <xsl:text>SHA-1: </xsl:text>
+          <code>
+            <xsl:value-of select="@hash" />
+          </code>
           <xsl:text> - </xsl:text>
           <xsl:call-template name="formatFileSize">
             <xsl:with-param name="size" select="@size" />
           </xsl:call-template>
-        </small>
+        </p>
       </xsl:if>
-    </h4>
-    <xsl:if test="$hasAdminPermission">
-      <p>
-        <xsl:text>SHA-1: </xsl:text>
-        <code>
-          <xsl:value-of select="@hash" />
-        </code>
-        <xsl:text> - </xsl:text>
-        <xsl:call-template name="formatFileSize">
-          <xsl:with-param name="size" select="@size" />
-        </xsl:call-template>
-      </p>
+      <xsl:if test="$writePermission and (string-length(@accepted) = 0 or  @accepted != 'true')">
+        <span class="label label-danger">
+          <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.accepted_label')" />
+        </span>
+      </xsl:if>
     </xsl:if>
   </xsl:template>
   

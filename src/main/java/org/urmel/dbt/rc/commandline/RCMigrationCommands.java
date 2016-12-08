@@ -35,6 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -47,7 +48,9 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.urmel.dbt.rc.datamodel.slot.Slot;
 import org.urmel.dbt.rc.datamodel.slot.SlotEntry;
+import org.urmel.dbt.rc.datamodel.slot.SlotList;
 import org.urmel.dbt.rc.datamodel.slot.entries.FileEntry;
+import org.urmel.dbt.rc.persistency.SlotManager;
 import org.urmel.dbt.rc.utils.SlotTransformer;
 import org.xml.sax.SAXException;
 
@@ -204,5 +207,21 @@ public class RCMigrationCommands extends MCRAbstractCommands {
             }
         }
         return cmds;
+    }
+
+    @SuppressWarnings("unchecked")
+    @MCRCommand(syntax = "mark file entries copyrighted", help = "marks all file entries as copyrigthed")
+    public static void markCopyrigthed() throws IOException, MCRAccessException {
+        final SlotManager mgr = SlotManager.instance();
+        mgr.syncList();
+        final SlotList slotList = mgr.getSlotList();
+
+        if (!slotList.getSlots().isEmpty()) {
+            slotList.getSlots().stream().filter(slot -> slot.getEntries() != null && !slot.getEntries().isEmpty())
+                .forEach(slot -> {
+                    slot.getEntries().stream().filter(s -> s.getEntry().getClass().equals(FileEntry.class))
+                        .forEach(s -> ((SlotEntry<FileEntry>) s).getEntry().setCopyrighted(true));
+                });
+        }
     }
 }

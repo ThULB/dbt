@@ -119,10 +119,8 @@ public class TextEntry implements Serializable {
         } else if (!text.equals(other.text)) {
             return false;
         }
-        if (format != other.format) {
-            return false;
-        }
-        return true;
+
+        return format != other.format;
     }
 
     @XmlType(name = "textFormat")

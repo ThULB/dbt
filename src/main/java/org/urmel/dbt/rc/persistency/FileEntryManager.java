@@ -85,10 +85,9 @@ public final class FileEntryManager {
             MCRNode dir = col.getNodeByPath(slotEntry.getId());
 
             return dir != null && dir.isDirectory();
+        } catch (MCRException ex) {
+            throw ex;
         } catch (Exception ex) {
-            if (ex instanceof MCRException) {
-                throw (MCRException) ex;
-            }
             final String msg = "Exception while checking existence of fileEntry " + slotEntry.getId()
                 + " with filename " + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
