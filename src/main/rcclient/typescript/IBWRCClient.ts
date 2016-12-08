@@ -584,7 +584,7 @@ class IBWRCClient {
                 if (ibw.titleFindRegExp("4801", new RegExp(IBWRCClient.FORMAT_4801.replaceAll(".", "\.").format(".*" + "\/rc\/" + slotId, slotId).trim()), true, true))
                     ibw.getTitle().deleteToEndOfLine();
 
-                if (ibw.titleFindRegExp("4802", new RegExp(f4802.format(slotId, cat7100).trim()), true, true))
+                if (ibw.titleFindRegExp("4802", new RegExp(f4802.format(slotId, cat7100.escapeRegExp()).trim()), true, true))
                     ibw.getTitle().deleteToEndOfLine();
 
                 if (copy.backup.length == 1) {
