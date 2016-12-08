@@ -69,6 +69,14 @@
             </div>
           </div>
           <div class="form-group">
+            <label for="comment" class="col-md-3 control-label">
+              <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.comment')" />
+            </label>
+            <div class="col-md-9">
+              <textarea rows="3" id="comment" class="form-control input-md" name="comment" />
+            </div>
+          </div>
+          <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
               <div class="checkbox">
                 <label>
@@ -80,17 +88,20 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="comment" class="col-md-3 control-label">
-              <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.comment')" />
-            </label>
-            <div class="col-md-9">
-              <textarea rows="3" id="comment" class="form-control input-md" name="comment" />
+            <div class="col-md-offset-3 col-md-9">
+              <div class="checkbox">
+                <label class="text-danger">
+                  <input type="checkbox" name="accepted" value="true">
+                    <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.accepted')" />
+                  </input>
+                </label>
+              </div>
             </div>
           </div>
         </div>
         <div class="panel-footer clearfix">
           <div class="pull-right">
-            <button type="submit" class="btn btn-primary btn-md" name="upload">
+            <button type="submit" class="btn btn-primary btn-md" name="upload" disabled="disabled">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.upload')" />
             </button>
             <span>
@@ -105,6 +116,17 @@
     </form>
     <link type="text/css" href="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/js/fileinput.min.js" />
+    <script type="text/javascript">
+    <![CDATA[
+      $("input[name='accepted']").click(function() {
+        if (this.checked) {
+          $("button[name='upload']").removeAttr("disabled");
+        } else {
+          $("button[name='upload']").attr("disabled", "disabled");
+        }
+      });
+    ]]>
+    </script>
   </xsl:template>
 
 </xsl:stylesheet>

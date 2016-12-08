@@ -239,6 +239,14 @@
     <xed:bind xpath="file">
       <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
       <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+      <mir:template name="checkboxList" xpath="@copyrighted" id="copyrighted">
+        <option i18n="component.rc.slot.entry.file.copyrighted" value="true" />
+      </mir:template>
+      <xed:if test="string-length(@accepted) = 0 or @accepted != 'true'">
+        <mir:template name="checkboxList" xpath="@accepted" id="accepted">
+          <option i18n="component.rc.slot.entry.file.accepted" value="true" />
+        </mir:template>
+      </xed:if>
     </xed:bind>
   </xed:template>
 

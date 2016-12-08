@@ -457,13 +457,10 @@ public final class SlotManager {
         }
 
         if (slot.getEntries() != null) {
-            for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                if (slotEntry.getEntry() instanceof FileEntry) {
-                    if (!FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                        FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry);
-                    }
-                }
-            }
+            slot.getEntries().stream()
+                .filter(slotEntry -> slotEntry.getEntry() instanceof FileEntry
+                    && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry))
+                .forEach(slotEntry -> FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry));
         }
     }
 
@@ -482,12 +479,10 @@ public final class SlotManager {
 
         if (objID != null && MCRMetadataManager.exists(objID)) {
             if (slot.getEntries() != null) {
-                for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                    if (slotEntry.getEntry() instanceof FileEntry
-                        && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                        FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry);
-                    }
-                }
+                slot.getEntries().stream()
+                    .filter(slotEntry -> slotEntry.getEntry() instanceof FileEntry
+                        && FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry))
+                    .forEach(slotEntry -> FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry));
             }
 
             final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objID);

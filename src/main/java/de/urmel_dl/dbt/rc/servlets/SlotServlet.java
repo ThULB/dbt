@@ -172,6 +172,7 @@ public class SlotServlet extends MCRServlet {
                     try {
                         final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(), getFilename(filePart),
                             getParameter(req, "comment"), Boolean.parseBoolean(getParameter(req, "copyrighted")),
+                            Boolean.parseBoolean(getParameter(req, "accepted")),
                             filePart.getInputStream());
                         ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                     } catch (FileEntryProcessingException pe) {

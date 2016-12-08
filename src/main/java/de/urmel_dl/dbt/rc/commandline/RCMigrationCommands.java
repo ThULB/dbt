@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +30,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
@@ -46,7 +47,9 @@ import com.google.common.io.Files;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
+import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
+import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.rc.utils.SlotTransformer;
 
 /**
@@ -93,7 +96,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
 
                             Optional.ofNullable(msaXML.getChildren("entry")).ifPresent(x -> {
                                 final Element root = new Element("entries");
-                                final List<Element> entries = new ArrayList<Element>(x);
+                                final List<Element> entries = new ArrayList<>(x);
                                 entries.forEach(e -> root.addContent(e.clone()));
                                 slotXML.addContent(root);
                             });
@@ -120,7 +123,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     final Slot slot = SlotTransformer.buildSlot(xml.asXML());
 
                     if (slot.getEntries() != null) {
-                        List<SlotEntry<?>> migEntries = new ArrayList<SlotEntry<?>>();
+                        List<SlotEntry<?>> migEntries = new ArrayList<>();
                         for (SlotEntry<?> entry : slot.getEntries()) {
                             if (entry.getEntry() instanceof FileEntry) {
                                 SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) entry;
@@ -182,7 +185,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
             return Collections.emptyList();
         }
 
-        List<String> cmds = new ArrayList<String>();
+        List<String> cmds = new ArrayList<>();
         for (final String r : list) {
             final File fr = new File(fromDir, r);
             if (fr.isDirectory()) {
@@ -200,5 +203,21 @@ public class RCMigrationCommands extends MCRAbstractCommands {
             }
         }
         return cmds;
+    }
+
+    @SuppressWarnings("unchecked")
+    @MCRCommand(syntax = "mark file entries copyrighted", help = "marks all file entries as copyrigthed")
+    public static void markCopyrigthed() throws IOException, MCRAccessException {
+        final SlotManager mgr = SlotManager.instance();
+        mgr.syncList();
+        final SlotList slotList = mgr.getSlotList();
+
+        if (!slotList.getSlots().isEmpty()) {
+            slotList.getSlots().stream().filter(slot -> slot.getEntries() != null && !slot.getEntries().isEmpty())
+            .forEach(slot -> {
+                slot.getEntries().stream().filter(s -> s.getEntry().getClass().equals(FileEntry.class))
+                .forEach(s -> ((SlotEntry<FileEntry>) s).getEntry().setCopyrighted(true));
+            });
+        }
     }
 }
