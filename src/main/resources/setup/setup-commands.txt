@@ -1,0 +1,4 @@
+update all classifications from directory classifications
+
+process acl/defaultrules-commands.txt
+process webacl-commands.txt
