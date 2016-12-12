@@ -19,7 +19,7 @@
       </includes>
     </fileSet>
     <fileSet>
-      <directory>${project.basedir}/../main/config/</directory>
+      <directory>${project.basedir}/src/main/resources/setup/</directory>
       <outputDirectory>/</outputDirectory>
     </fileSet>
     <fileSet>
@@ -36,6 +36,11 @@
   <dependencySets>
     <dependencySet>
       <useTransitiveDependencies>false</useTransitiveDependencies>
+      <includes>
+        <include>${project.parent.groupId}:${artifactId}:jar</include>
+        <include>${project.parent.groupId}:mir-cli:tar.gz</include>
+        <include>${project.parent.groupId}:mir-webapp:war</include>
+      </includes>
     </dependencySet>
   </dependencySets>
 </assembly>
