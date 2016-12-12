@@ -6,7 +6,6 @@
     <version>2016.06.0.2-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2016.06.0.2-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -46,22 +45,6 @@
   </properties>
 
   <build>
-    <resources>
-      <resource>
-        <filtering>true</filtering>
-        <directory>src/main/resources-filtered/</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
-      <resource>
-        <filtering>false</filtering>
-        <directory>src/main/resources/</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -94,9 +77,15 @@
           </execution>
         </executions>
         <configuration>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <generateGitPropertiesFilename>${project.build.outputDirectory}/de/urmel_dl/dbt/git.properties</generateGitPropertiesFilename>
           <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
           <dateFormatTimeZone>UTC</dateFormatTimeZone>
           <commitIdGenerationMode>full</commitIdGenerationMode>
+          <excludeProperties>
+            <excludeProperty>.*\.email</excludeProperty>
+            <excludeProperty>.*\.host</excludeProperty>
+          </excludeProperties>
         </configuration>
       </plugin>
       
