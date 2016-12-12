@@ -70,7 +70,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <mainClass>org.urmel.dbt.common.DBTVersion</mainClass>
+              <mainClass>de.urmel_dl.dbt.common.DBTVersion</mainClass>
               <addExtensions />
             </manifest>
             <manifestEntries>
