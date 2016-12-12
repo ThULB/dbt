@@ -5,7 +5,7 @@
 
   <filter>
     <filter-name>VideoDirectLinkFilter</filter-name>
-    <filter-class>org.urmel.dbt.filter.VideoDirectLinkFilter</filter-class>
+    <filter-class>de.urmel_dl.dbt.filter.VideoDirectLinkFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>VideoDirectLinkFilter</filter-name>
@@ -16,7 +16,7 @@
   
   <filter>
     <filter-name>DerivateServletFilter</filter-name>
-    <filter-class>org.urmel.dbt.filter.DerivateServletFilter</filter-class>
+    <filter-class>de.urmel_dl.dbt.filter.DerivateServletFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>DerivateServletFilter</filter-name>
@@ -27,7 +27,7 @@
 
   <servlet id="RCSlotListServlet">
     <servlet-name>RCSlotListServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.rc.servlets.SlotListServlet</servlet-class>
+    <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotListServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RCSlotListServlet</servlet-name>
@@ -37,7 +37,7 @@
 
   <servlet id="RCSlotServlet">
     <servlet-name>RCSlotServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.rc.servlets.SlotServlet</servlet-class>
+    <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RCSlotServlet</servlet-name>
@@ -47,7 +47,7 @@
 
   <servlet id="RCSlotLocationServlet">
     <servlet-name>RCSlotLocationServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.rc.servlets.SlotLocationServlet</servlet-class>
+    <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotLocationServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RCSlotLocationServlet</servlet-name>
@@ -56,7 +56,7 @@
 
   <servlet id="RCClientServlet">
     <servlet-name>RCClientServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.rc.servlets.ClientServlet</servlet-class>
+    <servlet-class>de.urmel_dl.dbt.rc.servlets.ClientServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>RCClientServlet</servlet-name>
@@ -65,7 +65,7 @@
 
   <servlet>
     <servlet-name>OPCServlet</servlet-name>
-    <servlet-class>org.urmel.dbt.opc.servlets.OPCServlet</servlet-class>
+    <servlet-class>de.urmel_dl.dbt.opc.servlets.OPCServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>OPCServlet</servlet-name>
