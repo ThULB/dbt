@@ -90,7 +90,7 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 
 	$scope.load = function() {
 		$scope.jobs.loading = true;
-		$http.get(webApplicationBaseURL + "rsc/jobqueue/org.urmel.dbt.common.MailJob").then(function(result) {
+		$http.get(webApplicationBaseURL + "rsc/jobqueue/de.urmel_dl.dbt.common.MailJob").then(function(result) {
 			if (result.status === 200) {
 				$scope.jobs = result.data;
 				$scope.jobs.total = $scope.jobs.job.length;

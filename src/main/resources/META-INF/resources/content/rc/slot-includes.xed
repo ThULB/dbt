@@ -101,7 +101,7 @@
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
 
               <xed:validate xpath="slot" display="global local"
-                test="not(xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isMatchPreviousAccessKeys', /slot))" i18n="component.rc.slot.accesskey.matchesPrevious" />
+                test="not(xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','isMatchPreviousAccessKeys', /slot))" i18n="component.rc.slot.accesskey.matchesPrevious" />
             </fieldset>
           </xed:when>
           <xed:when test="$action = 'ownerTransfer'">
@@ -115,13 +115,13 @@
 
             <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
           </xed:when>
-          <xed:when test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission')">
+          <xed:when test="xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
             <fieldset class="{$xed-validation-marker}">
               <legend />
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="changeLocation" />
 
-              <xed:validate xpath="slot" display="global local" test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','isFreeId', /slot)"
+              <xed:validate xpath="slot" display="global local" test="xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','isFreeId', /slot)"
                 i18n="component.rc.slot.id.notFree" />
             </fieldset>
 
@@ -207,12 +207,12 @@
 
   <xed:template id="status">
     <mir:template name="radioList" xpath="@status" id="status" inline="true" i18n="component.rc.slot.status"
-      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:org.urmel.dbt.rc.datamodel.Status" />
+      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot:enum:de.urmel_dl.dbt.rc.datamodel.Status" />
   </xed:template>
 
   <xed:template id="pendingStatus">
     <mir:template name="radioList" xpath="@pendingStatus" default="active" id="pendingStatus" i18n="component.rc.slot.setPendingStatus.pendingStatus"
-      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot.setPendingStatus:enum:org.urmel.dbt.rc.datamodel.PendingStatus" />
+      uri="xslStyle:enum2options?i18nPrefix=component.rc.slot.setPendingStatus:enum:de.urmel_dl.dbt.rc.datamodel.PendingStatus" />
   </xed:template>
 
   <xed:template id="onlineOnly">

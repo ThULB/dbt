@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:mods="http://www.loc.gov/mods/v3" xmlns:mcrld="xalan://org.mycore.common.MCRLanguageDetector" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:mcrdataurl="xalan://org.mycore.datamodel.common.MCRDataURL" xmlns:migutils="xalan://org.urmel.dbt.migration.MigrationUtils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:mcrdataurl="xalan://org.mycore.datamodel.common.MCRDataURL" xmlns:migutils="xalan://de.urmel_dl.dbt.migration.MigrationUtils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   exclude-result-prefixes="xsl xlink mods mcrld mcrxml mcrdataurl migutils xalan"
 >
 

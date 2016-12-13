@@ -126,7 +126,7 @@
       </div>
     </div>
     <xed:if
-      test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission') or xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasEditorPermission')"
+      test="xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasAdminPermission') or xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasEditorPermission')"
     >
       <mir:template name="static" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn" />
     </xed:if>
@@ -149,7 +149,7 @@
     </div>
 
     <xed:if
-      test="xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasAdminPermission') or xed:call-java('org.urmel.dbt.rc.persistency.SlotManager','hasEditorPermission')"
+      test="xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasAdminPermission') or xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasEditorPermission')"
     >
       <xed:bind xpath="opcrecord/pica:record/@ppn" name="ppn" />
       <mir:template name="selectInput" xpath="opcrecord/@epn" id="epn" i18n="component.rc.slot.entry.opcrecord.epn"

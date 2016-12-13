@@ -1,0 +1,3 @@
+update permission read for id de.urmel_dl.dbt.common.MailJob with rulefile acl/grant-rc-admin.xml described by rc administrators and rc editor and administrators
+update permission read for id webpage:/content/rc/mail-queue.xml with rulefile acl/grant-rc-admin.xml described by rc administrators and rc editor and administrators
+update permission read for id webpage:/content/rc/slot.xed with rulefile acl/grant-submitter.xml described by submitter, editor and administrator

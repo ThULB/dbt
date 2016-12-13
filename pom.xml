@@ -45,22 +45,6 @@
   </properties>
 
   <build>
-    <resources>
-      <resource>
-        <filtering>true</filtering>
-        <directory>src/main/resources-filtered/</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
-      <resource>
-        <filtering>false</filtering>
-        <directory>src/main/resources/</directory>
-        <includes>
-          <include>**/*</include>
-        </includes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -69,7 +53,7 @@
           <archive>
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <mainClass>org.urmel.dbt.common.DBTVersion</mainClass>
+              <mainClass>de.urmel_dl.dbt.common.DBTVersion</mainClass>
               <addExtensions />
             </manifest>
             <manifestEntries>
@@ -93,9 +77,15 @@
           </execution>
         </executions>
         <configuration>
+          <generateGitPropertiesFile>true</generateGitPropertiesFile>
+          <generateGitPropertiesFilename>${project.build.outputDirectory}/de/urmel_dl/dbt/git.properties</generateGitPropertiesFilename>
           <dateFormat>yyyy-MM-dd'T'HH:mm:ssXXX</dateFormat>
           <dateFormatTimeZone>UTC</dateFormatTimeZone>
           <commitIdGenerationMode>full</commitIdGenerationMode>
+          <excludeProperties>
+            <excludeProperty>.*\.email</excludeProperty>
+            <excludeProperty>.*\.host</excludeProperty>
+          </excludeProperties>
         </configuration>
       </plugin>
 
@@ -520,6 +510,85 @@
     </dependency>
 
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>build-deploy-package</id>
+      <activation>
+        <property>
+          <name>deploy-package</name>
+        </property>
+      </activation>
+
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/bin</outputDirectory>
+                  <resources>
+                    <resource>
+                      <filtering>true</filtering>
+                      <directory>${basedir}/src/deploy/bin</directory>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <finalName>dbt-deploy-${project.version}</finalName>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>${basedir}/src/deploy/assembly/deploy.xml</descriptor>
+              </descriptors>
+              <tarLongFileMode>gnu</tarLongFileMode>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+
+      <dependencies>
+        <dependency>
+          <groupId>org.mycore.mir</groupId>
+          <artifactId>dbt-module</artifactId>
+          <version>${project.version}</version>
+          <type>jar</type>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore.mir</groupId>
+          <artifactId>mir-webapp</artifactId>
+          <version>${project.parent.version}</version>
+          <type>war</type>
+          <scope>runtime</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.mycore.mir</groupId>
+          <artifactId>mir-cli</artifactId>
+          <version>${project.parent.version}</version>
+          <type>tar.gz</type>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 
   <pluginRepositories>
     <pluginRepository>
