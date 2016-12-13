@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import org.mycore.mir.common.MIRCoreVersion;
 
 /**
+ * @author Ren\u00E9 Adler (eagle)
  * @author Thomas Scheffler (yagee)
  *
  */
@@ -41,7 +42,9 @@ public class DBTVersion {
     public static final String BRANCH = prop.getProperty("git.branch");
 
     public static final String REVISION = prop.getProperty("git.commit.id.full");
-    
+
+    public static final String ABBREV = prop.getProperty("git.commit.id.abbrev");
+
     public static final String DESCRIBE = prop.getProperty("git.commit.id.describe");
 
     public static final String COMPLETE = VERSION + " " + BRANCH + ":" + DESCRIBE;
@@ -81,6 +84,10 @@ public class DBTVersion {
         return REVISION;
     }
 
+    public static String getAbbRev() {
+        return ABBREV;
+    }
+
     public static String getGitDescribe() {
         return DESCRIBE;
     }
@@ -88,7 +95,7 @@ public class DBTVersion {
     public static String getCompleteVersion() {
         return COMPLETE;
     }
-    
+
     public static Map<String,String> getVersionProperties(){
         return prop.entrySet()
             .stream()
