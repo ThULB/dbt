@@ -472,7 +472,7 @@
         <xsl:value-of select="i18n:translate('dbt.copyright')" />
       </p>
       <p title="{concat('MIR ',mirver:getCompleteVersion())}">
-        <xsl:value-of select="concat('Version ', dbtver:getVersion(), ' (',dbtver:getShortHash(), ')')" />
+        <xsl:value-of select="concat('Version ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')')" />
       </p>
     </div>
     <div class="col-xs-2">
