@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,8 +32,7 @@ import de.urmel_dl.dbt.opc.datamodel.Catalog;
 import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.opc.datamodel.pica.Record;
 import de.urmel_dl.dbt.opc.datamodel.pica.Result;
-import de.urmel_dl.dbt.opc.utils.RecordTransformer;
-import de.urmel_dl.dbt.opc.utils.ResultTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -45,6 +44,7 @@ public class OPCServlet extends MCRServlet {
 
     private static final Catalogues CATALOGUES = Catalogues.instance();
 
+    @Override
     public void doGetPost(final MCRServletJob job) throws Exception {
         final HttpServletRequest req = job.getRequest();
         final HttpServletResponse res = job.getResponse();
@@ -80,13 +80,13 @@ public class OPCServlet extends MCRServlet {
                     result.setCatalog(catalog);
 
                     getLayoutService().doLayout(req, res,
-                            new MCRJDOMContent(ResultTransformer.buildExportableXML(result)));
+                        new MCRJDOMContent(new EntityFactory<>(result).toDocument()));
                     return;
                 } else if ("record".equals(action)) {
                     final Record record = opc.getRecord(request);
 
                     getLayoutService().doLayout(req, res,
-                            new MCRJDOMContent(RecordTransformer.buildExportableXML(record)));
+                        new MCRJDOMContent(new EntityFactory<>(record).toDocument()));
                     return;
                 }
             }

@@ -3,21 +3,21 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.urmel_dl.dbt.opc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
@@ -25,16 +25,12 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 
-import de.urmel_dl.dbt.opc.OPCConnector;
 import de.urmel_dl.dbt.opc.datamodel.Catalog;
 import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.opc.datamodel.IKTList;
 import de.urmel_dl.dbt.opc.datamodel.pica.Record;
 import de.urmel_dl.dbt.opc.datamodel.pica.Result;
-import de.urmel_dl.dbt.opc.utils.CataloguesTransformer;
-import de.urmel_dl.dbt.opc.utils.IKTListTransformer;
-import de.urmel_dl.dbt.opc.utils.RecordTransformer;
-import de.urmel_dl.dbt.opc.utils.ResultTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -52,7 +48,7 @@ public class TestOPCConnector extends MCRTestCase {
         IKTList iktList = opc.getIKTList();
         assertNotNull(iktList);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(IKTListTransformer.buildExportableXML(iktList), System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(iktList).toDocument(), System.out);
     }
 
     @Test
@@ -61,7 +57,7 @@ public class TestOPCConnector extends MCRTestCase {
         Result result = opc.search("papula");
         assertNotNull(result);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
 
     @Test
@@ -70,7 +66,7 @@ public class TestOPCConnector extends MCRTestCase {
         Result result = opc.search("papula", "1004");
         assertNotNull(result);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
 
     @Test
@@ -79,7 +75,7 @@ public class TestOPCConnector extends MCRTestCase {
         Result result = opc.family("785761829");
         assertNotNull(result);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(ResultTransformer.buildExportableXML(result), System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
 
     @Test
@@ -88,7 +84,7 @@ public class TestOPCConnector extends MCRTestCase {
         Record record = opc.getRecord("785761829");
         assertNotNull(record);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(RecordTransformer.buildExportableXML(record), System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(record).toDocument(), System.out);
     }
 
     @Test
@@ -97,7 +93,7 @@ public class TestOPCConnector extends MCRTestCase {
         Record record = opc.getRecord("785761829");
         assertNotNull(record);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(RecordTransformer.buildExportableXML(record.getBasicCopy()),
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(record.getBasicCopy()).toDocument(),
             System.out);
     }
 
@@ -106,8 +102,7 @@ public class TestOPCConnector extends MCRTestCase {
         Catalogues catalogues = Catalogues.instance();
         assertNotNull(catalogues);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(CataloguesTransformer.buildExportableXML(catalogues),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(catalogues).toDocument(), System.out);
     }
 
     @Test
@@ -118,7 +113,7 @@ public class TestOPCConnector extends MCRTestCase {
         Result result = opc.search("papula");
         result.setCatalog(catalog);
 
-        Document doc = ResultTransformer.buildExportableXML(result);
+        Document doc = new EntityFactory<>(result).toDocument();
 
         assertNotNull(doc.getRootElement().getAttribute("catalogId"));
     }

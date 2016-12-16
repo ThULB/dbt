@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -20,7 +20,6 @@ package de.urmel_dl.dbt.resources;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.StringWriter;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
@@ -58,15 +57,13 @@ import org.mycore.media.video.MCRMediaSourceProvider;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jaxb.JaxbAnnotationModule;
 import com.sun.jersey.spi.resource.Singleton;
+
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * A Jersey resource to return all video sources for video file in derivate.
- * 
+ *
  * @author Ren\u00E9 Adler (eagle)
  *
  */
@@ -89,42 +86,22 @@ public class VideoSourceResource {
 
     @GET
     @Path("sources/{derivateId:.*}/{path:.*}")
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
     public Response getSourcesAsXML(@Context HttpServletRequest request, @PathParam("derivateId") String derivateId,
         @PathParam("path") String path,
         @QueryParam("accessToken") String accessToken) {
         try {
             int errorCode = checkPermission(derivateId, request.getRemoteAddr(), accessToken);
             if (errorCode == ErrorCode.OK) {
-                return Response.ok().status(Response.Status.OK).entity(
-                    buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8.toString())))
-                    .build();
-            } else {
-                return Response.serverError().status(Response.Status.FORBIDDEN).entity(new ErrorCode(errorCode))
-                    .build();
-            }
-        } catch (IOException | URISyntaxException | NoSuchAlgorithmException e) {
-            final StreamingOutput so = (OutputStream os) -> e
-                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
-        }
-    }
-
-    @GET
-    @Path("sources/{derivateId:.*}/{path:.*}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getSourcesAsJSON(@Context HttpServletRequest request, @PathParam("derivateId") String derivateId,
-        @PathParam("path") String path,
-        @QueryParam("accessToken") String accessToken) {
-        try {
-            int errorCode = checkPermission(derivateId, request.getRemoteAddr(), accessToken);
-            if (errorCode == ErrorCode.OK) {
                 return Response.ok().status(Response.Status.OK)
-                    .entity(
-                        toJSON(buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8.toString()))))
+                    .entity(new EntityFactory<>(
+                        buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8.toString())))
+                        .marshalByMediaType(Optional.ofNullable(request.getHeader("accept"))))
                     .build();
             } else {
-                return Response.serverError().status(Response.Status.FORBIDDEN).entity(toJSON(new ErrorCode(errorCode)))
+                return Response.serverError().status(Response.Status.FORBIDDEN)
+                    .entity(new EntityFactory<>(new ErrorCode(errorCode))
+                        .marshalByMediaType(Optional.ofNullable(request.getHeader("accept"))))
                     .build();
             }
         } catch (IOException | URISyntaxException | NoSuchAlgorithmException e) {
@@ -198,19 +175,9 @@ public class VideoSourceResource {
         return src;
     }
 
-    private <T> String toJSON(T entity) throws JsonGenerationException, JsonMappingException, IOException {
-        StringWriter sw = new StringWriter();
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JaxbAnnotationModule());
-        mapper.writeValue(sw, entity);
-
-        return sw.toString();
-    }
-
     /**
      * A wrapper of all video sources.
-     * 
+     *
      * @author Ren\u00E9 Adler (eagle)
      *
      */
@@ -229,7 +196,7 @@ public class VideoSourceResource {
 
     /**
      * A wrapper for video source.
-     * 
+     *
      * @author Ren\u00E9 Adler (eagle)
      *
      */
@@ -252,7 +219,7 @@ public class VideoSourceResource {
 
     /**
      * A wrapper for error codes.
-     * 
+     *
      * @author Ren\u00E9 Adler (eagle)
      *
      */
