@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,6 +23,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -34,8 +36,14 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration;
 import org.mycore.common.config.MCRConfigurationDir;
 
-import de.urmel_dl.dbt.opc.utils.CataloguesTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
+/**
+ * The Class Catalogues.
+ *
+ * @author Ren\u00E9 Adler (eagle)
+ */
+@XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "catalogues")
 public class Catalogues {
 
@@ -43,8 +51,13 @@ public class Catalogues {
 
     private static Catalogues SINGLETON;
 
-    private List<Catalog> catalogues = new ArrayList<Catalog>();
+    private List<Catalog> catalogues = new ArrayList<>();
 
+    /**
+     * Instance.
+     *
+     * @return the catalogues
+     */
     public static Catalogues instance() {
         if (SINGLETON == null) {
             final URL cataloguesConfig = getCataloguesConfig();
@@ -60,7 +73,7 @@ public class Catalogues {
                 throw new MCRException("Could not load " + getCataloguesConfigResourceName());
             }
 
-            SINGLETON = CataloguesTransformer.buildCatalogues(doc.getRootElement());
+            SINGLETON = new EntityFactory<>(Catalogues.class).fromDocument(doc);
         }
         return SINGLETON;
     }
@@ -82,6 +95,8 @@ public class Catalogues {
     }
 
     /**
+     * Returns a list of calagogues.
+     *
      * @return the catalogues
      */
     @XmlElement(name = "catalog")
@@ -90,6 +105,8 @@ public class Catalogues {
     }
 
     /**
+     * Set a list of catalogues.
+     *
      * @param catalogues the catalogues to set
      */
     public void setCatalogues(final List<Catalog> catalogues) {
@@ -97,6 +114,8 @@ public class Catalogues {
     }
 
     /**
+     * Adds a catalog.
+     *
      * @param catalog the catalog to set
      */
     public void addCatalog(final Catalog catalog) {
@@ -105,7 +124,7 @@ public class Catalogues {
 
     /**
      * Returns the {@link Catalog#Catalog()} for given Id.
-     * 
+     *
      * @param id the catalog identifier
      * @return the {@link Catalog#Catalog()}
      */
@@ -121,7 +140,7 @@ public class Catalogues {
 
     /**
      * Returns the {@link Catalog#Catalog()} for given ISIL.
-     * 
+     *
      * @param ISIL the ISIL
      * @return the {@link Catalog#Catalog()}
      */
