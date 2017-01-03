@@ -46,7 +46,6 @@
   <xsl:template name="HTML.Head">
     <head>
       <xsl:call-template name="layout.page.title" />
-      <xsl:call-template name="layout.headMicrosoft" />
       <xsl:call-template name="layout.htmlContentType" />
       <xsl:call-template name="layout.noCaching" />
       <link rel="icon" href="{$WebApplicationBaseURL}favicon.ico" />
@@ -75,13 +74,6 @@
   <!-- *                    Main Page Elements                    * -->
   <!-- ************************************************************ -->
     
-  <!-- Microsoft -->
-
-  <xsl:template name="layout.headMicrosoft">
-    <meta http-equiv="cleartype" content="on" />
-    <meta content="IE=9; IE=8" http-equiv="X-UA-Compatible" />
-  </xsl:template>
-  
   <!-- HTML Content Type -->
 
   <xsl:template name="layout.htmlContentType">
