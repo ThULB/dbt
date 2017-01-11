@@ -141,10 +141,10 @@ public class VideoSourceResource {
                     return ErrorCode.NEED_ACCESSTOKEN;
                 }
 
-                return ErrorCode.OK;
+                return ErrorCode.NO_OBJECT_ACCESS;
             }
 
-            return ErrorCode.NO_OBJECT_ACCESS;
+            return ErrorCode.OK;
         }
 
         return ErrorCode.NO_DERIVATE_ACCESS;
