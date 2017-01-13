@@ -20,14 +20,12 @@ package de.urmel_dl.dbt.resources;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.math.BigInteger;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -42,6 +40,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -96,7 +95,7 @@ public class VideoSourceResource {
                 return Response.ok().status(Response.Status.OK)
                     .entity(new EntityFactory<>(
                         buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8.toString())))
-                        .marshalByMediaType(Optional.ofNullable(request.getHeader("accept"))))
+                            .marshalByMediaType(Optional.ofNullable(request.getHeader("accept"))))
                     .build();
             } else {
                 return Response.serverError().status(Response.Status.FORBIDDEN)
@@ -152,8 +151,8 @@ public class VideoSourceResource {
 
     private static String buildAccessToken(String accessKey) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
-        return String.format(Locale.ROOT, "%032X",
-            new BigInteger(1, md.digest((sharedSecret + ":" + accessKey).getBytes(StandardCharsets.UTF_8))));
+        return DatatypeConverter
+            .printHexBinary(md.digest((sharedSecret.get() + ":" + accessKey).getBytes(StandardCharsets.UTF_8)));
     }
 
     private static VideoSources buildSources(String derivateId, String path) throws IOException, URISyntaxException {
