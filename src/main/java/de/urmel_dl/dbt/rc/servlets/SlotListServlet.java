@@ -255,7 +255,7 @@ public class SlotListServlet extends MCRServlet {
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
                 !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
                     && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_EDIT_SLOT)
-                        ? "slot.status:active or createdby:"
+                        ? "slot.status:active or slot.status:pending or createdby:"
                             + currentUser.getUserID()
                         : null,
                 start, rows, sortClauses);
