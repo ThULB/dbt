@@ -459,10 +459,9 @@ public final class SlotManager {
 
         if (slot.getEntries() != null) {
             for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                if (slotEntry.getEntry() instanceof FileEntry) {
-                    if (!FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                        FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry);
-                    }
+                if (slotEntry.getEntry() instanceof FileEntry
+                    && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
+                    FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry);
                 }
             }
         }

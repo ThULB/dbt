@@ -1,17 +1,17 @@
 /*
  * This file is part of the Digitale Bibliothek Thüringen repository software.
- * Copyright (c) 2000 - 2016
+ * Copyright (c) 2000 - 2017
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,8 +30,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.urmel_dl.dbt.rc.datamodel.TypedDate;
 
 /**
+ * The Class SlotEntry.
+ *
  * @author Ren\u00E9 Adler (eagle)
  *
+ * @param <V> the value type
  */
 @XmlRootElement(name = "entry")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -64,6 +67,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Gets the id.
+     *
      * @return the id
      */
     @XmlAttribute(name = "id")
@@ -75,6 +80,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the id.
+     *
      * @param id the id to set
      */
     public void setId(final String id) {
@@ -83,18 +90,20 @@ public class SlotEntry<V> implements Serializable {
 
     private void setDate(final TypedDate entryDate) {
         switch (entryDate.getType()) {
-        case CREATED:
-            created = entryDate;
-            break;
-        case MODIFIED:
-            modified = entryDate;
-            break;
-        default:
-            break;
+            case CREATED:
+                created = entryDate;
+                break;
+            case MODIFIED:
+                modified = entryDate;
+                break;
+            default:
+                break;
         }
     }
 
     /**
+     * Gets the created.
+     *
      * @return the created
      */
     public Date getCreated() {
@@ -105,6 +114,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the created.
+     *
      * @param created the created to set
      */
     public void setCreated(final Date created) {
@@ -114,6 +125,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Gets the date created.
+     *
      * @return the created
      */
     @XmlElement(name = "date", required = true)
@@ -125,6 +138,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the date created.
+     *
      * @param created the created to set
      */
     public void setDateCreated(final TypedDate created) {
@@ -132,6 +147,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Gets the modified.
+     *
      * @return the modified
      */
     public Date getModified() {
@@ -142,6 +159,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the modified.
+     *
      * @param modified the modified to set
      */
     public void setModified(final Date modified) {
@@ -151,6 +170,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Gets the date modified.
+     *
      * @return the changed
      */
     @XmlElement(name = "date", required = true)
@@ -162,6 +183,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the date modified.
+     *
      * @param modified the changed to set
      */
     public void setDateModified(final TypedDate modified) {
@@ -169,6 +192,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Gets the entry.
+     *
      * @return the entry
      */
     @XmlAnyElement(lax = true)
@@ -177,6 +202,8 @@ public class SlotEntry<V> implements Serializable {
     }
 
     /**
+     * Sets the entry.
+     *
      * @param entry the entry to set
      */
     public void setEntry(final V entry) {
@@ -193,7 +220,7 @@ public class SlotEntry<V> implements Serializable {
     @Override
     public String toString() {
         return "SlotEntry [id=" + getId() + ", " + (created != null ? "created=" + created + ", " : "")
-                + (modified != null ? "modified=" + modified + ", " : "") + (entry != null ? "entry=" + entry : "")
-                + "]";
+            + (modified != null ? "modified=" + modified + ", " : "") + (entry != null ? "entry=" + entry : "")
+            + "]";
     }
 }

@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -35,17 +35,15 @@ import javax.xml.bind.annotation.XmlType;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 
 /**
- * <p>
- * This object represents a warning within or outside a period to be send as
+ * <p>This object represents a warning within or outside a period to be send as
  * mail to the lecturer and/or the library staff.<br>
  * It held informations about the warning Date btw. an Integer value to be
  * subtract, as day(s), from the period end date of the Reserve Collection.<br>
  * Also an XSL template can be defined witch is used to build an mail from given
- * XML Element.
- * </p>
- * <p>
- * Use the following example to define a warning:
- * </p>
+ * XML Element.</p>
+ *
+ * <p>Use the following example to define a warning:</p>
+ *
  * <pre>
  * {@code
  * <period>
@@ -55,12 +53,11 @@ import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
  * </period>
  * }
  * </pre>
- * <p>
- * The "at"-attribute should contain a number or a date with the given format. A
+ *
+ * <p>The "at"-attribute should contain a number or a date with the given format. A
  * number is used in combination with the expiration date of a {@link Slot}. X
- * days, where x is the number, before expiration a warning can be generated.
- * </p>
- * 
+ * days, where x is the number, before expiration a warning can be generated.</p>
+ *
  * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "warning")
@@ -116,7 +113,7 @@ public class Warning implements Serializable {
 
     /**
      * @return the at
-     * @throws CloneNotSupportedException thrown to indicate clone is not supported 
+     * @throws CloneNotSupportedException thrown to indicate clone is not supported
      * @throws ParseException thrown if date couldn't constructed
      * @throws IllegalArgumentException thrown on missing argument
      */
@@ -165,7 +162,7 @@ public class Warning implements Serializable {
     /**
      * Creates the warning date according to the format of this objects
      * {@link #at} and the different dates of the period this warning belongs to.
-     * 
+     *
      * @return Date the warning date
      * @throws ParseException thrown if date couldn't parsed
      * @throws CloneNotSupportedException thrown to indicate clone is not supported
@@ -175,8 +172,8 @@ public class Warning implements Serializable {
 
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
         Date toDate = this.type == WarningType.PERIODEND ? period.getToDate() // end of current period
-                : this.type == WarningType.LECTUREEND ? period.getLectureEndDate() // lecture end of current period
-                        : period.getBaseDate(); // if all goes wrong we use the base date
+            : this.type == WarningType.LECTUREEND ? period.getLectureEndDate() // lecture end of current period
+                : period.getBaseDate(); // if all goes wrong we use the base date
 
         if (at.matches(NUMBER_FORMAT)) {
 
@@ -195,8 +192,9 @@ public class Warning implements Serializable {
             return warningDate;
         } else if (at.matches(AT_DATE_FORMAT)) {
 
-            if (this.type == WarningType.VALIDTO)
+            if (this.type == WarningType.VALIDTO) {
                 throw new IllegalArgumentException("A date value isn't allowed for type validTo!");
+            }
 
             Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 
@@ -220,8 +218,9 @@ public class Warning implements Serializable {
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);
 
-                if (period.equals(periodAt))
+                if (period.equals(periodAt)) {
                     result = atDate;
+                }
             } else if (atDate.after(toDate)) {
                 Calendar tDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 
@@ -231,8 +230,9 @@ public class Warning implements Serializable {
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);
 
-                if (period.equals(periodAt))
+                if (period.equals(periodAt)) {
                     result = atDate;
+                }
             }
         } else {
             throw new IllegalArgumentException("invalid value given in at. use \"[0-9]+\" or \"dd.MM.\"");
@@ -244,7 +244,7 @@ public class Warning implements Serializable {
     /**
      * Helper method for rolling given date with a field defined inside
      * {@link Calendar} by given amount.
-     * 
+     *
      * @param date
      * @param field
      *            field defined in {@link Calendar} like {@link Calendar#MONTH}
@@ -267,14 +267,18 @@ public class Warning implements Serializable {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("Warning [");
-        if (type != null)
+        if (type != null) {
             builder.append("type=").append(type).append(", ");
-        if (at != null)
+        }
+        if (at != null) {
             builder.append("at=").append(at).append(", ");
-        if (template != null)
+        }
+        if (template != null) {
             builder.append("template=").append(template).append(", ");
-        if (groupTemplate != null)
+        }
+        if (groupTemplate != null) {
             builder.append("groupTemplate=").append(groupTemplate);
+        }
         builder.append("]");
         return builder.toString();
     }

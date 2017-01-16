@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -62,7 +62,7 @@ public final class FileEntryManager {
 
     /**
      * Checks if {@link FileEntry} exists.
-     * 
+     *
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
      * @return <code>true</code> if exists or <code>false</code>
@@ -74,17 +74,17 @@ public final class FileEntryManager {
 
         try {
             final MCRFileStore store = getStore();
-            if (!store.exists(id))
+            if (!store.exists(id)) {
                 return false;
+            }
 
             MCRFileCollection col = store.retrieve(id);
             MCRNode dir = col.getNodeByPath(slotEntry.getId());
 
             return dir != null && dir.isDirectory();
+        } catch (MCRException ex) {
+            throw ex;
         } catch (Exception ex) {
-            if (ex instanceof MCRException) {
-                throw (MCRException) ex;
-            }
             final String msg = "Exception while checking existence of fileEntry " + slotEntry.getId()
                 + " with filename " + fileEntry.getName();
             throw new MCRPersistenceException(msg, ex);
@@ -93,7 +93,7 @@ public final class FileEntryManager {
 
     /**
      * Creates an new {@link FileEntry} on filesystem by IFS2.
-     * 
+     *
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
      * @throws MCRPersistenceException thrown if {@link FileEntry} couldn't stored
@@ -125,7 +125,7 @@ public final class FileEntryManager {
 
     /**
      * Updates an {@link FileEntry} on filesystem and save old entry with Revision, if not <code>null</code>.
-     * 
+     *
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
      * @throws MCRPersistenceException thrown if {@link FileEntry} coudln't stored
@@ -161,7 +161,7 @@ public final class FileEntryManager {
 
     /**
      * Deletes an {@link FileEntry} on filesystem.
-     * 
+     *
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
      * @throws MCRPersistenceException thrown if {@link FileEntry} couldn't deleted
