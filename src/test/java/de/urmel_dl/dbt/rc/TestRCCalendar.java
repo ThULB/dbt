@@ -89,6 +89,7 @@ public class TestRCCalendar extends MCRTestCase {
     public void testPeriodResolverSingle() throws IOException {
         Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
+        assertNotNull(input);
     }
 
     @Test
