@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlValue;
  */
 @XmlRootElement(name = "date")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "date", propOrder = { "type", "format" })
+@XmlType(name = "date", propOrder = { "type", "format", "formatedDate" })
 public class TypedDate implements Serializable {
 
     private static final long serialVersionUID = -8422581526966266251L;
@@ -62,7 +62,7 @@ public class TypedDate implements Serializable {
 
     /**
      * Creates a new {@link TypedDate} with given type.
-     * 
+     *
      * @param type the date type
      */
     public TypedDate(final Type type) {
@@ -71,7 +71,7 @@ public class TypedDate implements Serializable {
 
     /**
      * Creates a new {@link TypedDate} with given type and specific format.
-     * 
+     *
      * @param type the date type
      * @param format the date format
      */
@@ -81,7 +81,7 @@ public class TypedDate implements Serializable {
 
     /**
      * Creates a new {@link TypedDate} with given type and date.
-     * 
+     *
      * @param type the date type
      * @param date the date
      */
@@ -91,7 +91,7 @@ public class TypedDate implements Serializable {
 
     /**
      * Creates a new {@link TypedDate} with given type, format and date.
-     *  
+     *
      * @param type the date type
      * @param format the date format
      * @param date the date
@@ -258,7 +258,7 @@ public class TypedDate implements Serializable {
 
         /**
          * Returns the set date type.
-         * 
+         *
          * @return the set date type
          */
         public String value() {
@@ -267,7 +267,7 @@ public class TypedDate implements Serializable {
 
         /**
          * Returns the date type from given value.
-         * 
+         *
          * @param value the date type value
          * @return the date type
          */

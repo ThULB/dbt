@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -66,13 +66,12 @@ import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.HeadlineEntry;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
-import de.urmel_dl.dbt.rc.utils.SlotListTransformer;
-import de.urmel_dl.dbt.rc.utils.SlotTransformer;
 import de.urmel_dl.dbt.rc.utils.SlotWrapper;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * The {@link Slot} test cases.
- * 
+ *
  * @author Ren\u00E9 Adler (eagle)
  *
  */
@@ -85,6 +84,7 @@ public class TestSlot extends MCRJPATestCase {
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
+    @Override
     @Before()
     public void setUp() throws Exception {
         super.setUp();
@@ -136,7 +136,7 @@ public class TestSlot extends MCRJPATestCase {
 
         slot.addLecturer(lecturer);
 
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
 
         HeadlineEntry headline = new HeadlineEntry();
         headline.setText("Überschrift");
@@ -147,11 +147,11 @@ public class TestSlot extends MCRJPATestCase {
 
         assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), slot.getLocation());
 
-        Document xml = SlotTransformer.buildExportableXML(slot);
+        Document xml = new EntityFactory<>(slot).toDocument();
 
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
 
-        Slot transSlot = SlotTransformer.buildSlot(xml.getRootElement());
+        Slot transSlot = new EntityFactory<>(Slot.class).fromElement(xml.getRootElement());
 
         assertEquals(slot.getReadKey(), transSlot.getReadKey());
         assertEquals(slot.getWriteKey(), transSlot.getWriteKey());
@@ -179,7 +179,7 @@ public class TestSlot extends MCRJPATestCase {
         SlotList slotList = new SlotList();
         slotList.addSlot(slot);
 
-        Document xSL = SlotListTransformer.buildExportableXML(slotList);
+        Document xSL = new EntityFactory<>(slotList).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(xSL, System.out);
 
         assertNotNull(xSL);
@@ -198,7 +198,7 @@ public class TestSlot extends MCRJPATestCase {
 
         slot1.addLecturer(lecturer);
 
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
 
         HeadlineEntry headline = new HeadlineEntry();
         headline.setText("Überschrift");
@@ -224,8 +224,7 @@ public class TestSlot extends MCRJPATestCase {
         assertEquals(1, activeSlots.getSlots().size());
         assertNull(activeSlots.getSlots().get(0).getEntries());
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotListTransformer.buildExportableXML(activeSlots),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(activeSlots).toDocument(), System.out);
     }
 
     @Test
@@ -266,29 +265,7 @@ public class TestSlot extends MCRJPATestCase {
     public void testSaveSlot()
         throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException,
         MCRAccessException {
-        Slot slot = new Slot("3400.01.01.0001");
-        slot.setTitle("Test ESA");
-        slot.setStatus(Status.ACTIVE);
-        slot.setValidTo(new Date());
-
-        slot.setReadKey("blah");
-        slot.setWriteKey("blub");
-
-        Lecturer lecturer = new Lecturer();
-        lecturer.setName("Mustermann, Max");
-        lecturer.setEmail("max.mustermann@muster.de");
-        lecturer.setOrigin("0815");
-
-        slot.addLecturer(lecturer);
-
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
-
-        HeadlineEntry headline = new HeadlineEntry();
-        headline.setText("Überschrift");
-
-        slotEntry.setEntry(headline);
-
-        slot.addEntry(slotEntry);
+        Slot slot = activeSlot();
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
@@ -309,29 +286,7 @@ public class TestSlot extends MCRJPATestCase {
     public void testSaveSlotWithFileEntry()
         throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException,
         MCRAccessException {
-        Slot slot = new Slot("3400.01.01.0001");
-        slot.setTitle("Test ESA");
-        slot.setStatus(Status.ACTIVE);
-        slot.setValidTo(new Date());
-
-        Lecturer lecturer = new Lecturer();
-        lecturer.setName("Mustermann, Max");
-        lecturer.setEmail("max.mustermann@muster.de");
-        lecturer.setOrigin("0815");
-
-        slot.addLecturer(lecturer);
-
-        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
-
-        FileEntry fileEntry = new FileEntry();
-
-        fileEntry.setName("mycore.properties");
-        fileEntry.setComment("This is a comment!");
-        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
-
-        slotEntry.setEntry(fileEntry);
-
-        slot.addEntry(slotEntry);
+        Slot slot = slotWithFileEntry();
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
@@ -352,29 +307,7 @@ public class TestSlot extends MCRJPATestCase {
     public void testDeleteSlot()
         throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException,
         MCRAccessException {
-        Slot slot = new Slot("3400.01.01.0001");
-        slot.setTitle("Test ESA");
-        slot.setStatus(Status.ACTIVE);
-        slot.setValidTo(new Date());
-
-        slot.setReadKey("blah");
-        slot.setWriteKey("blub");
-
-        Lecturer lecturer = new Lecturer();
-        lecturer.setName("Mustermann, Max");
-        lecturer.setEmail("max.mustermann@muster.de");
-        lecturer.setOrigin("0815");
-
-        slot.addLecturer(lecturer);
-
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
-
-        HeadlineEntry headline = new HeadlineEntry();
-        headline.setText("Überschrift");
-
-        slotEntry.setEntry(headline);
-
-        slot.addEntry(slotEntry);
+        Slot slot = activeSlot();
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
@@ -389,29 +322,7 @@ public class TestSlot extends MCRJPATestCase {
     public void testDeleteSlotWithFileEntry()
         throws IOException, JDOMException, SAXException, MCRPersistenceException, MCRActiveLinkException,
         MCRAccessException {
-        Slot slot = new Slot("3400.01.01.0001");
-        slot.setTitle("Test ESA");
-        slot.setStatus(Status.ACTIVE);
-        slot.setValidTo(new Date());
-
-        Lecturer lecturer = new Lecturer();
-        lecturer.setName("Mustermann, Max");
-        lecturer.setEmail("max.mustermann@muster.de");
-        lecturer.setOrigin("0815");
-
-        slot.addLecturer(lecturer);
-
-        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
-
-        FileEntry fileEntry = new FileEntry();
-
-        fileEntry.setName("mycore.properties");
-        fileEntry.setComment("This is a comment!");
-        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
-
-        slotEntry.setEntry(fileEntry);
-
-        slot.addEntry(slotEntry);
+        Slot slot = slotWithFileEntry();
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
@@ -451,7 +362,7 @@ public class TestSlot extends MCRJPATestCase {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setStatus(Status.ACTIVE);
 
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
 
         HeadlineEntry headline = new HeadlineEntry();
         headline.setText("Überschrift");
@@ -476,7 +387,7 @@ public class TestSlot extends MCRJPATestCase {
         Slot slot = new Slot("3400.01.01.0001");
         slot.setStatus(Status.ACTIVE);
 
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
 
         HeadlineEntry headline = new HeadlineEntry();
         headline.setText("Überschrift");
@@ -492,5 +403,59 @@ public class TestSlot extends MCRJPATestCase {
 
         assertTrue("slot entry remove", slot.removeEntry(slotEntry));
         assertEquals(0, slot.getEntries().size());
+    }
+
+    private Slot activeSlot() {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setTitle("Test ESA");
+        slot.setStatus(Status.ACTIVE);
+        slot.setValidTo(new Date());
+
+        slot.setReadKey("blah");
+        slot.setWriteKey("blub");
+
+        Lecturer lecturer = new Lecturer();
+        lecturer.setName("Mustermann, Max");
+        lecturer.setEmail("max.mustermann@muster.de");
+        lecturer.setOrigin("0815");
+
+        slot.addLecturer(lecturer);
+
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
+
+        HeadlineEntry headline = new HeadlineEntry();
+        headline.setText("Überschrift");
+
+        slotEntry.setEntry(headline);
+
+        slot.addEntry(slotEntry);
+        return slot;
+    }
+
+    private Slot slotWithFileEntry() throws IOException {
+        Slot slot = new Slot("3400.01.01.0001");
+        slot.setTitle("Test ESA");
+        slot.setStatus(Status.ACTIVE);
+        slot.setValidTo(new Date());
+
+        Lecturer lecturer = new Lecturer();
+        lecturer.setName("Mustermann, Max");
+        lecturer.setEmail("max.mustermann@muster.de");
+        lecturer.setOrigin("0815");
+
+        slot.addLecturer(lecturer);
+
+        SlotEntry<FileEntry> slotEntry = new SlotEntry<>();
+
+        FileEntry fileEntry = new FileEntry();
+
+        fileEntry.setName("mycore.properties");
+        fileEntry.setComment("This is a comment!");
+        fileEntry.setContent(Thread.currentThread().getContextClassLoader().getResourceAsStream("mycore.properties"));
+
+        slotEntry.setEntry(fileEntry);
+
+        slot.addEntry(slotEntry);
+        return slot;
     }
 }

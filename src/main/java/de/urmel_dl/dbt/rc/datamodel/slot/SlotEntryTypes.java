@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,7 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.jdom2.Element;
 import org.mycore.common.xml.MCRURIResolver;
 
-import de.urmel_dl.dbt.rc.utils.SlotEntryTypesTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -46,14 +46,14 @@ public class SlotEntryTypes implements Serializable {
 
     /**
      * Returns a singleton instance of {@link SlotEntryTypes} with configured {@link SlotEntryType}s.
-     * 
+     *
      * @return a instance of configured {@link SlotEntryType}
      */
     public static SlotEntryTypes instance() {
         if (singleton == null) {
             final Element xml = MCRURIResolver.instance().resolve("resource:slot-entry-types.xml");
             if (xml != null) {
-                singleton = SlotEntryTypesTransformer.buildSlotEntryTypes(xml);
+                singleton = new EntityFactory<>(SlotEntryTypes.class).fromElement(xml);
             }
         }
 
@@ -77,7 +77,7 @@ public class SlotEntryTypes implements Serializable {
 
     /**
      * Returns the {@link SlotEntryType} for given entryType parameter or <code>null</code> if nothing found.
-     * 
+     *
      * @param entryType the entryType to search
      * @return an {@link SlotEntryType} or <code>null</code> if nothing was found
      */

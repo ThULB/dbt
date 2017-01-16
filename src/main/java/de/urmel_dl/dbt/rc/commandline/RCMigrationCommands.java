@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,7 +47,7 @@ import com.google.common.io.Files;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
-import de.urmel_dl.dbt.rc.utils.SlotTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -93,7 +93,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
 
                             Optional.ofNullable(msaXML.getChildren("entry")).ifPresent(x -> {
                                 final Element root = new Element("entries");
-                                final List<Element> entries = new ArrayList<Element>(x);
+                                final List<Element> entries = new ArrayList<>(x);
                                 entries.forEach(e -> root.addContent(e.clone()));
                                 slotXML.addContent(root);
                             });
@@ -117,10 +117,10 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     MCRContent xml = MCRXSLTransformer.getInstance("xsl/migrate/slot.xsl")
                         .transform(new MCRJDOMContent(slotXML.clone()), params);
 
-                    final Slot slot = SlotTransformer.buildSlot(xml.asXML());
+                    final Slot slot = new EntityFactory<>(Slot.class).fromDocument(xml.asXML());
 
                     if (slot.getEntries() != null) {
-                        List<SlotEntry<?>> migEntries = new ArrayList<SlotEntry<?>>();
+                        List<SlotEntry<?>> migEntries = new ArrayList<>();
                         for (SlotEntry<?> entry : slot.getEntries()) {
                             if (entry.getEntry() instanceof FileEntry) {
                                 SlotEntry<FileEntry> slotEntry = (SlotEntry<FileEntry>) entry;
@@ -149,7 +149,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     }
 
                     File xmlOutput = new File(dir, "slot-" + slot.getSlotId() + ".xml");
-                    SlotTransformer.sendTo(slot, xmlOutput);
+                    new MCRJDOMContent(new EntityFactory<>(slot).toDocument()).sendTo(xmlOutput);
                     LOGGER.info("Slot " + slot.getSlotId() + " saved to " + xmlOutput.getCanonicalPath() + ".");
                 } catch (IOException | JDOMException | SAXException e) {
                     LOGGER.error("Couldn't migrate slot from file " + file.getAbsolutePath() + ".", e);
@@ -182,7 +182,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
             return Collections.emptyList();
         }
 
-        List<String> cmds = new ArrayList<String>();
+        List<String> cmds = new ArrayList<>();
         for (final String r : list) {
             final File fr = new File(fromDir, r);
             if (fr.isDirectory()) {
