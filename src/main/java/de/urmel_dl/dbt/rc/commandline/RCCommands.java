@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -37,16 +37,21 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
+import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.MCRVFSContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
+import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.xml.sax.SAXParseException;
 
 import de.urmel_dl.dbt.common.MailQueue;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
@@ -62,7 +67,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry.FileEntryProcessingException;
 import de.urmel_dl.dbt.rc.persistency.FileEntryManager;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
-import de.urmel_dl.dbt.rc.utils.SlotTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -94,7 +99,7 @@ public class RCCommands extends MCRAbstractCommands {
             }
 
             File xmlOutput = new File(dir, "slot-" + slotId + ".xml");
-            SlotTransformer.sendTo(slot, xmlOutput);
+            new MCRJDOMContent(new EntityFactory<>(slot).toDocument()).sendTo(xmlOutput);
             LOGGER.info("Slot " + slotId + " saved to " + xmlOutput.getCanonicalPath() + ".");
 
             if (slot.getEntries() != null) {
@@ -140,7 +145,7 @@ public class RCCommands extends MCRAbstractCommands {
         }
 
         if (!slotList.getSlots().isEmpty()) {
-            List<String> cmds = new ArrayList<String>(slotList.getSlots().size());
+            List<String> cmds = new ArrayList<>(slotList.getSlots().size());
             for (final Slot slot : slotList.getSlots()) {
                 File slotDir = new File(dir, slot.getSlotId());
                 if (slotDir.isDirectory() || slotDir.mkdirs()) {
@@ -159,7 +164,7 @@ public class RCCommands extends MCRAbstractCommands {
     @SuppressWarnings("unchecked")
     @MCRCommand(syntax = "import slot from file {0}", help = "imports a slot from given file")
     public static void importSlot(final String filename)
-        throws IOException, MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws IOException, MCRActiveLinkException, MCRAccessException, MCRException, SAXParseException {
         final SlotManager mgr = SlotManager.instance();
 
         File file = new File(filename);
@@ -173,7 +178,8 @@ public class RCCommands extends MCRAbstractCommands {
             return;
         }
 
-        final Slot slot = SlotTransformer.buildSlot(file.toURI());
+        final Slot slot = new EntityFactory<>(Slot.class)
+            .fromDocument(MCRXMLParserFactory.getParser(false).parseXML(new MCRVFSContent(file.toURI())));
         final Slot oldSlot = mgr.getSlotById(slot.getSlotId());
 
         boolean update = oldSlot != null;
@@ -202,8 +208,9 @@ public class RCCommands extends MCRAbstractCommands {
                                 + f.getCanonicalPath() + "\".");
                             return;
                         } finally {
-                            if (is != null)
+                            if (is != null) {
                                 is.close();
+                            }
                         }
 
                         if (update) {
@@ -226,9 +233,10 @@ public class RCCommands extends MCRAbstractCommands {
             // rebuild new keys
             String readKey = SlotManager.buildKey();
             String writeKey = null;
-            // rebuild write key if match with read key 
-            while ((writeKey = SlotManager.buildKey()).equals(readKey))
+            // rebuild write key if match with read key
+            while ((writeKey = SlotManager.buildKey()).equals(readKey)) {
                 ;
+            }
 
             slot.setReadKey(readKey);
             slot.setWriteKey(writeKey);
@@ -266,7 +274,7 @@ public class RCCommands extends MCRAbstractCommands {
             return Collections.emptyList();
         }
 
-        List<String> cmds = new ArrayList<String>();
+        List<String> cmds = new ArrayList<>();
         for (final String r : list) {
             final File fr = new File(dir, r);
             if (fr.isDirectory()) {

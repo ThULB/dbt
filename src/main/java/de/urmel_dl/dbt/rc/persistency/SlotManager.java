@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -69,13 +69,14 @@ import org.tmatesoft.svn.core.SVNException;
 import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.rc.datamodel.Attendee;
+import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.Status;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
-import de.urmel_dl.dbt.rc.utils.SlotTransformer;
 import de.urmel_dl.dbt.rc.utils.SlotWrapper;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author René Adler (eagle)
@@ -118,7 +119,7 @@ public final class SlotManager {
 
     /**
      * Returns a instance of the {@link SlotManager}.
-     * 
+     *
      * @return the SlotManager
      */
     public static SlotManager instance() {
@@ -137,7 +138,7 @@ public final class SlotManager {
 
     /**
      * Returns the base id of the MCRObject.
-     * 
+     *
      * @return the base id
      */
     public static String getMCRObjectBaseID() {
@@ -147,7 +148,7 @@ public final class SlotManager {
     /**
      * Checks if current user allowed to access the {@link Slot} by given {@link MCRObjectID} and permission.
      * This method checks if current user is owner or the user has access from any strategy.
-     *  
+     *
      * @param objId the {@link MCRObjectID}
      * @param permission the permission
      * @return <code>true</code> if allowed or <code>false</code> if not
@@ -159,7 +160,7 @@ public final class SlotManager {
     /**
      * Checks if current user allowed to access the {@link Slot} by given {@link MCRObjectID} and permission.
      * This method checks if current user is owner or the user has access from any strategy.
-     *  
+     *
      * @param objId the {@link MCRObjectID}
      * @param permission the permission
      * @return <code>true</code> if allowed or <code>false</code> if not
@@ -179,7 +180,7 @@ public final class SlotManager {
 
     /**
      * Checks if current user is reserve collection administrator.
-     * 
+     *
      * @return <code>true</code> if is administrator
      */
     public static boolean hasAdminPermission() {
@@ -188,7 +189,7 @@ public final class SlotManager {
 
     /**
      * Checks if current user is reserve collection editor.
-     * 
+     *
      * @return <code>true</code> if is editor
      */
     public static boolean hasEditorPermission() {
@@ -197,7 +198,7 @@ public final class SlotManager {
 
     /**
      * Checks if current user is owner of reserve collection.
-     * 
+     *
      * @param objId the {@link MCRObjectID}
      * @return <code>true</code> is owner
      */
@@ -207,7 +208,7 @@ public final class SlotManager {
 
     /**
      * Checks if user is owner of reserve collection.
-     * 
+     *
      * @param objId the {@link MCRObjectID}
      * @param user the {@link MCRUserInformation}
      * @return <code>true</code> is owner
@@ -243,13 +244,13 @@ public final class SlotManager {
 
     /**
      * Checks if given access key was previously used on slot.
-     * 
+     *
      * @param nodes the slot element
      * @return <code>true</code> if key is matching
      */
     public static boolean isMatchPreviousAccessKeys(List<Element> nodes) {
         if (nodes != null && !nodes.isEmpty()) {
-            final Slot slot = SlotTransformer.buildSlot(nodes.get(0));
+            final Slot slot = new EntityFactory<>(Slot.class).fromElement(nodes.get(0));
             final Slot cSlot = SlotManager.instance().getSlotById(slot.getSlotId());
 
             final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
@@ -262,7 +263,7 @@ public final class SlotManager {
 
     /**
      * Checks if given slot location and new number is free.
-     * 
+     *
      * @param nodes the location element
      * @return <code>true</code> if slot number is free
      */
@@ -274,7 +275,7 @@ public final class SlotManager {
             final String newId = location != null ? location.getAttributeValue("newId") : null;
 
             if (locId != null && newId != null) {
-                final Slot slot = SlotTransformer.buildSlot(xml);
+                final Slot slot = new EntityFactory<>(Slot.class).fromElement(xml);
                 final MCRCategoryID locCat = new MCRCategoryDAOImpl()
                     .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
                 int id = Integer.parseInt(newId);
@@ -316,7 +317,7 @@ public final class SlotManager {
 
     /**
      * Adds a new {@link Slot} to {@link SlotList}.
-     * 
+     *
      * @param slot the slot
      */
     public void addSlot(final Slot slot) {
@@ -330,7 +331,7 @@ public final class SlotManager {
 
     /**
      * Set a {@link Slot} to {@link SlotList}.
-     * 
+     *
      * @param slot the slot
      */
     public void setSlot(final Slot slot) {
@@ -339,7 +340,7 @@ public final class SlotManager {
 
     /**
      * Remove a {@link Slot} from {@link SlotList}.
-     * 
+     *
      * @param slot the slot
      */
     public void removeSlot(final Slot slot) {
@@ -348,7 +349,7 @@ public final class SlotManager {
 
     /**
      * Returns a slot by given id.
-     * 
+     *
      * @param slotId the slot id
      * @return the slot
      */
@@ -358,7 +359,7 @@ public final class SlotManager {
 
     /**
      * Returns a slot for given id and revision.
-     * 
+     *
      * @param slotId the slot id
      * @param revision the revision
      * @return the slot
@@ -382,7 +383,7 @@ public final class SlotManager {
 
     /**
      * Returns the next free slot id for given reserve collection location.
-     * 
+     *
      * @param rcLocation the reserve collection location
      * @return the next id
      */
@@ -404,7 +405,7 @@ public final class SlotManager {
 
     /**
      * Validates a given location and id if it is unused.
-     * 
+     *
      * @param rcLocation the reserve collection location
      * @param id the id to validate
      * @return <code>true</code> if id currently unused
@@ -418,7 +419,7 @@ public final class SlotManager {
 
     /**
      * Returns the current SVN revision of an {@link Slot}.
-     * 
+     *
      * @param slot the {@link Slot}
      * @return an number or <code>null</code> on Exception
      */
@@ -434,7 +435,7 @@ public final class SlotManager {
 
     /**
      * Saves or updates the metadata of given {@link Slot}.
-     * 
+     *
      * @param slot the slot
      * @throws MCRActiveLinkException thrown from underlying classes
      * @throws MCRPersistenceException thrown from underlying classes
@@ -469,7 +470,7 @@ public final class SlotManager {
 
     /**
      * Delete a given {@link Slot}.
-     * 
+     *
      * @param slot the slot
      * @throws MCRPersistenceException thrown from underlying classes
      * @throws MCRActiveLinkException thrown from underlying classes
@@ -502,13 +503,13 @@ public final class SlotManager {
     }
 
     /**
-     * Returns a list of {@link Attendee} based on {@link MCRObjectID} without any check of valid key.
-     * 
+     * Returns a list of {@link Attendees} based on {@link MCRObjectID} without any check of valid key.
+     *
      * @param slot the {@link Slot}
      * @return a list of {@link Attendee}
      */
-    public List<Attendee> getAttendees(final Slot slot) {
-        final List<Attendee> attendees = new ArrayList<Attendee>();
+    public Attendees getAttendees(final Slot slot) {
+        final List<Attendee> attendees = new ArrayList<>();
 
         final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
@@ -526,12 +527,16 @@ public final class SlotManager {
             attendees.add(new Attendee(slot, user));
         }
 
-        return attendees;
+        Attendees a = new Attendees();
+        a.slotId = slot.getSlotId();
+        a.attendees = attendees;
+
+        return a;
     }
 
     /**
      * Returns the current {@link SlotList}.
-     * 
+     *
      * @return the slot list
      */
     public SlotList getSlotList() {
@@ -540,7 +545,7 @@ public final class SlotManager {
 
     /**
      * Returns a filtered and sorted {@link SlotList}.
-     * 
+     *
      * @param search the search string
      * @param filter the extra filter
      * @param start the start position

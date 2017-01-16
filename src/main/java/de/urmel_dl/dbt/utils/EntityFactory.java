@@ -1,6 +1,6 @@
 /*
  * This file is part of the Digitale Bibliothek Thüringen repository software.
- * Copyright (c) 2000 - 2016
+ * Copyright (c) 2000 - 2017
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
  * This program is free software: you can redistribute it and/or modify it under the
@@ -20,10 +20,18 @@ package de.urmel_dl.dbt.utils;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -89,83 +97,64 @@ public class EntityFactory<T> {
 
     private final static Map<String, Class<?>[]> CACHED_ENTITIES = new ConcurrentHashMap<>();
 
+    private final static Map<String, String> MARSHALLER_JSON_PROPERTIES = new HashMap<>();
+
+    private final static Map<String, String> UNMARSHALLER_JSON_PROPERTIES = new HashMap<>();
+
+    static {
+        MARSHALLER_JSON_PROPERTIES.put(MarshallerProperties.MEDIA_TYPE, "application/json");
+        UNMARSHALLER_JSON_PROPERTIES.put(UnmarshallerProperties.MEDIA_TYPE, "application/json");
+    }
+
     private Class<T> entityType;
 
     private T entity;
 
-    private Function<T, String> toJSON = entity -> {
+    private BiConsumer<Callable<Marshaller>, Object> marshal = (marshallerCaller, output) -> {
+        Marshaller marshaller;
         try {
-            StringWriter sw = new StringWriter();
-
-            Marshaller marshaller = marshaller();
-            try {
-                marshaller.setProperty(MarshallerProperties.MEDIA_TYPE, "application/json");
-            } catch (PropertyException e) {
-                LOGGER.warn("Property \"{}\" couldn't set.", MarshallerProperties.MEDIA_TYPE);
-            }
-            marshaller.marshal(entity, sw);
-
-            return sw.toString();
-        } catch (JAXBException e) {
-            throw new RuntimeException("Couldn't marshal " + entity.getClass().getName() + " to JSON.", e);
+            marshaller = marshallerCaller.call();
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't build marshaller.", e);
         }
-    };
 
-    private Function<String, T> fromJSON = source -> {
+        Class<? extends Marshaller> marshallerClass = marshaller.getClass();
+        Class<?> outputType = output.getClass();
+
+        Method method = findMethod(marshallerClass, "marshal", Object.class, outputType).orElseThrow(
+            () -> new IllegalArgumentException(
+                "Couldn't find a marshal method for marshaller " + marshallerClass + " with output type "
+                    + outputType + "."));
+
         try {
-            StringReader sr = new StringReader(source);
-            Unmarshaller unmarshaller = unmarshaller();
-            try {
-                unmarshaller.setProperty(UnmarshallerProperties.MEDIA_TYPE, "application/json");
-            } catch (PropertyException e) {
-                LOGGER.warn("Property \"{}\" couldn't set.", MarshallerProperties.MEDIA_TYPE);
-            }
-            return entityType.cast(unmarshaller.unmarshal(sr));
-        } catch (JAXBException e) {
+            method.invoke(marshaller, entity, output);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException(
-                "Couldn't unmarshal " + source.getClass().getName() + " as JSON to " + entityType + ".", e);
+                "Couldn't marshal " + entityType + " to output " + outputType + ".", e);
         }
     };
 
-    private Function<T, String> toXML = entity -> {
+    private BiFunction<Callable<Unmarshaller>, Object, T> unmarshal = (unmarshallerCaller, input) -> {
+        Unmarshaller unmarshaller;
         try {
-            StringWriter sw = new StringWriter();
-            marshaller().marshal(entity, sw);
-            return sw.toString();
-        } catch (JAXBException e) {
-            throw new RuntimeException("Couldn't marshal " + entity.getClass().getName() + " to XML.", e);
+            unmarshaller = unmarshallerCaller.call();
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't build unmarshaller.", e);
         }
-    };
 
-    private Function<String, T> fromXML = source -> {
+        Class<? extends Unmarshaller> unmarshallerClass = unmarshaller.getClass();
+        Class<?> inputType = input.getClass();
+
+        Method method = findMethod(unmarshallerClass, "unmarshal", inputType).orElseThrow(
+            () -> new IllegalArgumentException(
+                "Couldn't find a unmarshal method for unmarshaller " + unmarshallerClass + " with input type "
+                    + inputType + "."));
+
         try {
-            StringReader sr = new StringReader(source);
-            Unmarshaller unmarshaller = unmarshaller();
-            return entityType.cast(unmarshaller.unmarshal(sr));
-        } catch (JAXBException e) {
+            return entityType.cast(method.invoke(unmarshaller, input));
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new RuntimeException(
-                "Couldn't unmarshal " + source.getClass().getName() + " as XML to " + entityType + ".", e);
-        }
-    };
-
-    private Function<T, Document> toDocument = entity -> {
-        try {
-            JDOMResult r = new JDOMResult();
-            marshaller().marshal(entity, r);
-            return r.getDocument();
-        } catch (JAXBException e) {
-            throw new RuntimeException("Couldn't marshal " + entity.getClass().getName() + " to Document.", e);
-        }
-    };
-
-    private Function<Document, T> fromDocument = source -> {
-        try {
-            JDOMSource js = new JDOMSource(source);
-            Unmarshaller unmarshaller = unmarshaller();
-            return entityType.cast(unmarshaller.unmarshal(js.getInputSource()));
-        } catch (JAXBException e) {
-            throw new RuntimeException("Couldn't unmarshal " + source.getClass().getName() + " to " + entityType + ".",
-                e);
+                "Couldn't unmarshal " + inputType + " to " + entityType + ".", e);
         }
     };
 
@@ -200,24 +189,24 @@ public class EntityFactory<T> {
     /**
      * Marshals a entity with specified marshal function.
      *
-     * @param <V> the value type
-     * @param marshalFunc the marshal function
-     * @return the value type
+     * @param <R> the return type
+     * @param c the marshal cons
+     * @return the return type
      */
-    public <V> V marshal(Function<T, V> marshalFunc) {
-        return marshalFunc.apply(entity);
+    public <R> R marshal(Function<T, R> f) {
+        return f.apply(entity);
     }
 
     /**
      * Unmarshals a entity with specified unmarshal function.
      *
-     * @param <V> the value type
-     * @param source the source
-     * @param unmarshalFunc the unmarshal function
+     * @param <S> the source type
+     * @param s the source
+     * @param f the unmarshal function
      * @return the entity class
      */
-    public <V> T unmarshal(V source, Function<V, T> unmarshalFunc) {
-        return unmarshalFunc.apply(source);
+    public <S> T unmarshal(S s, Function<S, T> f) {
+        return f.apply(s);
     }
 
     /**
@@ -226,17 +215,41 @@ public class EntityFactory<T> {
      * @return the JSON string
      */
     public String toJSON() {
-        return marshal(toJSON);
+        StringWriter sw = new StringWriter();
+        toJSON(sw);
+
+        return sw.toString();
     }
 
     /**
-     * Unmarshals the JSON source to entity.
+     *  Marshals the entity to JSON.
      *
-     * @param json the json
+     * @param <S> the source type
+     * @param source the source
+     */
+    public <S> void toJSON(S source) {
+        marshal.accept(() -> marshaller(Optional.of(MARSHALLER_JSON_PROPERTIES)), source);
+    }
+
+    /**
+     * Unmarshals the JSON string to entity.
+     *
+     * @param json the json string
      * @return the entity class
      */
     public T fromJSON(String json) {
-        return unmarshal(json, fromJSON);
+        StringReader sr = new StringReader(json);
+        return fromJSON(sr);
+    }
+
+    /**
+     * Unmarshals the JSON source object to entity.
+     *
+     * @param source the json source
+     * @return the entity class
+     */
+    public T fromJSON(Object source) {
+        return unmarshal.apply(() -> unmarshaller(Optional.of(UNMARSHALLER_JSON_PROPERTIES)), source);
     }
 
     /**
@@ -245,17 +258,40 @@ public class EntityFactory<T> {
      * @return the XML string
      */
     public String toXML() {
-        return marshal(toXML);
+        StringWriter sw = new StringWriter();
+        toXML(sw);
+        return sw.toString();
     }
 
     /**
-     * Unmarshals the XML source to entity.
+     *  Marshals the entity to XML.
+     *
+     * @param <S> the source type
+     * @param source the source
+     */
+    public <S> void toXML(S source) {
+        marshal.accept(() -> marshaller(Optional.empty()), source);
+    }
+
+    /**
+     * Unmarshals the XML string to entity.
      *
      * @param xml the xml
      * @return the entity class
      */
     public T fromXML(String xml) {
-        return unmarshal(xml, fromXML);
+        StringReader sr = new StringReader(xml);
+        return fromXML(sr);
+    }
+
+    /**
+     * Unmarshals the XML source to entity.
+     *
+     * @param source the source
+     * @return the entity class
+     */
+    public T fromXML(Object source) {
+        return unmarshal.apply(() -> unmarshaller(Optional.empty()), source);
     }
 
     /**
@@ -264,7 +300,9 @@ public class EntityFactory<T> {
      * @return the {@link Document}
      */
     public Document toDocument() {
-        return marshal(toDocument);
+        JDOMResult r = new JDOMResult();
+        marshal.accept(() -> marshaller(Optional.empty()), r);
+        return r.getDocument();
     }
 
     /**
@@ -274,7 +312,8 @@ public class EntityFactory<T> {
      * @return the entity class
      */
     public T fromDocument(Document doc) {
-        return unmarshal(doc, fromDocument);
+        JDOMSource source = new JDOMSource(doc);
+        return unmarshal.apply(() -> unmarshaller(Optional.empty()), source.getInputSource());
     }
 
     /**
@@ -293,26 +332,21 @@ public class EntityFactory<T> {
      * @return the entity class
      */
     public T fromElement(Element elm) {
-        return unmarshal(new Document(elm.clone()), fromDocument);
+        return fromDocument(new Document(elm.clone()));
     }
 
     /**
-     * Returns the marshaled entity.
+     * Returns the marshaled entity. By default outputs entity as XML.
      *
      * @param mediaType the optional mediaType
-     * @return the entity as string
+     * @return the marshaled entity
      */
     public String marshalByMediaType(Optional<String> mediaType) {
-        if (mediaType.isPresent()) {
-            if (mediaType.get().contains(MediaType.APPLICATION_JSON)) {
-                return toJSON();
-            } else if (mediaType.get().contains(MediaType.APPLICATION_XML)
-                || mediaType.get().contains(MediaType.TEXT_XML)) {
-                return toXML();
-            }
+        if (mediaType.isPresent() && mediaType.get().contains(MediaType.APPLICATION_JSON)) {
+            return toJSON();
         }
 
-        return entity.toString();
+        return toXML();
     }
 
     /**
@@ -333,34 +367,52 @@ public class EntityFactory<T> {
         return null;
     }
 
-    private Marshaller marshaller() throws JAXBException {
+    private Marshaller marshaller(Optional<Map<String, ?>> extraProperties) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(populateEntities());
         Marshaller marshaller = context.createMarshaller();
 
-        properties(CONFIG_MARSHALLER).forEach((k, v) -> {
-            try {
-                marshaller.setProperty(k, v);
-            } catch (PropertyException e) {
-                LOGGER.warn("Property \"{}\" couldn't set.", k);
-            }
-        });
+        Map<String, ?> props = extraProperties.orElse(new HashMap<>());
+
+        Stream.of(props, properties(CONFIG_MARSHALLER)).map(Map::entrySet).flatMap(Collection::stream)
+            .forEach((e) -> {
+                try {
+                    marshaller.setProperty(e.getKey(), e.getValue());
+                } catch (PropertyException ex) {
+                    LOGGER.warn("Property \"{}\" couldn't set.", e.getKey());
+                }
+            });
 
         return marshaller;
-    }
+    };
 
-    private Unmarshaller unmarshaller() throws JAXBException {
+    private Unmarshaller unmarshaller(Optional<Map<String, ?>> extraProperties) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(populateEntities());
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
-        properties(CONFIG_UNMARSHALLER).forEach((k, v) -> {
+        Map<String, ?> props = extraProperties.orElse(new HashMap<>());
+
+        Stream.of(props, properties(CONFIG_UNMARSHALLER)).map(Map::entrySet).flatMap(Collection::stream).forEach(e -> {
             try {
-                unmarshaller.setProperty(k, v);
-            } catch (PropertyException e) {
-                LOGGER.warn("Property \"{}\" couldn't set.", k);
+                unmarshaller.setProperty(e.getKey(), e.getValue());
+            } catch (PropertyException ex) {
+                LOGGER.warn("Property \"{}\" couldn't set.", e.getKey());
             }
         });
 
         return unmarshaller;
+    };
+
+    private Optional<Method> findMethod(Class<?> cls, String name, Class<?>... parameterTypes) {
+        return Arrays.stream(cls.getMethods()).filter(m -> name.equals(m.getName())).filter(m -> {
+            Iterator<Class<?>> it1 = Arrays.stream(m.getParameterTypes()).iterator();
+            Iterator<Class<?>> it2 = Arrays.stream(parameterTypes).iterator();
+            while (it1.hasNext() && it2.hasNext()) {
+                if (!it1.next().isAssignableFrom(it2.next())) {
+                    return false;
+                }
+            }
+            return !it1.hasNext() && !it2.hasNext();
+        }).findFirst();
     }
 
     private Map<String, ?> properties(String propType) {

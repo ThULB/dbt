@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -98,9 +98,13 @@ public class SlotList implements Serializable {
         this.total = total;
     }
 
+    protected void setTotal(long total) {
+        this.total = total;
+    }
+
     /**
      * Returns a slot by given id.
-     * 
+     *
      * @param slotId the slot id
      * @return the slot
      */
@@ -116,7 +120,7 @@ public class SlotList implements Serializable {
 
     /**
      * Returns a {@link SlotList}.
-     * 
+     *
      * @return the {@link SlotList}
      */
     public SlotList getBasicSlots() {
@@ -132,7 +136,7 @@ public class SlotList implements Serializable {
 
     /**
      * Returns a {@link SlotList} with only active {@link Slot}s.
-     * 
+     *
      * @return the {@link SlotList}
      */
     public SlotList getActiveSlots() {

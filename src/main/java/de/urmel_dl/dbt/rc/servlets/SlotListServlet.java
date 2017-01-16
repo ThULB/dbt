@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,16 +47,14 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 
-import de.urmel_dl.dbt.rc.datamodel.Attendee;
+import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
 import de.urmel_dl.dbt.rc.datamodel.Status;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
-import de.urmel_dl.dbt.rc.utils.AttendeeTransformer;
-import de.urmel_dl.dbt.rc.utils.SlotListTransformer;
-import de.urmel_dl.dbt.rc.utils.SlotTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author René Adler (eagle)
@@ -72,6 +70,7 @@ public class SlotListServlet extends MCRServlet {
 
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
+    @Override
     public void doGetPost(final MCRServletJob job) throws Exception {
         final HttpServletRequest req = job.getRequest();
 
@@ -82,7 +81,7 @@ public class SlotListServlet extends MCRServlet {
 
             LOGGER.debug(new XMLOutputter().outputString(xml));
 
-            final Slot slot = SlotTransformer.buildSlot(xml);
+            final Slot slot = new EntityFactory<>(Slot.class).fromElement(xml);
 
             final String action = req.getParameter("action");
             final String slotId = xml.getAttributeValue("id");
@@ -132,9 +131,10 @@ public class SlotListServlet extends MCRServlet {
                     // rebuild new keys
                     String readKey = SlotManager.buildKey();
                     String writeKey = null;
-                    // rebuild write key if match with read key 
-                    while ((writeKey = SlotManager.buildKey()).equals(readKey))
+                    // rebuild write key if match with read key
+                    while ((writeKey = SlotManager.buildKey()).equals(readKey)) {
                         ;
+                    }
 
                     slot.setReadKey(readKey);
                     slot.setWriteKey(writeKey);
@@ -142,8 +142,9 @@ public class SlotListServlet extends MCRServlet {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
                         RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
-                } else
+                } else {
                     evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
+                }
 
                 // remove warning dates on new validTo date
                 if (s.getValidToAsDate().before(slot.getValidToAsDate())) {
@@ -211,10 +212,10 @@ public class SlotListServlet extends MCRServlet {
                 if (option != null && ("attendees".equals(option)
                     && MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
                     || SlotManager.isOwner(slot.getMCRObjectID().toString()))) {
-                    List<Attendee> attendees = SLOT_MGR.getAttendees(slot);
+                    Attendees attendees = SLOT_MGR.getAttendees(slot);
 
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                        new MCRJDOMContent(AttendeeTransformer.buildExportableXML(slotId, attendees)));
+                        new MCRJDOMContent(new EntityFactory<>(attendees).toDocument()));
                     return;
                 }
 
@@ -222,12 +223,12 @@ public class SlotListServlet extends MCRServlet {
                     && !MCRAccessManager.checkPermission(slot.getMCRObjectID(),
                         MCRAccessManager.PERMISSION_WRITE)) {
                     getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                        new MCRJDOMContent(SlotTransformer.buildExportableXML(slot.getBasicCopy())));
+                        new MCRJDOMContent(new EntityFactory<>(slot.getBasicCopy()).toDocument()));
                     return;
                 }
 
                 getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                    new MCRJDOMContent(SlotTransformer.buildExportableXML(slot)));
+                    new MCRJDOMContent(new EntityFactory<>(slot).toDocument()));
                 return;
             }
 
@@ -261,7 +262,7 @@ public class SlotListServlet extends MCRServlet {
                 start, rows, sortClauses);
 
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                new MCRJDOMContent(SlotListTransformer.buildExportableXML(slotList.getBasicSlots())));
+                new MCRJDOMContent(new EntityFactory<>(slotList.getBasicSlots()).toDocument()));
         }
 
     }
