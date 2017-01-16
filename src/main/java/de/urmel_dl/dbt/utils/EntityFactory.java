@@ -83,7 +83,7 @@ import com.google.common.reflect.ClassPath.ClassInfo;
  * </blockquote>
  *
  * @author Ren\u00E9 Adler (eagle)
- *
+ * @param <T> the generic type
  */
 public class EntityFactory<T> {
 
@@ -190,7 +190,7 @@ public class EntityFactory<T> {
      * Marshals a entity with specified marshal function.
      *
      * @param <R> the return type
-     * @param c the marshal cons
+     * @param f the f
      * @return the return type
      */
     public <R> R marshal(Function<T, R> f) {

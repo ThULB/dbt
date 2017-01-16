@@ -69,8 +69,8 @@ public class RCResource {
      *
      * @param search the search term
      * @return the {@link SlotList}
-     * @throws IOException
-     * @throws SolrServerException
+     * @throws SolrServerException the solr server exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @GET
     @Path("{search:.+}")
@@ -85,8 +85,8 @@ public class RCResource {
      * @param search the search
      * @param filter the filter
      * @return the {@link SlotList}
-     * @throws IOException
-     * @throws SolrServerException
+     * @throws SolrServerException the solr server exception
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @GET
     @Path("{search:.+}/{filter:.+}")
@@ -146,7 +146,7 @@ public class RCResource {
      * @param slotId the slot id
      * @param entryId the entry id
      * @return the response
-     * @throws IOException
+     * @throws IOException Signals that an I/O exception has occurred.
      */
     @SuppressWarnings("unchecked")
     @GET
