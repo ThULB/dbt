@@ -35,6 +35,7 @@ import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.opc.datamodel.IKTList;
 import de.urmel_dl.dbt.opc.datamodel.pica.Record;
 import de.urmel_dl.dbt.opc.resources.OPCResource;
+import de.urmel_dl.dbt.rest.utils.EntityMessageBodyWriter;
 import de.urmel_dl.dbt.test.JerseyTestCase;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
@@ -50,7 +51,7 @@ public class TestOPCResource extends JerseyTestCase {
      * @throws TestContainerException
      */
     public TestOPCResource() throws TestContainerException {
-        super(OPCResource.class.getPackage().getName());
+        super(OPCResource.class.getPackage().getName(), EntityMessageBodyWriter.class.getPackage().getName());
         webResource = resource();
     }
 
