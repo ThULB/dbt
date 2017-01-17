@@ -126,4 +126,14 @@ public class TestOPCResource extends JerseyTestCase {
             });
         });
     }
+
+    @Test
+    public void testMods() {
+        final String PPN = "844149659";
+        Stream.of("", "/DE-27", "/TEST").forEach(cat -> {
+            String response = webResource.path("opc/mods" + cat + "/" + PPN).accept(MediaType.APPLICATION_XML)
+                .get(String.class);
+            assertNotNull(response);
+        });
+    }
 }

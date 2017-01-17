@@ -17,6 +17,11 @@
  */
 package de.urmel_dl.dbt.opc.resources;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.ws.rs.GET;
@@ -24,6 +29,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
+
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xsl.MCRParameterCollector;
 
 import de.urmel_dl.dbt.opc.OPCConnector;
 import de.urmel_dl.dbt.opc.datamodel.Catalog;
@@ -31,6 +43,7 @@ import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.opc.datamodel.IKTList;
 import de.urmel_dl.dbt.opc.datamodel.pica.Record;
 import de.urmel_dl.dbt.opc.datamodel.pica.Result;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * The OPC Rest API.
@@ -42,6 +55,12 @@ import de.urmel_dl.dbt.opc.datamodel.pica.Result;
 public class OPCResource {
 
     private static final Catalogues CATALOGUES = Catalogues.instance();
+
+    private static final String MODS_STYLESHEET = "xsl/opc/pica2mods.xsl";
+
+    private static final String MODS_PARAM_SOURCE = "RecordIdSource";
+
+    private static final String MODS_PARAM_PREFIX = "RecordIdPrefix";
 
     /**
      * Returns a list of {@link Catalogues}.
@@ -187,7 +206,7 @@ public class OPCResource {
     }
 
     /**
-     * Record the {@link Record} for given catalog and PPN.
+     * Returns the {@link Record} for given catalog and PPN.
      *
      * @param catalog the catalog
      * @param ppn the ppn
@@ -201,7 +220,49 @@ public class OPCResource {
         return record(opc(catalog), ppn);
     }
 
-    private OPCConnector opc(String catalogId) throws Exception {
+    /**
+     * Returns a MODS XML for given PPN.
+     *
+     * @param ppn the ppn
+     * @return the response
+     * @throws Exception the exception
+     */
+    @GET
+    @Path("mods/{ppn:[0-9X]+}")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response mods(@PathParam("ppn") String ppn) throws Exception {
+        Map<String, String> params = new HashMap<>();
+        params.put(MODS_PARAM_SOURCE, "GVK");
+        params.put(MODS_PARAM_PREFIX, "ppn:");
+
+        return transformedResponse(record(ppn), MODS_STYLESHEET, params);
+    }
+
+    /**
+     * Returns a MODS XML from given catalog with given PPN.
+     *
+     * @param catalog the catalog
+     * @param ppn the ppn
+     * @return the response
+     * @throws Exception the exception
+     */
+    @GET
+    @Path("mods/{catalog:.*}/{ppn:[0-9X]+}")
+    @Produces(MediaType.APPLICATION_XML)
+    public Response mods(@PathParam("catalog") String catalog, @PathParam("ppn") String ppn) throws Exception {
+        Optional<Catalog> c = catalog(catalog);
+        if (c.isPresent()) {
+            Map<String, String> params = new HashMap<>();
+            params.put(MODS_PARAM_SOURCE, c.get().getISIL().get(0));
+            params.put(MODS_PARAM_PREFIX, "ppn:");
+
+            return transformedResponse(record(catalog, ppn), MODS_STYLESHEET, params);
+        }
+
+        return mods(ppn);
+    }
+
+    private Optional<Catalog> catalog(String catalogId) throws Exception {
         Optional<Catalog> catalog = Optional.empty();
 
         if (catalogId != null) {
@@ -211,6 +272,11 @@ public class OPCResource {
             }
         }
 
+        return catalog;
+    }
+
+    private OPCConnector opc(String catalogId) throws Exception {
+        Optional<Catalog> catalog = catalog(catalogId);
         return catalog.isPresent() ? catalog.get().getOPCConnector() : new OPCConnector();
     }
 
@@ -230,4 +296,21 @@ public class OPCResource {
         return opc.getRecord(ppn);
     }
 
+    private <T> Response transformedResponse(T entity, String stylesheet, Map<String, String> parameters) {
+        try {
+            MCRParameterCollector pc = new MCRParameterCollector();
+            pc.setParameters(parameters);
+
+            MCRXSLTransformer transformer = MCRXSLTransformer.getInstance(stylesheet);
+            MCRContent result = transformer
+                .transform(new MCRJDOMContent(new EntityFactory<>(entity).toDocument()), pc);
+
+            final StreamingOutput so = (OutputStream os) -> result.sendTo(os);
+            return Response.ok().status(Response.Status.OK).entity(so).build();
+        } catch (Exception e) {
+            final StreamingOutput so = (OutputStream os) -> e
+                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+        }
+    }
 }
