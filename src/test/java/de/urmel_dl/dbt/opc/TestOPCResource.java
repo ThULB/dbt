@@ -21,13 +21,22 @@ package de.urmel_dl.dbt.opc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 import javax.ws.rs.core.MediaType;
 
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.test.framework.spi.container.TestContainerException;
 
@@ -102,7 +111,7 @@ public class TestOPCResource extends JerseyTestCase {
 
     @Test
     public void testRecord() {
-        final String PPN = "844149659";
+        final String PPN = "837382513";
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 String response = webResource.path("opc/record" + cat + "/" + PPN).accept(mt)
@@ -111,6 +120,17 @@ public class TestOPCResource extends JerseyTestCase {
 
                 Record record = new EntityFactory<>(Record.class).unmarshalByMediaType(response, mt);
                 assertEquals(PPN, record.getPPN());
+            });
+        });
+    }
+
+    @Test
+    public void testNullRecord() {
+        final String PPN = "X44149659";
+        Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
+            Stream.of("", "/DE-27").forEach(cat -> {
+                ClientResponse response = webResource.path("opc/record" + cat + "/" + PPN).accept(mt).head();
+                assertEquals(204, response.getStatus());
             });
         });
     }
@@ -129,11 +149,26 @@ public class TestOPCResource extends JerseyTestCase {
 
     @Test
     public void testMods() {
-        final String PPN = "844149659";
-        Stream.of("", "/DE-27", "/TEST").forEach(cat -> {
-            String response = webResource.path("opc/mods" + cat + "/" + PPN).accept(MediaType.APPLICATION_XML)
-                .get(String.class);
-            assertNotNull(response);
+        Stream.of("", "/DE-27"/*, "/TEST"*/).forEach(cat -> {
+            Stream.of(/*"333183061", "126649847", "13027304X", "560310706",*/ "625181425"/*, "877411565", "875185347"*/)
+                .forEach(PPN -> {
+                    String response = webResource.path("opc/mods" + cat + "/" + PPN).accept(MediaType.APPLICATION_XML)
+                        .get(String.class);
+                    assertNotNull(response);
+
+                    try {
+                        SAXBuilder builder = new SAXBuilder();
+                        Document doc = builder
+                            .build(new ByteArrayInputStream(response.getBytes(StandardCharsets.UTF_8)));
+                        new XMLOutputter(Format.getPrettyFormat()).output(doc, System.out);
+                    } catch (JDOMException e) {
+                        e.printStackTrace();
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
         });
     }
 }

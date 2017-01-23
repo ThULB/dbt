@@ -479,12 +479,6 @@ public class PicaCharDecoder {
                     put(PicaCharDecoder.UTF_8, "\u00C3\u00AB");
                 }
             });
-            put("&ring;", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, "\u00EA");
-                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AA");
-                }
-            });
 
             // Czech Chars
             put("&#x10D;", new HashMap<Integer, String>() {
@@ -560,12 +554,33 @@ public class PicaCharDecoder {
                 }
             });
 
-            put("&hacek;", new HashMap<Integer, String>() {
+            //hacek
+            put("&#x2c7;", new HashMap<Integer, String>() {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00E9");
                     put(PicaCharDecoder.UTF_8, "\u00C3\u00A9");
                 }
             });
+
+            put("&#x16e;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EAU");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AAU");
+                }
+            });
+            put("&#x16f;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EAu");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AAu");
+                }
+            });
+            put("&ring;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EA");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AA");
+                }
+            });
+
             put("&ptbov;", new HashMap<Integer, String>() {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00E7");
@@ -936,12 +951,6 @@ public class PicaCharDecoder {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00A0");
                     put(PicaCharDecoder.UTF_8, "\u00C2\u00A0");
-                }
-            });
-            put(" ", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, " @");
-                    put(PicaCharDecoder.UTF_8, " @");
                 }
             });
         }

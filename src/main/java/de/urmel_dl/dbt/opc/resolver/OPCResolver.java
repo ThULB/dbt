@@ -56,13 +56,13 @@ public class OPCResolver implements URIResolver {
                 }
             }
 
-            OPCConnector opc = null;
+            OPCConnector opc = new OPCConnector();
 
             if (params.get("catalogId") != null) {
                 opc = Catalogues.instance().getCatalogById(params.get("catalogId")).getOPCConnector();
             } else if (params.get("isil") != null) {
                 opc = Catalogues.instance().getCatalogByISIL(params.get("isil")).getOPCConnector();
-            } else {
+            } else if (params.get("url") != null) {
                 opc = new OPCConnector(params.get("url"), params.get("db"));
             }
 

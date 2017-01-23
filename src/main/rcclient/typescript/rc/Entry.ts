@@ -31,7 +31,7 @@ module rc {
             if (record.length == 0)
                 return null;
 
-            var picaRecord: NodeList = (<Element>record.item(0)).getElementsByTagNameNS("http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", "record");
+            var picaRecord: NodeList = (<Element>record.item(0)).getElementsByTagNameNS("http://www.db-thueringen.de/opc/pica-xml-1-0.xsd", "record");
             if (picaRecord.length == 0)
                 return null;
 
@@ -41,7 +41,7 @@ module rc {
             entry.epn = (<Element>record.item(0)).getAttribute("epn");
             entry.ppn = (<Element>picaRecord.item(0)).getAttribute("ppn");
 
-            var fields: NodeList = (<Element>picaRecord.item(0)).getElementsByTagNameNS("http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", "field");
+            var fields: NodeList = (<Element>picaRecord.item(0)).getElementsByTagNameNS("http://www.db-thueringen.de/opc/pica-xml-1-0.xsd", "field");
             for (var i = 0; i < fields.length; i++) {
                 if (fields.item(i).attributes.getNamedItem("tag").value == "021A" || fields.item(i).attributes.getNamedItem("tag").value == "036C") {
                     var subfields = fields.item(i).childNodes;

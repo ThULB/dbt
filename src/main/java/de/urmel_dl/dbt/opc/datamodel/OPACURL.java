@@ -88,7 +88,7 @@ public class OPACURL {
      *
      * @return the db
      */
-    @XmlAttribute(required = true)
+    @XmlAttribute(name = "db", required = true)
     public String getDB() {
         return db;
     }

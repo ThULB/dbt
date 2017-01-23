@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalogues>
+  <catalog enabled="false" identifier="f128647b-1d98-4302-8970-d75e6f7f5a46">
+    <name>GVK</name>
+    <description>GBV - Gemeinsamer Bibliotheksverbund</description>
+    <opc db="2.1">http://gso.gbv.de</opc>
+    <ISIL>GVK</ISIL>
+    <ISIL>DE-601</ISIL>
+  </catalog>
   <catalog enabled="true" identifier="74f272a0-5bb1-11e0-80e3-0800200c9a66">
     <name>Technische Universität Ilmenau</name>
     <description>Universitätsbibliothek Ilmenau</description>
@@ -23,7 +30,7 @@
   <catalog enabled="true" identifier="1956b184-1a52-4d18-924c-bc5974d1b423">
     <name>Universität Erfurt</name>
     <description>Universitäts- und Forschungsbibliothek Erfurt/Gotha</description>
-    <opc db="1">http://opac.uni-erfurt.de/</opc>
+    <opc db="1">http://opac.uni-erfurt.de</opc>
     <ISIL>DE-547</ISIL>
     <ISIL>OCLC-DEUEG</ISIL>
     <ISIL>OCLC-6EU</ISIL>
