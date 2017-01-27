@@ -56,7 +56,7 @@ public class OPCResource {
 
     private static final Catalogues CATALOGUES = Catalogues.instance();
 
-    private static final String MODS_STYLESHEET = "xsl/opc/pica2mods.xsl";
+    private static final String MODS_STYLESHEET = "xsl/opc/transform/pica2mods.xsl";
 
     private static final String MODS_PARAM_SOURCE = "RecordIdSource";
 
@@ -232,8 +232,8 @@ public class OPCResource {
     @Produces(MediaType.APPLICATION_XML)
     public Response mods(@PathParam("ppn") String ppn) throws Exception {
         Map<String, String> params = new HashMap<>();
-        params.put(MODS_PARAM_SOURCE, "GVK");
-        params.put(MODS_PARAM_PREFIX, "ppn:");
+        params.put(MODS_PARAM_SOURCE, "DE-601");
+        params.put(MODS_PARAM_PREFIX, "");
 
         return transformedResponse(record(ppn), MODS_STYLESHEET, params);
     }
@@ -254,7 +254,7 @@ public class OPCResource {
         if (c.isPresent()) {
             Map<String, String> params = new HashMap<>();
             params.put(MODS_PARAM_SOURCE, c.get().getISIL().get(0));
-            params.put(MODS_PARAM_PREFIX, "ppn:");
+            params.put(MODS_PARAM_PREFIX, "");
 
             return transformedResponse(record(catalog, ppn), MODS_STYLESHEET, params);
         }
@@ -297,6 +297,10 @@ public class OPCResource {
     }
 
     private <T> Response transformedResponse(T entity, String stylesheet, Map<String, String> parameters) {
+        if (entity == null) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+
         try {
             MCRParameterCollector pc = new MCRParameterCollector();
             pc.setParameters(parameters);
