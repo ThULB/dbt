@@ -1,17 +1,17 @@
 /*
  * This file is part of the Digitale Bibliothek Thüringen repository software.
- * Copyright (c) 2000 - 2016
+ * Copyright (c) 2000 - 2017
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,8 +22,14 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
+/**
+ * The Class PicaCharDecoder.
+ *
+ * @author Ren\u00E9 Adler (eagle)
+ */
 public class PicaCharDecoder {
     private static final int ISO_8859_1 = 0x1000;
+
     private static final int UTF_8 = 0x1001;
 
     @SuppressWarnings("serial")
@@ -473,12 +479,6 @@ public class PicaCharDecoder {
                     put(PicaCharDecoder.UTF_8, "\u00C3\u00AB");
                 }
             });
-            put("&ring;", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, "\u00EA");
-                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AA");
-                }
-            });
 
             // Czech Chars
             put("&#x10D;", new HashMap<Integer, String>() {
@@ -554,12 +554,33 @@ public class PicaCharDecoder {
                 }
             });
 
-            put("&hacek;", new HashMap<Integer, String>() {
+            //hacek
+            put("&#x2c7;", new HashMap<Integer, String>() {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00E9");
                     put(PicaCharDecoder.UTF_8, "\u00C3\u00A9");
                 }
             });
+
+            put("&#x16e;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EAU");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AAU");
+                }
+            });
+            put("&#x16f;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EAu");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AAu");
+                }
+            });
+            put("&ring;", new HashMap<Integer, String>() {
+                {
+                    put(PicaCharDecoder.ISO_8859_1, "\u00EA");
+                    put(PicaCharDecoder.UTF_8, "\u00C3\u00AA");
+                }
+            });
+
             put("&ptbov;", new HashMap<Integer, String>() {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00E7");
@@ -932,19 +953,26 @@ public class PicaCharDecoder {
                     put(PicaCharDecoder.UTF_8, "\u00C2\u00A0");
                 }
             });
-            put(" ", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, " @");
-                    put(PicaCharDecoder.UTF_8, " @");
-                }
-            });
         }
     };
 
+    /**
+     * Decode Pica encode {@link String}.
+     *
+     * @param plain the plain
+     * @return the string
+     */
     public static String decode(final String plain) {
         return decode(plain, PicaCharDecoder.UTF_8);
     }
 
+    /**
+     * Decode Pica encode {@link String} with given encoding.
+     *
+     * @param plain the plain
+     * @param encoding the encoding
+     * @return the string
+     */
     public static String decode(final String plain, final int encoding) {
         String ppDecoded = plain;
 

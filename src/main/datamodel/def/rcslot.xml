@@ -3,7 +3,7 @@
   xsi:noNamespaceSchemaLocation="datamodel.xsd"
 >
   <xsd>
-    <xs:import schemaLocation="http://www.mycore.de/dbt/rc/slot-1-0.xsd" />
+    <xs:import schemaLocation="http://www.db-thueringen.de/rc/slot-1-0.xsd" />
   </xsd>
   <metadata>
     <element name="rcSlotContainer" type="xml" style="dontknow" notinherit="true" heritable="false">

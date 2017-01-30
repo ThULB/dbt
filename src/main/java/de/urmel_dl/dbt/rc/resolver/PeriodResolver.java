@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,11 +32,10 @@ import org.jdom2.transform.JDOMSource;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
-import de.urmel_dl.dbt.rc.utils.PeriodTransformer;
-import de.urmel_dl.dbt.rc.utils.RCCalendarTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * This resolver can be used to resolve the Period from given 
+ * This resolver can be used to resolve the Period from given
  * <code>areaCode</code> with an optional date string or "now" for
  * the current date.
  * <br>
@@ -47,7 +46,7 @@ import de.urmel_dl.dbt.rc.utils.RCCalendarTransformer;
  * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;fq=true]</code> get (fq = full qualified) period for given date</li>
  * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;list=true][&amp;onlySetable=true][&amp;numnext=1]</code> get periods (+ next) for given date</li>
  * </ul>
- * 
+ *
  * @author Ren\u00E9 Adler (eagle)
  *
  */
@@ -59,7 +58,7 @@ public class PeriodResolver implements URIResolver {
             final DateFormat parser = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
 
             final String options = href.substring(href.indexOf(":") + 1);
-            final HashMap<String, String> params = new HashMap<String, String>();
+            final HashMap<String, String> params = new HashMap<>();
             String[] param;
             final StringTokenizer tok = new StringTokenizer(options, "&");
             while (tok.hasMoreTokens()) {
@@ -76,7 +75,7 @@ public class PeriodResolver implements URIResolver {
             boolean fq = params.get("fq") != null ? Boolean.parseBoolean(params.get("fq")) : false;
             boolean list = params.get("list") != null ? Boolean.parseBoolean(params.get("list")) : false;
             boolean onlySetable = params.get("onlySetable") != null ? Boolean.parseBoolean(params.get("onlySetable"))
-                    : true;
+                : true;
             int numNext = params.get("numnext") != null ? Integer.parseInt(params.get("numnext")) : 1;
 
             Date date = new Date();
@@ -90,11 +89,11 @@ public class PeriodResolver implements URIResolver {
 
             if (!list) {
                 final Period period = fq ? RCCalendar.getPeriod(areaCode, date)
-                        : RCCalendar.getPeriodBySetable(areaCode, date);
-                return new JDOMSource(PeriodTransformer.buildExportableXML(period));
+                    : RCCalendar.getPeriodBySetable(areaCode, date);
+                return new JDOMSource(new EntityFactory<>(period).toDocument());
             } else {
                 final RCCalendar calendar = RCCalendar.getPeriodList(areaCode, date, onlySetable, numNext);
-                return new JDOMSource(RCCalendarTransformer.buildExportableXML(calendar));
+                return new JDOMSource(new EntityFactory<>(calendar).toDocument());
             }
         } catch (final Exception ex) {
             throw new TransformerException("Exception resolving " + href, ex);

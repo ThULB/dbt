@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -49,13 +49,13 @@ import de.urmel_dl.dbt.rc.datamodel.WarningDate;
 
 /**
  * Represents an Reserve Collection slot.
- * 
+ *
  * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "slot")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "slot", propOrder = { "slotId", "status", "pendingStatus", "onlineOnly", "title", "lecturers",
-        "contact", "validTo", "comment", "warningDates", "accessKeys", "entries" })
+    "contact", "validTo", "comment", "warningDates", "accessKeys", "entries" })
 public class Slot implements Serializable {
 
     /**
@@ -90,7 +90,7 @@ public class Slot implements Serializable {
 
     private String title;
 
-    private List<Lecturer> lecturers = new ArrayList<Lecturer>();
+    private List<Lecturer> lecturers = new ArrayList<>();
 
     private Contact contact;
 
@@ -110,7 +110,7 @@ public class Slot implements Serializable {
 
     /**
      * Creates a new {@link Slot} by given {@link Slot#location} and {@link Slot#id}.
-     * 
+     *
      * @param location the slot location
      * @param id the slot id
      */
@@ -122,9 +122,9 @@ public class Slot implements Serializable {
     }
 
     /**
-     * Creates a new {@link Slot} from given slotId. 
+     * Creates a new {@link Slot} from given slotId.
      * The slotId holds the formated {@link Slot#location} and {@link Slot#id} which will parsed by {@link Slot#setSlotId(String)}.
-     * 
+     *
      * @param slotId the slotId for example <code>3400:01:01:0001</code>
      */
     public Slot(final String slotId) {
@@ -208,7 +208,7 @@ public class Slot implements Serializable {
     public boolean isActive() {
         final Date today = new Date();
         return status == Status.ACTIVE || (status == Status.PENDING && pendingStatus != PendingStatus.VALIDATING
-                && validTo != null && today.before(validTo));
+            && validTo != null && today.before(validTo));
     }
 
     /**
@@ -223,8 +223,9 @@ public class Slot implements Serializable {
      * @param status the status to set
      */
     public void setStatus(final Status status) {
-        if (this.status == Status.PENDING && status != Status.PENDING)
+        if (this.status == Status.PENDING && status != Status.PENDING) {
             this.pendingStatus = null;
+        }
 
         this.status = status;
     }
@@ -241,10 +242,11 @@ public class Slot implements Serializable {
      * @param pendingStatus the pendingStatus to set
      */
     public void setPendingStatus(final PendingStatus pendingStatus) {
-        if (pendingStatus != PendingStatus.OWNERTRANSFER && this.status != Status.PENDING)
+        if (pendingStatus != PendingStatus.OWNERTRANSFER && this.status != Status.PENDING) {
             this.pendingStatus = null;
-        else
+        } else {
             this.pendingStatus = pendingStatus;
+        }
     }
 
     /**
@@ -374,15 +376,16 @@ public class Slot implements Serializable {
 
     /**
      * Checks if {@link WarningDate} is set on {@link Slot}.
-     * 
+     *
      * @param warningDate the warningDate to check
      * @return <code>true</code> if {@link Slot} has warning date
      */
     public boolean hasWarningDate(final WarningDate warningDate) {
         if (warningDates != null && !warningDates.isEmpty()) {
             for (final WarningDate wd : warningDates) {
-                if (wd.compareTo(warningDate) == 0)
+                if (wd.compareTo(warningDate) == 0) {
                     return true;
+                }
             }
         }
 
@@ -391,7 +394,7 @@ public class Slot implements Serializable {
 
     /**
      * Checks if {@link Date} is set as {@link WarningDate} on {@link Slot}.
-     * 
+     *
      * @param warningDate the warningDate to check
      * @return <code>true</code> if {@link Slot} has warning date
      */
@@ -404,7 +407,7 @@ public class Slot implements Serializable {
      */
     public void addWarningDate(final Date warningDate) {
         if (warningDates == null) {
-            warningDates = new ArrayList<WarningDate>();
+            warningDates = new ArrayList<>();
         }
 
         warningDates.add(new WarningDate(warningDate));
@@ -415,7 +418,7 @@ public class Slot implements Serializable {
      */
     public void addWarningDate(final WarningDate warningDate) {
         if (warningDates == null) {
-            warningDates = new ArrayList<WarningDate>();
+            warningDates = new ArrayList<>();
         }
 
         warningDates.add(warningDate);
@@ -513,7 +516,7 @@ public class Slot implements Serializable {
      */
     public boolean addEntry(final SlotEntry<?> entry) {
         if (entries == null) {
-            entries = new ArrayList<SlotEntry<?>>();
+            entries = new ArrayList<>();
         }
 
         return entries.add(entry);
@@ -526,7 +529,7 @@ public class Slot implements Serializable {
      */
     public boolean addEntry(final SlotEntry<?> entry, final String afterId) {
         if (entries == null) {
-            entries = new ArrayList<SlotEntry<?>>();
+            entries = new ArrayList<>();
         }
 
         if (afterId != null && afterId.length() > 0) {
@@ -568,7 +571,7 @@ public class Slot implements Serializable {
 
     /**
      * Returns a exportable copy of current {@link Slot}.
-     * 
+     *
      * @return a exportable copy of current slot
      */
     public Slot getExportableCopy() {
@@ -593,7 +596,7 @@ public class Slot implements Serializable {
 
     /**
      * Returns a copy of current {@link Slot} without entries.
-     * 
+     *
      * @return a basic copy of current slot
      */
     public Slot getBasicCopy() {
@@ -743,8 +746,9 @@ public class Slot implements Serializable {
         public String writeKey;
 
         public static AccessKeys buildAccessKeys(final String readKey, final String writeKey) {
-            if (readKey == null && writeKey == null)
+            if (readKey == null && writeKey == null) {
                 return null;
+            }
 
             final AccessKeys accKeys = new AccessKeys();
 

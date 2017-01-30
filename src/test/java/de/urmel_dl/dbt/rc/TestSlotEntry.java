@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -39,8 +39,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.MCRObjectEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.TextEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.WebLinkEntry;
-import de.urmel_dl.dbt.rc.utils.SlotEntryTransformer;
-import de.urmel_dl.dbt.rc.utils.SlotEntryTypesTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -49,7 +48,7 @@ import de.urmel_dl.dbt.rc.utils.SlotEntryTypesTransformer;
 public class TestSlotEntry extends MCRTestCase {
 
     private SlotEntry<HeadlineEntry> newHeadLineEntry() {
-        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<HeadlineEntry>();
+        SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
 
         HeadlineEntry headline = new HeadlineEntry();
         headline.setText("Überschrift");
@@ -60,7 +59,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<MCRObjectEntry> newMCRObjectEntry() {
-        SlotEntry<MCRObjectEntry> slotEntry = new SlotEntry<MCRObjectEntry>();
+        SlotEntry<MCRObjectEntry> slotEntry = new SlotEntry<>();
 
         MCRObjectEntry mcrObjectEntry = new MCRObjectEntry();
         mcrObjectEntry.setId("mir_mods_00000001");
@@ -72,7 +71,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<TextEntry> newPlainTextEntry() {
-        SlotEntry<TextEntry> slotEntry = new SlotEntry<TextEntry>();
+        SlotEntry<TextEntry> slotEntry = new SlotEntry<>();
 
         TextEntry text = new TextEntry();
         text.setFormat(TextEntry.Format.PLAIN);
@@ -84,7 +83,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<TextEntry> newHtmlTextEntry() {
-        SlotEntry<TextEntry> slotEntry = new SlotEntry<TextEntry>();
+        SlotEntry<TextEntry> slotEntry = new SlotEntry<>();
 
         TextEntry text = new TextEntry();
         text.setFormat(TextEntry.Format.HTML);
@@ -96,7 +95,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<WebLinkEntry> newWebLinkEntry() {
-        SlotEntry<WebLinkEntry> slotEntry = new SlotEntry<WebLinkEntry>();
+        SlotEntry<WebLinkEntry> slotEntry = new SlotEntry<>();
 
         WebLinkEntry link = new WebLinkEntry();
         link.setURL("http://www.test.de");
@@ -108,7 +107,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<OPCRecordEntry> newOPCRecordEntry() throws Exception {
-        SlotEntry<OPCRecordEntry> slotEntry = new SlotEntry<OPCRecordEntry>();
+        SlotEntry<OPCRecordEntry> slotEntry = new SlotEntry<>();
 
         OPCRecordEntry opcEntry = new OPCRecordEntry();
 
@@ -123,7 +122,7 @@ public class TestSlotEntry extends MCRTestCase {
     }
 
     private SlotEntry<FileEntry> newFileEntry() throws IOException {
-        SlotEntry<FileEntry> slotEntry = new SlotEntry<FileEntry>();
+        SlotEntry<FileEntry> slotEntry = new SlotEntry<>();
 
         FileEntry fileEntry = new FileEntry();
         fileEntry.setName("test.txt");
@@ -140,8 +139,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<HeadlineEntry> slotEntry = newHeadLineEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -149,8 +147,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<MCRObjectEntry> slotEntry = newMCRObjectEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -158,8 +155,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<TextEntry> slotEntry = newPlainTextEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -167,8 +163,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<TextEntry> slotEntry = newHtmlTextEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -176,8 +171,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<WebLinkEntry> slotEntry = newWebLinkEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -185,8 +179,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<OPCRecordEntry> slotEntry = newOPCRecordEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -194,8 +187,7 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntry<FileEntry> slotEntry = newFileEntry();
         assertNotNull(slotEntry);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTransformer.buildExportableXML(slotEntry),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
 
     @Test
@@ -255,7 +247,6 @@ public class TestSlotEntry extends MCRTestCase {
         SlotEntryTypes entryTypes = SlotEntryTypes.instance();
         assertNotNull(entryTypes);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(SlotEntryTypesTransformer.buildExportableXML(entryTypes),
-            System.out);
+        new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(entryTypes).toDocument(), System.out);
     }
 }

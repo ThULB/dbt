@@ -1,17 +1,17 @@
 /*
  * This file is part of the Digitale Bibliothek Thüringen repository software.
- * Copyright (c) 2000 - 2016
+ * Copyright (c) 2000 - 2017
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -47,13 +47,15 @@ import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStreamContent;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * The Class FileEntry.
  *
+ * @author Ren\u00E9 Adler (eagle)
  */
 @XmlRootElement(name = "file")
 @XmlAccessorType(XmlAccessType.NONE)
 public class FileEntry implements Serializable {
 
+    /** The Constant DEFAULT_HASH_TYPE. */
     public static final String DEFAULT_HASH_TYPE = "SHA-1";
 
     private static final long serialVersionUID = 2749951822001215240L;
@@ -84,7 +86,7 @@ public class FileEntry implements Serializable {
     /**
      * Creates an {@link FileEntry} from given {@link InputStream}.
      * If is copyrighted material, extra processing of content happens.
-     * 
+     *
      * @param entryId the SlotEntry id
      * @param fileName the file name
      * @param comment the comment
@@ -168,10 +170,10 @@ public class FileEntry implements Serializable {
 
     /**
      * Returns the number of pages from given PDF {@link InputStream}.
-     * 
+     *
      * @param pdfInput the {@link InputStream}
      * @return the number of pages
-     * @throws IOException
+     * @throws IOException thrown if file not found or other
      */
     private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
         PDDocument doc = PDDocument.load(pdfInput);
@@ -180,10 +182,10 @@ public class FileEntry implements Serializable {
 
     /**
      * Makes an save copy of given PDF {@link InputStream} to an new {@link OutputStram}.
-     * 
+     *
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException
+     * @throws IOException  hrown if file not found or other
      */
     private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
         throws IOException {
@@ -204,11 +206,11 @@ public class FileEntry implements Serializable {
 
     /**
      * Secures the PDF document and set the password.
-     * 
+     *
      * @param password the password
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException
+     * @throws IOException thrown if file not found or other
      */
     private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
         throws IOException {
@@ -245,6 +247,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Gets the name.
+     *
      * @return the name
      */
     @XmlAttribute(name = "name", required = true)
@@ -253,6 +257,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the name.
+     *
      * @param name the id to set
      */
     public void setName(final String name) {
@@ -260,6 +266,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Checks if is copyrighted.
+     *
      * @return the copyrighted
      */
     @XmlAttribute(name = "copyrighted")
@@ -268,6 +276,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the copyrighted.
+     *
      * @param copyrighted the copyrighted to set
      */
     public void setCopyrighted(boolean copyrighted) {
@@ -275,6 +285,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Gets the hash.
+     *
      * @return the hash
      */
     @XmlAttribute(name = "hash")
@@ -290,6 +302,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Gets the size.
+     *
      * @return the size
      */
     @XmlAttribute(name = "size")
@@ -305,12 +319,20 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Gets the content.
+     *
      * @return the content
      */
     public MCRContent getContent() {
         return content;
     }
 
+    /**
+     * Gets the exportable content.
+     *
+     * @param entryId the entry id
+     * @return the exportable content
+     */
     public MCRContent getExportableContent(final String entryId) {
         if (this.copyrighted) {
             try {
@@ -332,6 +354,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the content.
+     *
      * @param content the content to set
      */
     public void setContent(final MCRContent content) {
@@ -347,6 +371,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the content.
+     *
      * @param content the byte array
      */
     public void setContent(final byte[] content) {
@@ -354,6 +380,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the content.
+     *
      * @param is the InputStream
      * @throws IOException thrown if couldn't write to inputstream.
      */
@@ -362,6 +390,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Gets the comment.
+     *
      * @return the comment
      */
     @XmlValue
@@ -370,6 +400,8 @@ public class FileEntry implements Serializable {
     }
 
     /**
+     * Sets the comment.
+     *
      * @param comment the comment to set
      */
     public void setComment(final String comment) {
@@ -434,22 +466,36 @@ public class FileEntry implements Serializable {
         } else if (!name.equals(other.name)) {
             return false;
         }
-        if (size != other.size) {
-            return false;
-        }
-        return true;
+
+        return size != other.size;
     }
 
+    /**
+     * The Class FileEntryProcessingException.
+     *
+     * @author Ren\u00E9 Adler (eagle)
+     */
     public static class FileEntryProcessingException extends Exception {
         private static final long serialVersionUID = 1L;
 
         private int errorCode;
 
+        /**
+         * Instantiates a new file entry processing exception.
+         *
+         * @param message the message
+         * @param errorCode the error code
+         */
         public FileEntryProcessingException(final String message, int errorCode) {
             super(message);
             this.errorCode = errorCode;
         }
 
+        /**
+         * Gets the error code.
+         *
+         * @return the error code
+         */
         public int getErrorCode() {
             return errorCode;
         }

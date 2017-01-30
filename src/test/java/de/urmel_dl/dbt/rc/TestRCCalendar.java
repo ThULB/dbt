@@ -3,26 +3,30 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -33,18 +37,18 @@ import org.mycore.common.xml.MCRURIResolver;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
-import de.urmel_dl.dbt.rc.utils.PeriodTransformer;
-import de.urmel_dl.dbt.rc.utils.RCCalendarTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * Test Case for RCCalendar.
- * 
+ *
  * @author Ren\u00E9 Adler (eagle)
  */
 public class TestRCCalendar extends MCRTestCase {
 
     private static RCCalendar calendar;
 
+    @Override
     @Before()
     public void setUp() throws Exception {
         super.setUp();
@@ -56,8 +60,9 @@ public class TestRCCalendar extends MCRTestCase {
 
     @Test
     public void testRCCalendarExport() throws IOException {
-        new XMLOutputter(Format.getPrettyFormat()).output(RCCalendarTransformer.buildExportableXML(calendar),
-            System.out);
+        Document cal = new EntityFactory<>(calendar).toDocument();
+        new XMLOutputter(Format.getPrettyFormat()).output(cal, System.out);
+        assertNotNull(cal);
     }
 
     @Test
@@ -65,7 +70,9 @@ public class TestRCCalendar extends MCRTestCase {
         Period period = RCCalendar.getPeriod("2700", new Date());
         assertNotNull(period);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(PeriodTransformer.buildExportableXML(period), System.out);
+        Document p = new EntityFactory<>(period).toDocument();
+        new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
+        assertNotNull(p);
     }
 
     @Test
@@ -73,13 +80,16 @@ public class TestRCCalendar extends MCRTestCase {
         Period period = RCCalendar.getPeriodBySetable("2700", new Date());
         assertNotNull(period);
 
-        new XMLOutputter(Format.getPrettyFormat()).output(PeriodTransformer.buildExportableXML(period), System.out);
+        Document p = new EntityFactory<>(period).toDocument();
+        new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
+        assertNotNull(p);
     }
 
     @Test
     public void testPeriodResolverSingle() throws IOException {
         Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
+        assertNotNull(input);
     }
 
     @Test

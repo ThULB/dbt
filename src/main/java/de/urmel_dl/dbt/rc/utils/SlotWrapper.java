@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,6 +32,7 @@ import org.mycore.datamodel.metadata.MCRObjectService;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author René Adler (eagle)
@@ -65,7 +66,7 @@ public class SlotWrapper {
     }
 
     /**
-     *  Returns a new MCRObject 
+     *  Returns a new MCRObject
      */
     public SlotWrapper() {
         this(new MCRObject());
@@ -82,7 +83,7 @@ public class SlotWrapper {
 
     public MCRObjectID setID(String projectID, int ID) {
         MCRObjectID objID = ID == 0 ? MCRObjectID.getNextFreeId(SlotManager.getMCRObjectBaseID()) : MCRObjectID
-                .getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
+            .getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
         object.setId(objID);
         return objID;
     }
@@ -91,7 +92,7 @@ public class SlotWrapper {
         MCRMetaXML mx = (MCRMetaXML) (object.getMetadata().getMetadataElement(DEF_SLOT_CONTAINER).getElement(0));
         for (Content content : mx.getContent()) {
             if (content instanceof Element) {
-                Slot slot = SlotTransformer.buildSlot((Element) content);
+                Slot slot = new EntityFactory<>(Slot.class).fromElement((Element) content);
                 slot.setMCRObjectID(object.getId());
                 return slot;
             }
@@ -101,15 +102,16 @@ public class SlotWrapper {
 
     public void setSlot(Slot slot) {
         MCRObjectMetadata om = object.getMetadata();
-        if (om.getMetadataElement(DEF_SLOT_CONTAINER) != null)
+        if (om.getMetadataElement(DEF_SLOT_CONTAINER) != null) {
             om.removeMetadataElement(DEF_SLOT_CONTAINER);
+        }
 
         MCRMetaXML slotContainer = new MCRMetaXML(SLOT_CONTAINER, null, 0);
         List<MCRMetaXML> list = Collections.nCopies(1, slotContainer);
         MCRMetaElement defSlotContainer = new MCRMetaElement(MCRMetaXML.class, DEF_SLOT_CONTAINER, false, true, list);
         om.setMetadataElement(defSlotContainer);
 
-        Document doc = SlotTransformer.buildExportableXML(slot.getExportableCopy());
+        Document doc = new EntityFactory<>(slot.getExportableCopy()).toDocument();
         slotContainer.addContent(doc.getRootElement());
 
         if (slot.getReadKey() != null) {
@@ -129,9 +131,11 @@ public class SlotWrapper {
 
     public void setServiceFlag(String type, String value) {
         MCRObjectService os = object.getService();
-        if (os.isFlagTypeSet(type))
+        if (os.isFlagTypeSet(type)) {
             os.removeFlags(type);
-        if (value != null && !value.trim().isEmpty())
+        }
+        if (value != null && !value.trim().isEmpty()) {
             os.addFlag(type, value.trim());
+        }
     }
 }

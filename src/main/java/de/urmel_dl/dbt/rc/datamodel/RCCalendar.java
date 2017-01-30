@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -44,7 +44,7 @@ import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.content.MCRSourceContent;
 import org.xml.sax.SAXException;
 
-import de.urmel_dl.dbt.rc.utils.RCCalendarTransformer;
+import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -69,7 +69,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     /**
      * Returns a {@link RCCalendar} instance.
-     * 
+     *
      * @return a instance of {@link RCCalendar}
      */
     public static RCCalendar instance() {
@@ -78,7 +78,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             try {
                 xml = getCalendar().getRootElement();
                 if (xml != null) {
-                    singleton = RCCalendarTransformer.buildRCCalendar(xml);
+                    singleton = new EntityFactory<>(RCCalendar.class).fromElement(xml);
                 }
             } catch (TransformerException | SAXException | MCRException | JDOMException | IOException e) {
                 LOGGER.error(e.getMessage(), e);
@@ -88,7 +88,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     }
 
     private static Document getCalendar()
-            throws MCRException, TransformerException, JDOMException, IOException, SAXException {
+        throws MCRException, TransformerException, JDOMException, IOException, SAXException {
         return MCRSourceContent.getInstance(MCRConfigurationDir.getConfigResource(RESOURCE_URI).toString()).asXML();
     }
 
@@ -103,7 +103,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     /**
      * Tries to obtain a {@link Period}, which was defined inside RC periods, by
      * calculating <b>from</b> and <b>to</b> dates with the use of target date.
-     * 
+     *
      * @param areaCode
      *            specific area code for the period
      * @param date
@@ -130,9 +130,9 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     }
 
     /**
-     * Returns a list of setable {@link Period} for given <code>areaCode</code>, <code>date</code> and 
+     * Returns a list of setable {@link Period} for given <code>areaCode</code>, <code>date</code> and
      * <code>numNext</code> (number of next periods).
-     * 
+     *
      * @param areaCode specific area code for the period
      * @param date date as starting point which should return period(s)
      * @param numNext number of periods after starting one
@@ -143,12 +143,12 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     }
 
     /**
-     * Returns a list of {@link Period} for given <code>areaCode</code>, <code>date</code> and 
+     * Returns a list of {@link Period} for given <code>areaCode</code>, <code>date</code> and
      * <code>numNext</code> (number of next periods).
-     * 
+     *
      * @param areaCode specific area code for the period
      * @param date date as starting point which should return period(s)
-     * @param onlySetable if <code>true</code> only setable periods are listed  
+     * @param onlySetable if <code>true</code> only setable periods are listed
      * @param numNext number of periods after first setable one
      * @return a list of {@link Period}
      */
@@ -157,7 +157,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             final Iterable<Period> periods = instance().iterable(areaCode);
 
             final RCCalendar calendar = new RCCalendar();
-            calendar.periods = new ArrayList<Period>();
+            calendar.periods = new ArrayList<>();
 
             Date lastDate = date;
 
@@ -170,8 +170,8 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
                     }
 
                     if (pos < numNext + 1 && ((period.isSetable(lastDate) && onlySetable) || (!onlySetable && (period
-                            .isSetable(lastDate)
-                            || (period.getFromDate(lastDate) != null && period.getToDate(lastDate) != null))))) {
+                        .isSetable(lastDate)
+                        || (period.getFromDate(lastDate) != null && period.getToDate(lastDate) != null))))) {
                         final Period p = period.clone();
 
                         if (onlySetable) {
@@ -211,7 +211,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     /**
      * Tries to obtain a {@link Period}, which was defined inside RC periods, by
      * calculating <b>setableFrom</b> and <b>setableTo</b> dates with the use of target date.
-     * 
+     *
      * @param areaCode
      *            specific area code for the period
      * @param date
@@ -254,10 +254,10 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     /**
      * Returns an iterator over a set of elements of type {@link Period} witch match the given location.
-     * 
+     *
      * @param areaCode the which location
      * @return the iterator
-     * 
+     *
      * @see java.lang.Iterable#iterator()
      */
     public Iterator<Period> iterator(final String areaCode) {
@@ -303,17 +303,13 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     /**
      * Implementing this interface allows an object to be the target of the "foreach" statement with given location.
-     * 
+     *
      * @param areaCode the which location
      * @return the iterable
-     * 
+     *
      * @see java.lang.Iterable
      */
     public Iterable<Period> iterable(final String areaCode) {
-        return new Iterable<Period>() {
-            public Iterator<Period> iterator() {
-                return RCCalendar.this.iterator(areaCode);
-            }
-        };
+        return () -> RCCalendar.this.iterator(areaCode);
     }
 }
