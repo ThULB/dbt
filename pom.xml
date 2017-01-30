@@ -6,7 +6,7 @@
     <version>2016.12</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2016.12</version>
+  <version>2017.01-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -22,7 +22,7 @@
     <url>https://github.com/ThULB/dbt/tree/master</url>
     <connection>scm:git:https://github.com/ThULB/dbt.git</connection>
     <developerConnection>scm:git:https://github.com/ThULB/dbt.git</developerConnection>
-    <tag>v2016.12</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <ciManagement>
