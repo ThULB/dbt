@@ -232,7 +232,7 @@
   <!-- originInfo -->
   <xsl:template match="pica:record" mode="originInfo">
     <originInfo eventType="publication">
-      <xsl:apply-templates select="." mode="place" />
+      <xsl:apply-templates select="." mode="publisherAndPlace" />
       <xsl:apply-templates select="." mode="dates" />
       <xsl:apply-templates select="." mode="issuance" />
       <xsl:apply-templates select="." mode="frequency" />
@@ -251,17 +251,12 @@
 
   </xsl:template>
     
-  <!-- Place -->
-  <xsl:template match="pica:record" mode="place">
+  <!-- Publisher and Place -->
+  <xsl:template match="pica:record" mode="publisherAndPlace">
     <xsl:param name="type" select="''" />
 
     <xsl:choose>
       <xsl:when test="$type = 'online'">
-        <xsl:if test="pica:field[@tag='033B' and @occurrence='01']/pica:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-          <publisher>
-            <xsl:value-of select="./pica:field[@tag='033B' and @occurrence='01']/pica:subfield[@code='n']" />
-          </publisher>
-        </xsl:if>
         <xsl:if test="pica:field[@tag='033B' and @occurrence='01']/pica:subfield[@code='p']">  <!-- 4030 Ort, Verlag -->
           <place>
             <placeTerm type="text">
@@ -269,15 +264,15 @@
             </placeTerm>
           </place>
         </xsl:if>
+        <xsl:if test="pica:field[@tag='033B' and @occurrence='01']/pica:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
+          <publisher>
+            <xsl:value-of select="./pica:field[@tag='033B' and @occurrence='01']/pica:subfield[@code='n']" />
+          </publisher>
+        </xsl:if>
         <edition>[Electronic ed.]</edition>
       </xsl:when>
       <xsl:otherwise>
         <xsl:for-each select="pica:field[@tag='033A']">
-          <xsl:if test="pica:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
-            <publisher>
-              <xsl:value-of select="pica:subfield[@code='n']" />
-            </publisher>
-          </xsl:if>
           <xsl:for-each select="pica:subfield[@code='p']">
             <place>
               <placeTerm type="text">
@@ -285,6 +280,11 @@
               </placeTerm>
             </place>
           </xsl:for-each>
+          <xsl:if test="pica:subfield[@code='n']">  <!-- 4030 Ort, Verlag -->
+            <publisher>
+              <xsl:value-of select="pica:subfield[@code='n']" />
+            </publisher>
+          </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="pica:field[@tag='019@']/pica:subfield[@code='a']">
           <place>
