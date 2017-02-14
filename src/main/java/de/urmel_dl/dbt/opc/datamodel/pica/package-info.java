@@ -26,7 +26,7 @@
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED, namespace = "http://www.db-thueringen.de/opc/pica-xml-1-0.xsd", xmlns = { @XmlNs(prefix = "pica", namespaceURI = "http://www.db-thueringen.de/opc/pica-xml-1-0.xsd") })
+@XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED, namespace = "http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", xmlns = { @XmlNs(prefix = "pica", namespaceURI = "http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd") })
 package de.urmel_dl.dbt.opc.datamodel.pica;
 
 import javax.xml.bind.annotation.XmlNs;
