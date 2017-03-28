@@ -635,13 +635,6 @@
       <dependencies>
         <dependency>
           <groupId>org.mycore.mir</groupId>
-          <artifactId>dbt-module</artifactId>
-          <version>${project.version}</version>
-          <type>jar</type>
-          <scope>runtime</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.mycore.mir</groupId>
           <artifactId>mir-cli</artifactId>
           <version>${project.parent.version}</version>
           <type>tar.gz</type>
