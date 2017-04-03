@@ -66,7 +66,7 @@ public class SlotList implements Serializable {
      */
     public void addSlot(final Slot slot) {
         Optional<Slot> os = Optional.ofNullable(getSlotById(slot.getSlotId()));
-        if (slot.getSlotId() != null && os.isPresent() && Status.FREE.equals(os.get().getStatus())) {
+        if (slot.getSlotId() != null && os.isPresent() && !Status.FREE.equals(os.get().getStatus())) {
             throw new MCRException("Slot with id " + slot.getSlotId() + " already exists!");
         }
 
