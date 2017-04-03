@@ -92,7 +92,18 @@
     </xsl:variable>
     <xsl:variable name="period" select="document(concat('period:areacode=0&amp;date=', $date, '&amp;fq=true'))" />
 
-    <xsl:if test="(count(//opcrecord) &gt; 0) and (@onlineOnly = 'false')">
+    <xsl:variable name="numRecords">
+      <xsl:choose>
+        <xsl:when test="$action = 'inactivate'">
+          <xsl:value-of select="count(//opcrecord[string-length(@epn) &gt; 0])" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="count(//opcrecord)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+
+    <xsl:if test="($numRecords &gt; 0) and (@onlineOnly = 'false')">
       <xsl:message>
         Send Mail for:
         <xsl:value-of select="$action" />
@@ -150,10 +161,12 @@
 
         <xsl:for-each select="//entry">
           <xsl:if test="opcrecord">
-            <xsl:apply-templates select="opcrecord" mode="output">
-              <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
-              <xsl:with-param name="entryId" select="@id" />
-            </xsl:apply-templates>
+            <xsl:if test="($action = 'reactivate') or (($action = 'inactivate') and (string-length(@epn) &gt; 0))">
+              <xsl:apply-templates select="opcrecord" mode="output">
+                <xsl:with-param name="withCopys" select="$action = 'reactivate'" />
+                <xsl:with-param name="entryId" select="@id" />
+              </xsl:apply-templates>
+            </xsl:if>
           </xsl:if>
         </xsl:for-each>
 
