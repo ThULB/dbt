@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -30,8 +29,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.mycore.common.MCRException;
-
-import de.urmel_dl.dbt.rc.datamodel.Status;
 
 /**
  * @author René Adler (eagle)
@@ -65,12 +62,10 @@ public class SlotList implements Serializable {
      * @param slot the slot to add
      */
     public void addSlot(final Slot slot) {
-        Optional<Slot> os = Optional.ofNullable(getSlotById(slot.getSlotId()));
-        if (slot.getSlotId() != null && os.isPresent() && !Status.FREE.equals(os.get().getStatus())) {
+        if (slot.getSlotId() != null && getSlotById(slot.getSlotId()) != null) {
             throw new MCRException("Slot with id " + slot.getSlotId() + " already exists!");
         }
 
-        os.ifPresent(slots::remove);
         slots.add(slot);
     }
 
