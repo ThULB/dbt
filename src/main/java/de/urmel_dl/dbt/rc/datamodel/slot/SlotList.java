@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -29,6 +30,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.mycore.common.MCRException;
+
+import de.urmel_dl.dbt.rc.datamodel.Status;
 
 /**
  * @author René Adler (eagle)
@@ -62,10 +65,12 @@ public class SlotList implements Serializable {
      * @param slot the slot to add
      */
     public void addSlot(final Slot slot) {
-        if (slot.getSlotId() != null && getSlotById(slot.getSlotId()) != null) {
+        Optional<Slot> os = Optional.ofNullable(getSlotById(slot.getSlotId()));
+        if (slot.getSlotId() != null && os.isPresent() && Status.FREE.equals(os.get().getStatus())) {
             throw new MCRException("Slot with id " + slot.getSlotId() + " already exists!");
         }
 
+        os.ifPresent(slots::remove);
         slots.add(slot);
     }
 
@@ -109,9 +114,11 @@ public class SlotList implements Serializable {
      * @return the slot
      */
     public Slot getSlotById(final String slotId) {
-        for (Slot slot : slots) {
-            if (slotId.equals(slot.getSlotId())) {
-                return slot;
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                if (slotId.equals(slot.getSlotId())) {
+                    return slot;
+                }
             }
         }
 
@@ -127,8 +134,10 @@ public class SlotList implements Serializable {
         final SlotList slotList = new SlotList();
         slotList.total = this.total;
 
-        for (Slot slot : slots) {
-            slotList.addSlot(slot.getBasicCopy());
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                slotList.addSlot(slot.getBasicCopy());
+            }
         }
 
         return slotList;
@@ -142,9 +151,11 @@ public class SlotList implements Serializable {
     public SlotList getActiveSlots() {
         final SlotList slotList = new SlotList();
 
-        for (Slot slot : slots) {
-            if (slot.isActive()) {
-                slotList.addSlot(slot.getBasicCopy());
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                if (slot.isActive()) {
+                    slotList.addSlot(slot.getBasicCopy());
+                }
             }
         }
 
