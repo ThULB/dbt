@@ -237,9 +237,6 @@ public class TestSlot extends MCRJPATestCase {
         slot2.setStatus(Status.FREE);
         SLOT_MANAGER.addSlot(slot2);
 
-        assertEquals(2, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01")));
-
-        slot2.setStatus(Status.ACTIVE);
         assertEquals(3, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01")));
 
         assertEquals(1, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "0027.01.01")));

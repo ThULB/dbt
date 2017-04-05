@@ -78,7 +78,7 @@ public class OPCRecordEntry implements Serializable {
     /**
      * @return the record
      */
-    @XmlElement(name = "record", namespace="http://www.db-thueringen.de/opc/pica-xml-1-0.xsd")
+    @XmlElement(name = "record", namespace="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd")
     public Record getRecord() {
         return record;
     }

@@ -388,19 +388,15 @@ public final class SlotManager {
      * @return the next id
      */
     public synchronized int getNextFreeId(final MCRCategoryID rcLocation) {
-        int nextId = -1;
         int lastId = -1;
 
         for (Slot slot : slotList.getSlots()) {
             if (slot.getLocation().equals(rcLocation)) {
                 lastId = lastId == -1 || lastId <= slot.getId() ? slot.getId() + 1 : lastId;
-                if (slot.getStatus() == Status.FREE) {
-                    nextId = nextId == -1 || nextId > slot.getId() ? slot.getId() : nextId;
-                }
             }
         }
 
-        return nextId == -1 ? lastId == -1 ? 1 : lastId : nextId;
+        return lastId == -1 ? 1 : lastId;
     }
 
     /**
@@ -414,7 +410,7 @@ public final class SlotManager {
         final Slot a = new Slot(rcLocation, id);
         final Slot b = getSlotById(a.getSlotId());
 
-        return b == null || b.getStatus() == Status.FREE;
+        return b == null;
     }
 
     /**

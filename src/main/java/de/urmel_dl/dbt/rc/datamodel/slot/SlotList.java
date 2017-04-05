@@ -109,9 +109,11 @@ public class SlotList implements Serializable {
      * @return the slot
      */
     public Slot getSlotById(final String slotId) {
-        for (Slot slot : slots) {
-            if (slotId.equals(slot.getSlotId())) {
-                return slot;
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                if (slotId.equals(slot.getSlotId())) {
+                    return slot;
+                }
             }
         }
 
@@ -127,8 +129,10 @@ public class SlotList implements Serializable {
         final SlotList slotList = new SlotList();
         slotList.total = this.total;
 
-        for (Slot slot : slots) {
-            slotList.addSlot(slot.getBasicCopy());
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                slotList.addSlot(slot.getBasicCopy());
+            }
         }
 
         return slotList;
@@ -142,9 +146,11 @@ public class SlotList implements Serializable {
     public SlotList getActiveSlots() {
         final SlotList slotList = new SlotList();
 
-        for (Slot slot : slots) {
-            if (slot.isActive()) {
-                slotList.addSlot(slot.getBasicCopy());
+        synchronized (slots) {
+            for (Slot slot : slots) {
+                if (slot.isActive()) {
+                    slotList.addSlot(slot.getBasicCopy());
+                }
             }
         }
 
