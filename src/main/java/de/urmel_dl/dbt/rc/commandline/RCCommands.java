@@ -364,6 +364,7 @@ public class RCCommands extends MCRAbstractCommands {
                                         default:
                                             save = false;
                                     }
+                                    break;
                                 default:
                                     save = false;
                             }
