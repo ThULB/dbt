@@ -302,7 +302,7 @@ public class RCCommands extends MCRAbstractCommands {
                 try {
                     MCREvent evt = null;
 
-                    if (slot.isActive()) {
+                    if (slot.isActive() || Status.PENDING.equals(slot.getStatus())) {
                         final Date today = new Date();
                         final Date validTo = slot.getValidToAsDate();
                         final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
