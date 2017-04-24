@@ -316,6 +316,17 @@ class IBWRCClient {
         var mlSlots: XULMenuListElement = <any>ev.currentTarget;
         var slotId = mlSlots.selectedItem.value;
 
+        var otherElm: XULMenuListElement = null;
+        if (mlSlots.getAttribute("id") == "mlSlots") {
+            otherElm = <any>document.getElementById("mlSlotsBar");
+        } else {
+            otherElm = <any>document.getElementById("mlSlots");
+        }
+
+        if (core.Utils.isValid(otherElm)) {
+            otherElm.selectedIndex = mlSlots.selectedIndex;
+        }
+
         this.clearMenuList("mlPPN", true);
         this.clearMenuList("mlEPN", true);
         this.clearTextBox("tbBarcode", true);
