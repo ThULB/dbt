@@ -449,7 +449,24 @@
       </xsl:if>
     </dl>
 
-    <xsl:if test="$withCopys">
+    <xsl:if test="string-length(@epn) &gt; 0">
+      <xsl:variable name="epn" select="@epn" />
+      <xsl:variable name="occurrence" select="$record//pica:field[@tag = '203@' and (pica:subfield[@code = '0'] = $epn)]/@occurrence" />
+      <dl>
+        <xsl:for-each select="$record//pica:field[@tag = '209A' and @occurrence = $occurrence]">
+          <dt>Standort</dt>
+          <dd>
+            <xsl:value-of select="pica:subfield[@code='f']" />
+          </dd>
+          <dt>Signatur</dt>
+          <dd>
+            <xsl:value-of select="pica:subfield[@code='a']" />
+          </dd>
+        </xsl:for-each>
+      </dl>
+    </xsl:if>
+
+    <xsl:if test="$withCopys and (string-length(@epn) = 0)">
       <dl>
         <xsl:for-each select="$record//pica:field[@tag = '209A']">
           <dt>Standort</dt>
