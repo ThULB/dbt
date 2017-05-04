@@ -247,6 +247,15 @@
         <label xml:lang="de" text="Bibliothek" />
       </category>
     </category>
+    <category ID="hsn">
+      <label xml:lang="de" text="Hochschule Nordhausen" />
+      <category ID="hsn.eng">
+        <label xml:lang="de" text="Ingenieur-Wissenschaften" />
+        <category ID="hsn.comp_sc">
+          <label xml:lang="de" text="Institut für Informatik, Automatisierung und Elektronik" />
+        </category>
+      </category>
+    </category>
     <category ID="21000">
       <label xml:lang="de" text="Fachhochschule Schmalkalden" />
       <category ID="21030">
