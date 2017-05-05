@@ -65,6 +65,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry.FileEntryProcessingException;
+import de.urmel_dl.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import de.urmel_dl.dbt.rc.persistency.FileEntryManager;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.utils.EntityFactory;
@@ -302,7 +303,7 @@ public class RCCommands extends MCRAbstractCommands {
                 try {
                     MCREvent evt = null;
 
-                    if (slot.isActive()) {
+                    if (slot.isActive() || Status.PENDING.equals(slot.getStatus())) {
                         final Date today = new Date();
                         final Date validTo = slot.getValidToAsDate();
                         final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
@@ -344,11 +345,18 @@ public class RCCommands extends MCRAbstractCommands {
                                             evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                                             break;
                                         case FREE:
-                                            LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+                                            if (slot.isOnlineOnly() ||
+                                                slot.getEntries().stream()
+                                                    .filter(se -> se.getEntry() instanceof OPCRecordEntry
+                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
+                                                    .count() == 0) {
+                                                LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+                                                mgr.delete(slot);
+                                                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                            } else {
+                                                evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                            }
 
-                                            mgr.delete(slot);
-
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
                                             evt.put(SlotManager.SLOT_TYPE, slot);
                                             MCREventManager.instance().handleEvent(evt);
                                             continue;
@@ -364,6 +372,7 @@ public class RCCommands extends MCRAbstractCommands {
                                         default:
                                             save = false;
                                     }
+                                    break;
                                 default:
                                     save = false;
                             }

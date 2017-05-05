@@ -251,19 +251,22 @@
       <label xml:lang="de" text="Hochschule Nordhausen" />
       <category ID="hsn.eng">
         <label xml:lang="de" text="Ingenieur-Wissenschaften" />
-        <category ID="hsn.eng.el_eng">
+        <category ID="hsn.el_eng">
           <label xml:lang="de" text="Elektrotechnik" />
         </category>
-        <category ID="hsn.eng.sys_eng">
+        <category ID="hsn.comp_sc">
+          <label xml:lang="de" text="Institut für Informatik, Automatisierung und Elektronik" />
+        </category>
+        <category ID="hsn.sys_eng">
           <label xml:lang="de" text="Systems Engineering" />
         </category>
       </category>
       <category ID="hsn.eco">
         <label xml:lang="de" text="Wirtschafts- und Sozialwissenschaften" />
-        <category ID="hsn.eco.ba">
+        <category ID="hsn.ba">
           <label xml:lang="de" text="Betriebswirtschaftlehre" />
         </category>
-        <category ID="hsn.eco.pmg">
+        <category ID="hsn.pmg">
           <label xml:lang="de" text="Public Management &amp; Governance" />
         </category>
       </category>
