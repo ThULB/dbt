@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd"
-  ID="mir_institutes"
->
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="mir_institutes">
+  <label xml:lang="x-uri" text="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes" />
   <label xml:lang="de" text="Hochschule/Fachbereich" />
   <categories>
     <category ID="3">
@@ -97,7 +96,10 @@
         <label xml:lang="de" text="Fakultät für Mathematik und Naturwissenschaften" />
       </category>
       <category ID="8400">
-        <label xml:lang="de" text="Fakultät für Wirtschaftswissenschaften" />
+        <label xml:lang="de" text="Fakultät für Wirtschaftswissenschaften (bis 2013)" />
+      </category>
+      <category ID="8450">
+        <label xml:lang="de" text="Fakultät für Wirtschaftswissenschaften und Medien (ab 2014)" />
       </category>
       <category ID="8500">
         <label xml:lang="de" text="Universitätsbibliothek" />
@@ -176,7 +178,7 @@
       </category>
     </category>
     <category ID="6">
-      <label xml:lang="de" text="Fachhochschule Jena" />
+      <label xml:lang="de" text="Ernst-Abbe-Hochschule" />
       <category ID="6020">
         <label xml:lang="de" text="Betriebswirtschaft" />
       </category>
@@ -291,6 +293,9 @@
           <label xml:lang="de" text="Bibliothek d. Friedrich-Schiller-Gymnasiums Eisenberg" />
         </category>
       </category>
+      <category ID="20025">
+        <label xml:lang="de" text="Landesamt für Denkmalpflege und Archäologie Weimar" />
+      </category>
       <category ID="20030">
         <label xml:lang="de" text="Museen" />
         <category ID="20031">
@@ -309,40 +314,10 @@
           <label xml:lang="de" text="Campus TV" />
         </category>
       </category>
-      <category ID="20080">
-        <label xml:lang="de" text="Stiftung Weimarer Klassik" />
-      </category>
       <category ID="20060">
         <label xml:lang="de" text="Vereine/Organisationen" />
         <category ID="20061">
           <label xml:lang="de" text="Landesverband Thüringen im Deutschen Bibliotheksverbund e.V." />
-        </category>
-      </category>
-      <category ID="20070">
-        <label xml:lang="de" text="Vereinigte Domstifter zu Merseburg und Naumburg und des Kollegiatstifts Zeitz" />
-        <category ID="20071">
-          <label xml:lang="de" text="Stiftsbibliothek Zeitz" />
-          <category ID="200711">
-            <label xml:lang="de" text="Domherrenbibliothek" />
-          </category>
-          <category ID="200712">
-            <label xml:lang="de" text="Stiftsbibliothek" />
-          </category>
-        </category>
-        <category ID="20072">
-          <label xml:lang="de" text="Stiftsarchiv Zeitz" />
-        </category>
-        <category ID="20073">
-          <label xml:lang="de" text="Domarchiv Naumburg" />
-        </category>
-        <category ID="20074">
-          <label xml:lang="de" text="Dombibliothek Naumburg" />
-        </category>
-        <category ID="20075">
-          <label xml:lang="de" text="Domarchiv Merseburg" />
-        </category>
-        <category ID="20076">
-          <label xml:lang="de" text="Dombibliothek Merseburg" />
         </category>
       </category>
       <category ID="20050">
