@@ -36,9 +36,11 @@
     <jersey.version>2.25</jersey.version>
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.target>${java.target.version}</maven.compiler.target>
+    <node.version>v6.9.2</node.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${project.build.directory}/classes/META-INF/resources/dbt/assets</template.assetsdir>
     <template.cssdir>${project.build.directory}/classes/META-INF/resources/dbt/css</template.cssdir>
+    <yarn.version>v0.28.1</yarn.version>
   </properties>
 
   <build>
@@ -224,26 +226,23 @@
         <artifactId>frontend-maven-plugin</artifactId>
 
         <configuration>
-          <installDirectory>target</installDirectory>
+          <nodeVersion>${node.version}</nodeVersion>
+          <yarnVersion>${yarn.version}</yarnVersion>
+          <installDirectory>${settings.localRepository}/node-yarn-${node.version}-${yarn.version}</installDirectory>
         </configuration>
 
         <executions>
           <execution>
-            <id>install node and npm</id>
+            <id>install node and yarn</id>
             <goals>
-              <goal>install-node-and-npm</goal>
+              <goal>install-node-and-yarn</goal>
             </goals>
-            <configuration>
-              <nodeVersion>v4.2.2</nodeVersion>
-              <npmVersion>3.5.0</npmVersion>
-            </configuration>
           </execution>
 
           <execution>
             <id>webapp-deps</id>
             <goals>
-              <goal>npm</goal>
-              <goal>bower</goal>
+              <goal>yarn</goal>
             </goals>
             <phase>process-resources</phase>
             <configuration>
@@ -259,16 +258,15 @@
             <phase>process-resources</phase>
             <configuration>
               <workingDirectory>${grunt.projectBase}</workingDirectory>
-              <arguments>--verbose --lessFile ${basedir}/src/main/less/build.less --targetDirectory ${template.cssdir} --assetsDirectory
-                ${template.assetsdir}</arguments>
+              <arguments>--verbose --lessFile=${basedir}/src/main/less/build.less --targetDirectory=${template.cssdir}
+                --assetsDirectory=${template.assetsdir}</arguments>
             </configuration>
           </execution>
 
           <execution>
             <id>rcclient-deps</id>
             <goals>
-              <goal>npm</goal>
-              <goal>bower</goal>
+              <goal>yarn</goal>
             </goals>
             <phase>process-resources</phase>
             <configuration>
@@ -323,7 +321,6 @@
                   <filtering>true</filtering>
                   <directory>${basedir}/src/main/rcclient</directory>
                   <includes>
-                    <include>bower.json</include>
                     <include>GruntFile.js</include>
                     <include>package.json</include>
                   </includes>

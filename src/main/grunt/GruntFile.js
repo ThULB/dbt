@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-less");
-	grunt.loadNpmTasks("grunt-bowercopy");
+    grunt.loadNpmTasks("grunt-contrib-copy");
 	var fs = require("fs");
 	var path = require("path");
 	var util = require("util");
@@ -42,29 +42,65 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		globalConfig : globalConfig,
 		pkg : grunt.file.readJSON("package.json"),
-		bootstrap : grunt.file.readJSON("bower_components/bootstrap/package.json"),
+		bootstrap : grunt.file.readJSON("node_modules/bootstrap/package.json"),
 		banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
 				+ " * Copyright 2013-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n" + " * Licensed under <%= pkg.license %>\n"
 				+ " * Based on Bootstrap\n" + "*/\n",
-		bowercopy : {
-			deps : {
-				options : {
-					destPrefix : "<%=globalConfig.assetsDirectory%>/"
-				},
-				files : {
-					"angular/js" : [ "angular/*.min.*", "angular-translate/*.min.*", "angular-translate-loader-partial/*.min.*",
-							"angular-modal-service/dst/*.min.*" ],
-					"bootstrap-fileinput/css" : "bootstrap-fileinput/css",
-					"bootstrap-fileinput/img" : "bootstrap-fileinput/img",
-					"bootstrap-fileinput/js" : "bootstrap-fileinput/js/*min.js",
-
-					"summernote/lang" : "summernote/lang",
-					"summernote" : [ "summernote/dist/*.min.*", "summernote/dist/*.css" ],
-
-					"jquery/plugins" : "jquery-sortable/source/js/*min.js",
-				},
-			}
-		},
+        copy: {
+            main: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: "./node_modules",
+                        dest: "<%=globalConfig.assetsDirectory%>/angular/js",
+                        flatten: true,
+                        src: [
+                            "./angular/*.min.*",
+                            "./angular-translate/dist/*.min.*",
+							"./angular-translate-loader-partial/*.min.*",
+							"./angular-modal-service/dst/*.min.*"
+                        ]
+                    },
+                    {
+                        expand: true,
+                        cwd: "./node_modules/bootstrap-fileinput",
+                        dest: "<%=globalConfig.assetsDirectory%>/bootstrap-fileinput",
+                        src: [
+                            "./css/**",
+							"./img/**",
+							"./js/*min.js"
+                        ]
+                    },
+                    {
+                        expand: true,
+                        cwd: "./node_modules/summernote",
+                        dest: "<%=globalConfig.assetsDirectory%>/summernote",
+                        src: [
+                            "./lang/**",
+                        ]
+                    },
+                    {
+                        expand: true,
+                        cwd: "./node_modules/summernote",
+                        dest: "<%=globalConfig.assetsDirectory%>/summernote",
+                        flatten: true,
+                        src: [
+                            "./dist/*.min.*",
+                            "./dist/*.css"
+                        ]
+                    },
+                    {
+                        expand: true,
+                        cwd: "./node_modules/jquery-sortable",
+                        dest: "<%=globalConfig.assetsDirectory%>/jquery/plugins",
+                        flatten: true,
+                        src: [
+                            "./source/js/*min.js"
+                        ]
+                    }
+                ]
+            }
+        },
 		concat : {
 			options : {
 				banner : "<%= banner %>",
@@ -154,9 +190,9 @@ module.exports = function(grunt) {
 
 	grunt.registerTask("default", "build a theme", function() {
 		grunt.log.writeln("less directory: " + grunt.config("globalConfig").lessDirectory());
-		grunt.task.run("bowercopy");
+		grunt.task.run("copy");
 		grunt.config("globalConfig.lastModified", new Date(Math.max(dirLastModified(grunt.config("globalConfig").lessDirectory()),
-				dirLastModified("bower_components"))));
+				dirLastModified("node_modules"))));
 		grunt.task.run("build:layout");
 	});
 };

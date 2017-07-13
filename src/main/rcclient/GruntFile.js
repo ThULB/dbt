@@ -40,7 +40,7 @@ module.exports = function(grunt) {
 				concat : {
 					debug : {
 						files : {
-							"build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js" : [ "bower_components/crypto-js/crypto-js.js",
+							"build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js" : [ "node_modules/crypto-js/crypto-js.js",
 									"build/js/<%= pkg.name %>.js" ]
 						},
 					}
@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 							screwIE8 : true
 						},
 						files : {
-							"build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js" : [ "bower_components/crypto-js/crypto-js.js",
+							"build/<%= pkg.name %>/chrome/content/xul/<%= pkg.name %>.js" : [ "node_modules/crypto-js/crypto-js.js",
 									"build/js/<%= pkg.name %>.js" ],
 							"build/<%= pkg.name %>/scripts/<%= pkg.name %>.js" : [ "build/js/<%= pkg.name %>Startup.js" ]
 						}
