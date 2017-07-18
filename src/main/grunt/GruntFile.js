@@ -1,123 +1,81 @@
 module.exports = function(grunt) {
-	grunt.loadNpmTasks("grunt-contrib-concat");
-	grunt.loadNpmTasks("grunt-contrib-less");
-    grunt.loadNpmTasks("grunt-contrib-copy");
 	var fs = require("fs");
 	var path = require("path");
-	var util = require("util");
+
 	var getAbsoluteDir = function(dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 	};
+
 	var globalConfig = {
 		lessFile : grunt.option("lessFile"),
-		lessDirectory : function() {
-			var lessFile = grunt.config("globalConfig.lessFile");
-			return lessFile.substring(0, Math.max(lessFile.lastIndexOf("/"), lessFile.lastIndexOf("\\")));
-		},
+		resourceDirectory : getAbsoluteDir(grunt.option("resourceDirectory")),
 		targetDirectory : getAbsoluteDir(grunt.option("targetDirectory")),
+		cssDirectory : getAbsoluteDir(grunt.option("cssDirectory")),
 		assetsDirectory : getAbsoluteDir(grunt.option("assetsDirectory")),
-		assetsDirectoryRelative : path.basename(grunt.option("assetsDirectory")),
-		lastModified : new Date(0)
-	};
-	var dirLastModified = function(dir, date) {
-		var src = grunt.file.expand(dir + "/**/*.less");
-		var modified = [];
-		src.forEach(function(file, index) {
-			var stat = fs.statSync(file);
-			modified[index] = stat.mtime;
-		});
-		return new Date(Math.max.apply(Math, modified));
-	};
-	var createFileIfNotExist = function(filepath) {
-		if (!grunt.file.exists(filepath)) {
-			grunt.file.write(filepath);
-		}
-	};
-	var needRebuild = function(dest) {
-		var destModified = fs.existsSync(dest) ? fs.statSync(dest).mtime : new Date(0);
-		var srcModified = grunt.config("globalConfig.lastModified");
-		return srcModified.getTime() > destModified.getTime();
 	};
 
 	grunt.initConfig({
 		globalConfig : globalConfig,
 		pkg : grunt.file.readJSON("package.json"),
 		bootstrap : grunt.file.readJSON("node_modules/bootstrap/package.json"),
-		banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
-				+ " * Copyright 2013-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n" + " * Licensed under <%= pkg.license %>\n"
-				+ " * Based on Bootstrap\n" + "*/\n",
-        copy: {
-            main: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: "./node_modules",
-                        dest: "<%=globalConfig.assetsDirectory%>/angular/js",
-                        flatten: true,
-                        src: [
-                            "./angular/*.min.*",
-                            "./angular-translate/dist/*.min.*",
-							"./angular-translate-loader-partial/*.min.*",
-							"./angular-modal-service/dst/*.min.*"
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: "./node_modules/bootstrap-fileinput",
-                        dest: "<%=globalConfig.assetsDirectory%>/bootstrap-fileinput",
-                        src: [
-                            "./css/**",
-							"./img/**",
-							"./js/*min.js"
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: "./node_modules/summernote",
-                        dest: "<%=globalConfig.assetsDirectory%>/summernote",
-                        src: [
-                            "./lang/**",
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: "./node_modules/summernote",
-                        dest: "<%=globalConfig.assetsDirectory%>/summernote",
-                        flatten: true,
-                        src: [
-                            "./dist/*.min.*",
-                            "./dist/*.css"
-                        ]
-                    },
-                    {
-                        expand: true,
-                        cwd: "./node_modules/jquery-sortable",
-                        dest: "<%=globalConfig.assetsDirectory%>/jquery/plugins",
-                        flatten: true,
-                        src: [
-                            "./source/js/*min.js"
-                        ]
-                    }
-                ]
-            }
-        },
-		concat : {
-			options : {
-				banner : "<%= banner %>",
-				stripBanners : false
-			},
-			dist : {
-				src : [],
-				dest : ""
+		copy : {
+			deps : {
+				files : [
+						{
+							expand : true,
+							cwd : "./node_modules",
+							dest : "<%=globalConfig.assetsDirectory%>/angular/js",
+							flatten : true,
+							src : [ "./angular/*.min.*", "./angular-translate/dist/*.min.*", "./angular-translate-loader-partial/*.min.*",
+									"./angular-modal-service/dst/*.min.*" ]
+						}, {
+							expand : true,
+							cwd : "./node_modules/bootstrap-fileinput",
+							dest : "<%=globalConfig.assetsDirectory%>/bootstrap-fileinput",
+							src : [ "./css/**", "./img/**", "./js/*min.js" ]
+						}, {
+							expand : true,
+							cwd : "./node_modules/summernote",
+							dest : "<%=globalConfig.assetsDirectory%>/summernote",
+							src : [ "./lang/**", ]
+						}, {
+							expand : true,
+							cwd : "./node_modules/summernote",
+							dest : "<%=globalConfig.assetsDirectory%>/summernote",
+							flatten : true,
+							src : [ "./dist/*.min.*", "./dist/*.css" ]
+						}, {
+							expand : true,
+							cwd : "./node_modules/jquery-sortable",
+							dest : "<%=globalConfig.assetsDirectory%>/jquery/plugins",
+							flatten : true,
+							src : [ "./source/js/*min.js" ]
+						} ]
+			}
+		},
+		imagemin : {
+			build : {
+				options : {
+					optimizationLevel : 5
+				},
+				files : [ {
+					expand : true,
+					cwd : "<%=globalConfig.resourceDirectory%>/dbt/images",
+					src : [ "**/*.{gif,jpg,png,svg}" ],
+					dest : "<%=globalConfig.targetDirectory%>/dbt/images/"
+				} ]
 			}
 		},
 		less : {
-			dist : {
+			build : {
 				options : {
-					compress : false,
-					cleancss : false,
+					banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
+							+ " * Copyright 2013-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n"
+							+ " * Licensed under <%= pkg.license %>\n" + " * Based on Bootstrap\n" + "*/\n",
+					compress : true,
+					cleancss : true,
 					ieCompat : false,
-					sourceMap : true,
+					sourceMap : false,
 					sourceMapURL : "",
 					sourceMapFilename : "",
 					outputSourceFiles : true,
@@ -132,67 +90,36 @@ module.exports = function(grunt) {
 						"input-border-focus" : "@brand-primary"
 					}
 				},
-				files : {}
+				files : {
+					"<%=globalConfig.cssDirectory%>/layout.min.css" : "<%=globalConfig.lessFile%>"
+				}
+			}
+		},
+		uglify : {
+			build : {
+				options : {
+					banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
+							+ " * Copyright 2013-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n"
+							+ " * Licensed under <%= pkg.license %>\n*/\n",
+					preserveComments : false,
+					mangle : false,
+					sourceMap : true
+				},
+				files : [ {
+					expand : true,
+					cwd : "<%=globalConfig.resourceDirectory%>",
+					src : "**/*.js",
+					dest : "<%=globalConfig.targetDirectory%>",
+					ext : ".min.js"
+				} ]
 			}
 		}
 	});
-	grunt.registerTask("none", function() {
-	});
-	grunt.registerTask("build", "build a regular theme", function(theme, compress) {
-		var target = grunt.config("globalConfig.targetDirectory") + "/" + theme + ".css";
-		if (needRebuild(target)) {
-			compress = compress === undefined ? true : compress;
 
-			var concatSrc;
-			var concatDest;
-			var lessDest;
-			var lessSrc;
-			var files = {};
-			var dist = {};
-			lessDest = "build.css";
-			lessSrc = [ "<%=globalConfig.lessFile%>" ];
-			concatSrc = lessDest;
-			concatDest = "<%=globalConfig.targetDirectory%>/" + theme + ".css";
-			dist = {
-				src : concatSrc,
-				dest : concatDest
-			};
-			grunt.config("concat.dist", dist);
+	grunt.loadNpmTasks("grunt-contrib-copy");
+	grunt.loadNpmTasks("grunt-contrib-imagemin");
+	grunt.loadNpmTasks("grunt-contrib-less");
+	grunt.loadNpmTasks("grunt-contrib-uglify");
 
-			files = {};
-			files[lessDest] = lessSrc;
-			grunt.config("less.dist.files", files);
-			grunt.config("less.dist.options.compress", false);
-			grunt.config("less.dist.options.cleancss", false);
-			grunt.config("less.dist.options.sourceMap", true);
-			grunt.config("less.dist.options.sourceMapURL", theme + ".css.map");
-			grunt.config("less.dist.options.sourceMapFilename", "<%=globalConfig.targetDirectory%>/" + theme + ".css.map");
-			grunt.log.writeln("compiling file " + lessSrc + " ==> " + lessDest);
-
-			grunt.task.run([ "less:dist", "concat",
-					compress ? "compress:" + concatDest + ":" + "<%=globalConfig.targetDirectory%>/" + theme + ".min.css" : "none" ]);
-		} else {
-			grunt.log.writeln("do not need to rebuild " + target);
-		}
-	});
-
-	grunt.registerTask("compress", "compress a generic css", function(fileSrc, fileDst) {
-		var files = {};
-		files[fileDst] = fileSrc;
-		grunt.log.writeln("compressing file " + fileSrc);
-
-		grunt.config("less.dist.files", files);
-		grunt.config("less.dist.options.compress", true);
-		grunt.config("less.dist.options.cleancss", true);
-		grunt.config("less.dist.options.sourceMap", false);
-		grunt.task.run([ "less:dist" ]);
-	});
-
-	grunt.registerTask("default", "build a theme", function() {
-		grunt.log.writeln("less directory: " + grunt.config("globalConfig").lessDirectory());
-		grunt.task.run("copy");
-		grunt.config("globalConfig.lastModified", new Date(Math.max(dirLastModified(grunt.config("globalConfig").lessDirectory()),
-				dirLastModified("node_modules"))));
-		grunt.task.run("build:layout");
-	});
+	grunt.registerTask("default", [ "copy", "imagemin", "less", "uglify" ]);
 };
