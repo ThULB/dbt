@@ -38,8 +38,8 @@
     <maven.compiler.target>${java.target.version}</maven.compiler.target>
     <node.version>v6.9.2</node.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
-    <template.assetsdir>${template.targetdir}/assets</template.assetsdir>
-    <template.cssdir>${template.targetdir}/css</template.cssdir>
+    <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
+    <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
     <yarn.version>v0.28.1</yarn.version>
   </properties>
