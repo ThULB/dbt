@@ -435,7 +435,7 @@
 
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
-              <xsl:copy-of select="@*|node()[not(contains('|head|breadcrumb|', concat('|', name(), '|')))]" />
+              <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|', concat('|', name(), '|')))]" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="printNotLoggedIn" />
