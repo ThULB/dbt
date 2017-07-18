@@ -19,6 +19,8 @@
         "grunt-contrib-less": "^1.0.0",
         "grunt-replace": "^1.0.0",
         "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-imagemin": "2.0.1",
+        "grunt-contrib-uglify": "^3.0.1",
         "angular": "~1.5.8",
         "angular-translate": "~2.11.0",
         "angular-translate-loader-partial": "~2.11.0",

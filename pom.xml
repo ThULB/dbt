@@ -38,8 +38,9 @@
     <maven.compiler.target>${java.target.version}</maven.compiler.target>
     <node.version>v6.9.2</node.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
-    <template.assetsdir>${project.build.directory}/classes/META-INF/resources/dbt/assets</template.assetsdir>
-    <template.cssdir>${project.build.directory}/classes/META-INF/resources/dbt/css</template.cssdir>
+    <template.assetsdir>${template.targetdir}/assets</template.assetsdir>
+    <template.cssdir>${template.targetdir}/css</template.cssdir>
+    <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
     <yarn.version>v0.28.1</yarn.version>
   </properties>
 
@@ -258,7 +259,7 @@
             <phase>process-resources</phase>
             <configuration>
               <workingDirectory>${grunt.projectBase}</workingDirectory>
-              <arguments>--verbose --lessFile=${basedir}/src/main/less/build.less --targetDirectory=${template.cssdir}
+              <arguments>--verbose --resourceDirectory=${basedir}/src/main/resources/META-INF/resources/ --lessFile=${basedir}/src/main/less/build.less --targetDirectory=${template.targetdir} --cssDirectory=${template.cssdir}
                 --assetsDirectory=${template.assetsdir}</arguments>
             </configuration>
           </execution>
