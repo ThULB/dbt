@@ -64,3 +64,87 @@
   }
 }
 
+// SVG Icon Overlay
+#hit_list {
+  @cover-height: 90px;
+  @cover-width: 60px;
+    
+  .hit_item {
+    .hit_download_box {
+      float: left;
+      .hit_icon {
+        .hitIcon () {
+          background-color: #fff;
+          background-size: cover;
+          background-repeat: no-repeat;
+          border: 1px solid @panel-default-border;
+          height: @cover-height;
+        }
+
+        &[style *= "icon_common.png"] {
+          background: none ! important;
+        }
+
+        &[src *= "icon_common_disabled.png"] {
+          visibility: hidden;
+          @media (max-width: @grid-float-breakpoint-max) {
+            display: none;
+          }
+        }
+
+        @media (min-width: @grid-float-breakpoint) {
+          .hitIcon ();
+        }
+
+        @media (max-width: @grid-float-breakpoint-max) {
+          @media (orientation: landscape) {
+            .hitIcon ();
+          }
+        }
+      }
+
+      .hit_icon_overlay {
+        display: none;
+        .hitIconOverlay () {
+          &[src $= ".svg"] {
+            display: none;
+            .vendor-webkit & + span {
+              position: absolute;
+              top: 5px;
+              display: block;
+              height: (@cover-height - 10px);
+              width: (@cover-width - 10px);
+              -webkit-mask-size: (@cover-width - 10px) (@cover-height - 10px);
+              background: @brand-primary;
+            }
+
+            & + svg {
+              position: absolute;
+              top: 5px;
+              & , & div {
+                display: block;
+                height: (@cover-height - 10px);
+                width: (@cover-width - 10px);
+              }
+
+              & div {
+                background-color: @brand-primary;
+              }
+            }
+          }
+        }
+
+        @media (min-width: @grid-float-breakpoint) {
+          .hitIconOverlay ();
+        }
+
+        @media (max-width: @grid-float-breakpoint-max) {
+          @media (orientation: landscape) {
+            .hitIconOverlay ();
+          }
+        }
+      }
+    }
+  }
+}
+
