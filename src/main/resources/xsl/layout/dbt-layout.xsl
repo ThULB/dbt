@@ -47,7 +47,6 @@
       <xsl:call-template name="layout.noCaching" />
       <link rel="icon" href="{$WebApplicationBaseURL}favicon.ico" />
       <xsl:call-template name="layout.cssLinks" />
-      <xsl:call-template name="layout.scripts" />
 
       <xsl:copy-of select="head/*" />
     </head>
@@ -62,6 +61,8 @@
       <footer>
         <xsl:call-template name="layout.footer" />
       </footer>
+
+      <xsl:call-template name="layout.scripts" />
     </body>
   </xsl:template>
   
@@ -111,7 +112,7 @@
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.min.js"></script>
-    <script>
+    <script type="text/javascript">
       $( document ).ready(function() {
       $('.overtext').tooltip();
       $.confirm.options = {
@@ -136,6 +137,9 @@
       <xsl:value-of select="concat('var webApplicationBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
       <xsl:value-of select="concat('var currentLang = &quot;', $CurrentLang, '&quot;;')" disable-output-escaping="yes" />
     </script>
+
+    <!-- extra scripts from each page -->
+    <xsl:apply-templates select="//script" mode="html.scripts" />
 
     <xsl:if test="$include.HTML.Head.JS">
       <xsl:copy-of select="$include.HTML.Head.JS" />
@@ -367,9 +371,7 @@
           </xsl:if>
           <xsl:call-template name="layout.head.basketMenu" />
         </ul>
-        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="navbar-form navbar-right visible-xs visible-md visible-lg"
-          role="search"
-        >
+        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="navbar-form navbar-right visible-xs visible-md visible-lg" role="search">
           <div class="input-group input-group-sm">
             <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <div class="input-group-btn">
@@ -435,7 +437,8 @@
 
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
-              <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|', concat('|', name(), '|')))]" />
+<!--               <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|scripts|', concat('|', name(), '|')))]" /> -->
+              <xsl:apply-templates select="@*|node()" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="printNotLoggedIn" />
@@ -514,6 +517,12 @@
       </a>
     </div>
   </xsl:template>
+
+  <xsl:template match="@title|head|breadcrumb|script" />
+
+  <xsl:template match="script" mode="html.scripts">
+    <xsl:copy-of select="." />
+  </xsl:template>
   
   <!-- ************************************************************ -->
   <!-- *                      Action Buttons                      * -->
@@ -578,6 +587,14 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:element>
+  </xsl:template>
+  
+  <!-- Standard Copy Template -->
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*" />
+      <xsl:apply-templates select="child::node()" />
+    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>

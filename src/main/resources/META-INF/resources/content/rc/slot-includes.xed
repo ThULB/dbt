@@ -112,8 +112,6 @@
             <fieldset class="{$xed-validation-marker}">
               <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
             </fieldset>
-
-            <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
           </xed:when>
           <xed:when test="xed:call-java('de.urmel_dl.dbt.rc.persistency.SlotManager','hasAdminPermission')">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="status" />
@@ -179,8 +177,6 @@
           required="true" />
 
         <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="accesskeys" />
-
-        <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
       </xed:otherwise>
     </xed:choose>
   </xed:template>
@@ -332,6 +328,8 @@
     <xed:validate xpath="slot" display="global"
       test="(string-length(accesskeys/@readkey) &gt; 0) and (string-length(accesskeys/@writekey) &gt; 0) and (accesskeys/@readkey != accesskeys/@writekey)"
       i18n="component.rc.slot.accesskey.matches" />
+
+    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
   </xed:template>
 
 </xed:template>
