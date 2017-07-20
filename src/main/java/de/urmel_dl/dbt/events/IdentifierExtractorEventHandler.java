@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -23,13 +23,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.filter.Filters;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -69,8 +69,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
      */
     @Override
     synchronized protected void handleObjectCreated(MCREvent evt, MCRObject obj) {
-        if (!obj.getId().getTypeId().equals("mods"))
+        if (!obj.getId().getTypeId().equals("mods")) {
             return;
+        }
 
         MCRMODSWrapper mods = new MCRMODSWrapper(obj);
 
@@ -78,29 +79,29 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
             final String prefix = PREFIX_SINGELTON.getPrefix(mods);
 
             if (mods.getElements("mods:identifier[@type='uri']").stream()
-                .filter(e -> e.getText()
-                    .contains(new MessageFormat(URI_SYNTAX, Locale.ROOT).format(new Object[] { prefix, "" })))
-                .count() == 0) {
+                .noneMatch(e -> e.getText()
+                    .contains(new MessageFormat(URI_SYNTAX, Locale.ROOT).format(new Object[] { prefix, "" })))) {
                 final OPCConnector opc = new OPCConnector();
                 opc.setMaxHits(50);
 
                 final List<Element> titleInfos = mods.getElements("mods:titleInfo");
-                for (final Element titleInfo : titleInfos) {
-                    final String query = buildQuery(titleInfo);
-                    final Result result = opc.search(query);
-                    if (result.getRecords().isEmpty()) {
-                        LOGGER.info("Nothing was found for title " + query);
-                    } else {
-                        for (final Record record : result.getRecords()) {
-                            record.load(true); // load full record
+                titleInfos.parallelStream().forEach(titleInfo -> {
+                    try {
+                        final String query = buildQuery(titleInfo);
+                        final Result result = opc.search(query);
 
-                            if (!matchTitle(titleInfo, record))
-                                continue;
-
-                            final PPField f = record.getFieldByTag("002@");
-                            if (f != null) {
-                                final String matCode = f.getSubfieldByCode("0").getContent();
-                                if (matCode.startsWith("O")) {
+                        if (result.getRecords().isEmpty()) {
+                            LOGGER.info("Nothing was found for title " + query);
+                        } else {
+                            result.getRecords().parallelStream().map(record -> {
+                                record.load(true);
+                                return record;
+                            }).filter(record -> matchTitle(titleInfo, record)
+                                && Optional.ofNullable(record.getFieldByTag("002@"))
+                                    .map(f -> Optional.ofNullable(f.getSubfieldByCode("0"))
+                                        .map(sf -> sf.getContent().startsWith("O")).isPresent())
+                                    .isPresent())
+                                .findFirst().ifPresent(record -> {
                                     LOGGER.info("Found PPN " + record.getPPN());
 
                                     final Element mId = mods.addElement("identifier");
@@ -109,9 +110,10 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                         .format(new Object[] { prefix, record.getPPN() }));
 
                                     final List<Element> persons = mods.getElements("mods:name[@type='personal']");
-                                    for (final Element person : persons) {
-                                        if (buildXPath("mods:nameIdentifier[@type='gnd']")
-                                            .evaluateFirst(person) == null) {
+                                    persons.parallelStream()
+                                        .filter(person -> buildXPath("mods:nameIdentifier[@type='gnd']")
+                                            .evaluateFirst(person) == null)
+                                        .forEach(person -> {
                                             final String gnd = extractPersonIdentifier("gnd",
                                                 buildXPath("mods:displayForm").evaluateFirst(person), record, opc);
                                             if (gnd != null) {
@@ -121,19 +123,19 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                                 mNId.addContent(gnd);
                                                 person.addContent(mNId);
                                             }
-                                        }
-                                    }
+                                        });
 
                                     if (LOGGER.isDebugEnabled()) {
                                         LOGGER.debug(new XMLOutputter(Format.getPrettyFormat())
                                             .outputString(obj.createXML()));
                                     }
-                                    return;
-                                }
-                            }
+                                });
                         }
+
+                    } catch (ExecutionException e1) {
+                        LOGGER.error("Error on extract identifiers for object " + obj, e1);
                     }
-                }
+                });
             }
         } catch (Exception e) {
             LOGGER.error("Error on extract identifiers for object " + obj, e);
@@ -164,12 +166,12 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         handleObjectCreated(evt, obj);
     }
 
-    private XPathExpression<Element> buildXPath(String xPath) throws JDOMException {
+    private XPathExpression<Element> buildXPath(String xPath) {
         return XPathFactory.instance().compile(xPath, Filters.element(), null, MCRConstants.MODS_NAMESPACE,
             MCRConstants.XLINK_NAMESPACE);
     }
 
-    private String buildQuery(final Element titleInfo) throws JDOMException {
+    private String buildQuery(final Element titleInfo) {
         final StringBuffer sb = new StringBuffer();
 
         final Element title = buildXPath("mods:title").evaluateFirst(titleInfo);
@@ -188,7 +190,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         return sb.toString();
     }
 
-    private boolean matchTitle(final Element titleInfo, final Record record) throws JDOMException {
+    private boolean matchTitle(final Element titleInfo, final Record record) {
         if (titleInfo != null && record != null) {
             final List<PPField> titFields = record.getFieldsByTag("021A");
             if (!titFields.isEmpty()) {
