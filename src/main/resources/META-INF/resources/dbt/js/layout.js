@@ -47,5 +47,15 @@ var initSVGImageMasks = function() {
  */
 $(document).ready(function() {
 	$prefix = prefix();
+
+	// workaround to remove empty querystring param
+	$("form[role='search']").submit(function() {
+		$("input").each(function(i, elem) {
+			if ($(elem).prop("value").length === 0) {
+				$(elem).prop("disabled", "disabled");
+			}
+		});
+	});
+
 	initSVGImageMasks();
 });
