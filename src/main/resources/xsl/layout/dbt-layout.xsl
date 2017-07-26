@@ -376,7 +376,9 @@
         <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="navbar-form navbar-right visible-xs visible-md visible-lg" role="search">
           <div class="input-group input-group-sm">
             <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
-            <input name="fq" type="hidden" value="createdby:{$CurrentUser}" />
+            <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
+              <input name="owner" type="hidden" value="createdby:{$CurrentUser}" />
+            </xsl:if>
             <div class="input-group-btn">
               <button class="btn btn-default" type="submit">
                 <span class="glyphicon glyphicon-search" />
