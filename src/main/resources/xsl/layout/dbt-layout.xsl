@@ -44,7 +44,6 @@
     <head>
       <xsl:call-template name="layout.page.title" />
       <xsl:call-template name="layout.htmlContentType" />
-      <xsl:call-template name="layout.noCaching" />
       <link rel="icon" href="{$WebApplicationBaseURL}favicon.ico" />
       <xsl:call-template name="layout.cssLinks" />
 
@@ -76,14 +75,6 @@
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  </xsl:template>
-
-  <!-- No Caching -->
-
-  <xsl:template name="layout.noCaching">
-    <meta http-equiv="expires" content="0" />
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
   </xsl:template>
 
   <!-- CSS Links -->
