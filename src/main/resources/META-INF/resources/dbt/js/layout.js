@@ -48,6 +48,8 @@ var initSVGImageMasks = function() {
 $(document).ready(function() {
 	$prefix = prefix();
 
+	$("html").removeClass("no-js");
+
 	// workaround to remove empty querystring param
 	$("form[role='search']").submit(function() {
 		$("input").each(function(i, elem) {
