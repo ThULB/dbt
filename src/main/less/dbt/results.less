@@ -64,12 +64,15 @@
   }
 }
 
-// SVG Icon Overlay
 #hit_list {
   @cover-height: 90px;
   @cover-width: 60px;
-    
   .hit_item {
+    .hit_item_head {
+      .hit_stars {
+        width: auto !important;
+      }
+    }
     .hit_download_box {
       float: left;
       .hit_icon {
@@ -141,6 +144,30 @@
         @media (max-width: @grid-float-breakpoint-max) {
           @media (orientation: landscape) {
             .hitIconOverlay ();
+          }
+        }
+      }
+    }
+
+    .hit_tnd_container {
+      @media (min-width: @grid-float-breakpoint) {
+        margin-left: (@cover-width + 5px);
+      }
+
+      .hit_tnd_content {
+        overflow: hidden;
+        overflow-y: hidden;
+        overflow-x: visible;
+        float: left;
+        height: 25px;
+        width: 100%;
+        white-space: nowrap;
+        .hide-scrollbar ();
+        * {
+          display: inline;
+          margin-right: 5px;
+          &:nth-last-child(1) {
+            margin-right: 0;
           }
         }
       }

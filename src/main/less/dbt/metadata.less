@@ -1,0 +1,55 @@
+#head_col {
+  #badges {
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: visible;
+    float: left;
+    height: 25px;
+    width: 100%;
+    white-space: nowrap;
+    .hide-scrollbar ();
+    * {
+      display: inline;
+      margin-right: 5px;
+      &:nth-last-child(1) {
+        margin-right: 0;
+      }
+    }
+
+    .doc_state {
+      display: inline;
+      margin-right: 3px;
+      .mir-published {
+        background-color: @label-success-bg;
+      }
+
+      .mir-submitted , .mir-new , .mir-imported {
+        background-color: @label-warning-bg;
+      }
+
+      .mir-review {
+        background-color: @label-primary-bg;
+      }
+
+      .mir-blocked {
+        background-color: @label-danger-bg;
+      }
+
+      .mir-deleted {
+        background-color: @label-default-bg;
+      }
+
+      span {
+        background-color: @label-default-bg;
+      }
+    }
+  }
+  
+  @media (max-width: @grid-float-breakpoint-max) {
+    #aux_col_actions {
+      padding-top: 10px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
