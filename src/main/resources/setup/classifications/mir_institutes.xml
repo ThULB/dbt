@@ -5,6 +5,7 @@
   <categories>
     <category ID="3">
       <label xml:lang="de" text="Bauhaus-Universität Weimar" />
+      <label xml:lang="x-place" text="Bauhaus-Universität Weimar | Weimar | Geschwister-Scholl-Straße 8, 99423 Weimar" />
       <category ID="3000">
         <label xml:lang="de" text="Fakultät Architektur" />
       </category>
@@ -20,6 +21,7 @@
     </category>
     <category ID="1">
       <label xml:lang="de" text="Friedrich-Schiller-Universität Jena" />
+      <label xml:lang="x-place" text="Friedrich-Schiller-Universität Jena | Jena | Fürstengraben 1, 07743 Jena" />
       <category ID="6010">
         <label xml:lang="de" text="Biologisch-Pharmazeutische Fakultät" />
       </category>
@@ -76,6 +78,7 @@
       </category>
     </category>
     <category ID="5">
+      <label xml:lang="x-place" text="Universität Erfurt | Erfurt | Nordhäuser Str. 63, 99089 Erfurt" />
       <label xml:lang="de" text="Pädagogische Hochschule Erfurt" />
       <category ID="9990">
         <label xml:lang="de" text="alle Fakultäten" />
@@ -83,6 +86,7 @@
     </category>
     <category ID="4">
       <label xml:lang="de" text="Technische Universität Ilmenau" />
+      <label xml:lang="x-place" text="TU Ilmenau | Ilmenau | Ehrenbergstraße 29, 98693 Ilmenau" />
       <category ID="8000">
         <label xml:lang="de" text="Fakultät für Elektrotechnik und Informationstechnik" />
       </category>
@@ -121,6 +125,7 @@
       </category>
     </category>
     <category ID="2">
+      <label xml:lang="x-place" text="Universität Erfurt | Erfurt | Nordhäuser Str. 63, 99089 Erfurt" />
       <label xml:lang="de" text="Universität Erfurt" />
       <category ID="9110">
         <label xml:lang="de" text="Erfurt School of Education (ESE)" />
@@ -179,6 +184,7 @@
     </category>
     <category ID="6">
       <label xml:lang="de" text="Ernst-Abbe-Hochschule" />
+      <label xml:lang="de" text="Ernst-Abbe-Hochschule | Jena | Carl-Zeiß-Promenade 2, 07745 Jena" />
       <category ID="6020">
         <label xml:lang="de" text="Betriebswirtschaft" />
       </category>
@@ -215,6 +221,7 @@
     </category>
     <category ID="7">
       <label xml:lang="de" text="Fachhochschule Erfurt" />
+      <label xml:lang="x-place" text="Fachhochschule Erfurt | Erfurt | Altonaer Str. 25, 99085 Erfurt" />
       <category ID="7010">
         <label xml:lang="de" text="BSc/MSc Angewandte Informatik" />
       </category>
@@ -251,6 +258,7 @@
     </category>
     <category ID="hsn">
       <label xml:lang="de" text="Hochschule Nordhausen" />
+      <label xml:lang="x-place" text="Hochschule Nordhausen | Nordhausen | Weinberghof 4, 99734 Nordhausen" />
       <category ID="hsn.eng">
         <label xml:lang="de" text="Ingenieur-Wissenschaften" />
         <category ID="hsn.comp_sc">
@@ -259,7 +267,8 @@
       </category>
     </category>
     <category ID="21000">
-      <label xml:lang="de" text="Fachhochschule Schmalkalden" />
+      <label xml:lang="de" text="Hochschule Schmalkalden" />
+      <label xml:lang="x-place" text="Hochschule Schmalkalden | Schmalkalden | Blechhammer 9, 98574 Schmalkalden" />
       <category ID="21030">
         <label xml:lang="de" text="Fachbereich Informatik" />
       </category>
@@ -275,6 +284,7 @@
     </category>
     <category ID="20000">
       <label xml:lang="de" text="Kultur-, Medien- und Forschungseinrichtungen" />
+      <label xml:lang="de" text="Thüringer Universitäts- und Landesbibliothek | Jena | Bibliotheksplatz 2, 07743 Jena" />
       <category ID="20005">
         <label xml:lang="de" text="Herzogin Anna Amalia Bibliothek" />
       </category>
