@@ -23,7 +23,7 @@
   <catalog enabled="true" identifier="2fd22120-5bc5-11e0-80e3-0800200c9a66">
     <name>Friedrich-Schiller-Universität Jena</name>
     <description>Thüringer Universitäts- und Landesbibliothek Jena</description>
-    <opc db="1">http://kataloge.thulb.uni-jena.de</opc>
+    <opc db="1">https://kataloge.thulb.uni-jena.de</opc>
     <ISIL>DE-27</ISIL>
     <ISIL>OCLC-DETUL</ISIL>
   </catalog>
