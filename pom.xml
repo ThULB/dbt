@@ -566,11 +566,6 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
-      <artifactId>mycore-urn</artifactId>
-      <version>${mycore.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
       <artifactId>mycore-user2</artifactId>
     </dependency>
     <dependency>
