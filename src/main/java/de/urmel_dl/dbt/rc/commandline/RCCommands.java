@@ -80,7 +80,8 @@ public class RCCommands extends MCRAbstractCommands {
     private static final Logger LOGGER = LogManager.getLogger(RCCommands.class);
 
     @SuppressWarnings("unchecked")
-    @MCRCommand(syntax = "export slot {0} to directory {1}", help = "exports rc slot with id {0} to given directory {1}")
+    @MCRCommand(syntax = "export slot {0} to directory {1}",
+        help = "exports rc slot with id {0} to given directory {1}")
     public static void exportSlot(final String slotId, final String dirname) throws IOException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
@@ -291,7 +292,8 @@ public class RCCommands extends MCRAbstractCommands {
         return cmds;
     }
 
-    @MCRCommand(syntax = "rc inactivator", help = "send warning mails for reserve collections or inactivate, set new status")
+    @MCRCommand(syntax = "rc inactivator",
+        help = "send warning mails for reserve collections or inactivate, set new status")
     public static void rcInactivator() throws IOException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
@@ -430,6 +432,8 @@ public class RCCommands extends MCRAbstractCommands {
                     LOGGER.error(e.getMessage());
                 }
             }
+
+            mgr.syncList();
         }
     }
 
