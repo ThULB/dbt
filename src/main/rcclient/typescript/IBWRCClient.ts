@@ -374,7 +374,7 @@ class IBWRCClient {
             for (var i in this.copys) {
                 var copy: ibw.Copy = this.copys[i];
 
-                if (copy == null || copy.epn.isEmpty()) continue;
+                if (copy == null || copy.epn.isEmpty() || copy.type === "d") continue;
 
                 var item = mlEPN.appendItem("({0}|{1}) {2}".format(copy.epn, copy.backup == null ? "-" : "v", copy.shelfmark || ""), i);
 
