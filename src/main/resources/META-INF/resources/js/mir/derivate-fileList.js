@@ -255,7 +255,10 @@
 		
 		function removeWowzaToken(json) {
 			$(json.children).each(function() {
-				$(this).attr("href", $(this).attr("href").replace(/[\?&]wowzatokenhash=[^&]+/, ""));
+				var href = $(this).attr("href");
+				if (href) {
+					$(this).attr("href", href.replace(/[\?&]wowzatokenhash=[^&]+/, ""));
+				}
 			});
 			return json;
 		}
