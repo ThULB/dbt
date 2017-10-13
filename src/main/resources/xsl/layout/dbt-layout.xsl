@@ -91,6 +91,11 @@
   <!-- Load JavaScripts -->
 
   <xsl:template name="layout.scripts">
+    <script type="text/javascript">
+      <xsl:value-of select="concat('var webApplicationBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
+      <xsl:value-of select="concat('var currentLang = &quot;', $CurrentLang, '&quot;;')" disable-output-escaping="yes" />
+    </script>
+    
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/jquery.min.js" />
     <script type="text/javascript">
       <!-- Bootstrap & Query-Ui button conflict workaround  -->
@@ -98,6 +103,13 @@
     </script>
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
+    
+    <!-- extra scripts from each page -->
+    <xsl:apply-templates select="//script" mode="html.scripts" />
+
+    <xsl:if test="$include.HTML.Head.JS">
+      <xsl:copy-of select="$include.HTML.Head.JS" />
+    </xsl:if>
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.min.js" />
@@ -107,17 +119,17 @@
 
     <script type="text/javascript">
       $( document ).ready(function() {
-      $('.overtext').tooltip();
-      $.confirm.options = {
-      <xsl:value-of select="concat('title: &quot;', i18n:translate('mir.confirm.title'), '&quot;,')" />
-      <xsl:value-of select="concat('confirmButton: &quot;',i18n:translate('mir.confirm.confirmButton'), '&quot;,')" />
-      <xsl:value-of select="concat('cancelButton: &quot;',i18n:translate('mir.confirm.cancelButton'), '&quot;,')" />
-      post: false,
-      confirmButtonClass: "btn-danger",
-      cancelButtonClass: "btn-default",
-      dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
-      }
-      $('*[data-toggle="tooltip"]').tooltip();
+        $('.overtext').tooltip();
+          $.confirm.options = {
+            <xsl:value-of select="concat('title: &quot;', i18n:translate('mir.confirm.title'), '&quot;,')" />
+            <xsl:value-of select="concat('confirmButton: &quot;',i18n:translate('mir.confirm.confirmButton'), '&quot;,')" />
+            <xsl:value-of select="concat('cancelButton: &quot;',i18n:translate('mir.confirm.cancelButton'), '&quot;,')" />
+            post: false,
+            confirmButtonClass: "btn-danger",
+            cancelButtonClass: "btn-default",
+            dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
+          }
+        $('*[data-toggle="tooltip"]').tooltip();
       });
     </script>
     <script src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
@@ -125,18 +137,6 @@
       jQuery("input[placeholder]").placeholder();
       jQuery("textarea[placeholder]").placeholder();
     </script>
-
-    <script type="text/javascript">
-      <xsl:value-of select="concat('var webApplicationBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
-      <xsl:value-of select="concat('var currentLang = &quot;', $CurrentLang, '&quot;;')" disable-output-escaping="yes" />
-    </script>
-
-    <!-- extra scripts from each page -->
-    <xsl:apply-templates select="//script" mode="html.scripts" />
-
-    <xsl:if test="$include.HTML.Head.JS">
-      <xsl:copy-of select="$include.HTML.Head.JS" />
-    </xsl:if>
   </xsl:template>
 
   <!-- Page Title -->
