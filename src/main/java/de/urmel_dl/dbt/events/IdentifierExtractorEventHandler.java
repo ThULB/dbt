@@ -98,9 +98,8 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                 return record;
                             }).filter(record -> matchTitle(titleInfo, record)
                                 && Optional.ofNullable(record.getFieldByTag("002@"))
-                                    .map(f -> Optional.ofNullable(f.getSubfieldByCode("0"))
-                                        .map(sf -> sf.getContent().startsWith("O")).isPresent())
-                                    .isPresent())
+                                    .map(f -> f.getSubfieldByCode("0")).map(sf -> sf.getContent().startsWith("O"))
+                                    .orElse(false))
                                 .findFirst().ifPresent(record -> {
                                     LOGGER.info("Found PPN " + record.getPPN());
 
