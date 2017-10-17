@@ -71,46 +71,50 @@ module ibw {
             var copy: Copy = new Copy();
             var has7100: boolean = false;
 
-            for (var i in lines) {
-                var tag: Tag = Tag.parse(lines[i]);
-                if (tag == null) continue;
+            try {
+                for (var i in lines) {
+                    var tag: Tag = Tag.parse(lines[i]);
+                    if (tag == null) continue;
 
-                if (tag.category.startsWith("70")) {
-                    copy.num = parseInt(tag.category) - 7000;
-                    copy.type = tag.content.match(/(.*) : (.*)/)[2];
-                } else {
-                    switch (tag.category) {
-                        case "4802":
-                            var backup: CopyBackup = CopyBackup.parse(tag.content);
-                            if (core.Utils.isValid(backup)) {
-                                (!core.Utils.isValid(copy.backup)) && (copy.backup = new Array<CopyBackup>());
-                                copy.backup.push(backup);
-                            }
-                            break;
-                        case "7100":
-                            has7100 = true;
-                            var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
-                            copy.location = m[1];
-                            copy.shelfmark = m[2];
+                    if (tag.category.startsWith("70")) {
+                        copy.num = parseInt(tag.category) - 7000;
+                        copy.type = tag.content.match(/(.*) : (.*)/)[2];
+                    } else {
+                        switch (tag.category) {
+                            case "4802":
+                                var backup: CopyBackup = CopyBackup.parse(tag.content);
+                                if (core.Utils.isValid(backup)) {
+                                    (!core.Utils.isValid(copy.backup)) && (copy.backup = new Array<CopyBackup>());
+                                    copy.backup.push(backup);
+                                }
+                                break;
+                            case "7100":
+                                has7100 = true;
+                                var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
+                                copy.location = m[1];
+                                copy.shelfmark = m[2];
 
-                            var exp: RegExp = /(.*) \\ c/;
+                                var exp: RegExp = /(.*) \\ c/;
 
-                            if (exp.test(m[3])) {
-                                copy.loanIndicator = m[3].match(exp)[1];
-                                copy.isBundle = true;
-                            } else {
-                                copy.loanIndicator = m[3];
-                                copy.isBundle = false;
-                            }
-                            break;
-                        case "7800":
-                            copy.epn = tag.content;
-                            break;
-                        case "8200":
-                            copy.barcode = tag.content;
-                            break;
+                                if (exp.test(m[3])) {
+                                    copy.loanIndicator = m[3].match(exp)[1];
+                                    copy.isBundle = true;
+                                } else {
+                                    copy.loanIndicator = m[3];
+                                    copy.isBundle = false;
+                                }
+                                break;
+                            case "7800":
+                                copy.epn = tag.content;
+                                break;
+                            case "8200":
+                                copy.barcode = tag.content;
+                                break;
+                        }
                     }
                 }
+            } catch (e) {
+                return null;
             }
 
             return has7100 ? copy : null;
