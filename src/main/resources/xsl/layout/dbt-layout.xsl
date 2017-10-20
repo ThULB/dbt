@@ -434,7 +434,7 @@
           <xsl:choose>
             <xsl:when test="$readAccess='true'">
 <!--               <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|scripts|', concat('|', name(), '|')))]" /> -->
-              <xsl:apply-templates select="@*|node()" />
+              <xsl:apply-templates select="@*[name != 'title']|node()" />
             </xsl:when>
             <xsl:otherwise>
               <xsl:call-template name="printNotLoggedIn" />
@@ -514,7 +514,7 @@
     </div>
   </xsl:template>
 
-  <xsl:template match="@title|head|breadcrumb|script" />
+  <xsl:template match="head|breadcrumb|script" />
 
   <xsl:template match="script" mode="html.scripts">
     <xsl:copy-of select="." />
