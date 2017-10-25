@@ -34,7 +34,7 @@
       <xsl:value-of select="$hasEditorPermission" />
     </xsl:message>
     <xsl:choose>
-      <xsl:when test="$Mode = 'edit' and ($writePermission and (/slot/@status != 'archived'))">
+      <xsl:when test="$Mode = 'edit' and (($hasAdminPermission or $hasEditorPermission) or ($writePermission and (/slot/@status != 'archived')))">
         <xsl:text>edit</xsl:text>
       </xsl:when>
       <xsl:otherwise>
@@ -108,7 +108,7 @@
               </xsl:if>
               <xsl:if test="$hasAdminPermission or $hasEditorPermission or ($writePermission and (@status != 'archived'))">
                 <xsl:if
-                  test="($hasAdminPermission or $hasEditorPermission or $writePermission) and (@status != 'archived') and not(contains($RequestURL, '/attendees'))"
+                  test="(($hasAdminPermission or $hasEditorPermission) or ($writePermission and (@status != 'archived'))) and not(contains($RequestURL, '/attendees'))"
                 >
                   <li role="presentation">
                     <xsl:choose>
