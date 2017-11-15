@@ -4,6 +4,20 @@
     <categoryTitle href="allgemein">
       Allgemeines zur DBT
     </categoryTitle>
+    <entry href="about">
+      <question>
+        Was is die DBT?
+      </question>
+      <answer>
+        <p>Willkommen in der Digitalen Bibliothek Thüringen (DBT).
+          Die DBT ist die gemeinsame Plattform Thüringer Hochschulen für das
+          Elektronische Publizieren
+          und Langzeitarchivieren multimedialer Dokumente aus Forschung und Lehre.
+          Derzeit stehen mehr als 20.000
+          Hochschulschriften, Vorlesungsvideos sowie weitere multimediale Inhalte zur Verfügung.
+        </p>
+      </answer>
+    </entry>
     <entry href="veroeffentlichungWarum">
       <question>
         Warum ist eine Veröffentlichung in der DBT sinnvoll?
@@ -17,7 +31,8 @@
           <li>dauerhaften Zugriff durch langfristige Archivierung</li>
           <li>Zitierfähigkeit durch konstante Adresse (Persistent Identifier)</li>
           <li>Nachweis der Dokumente in Bibliothekskatalogen, Suchmaschinen und Fachportalen</li>
-          <li>das Recht zu einer weiteren Verwendung oder anderweitigen Veröffentlichung des Werks verbleibt bei den Autorinnen und Autoren</li>
+          <li>das Recht zu einer weiteren Verwendung oder anderweitigen Veröffentlichung des Werks verbleibt bei den Autorinnen und Autoren
+          </li>
         </ul>
       </answer>
     </entry>
@@ -26,9 +41,48 @@
         Wer darf in der DBT veröffentlichen?
       </question>
       <answer>
-        <p>Alle Angehörigen der FSU Jena, der TU Ilmenau und der Universität Erfurt sowie Angehörige der übrigen Thüringer Universitäten und Fachhochschulen
-          können wissenschaftliche Dokumente in der DBT publizieren. In Einzelfällen können auch Landesnutzer (über die ThULB Jena) Dokumente in der DBT
+        <p>Alle Angehörigen der FSU Jena, der TU Ilmenau und der Universität Erfurt sowie Angehörige der übrigen Thüringer Universitäten und
+          Fachhochschulen
+          können wissenschaftliche Dokumente in der DBT publizieren. In Einzelfällen können auch Landesnutzer (über die ThULB
+          Jena) Dokumente in der DBT
           archivieren.
+        </p>
+      </answer>
+    </entry>
+    <entry href="veroeffentlichungWie">
+      <question>
+        Wie funktioniert das Publizieren in der DBT?
+      </question>
+      <answer>
+        <p>Unter dem Punkt Publizieren ist es möglich, Dokumente einzureichen.</p>
+        <h4>Anmeldung</h4>
+        <p>Als Mitglied einer teilnehmenden Einrichtung erfolgt eine Authentifizierung über den Punkt Uni-Login. Auch nicht universitäre
+          Nutzerinnen und Nutzer können sich anmelden unter „Anmelden mit lokaler Nutzerkennung“ bzw. unter „Benutzerkennung anlegen“ eine
+          solche generieren. Nach der erfolgten Anmeldung erscheint ein Auswahlmenu, bei dem festgelegt wird, welche Art von Dokument
+          publiziert werden soll. Es erscheint dann ein entsprechendes Eingabeformular für die Metadaten.
+        </p>
+        <h4>Erfassung der Metadaten</h4>
+        <p>Alle Pflichtfelder sind mit * gekennzeichnet und müssen belegt werden.</p>
+        <p>Das sind:</p>
+        <ul>
+          <li>Publikationstyp</li>
+          <li>Titel</li>
+          <li>Sachgruppe der DNB (Deutschen Nationalbibliothek)</li>
+          <li>Lizenz</li>
+        </ul>
+        <p>
+          Nähere Informationen zur Belegung eines Formularfeldes erhält man über den jeweiligen Informationsbutton:
+          <a tabindex="0" class="btn btn-default btn-xs info-button" role="button" data-toggle="popover" data-placement="right"
+            data-content="Nach einem Klick erscheint ein kurzer Hilfetext">
+            <i class="fa fa-info"></i>
+          </a>
+        </p>
+        <p>Das Hochladen der Derivate erfolgt über „Aktionen“ → „Hinzufügen eines Datenobjektes“. Bitte beachten Sie die Vorgaben zu den
+          akzeptierten Dateiformaten.
+        </p>
+        <h4>Was passiert, wenn die Dokumente hochgeladen sind?</h4>
+        <p>Die jeweils betreuende Bibliothek prüft das eingestellte Dokument auf Funktionalität und Formalia. Dann erhält das Dokument die
+          öffentliche Freischaltung. Bei Rückfragen meldet sich die jeweils zuständige Bibliothek.
         </p>
       </answer>
     </entry>
@@ -37,7 +91,8 @@
         Sind die Texte im Internet auffindbar?
       </question>
       <answer>
-        <p>Sämtliche in die DBT integrierten Dokumente sind über regionale und überregionale Bibliothekskataloge, Suchmaschinen (z.B. Google, Base) und
+        <p>Sämtliche in die DBT integrierten Dokumente sind über regionale und überregionale Bibliothekskataloge, Suchmaschinen (z.B.
+          Google, Base) und
           Nachweissysteme recherchierbar.
         </p>
       </answer>
@@ -47,19 +102,54 @@
         Können Dokumente in der DBT nachträglich geändert oder gelöscht werden?
       </question>
       <answer>
-        <p>Für Dokumente wird eine Mindestarchivierungsfrist von zehn Jahren garantiert (davon mindestens fünf Jahre in demjenigen Formt, in dem das Dokument
+        <p>Für Dokumente wird eine Mindestarchivierungsfrist von zehn Jahren garantiert (davon mindestens fünf Jahre in demjenigen Formt, in
+          dem das Dokument
           eingereicht wurde). Gegenwärtig besteht nicht die Absicht, Dokumente nach Ablauf dieser Fristen zu löschen.
         </p>
       </answer>
     </entry>
     <entry href="spaeter">
       <question>
-        Ist es möglich, ein Dokument in die DBT hochzuladen und es erst zu einem späteren Zeitpunkt für die Öffentlichkeit freischalten zu lassen?
+        Ist es möglich, ein Dokument in die DBT hochzuladen und es erst zu einem späteren Zeitpunkt für die Öffentlichkeit
+        freischalten zu lassen?
       </question>
       <answer>
-        <p>Wenn Sie ein Dokument (z.B. aufgrund einer Patentanmeldung oder aus anderen rechtlichen Gründen) erst zu einem späteren Zeitpunkt in der DBT
-          publizieren möchten oder dürfen, es jedoch schon dort hochladen wollen, können Sie dies tun. Wir schalten dann zunächst nur die Metadaten frei. Die
+        <p>Wenn Sie ein Dokument (z.B. aufgrund einer Patentanmeldung oder aus anderen rechtlichen Gründen) erst zu einem späteren Zeitpunkt
+          in der DBT
+          publizieren möchten oder dürfen, es jedoch schon dort hochladen wollen, können Sie dies tun. Wir schalten dann zunächst
+          nur die Metadaten frei. Die
           Freigabe des Volltextes erfolgt erst nach Ablauf der von Ihnen angegebenen Sperrfrist.
+        </p>
+      </answer>
+    </entry>
+    <entry href="support">
+      <question>
+        Wo kann ich Unterstützung bei der Einstellung von Dokumenten in die DBT erhalten?
+      </question>
+      <answer>
+        <p>
+          Bei Fragen zum Einstellen von Dokumenten in die DBT hilft Ihnen das Team E-Publizieren der ThULB Jena gerne weiter. Sie erreichen
+          uns unter:
+          <ul>
+            <li>
+              <a href="mailto:epublizieren@thulb.uni-jena.de">epublizieren@thulb.uni-jena.de</a>
+            </li>
+            <li>
+              Tel.:
+              <a href="tel:+493641940206">+49 (0) 3641 940206</a>
+            </li>
+          </ul>
+        </p>
+      </answer>
+    </entry>
+    <entry href="oas">
+      <question>
+        Wie werden Open-Access-Statistiken generiert?
+      </question>
+      <answer>
+        <p>
+          Ausführliche Informationen zu Open-Access-Statistiken finden Sie hier:
+          <a href="https://www.gbv.de/Verbundzentrale/serviceangebote/oas-service/pdf/faq-oas">https://www.gbv.de/Verbundzentrale/serviceangebote/oas-service/pdf/faq-oas</a>
         </p>
       </answer>
     </entry>
@@ -73,9 +163,12 @@
         Regelungen zur Erfassung von elektronischen Dissertationen/Habilitationen und studentischen Abschlussarbeiten
       </question>
       <answer>
-        <p>Die Regelungen zur Erfassung elektronischer Dissertationen und Habilitationen unterliegen aufgrund der verschiedenen Promotionsordnungen der
-          einzelnen Hochschulen unterschiedlichen Bestimmungen. Die Aufnahme dieser Dokumenttypen in die DBT obliegt der Kontrolle der jeweiligen Bibliothek.
-          Auch die Erfassung elektronischer Abschlussarbeiten von Studierenden ist über die Prüfungsordnungen der einzelnen Hochschulen geregelt.
+        <p>Die Regelungen zur Erfassung elektronischer Dissertationen und Habilitationen unterliegen aufgrund der verschiedenen
+          Promotionsordnungen der
+          einzelnen Hochschulen unterschiedlichen Bestimmungen. Die Aufnahme dieser Dokumenttypen in die DBT obliegt
+          der Kontrolle der jeweiligen Bibliothek.
+          Auch die Erfassung elektronischer Abschlussarbeiten von Studierenden ist über die
+          Prüfungsordnungen der einzelnen Hochschulen geregelt.
         </p>
         <ul>
           <li>
@@ -127,11 +220,16 @@
         <p>
           Gemäß der
           <a href="http://www.budapestopenaccessinitiative.org/">Budapester Open Access Initiative</a>
-          bedeutet Open Access, „dass [wissenschaftliche] Literatur kostenfrei und öffentlich im Internet zugänglich sein sollte, so dass Interessierte die
-          Volltexte lesen, herunterladen, kopieren, verteilen, drucken, in ihnen suchen, auf sie verweisen und sie auch sonst auf jede denkbare legale Weise
-          benutzen können, ohne finanzielle, gesetzliche oder technische Barrieren jenseits von denen, die mit dem Internet-Zugang selbst verbunden sind. In
-          allen Fragen des Wiederabdrucks und der Verteilung und in allen Fragen des Copyright überhaupt sollte die einzige Einschränkung darin bestehen, den
-          jeweiligen Autorinnen und Autoren Kontrolle über ihre Arbeit zu belassen und deren Recht zu sichern, dass ihre Arbeit angemessen anerkannt und zitiert
+          bedeutet Open Access, „dass [wissenschaftliche] Literatur kostenfrei und öffentlich im Internet zugänglich sein sollte, so dass
+          Interessierte die
+          Volltexte lesen, herunterladen, kopieren, verteilen, drucken, in ihnen suchen, auf sie verweisen und sie auch
+          sonst auf jede denkbare legale Weise
+          benutzen können, ohne finanzielle, gesetzliche oder technische Barrieren jenseits von denen,
+          die mit dem Internet-Zugang selbst verbunden sind. In
+          allen Fragen des Wiederabdrucks und der Verteilung und in allen Fragen des
+          Copyright überhaupt sollte die einzige Einschränkung darin bestehen, den
+          jeweiligen Autorinnen und Autoren Kontrolle über ihre
+          Arbeit zu belassen und deren Recht zu sichern, dass ihre Arbeit angemessen anerkannt und zitiert
           wird."
         </p>
         <p>
@@ -147,16 +245,21 @@
       </question>
       <answer>
         <h4>Goldener Weg:</h4>
-        <p>Erstveröffentlichung wissenschaftlicher Arbeiten in Open-Access-Zeitschriften oder anderen Open-Access-Medien. Die eingereichten Manuskripte
+        <p>Erstveröffentlichung wissenschaftlicher Arbeiten in Open-Access-Zeitschriften oder anderen Open-Access-Medien. Die eingereichten
+          Manuskripte
           durchlaufen in der Regel einen Qualitätssicherungsprozess (Peer-Review).
         </p>
         <h4>Grüner Weg:</h4>
-        <p>Zeitgleiche oder nachträgliche Archivierung bereits publizierter Arbeiten oder Preprints auf einem Repositorium, wie z.B. der DBT. Wie der Zugriff
-          für Nutzerinnen und Nutzer ist auch die Bereitstellung der wissenschaftlichen Arbeiten in einem Repositorium für Autorinnen und Autoren in der Regel
+        <p>Zeitgleiche oder nachträgliche Archivierung bereits publizierter Arbeiten oder Preprints auf einem Repositorium, wie z.B. der
+          DBT. Wie der Zugriff
+          für Nutzerinnen und Nutzer ist auch die Bereitstellung der wissenschaftlichen Arbeiten in einem Repositorium
+          für Autorinnen und Autoren in der Regel
           kostenfrei.
         </p>
-        <p>Viele Verlage gestatten eine parallele oder verzögerte Open-Access-Veröffentlichung zumindest der akzeptierten Manuskriptversion. Eine Übersicht über
-          die Konditionen zahlreicher wissenschaftlicher Verlage bietet die SHERPA/RoMEO-Datenbank. Rechtsverbindlich sind stets die Bestimmungen des jeweiligen
+        <p>Viele Verlage gestatten eine parallele oder verzögerte Open-Access-Veröffentlichung zumindest der akzeptierten Manuskriptversion.
+          Eine Übersicht über
+          die Konditionen zahlreicher wissenschaftlicher Verlage bietet die SHERPA/RoMEO-Datenbank. Rechtsverbindlich
+          sind stets die Bestimmungen des jeweiligen
           Verlags.
         </p>
       </answer>
@@ -166,9 +269,34 @@
         Sind Open-Acccess-Publikationen zitierbar?
       </question>
       <answer>
-        <p>Elektronische Veröffentlichungen sind konventionellen Veröffentlichungen prinzipiell gleichwertig und damit auch zitierfähig. Die dauerhafte und
-          stabile Adressierung wird in der DBT durch die Vergabe eines URN (Uniform Resource Name) gewährleistet. Ein URN ist ein so genannter Persistent
-          Identifier, d.h. ein eindeutiger Bezeichner für Objekte zur dauerhaften Identifizierung und zuverlässigen Zitierfähigkeit von Online-Ressourcen.
+        <p>
+          Elektronische Veröffentlichungen sind konventionellen Veröffentlichungen prinzipiell gleichwertig und damit auch zitierfähig. Die
+          dauerhafte und stabile Adressierung wird in der DBT durch die Vergabe eines
+          <abbr title="Uniform Resource Name">URN</abbr>
+          und/oder
+          <abbr title="Digital Object Identifier">DOI</abbr>
+          gewährleistet. URN, DOI sind so genannte Persistent Identifier, d.h. ein eindeutige Bezeichner für Objekte zur dauerhaften
+          Identifizierung und zuverlässigen Zitierfähigkeit von Online-Ressourcen.
+        </p>
+      </answer>
+    </entry>
+    <entry href="oaj">
+      <question>
+        Kann ich in der DBT eine Open-Access Zeitschrift gründen?
+      </question>
+      <answer>
+        <p>
+          Für die Gründung von Open-Access-Zeitschriften steht Ihnen das von der ThULB Jena betriebene Zeitschriftenportal journals@urmel
+          zur Verfügung. Bei Interesse nehmen Sie bitte Kontakt mit dem UrMEL-Team unter:
+          <ul>
+            <li>
+              <a href="mailto:urmel_auskunft@thulb.uni-jena.de">urmel_auskunft@thulb.uni-jena.de</a>
+            </li>
+            <li>
+              Tel.:
+              <a href="tel:+493641940206">+49 (0) 3641 940206</a>
+            </li>
+          </ul>
         </p>
       </answer>
     </entry>
@@ -182,10 +310,14 @@
         Welche urheberrechtlichen Bestimmungen müssen beachtet werden?
       </question>
       <answer>
-        <p>Für im Internet veröffentlichte Arbeiten gelten dieselben gesetzlichen Bestimmungen wie auch für "konventionelle" Veröffentlichungen. Fremde Inhalte
-          innerhalb einer Arbeit dürfen nur mit Zustimmung des jeweiligen Urhebers bzw. Verlages oder im Rahmen eines Zitats verwendet werden. Im
-          Veröffentlichungsvertrag bestätigen Sie gegenüber der Bibliothek, dass Sie keine Rechte Dritter verletzen. Dazu zählen neben den Urheberrechten ggf.
-          auch weitere Rechte, wie z.B. Persönlichkeits-, Datenschutz-, Marken- und Patentrechte.
+        <p>Für im Internet veröffentlichte Arbeiten gelten dieselben gesetzlichen Bestimmungen wie auch für "konventionelle"
+          Veröffentlichungen. Fremde Inhalte
+          innerhalb einer Arbeit dürfen nur mit Zustimmung des jeweiligen Urhebers bzw. Verlages oder im
+          Rahmen eines Zitats verwendet werden. Im
+          Veröffentlichungsvertrag bestätigen Sie gegenüber der Bibliothek, dass Sie keine Rechte
+          Dritter verletzen. Dazu zählen neben den Urheberrechten ggf.
+          auch weitere Rechte, wie z.B. Persönlichkeits-, Datenschutz-, Marken-
+          und Patentrechte.
         </p>
       </answer>
     </entry>
@@ -195,7 +327,8 @@
       </question>
       <answer>
         <p>
-          Als Urheberin oder Urheber können Sie festlegen, wie Ihre digitale Publikation von anderen Personen nachgenutzt werden darf. Eine Möglichkeit dazu
+          Als Urheberin oder Urheber können Sie festlegen, wie Ihre digitale Publikation von anderen Personen nachgenutzt werden darf. Eine
+          Möglichkeit dazu
           bieten die
           <a href="http://de.creativecommons.org/">Creative-Commons-Lizenzen</a>
           . Dabei handelt es sich um standardisierte Lizenzverträge.
@@ -253,9 +386,12 @@
         Was ist bei einer Zweitveröffentlichung einer bereits in einem Verlag erschienenen Publikation zu beachten?
       </question>
       <answer>
-        <p>Sie sollten vorab prüfen, ob der Verlag, in dem Sie die Erstveröffentlichung vorgenommen haben, eine Zweitveröffentlichung auf einem Repositorium
-          (zum Beispiel in der DBT) erlaubt und unter welchen Konditionen dies ggf. möglich ist. Häufig muss eine so genannte Embargofrist eingehalten werden.
-          Nähere Auskünfte hierzu finden Sie in dem von Ihnen unterzeichneten Autorenvertrag oder auf den Webseiten des jeweiligen Verlages.
+        <p>Sie sollten vorab prüfen, ob der Verlag, in dem Sie die Erstveröffentlichung vorgenommen haben, eine Zweitveröffentlichung auf
+          einem Repositorium
+          (zum Beispiel in der DBT) erlaubt und unter welchen Konditionen dies ggf. möglich ist. Häufig muss eine so
+          genannte Embargofrist eingehalten werden.
+          Nähere Auskünfte hierzu finden Sie in dem von Ihnen unterzeichneten Autorenvertrag oder
+          auf den Webseiten des jeweiligen Verlages.
         </p>
         <p>
           Eine Übersicht zu den Konditionen vieler Verlage bzgl. Zweitveröffentlichungen gibt die
@@ -271,7 +407,8 @@
         Dürfen in der DBT publizierte Texte in einem Verlag zweitveröffentlicht werden?
       </question>
       <answer>
-        <p>Wenn Sie Ihr Dokument zuerst in der DBT veröffentlichen, bleiben Ihre Urheberrechte gewahrt. Einer weiteren Publikation Ihrer Arbeit in
+        <p>Wenn Sie Ihr Dokument zuerst in der DBT veröffentlichen, bleiben Ihre Urheberrechte gewahrt. Einer weiteren Publikation Ihrer
+          Arbeit in
           Fachzeitschriften, als Buch oder in anderen Repositorien steht grundsätzlich nichts entgegen.
         </p>
       </answer>
@@ -287,11 +424,16 @@
       </question>
       <answer>
         <p>
-          Elektronische Semesterapparate bieten Dozentinnen und Dozenten die Möglichkeit, die für eine Lehrveranstaltung benötigten Lehrmaterialien (z. B.
-          Literatur, Vorlesungsskripte und Internet-Links, elektronische Dokumente) an einer Stelle digital zusammenzuführen und zeit- und ortsunabhängig für
-          die Teilnehmer zur Verfügung zu stellen. Die für die Lehrveranstaltung benötigten Bücher werden zur Präsenznutzung in der Bibliothek aufgestellt, sind
-          also nicht entleihbar. Ein ESA besteht zunächst für die Dauer eines Semesters und kann zum Ende des Semesters verlängert, archiviert oder gelöscht
-          werden. Außerdem ist es jederzeit möglich, einen archivierten Semesterapparat zu reaktivieren.
+          Elektronische Semesterapparate bieten Dozentinnen und Dozenten die Möglichkeit, die für eine Lehrveranstaltung benötigten
+          Lehrmaterialien (z. B.
+          Literatur, Vorlesungsskripte und Internet-Links, elektronische Dokumente) an einer Stelle digital
+          zusammenzuführen und zeit- und ortsunabhängig für
+          die Teilnehmer zur Verfügung zu stellen. Die für die Lehrveranstaltung benötigten
+          Bücher werden zur Präsenznutzung in der Bibliothek aufgestellt, sind
+          also nicht entleihbar. Ein ESA besteht zunächst für die Dauer
+          eines Semesters und kann zum Ende des Semesters verlängert, archiviert oder gelöscht
+          werden. Außerdem ist es jederzeit möglich,
+          einen archivierten Semesterapparat zu reaktivieren.
         </p>
       </answer>
     </entry>
@@ -314,20 +456,26 @@
       </question>
       <answer>
         <p>
-          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und wählen Sie unter „Semesterapparate“ den Punkt „Einrichten“. Füllen Sie das Formular
+          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und wählen Sie unter „Semesterapparate“ den Punkt „Einrichten“. Füllen
+          Sie das Formular
           „Neuen
-          Semesterapparat anlegen“ mit den Angaben für Ihre Veranstaltung aus. Über den Button "Standort" ordnen Sie Ihren Semesterapparat einem
+          Semesterapparat anlegen“ mit den Angaben für Ihre Veranstaltung aus. Über den Button "Standort" ordnen Sie
+          Ihren Semesterapparat einem
           Fachbereich zu.
-          Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren diesen über die Schaltfläche
+          Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren
+          diesen über die Schaltfläche
           <button type="button" class="btn btn-default btn-xs">
             <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           . Der Leseschlüssel stellt sicher,
-          dass nur die an der Veranstaltung Teilnehmenden Zugriff auf den ESA erhalten; Sie geben ihn in Ihrer Veranstaltung
+          dass nur die an der Veranstaltung Teilnehmenden Zugriff auf den ESA erhalten; Sie geben ihn in
+          Ihrer Veranstaltung
           bekannt. Vergeben bzw. generieren
-          Sie außerdem einen Schreibschlüssel. Dieser kann an eine von Ihnen mit der Bearbeitung des ESA beauftragte Person –
+          Sie außerdem einen Schreibschlüssel. Dieser kann an eine von Ihnen mit der
+          Bearbeitung des ESA beauftragte Person –
           und nur an diese – weitergegeben
-          werden. Schreib- und Leseschlüssel müssen immer beide eingetragen sein. Nach dem Abschicken des Formulars ist der ESA
+          werden. Schreib- und Leseschlüssel müssen immer beide
+          eingetragen sein. Nach dem Abschicken des Formulars ist der ESA
           sofort nutzbar und kann mit
           Inhalten gefüllt werden.
         </p>
@@ -346,7 +494,8 @@
           </button>
           &gt; „Semesterapparat verwalten“ können Sie einen Ansprechpartner (Name + E-Mailadresse) für Ihren ESA angeben. Mit dem Einrichten
           eines ESA haben Sie
-          einen Schreibschlüssel festgelegt. Geben Sie diesen an die Person – und nur an diese - weiter, die die Bearbeitung Ihres ESA
+          einen Schreibschlüssel festgelegt. Geben Sie diesen an die Person – und nur an diese - weiter, die die
+          Bearbeitung Ihres ESA
           übernehmen soll.
         </p>
       </answer>
@@ -356,7 +505,8 @@
         Wie kann ich einen ESA für das nächste Semester verlängern?
       </question>
       <answer>
-        <p>Zum Ende eines jeden Semesters erhalten Sie automatische E-Mails, die Sie an das Ablaufen Ihrer ESA zum Semesterende erinnern. Nach Anklicken des
+        <p>Zum Ende eines jeden Semesters erhalten Sie automatische E-Mails, die Sie an das Ablaufen Ihrer ESA zum Semesterende erinnern.
+          Nach Anklicken des
           Links in der Mail und Anmeldung in der DBT können Sie den Status des ESA für das nächste Semester festlegen.
         </p>
       </answer>
@@ -379,7 +529,8 @@
             <strong>„Überschrift“</strong>
           </div>
           <div class="col-md-9">
-            Um den ESA inhaltlich zu gliedern verwenden Sie Überschriften. Aus den Überschriften wird automatisch ein Inhaltsverzeichnis generiert.
+            Um den ESA inhaltlich zu gliedern verwenden Sie Überschriften. Aus den Überschriften wird automatisch ein
+            Inhaltsverzeichnis generiert.
           </div>
         </div>
         <br />
@@ -397,9 +548,12 @@
             <strong>„Hyperlink“</strong>
           </div>
           <div class="col-md-9">
-            Hier können Sie beliebige Webseiten verlinken und diese kurz beschreiben, z. B. Datenbanken, Internetportale usw. Möchten Sie digitale
-            Bestände der Bibliothek (Aufsätze aus elektronischen Zeitschriften oder E-Books) in Ihren Semesterapparat aufnehmen, so geben Sie hier den Link zum
-            Volltext an. Lizenzierte digitale Bestände sind im Hochschulnetz aufrufbar oder für Hochschulangehörige auch über den externen Zugriff (VPN)
+            Hier können Sie beliebige Webseiten verlinken und diese kurz beschreiben, z. B. Datenbanken, Internetportale usw.
+            Möchten Sie digitale
+            Bestände der Bibliothek (Aufsätze aus elektronischen Zeitschriften oder E-Books) in Ihren Semesterapparat
+            aufnehmen, so geben Sie hier den Link zum
+            Volltext an. Lizenzierte digitale Bestände sind im Hochschulnetz aufrufbar oder für
+            Hochschulangehörige auch über den externen Zugriff (VPN)
             zugänglich.
           </div>
         </div>
@@ -409,11 +563,16 @@
             <strong>„Katalog-Eintrag"</strong>
           </div>
           <div class="col-md-9">
-            Hier können Sie Bücher aus dem Bestand der Bibliothek in Ihrem Semesterapparat verzeichnen und Hinweise dazu geben. Nach Suche und
-            Auswahl der entsprechenden Titel werden die bibliographischen Daten automatisch in Ihren ESA übernommen. Die ausgewählten Medien werden durch die
-            Mitarbeiter/innen der Bibliothek bearbeitet und während der Laufzeit Ihres ESA als Präsenzbestand in der Bibliothek aufgestellt. Entscheiden Sie
-            sich für einen ESA mit „nur Online-Material“, so werden die bibliographischen Daten aus dem Online-Katalog in einer Literaturliste zusammengeführt.
-            Eine Bearbeitung der Bücher erfolgt in diesem Fall nicht.
+            Hier können Sie Bücher aus dem Bestand der Bibliothek in Ihrem Semesterapparat verzeichnen und Hinweise dazu geben.
+            Nach Suche und
+            Auswahl der entsprechenden Titel werden die bibliographischen Daten automatisch in Ihren ESA übernommen. Die
+            ausgewählten Medien werden durch die
+            Mitarbeiter/innen der Bibliothek bearbeitet und während der Laufzeit Ihres ESA als
+            Präsenzbestand in der Bibliothek aufgestellt. Entscheiden Sie
+            sich für einen ESA mit „nur Online-Material“, so werden die
+            bibliographischen Daten aus dem Online-Katalog in einer Literaturliste zusammengeführt.
+            Eine Bearbeitung der Bücher erfolgt in
+            diesem Fall nicht.
           </div>
         </div>
         <br />
@@ -422,7 +581,8 @@
             <strong>„Datei“</strong>
           </div>
           <div class="col-md-9">
-            Hier können Sie eigene Dateien (z. B. Übungsblätter, Seminarpläne oder digitalisierte Kopiervorlagen) in beliebigen Formaten hochladen
+            Hier können Sie eigene Dateien (z. B. Übungsblätter, Seminarpläne oder digitalisierte Kopiervorlagen) in beliebigen Formaten
+            hochladen
             und
             kommentieren. Bitte beachten Sie die Hinweise zum geltenden
             <a href="#rcLecturerCopyright">Urheberrecht</a>
@@ -454,7 +614,8 @@
             </div>
           </div>
           <div class="col-md-9">
-            Die einzelnen Bausteine innerhalb eines ESA lassen sich mittels der rechts neben dem jeweiligen Eintrag zu findenden Symbole
+            Die einzelnen Bausteine innerhalb eines ESA lassen sich mittels der rechts neben dem jeweiligen Eintrag zu
+            findenden Symbole
             bearbeiten, löschen und innerhalb des ESA verschieben.
           </div>
         </div>
@@ -466,14 +627,16 @@
       </question>
       <answer>
         <p>
-          Änderungen sowohl an den Inhalten als auch der Form eines ESA sind jederzeit möglich. Melden Sie sich dafür mit Ihrer persönlichen URZ-Nutzerkennung
+          Änderungen sowohl an den Inhalten als auch der Form eines ESA sind jederzeit möglich. Melden Sie sich dafür mit Ihrer persönlichen
+          URZ-Nutzerkennung
           in der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
           <button type="button" class="btn btn-default btn-xs dropdown-toggle">
             <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
             <span class="caret"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie die gewünschten Änderungen vornehmen.
-          Als beauftragte Person geben Sie bitte zusätzlich den Schreibschlüssel ein.
+          Als beauftragte Person geben Sie bitte zusätzlich den
+          Schreibschlüssel ein.
         </p>
       </answer>
     </entry>
@@ -483,9 +646,12 @@
       </question>
       <answer>
         <p>
-          Das Einrichten neuer ESA und das Reaktivieren inaktiver ESA ist jederzeit möglich. Automatisch generierte E-Mails erinnern Sie wenige Wochen vor Ende
-          der Laufzeit (= Semesterende) an die Möglichkeit der Verlängerung Ihres ESA für das nächste Semester. Zum Ende des Semesters haben Sie neben der
-          Verlängerung die Möglichkeit, einen ESA zu archivieren (um ihn ggf. später wieder zu reaktivieren) oder zu löschen.
+          Das Einrichten neuer ESA und das Reaktivieren inaktiver ESA ist jederzeit möglich. Automatisch generierte E-Mails erinnern Sie
+          wenige Wochen vor Ende
+          der Laufzeit (= Semesterende) an die Möglichkeit der Verlängerung Ihres ESA für das nächste Semester. Zum
+          Ende des Semesters haben Sie neben der
+          Verlängerung die Möglichkeit, einen ESA zu archivieren (um ihn ggf. später wieder zu
+          reaktivieren) oder zu löschen.
         </p>
       </answer>
     </entry>
@@ -495,7 +661,8 @@
       </question>
       <answer>
         <p>
-          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und wählen Sie unter „Semesterapparate“ den Punkt „Aktuelle Liste“. Nach der Anmeldung
+          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und wählen Sie unter „Semesterapparate“ den Punkt „Aktuelle Liste“.
+          Nach der Anmeldung
           erscheinen Ihre eigenen ESA in der Liste „Semesterapparate“ an erster Stelle.
         </p>
       </answer>
@@ -506,8 +673,10 @@
       </question>
       <answer>
         <p>
-          Ihre Bibliothek verfolgt aufmerksam die aktuellen Entwicklungen zur Bereitstellung urheberrechtlich geschützter Inhalte in Elektronischen
-          Semesterapparaten nach §52a UrhG. Unter bestimmten Bedingungen dürfen fremde Werke und Werkteile ohne Zustimmung des Rechteinhabers in der Lehre
+          Ihre Bibliothek verfolgt aufmerksam die aktuellen Entwicklungen zur Bereitstellung urheberrechtlich geschützter Inhalte in
+          Elektronischen
+          Semesterapparaten nach §52a UrhG. Unter bestimmten Bedingungen dürfen fremde Werke und Werkteile ohne Zustimmung des
+          Rechteinhabers in der Lehre
           verwendet werden. Erlaubt sind:
         </p>
         <ul>
@@ -515,36 +684,46 @@
           <li>„einzelne Beiträge aus Zeitungen oder Zeitschriften“: z. B. Aufsätze aus Fachzeitschriften</li>
           <li>„Werke geringen Umfangs“: z. B. Gedichte, Kurzgeschichten, auch: Bilder</li>
           <li>Diese Regelungen dürfen nicht umgangen werden.</li>
-          <li>Es dürfen nur Teile von Werken aus dem Bestand der jeweiligen Hochschulbibliothek für Elektronische Semesterapparate verwendet werden.</li>
-          <li>Urheberrechtsfreie Werke (70 Jahre nach dem Tod eines Autors) dürfen komplett digitalisiert und bereitgestellt werden, sofern keine weiteren
+          <li>Es dürfen nur Teile von Werken aus dem Bestand der jeweiligen Hochschulbibliothek für Elektronische Semesterapparate verwendet
+            werden.
+          </li>
+          <li>Urheberrechtsfreie Werke (70 Jahre nach dem Tod eines Autors) dürfen komplett digitalisiert und bereitgestellt werden, sofern
+            keine weiteren
             Rechte Dritter vorliegen.
           </li>
-          <li>Nicht digitalisiert und bereitgestellt werden dürfen Schulbücher, insofern keine anderslautende Vereinbarung mit dem Verlag vorliegt.</li>
+          <li>Nicht digitalisiert und bereitgestellt werden dürfen Schulbücher, insofern keine anderslautende Vereinbarung mit dem Verlag
+            vorliegt.
+          </li>
           <li>Nicht digitalisiert werden dürfen Werke, für die der Verlag selbst ein angemessenes Lizenzangebot zur Verfügung stellt.</li>
           <li>In Zweifelsfällen ist beim Rechteinhaber die Erlaubnis zur Bereitstellung in einem ESA einzuholen.</li>
         </ul>
         <p>Folgende Bedingung ist bei der Bereitstellung zu erfüllen:</p>
         <ul>
-          <li>Die Dokumente sind nur für einen geschlossenen Nutzerkreis – also die Teilnehmenden an der entsprechenden Lehrveranstaltung - zugänglich. Jeder
-            ESA ist grundsätzlich durch ein Passwort (Leseschlüssel) zu schützen, so dass nur die Teilnehmenden Zugang zu den Inhalten erhalten. Geben Sie
+          <li>Die Dokumente sind nur für einen geschlossenen Nutzerkreis – also die Teilnehmenden an der entsprechenden Lehrveranstaltung -
+            zugänglich. Jeder
+            ESA ist grundsätzlich durch ein Passwort (Leseschlüssel) zu schützen, so dass nur die Teilnehmenden Zugang zu
+            den Inhalten erhalten. Geben Sie
             diesen daher ausschließlich an die Teilnehmer Ihrer Veranstaltung weiter.
           </li>
         </ul>
-        <p>Bitte stellen Sie sicher, dass die von Ihnen eingestellten Inhalte den durch das Urheberrecht begrenzten Umfang nicht überschreiten und keine Rechte
+        <p>Bitte stellen Sie sicher, dass die von Ihnen eingestellten Inhalte den durch das Urheberrecht begrenzten Umfang nicht
+          überschreiten und keine Rechte
           Dritter verletzt werden.
         </p>
       </answer>
     </entry>
     <entry href="rcLecturerMail">
       <question>
-        Was ist zu tun, wenn ich die E-Mail „Aufforderung zur Übernahme“ gelöscht habe und damit meinen ESA in der neuen DBT nicht mehr finde?
+        Was ist zu tun, wenn ich die E-Mail „Aufforderung zur Übernahme“ gelöscht habe und damit meinen ESA in der neuen DBT nicht
+        mehr finde?
       </question>
       <answer>
         <p>
           Schreiben Sie eine E-Mail an
           <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
           . Die E-Mail zur Übernahme des ESA in der neuen DBT wird Ihnen erneut
-          zugesandt. Mit der Anmeldung in der DBT und durch die Eingabe eines
+          zugesandt. Mit der Anmeldung in der DBT und durch die Eingabe
+          eines
           Zugriffsschlüssels (enthalten in der E-Mail) können Sie den ESA in wenigen
           Schritten übernehmen.
         </p>
@@ -559,7 +738,8 @@
           Ja, schreiben Sie dazu eine E-Mail an
           <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
           . Die Person, die den ESA übernehmen soll, erhält eine E-Mail
-          mit Aufforderung zur Übernahme des ESA und kann nach Anmeldung in der DBT und der Eingabe
+          mit Aufforderung zur Übernahme des ESA und kann nach Anmeldung in der
+          DBT und der Eingabe
           eines Zugriffsschlüssels (enthalten in der E-Mail), den ESA
           in wenigen Schritten übernehmen.
         </p>
@@ -567,7 +747,8 @@
     </entry>
     <entry href="rcLecturerAccesskey">
       <question>
-        Ich kann mich in der DBT anmelden, aber keinen ESA einrichten bzw. bearbeiten und werde auch nicht zur Eingabe eines Zugriffsschlüssels
+        Ich kann mich in der DBT anmelden, aber keinen ESA einrichten bzw. bearbeiten und werde auch nicht zur Eingabe eines
+        Zugriffsschlüssels
         aufgefordert?
       </question>
       <answer>
@@ -603,9 +784,12 @@
         Wie kann ich als beauftragte Person Inhalte eines ESA bearbeiten?
       </question>
       <answer>
-        <p>Beim Einrichten eines Elektronischen Semesterapparates legt der Dozent einen Schreibschlüssel fest. Nach Anmeldung mit Ihrer eigenen
-          URZ-Nutzerkennung in der DBT und Öffnen des entsprechenden Semesterapparates werden Sie zur Eingabe eines Zugriffsschlüssels aufgefordert. Geben Sie
-          hier den Schreibschlüssel ein – danach können Sie die Inhalte des Semesterapparates sofort bearbeiten. Ausschließlich der Dozent kann den
+        <p>Beim Einrichten eines Elektronischen Semesterapparates legt der Dozent einen Schreibschlüssel fest. Nach Anmeldung mit Ihrer
+          eigenen
+          URZ-Nutzerkennung in der DBT und Öffnen des entsprechenden Semesterapparates werden Sie zur Eingabe eines
+          Zugriffsschlüssels aufgefordert. Geben Sie
+          hier den Schreibschlüssel ein – danach können Sie die Inhalte des Semesterapparates
+          sofort bearbeiten. Ausschließlich der Dozent kann den
           Schreibschlüssel an die von ihm beauftragte Person herausgeben.
         </p>
       </answer>
@@ -621,8 +805,10 @@
       </question>
       <answer>
         <p>
-          Wählen Sie unter „Semesterapparate“ den Punkt „Aktuelle Liste“. Geben Sie den Namen des Dozenten / der Dozentin bzw. Stichworte aus dem Titel der
-          Lehrveranstaltung oder das Fach in das Feld „Filter“ ein. Sie können die Spalten der ESA-Liste auch über das Symbol umsortieren
+          Wählen Sie unter „Semesterapparate“ den Punkt „Aktuelle Liste“. Geben Sie den Namen des Dozenten / der Dozentin bzw. Stichworte
+          aus dem Titel der
+          Lehrveranstaltung oder das Fach in das Feld „Filter“ ein. Sie können die Spalten der ESA-Liste auch über das
+          Symbol umsortieren
           <span class="glyphicon glyphicon-sort sort-icon" />
           .
         </p>
@@ -634,8 +820,10 @@
       </question>
       <answer>
         <p>
-          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und suchen Sie den gewünschten ESA über den Punkt „Aktuelle Liste“. Um Zugriff auf die
-          Inhalte eines ESA zu erhalten, benötigen Sie den Leseschlüssel für den Apparat. Dieser wird von Ihrer Dozentin / Ihrem Dozenten im Rahmen der
+          Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und suchen Sie den gewünschten ESA über den Punkt „Aktuelle Liste“. Um
+          Zugriff auf die
+          Inhalte eines ESA zu erhalten, benötigen Sie den Leseschlüssel für den Apparat. Dieser wird von Ihrer Dozentin /
+          Ihrem Dozenten im Rahmen der
           entsprechenden Veranstaltung bekannt gegeben bzw. kann dort erfragt werden.
         </p>
       </answer>
