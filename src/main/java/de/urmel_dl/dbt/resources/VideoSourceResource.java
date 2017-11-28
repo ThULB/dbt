@@ -42,7 +42,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,10 +51,11 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
-import org.mycore.media.video.MCRMediaSourceProvider;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 
+import de.urmel_dl.dbt.media.MediaService;
+import de.urmel_dl.dbt.media.entity.Sources;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
@@ -69,12 +69,7 @@ public class VideoSourceResource {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String[] EMPTY_ARRAY = new String[0];
-
     public static final String DEFAULT_HASH_TYPE = "SHA-1";
-
-    private static String wowzaHashParameter = MCRConfiguration2.getString("MCR.Media.Wowza.HashParameter")
-        .orElse("wowzatokenhash");
 
     private static List<String> allowedIPs = MCRConfiguration2.getStrings("DBT.VideoSource.AllowedIPs");
 
@@ -152,65 +147,12 @@ public class VideoSourceResource {
             .printHexBinary(md.digest((sharedSecret.get() + ":" + accessKey).getBytes(StandardCharsets.UTF_8)));
     }
 
-    private static VideoSources buildSources(String derivateId, String path) throws IOException, URISyntaxException {
-        MCRMediaSourceProvider msp = new MCRMediaSourceProvider(derivateId, path, Optional.ofNullable("Safari"),
-            () -> EMPTY_ARRAY);
-        return new VideoSources(msp.getSources().stream().filter(s -> !s.getUri().contains("MCRFileNodeServlet"))
-            .map(s -> new VideoSource(removeToken(s.getUri()), s.getType().getMimeType()))
-            .collect(Collectors.toList()));
-    }
-
-    private static String removeToken(String src) {
-        String queryString = src.lastIndexOf("?") != -1 ? src.substring(src.lastIndexOf("?")) : null;
-        if (queryString != null) {
-            String keyValue = wowzaHashParameter + "=[^&]*?";
-            return src.replace(queryString,
-                queryString.replaceAll("(&" + keyValue + "(?=(&|$))|^\\?" + keyValue + "(&|$))", ""));
-        }
-
-        return src;
-    }
-
-    /**
-     * A wrapper of all video sources.
-     *
-     * @author Ren\u00E9 Adler (eagle)
-     *
-     */
-    @XmlRootElement(name = "sources")
-    static class VideoSources {
-        @XmlElement(name = "source")
-        private List<VideoSource> sources;
-
-        protected VideoSources() {
-        }
-
-        protected VideoSources(List<VideoSource> sources) {
-            this.sources = sources;
-        }
-    }
-
-    /**
-     * A wrapper for video source.
-     *
-     * @author Ren\u00E9 Adler (eagle)
-     *
-     */
-    @XmlRootElement(name = "source")
-    static class VideoSource {
-        @XmlAttribute(name = "src")
-        private String src;
-
-        @XmlAttribute(name = "type")
-        private String type;
-
-        protected VideoSource() {
-        }
-
-        protected VideoSource(String src, String type) {
-            this.src = src;
-            this.type = type;
-        }
+    private static Sources buildSources(String derivateId, String path) throws IOException, URISyntaxException {
+        String mediaId = MediaService.buildInternalId(derivateId + "_" + path);
+        Sources sources = Sources.build(mediaId, MediaService.getMediaFiles(mediaId));
+        sources.setSources(sources.getSources().stream()
+            .filter(s -> !"video/mp4".equals(s.getType())).collect(Collectors.toList()));
+        return sources;
     }
 
     /**

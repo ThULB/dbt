@@ -25,9 +25,11 @@
         "angular-translate": "~2.11.0",
         "angular-translate-loader-partial": "~2.11.0",
         "angular-modal-service": "~0.10.1",
-        "bootstrap": "~3.3.6",
+        "bootstrap": "~3.3.7",
         "bootstrap-fileinput": "~4.2.5",
         "summernote": "~0.6.13",
-        "jquery-sortable": "~0.9.12"
+        "jquery-sortable": "~0.9.12",
+        "video.js": "^6.4.0",
+        "videojs-contrib-hls" : "^5.12.2"
     }
 }

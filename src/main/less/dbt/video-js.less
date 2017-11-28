@@ -1,0 +1,68 @@
+.mir-player {
+  div.panel-body {
+    padding: 0;
+  }
+
+  .video-js {
+    color: #000;
+    &:focus {
+      outline-style: none ! important;
+      outline-color: transparent ! important;
+      outline-width: 0 ! important;
+    }
+
+    video {
+      margin-bottom: -2px;
+    }
+
+    .vjs-big-play-button {
+      background-color: fade(@brand-primary, 80%);
+      border-color: #fff;
+      left: 50%;
+      margin: -0.75em 0 0 -1.5em;
+      top: 50%;
+      > .vjs-icon-placeholder {
+        color: #fff;
+      }
+    }
+
+    .vjs-control-bar {
+      background-color: rgba(255, 255, 255, 0.85);
+      position: absolute;
+      bottom: 0px;
+      .vjs-icon-placeholder:hover {
+        color: @brand-primary;
+      }
+    }
+
+    .vjs-menu-button-popup {
+      .vjs-menu {
+        .vjs-menu-content {
+          background-color: rgba(255, 255, 255, 0.85);
+        }
+      }
+    }
+
+    .vjs-menu {
+      li.vjs-menu-item {
+        &:hover {
+          background-color: fade(@brand-primary, 20%);
+          color: @brand-primary;
+        }
+      }
+    }
+
+    .vjs-slider {
+      background: fade(#808080, 60%);
+    }
+
+    .vjs-play-progress , .vjs-volume-level {
+      background-color: #000;
+    }
+
+    .vjs-load-progress , .vjs-load-progress div {
+      background: fade(@brand-primary, 40%);
+    }
+  }
+}
+
