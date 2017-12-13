@@ -19,6 +19,7 @@
 package de.urmel_dl.dbt.media.events;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
@@ -53,6 +54,9 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
+        if (attrs.isDirectory()){
+            return;
+        }
         try {
             String id = MediaService
                 .buildInternalId(MCRPath.toMCRPath(path).getOwner() + "_" + path.getFileName().toString());
@@ -60,7 +64,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
                 MediaService.deleteMediaFiles(id);
             }
         } catch (IOException e) {
-            throw new MCRException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
