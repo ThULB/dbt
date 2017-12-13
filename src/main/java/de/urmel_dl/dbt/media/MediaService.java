@@ -428,9 +428,11 @@ public class MediaService {
             this.job = job;
         }
 
-        /* (non-Javadoc)
-         * @see java.lang.Runnable#run()
-         */
+        @Override
+        public String toString() {
+            return job.getId() + ": " + job.getFileName();
+        }
+
         @Override
         public void run() {
             try {
