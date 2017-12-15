@@ -131,7 +131,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
             return;
         }
 
-        MediaService.encodeMediaFile(derivateRoot.getOwner() + "_" + fileName, mediaFile);
+        MediaService.encodeMediaFile(derivateRoot.getOwner() + "_" + fileName, mediaFile, 0);
     }
 
     private static List<String> forAllDerivates(String batchCommandSyntax) {

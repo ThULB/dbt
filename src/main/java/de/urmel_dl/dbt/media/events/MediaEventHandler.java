@@ -23,7 +23,6 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import org.mycore.common.MCRException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.niofs.MCRPath;
@@ -41,8 +40,12 @@ public class MediaEventHandler extends MCREventHandlerBase {
      */
     @Override
     protected void handlePathUpdated(MCREvent evt, Path path, BasicFileAttributes attrs) {
+        if (!(path instanceof MCRPath)) {
+            return;
+        }
+
         handlePathDeleted(evt, path, attrs);
-        handlePathCreated(evt, path, attrs);
+        encodeMediaFile(MCRPath.toMCRPath(path), 0);
     }
 
     /* (non-Javadoc)
@@ -54,7 +57,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
-        if (attrs.isDirectory()){
+        if (attrs.isDirectory()) {
             return;
         }
         try {
@@ -76,12 +79,12 @@ public class MediaEventHandler extends MCREventHandlerBase {
         if (!(path instanceof MCRPath)) {
             return;
         }
-        encodeMediaFile(MCRPath.toMCRPath(path));
+        encodeMediaFile(MCRPath.toMCRPath(path), 10);
     }
 
-    private void encodeMediaFile(MCRPath path) {
+    private void encodeMediaFile(MCRPath path, int priority) {
         if (MediaService.isMediaSupported(path)) {
-            MediaService.encodeMediaFile(path.getOwner() + "_" + path.getFileName().toString(), path);
+            MediaService.encodeMediaFile(path.getOwner() + "_" + path.getFileName().toString(), path, priority);
         }
     }
 }
