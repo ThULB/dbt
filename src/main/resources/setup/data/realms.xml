@@ -27,10 +27,10 @@
       <label xml:lang="en">Login with your user credentials of your university</label>
       <info>
         <label xml:lang="de">
-	  &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau und Uni Erfurt.&lt;/strong&gt;
+	  &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
         </label>
         <label xml:lang="en">
-	  Login for university users of FSU Jena, TU Ilmenau and Erfurt.
+	  &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt and Nordhausen.&lt;/strong&gt;
         </label>
       </info>
     </login>
