@@ -31,6 +31,16 @@
 				}
 				return options.inverse(this);
 			});
+			Handlebars.registerHelper("containsIgnoreCase", function(a, b, options) {
+				a = a.toLowerCase() || a;
+				b = b.toLowerCase() || b;
+				
+				if (a.indexOf(b) > -1) {
+					return options.fn(this);
+				}
+				return options.inverse(this);
+			});
+
 			Handlebars.registerHelper("concat", function() {
 				var args = Array.prototype.slice.call(arguments);
 				args.pop();
@@ -228,7 +238,7 @@
 			},
 			"Video" : {
 				icon : "fa-file-video-o",
-				extensions : "mp4|f4v|flv|rm|avi|wmv"
+				extensions : "mp4|f4v|flv|rm|avi|wmv|mov"
 			},
 			"Code" : {
 				icon : "fa-file-code-o",
@@ -543,7 +553,7 @@
 				});
 
 				$(fileBox).on("click", ".file_video > a", function(evt) {
-					if ($("#player_").length > 0) {
+					if ($("#player_video").length > 0) {
 						evt.preventDefault();
 						changeVideo($(this));
 					}

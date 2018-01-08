@@ -18,6 +18,8 @@
 package de.urmel_dl.dbt.utils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
@@ -43,6 +45,8 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -158,6 +162,22 @@ public class EntityFactory<T> {
         }
     };
 
+    private BiFunction<Callable<Unmarshaller>, Object, T> jsonUnmarshal = (unmarshallerCaller, input) -> {
+        Unmarshaller unmarshaller;
+        try {
+            unmarshaller = unmarshallerCaller.call();
+        } catch (Exception e) {
+            throw new RuntimeException("Couldn't build unmarshaller.", e);
+        }
+
+        try {
+            return unmarshaller.unmarshal(toSource(input), entityType).getValue();
+        } catch (IllegalArgumentException | JAXBException e) {
+            throw new RuntimeException(
+                "Couldn't unmarshal " + input.getClass() + " to " + entityType + ".", e);
+        }
+    };
+
     /**
      * Instantiates a new entity factory.
      *
@@ -249,7 +269,7 @@ public class EntityFactory<T> {
      * @return the entity class
      */
     public T fromJSON(Object source) {
-        return unmarshal.apply(() -> unmarshaller(Optional.of(UNMARSHALLER_JSON_PROPERTIES)), source);
+        return jsonUnmarshal.apply(() -> unmarshaller(Optional.of(UNMARSHALLER_JSON_PROPERTIES)), source);
     }
 
     /**
@@ -415,6 +435,23 @@ public class EntityFactory<T> {
         }).findFirst();
     }
 
+    private Source toSource(Object input) {
+        Class<?> inputType = input.getClass();
+
+        Source src;
+        if (Source.class.isAssignableFrom(inputType)) {
+            src = (Source) input;
+        } else if (Reader.class.isAssignableFrom(inputType)) {
+            src = new StreamSource((Reader) input);
+        } else if (InputStream.class.isAssignableFrom(inputType)) {
+            src = new StreamSource((InputStream) input);
+        } else {
+            throw new IllegalArgumentException("Couldn't use " + inputType + " to unmarshal json.");
+        }
+
+        return src;
+    }
+
     private Map<String, ?> properties(String propType) {
         Function<String, String> keyFunc = k -> k.substring(k.indexOf(propType) + propType.length());
         Function<String, ?> valueFunc = v -> {
@@ -425,7 +462,8 @@ public class EntityFactory<T> {
         };
 
         return Stream.of(MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + propType),
-            MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + entityType.getPackage().getName() + "." + propType))
+            MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + entityType.getPackage().getName() + "." + propType),
+            MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + entityType.getName() + "." + propType))
             .map(Map::entrySet).flatMap(Collection::stream)
             .collect(
                 Collectors.toMap(e -> keyFunc.apply(e.getKey()), e -> valueFunc.apply(e.getValue()), (v1, v2) -> v2));
