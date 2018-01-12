@@ -294,146 +294,152 @@ public class RCCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "rc inactivator",
         help = "send warning mails for reserve collections or inactivate, set new status")
-    public static void rcInactivator() throws IOException, MCRAccessException {
+    public static List<String> rcInactivator() throws IOException, MCRAccessException {
         final SlotManager mgr = SlotManager.instance();
         final SlotList slotList = mgr.getSlotList();
 
-        if (!slotList.getSlots().isEmpty()) {
-            for (int i = 0; i < slotList.getSlots().size(); i++) {
-                final Slot slot = slotList.getSlots().get(i);
+        List<String> cmds = slotList.getSlots().stream()
+            .map(slot -> new MessageFormat("rc inactivator for slot {0}", Locale.ROOT)
+                .format(slot.getSlotId()))
+            .collect(Collectors.toList());
 
-                try {
-                    MCREvent evt = null;
+        // sync list at end
+        cmds.add("sync slot list");
 
-                    if (slot.isActive() || Status.PENDING.equals(slot.getStatus())) {
-                        final Date today = new Date();
-                        final Date validTo = slot.getValidToAsDate();
-                        final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
+        return cmds;
+    }
 
-                        if (today.after(validTo)) {
-                            boolean save = true;
+    @MCRCommand(syntax = "rc inactivator for slot {0}",
+        help = "send warning mail for reserve collection {0} or inactivate, set new status")
+    public static void rcInactivator(String slotId) throws IOException, MCRAccessException {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+        final Slot slot = slotList.getSlotById(slotId);
 
-                            switch (slot.getStatus()) {
-                                case ARCHIVED:
-                                case FREE:
-                                case RESERVED:
-                                    save = false;
-                                    break;
+        try {
+            MCREvent evt = null;
+
+            if (slot.isActive() || Status.PENDING.equals(slot.getStatus())) {
+                final Date today = new Date();
+                final Date validTo = slot.getValidToAsDate();
+                final Period period = RCCalendar.getPeriod(slot.getLocation().toString(), validTo);
+
+                if (today.after(validTo)) {
+                    boolean save = true;
+
+                    switch (slot.getStatus()) {
+                        case ARCHIVED:
+                        case FREE:
+                        case RESERVED:
+                            save = false;
+                            break;
+                        case ACTIVE:
+                            LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
+
+                            slot.setStatus(Status.ARCHIVED);
+
+                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+
+                            break;
+                        case PENDING:
+                            switch (slot.getPendingStatus()) {
                                 case ACTIVE:
+                                    LOGGER.info("reactivate slot with id \"" + slot.getSlotId() + "\"");
+
+                                    slot.setStatus(Status.ACTIVE);
+                                    slot.setValidTo(RCCalendar
+                                        .getPeriodBySetable(slot.getLocation().toString(), new Date())
+                                        .getToDate());
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                                    break;
+                                case ARCHIVED:
                                     LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
 
                                     slot.setStatus(Status.ARCHIVED);
 
                                     evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
-
                                     break;
-                                case PENDING:
-                                    switch (slot.getPendingStatus()) {
-                                        case ACTIVE:
-                                            LOGGER.info("reactivate slot with id \"" + slot.getSlotId() + "\"");
-
-                                            slot.setStatus(Status.ACTIVE);
-                                            slot.setValidTo(RCCalendar
-                                                .getPeriodBySetable(slot.getLocation().toString(), new Date())
-                                                .getToDate());
-
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
-                                            break;
-                                        case ARCHIVED:
-                                            LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
-
-                                            slot.setStatus(Status.ARCHIVED);
-
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
-                                            break;
-                                        case FREE:
-                                            if (slot.isOnlineOnly() ||
-                                                slot.getEntries().stream()
-                                                    .filter(se -> se.getEntry() instanceof OPCRecordEntry
-                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
-                                                    .count() == 0) {
-                                                LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
-                                                mgr.delete(slot);
-                                                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                                            } else {
-                                                evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
-                                            }
-
-                                            evt.put(SlotManager.SLOT_TYPE, slot);
-                                            MCREventManager.instance().handleEvent(evt);
-                                            continue;
-                                        case RESERVED:
-                                            LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
-
-                                            slot.setStatus(Status.RESERVED);
-                                            slot.getEntries().clear();
-
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                                            break;
-                                        case VALIDATING:
-                                        default:
-                                            save = false;
+                                case FREE:
+                                    if (slot.isOnlineOnly() ||
+                                        slot.getEntries().stream()
+                                            .filter(se -> se.getEntry() instanceof OPCRecordEntry
+                                                && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
+                                            .count() == 0) {
+                                        LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+                                        mgr.delete(slot);
+                                        evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                    } else {
+                                        evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                                     }
+
+                                    evt.put(SlotManager.SLOT_TYPE, slot);
+                                    MCREventManager.instance().handleEvent(evt);
+
+                                    return;
+                                case RESERVED:
+                                    LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
+
+                                    slot.setStatus(Status.RESERVED);
+                                    slot.getEntries().clear();
+
+                                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
                                     break;
+                                case VALIDATING:
                                 default:
                                     save = false;
                             }
-
-                            if (save) {
-                                mgr.setSlot(slot);
-                                mgr.saveOrUpdate(slot);
-
-                                if (evt != null) {
-                                    evt.put(SlotManager.SLOT_TYPE, slot);
-                                    MCREventManager.instance().handleEvent(evt);
-                                }
-
-                                continue;
-                            }
-                        } else if (slot.getStatus() == Status.ACTIVE) {
-                            final Warning pWarning = period.getWarning(today);
-
-                            if (pWarning != null) {
-                                final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
-                                    : new WarningDate(pWarning.getWarningDate());
-
-                                if (sWarning != null) {
-                                    LOGGER.info("Add warning to slot with id \"" + slot.getSlotId() + "\"...");
-
-                                    slot.addWarningDate(sWarning);
-                                    mgr.saveOrUpdate(slot);
-
-                                    final StringBuilder uri = new StringBuilder();
-
-                                    uri.append("xslStyle:" + pWarning.getTemplate());
-                                    uri.append("?warningDate=" + sWarning.getWarningDate());
-                                    uri.append(":notnull:slot:");
-                                    uri.append("slotId=" + slot.getSlotId());
-
-                                    LOGGER.info("...send mail");
-                                    MailQueue.addJob(uri.toString());
-
-                                    continue;
-                                }
-                            }
-                        }
-                    } else if (slot.getStatus() == Status.FREE) {
-                        LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
-
-                        mgr.delete(slot);
-
-                        evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
-                        evt.put(SlotManager.SLOT_TYPE, slot);
-                        MCREventManager.instance().handleEvent(evt);
-                        continue;
+                            break;
+                        default:
+                            save = false;
                     }
-                } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
-                    | MCRPersistenceException | MCRActiveLinkException e) {
-                    LOGGER.error(e.getMessage());
-                }
-            }
 
-            mgr.syncList();
+                    if (save) {
+                        mgr.setSlot(slot);
+                        mgr.saveOrUpdate(slot);
+
+                        if (evt != null) {
+                            evt.put(SlotManager.SLOT_TYPE, slot);
+                            MCREventManager.instance().handleEvent(evt);
+                        }
+                    }
+                } else if (slot.getStatus() == Status.ACTIVE) {
+                    final Warning pWarning = period.getWarning(today);
+
+                    if (pWarning != null) {
+                        final WarningDate sWarning = slot.hasWarningDate(pWarning.getWarningDate()) ? null
+                            : new WarningDate(pWarning.getWarningDate());
+
+                        if (sWarning != null) {
+                            LOGGER.info("Add warning to slot with id \"" + slot.getSlotId() + "\"...");
+
+                            slot.addWarningDate(sWarning);
+                            mgr.saveOrUpdate(slot);
+
+                            final StringBuilder uri = new StringBuilder();
+
+                            uri.append("xslStyle:" + pWarning.getTemplate());
+                            uri.append("?warningDate=" + sWarning.getWarningDate());
+                            uri.append(":notnull:slot:");
+                            uri.append("slotId=" + slot.getSlotId());
+
+                            LOGGER.info("...send mail");
+                            MailQueue.addJob(uri.toString());
+                        }
+                    }
+                }
+            } else if (slot.getStatus() == Status.FREE) {
+                LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
+
+                mgr.delete(slot);
+
+                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                evt.put(SlotManager.SLOT_TYPE, slot);
+                MCREventManager.instance().handleEvent(evt);
+            }
+        } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
+            | MCRPersistenceException | MCRActiveLinkException e) {
+            LOGGER.error(e.getMessage());
         }
     }
 
