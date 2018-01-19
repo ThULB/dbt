@@ -283,7 +283,7 @@ public class RCCommands extends MCRAbstractCommands {
                 for (final String c : fr.list()) {
                     if (c.endsWith(".xml") && c.contains("slot")) {
                         String command = new MessageFormat("import slot from file {0}", Locale.ROOT)
-                            .format(new File(fr, c).getAbsolutePath());
+                            .format(new Object[] { new File(fr, c).getAbsolutePath() });
                         cmds.add(command);
                     }
                 }
@@ -300,7 +300,7 @@ public class RCCommands extends MCRAbstractCommands {
 
         List<String> cmds = slotList.getSlots().stream()
             .map(slot -> new MessageFormat("rc inactivator for slot {0}", Locale.ROOT)
-                .format(slot.getSlotId()))
+                .format(new Object[] { slot.getSlotId() }))
             .collect(Collectors.toList());
 
         // sync list at end
