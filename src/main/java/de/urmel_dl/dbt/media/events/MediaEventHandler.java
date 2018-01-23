@@ -23,6 +23,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.niofs.MCRPath;
@@ -45,7 +46,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
         }
 
         handlePathDeleted(evt, path, attrs);
-        encodeMediaFile(MCRPath.toMCRPath(path), 0);
+        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.toMCRPath(path), 0));
     }
 
     /* (non-Javadoc)
@@ -60,15 +61,8 @@ public class MediaEventHandler extends MCREventHandlerBase {
         if (attrs.isDirectory()) {
             return;
         }
-        try {
-            String id = MediaService
-                .buildInternalId(MCRPath.toMCRPath(path).getOwner() + "_" + path.getFileName().toString());
-            if (MediaService.hasMediaFiles(id)) {
-                MediaService.deleteMediaFiles(id);
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
+
+        MCRSessionMgr.getCurrentSession().onCommit(() -> deleteMediaFile(MCRPath.toMCRPath(path)));
     }
 
     /* (non-Javadoc)
@@ -79,7 +73,19 @@ public class MediaEventHandler extends MCREventHandlerBase {
         if (!(path instanceof MCRPath)) {
             return;
         }
-        encodeMediaFile(MCRPath.toMCRPath(path), 10);
+        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.toMCRPath(path), 10));
+    }
+
+    private void deleteMediaFile(MCRPath path) {
+        try {
+            String id = MediaService
+                .buildInternalId(MCRPath.toMCRPath(path).getOwner() + "_" + path.getFileName().toString());
+            if (MediaService.hasMediaFiles(id)) {
+                MediaService.deleteMediaFiles(id);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     private void encodeMediaFile(MCRPath path, int priority) {
