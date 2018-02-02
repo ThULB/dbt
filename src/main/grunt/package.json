@@ -29,7 +29,7 @@
         "bootstrap-fileinput": "~4.2.5",
         "summernote": "~0.6.13",
         "jquery-sortable": "~0.9.12",
-        "video.js": "^6.4.0",
+        "video.js": "6.4.0",
         "videojs-contrib-hls" : "^5.12.2"
     }
 }
