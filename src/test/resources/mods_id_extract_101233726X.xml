@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd" ID="dbt_mods_00000001" label="dbt_mods_00000001" version="2017.07-SNAPSHOT">
+  <metadata>
+    <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
+      <modsContainer inherited="0">
+        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+          <mods:typeOfResource>text</mods:typeOfResource>
+          <mods:classification generator="mir_genres2marcgt-mycore" authority="marcgt">book</mods:classification>
+          <mods:classification generator="mir_genres2diniPublType-mycore" authorityURI="http://www.mycore.org/classifications/diniPublType" valueURI="http://www.mycore.org/classifications/diniPublType#book"/>
+          <mods:genre type="intern" authorityURI="http://www.mycore.org/classifications/mir_genres" valueURI="http://www.mycore.org/classifications/mir_genres#book"/>
+          <mods:titleInfo xml:lang="de" xlink:type="simple">
+            <mods:title>Kommunikationspolitik</mods:title>
+            <mods:subTitle>Humor in der Werbung</mods:subTitle>
+          </mods:titleInfo>
+          <mods:identifier type="urn">urn:nbn:de:gbv:27-dbt-20180205-1141404</mods:identifier>
+          <mods:name type="personal" xlink:type="simple">
+            <mods:displayForm>Drees, Norbert</mods:displayForm>
+            <mods:role>
+              <mods:roleTerm authority="marcrelator" type="code">edt</mods:roleTerm>
+            </mods:role>
+            <mods:namePart type="family">Drees</mods:namePart>
+            <mods:namePart type="given">Norbert</mods:namePart>
+          </mods:name>
+          <mods:originInfo eventType="publication">
+            <mods:place>
+              <mods:placeTerm type="text">Erfurt</mods:placeTerm>
+            </mods:place>
+            <mods:publisher>Fachhochschule Erfurt, Fakultät Wirtschaft-Logistik-Verkehr</mods:publisher>
+          </mods:originInfo>
+          <mods:physicalDescription>
+            <mods:extent>41 Seiten</mods:extent>
+          </mods:physicalDescription>
+          <mods:language>
+            <mods:languageTerm authority="rfc4646" type="code">de</mods:languageTerm>
+          </mods:language>
+          <mods:classification displayLabel="sdnb" authority="sdnb">380</mods:classification>
+          <mods:accessCondition type="restriction on access" xlink:href="http://www.mycore.de/classifications/mir_access#unlimited" xlink:type="simple"/>
+          <mods:accessCondition type="use and reproduction" xlink:href="http://www.mycore.org/classifications/mir_licenses#rights_reserved" xlink:type="simple"/>
+          <mods:name type="corporate" authorityURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes" valueURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes#471102" xlink:type="simple">
+            <mods:role>
+              <mods:roleTerm authority="marcrelator" type="code">his</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:relatedItem xlink:href="dbt_mods_00025613" type="host" xlink:type="simple">
+            <mods:part order="0052">
+              <mods:detail type="volume">
+                <mods:number>52</mods:number>
+              </mods:detail>
+            </mods:part>
+            <mods:titleInfo xml:lang="de" xlink:type="simple">
+              <mods:title>Erfurter Hefte zum angewandten Marketing</mods:title>
+            </mods:titleInfo>
+            <mods:name type="corporate" xlink:type="simple">
+              <mods:nameIdentifier type="legalEntity" typeURI="http://dbtmig.thulb.uni-jena.de:18311/legalEntity">16739</mods:nameIdentifier>
+              <mods:namePart>Fachhochschule Erfurt</mods:namePart>
+              <mods:displayForm>Fachhochschule Erfurt</mods:displayForm>
+              <mods:role>
+                <mods:roleTerm type="code" authority="marcrelator">pbl</mods:roleTerm>
+              </mods:role>
+            </mods:name>
+            <mods:originInfo eventType="creation">
+              <mods:dateCreated encoding="w3cdtf">2015-02-10</mods:dateCreated>
+              <mods:dateModified encoding="w3cdtf">2015-02-10</mods:dateModified>
+            </mods:originInfo>
+            <mods:originInfo eventType="publication">
+              <mods:dateIssued encoding="w3cdtf">2015-02-10</mods:dateIssued>
+            </mods:originInfo>
+            <mods:language>
+              <mods:languageTerm type="code" authority="rfc4646">de</mods:languageTerm>
+            </mods:language>
+            <mods:classification generator="mir_genres2marcgt-mycore" authority="marcgt">series</mods:classification>
+            <mods:classification generator="mir_genres2diniPublType-mycore" authorityURI="http://www.mycore.org/classifications/diniPublType" valueURI="http://www.mycore.org/classifications/diniPublType#Other"/>
+            <mods:genre valueURI="http://www.mycore.org/classifications/mir_genres#series" authorityURI="http://www.mycore.org/classifications/mir_genres" type="intern"/>
+            <mods:name authorityURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes" valueURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes#471102" xlink:type="simple" type="corporate">
+              <mods:role>
+                <mods:roleTerm type="code" authority="marcrelator">his</mods:roleTerm>
+              </mods:role>
+            </mods:name>
+            <mods:classification displayLabel="sdnb" authority="sdnb">380</mods:classification>
+            <mods:classification authorityURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/KLASSE" valueURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/KLASSE#1"/>
+            <mods:classification authorityURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI" valueURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI#tpe"/>
+            <mods:classification authorityURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI" valueURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI#tb"/>
+          </mods:relatedItem>
+        </mods:mods>
+      </modsContainer>
+    </def.modsContainer>
+  </metadata>
+</mycoreobject>
