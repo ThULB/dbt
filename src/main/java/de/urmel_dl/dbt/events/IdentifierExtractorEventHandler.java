@@ -96,11 +96,12 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                             result.getRecords().parallelStream().map(record -> {
                                 record.load(true);
                                 return record;
-                            }).filter(record -> matchTitle(titleInfo, record)
-                                && Optional.ofNullable(record.getFieldByTag("002@"))
-                                    .map(f -> f.getSubfieldByCode("0")).map(sf -> sf.getContent().startsWith("O"))
-                                    .orElse(false))
-                                .findFirst().ifPresent(record -> {
+                            }).filter(record -> Optional.ofNullable(record.getFieldByTag("002@"))
+                                .map(f -> f.getSubfieldByCode("0")).map(sf -> sf.getContent().startsWith("O"))
+                                .orElse(false) && matchTitle(titleInfo, record)
+                                && matchPersons(mods.getElements("mods:name[@type='personal']"), record, opc))
+                                .findFirst()
+                                .ifPresent(record -> {
                                     LOGGER.info("Found PPN " + record.getPPN());
 
                                     final Element mId = mods.addElement("identifier");
@@ -130,7 +131,6 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                                     }
                                 });
                         }
-
                     } catch (ExecutionException e1) {
                         LOGGER.error("Error on extract identifiers for object " + obj, e1);
                     }
@@ -225,7 +225,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
         return false;
     }
 
-    private String extractPersonIdentifier(final String idType, final Element displayForm, final Record record,
+    private boolean matchPerson(final Element displayForm, final Record record,
         final OPCConnector opc) {
         if (displayForm != null && record != null) {
             List<PPField> nameFields = Arrays.stream("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(","))
@@ -240,6 +240,34 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
                     LOGGER.info("Person \"" + displayForm.getTextTrim() + "\" matches with a confidence of "
                         + confidence + "%.");
 
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean matchPersons(final List<Element> persons, final Record record,
+        final OPCConnector opc) {
+        long numMatching = persons.parallelStream().map(person -> matchPerson(
+            buildXPath("mods:displayForm").evaluateFirst(person), record, opc)).count();
+
+        return Math.round(100 / persons.size() * numMatching) > 75;
+    }
+
+    private String extractPersonIdentifier(final String idType, final Element displayForm, final Record record,
+        final OPCConnector opc) {
+        if (displayForm != null && record != null) {
+            List<PPField> nameFields = Arrays.stream("028A,028B,028C,028D,028E,028F,028G,028H,028L,028M".split(","))
+                .map(tag -> record.getFieldsByTag(tag)).flatMap(l -> l.stream()).collect(Collectors.toList());
+
+            for (final PPField f : nameFields) {
+                int confidence = partsCompare(displayForm.getTextTrim(),
+                    Arrays.stream("d,a,c".split(",")).map(s -> f.getSubfieldByCode(s)).filter(sc -> sc != null)
+                        .map(sc -> sc.getContent()).collect(Collectors.joining(", ")));
+
+                if (confidence > 50) {
                     final Optional<PPSubField> idn = Optional.ofNullable(f.getSubfieldByCode("9"));
                     if (idn.isPresent()) {
                         final String id = getIdentifier(idType, opc, idn.get().getContent());

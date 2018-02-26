@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mycoreobject xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="datamodel-mods.xsd"
+  ID="dbt_mods_00000001" label="dbt_mods_00000001" version="2015.05.0.1-SNAPSHOT"
+>
+  <metadata>
+    <def.modsContainer class="MCRMetaXML" heritable="false" notinherit="true">
+      <modsContainer inherited="0">
+        <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
+          <mods:titleInfo xml:lang="de" xlink:type="simple">
+            <mods:title>Vom Jugendlichen zum selbständigen Erwachsenen</mods:title>
+            <mods:subTitle>Entwicklungsübergänge ins Erwachsenenalter im sozialen Wandel</mods:subTitle>
+          </mods:titleInfo>
+          <mods:name type="personal" xlink:type="simple">
+            <mods:nameIdentifier type="legalEntity" typeURI="http://dbtmig.thulb.uni-jena.de:18311/legalEntity">3046</mods:nameIdentifier>
+            <mods:namePart type="family">Reitzle</mods:namePart>
+            <mods:namePart type="given">Matthias</mods:namePart>
+            <mods:namePart type="termsOfAddress">Dr. phil.</mods:namePart>
+            <mods:displayForm>Reitzle, Matthias</mods:displayForm>
+            <mods:role>
+              <mods:roleTerm type="code" authority="marcrelator">aut</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:name type="personal" xlink:type="simple">
+            <mods:nameIdentifier type="legalEntity" typeURI="http://dbtmig.thulb.uni-jena.de:18311/legalEntity">1921</mods:nameIdentifier>
+            <mods:namePart type="family">Silbereisen</mods:namePart>
+            <mods:namePart type="given">Rainer K.</mods:namePart>
+            <mods:namePart type="termsOfAddress">Prof. Dr.</mods:namePart>
+            <mods:displayForm>Silbereisen, Rainer K.</mods:displayForm>
+            <mods:role>
+              <mods:roleTerm type="code" authority="marcrelator">rev</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:name type="personal" xlink:type="simple">
+            <mods:nameIdentifier type="legalEntity" typeURI="http://dbtmig.thulb.uni-jena.de:18311/legalEntity">3528</mods:nameIdentifier>
+            <mods:namePart type="family">Best</mods:namePart>
+            <mods:namePart type="given">Heinrich</mods:namePart>
+            <mods:namePart type="termsOfAddress">Prof. Dr.</mods:namePart>
+            <mods:displayForm>Best, Heinrich</mods:displayForm>
+            <mods:role>
+              <mods:roleTerm type="code" authority="marcrelator">rev</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:name type="personal" xlink:type="simple">
+            <mods:nameIdentifier type="legalEntity" typeURI="http://dbtmig.thulb.uni-jena.de:18311/legalEntity">2889</mods:nameIdentifier>
+            <mods:namePart type="family">Trimpop</mods:namePart>
+            <mods:namePart type="given">Rüdiger</mods:namePart>
+            <mods:namePart type="termsOfAddress">Prof. Dr.</mods:namePart>
+            <mods:displayForm>Trimpop, Rüdiger</mods:displayForm>
+            <mods:role>
+              <mods:roleTerm type="code" authority="marcrelator">rev</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:originInfo eventType="creation">
+            <mods:dateCreated encoding="w3cdtf">2005-04-27</mods:dateCreated>
+            <mods:dateModified encoding="w3cdtf">2005-10-24</mods:dateModified>
+          </mods:originInfo>
+          <mods:originInfo eventType="publication">
+            <mods:dateIssued encoding="w3cdtf">2005-04-27</mods:dateIssued>
+          </mods:originInfo>
+          <mods:language>
+            <mods:languageTerm type="code" authority="rfc4646">de</mods:languageTerm>
+          </mods:language>
+          <mods:abstract xml:lang="de" xlink:type="simple">Die Arbeit fasst eine Reihe empirischer Arbeiten zu Übergängen ins Erwachsenenalter in Ost- und
+            Westdeutschland vor und nach der Wende zusammen. Erwartungsgemäß zeigte sich, dass Übergänge junger Ostdeutscher wie das Erreichen materieller
+            Unabhängigkeit oder die Familiengründung im Zuge von Pluralisierung und Individualisierung nach der Wiedervereinigung nicht nur ein höheres Maß
+            interindividueller Variabilität aufweisen, sondern im Schnitt später erfolgen als zu DDR-Zeiten. Es fanden sich jedoch kaum Anhaltspunkte dafür, daß
+            persönliche Agency verstärkt für interindividuelle Unterschiede in den Übergangszeitpunkten verantwortlich ist. Statt dessen waren es eher
+            strukturinduzierte Faktoren wie Arbeitslosigkeit oder berufliches Um- und Weiterlernen, die offenbar Einfluss auf das Timing von Übergängen ins
+            Erwachsenenalter nahmen. Ebensowenig fanden sich die im Westen beobachteten Indizien für eine Abkehr von familiären Übergängen unter gebildeten
+            jungen Leuten. Begünstigt durch deutlich bessere Kinderbetreuungsmöglichkeiten als im Westen setzen gebildete ostdeutsche Frauen ihr soziales
+            Kapital offenbar weniger für Selbstverwirklichung und Karriere als für die Beibehaltung relativ normalbiographischer Übergangsmuster ein.
+          </mods:abstract>
+          <mods:subject xlink:type="simple">
+            <mods:topic>Entwicklungspsychologie</mods:topic>
+          </mods:subject>
+          <mods:classification generator="mir_genres2marcgt-mycore" authority="marcgt">thesis</mods:classification>
+          <mods:classification generator="mir_genres2diniPublType-mycore" authorityURI="http://www.mycore.org/classifications/diniPublType"
+            valueURI="http://www.mycore.org/classifications/diniPublType#doctoralThesis" />
+          <mods:classification generator="mir_genres2XMetaDissPlusThesisLevel-mycore" authorityURI="http://www.mycore.org/classifications/XMetaDissPlusThesisLevel"
+            valueURI="http://www.mycore.org/classifications/XMetaDissPlusThesisLevel#thesis.habilitation" />
+          <mods:subject xlink:type="simple">
+            <mods:topic>Erwachsenenalter</mods:topic>
+          </mods:subject>
+          <mods:subject xlink:type="simple">
+            <mods:topic>Rollenübergänge</mods:topic>
+          </mods:subject>
+          <mods:subject xlink:type="simple">
+            <mods:topic>Entwicklungstempo</mods:topic>
+          </mods:subject>
+          <mods:subject xlink:type="simple">
+            <mods:topic>sozialer Wandel</mods:topic>
+          </mods:subject>
+          <mods:subject xlink:type="simple">
+            <mods:topic>Ost-West-Vergleich</mods:topic>
+          </mods:subject>
+          <mods:subject xlink:type="simple">
+            <mods:topic>Transformationsforschung</mods:topic>
+          </mods:subject>
+          <mods:genre valueURI="http://www.mycore.org/classifications/mir_genres#habilitation" authorityURI="http://www.mycore.org/classifications/mir_genres"
+            type="intern" />
+          <mods:name authorityURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes" valueURI="https://www.db-thueringen.de/rsc/classifications/export/mir_institutes#1040"
+            xlink:type="simple" type="corporate"
+          >
+            <mods:role>
+              <mods:roleTerm type="code" authority="marcrelator">his</mods:roleTerm>
+            </mods:role>
+          </mods:name>
+          <mods:classification authorityURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/KLASSE" valueURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/KLASSE#1" />
+          <mods:classification authorityURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI" valueURI="http://dbtmig.thulb.uni-jena.de:18311/classifications/OAI#1" />
+          <mods:classification displayLabel="sdnb" authority="sdnb">150</mods:classification>
+          <mods:identifier type="urn">urn:nbn:de:gbv:27-dbt-004640-0</mods:identifier>
+        </mods:mods>
+      </modsContainer>
+    </def.modsContainer>
+  </metadata>
+</mycoreobject>
