@@ -57,7 +57,7 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
     private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance()
-        .getSingleInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
+        .getInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
             IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
 
     private static final String URI_SYNTAX = "http://uri.gbv.de/document/{0}:ppn:{1}";

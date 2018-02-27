@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -461,10 +462,12 @@ public class EntityFactory<T> {
             return v;
         };
 
-        return Stream.of(MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + propType),
-            MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + entityType.getPackage().getName() + "." + propType),
-            MCRConfiguration2.getPropertiesMap(CONFIG_PREFIX + entityType.getName() + "." + propType))
-            .map(Map::entrySet).flatMap(Collection::stream)
+        List<String> propNames = Arrays.asList(CONFIG_PREFIX + propType,
+            CONFIG_PREFIX + entityType.getPackage().getName() + "." + propType,
+            CONFIG_PREFIX + entityType.getName() + "." + propType);
+
+        return MCRConfiguration2.getPropertiesMap().entrySet().stream()
+            .filter(e -> propNames.stream().anyMatch(n -> e.getKey().startsWith(n)))
             .collect(
                 Collectors.toMap(e -> keyFunc.apply(e.getKey()), e -> valueFunc.apply(e.getValue()), (v1, v2) -> v2));
     }

@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
@@ -71,9 +72,11 @@ public class VideoSourceResource {
 
     public static final String DEFAULT_HASH_TYPE = "SHA-1";
 
-    private static List<String> allowedIPs = MCRConfiguration2.getStrings("DBT.VideoSource.AllowedIPs");
+    private static List<String> allowedIPs = MCRConfiguration2.getString("DBT.VideoSource.AllowedIPs")
+        .map(MCRConfiguration2::splitValue).orElseGet(Stream::empty).collect(Collectors.toList());
 
-    private static Optional<String> sharedSecret = MCRConfiguration2.getString("DBT.VideoSource.SharedSecret");
+    private static String sharedSecret = MCRConfiguration2.getString("DBT.VideoSource.SharedSecret")
+        .orElseThrow(() -> new MCRConfigurationException("No shared secret defined!"));
 
     @GET
     @Path("sources/{derivateId:.*}/{path:.*}")
@@ -104,10 +107,6 @@ public class VideoSourceResource {
 
     private static int checkPermission(String derivateId, String remoteAddr, String accessToken)
         throws NoSuchAlgorithmException {
-        if (!sharedSecret.isPresent()) {
-            throw new MCRConfigurationException("No shared secret defined!");
-        }
-
         if (remoteAddr == null || !allowedIPs.contains(remoteAddr)) {
             LOGGER.debug("Remote address: {}", remoteAddr);
             return ErrorCode.CLIENT_NOT_ALLOWED;
@@ -144,7 +143,7 @@ public class VideoSourceResource {
     private static String buildAccessToken(String accessKey) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
         return DatatypeConverter
-            .printHexBinary(md.digest((sharedSecret.get() + ":" + accessKey).getBytes(StandardCharsets.UTF_8)));
+            .printHexBinary(md.digest((sharedSecret + ":" + accessKey).getBytes(StandardCharsets.UTF_8)));
     }
 
     private static Sources buildSources(String derivateId, String path) throws IOException, URISyntaxException {
