@@ -52,7 +52,7 @@ public final class FileEntryManager {
         if (store == null) {
             try {
                 store = MCRStoreManager.createStore(projectType, MCRFileStore.class);
-            } catch (InstantiationException | IllegalAccessException ex) {
+            } catch (ReflectiveOperationException ex) {
                 throw new MCRPersistenceException("Exception while create store for " + projectType, ex);
             }
         }
