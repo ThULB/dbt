@@ -27,6 +27,10 @@
       <label xml:lang="de">Impressum</label>
       <label xml:lang="en">Imprint</label>
     </item>
+    <item href="/content/footer/privacy-policy.xml" type="intern">
+      <label xml:lang="de">Datenschutzerklärung</label>
+      <label xml:lang="en">Privacy Policy</label>
+    </item>
     <item href="/content/footer/contact.xml" type="intern">
       <label xml:lang="de">Kontakt</label>
       <label xml:lang="en">Contact</label>
