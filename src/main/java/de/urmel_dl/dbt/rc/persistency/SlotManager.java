@@ -36,7 +36,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
@@ -63,6 +62,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
 import org.tmatesoft.svn.core.SVNException;
@@ -554,8 +554,7 @@ public final class SlotManager {
         final List<SortClause> sortClauses) throws SolrServerException, IOException {
         final SlotList slotList = new SlotList();
 
-        final SolrClient client = new HttpSolrClient.Builder(
-            MCRConfiguration.instance().getString("MCR.Module-solr.ServerURL")).build();
+        final SolrClient client = MCRSolrClientFactory.getMainSolrClient();
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"
@@ -582,8 +581,6 @@ public final class SlotManager {
             }
         }
         slotList.setTotal(results.getNumFound());
-
-        client.close();
 
         return slotList;
     }
