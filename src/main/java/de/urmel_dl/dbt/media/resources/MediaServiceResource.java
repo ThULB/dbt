@@ -161,16 +161,16 @@ public class MediaServiceResource {
             .map(rm -> {
                 try {
                     final File assetFile = asset.toFile();
-                    final int from = new Integer(rm.group(2));
-                    final int to = Optional.ofNullable(rm.group(3)).map(Integer::parseInt)
-                        .orElse((int) assetFile.length() - 1);
+                    final long from = new Long(rm.group(2));
+                    final long to = Optional.ofNullable(rm.group(3)).map(Long::parseLong)
+                        .orElse(assetFile.length() - 1);
 
                     final String responseRange = String.format(Locale.ROOT, "bytes %d-%d/%d", from, to,
                         assetFile.length());
                     final RandomAccessFile raf = new RandomAccessFile(assetFile, "r");
                     raf.seek(from);
 
-                    final int len = to - from + 1;
+                    final long len = to - from + 1;
                     final RangeStreamingOutput streamer = new RangeStreamingOutput(len, raf);
 
                     return Response.ok(streamer, mimeType)
