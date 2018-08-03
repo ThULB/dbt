@@ -1,0 +1,52 @@
+[
+  {
+    "add-field": {
+      "name": "slot.lecturer",
+      "type": "mods.namesType",
+      "multiValued": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.lecturers",
+      "type": "string"
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.location",
+      "type": "text_general",
+      "multiValued": true
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.onlineOnly",
+      "type": "boolean"
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.status",
+      "type": "string"
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.title",
+      "type": "text_de"
+    }
+  },
+  {
+    "add-field": {
+      "name": "slot.validTo",
+      "type": "string"
+    }
+  },
+  {
+    "add-field": {
+      "name": "slotId",
+      "type": "string"
+    }
+  }
+]
