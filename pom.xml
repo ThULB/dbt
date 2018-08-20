@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.mycore.mir</groupId>
     <artifactId>mir-parent</artifactId>
-    <version>2018.06.0-SNAPSHOT</version>
+    <version>2018.06.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2018.06.0-SNAPSHOT</version>
+  <version>2018.06.0.1-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -260,7 +260,8 @@
             <phase>process-resources</phase>
             <configuration>
               <workingDirectory>${grunt.projectBase}</workingDirectory>
-              <arguments>--verbose --resourceDirectory=${basedir}/src/main/resources/META-INF/resources/ --lessFile=${basedir}/src/main/less/build.less
+              <arguments>--verbose --resourceDirectory=${basedir}/src/main/resources/META-INF/resources/
+                --lessFile=${basedir}/src/main/less/build.less
                 --targetDirectory=${template.targetdir} --cssDirectory=${template.cssdir}
                 --assetsDirectory=${template.assetsdir}</arguments>
             </configuration>
@@ -463,12 +464,12 @@
       <artifactId>icu4j</artifactId>
     </dependency>
     <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
+      <groupId>com.sun.activation</groupId>
+      <artifactId>javax.activation</artifactId>
     </dependency>
     <dependency>
-      <groupId>javax.activation</groupId>
-      <artifactId>javax.activation-api</artifactId>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
