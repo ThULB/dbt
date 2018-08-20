@@ -1,5 +1,8 @@
 body {
   padding-top: (@dbt-navbar-height + @dbt-loginForm-height);
+  &.mycoreViewer{
+    padding-top: 0;
+  }
   @media (max-width: @container-desktop) {
     padding-top: @dbt-navbar-height;
   }
