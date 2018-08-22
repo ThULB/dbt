@@ -1,7 +1,7 @@
 .metadata {
   overflow: hidden;
   border: none;
-  font-family: inherit;
+  font-family: "Droid Sans", Arial, Helvetica, sans-serif;
   margin: 2em 0;
   th {
     text-align: right;
@@ -45,20 +45,17 @@
   a.mods_genre {
     margin-right: 3px;
   }
-
   time {
     .date_published {
       margin-right: 3px;
     }
   }
-
   a.access_condition {
     margin-right: 3px;
   }
-
   .doc_state {
     display: inline;
-    margin-right: 3px;
+    color: @dark_neutral;
     .mir-published {
       background-color: @label-success-bg;
     }
@@ -85,25 +82,21 @@
     text-align: center;
   }
 }
-
 #cite_link_box {
   text-align: center;
   .label {
     margin: 0px 2px;
   }
-
   #copy_cite_link {
   }
-
   #url_site_link {
     font-size: 12px;
   }
-
   #cite_link_code_box {
     display: none;
     border: 1 px solid #ccc;
     width: 100%;
-    font-family: monospace;
+    font-family:monospace;
   }
 }
 
@@ -126,6 +119,7 @@
 
 @grayLight: #f6f6f6;
 @grayDark: #ECF0F1;
+
 #mir_relatedItem {
   list-style: none;
   li {
@@ -134,23 +128,18 @@
       list-style: none;
       margin-bottom: 0.5em;
     }
-
     span {
       cursor: pointer;
     }
-
-    span.fa {
+    span.glyphicon {
       color: #ccc;
       margin-right: 0.5em;
     }
   }
 }
 
-#mir_relatedItem_showAll , #mir_relatedItem_hideAll {
-  float: right;
-  color: @link-color;
+#mir_relatedItem_showAll, #mir_relatedItem_hideAll {
   font-size: @font-size-base;
-  cursor: pointer;
 }
 
 #mir_oas {
@@ -180,3 +169,50 @@
   top: 12px;
 }
 
+.panel .mir-player:not(:only-child) {
+  border: 15px solid #ecf0f1;
+  border-top: 0;
+}
+
+#player_audio {
+  background: url('../../../images/audio.png') no-repeat center center;
+}
+
+#crossref-citation-alert {
+  text-align: center;
+  padding: 5px;
+}
+
+#crossref-citation-error {
+  padding-left: 5px;
+}
+
+#modal-pi .fa {
+  font-size: 40px;
+  padding-left: 20px;
+}
+
+.hidden-calc {
+  visibility: hidden!important;
+  overflow: hidden!important;
+  display: block!important;
+  position: absolute!important;
+}
+
+#mir-abstract-tabs .tab-content, #mir-abstract {
+  position: relative;
+  margin-bottom: 20px;
+
+}
+
+.mir-abstract-overlay-tran {
+  height: 35px;
+  background-color: #fff;
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 1%, rgba(255,255,255,1) 100%);
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 100%);
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(255,255,255,0) 1%,rgba(255,255,255,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 );
+}
