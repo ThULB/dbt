@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.mycore.mir</groupId>
     <artifactId>mir-parent</artifactId>
-    <version>2018.06.0.1-SNAPSHOT</version>
+    <version>2018.08-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2018.06.0.1-SNAPSHOT</version>
+  <version>2018.08-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -28,7 +28,7 @@
     <connection>scm:git:https://github.com/ThULB/dbt.git</connection>
     <developerConnection>scm:git:https://github.com/ThULB/dbt.git</developerConnection>
     <url>https://github.com/ThULB/dbt/tree/master</url>
-    <tag>2018.06.0.x</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
