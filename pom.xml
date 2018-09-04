@@ -529,11 +529,6 @@
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
-      <artifactId>mycore-ifs</artifactId>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
     </dependency>
     <dependency>
