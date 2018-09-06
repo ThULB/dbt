@@ -14,7 +14,8 @@
           Elektronische Publizieren
           und Langzeitarchivieren multimedialer Dokumente aus Forschung und Lehre.
           Derzeit stehen mehr als 20.000
-          Hochschulschriften, Vorlesungsvideos sowie weitere multimediale Inhalte zur Verfügung.
+          Hochschulschriften, Vorlesungsvideos sowie
+          weitere multimediale Inhalte zur Verfügung.
         </p>
       </answer>
     </entry>
@@ -57,9 +58,12 @@
         <p>Unter dem Punkt Publizieren ist es möglich, Dokumente einzureichen.</p>
         <h4>Anmeldung</h4>
         <p>Als Mitglied einer teilnehmenden Einrichtung erfolgt eine Authentifizierung über den Punkt Uni-Login. Auch nicht universitäre
-          Nutzerinnen und Nutzer können sich anmelden unter „Anmelden mit lokaler Nutzerkennung“ bzw. unter „Benutzerkennung anlegen“ eine
-          solche generieren. Nach der erfolgten Anmeldung erscheint ein Auswahlmenu, bei dem festgelegt wird, welche Art von Dokument
-          publiziert werden soll. Es erscheint dann ein entsprechendes Eingabeformular für die Metadaten.
+          Nutzerinnen und Nutzer
+          können sich anmelden unter „Anmelden mit lokaler Nutzerkennung“ bzw. unter „Benutzerkennung anlegen“ eine
+          solche generieren. Nach der erfolgten
+          Anmeldung erscheint ein Auswahlmenu, bei dem festgelegt wird, welche Art von Dokument
+          publiziert werden soll. Es erscheint dann ein entsprechendes
+          Eingabeformular für die Metadaten.
         </p>
         <h4>Erfassung der Metadaten</h4>
         <p>Alle Pflichtfelder sind mit * gekennzeichnet und müssen belegt werden.</p>
@@ -73,16 +77,19 @@
         <p>
           Nähere Informationen zur Belegung eines Formularfeldes erhält man über den jeweiligen Informationsbutton:
           <a tabindex="0" class="btn btn-default btn-xs info-button" role="button" data-toggle="popover" data-placement="right"
-            data-content="Nach einem Klick erscheint ein kurzer Hilfetext">
+            data-content="Nach einem Klick erscheint ein kurzer Hilfetext"
+          >
             <i class="fa fa-info"></i>
           </a>
         </p>
         <p>Das Hochladen der Derivate erfolgt über „Aktionen“ → „Hinzufügen eines Datenobjektes“. Bitte beachten Sie die Vorgaben zu den
-          akzeptierten Dateiformaten.
+          akzeptierten
+          Dateiformaten.
         </p>
         <h4>Was passiert, wenn die Dokumente hochgeladen sind?</h4>
         <p>Die jeweils betreuende Bibliothek prüft das eingestellte Dokument auf Funktionalität und Formalia. Dann erhält das Dokument die
-          öffentliche Freischaltung. Bei Rückfragen meldet sich die jeweils zuständige Bibliothek.
+          öffentliche
+          Freischaltung. Bei Rückfragen meldet sich die jeweils zuständige Bibliothek.
         </p>
       </answer>
     </entry>
@@ -165,9 +172,11 @@
       <answer>
         <p>Die Regelungen zur Erfassung elektronischer Dissertationen und Habilitationen unterliegen aufgrund der verschiedenen
           Promotionsordnungen der
-          einzelnen Hochschulen unterschiedlichen Bestimmungen. Die Aufnahme dieser Dokumenttypen in die DBT obliegt
+          einzelnen
+          Hochschulen unterschiedlichen Bestimmungen. Die Aufnahme dieser Dokumenttypen in die DBT obliegt
           der Kontrolle der jeweiligen Bibliothek.
-          Auch die Erfassung elektronischer Abschlussarbeiten von Studierenden ist über die
+          Auch die
+          Erfassung elektronischer Abschlussarbeiten von Studierenden ist über die
           Prüfungsordnungen der einzelnen Hochschulen geregelt.
         </p>
         <ul>
@@ -252,7 +261,8 @@
         <h4>Grüner Weg:</h4>
         <p>Zeitgleiche oder nachträgliche Archivierung bereits publizierter Arbeiten oder Preprints auf einem Repositorium, wie z.B. der
           DBT. Wie der Zugriff
-          für Nutzerinnen und Nutzer ist auch die Bereitstellung der wissenschaftlichen Arbeiten in einem Repositorium
+          für
+          Nutzerinnen und Nutzer ist auch die Bereitstellung der wissenschaftlichen Arbeiten in einem Repositorium
           für Autorinnen und Autoren in der Regel
           kostenfrei.
         </p>
@@ -271,12 +281,14 @@
       <answer>
         <p>
           Elektronische Veröffentlichungen sind konventionellen Veröffentlichungen prinzipiell gleichwertig und damit auch zitierfähig. Die
-          dauerhafte und stabile Adressierung wird in der DBT durch die Vergabe eines
+          dauerhafte und
+          stabile Adressierung wird in der DBT durch die Vergabe eines
           <abbr title="Uniform Resource Name">URN</abbr>
           und/oder
           <abbr title="Digital Object Identifier">DOI</abbr>
           gewährleistet. URN, DOI sind so genannte Persistent Identifier, d.h. ein eindeutige Bezeichner für Objekte zur dauerhaften
-          Identifizierung und zuverlässigen Zitierfähigkeit von Online-Ressourcen.
+          Identifizierung und
+          zuverlässigen Zitierfähigkeit von Online-Ressourcen.
         </p>
       </answer>
     </entry>
@@ -287,7 +299,8 @@
       <answer>
         <p>
           Für die Gründung von Open-Access-Zeitschriften steht Ihnen das von der ThULB Jena betriebene Zeitschriftenportal journals@urmel
-          zur Verfügung. Bei Interesse nehmen Sie bitte Kontakt mit dem UrMEL-Team unter:
+          zur Verfügung. Bei
+          Interesse nehmen Sie bitte Kontakt mit dem UrMEL-Team unter:
           <ul>
             <li>
               <a href="mailto:urmel_auskunft@thulb.uni-jena.de">urmel_auskunft@thulb.uni-jena.de</a>
@@ -388,9 +401,11 @@
       <answer>
         <p>Sie sollten vorab prüfen, ob der Verlag, in dem Sie die Erstveröffentlichung vorgenommen haben, eine Zweitveröffentlichung auf
           einem Repositorium
-          (zum Beispiel in der DBT) erlaubt und unter welchen Konditionen dies ggf. möglich ist. Häufig muss eine so
+          (zum
+          Beispiel in der DBT) erlaubt und unter welchen Konditionen dies ggf. möglich ist. Häufig muss eine so
           genannte Embargofrist eingehalten werden.
-          Nähere Auskünfte hierzu finden Sie in dem von Ihnen unterzeichneten Autorenvertrag oder
+          Nähere
+          Auskünfte hierzu finden Sie in dem von Ihnen unterzeichneten Autorenvertrag oder
           auf den Webseiten des jeweiligen Verlages.
         </p>
         <p>
@@ -428,11 +443,14 @@
           Lehrmaterialien (z. B.
           Literatur, Vorlesungsskripte und Internet-Links, elektronische Dokumente) an einer Stelle digital
           zusammenzuführen und zeit- und ortsunabhängig für
-          die Teilnehmer zur Verfügung zu stellen. Die für die Lehrveranstaltung benötigten
+          die
+          Teilnehmer zur Verfügung zu stellen. Die für die Lehrveranstaltung benötigten
           Bücher werden zur Präsenznutzung in der Bibliothek aufgestellt, sind
-          also nicht entleihbar. Ein ESA besteht zunächst für die Dauer
+          also
+          nicht entleihbar. Ein ESA besteht zunächst für die Dauer
           eines Semesters und kann zum Ende des Semesters verlängert, archiviert oder gelöscht
-          werden. Außerdem ist es jederzeit möglich,
+          werden.
+          Außerdem ist es jederzeit möglich,
           einen archivierten Semesterapparat zu reaktivieren.
         </p>
       </answer>
@@ -569,9 +587,11 @@
             ausgewählten Medien werden durch die
             Mitarbeiter/innen der Bibliothek bearbeitet und während der Laufzeit Ihres ESA als
             Präsenzbestand in der Bibliothek aufgestellt. Entscheiden Sie
-            sich für einen ESA mit „nur Online-Material“, so werden die
+            sich
+            für einen ESA mit „nur Online-Material“, so werden die
             bibliographischen Daten aus dem Online-Katalog in einer Literaturliste zusammengeführt.
-            Eine Bearbeitung der Bücher erfolgt in
+            Eine
+            Bearbeitung der Bücher erfolgt in
             diesem Fall nicht.
           </div>
         </div>
@@ -616,7 +636,8 @@
           <div class="col-md-9">
             Die einzelnen Bausteine innerhalb eines ESA lassen sich mittels der rechts neben dem jeweiligen Eintrag zu
             findenden Symbole
-            bearbeiten, löschen und innerhalb des ESA verschieben.
+            bearbeiten,
+            löschen und innerhalb des ESA verschieben.
           </div>
         </div>
       </answer>
@@ -629,7 +650,8 @@
         <p>
           Änderungen sowohl an den Inhalten als auch der Form eines ESA sind jederzeit möglich. Melden Sie sich dafür mit Ihrer persönlichen
           URZ-Nutzerkennung
-          in der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
+          in
+          der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
           <button type="button" class="btn btn-default btn-xs dropdown-toggle">
             <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
             <span class="caret"></span>
@@ -673,42 +695,37 @@
       </question>
       <answer>
         <p>
-          Ihre Bibliothek verfolgt aufmerksam die aktuellen Entwicklungen zur Bereitstellung urheberrechtlich geschützter Inhalte in
-          Elektronischen
-          Semesterapparaten nach §52a UrhG. Unter bestimmten Bedingungen dürfen fremde Werke und Werkteile ohne Zustimmung des
-          Rechteinhabers in der Lehre
-          verwendet werden. Erlaubt sind:
+          Urheberrechtlich geschützte Werke dürfen im Rahmen des Urheberrechtsgesetzes in elektronischen Semesterapparaten online bereitgestellt werden. Die am
+          1. März 2018 in Kraft getretene Neuregelung des Urheberrechts-Wissensgesellschafts-Gesetz (UrhWissG) regelt in einem neuen Abschnitt § 60ff die
+          nicht-kommerzielle Nutzung von urheberrechtlich geschützten Werken in Lehre und Forschung. Sollten Sie keine explizite Erlaubnis der Rechteinhaber
+          haben (z. B. weil Sie selbst Autorin oder Autor sind oder die Rechteinhaber das Werk für diese Nutzungen freigegeben haben), ist zu beachten:
         </p>
+        <p>Erlaubt ist:</p>
         <ul>
-          <li>„kleine Teile eines Werkes“: max. 12% eines Werkes, dabei dürfen 100 Seiten nicht überschritten werden</li>
-          <li>„einzelne Beiträge aus Zeitungen oder Zeitschriften“: z. B. Aufsätze aus Fachzeitschriften</li>
-          <li>„Werke geringen Umfangs“: z. B. Gedichte, Kurzgeschichten, auch: Bilder</li>
-          <li>Diese Regelungen dürfen nicht umgangen werden.</li>
-          <li>Es dürfen nur Teile von Werken aus dem Bestand der jeweiligen Hochschulbibliothek für Elektronische Semesterapparate verwendet
-            werden.
+          <li>das Hochladen von bis zu 15 % eines Werkes (inkl. Inhalts- und Literaturverzeichnis, Einleitung sowie Namens- und Sachregister).</li>
+          <li>die Verwendung einzelner Artikel aus Fachzeitschriften und Sammelwerken. Es darf jeweils nur ein einzelner Beitrag vollständig entnommen werden.
           </li>
-          <li>Urheberrechtsfreie Werke (70 Jahre nach dem Tod eines Autors) dürfen komplett digitalisiert und bereitgestellt werden, sofern
-            keine weiteren
-            Rechte Dritter vorliegen.
+          <li>die vollständige Verwendung von Werken geringen Umfangs (max. 25 Seiten, 5 Minuten Film) sowie von Abbildungen und Grafiken.</li>
+          <li>die vollständige Verwendung von im Handel vergriffenen Werken.</li>
+          <li>auf elektronische Ressourcen, für die die eigene Hochschulbibliothek Lizenzen erworben hat oder die frei im Internet stehen, zu verlinken.</li>
+        </ul>
+        <p>NICHT erlaubt ist:</p>
+        <ul>
+          <li>das Einstellen von Artikeln aus Zeitungen und Zeitschriften, die keine expliziten Fachzeitschriften, sondern so genannte Kioskzeitschriften
+            sind.
           </li>
-          <li>Nicht digitalisiert und bereitgestellt werden dürfen Schulbücher, insofern keine anderslautende Vereinbarung mit dem Verlag
-            vorliegt.
-          </li>
-          <li>Nicht digitalisiert werden dürfen Werke, für die der Verlag selbst ein angemessenes Lizenzangebot zur Verfügung stellt.</li>
-          <li>In Zweifelsfällen ist beim Rechteinhaber die Erlaubnis zur Bereitstellung in einem ESA einzuholen.</li>
+          <li>die sukzessive Bereitstellung von Werkteilen und damit die Umgehung der 15 %-Regelung.</li>
         </ul>
         <p>Folgende Bedingung ist bei der Bereitstellung zu erfüllen:</p>
         <ul>
-          <li>Die Dokumente sind nur für einen geschlossenen Nutzerkreis – also die Teilnehmenden an der entsprechenden Lehrveranstaltung -
-            zugänglich. Jeder
-            ESA ist grundsätzlich durch ein Passwort (Leseschlüssel) zu schützen, so dass nur die Teilnehmenden Zugang zu
-            den Inhalten erhalten. Geben Sie
-            diesen daher ausschließlich an die Teilnehmer Ihrer Veranstaltung weiter.
+          <li>Der elektronische Semesterapparat ist nur für einen geschlossenen Nutzerkreis, also die Teilnehmer an der entsprechenden Lehrveranstaltung
+            zugänglich.
           </li>
+          <li>Jeder elektronische Semesterapparat ist durch ein Passwort (Leseschlüssel) zu schützen.</li>
+          <li>Das Passwort ist ausschließlich an die Teilnehmer der entsprechenden Lehrveranstaltung auszugeben.</li>
         </ul>
-        <p>Bitte stellen Sie sicher, dass die von Ihnen eingestellten Inhalte den durch das Urheberrecht begrenzten Umfang nicht
-          überschreiten und keine Rechte
-          Dritter verletzt werden.
+        <p>Für die Lehrenden ist die Zugänglichmachung urheberrechtlich geschützter Werke unter den oben genannten Bedingungen kostenfrei und eine Meldung an
+          die VG Wort oder eine andere Institution ist gegenwärtig nicht erforderlich.
         </p>
       </answer>
     </entry>
@@ -786,11 +803,14 @@
       <answer>
         <p>Beim Einrichten eines Elektronischen Semesterapparates legt der Dozent einen Schreibschlüssel fest. Nach Anmeldung mit Ihrer
           eigenen
-          URZ-Nutzerkennung in der DBT und Öffnen des entsprechenden Semesterapparates werden Sie zur Eingabe eines
+          URZ-Nutzerkennung
+          in der DBT und Öffnen des entsprechenden Semesterapparates werden Sie zur Eingabe eines
           Zugriffsschlüssels aufgefordert. Geben Sie
-          hier den Schreibschlüssel ein – danach können Sie die Inhalte des Semesterapparates
+          hier den
+          Schreibschlüssel ein – danach können Sie die Inhalte des Semesterapparates
           sofort bearbeiten. Ausschließlich der Dozent kann den
-          Schreibschlüssel an die von ihm beauftragte Person herausgeben.
+          Schreibschlüssel an die
+          von ihm beauftragte Person herausgeben.
         </p>
       </answer>
     </entry>
