@@ -2,22 +2,14 @@
 <slot>
   <entries>
     <entry id="12345678">
-      <text format="html">&lt;div class="alert alert-info"&gt;&lt;p style="font-family: Verdana; font-weight: bold;"&gt;&lt;font size="3"&gt;Ihr neuer Semesterapparat ist jetzt eingerichtet!&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;p style="font-family: Verdana;"&gt;&lt;font size="2"&gt;Sie können den Online-Teil sofort benutzen.&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;p style="font-family: Verdana;"&gt;&lt;font size="2"&gt;Bitte beachten Sie das Urheberrecht. Dabei insbesondere:&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;p style="font-family: Verdana;"&gt;&lt;font size="2"&gt;&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;p&gt;&lt;font size="2"&gt;&lt;strong&gt;§ 52a: Öffentliche Zugänglichmachung für Unterricht und Forschung&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;div&gt;&lt;p&gt;&lt;font size="2"&gt;Unter den &lt;a href="http://www.gesetze-im-internet.de/urhg/__52a.html"&gt;§  52a      "Öffentliche Zugänglichmachung für Unterricht  und Forschung"&lt;/a&gt; des geltenden deutschen Urheberrechtes fällt auch die Bereitstellung von Texten in einem Online-Semesterapparat. Dort werden in Absatz 1 u. a. genannt:&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;ul&gt;&#xD;
-    &lt;li&gt;&lt;font size="2"&gt;&lt;strong&gt;"kleine Teile eines Werkes"&lt;/strong&gt;, das bedeutet &lt;strong&gt;nicht mehr als maximal 12%&lt;/strong&gt; des Gesamtumfangs. Sie &lt;strong&gt;dürfen daher nicht große Teile eines Buches  digitalisieren&lt;/strong&gt;, sofern nicht andere Vereinbarungen mit  dem Rechteinhaber existieren oder das Werk nicht mehr urheberrechtlich geschützt ist.&lt;/font&gt;&lt;/li&gt;&#xD;
-    &lt;li&gt;&lt;font size="2"&gt;&lt;strong&gt;"einzelne Beiträge aus Zeitungen oder Zeitschriften"&lt;/strong&gt;, z. B. einen Aufsatz aus einer Fachzeitschrift.&lt;/font&gt;&lt;/li&gt;&#xD;
-    &lt;li&gt;&lt;font size="2"&gt;der Bestimmungszweck &lt;strong&gt;"zur Veranschaulichung im  Unterricht an ... Hochschulen ... ausschließlich für den bestimmt abgegrenzten Kreis von Unterrichtsteilnehmern"&lt;/strong&gt;. Online-Semesterapparate sind daher grundsätzlich durch ein Passwort geschützt, so dass nur die Studierenden Ihrer Lehrveranstaltung Zugang zu den Texten haben.&lt;/font&gt;&lt;/li&gt;&#xD;
-    &lt;li&gt;&lt;font size="2"&gt;"Für die öffentliche Zugänglichmachung nach Absatz 1 ist eine angemessene Vergütung zu zahlen." Diese &lt;strong&gt;Vergütung ist im Moment durch Pauschalzahlungen abgedeckt&lt;/strong&gt;, für Sie als Dozent/Dozentin ist die Zugänglichmachung solcher Texte im Semesterapparat kostenfrei.&lt;/font&gt;&lt;/li&gt;&#xD;
-    &lt;/ul&gt;&#xD;
-&#xD;
-&lt;p&gt;&lt;/p&gt;&#xD;
-&lt;p style="font-family: Verdana; font-weight: bold;"&gt;&lt;font size="2"&gt;Über "Einträge bearbeiten" können Sie diesen Texteintrag wieder aus Ihrem Semesterapparat löschen.&lt;/font&gt;&lt;/p&gt;&lt;p&gt;&lt;font size="3"&gt;&lt;/font&gt;&lt;/p&gt;&#xD;
-&lt;/div&gt;&#xD;
+    <text format="html">
+&lt;h4 class="alert-heading"&gt;Ihr neuer Semesterapparat ist jetzt eingerichtet.&lt;/h4&gt;&#xD;
+&lt;p&gt;&#xD;
+Bitte beachten Sie das Urheberrechtsgesetz (UrhG) und dort insbesondere die Regelungen zur Verwendung von Werken in Lehre und Forschung (&lt;a class="alert-link" href="https://www.gesetze-im-internet.de/urhg/__60a.html"&gt;§ 60a&lt;/a&gt; und &lt;a class="alert-link" href="https://www.gesetze-im-internet.de/urhg/__60c.html"&gt;§ 60c&lt;/a&gt; UrhG). Im Zweifel konsultieren Sie unsere &lt;a class="alert-link" href="../content/top/faq.xml#rcLecturerCopyright"&gt;FAQ&lt;/a&gt; oder wenden Sie sich an Ihre Hochschulbibliothek.&#xD;
+&lt;/p&gt;&#xD;
+&lt;p&gt;&#xD;
+Über "Einträge bearbeiten" können Sie diesen Texteintrag wieder aus Ihrem Semesterapparat löschen.&#xD;
+&lt;/p&gt;&#xD;
 &lt;/div&gt;</text>
     </entry>
   </entries>
