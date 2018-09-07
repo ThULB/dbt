@@ -2,7 +2,7 @@
 <slot>
   <entries>
     <entry id="12345678">
-    <text format="html">
+    <text format="html">&lt;div class="alert alert-info"&gt;&#xD;
 &lt;h4 class="alert-heading"&gt;Ihr neuer Semesterapparat ist jetzt eingerichtet.&lt;/h4&gt;&#xD;
 &lt;p&gt;&#xD;
 Bitte beachten Sie das Urheberrechtsgesetz (UrhG) und dort insbesondere die Regelungen zur Verwendung von Werken in Lehre und Forschung (&lt;a class="alert-link" href="https://www.gesetze-im-internet.de/urhg/__60a.html"&gt;§ 60a&lt;/a&gt; und &lt;a class="alert-link" href="https://www.gesetze-im-internet.de/urhg/__60c.html"&gt;§ 60c&lt;/a&gt; UrhG). Im Zweifel konsultieren Sie unsere &lt;a class="alert-link" href="../content/top/faq.xml#rcLecturerCopyright"&gt;FAQ&lt;/a&gt; oder wenden Sie sich an Ihre Hochschulbibliothek.&#xD;
