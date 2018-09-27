@@ -20,7 +20,7 @@
         margin: 0;
         padding: 0;
         h4 {
-            background: @panel-default-heading-bg;
+            background: $panel-default-heading-bg;
             padding: 5px;
             margin: 0;
         }
@@ -31,7 +31,7 @@
     }
 
     div.dataTables_wrapper div.row {
-        background: @panel-default-heading-bg;
+        background: $panel-default-heading-bg;
         padding: 5px;
     }
 }

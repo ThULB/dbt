@@ -7,7 +7,7 @@
     height: 25px;
     width: 100%;
     white-space: nowrap;
-    .hide-scrollbar ();
+    @include hide-scrollbar ();
     * {
       display: inline;
       margin-right: 5px;
@@ -20,36 +20,42 @@
       display: inline;
       margin-right: 3px;
       .mir-published {
-        background-color: @label-success-bg;
+        background-color: $label-success-bg;
       }
 
       .mir-submitted , .mir-new , .mir-imported {
-        background-color: @label-warning-bg;
+        background-color: $label-warning-bg;
       }
 
       .mir-review {
-        background-color: @label-primary-bg;
+        background-color: $label-primary-bg;
       }
 
       .mir-blocked {
-        background-color: @label-danger-bg;
+        background-color: $label-danger-bg;
       }
 
       .mir-deleted {
-        background-color: @label-default-bg;
+        background-color: $label-default-bg;
       }
 
       span {
-        background-color: @label-default-bg;
+        background-color: $label-default-bg;
       }
     }
   }
   
-  @media (max-width: @grid-float-breakpoint-max) {
+  @media (max-width: $grid-float-breakpoint-max) {
     #aux_col_actions {
       padding-top: 10px;
       margin-bottom: 10px;
     }
+  }
+}
+
+#main_col {
+  .btn.file_toggle {
+    @include box-shadow(none);
   }
 }
 

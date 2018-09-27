@@ -16,7 +16,7 @@
     }
 
     .vjs-big-play-button {
-      background-color: fade(@brand-primary, 80%);
+      background-color: fade($brand-primary, 80%);
       border-color: #fff;
       left: 50%;
       margin: -0.75em 0 0 -1.5em;
@@ -31,7 +31,7 @@
       position: absolute;
       bottom: 0px;
       .vjs-icon-placeholder:hover {
-        color: @brand-primary;
+        color: $brand-primary;
       }
     }
 
@@ -46,8 +46,8 @@
     .vjs-menu {
       li.vjs-menu-item {
         &:hover {
-          background-color: fade(@brand-primary, 20%);
-          color: @brand-primary;
+          background-color: fade($brand-primary, 20%);
+          color: $brand-primary;
         }
       }
     }
@@ -61,7 +61,7 @@
     }
 
     .vjs-load-progress , .vjs-load-progress div {
-      background: fade(@brand-primary, 40%);
+      background: fade($brand-primary, 40%);
     }
   }
 }

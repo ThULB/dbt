@@ -1,0 +1,32 @@
+@import "./dbt/variables";
+@import "./dbt/mixins";
+
+@import  "../mir-layout/assets/bootstrap/stylesheets/bootstrap";
+
+@import "../mir-layout/scss/common/fileupload";
+@import "../mir-layout/scss/common/print";
+@import "../mir-layout/scss/common/mir_basket";
+@import "../mir-layout/scss/common/mir_browse";
+@import "../mir-layout/scss/common/mir_details";
+@import "../mir-layout/scss/common/mir_metadata";                      
+@import "../mir-layout/scss/common/mir_results";
+@import "../mir-layout/scss/common/mir_viewer";
+@import "../mir-layout/scss/common/responsive";
+
+@import "./dbt/animations";
+@import "./dbt/general";
+@import "./dbt/header";
+@import "./dbt/content";
+@import "./dbt/forms";
+@import "./dbt/footer";
+@import "./dbt/pagination";
+@import "./dbt/datatable";
+
+@import "./dbt/classificationbrowser";
+@import "./dbt/results";
+@import "./dbt/metadata";
+@import "./dbt/document";
+
+@import "./dbt/rc";
+
+@import "./dbt/video-js";
