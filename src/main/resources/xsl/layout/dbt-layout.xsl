@@ -81,9 +81,9 @@
 
   <xsl:template name="layout.cssLinks">
     <link href="{$WebApplicationBaseURL}assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/css/layout.min.css" type="text/css" />
+    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
-
+    
     <xsl:if test="$include.HTML.Head.CSS">
       <xsl:copy-of select="$include.HTML.Head.CSS" />
     </xsl:if>

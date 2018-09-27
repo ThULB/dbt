@@ -1,0 +1,69 @@
+//
+// Variables
+// --------------------------------------------------
+$icon-font-path : "../../../assets/bootstrap/fonts/";
+$fa-font-path : "../../../assets/font-awesome/fonts";
+$brand-primary : #008855;
+$brand-success : #5cb85c;
+$brand-warning : #f0ad4e;
+$brand-danger : #d9534f;
+$brand-info : #5bc0de;
+$input-border-focus: $brand-primary;
+
+// MIR values
+// --------------------------------------------------
+
+$dark_neutral: gray;
+$link_color: $brand-primary;
+$highlight: $brand-primary;
+
+// General values
+// --------------------------------------------------
+$dbt-backgroundColor: #6f6e72;
+$dbt-mobile-backgroundColor: #ffffff;
+//$dbt-fontFamily: Arial, Helvetica, sans-serif;
+$dbt-fontFamily: 'lucida grande', 'lucida sans unicode', arial, sans-serif;
+
+$dbt-input-color: #333333;
+$dbt-input-placeholder-color: lighten($dbt-input-color, 10%);
+
+// Navbar values
+// --------------------------------------------------
+
+$dbt-navbar-height: 60px;
+$dbt-navbar-fontSize: 14px;
+$dbt-navbar-margin: 15px;
+$dbt-navbar-color: #555555;
+$dbt-navbar-colorHighlight: #333333;
+
+// LoginForm values
+// --------------------------------------------------
+
+$dbt-loginForm-height: 40px;
+$dbt-loginForm-toggle-maxWidth: 75;
+$dbt-loginForm-input-background: #cccccc;
+$dbt-loginForm-input-backgroundHighlight: #dedede;
+$dbt-loginForm-input-borderColor: #5C5C5E;
+$dbt-loginForm-input-borderColorHighlight: #008855;
+$dbt-loginForm-input-borderWidth: 1px;
+$dbt-loginForm-input-color: #333333;
+$dbt-loginForm-input-height: 26px;
+$dbt-loginForm-input-width: 190px;
+
+// Content values
+// --------------------------------------------------
+
+$dbt-container-backgroundColor: #ffffff;
+$dbt-container-padding: 10px 0 10px 0;
+
+// Footer values
+// --------------------------------------------------
+
+$dbt-footer-height: 50px;
+$dbt-footer-padding: 10px 0;
+$dbt-footer-color: #ffffff;
+
+// Results list values
+// --------------------------------------------------
+
+$dbt-results-backgroundColor: #ffffff;

@@ -1,11 +1,11 @@
 footer {
-  min-height: @dbt-footer-height;
-  padding: @dbt-footer-padding;
+  min-height: $dbt-footer-height;
+  padding: $dbt-footer-padding;
   font-size: 0.846em;
   line-height: 2.1818em;
-  color: @dbt-footer-color;
+  color: $dbt-footer-color;
   #nav {
-    @media (max-width: (@screen-sm - 1)) {
+    @media (max-width: ($screen-sm - 1)) {
       text-align: center;
     }
   }
@@ -37,7 +37,7 @@ footer {
       &:after {
         content: "|";
         padding: 0 5px 0 10px;
-        @media (max-width: @container-desktop) {
+        @media (max-width: $container-desktop) {
           color: #808080;
         }
       }
@@ -53,22 +53,22 @@ footer {
   }
 
   #langSelect {
-    .language {
+    @mixin language() {
       background-repeat: no-repeat;
       background-size: 18px 12px;
       background-position: center center;
       &.de {
-        background-image: url(../images/icons/lng_de.gif);
+        background-image: url('../../../dbt/images/icons/lng_de.gif');
       }
 
       &.en {
-        background-image: url(../images/icons/lng_en.gif);
+        background-image: url('../../../dbt/images/icons/lng_en.gif');
       }
     }
 
     button {
       span.language {
-        .language;
+        @include language;
         display: inline-block;
         text-indent: -9999px;
         width: 30px;
@@ -77,7 +77,7 @@ footer {
 
     ul {
       .language {
-        .language;
+        @include language;
         padding-left: 30px;
         background-position: 5px center;
       }

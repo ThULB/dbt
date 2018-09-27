@@ -143,6 +143,18 @@ div.mir-fieldset-content {
     font-size: 13px;
 }
 
+.search-person {
+  .input-group {
+    > a {
+      margin-top: -2px !important;   
+    }
+  
+    .feedback {
+      font-size: 12px;
+    }
+  }
+}
+
 .relItemsearch {
   border-right-width: 0px !important;
 }
