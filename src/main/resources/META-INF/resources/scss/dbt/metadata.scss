@@ -54,8 +54,11 @@
 }
 
 #main_col {
-  .btn.file_toggle {
+  .btn.file_toggle, .options .btn {
+    background: transparent;
+    border: 0;
     @include box-shadow(none);
+    text-shadow: none;
   }
 }
 

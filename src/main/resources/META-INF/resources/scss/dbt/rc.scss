@@ -176,14 +176,14 @@ body.dragging , body.dragging * {
 //-------------------------
 @mixin status-gradient ($startFrom , $startTo , $endFrom , $endTo , $ownerTransfer: false) {
   background: transparent;
-  @if ($ownerTransfer=true) {
+  @if ($ownerTransfer == true) {
     background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
     background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
     background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
   } @else {
-    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, fade($endTo, 0%) 10%);
-    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, fade($endTo, 0%) 10%);
-    background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, fade($endTo, 0%) 10%);
+    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
+    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
+    background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
   }
 }
 

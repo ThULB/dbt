@@ -16,7 +16,7 @@
     }
 
     .vjs-big-play-button {
-      background-color: fade($brand-primary, 80%);
+      background-color: transparentize($brand-primary, 0.8);
       border-color: #fff;
       left: 50%;
       margin: -0.75em 0 0 -1.5em;
@@ -46,14 +46,14 @@
     .vjs-menu {
       li.vjs-menu-item {
         &:hover {
-          background-color: fade($brand-primary, 20%);
+          background-color: transparentize($brand-primary, 0.2);
           color: $brand-primary;
         }
       }
     }
 
     .vjs-slider {
-      background: fade(#808080, 60%);
+      background: transparentize(#808080, 0.6);
     }
 
     .vjs-play-progress , .vjs-volume-level {
@@ -61,7 +61,7 @@
     }
 
     .vjs-load-progress , .vjs-load-progress div {
-      background: fade($brand-primary, 40%);
+      background: transparentize($brand-primary, 0.4);
     }
   }
 }
