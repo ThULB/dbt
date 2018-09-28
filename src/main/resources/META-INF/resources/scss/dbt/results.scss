@@ -77,7 +77,10 @@
     
       .hit_options {
         .btn {
+          background: transparent;
           border-top-right-radius: 0;
+          border: 0;
+          @include box-shadow(none);
           
           &:nth-last-child(1) {
             border-top-right-radius: 10px;

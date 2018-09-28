@@ -157,7 +157,7 @@ td.text-ellipsis {
 }
 
 .scroll-container {
-  $fade-color: fade(darken($dbt-container-backgroundColor, 2%), 40%);
+  $fade-color: transparentize(darken($dbt-container-backgroundColor, 2%), 0.4);
   position: relative;
   .scrolling-container {
     overflow: hidden;
