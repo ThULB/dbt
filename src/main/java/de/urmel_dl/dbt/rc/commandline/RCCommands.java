@@ -347,7 +347,7 @@ public class RCCommands extends MCRAbstractCommands {
                                             evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                                             break;
                                         case FREE:
-                                            if (slot.isOnlineOnly() ||
+                                            if (slot.isOnlineOnly() || slot.getEntries() == null ||
                                                 slot.getEntries().stream()
                                                     .filter(se -> se.getEntry() instanceof OPCRecordEntry
                                                         && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
