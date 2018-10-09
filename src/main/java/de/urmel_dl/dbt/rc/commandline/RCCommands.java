@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.text.ParseException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -356,11 +357,20 @@ public class RCCommands extends MCRAbstractCommands {
                                                 mgr.delete(slot);
                                                 evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
                                             } else {
-                                                evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                                // send warning every 10 days
+                                                if (Duration
+                                                    .between(validTo.toInstant(), today.toInstant()).toDays()
+                                                    % 10 == 0) {
+                                                    evt = new MCREvent(SlotManager.SLOT_TYPE,
+                                                        SlotManager.INACTIVATE_EVENT);
+                                                }
                                             }
 
-                                            evt.put(SlotManager.SLOT_TYPE, slot);
-                                            MCREventManager.instance().handleEvent(evt);
+                                            if (evt != null) {
+                                                evt.put(SlotManager.SLOT_TYPE, slot);
+                                                MCREventManager.instance().handleEvent(evt);
+                                            }
+
                                             continue;
                                         case RESERVED:
                                             LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
