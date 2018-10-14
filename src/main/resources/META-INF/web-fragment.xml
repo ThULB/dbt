@@ -13,7 +13,7 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
-  
+
   <filter>
     <filter-name>DerivateServletFilter</filter-name>
     <filter-class>de.urmel_dl.dbt.filter.DerivateServletFilter</filter-class>
@@ -71,6 +71,15 @@
     <servlet-name>OPCServlet</servlet-name>
     <url-pattern>/servlets/OPCServlet</url-pattern>
     <url-pattern>/opc/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet id="DBTLoginEndpointServlet">
+    <servlet-name>DBTLoginEndpointServlet</servlet-name>
+    <servlet-class>de.urmel_dl.dbt.servlets.DBTLoginEndpointServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DBTLoginEndpointServlet</servlet-name>
+    <url-pattern>/servlets/LoginEndpoint</url-pattern>
   </servlet-mapping>
 
 </web-fragment>
