@@ -190,7 +190,7 @@
     </category>
     <category ID="6">
       <label xml:lang="de" text="Ernst-Abbe-Hochschule" />
-      <label xml:lang="de" text="Ernst-Abbe-Hochschule | Jena | Carl-Zeiß-Promenade 2, 07745 Jena" />
+      <label xml:lang="x-place" text="Ernst-Abbe-Hochschule | Jena | Carl-Zeiß-Promenade 2, 07745 Jena" />
       <category ID="6020">
         <label xml:lang="de" text="Betriebswirtschaft" />
       </category>
