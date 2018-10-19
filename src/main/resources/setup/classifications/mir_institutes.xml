@@ -7,16 +7,22 @@
       <label xml:lang="de" text="Bauhaus-Universität Weimar" />
       <label xml:lang="x-place" text="Bauhaus-Universität Weimar | Weimar | Geschwister-Scholl-Straße 8, 99423 Weimar" />
       <category ID="3000">
-        <label xml:lang="de" text="Fakultät Architektur" />
+        <label xml:lang="de" text="Fakultät Architektur (bis 2014)" />
+      </category>
+      <category ID="3010">
+        <label xml:lang="de" text="Fakultät Architektur und Urbanistik" />
       </category>
       <category ID="3100">
         <label xml:lang="de" text="Fakultät Bauingenieurwesen" />
       </category>
       <category ID="3200">
-        <label xml:lang="de" text="Fakultät Gestaltung" />
+        <label xml:lang="de" text="Fakultät Kunst und Gestaltung" />
       </category>
       <category ID="3300">
         <label xml:lang="de" text="Medien" />
+      </category>
+      <category ID="3400">
+        <label xml:lang="de" text="Zentrale Einrichtungen, Büro des Präsidenten, Dezernate" />
       </category>
     </category>
     <category ID="1">
