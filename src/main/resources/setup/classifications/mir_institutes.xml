@@ -371,7 +371,7 @@
     </category>
     <category ID="20000">
       <label xml:lang="de" text="Kultur-, Medien- und Forschungseinrichtungen" />
-      <label xml:lang="de" text="Thüringer Universitäts- und Landesbibliothek | Jena | Bibliotheksplatz 2, 07743 Jena" />
+      <label xml:lang="x-place" text="Thüringer Universitäts- und Landesbibliothek | Jena | Bibliotheksplatz 2, 07743 Jena" />
       <category ID="20005">
         <label xml:lang="de" text="Herzogin Anna Amalia Bibliothek" />
       </category>
