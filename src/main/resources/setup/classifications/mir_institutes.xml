@@ -29,216 +29,231 @@
           <label xml:lang="de" text="Juniorprofessur Computational Architecture" />
         </category>
         <category ID="3007">
-          <label xml:lang="de" text="Juniorprofessur Landschaftsarchitektur und Landschaftsplanung Professur Bauaufnahme und Baudenkmalpflege" />
+          <label xml:lang="de" text="Juniorprofessur Landschaftsarchitektur und Landschaftsplanung" />
         </category>
         <category ID="3008">
-          <label xml:lang="de" text="Professur Bauformenlehre" />
+          <label xml:lang="de" text="Professur Bauaufnahme und Baudenkmalpflege" />
         </category>
         <category ID="3009">
-          <label xml:lang="de" text="Professur Bauklimatik" />
+          <label xml:lang="de" text="Professur Bauformenlehre" />
         </category>
         <category ID="3010">
-          <label xml:lang="de" text="Professur Denkmalpflege und Baugeschichte" />
+          <label xml:lang="de" text="Professur Bauklimatik" />
         </category>
         <category ID="3011">
-          <label xml:lang="de" text="Professur Baumanagement und Bauwirtschaft" />
+          <label xml:lang="de" text="Professur Denkmalpflege und Baugeschichte" />
         </category>
         <category ID="3012">
-          <label xml:lang="de" text="Professur Darstellungsmethodik" />
+          <label xml:lang="de" text="Professur Baumanagement und Bauwirtschaft" />
         </category>
         <category ID="3013">
-          <label xml:lang="de" text="Professur Entwerfen und Architekturtheorie" />
+          <label xml:lang="de" text="Professur Darstellungsmethodik" />
         </category>
         <category ID="3014">
-          <label xml:lang="de" text="Professur Entwerfen und Baugestaltung" />
+          <label xml:lang="de" text="Professur Entwerfen und Architekturtheorie" />
         </category>
         <category ID="3015">
-          <label xml:lang="de" text="Professur Entwerfen und Baukonstruktion" />
+          <label xml:lang="de" text="Professur Entwerfen und Baugestaltung" />
         </category>
         <category ID="3016">
-          <label xml:lang="de" text="Professur Entwerfen und Gebäudekunde" />
+          <label xml:lang="de" text="Professur Entwerfen und Baukonstruktion" />
         </category>
         <category ID="3017">
-          <label xml:lang="de" text="Professur Entwerfen und komplexe Gebäudelehre" />
+          <label xml:lang="de" text="Professur Entwerfen und Gebäudekunde" />
         </category>
         <category ID="3018">
-          <label xml:lang="de" text="Professur Entwerfen und Industriebau" />
+          <label xml:lang="de" text="Professur Entwerfen und komplexe Gebäudelehre" />
         </category>
         <category ID="3019">
-          <label xml:lang="de" text="Professur Entwerfen und Innenraumgestaltung" />
+          <label xml:lang="de" text="Professur Entwerfen und Industriebau" />
         </category>
         <category ID="3020">
-          <label xml:lang="de" text="Professur Entwerfen und ländliches Bauen" />
+          <label xml:lang="de" text="Professur Entwerfen und Innenraumgestaltung" />
         </category>
         <category ID="3021">
-          <label xml:lang="de" text="Professur Entwerfen und Raumgestaltung" />
+          <label xml:lang="de" text="Professur Entwerfen und ländliches Bauen" />
         </category>
         <category ID="3022">
-          <label xml:lang="de" text="Professur Entwerfen und StadtArchitektur" />
+          <label xml:lang="de" text="Professur Entwerfen und Raumgestaltung" />
         </category>
         <category ID="3023">
-          <label xml:lang="de" text="Professur Entwerfen und Städtebau I" />
+          <label xml:lang="de" text="Professur Entwerfen und StadtArchitektur" />
         </category>
         <category ID="3024">
-          <label xml:lang="de" text="Professur Entwerfen und Städtebau II" />
+          <label xml:lang="de" text="Professur Entwerfen und Städtebau I" />
         </category>
         <category ID="3025">
-          <label xml:lang="de" text="Professur Entwerfen und Wohnungsbau" />
+          <label xml:lang="de" text="Professur Entwerfen und Städtebau II" />
         </category>
         <category ID="3026">
-          <label xml:lang="de" text="Professur Entwerfen und Tragwerkskonstruktion" />
+          <label xml:lang="de" text="Professur Entwerfen und Wohnungsbau" />
         </category>
         <category ID="3027">
-          <label xml:lang="de" text="Professur Gebäudetechnik" />
+          <label xml:lang="de" text="Professur Entwerfen und Tragwerkskonstruktion" />
         </category>
         <category ID="3028">
-          <label xml:lang="de" text="Professur Grundlagen des Entwerfens" />
+          <label xml:lang="de" text="Professur Gebäudetechnik" />
         </category>
         <category ID="3029">
-          <label xml:lang="de" text="Professur Informatik in der Architektur" />
+          <label xml:lang="de" text="Professur Grundlagen des Entwerfens" />
         </category>
         <category ID="3030">
-          <label xml:lang="de" text="Professur Sozialwissenschaftliche Stadtforschung" />
+          <label xml:lang="de" text="Professur Informatik in der Architektur" />
         </category>
         <category ID="3031">
-          <label xml:lang="de" text="Professur Tragwerkslehre" />
+          <label xml:lang="de" text="Professur Sozialwissenschaftliche Stadtforschung" />
         </category>
         <category ID="3032">
-          <label xml:lang="de" text="Professur Raumplanung und Raumforschung" />
+          <label xml:lang="de" text="Professur Tragwerkslehre" />
         </category>
         <category ID="3033">
-          <label xml:lang="de" text="Professur Soziologie und Sozialgeschichte der Stadt" />
+          <label xml:lang="de" text="Professur Raumplanung und Raumforschung" />
         </category>
         <category ID="3034">
-          <label xml:lang="de" text="Professur Stadtplanung" />
+          <label xml:lang="de" text="Professur Soziologie und Sozialgeschichte der Stadt" />
         </category>
         <category ID="3035">
+          <label xml:lang="de" text="Professur Stadtplanung" />
+        </category>
+        <category ID="3036">
           <label xml:lang="de" text="Professur Theorie und Geschichte der modernen Architektur" />
         </category>
       </category>
       <category ID="3100">
         <label xml:lang="de" text="Fakultät Bauingenieurwesen" />
         <category ID="3101">
-          <label xml:lang="de" text="Bauhaus-Institut für zukunftsweisende Infrastruktursysteme Professur Baumechanik" />
+          <label xml:lang="de" text="Bauhaus-Institut für zukunftsweisende Infrastruktursysteme" />
         </category>
         <category ID="3102">
-          <label xml:lang="de" text="Professur Baustatik und Bauteilfestigkeit" />
+          <label xml:lang="de" text="Professur Baumechanik" />
         </category>
         <category ID="3103">
-          <label xml:lang="de" text="Professur Massivbau I" />
+          <label xml:lang="de" text="Professur Baustatik und Bauteilfestigkeit" />
         </category>
         <category ID="3104">
-          <label xml:lang="de" text="Professur Massivbau II" />
+          <label xml:lang="de" text="Professur Massivbau I" />
         </category>
         <category ID="3105">
-          <label xml:lang="de" text="Professur Modellierung und Simulation - Konstruktion Professur Modellierung und Simulation - Mechanik Professur Stahlbau" />
+          <label xml:lang="de" text="Professur Massivbau II" />
         </category>
         <category ID="3106">
-          <label xml:lang="de" text="Professur Planung von Ingenieurbauten" />
+          <label xml:lang="de" text="Professur Modellierung und Simulation - Konstruktion" />
         </category>
         <category ID="3107">
-          <label xml:lang="de" text="Professur Holz- und Mauerwerksbau Professur Allgemeine Baustoffkunde Professur Angewandte Mathematik Professur Bauphysik" />
+          <label xml:lang="de" text="Professur Modellierung und Simulation - Mechanik Professur Stahlbau" />
         </category>
         <category ID="3108">
-          <label xml:lang="de" text="Professur Wasserbau" />
+          <label xml:lang="de" text="Professur Planung von Ingenieurbauten" />
         </category>
         <category ID="3109">
-          <label xml:lang="de" text="Weiterbildender Studiengang Wasser und Umwelt" />
+          <label xml:lang="de" text="Professur Holz- und Mauerwerksbau Professur Allgemeine Baustoffkunde" />
         </category>
         <category ID="3110">
-          <label xml:lang="de" text="Professur Werkstoffe des Bauens" />
+          <label xml:lang="de" text="Professur Angewandte Mathematik Professur Bauphysik" />
         </category>
         <category ID="3111">
-          <label xml:lang="de" text="Professur Strömungsmechanik" />
+          <label xml:lang="de" text="Professur Wasserbau" />
         </category>
         <category ID="3112">
-          <label xml:lang="de" text="Professur Bauchemie und Polymere Werkstoffe" />
+          <label xml:lang="de" text="Weiterbildender Studiengang Wasser und Umwelt" />
         </category>
         <category ID="3113">
-          <label xml:lang="de" text="Professur Verfahren und Umwelt" />
+          <label xml:lang="de" text="Professur Werkstoffe des Bauens" />
         </category>
         <category ID="3114">
-          <label xml:lang="de" text="Professur Verkehrsplanung und Verkehrstechnik" />
+          <label xml:lang="de" text="Professur Strömungsmechanik" />
         </category>
         <category ID="3115">
-          <label xml:lang="de" text="Professur Verkehrssystemplanung" />
+          <label xml:lang="de" text="Professur Bauchemie und Polymere Werkstoffe" />
         </category>
         <category ID="3116">
-          <label xml:lang="de" text="Professur Verkehrsbau" />
+          <label xml:lang="de" text="Professur Verfahren und Umwelt" />
         </category>
         <category ID="3117">
-          <label xml:lang="de" text="Professur Siedlungswasserwirtschaft" />
+          <label xml:lang="de" text="Professur Verkehrsplanung und Verkehrstechnik" />
         </category>
         <category ID="3118">
-          <label xml:lang="de" text="Professur Abfallwirtschaft" />
+          <label xml:lang="de" text="Professur Verkehrssystemplanung" />
         </category>
         <category ID="3119">
-          <label xml:lang="de" text="Professur Aufbereitung von Baustoffen und Wiederverwertung" />
+          <label xml:lang="de" text="Professur Verkehrsbau" />
         </category>
         <category ID="3120">
-          <label xml:lang="de" text="Professur Grundbau" />
+          <label xml:lang="de" text="Professur Siedlungswasserwirtschaft" />
         </category>
         <category ID="3121">
-          <label xml:lang="de" text="Professur Bodenmechanik" />
+          <label xml:lang="de" text="Professur Abfallwirtschaft" />
         </category>
         <category ID="3122">
-          <label xml:lang="de" text="Professur Computer Vision in Engineering" />
+          <label xml:lang="de" text="Professur Aufbereitung von Baustoffen und Wiederverwertung" />
         </category>
         <category ID="3123">
-          <label xml:lang="de" text="Professur Baubetrieb und Bauverfahren" />
+          <label xml:lang="de" text="Professur Grundbau" />
         </category>
         <category ID="3124">
-          <label xml:lang="de" text="Professur Informations- und Wissensverarbeitung" />
+          <label xml:lang="de" text="Professur Bodenmechanik" />
         </category>
         <category ID="3125">
-          <label xml:lang="de" text="Professur Informatik im Bauwesen" />
+          <label xml:lang="de" text="Professur Computer Vision in Engineering" />
         </category>
         <category ID="3126">
-          <label xml:lang="de" text="Professur Betriebswirtschaftslehre im Bauwesen" />
+          <label xml:lang="de" text="Professur Baubetrieb und Bauverfahren" />
         </category>
         <category ID="3127">
-          <label xml:lang="de" text="Professur Biotechnologie in der Ressourcenwirtschaft" />
+          <label xml:lang="de" text="Professur Informations- und Wissensverarbeitung" />
         </category>
         <category ID="3128">
-          <label xml:lang="de" text="Professur Experimentelle Konstruktions- und Materialanalyse" />
+          <label xml:lang="de" text="Professur Informatik im Bauwesen" />
         </category>
         <category ID="3129">
-          <label xml:lang="de" text="Juniorprofessur Simulation und Experiment" />
+          <label xml:lang="de" text="Professur Betriebswirtschaftslehre im Bauwesen" />
         </category>
         <category ID="3130">
-          <label xml:lang="de" text="Juniorprofessur Stochastik und Optimierung" />
+          <label xml:lang="de" text="Professur Biotechnologie in der Ressourcenwirtschaft" />
         </category>
         <category ID="3131">
-          <label xml:lang="de" text="Juniorprofessur Urban Energy Systems" />
+          <label xml:lang="de" text="Professur Experimentelle Konstruktions- und Materialanalyse" />
         </category>
         <category ID="3132">
-          <label xml:lang="de" text="Juniorprofessur Volkswirtschaftslehre - Infrastrukturökonomie-Infrastrukturmanagement Professur Erdbebenzentrum" />
+          <label xml:lang="de" text="Juniorprofessur Simulation und Experiment" />
         </category>
         <category ID="3133">
-          <label xml:lang="de" text="F. A. Finger-Institut für Baustoffkunde" />
+          <label xml:lang="de" text="Juniorprofessur Stochastik und Optimierung" />
         </category>
         <category ID="3134">
-          <label xml:lang="de" text="Institut für Strukturmechanik" />
+          <label xml:lang="de" text="Juniorprofessur Urban Energy Systems" />
         </category>
         <category ID="3135">
-          <label xml:lang="de" text="Institut Geotechnik Weimar" />
+          <label xml:lang="de" text="Juniorprofessur Volkswirtschaftslehre - Infrastrukturökonomie-Infrastrukturmanagement" />
         </category>
         <category ID="3136">
-          <label xml:lang="de" text="Institut für Konstruktiven Ingenieurbau" />
+          <label xml:lang="de" text="Professur Erdbebenzentrum" />
         </category>
         <category ID="3137">
-          <label xml:lang="de" text="Institut für Mathematik-Bauphysik" />
+          <label xml:lang="de" text="F. A. Finger-Institut für Baustoffkunde" />
         </category>
         <category ID="3138">
-          <label xml:lang="de" text="Juniorprofessur Polymere Bindemittel und Baustoffe im Bauwesen" />
+          <label xml:lang="de" text="Institut für Strukturmechanik" />
         </category>
         <category ID="3139">
-          <label xml:lang="de" text="Juniorprofessur CAD in der Bauinformatik" />
+          <label xml:lang="de" text="Institut Geotechnik Weimar" />
         </category>
         <category ID="3140">
-          <label xml:lang="de" text="Juniorprofessur Biotechnologie in der Abfallwirtschaft" />
+          <label xml:lang="de" text="Institut für Konstruktiven Ingenieurbau" />
         </category>
         <category ID="3141">
+          <label xml:lang="de" text="Institut für Mathematik-Bauphysik" />
+        </category>
+        <category ID="3142">
+          <label xml:lang="de" text="Juniorprofessur Polymere Bindemittel und Baustoffe im Bauwesen" />
+        </category>
+        <category ID="3143">
+          <label xml:lang="de" text="Juniorprofessur CAD in der Bauinformatik" />
+        </category>
+        <category ID="3144">
+          <label xml:lang="de" text="Juniorprofessur Biotechnologie in der Abfallwirtschaft" />
+        </category>
+        <category ID="3145">
           <label xml:lang="de" text="Graduiertenkolleg 1462" />
         </category>
       </category>
