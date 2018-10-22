@@ -27,8 +27,8 @@
       <label xml:lang="de" text="Autoren" />
     </category>
     <category ID="reader">
+      <label xml:lang="en" text="Reader" />
       <label xml:lang="de" text="Leser" />
-      <label xml:lang="de" text="Reader" />
     </category>
   </categories>
 </mycoreclass>
