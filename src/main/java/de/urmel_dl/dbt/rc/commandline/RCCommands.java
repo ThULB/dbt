@@ -55,6 +55,7 @@ import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 import org.xml.sax.SAXParseException;
 
 import de.urmel_dl.dbt.common.MailQueue;
+import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
@@ -517,4 +518,36 @@ public class RCCommands extends MCRAbstractCommands {
             System.out.println("Count files (total): " + total.get());
         }
     }
+
+    @MCRCommand(syntax = "rc cleanup invalid attendees {0}", help = "removes invalid attendees for given rc slot {0}")
+    public static void cleanupInvalidAttendees(final String slotId) {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        final Slot slot = slotList.getSlotById(slotId);
+        if (slot != null) {
+            Attendees aList = mgr.removeInvalidAttendees(slot);
+            aList.attendees
+                .forEach(a -> LOGGER.info("remove attendee {} ({}) from {}", a.getName(), a.getUID(), slotId));
+        }
+    }
+
+    @MCRCommand(syntax = "rc all cleanup invalid attendees", help = "removes invalid attendees for all rc slots")
+    public static List<String> cleanupAllInvalidAttendees() {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        if (!slotList.getSlots().isEmpty()) {
+            List<String> cmds = new ArrayList<>(slotList.getSlots().size());
+            for (final Slot slot : slotList.getSlots()) {
+                String command = new MessageFormat("rc cleanup invalid attendees {0}", Locale.ROOT)
+                    .format(new Object[] { slot.getSlotId() });
+                cmds.add(command);
+            }
+            return cmds;
+        }
+
+        return Collections.emptyList();
+    }
+
 }

@@ -530,6 +530,45 @@ public final class SlotManager {
     }
 
     /**
+     * Removes invalid {@link Attendees} based on {@link MCRObjectID} and return this.
+     *
+     * @param slot the {@link Slot}
+     * @return a list of invalid {@link Attendee}
+     */
+    public Attendees removeInvalidAttendees(final Slot slot) {
+        final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(slot.getMCRObjectID());
+        final List<Attendee> attendees = new ArrayList<>();
+
+        final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
+        EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<MCRUser> cq = cb.createQuery(MCRUser.class);
+        Root<MCRUser> root = cq.from(MCRUser.class);
+        MapJoin<MCRUser, String, String> attribs = root.joinMap("attributes");
+        cq.where(cb.equal(attribs.key(), filterStr));
+
+        TypedQuery<MCRUser> q = em.createQuery(cq);
+        final List<MCRUser> results = q.getResultList();
+
+        for (MCRUser user : results) {
+            final String key = user
+                .getUserAttribute(filterStr);
+
+            if (!key.equals(accKP.getReadKey()) && !key.equals(accKP.getWriteKey())) {
+                attendees.add(new Attendee(slot, user));
+                MIRAccessKeyManager.deleteAccessKey(user, slot.getMCRObjectID());
+            }
+        }
+
+        Attendees a = new Attendees();
+        a.slotId = slot.getSlotId();
+        a.attendees = attendees;
+
+        return a;
+    }
+
+    /**
      * Returns the current {@link SlotList}.
      *
      * @return the slot list
