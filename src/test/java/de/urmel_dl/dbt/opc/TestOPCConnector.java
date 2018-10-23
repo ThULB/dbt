@@ -38,7 +38,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  */
 public class TestOPCConnector extends MCRTestCase {
 
-    private final String OPC_URL = "http://opac.lbs-ilmenau.gbv.de";
+    private final String OPC_URL = "https://opac.lbs-ilmenau.gbv.de";
 
     private final String OPC_DB = "1";
 
