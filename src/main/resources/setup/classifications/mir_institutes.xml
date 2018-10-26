@@ -431,6 +431,21 @@
           <label xml:lang="de" text="Universitätsbibliothek" />
         </category>
       </category>
+      <category ID="3500">
+        <label xml:lang="de" text="An-Institute" />
+        <category ID="3501">
+          <label xml:lang="de" text="Materialforschungs- und -prüfanstalt an der Bauhaus-Universität" />
+        </category>
+        <category ID="3502">
+          <label xml:lang="de" text="Bauhaus Weiterbildungsakademie e.V." />
+        </category>
+        <category ID="3503">
+          <label xml:lang="de" text="KNOTEN WEIMAR - Internationale Transferstelle Umwelttechnologien" />
+        </category>
+      </category>
+      <category ID="3600">
+        <label xml:lang="de" text="Hochschule für Musik FRANZ LISZT" />
+      </category>
     </category>
     <category ID="1">
       <label xml:lang="de" text="Friedrich-Schiller-Universität Jena" />

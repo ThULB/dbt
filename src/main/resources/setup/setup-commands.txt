@@ -1,5 +1,5 @@
 update classification from file classifications/mcr_roles.xml
-update classification from file classifications/mir_institutes_test.xml
+update classification from file classifications/mir_institutes.xml
 update classification from file classifications/RCLOC.xml
 
 process acl/defaultrules-commands.txt
