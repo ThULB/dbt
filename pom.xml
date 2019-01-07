@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.mycore.mir</groupId>
     <artifactId>mir-parent</artifactId>
-    <version>2018.11-SNAPSHOT</version>
+    <version>2019.02-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2018.11-SNAPSHOT</version>
+  <version>2019.02-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -33,7 +33,6 @@
 
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
-    <jersey.version>2.25</jersey.version>
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.target>${java.target.version}</maven.compiler.target>
     <node.version>v6.9.2</node.version>
@@ -51,33 +50,10 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>1.10</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.10</version>
-          <executions>
-            <execution>
-              <id>analyze</id>
-              <goals>
-                <goal>analyze-only</goal>
-              </goals>
-              <inherited>true</inherited>
-              <configuration>
-                <failOnWarning>true</failOnWarning>
-                <ignoreNonCompile>true</ignoreNonCompile>
-                <outputXML>true</outputXML>
-                <usedDependencies>
-                  <usedDependency>org.eclipse.persistence:org.eclipse.persistence.moxy</usedDependency>
-                </usedDependencies>
-              </configuration>
-            </execution>
-          </executions>
         </plugin>
         <plugin>
           <groupId>de.thetaphi</groupId>
           <artifactId>forbiddenapis</artifactId>
-          <version>2.2</version>
           <configuration>
             <failOnUnsupportedJava>false</failOnUnsupportedJava>
             <failOnMissingClasses>false</failOnMissingClasses>
@@ -201,7 +177,7 @@
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
-        <version>2.2.1</version>
+        <version>2.2.6</version>
         <configuration>
           <generateGitPropertiesFile>true</generateGitPropertiesFile>
           <generateGitPropertiesFilename>${project.build.outputDirectory}/de/urmel_dl/dbt/git.properties</generateGitPropertiesFilename>
@@ -458,7 +434,6 @@
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
-
     <dependency>
       <groupId>com.google.inject</groupId>
       <artifactId>guice</artifactId>
@@ -518,6 +493,10 @@
     <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>org.eclipse.persistence.moxy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.glassfish.jersey.core</groupId>
+      <artifactId>jersey-client</artifactId>
     </dependency>
     <dependency>
       <groupId>org.glassfish.jersey.media</groupId>
