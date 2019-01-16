@@ -26,10 +26,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -94,11 +96,11 @@ public class EntityFactory<T> {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final static String CONFIG_PREFIX = "DBT.EntityFactory.";
+    protected final static String CONFIG_PREFIX = "DBT.EntityFactory.";
 
-    private final static String CONFIG_MARSHALLER = "Marshaller.";
+    protected final static String CONFIG_MARSHALLER = "Marshaller.";
 
-    private final static String CONFIG_UNMARSHALLER = "Unmarshaller.";
+    protected final static String CONFIG_UNMARSHALLER = "Unmarshaller.";
 
     private final static Map<String, Class<?>[]> CACHED_ENTITIES = new ConcurrentHashMap<>();
 
@@ -453,7 +455,7 @@ public class EntityFactory<T> {
         return src;
     }
 
-    private Map<String, ?> properties(String propType) {
+    protected Map<String, ?> properties(String propType) {
         Function<String, String> keyFunc = k -> k.substring(k.indexOf(propType) + propType.length());
         Function<String, ?> valueFunc = v -> {
             if ("true".equalsIgnoreCase(v) || "false".equalsIgnoreCase(v)) {
@@ -467,12 +469,21 @@ public class EntityFactory<T> {
             CONFIG_PREFIX + entityType.getName() + "." + propType);
 
         return MCRConfiguration2.getPropertiesMap().entrySet().stream()
-            .filter(e -> propNames.stream().anyMatch(n -> e.getKey().startsWith(n)))
+            .filter(e -> propNames.stream().anyMatch(n -> e.getKey().startsWith(n))).sorted(Comparator.comparing(
+                Entry::getKey, (k1, k2) -> {
+                    String fpn = keyFunc.apply(k1);
+                    if (fpn.equals(keyFunc.apply(k2))) {
+                        int pi1 = propNames.indexOf(k1.replace(fpn, ""));
+                        int pi2 = propNames.indexOf(k2.replace(fpn, ""));
+                        return pi1 == pi2 ? 0 : pi1 < pi2 ? -1 : 1;
+                    }
+                    return k1.compareTo(k2);
+                }))
             .collect(
                 Collectors.toMap(e -> keyFunc.apply(e.getKey()), e -> valueFunc.apply(e.getValue()), (v1, v2) -> v2));
     }
 
-    private Class<?>[] populateEntities() {
+    protected Class<?>[] populateEntities() {
         final String pkgName = entityType.getPackage().getName();
 
         if (!CACHED_ENTITIES.containsKey(pkgName)) {
@@ -491,4 +502,5 @@ public class EntityFactory<T> {
 
         return CACHED_ENTITIES.get(pkgName);
     }
+
 }
