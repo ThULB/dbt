@@ -40,7 +40,7 @@
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
-    <yarn.version>v0.28.1</yarn.version>
+    <yarn.version>v1.13.0</yarn.version>
   </properties>
 
   <build>
