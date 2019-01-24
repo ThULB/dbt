@@ -30,11 +30,13 @@ import org.mycore.user2.MCRUser;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
+import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
+@RCAccessCheck
 @XmlRootElement(name = "attendee")
 public class Attendee extends Person implements Serializable {
 
@@ -113,6 +115,7 @@ public class Attendee extends Person implements Serializable {
      *
      * @author Ren\u00E9 Adler (eagle)
      */
+    @RCAccessCheck
     @XmlRootElement(name = "attendees")
     public static class Attendees {
 
