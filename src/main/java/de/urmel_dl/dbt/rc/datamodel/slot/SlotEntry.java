@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import de.urmel_dl.dbt.rc.datamodel.TypedDate;
+import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 
 /**
  * The Class SlotEntry.
@@ -36,6 +37,7 @@ import de.urmel_dl.dbt.rc.datamodel.TypedDate;
  *
  * @param <V> the value type
  */
+@RCAccessCheck
 @XmlRootElement(name = "entry")
 @XmlAccessorType(XmlAccessType.NONE)
 public class SlotEntry<V> implements Serializable {
