@@ -160,6 +160,34 @@
         </p>
       </answer>
     </entry>
+    <entry href="file-formats">
+      <question>
+        Welche Datei-Formate sind für das Publizieren in der DBT erlaubt?
+      </question>
+      <answer>
+        <p>
+          Damit die Dateien auch in der Zukunft nutzbar sind, beachten Sie bitte die vorgegebenen Standards:
+          <ul>
+            <li>Text-Dateien: generell als PDF-Dokument nach dem PDF/A-Standard (aktuell: PDF/A-1, PDF/A-2, PDF/A-3, besonders die Formate PDF/A-2u oder
+              PDF/A-3u)
+            </li>
+            <li>Video-Dateien: MP4-Container mit H.264 oder H.265 und AAC (Advanced Audio Coding)</li>
+            <li>Audio-Dateien: MP3, WAV</li>
+            <li>Bilder: TIFF-unkomprimiert</li>
+            <li>Tabellen: CSV-Datei, wenn sie keine Formeln enthalten, mit Zeichensatz UTF-8, Datums- und Zeitangaben im ISO 8601-Format</li>
+            <li>
+              Weitere Informationen zu Forschungsdaten:
+              <a href="https://www.forschungsdaten.info/themen/bewahren-und-nachnutzen/formate-erhalten/">https://www.forschungsdaten.info/themen/bewahren-und-nachnutzen/formate-erhalten/</a>
+            </li>
+            <li>
+              <u>Nicht zulässig</u>
+              : Kopierschutzmaßnahmen
+            </li>
+          </ul>
+          Auf Nachfrage erhalten Sie Hilfe bei Auswahl und Konvertierung von Formaten.
+        </p>
+      </answer>
+    </entry>
   </category>
   <category>
     <categoryTitle href="hochschulschriften">
