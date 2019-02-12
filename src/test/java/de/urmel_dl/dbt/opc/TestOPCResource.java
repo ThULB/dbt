@@ -26,11 +26,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -147,8 +150,13 @@ public class TestOPCResource extends JerseyTestCase {
         Stream.of("", "/DE-27"/*, "/TEST"*/).forEach(cat -> {
             Stream.of(/*"333183061", "126649847", "13027304X", "560310706",*/ "625181425"/*, "877411565", "875185347"*/)
                 .forEach(PPN -> {
-                    String response = webResource.path("opc/mods" + cat + "/" + PPN).request(MediaType.APPLICATION_XML)
-                        .get(String.class);
+                    String response = null;
+                    try {
+                        response = webResource.path("opc/mods" + cat + "/" + PPN).request(MediaType.APPLICATION_XML)
+                            .get(String.class);
+                    } catch (WebApplicationException e) {
+                        LogManager.getLogger().error(e.getResponse().readEntity(String.class));
+                    }
                     assertNotNull(response);
 
                     try {
