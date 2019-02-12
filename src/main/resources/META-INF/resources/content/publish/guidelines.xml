@@ -2,121 +2,258 @@
 <!DOCTYPE MyCoReWebPage>
 <MyCoReWebPage>
 <section xml:lang="de" title="Leitlinie Publikationsserver">
-  <h2>Leitlinien für den Betrieb des Publikationsservers</h2>
-  <h3>1. Ziele und inhaltliche Kriterien für den Publikationsserver</h3>
+  <h2>
+    Leitlinien für den Betrieb des Publikationsservers
+  </h2>
+  <h3>
+    Rechte und Pflichten des Betreibers / Erklärung zu Open Access
+  </h3>
   <p>
-    Der Publikationsserver bietet Wissenschaftlerinnen
-    und Wissenschaftlern die organisatorischen und technischen
-    Rahmenbedingungen zur elektronischen Publikation wissenschaftlicher Dokumente.
+    Die Digitale Bibliothek Thüringen (DBT) bietet allen Angehörigen der
+    Thüringer Hochschulen die organisatorischen und technischen
+    Rahmenbedingungen zur elektronischen Publikation wissenschaftlicher
+    Dokumente sowie multimedialer Materialien.
   </p>
   <p>
-    Die elektronischen Dokumente erhalten dauerhafte Adressen und werden über nationale und internationale
-    Bibliothekskataloge, Suchmaschinen sowie andere Nachweisinstrumente erschlossen. Darüber hinaus wird
-    eine langfristige Archivierung der elektronischen Dokumente gewährleistet.
-  </p>
-
-  <h3>2. Der Sammelauftrag des Betreibers</h3>
-  <p>
-    Der Sammelauftrag des Betreibers des Publikationsservers umfasst die Speicherung, Katalogisierung
-    und Archivierung aller elektronischen Dokumente, die durch Wissenschaftlerinnen und Wissenschaftler
-    veröffentlicht werden. Dies bezieht sich sowohl auf rein elektronische Publikationen
-    als auch auf elektronische Versionen gedruckter Dokumente.
-  </p>
-  <p>
-    Die Urheberrechte der Autorinnen und Autoren bleiben gewahrt. Die Veröffentlichung auf dem Publikationsserver
-    steht einer weiteren Veröffentlichung der Dokumente in Fachzeitschriften oder Monografien sowie auf
-    anderen Servern nicht entgegen. Gemäß den Empfehlungen des Wissenschaftsrats werden alle Wissenschaftlerinnen
-    und Wissenschaftler in Deutschland aufgefordert, sich beim Abschluss von Verlagsverträgen ein entsprechendes
-    weiteres Nutzungsrecht zu sichern und die von ihnen verfassten Dokumente zusätzlich - eventuell nach einer
-    Sperrfrist - auf dem Schriftenserver zu veröffentlichen.
+    Die zur Archivierung vorgesehenen elektronischen Materialien in der DBT
+    können dauerhafte zitierfähige Adressen (URNs bzw. DOIs) erhalten und
+    werden über nationale und internationale Bibliothekskataloge, Suchmaschinen
+    sowie andere Nachweisinstrumente erschlossen. Darüber hinaus wird eine
+    langfristige Archivierung der elektronischen Dokumente und Materialien
+    gewährleistet.
+    <br/>
+    <br/>
+    Die Thüringer Hochschulen unterstützen mit den durch die DBT
+    bereitgestellten Dienstleistungen und Services den freien Zugang zu
+    wissenschaftlicher Information im Sinne von Open Access. Letzteres steht
+    für eine freie und unbegrenzte Verbreitung wissenschaftlicher Literatur.
+    Ein veröffentlichter Beitrag ist weltweit kostenfrei über das Internet
+    zugänglich. Weitere Informationen zu Open Access finden Sie
+    <a href="https://www.db-thueringen.de/content/top/faq.xml#openAccessWas">
+      hier.
+    </a>
   </p>
   <p>
-    Die Einhaltung von Urheber- und Verwertungsrechten Dritter liegt in der Verantwortung der Autorinnen und
-    Autoren bzw. der Herausgeber/innen der elektronischen Dokumente.
-  </p>
-
-  <h3>3. Das elektronische Dokument</h3>
-  <p>
-    Unter dem Begriff „elektronisches Dokument” wird im Sinne dieser Leitlinien ein Dokument verstanden,
-    welches auf Text, Grafik, Audio- oder Video-Sequenzen basiert, in digitaler Form auf einem Datenträger
-    gespeichert ist und über Rechnernetze verbreitet wird.
+    Neben ihrer Funktion als Publikationsserver der Thüringer Hochschulen
+    ermöglicht die DBT Lehrenden an Thüringer Hochschulen auch die Online
+    Einrichtung und Nutzung von Semesterapparaten. Außerdem werden in der DBT
+    elektronische Pflichtexemplare aus dem Freistaat Thüringen zugänglich
+    gemacht und archiviert.
   </p>
   <p>
-    Ein über den Publikationsserver zu veröffentlichendes elektronisches Dokument erfüllt folgende Bedingungen:
+    Der Großteil der in der DBT bereitgestellten Dokumente ist frei im Internet
+    zugänglich. Ausgenommen davon sind elektronische Dokumente folgender
+    Kategorien: zum Beispiel elektronische Pflichtexemplare, sofern es sich um
+    subskriptionspflichtige Inhalte („Verlagsexemplare“) handelt, Patente,
+    Materialien aus Elektronischen Semesterapparaten.
+    <br/>
+    Die Open-Access-verfügbaren Dokumente werden in der Trefferliste der DBT
+    durch das Open-Access-Logo
+    (<i class="fa fa-unlock-alt" style="color: #5cb85c"></i>) gekennzeichnet.
+  </p>
+  <h3>
+    Rechte und Pflichten der Autorinnen und Autoren
+  </h3>
+  <p>
+    Autorinnen und Autoren räumen dem Betreiber des Publikationsservers mit der
+    Zustimmung zu den Leitlinien und dem Unterzeichnen des
+    Veröffentlichungsvertrags folgende Nutzungsrechte ein:
   </p>
   <ol>
-    <li>
-      Es ist zur Verbreitung in der Öffentlichkeit bestimmt.
-    </li>
-    <li>
-      Es stellt kein dynamisches Dokument dar. Sind Veränderungen notwendig, wird das geänderte
-      elektronische Dokument als neue Version gespeichert.
-    </li>
-    <li>
-      Es entspricht den vom Betreiber vorgegebenen technischen Parametern.
-    </li>
-  </ol>
-
-  <h3>4. Elektronische Dokumente, die über den Publikationsserver veröffentlicht und verbreitet werden</h3>
+  <li>
+    das dauerhafte Recht zur elektronischen Speicherung, insbesondere in
+    Datenbanken
+  </li>
+  <li>
+    das einfache dauerhafte Nutzungsrecht (§ 31 Abs. 2 UrhG) zur öffentlichen
+    Zugänglichmachung in internationalen Datennetzen
+  </li>
+  <li>
+    das dauerhafte Recht zur Konvertierung zum Zwecke der
+    Langzeitarchivierung bzw. Visualisierung, unter Beachtung der Bewahrung des
+    Inhalts (die Originalarchivierung bleibt erhalten)
+  </li>
+  <li>
+    das Recht, die von den Autorinnen oder Autoren bzw. Herausgeberinnen oder
+    Herausgebern gelieferten Metadaten gegebenenfalls zu ändern und/oder zu
+    vervollständigen
+  </li>
+  <li>
+    das Recht, die Metadaten unbeschränkt zugänglich und nutzbar zu machen
+  </li>
+  <li>
+    das Recht zur Weitergabe des Dokuments und der dazugehörigen Metadaten an
+    die Deutsche Nationalbibliothek sowie weitere fachlich oder regional in
+    Frage kommende Dokumentenserver mit den gleichen vorgenannten Rechten.
+  </li>
+ </ol>
   <p>
-    Folgende Kategorien elektronischer Dokumente werden gespeichert und über den Publikationsserver verbreitet:
+    Für den Inhalt der Dokumente sind ausschließlich die Autorinnen oder
+    Autoren bzw. Herausgeberinnen oder Herausgeber verantwortlich. Der
+    Betreiber der DBT übernimmt keine Haftung für die Inhalte der
+    bereitgestellten Publikationen und verlinkter externer Seiten.
+    <br/>
+    Autorinnen oder Autoren bzw. Herausgeberinnen oder Herausgeber versichern,
+    dass das Dokument nicht gegen gesetzliche Vorschriften, behördliche
+    Verfügungen oder sonstige Rechte Dritter verstößt.
+    <br/>
+    Autorinnen oder Autoren bzw. Herausgeberinnen oder Herausgeber verpflichten
+    sich, eventuell betroffene Urheber- und Verwertungsrechte Dritter zu klären
+    bzw. deren Einverständnis einzuholen. Erhalten Autorinnen oder Autoren bzw.
+    Herausgeberinnen oder Herausgeber Kenntnis vom Bestehen oder der Entstehung
+    von Rechtshindernissen, setzen sie den Betreiber der DBT unverzüglich davon
+    in Kenntnis.
   </p>
-  <ul>
+  <p>
+    Die Urheberrechte der Autorinnen oder Autoren bzw. Herausgeberinnen oder
+    Herausgeber bleiben gewahrt. Der DBT wird nur ein einfaches Nutzungsrecht
+    eingeräumt. Die Veröffentlichung in der DBT steht somit einer weiteren
+    Veröffentlichung der Dokumente in Fachzeitschriften oder Monografien sowie
+    auf anderen Servern nicht entgegen. Gemäß den Empfehlungen des
+    Wissenschaftsrats zur digitalen Informationsversorgung durch
+    Hochschulbibliotheken wird allen Wissenschaftlerinnen und Wissenschaftlern
+    empfohlen, sich beim Abschluss von Verlagsverträgen das Recht der
+    Selbstarchivierung in institutionellen Repositorien vorzubehalten und die
+    von ihnen verfassten Dokumente zusätzlich - eventuell nach einer Sperrfrist
+    - auf dem Publikationsserver zu veröffentlichen.
+  </p>
+  <p>
+    Die Metadaten der auf dem Publikationsserver veröffentlichten Dokumente
+    dürfen gespeichert und - gegebenenfalls in angereicherter Form oder in
+    Auswahl - Dritten verfügbar gemacht werden.
+  </p>
+  <p>
+    Bereits publizierte Dokumente werden nicht vom Server gelöscht. Der
+    Betreiber der DBT ist allerdings berechtigt, publizierte Dokumente von der
+    Veröffentlichung auszuschließen, wenn eine Verletzung von Rechten Dritter
+    oder von Bestimmungen dieser Leitlinien und/oder des
+    Veröffentlichungsvertrags vorliegt.
+  </p>
+  <h3>
+    Sammelauftrag
+  </h3>
+  <p>
+    Der Sammelauftrag der DBT umfasst die Speicherung, Katalogisierung und
+    Archivierung elektronischer Dokumente und Materialien, die durch
+    Wissenschaftlerinnen und Wissenschaftler der beteiligten Thüringer
+    Hochschulen veröffentlicht werden. Dies bezieht sich sowohl auf rein
+    elektronische Publikationen als auch auf elektronische Versionen gedruckter
+    Dokumente.
+  </p>
+  <p>
+    Folgende Kategorien elektronischer Dokumente können in der DBT publiziert
+    werden:
+  </p>
+  <ul type="disc">
     <li>
-      Publikationen und Publikationsreihen der betreibenden Einrichtung mit wissenschaftlichen Inhalten.
+      Publikationen von Angehörigen der Thüringer Hochschulen mit
+      wissenschaftlichem Inhalt, wie einzelne Zeitschriftenaufsätze (auch als
+      Pre- und Postprints), Monographien, Teile aus Monographien, Öffentliche
+      Vorlesungen, Forschungsberichte, Studien etc.
     </li>
     <li>
-      Publikationen von mit dem betreibenden Institut assoziierten Einrichtungen und Personen
-      und Forscher/innen.
+      Hochschulschriften (Dissertationen, Habilitationsschriften)
+    </li>
+    <li>
+      Abschlussarbeiten von Studierenden der Thüringer Hochschulen, wenn die
+      Publikation durch den Betreuer oder ein anderes Mitglied des
+      Lehrkörpers befürwortet und mit der Note "sehr gut" oder „gut“ bewertet
+      wurde.
+    </li>
+    <li>
+      Forschungsdaten und –berichte
+    </li>
+    <li>
+      Tagungsberichte
+    </li>
+    <li>
+      Lehr- und Vorlesungsmaterialien
+    </li>
+    <li>
+      Film- und Tondokumente
+    </li>
+    <li>
+      Elektronische Pflichtexemplare des Freistaats Thüringen und Thuringica
     </li>
   </ul>
-
-  <h3>5. Technische Besonderheiten des Publikationsservers</h3>
-  <ol>
-    <li>
-      Die elektronischen Dokumente werden mit individuellen und dauerhaften Adressen versehen, welche einen
-      unmittelbaren Zugriff auf die Dokumente erlauben. Die Adressen werden als URNs (Uniform Resource Name)
-      registriert. Die Administration und Pflege der URNs wird vom Betreiber garantiert.
-    </li>
-    <li>
-      Das Auffinden der elektronischen Dokumente ist über Bibliothekskataloge, Recherchen in bibliografischen
-      Metadaten, über alphabetische und klassifikatorische Ordnungen sowie dynamisch erstellte Listen und Indizes
-      möglich.
-    </li>
-    <li>
-      Die Archivierungsdauer der Formate hängt von der Verfügbarkeit des Formates, der Betrachtungssoftware sowie
-      den Konvertierungsmöglichkeiten ab. Die Archivierungsdauer beträgt mindestens 5 Jahre.
-    </li>
-  </ol>
-
-  <h3>6. Organisatorische Regelungen</h3>
-  <ol>
-    <li>
-      Der Publikationsserver wird von der Thüringer Universitäts- und Landesbibliothek Jena betrieben. Die technische Betreuung des
-      Katalogsystems (Rechercheinstrument für den Publikationsserver) erfolgt durch die Verbundzentrale des
-      Gemeinsamen Bibliotheksverbundes (VZG).
-    </li>
-    <li>
-      Die elektronische Veröffentlichung von Publikationen ist für die mit der betreibenden Einrichtung
-      verbundenen Wissenschaftlerinnen und Wissenschaftler kostenfrei.
-    </li>
-    <li>
-      Für die Veröffentlichung notwendige zusätzliche Arbeiten wie die Aufbereitung der elektronischen Dokumente
-      oder die Konvertierung in andere Formate werden von den Mitarbeiterinnen und Mitarbeitern des Betreibers
-      nach Absprache betreut oder durchgeführt. Arbeiten, die einen bedeutenden Mehraufwand
-      erfordern, werden in Rechnung gestellt.
-    </li>
-    <li>
-      Ansprechpartner/in für alle den Publikationsserver betreffenden Fragen ist:<br/>
-      <a href="http://www.thulb.uni-jena.de/A+_+Z/Post_+und+Lieferanschrift.html">Thüringer Universitäts- und Landesbibliothek Jena</a><br/>
-      <a href="http://www.thulb.uni-jena.de/EPubOA.html#Kontakt">Team E-Publizieren</a><br/>
-      <a href="mailto:epublizieren@thulb.uni-jena.de">epublizieren@thulb.uni-jena.de</a>
-    </li>
-  </ol>
+  <h3>
+    Erschließung
+  </h3>
   <p>
-    Wir danken der Arbeitsgruppe Elektronisches Publizieren an der Humboldt-Universität zu Berlin
-    und den Kolleginnen der Universität der TU Clausthal. Deren Leitlinien für Hochschulschriftenserver wurden
-    hier als Vorlage benutzt.
+    Für die formale und inhaltliche Erschließung der elektronischen Dokumente
+    werden national und international definierte Standards und Schnittstellen
+    wie der Metadata Object Description Schema (MODS), die Richtlinien der
+    <a href="https://openarchives.org/">
+      Open Archives Initiative (OAI)
+    </a>
+    oder die Festlegungen von
+    <a
+        href="http://www.dnb.de/DE/Standardisierung/Metadaten/xMetadissPlus.html"
+    >
+      xMetaDissPlus
+    </a>
+    der Deutschen Nationalbibliothek genutzt. Informationen zu der jeweiligen
+    Veröffentlichung werden durch Eingabe in ein
+    Online-Veröffentlichungsformular durch die Autorinnen und Autoren vergeben
+    und von der Bibliothek geprüft, korrigiert und gegebenenfalls ergänzt. Die
+    Einbindung von Daten aus der Gemeinsamen-Normdatei (GND) ist ebenfalls
+    möglich. Dissertationen und Habilitationen verfügen über ein vom Autor in
+    mindestens einer Sprache abgefasstes Abstract. Die Dokumente werden mit der
+    Vergabe einer Fachgruppe der
+    <a
+        href="https://www.dnb.de/SharedDocs/Downloads/DE/DNB/service/ddcSachgruppenDNB.pdf?__blob=publicationFile"
+    >
+      DDC-Sachgruppen der Deutschen Nationalbibliografie
+    </a>
+    klassifikatorisch beschrieben.
+  </p>
+  <p>
+    <strong> </strong>
+  </p>
+  <h3>
+    Langzeitarchivierung
+  </h3>
+  <p>
+    Der Betreiber der DBT garantiert die Archivierung aller Originaldaten für
+    mindestens 5 Jahre. Darüber hinaus sollen die Daten und Objekte in
+    Kooperation mit dem im Aufbau befindlichen Digitalen Langzeitarchiv
+    Thüringen (DLA-Thüringen) zeitlich unbegrenzt online gemacht werden.
+    Voraussetzung für die Langzeitarchivierung ist die Verwendung der
+    definierten Archivierungsformate, die den Erhalt der Interpretierbarkeit
+    der Inhalte der digitalen Daten auf Dauer gewährleisteten.
+  </p>
+  <p>
+    Die Implementierung des DLA Thüringen erfolgt auf der Grundlage der Open
+    Source-Software Suite des Digitalen Archivs Nordrhein-Westfalen (DA NRW).
+    Die Datenverwaltung erfolgt während der ersten Projektphase zunächst in
+    zwei im Verbund arbeitenden iRODS-Servern. In der zweiten Projektphase wird
+    der Verbund auf drei iRODS-Servern in den Thüringer Hochschulrechenzentren
+    Jena, Erfurt und Ilmenau erweitert. Publizierte und über OAI-Schnittstelle
+    an das Digitale Langzeitarchiv Thüringen abgelieferte Dokumente können
+    nicht mehr verändert bzw. gelöscht werden.
+  </p>
+  <p>
+    <strong> </strong>
+  </p>
+  <h3>
+    Technischer Betrieb
+  </h3>
+  <p>
+    Die DBT wird auf der Basis der Open Source-Software MyCoRe betrieben.
+    Weitere Informationen zu MyCoRe finden Sie <a href="http://www.mycore.de">hier</a>. Das Auffinden der elektronischen
+    Dokumente ist über die DBT, Bibliothekskataloge, Discoverysysteme,
+    Suchmaschinen und bei OAI-Serviceprovidern (z.B. OAIster) ermöglicht. Für
+    die Erschließung, Speicherung und Archivierung der elektronischen Dokumente
+    sowie für den Austausch der Metadaten werden internationale Standards wie
+    die Richtlinien der Open Archives Initiative (OAI) genutzt. Die zur
+    Langezeitarchivierung vorgesehenen Dokumente und Materialien sind
+    persistent nachgewiesen. Im Rahmen der DBT besteht eine
+    Entwicklungspartnerschaft zwischen der ThULB und der Verbundzentrale des
+    Gemeinsamen Bibliotheksverbundes in Göttingen (VZG). Die ThULB
+    gewährleistet den dauerhaften Betrieb der DBT und trägt bei möglichen
+    Systemausfällen für eine schnellstmögliche Wiederherstellung des
+    Anwendungssystems Sorge. Wartungsbedingte Systemausfälle werden frühzeitig
+    angekündigt.
   </p>
 </section>
 </MyCoReWebPage>
