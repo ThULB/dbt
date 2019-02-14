@@ -13,7 +13,7 @@ module ibw {
                 return tag;
             } else if (typeof from === "string") {
                 var t: string = (<string>from).trim();
-                var s: Array<string> = t.match(/(\d{4})\s(.*)/);
+                var s: Array<string> = t.match(/(\w{4})\s(.*)/);
 
                 if (s != null && s.length == 3) {
                     return Tag.parse(Array.prototype.slice.call(s, 1));

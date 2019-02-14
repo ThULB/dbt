@@ -112,7 +112,7 @@ module ibw {
 
         var copys: Array<Copy> = new Array<Copy>();
 
-        var c: Array<string> = title.match(/\n(70.+)\s(.*)\n/g);
+        var c: Array<string> = title.match(/\n(E0.+)\s(.*)\n/g);
         for (var i = 0; i < c.length; i++) {
             var copyTag: Tag = Tag.parse(c[i]);
 

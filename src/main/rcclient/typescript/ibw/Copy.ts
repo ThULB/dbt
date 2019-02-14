@@ -76,8 +76,8 @@ module ibw {
                     var tag: Tag = Tag.parse(lines[i]);
                     if (tag == null) continue;
 
-                    if (tag.category.startsWith("70")) {
-                        copy.num = parseInt(tag.category) - 7000;
+                    if (tag.category.startsWith("E0")) {
+                        copy.num = parseInt(tag.category.replaceAll("E", ""));
                         copy.type = tag.content.match(/(.*) : (.*)/)[2];
                     } else {
                         switch (tag.category) {
@@ -90,7 +90,7 @@ module ibw {
                                 break;
                             case "7100":
                                 has7100 = true;
-                                var m: Array<string> = tag.content.match(/!(.*)!(.*) @ (.*)/);
+                                var m: Array<string> = tag.content.match(/\$f(.*)\$a(.*)\$d(.*)/);
                                 copy.location = m[1];
                                 copy.shelfmark = m[2];
 
