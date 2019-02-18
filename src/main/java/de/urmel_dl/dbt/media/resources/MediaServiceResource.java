@@ -161,7 +161,7 @@ public class MediaServiceResource {
             .map(rm -> {
                 try {
                     final File assetFile = asset.toFile();
-                    final long from = new Long(rm.group(2));
+                    final long from = Long.parseLong(rm.group(2));
                     final long to = Optional.ofNullable(rm.group(3)).map(Long::parseLong)
                         .orElse(assetFile.length() - 1);
 
