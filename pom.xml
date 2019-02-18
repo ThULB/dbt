@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>39</version>
+    <version>40-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2019.02</version>
+  <version>2019.05-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -28,14 +28,14 @@
     <connection>scm:git:https://github.com/ThULB/dbt.git</connection>
     <developerConnection>scm:git:https://github.com/ThULB/dbt.git</developerConnection>
     <url>https://github.com/ThULB/dbt/tree/master</url>
-    <tag>v2019.02</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
-    <mir.version>2019.02</mir.version>
+    <mir.version>2019.05-SNAPSHOT</mir.version>
     <node.version>v6.9.2</node.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
