@@ -76,8 +76,8 @@ module ibw {
                     var tag: Tag = Tag.parse(lines[i]);
                     if (tag == null) continue;
 
-                    if (tag.category.startsWith("E0")) {
-                        copy.num = parseInt(tag.category.replaceAll("E", ""));
+                    if (tag.category.startsWith("E")) {
+                        copy.num = parseInt(tag.category.replaceAll("E", ""), 10);
                         copy.type = tag.content.match(/(.*) : (.*)/)[2];
                     } else {
                         switch (tag.category) {
