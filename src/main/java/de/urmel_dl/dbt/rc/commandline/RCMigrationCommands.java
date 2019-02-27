@@ -33,7 +33,7 @@ import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.MCRVFSContent;
+import org.mycore.common.content.MCRPathContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
 import org.mycore.common.xml.MCRXMLParserFactory;
 import org.mycore.common.xsl.MCRParameterCollector;
@@ -79,7 +79,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
         }
 
         try {
-            final Element slotXML = MCRXMLParserFactory.getParser(false).parseXML(new MCRVFSContent(file.toURI()))
+            final Element slotXML = MCRXMLParserFactory.getParser(false).parseXML(new MCRPathContent(file.toPath()))
                 .getRootElement();
 
             Optional.ofNullable(slotXML.getChild("derivate").getAttributeValue("ID")).ifPresent(derId -> {
@@ -89,7 +89,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     if (msaFile.exists()) {
                         try {
                             final Element msaXML = MCRXMLParserFactory.getParser(false)
-                                .parseXML(new MCRVFSContent(msaFile.toURI())).getRootElement();
+                                .parseXML(new MCRPathContent(msaFile.toPath())).getRootElement();
 
                             Optional.ofNullable(msaXML.getChildren("entry")).ifPresent(x -> {
                                 final Element root = new Element("entries");
@@ -156,7 +156,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     return;
                 }
             });
-        } catch (MCRException | IOException | SAXException e) {
+        } catch (MCRException | SAXException e) {
             LOGGER.error("Couldn't process slot file " + file.getAbsolutePath() + ".", e);
         }
     }
