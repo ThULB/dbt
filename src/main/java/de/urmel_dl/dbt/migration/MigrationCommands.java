@@ -41,7 +41,7 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaLinkID;
+import org.mycore.datamodel.metadata.MCRMetaDerivateLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -61,7 +61,8 @@ public class MigrationCommands extends MCRAbstractCommands {
 
     private static final Logger LOGGER = Logger.getLogger(MigrationCommands.class);
 
-    @MCRCommand(syntax = "fix objects for base {0} with file {1}", help = "transforms all mycore objects for base {0} with the given file or URL {1}")
+    @MCRCommand(syntax = "fix objects for base {0} with file {1}",
+        help = "transforms all mycore objects for base {0} with the given file or URL {1}")
     public static List<String> xsltObjects(final String base, final String xslFile) throws Exception {
         URL styleFile = MigrationCommands.class.getResource("/xsl/" + xslFile);
         if (styleFile == null) {
@@ -163,8 +164,8 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
 
         // add the link to metadata
-        final MCRMetaLinkID der = new MCRMetaLinkID();
-        der.setReference(mcrDerivate.getId().toString(), null, mcrDerivate.getLabel());
+        MCRMetaDerivateLinkID der = new MCRMetaDerivateLinkID();
+        der.setReference(mcrDerivate.getId(), null, mcrDerivate.getLabel());
         der.setSubTag("derobject");
 
         try {
@@ -238,7 +239,8 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
     }
 
-    @MCRCommand(syntax = "check all derivates from directory {0}", help = "check all derivate from given directory {0} has missing files")
+    @MCRCommand(syntax = "check all derivates from directory {0}",
+        help = "check all derivate from given directory {0} has missing files")
     public static List<String> checkDerivates(final String directory) {
         File dir = new File(directory);
 
