@@ -3,7 +3,7 @@
   <catalog enabled="false" identifier="f128647b-1d98-4302-8970-d75e6f7f5a46">
     <name>GVK</name>
     <description>GBV - Gemeinsamer Bibliotheksverbund</description>
-    <opc db="2.1">http://gso.gbv.de</opc>
+    <opc db="2.1">https://kxp.k10plus.de</opc>
     <ISIL>GVK</ISIL>
     <ISIL>DE-601</ISIL>
   </catalog>

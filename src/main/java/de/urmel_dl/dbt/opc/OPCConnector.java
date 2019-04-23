@@ -63,6 +63,9 @@ import de.urmel_dl.dbt.opc.utils.PicaCharDecoder;
  *
  */
 public class OPCConnector {
+
+    private static final String GVK_URL = "https://kxp.k10plus.de";
+
     private static final Logger LOGGER = LogManager.getLogger(OPCConnector.class);
 
     private static final Cache<Object, Object> CACHE;
@@ -73,7 +76,7 @@ public class OPCConnector {
 
     private String db;
 
-    private URL url = new URL("http://gso.gbv.de/");
+    private URL url = new URL(GVK_URL);
 
     private int maxhits = 500;
 
@@ -112,7 +115,7 @@ public class OPCConnector {
      * @throws MalformedURLException thrown on malformed url
      */
     public OPCConnector() throws MalformedURLException {
-        this.url = new URL("http://gso.gbv.de");
+        this.url = new URL(GVK_URL);
         this.db = "2.1";
     }
 
