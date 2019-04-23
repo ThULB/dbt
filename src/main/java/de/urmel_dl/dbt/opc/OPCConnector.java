@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -640,8 +641,9 @@ public class OPCConnector {
     private InputStream readContentFromUrl(final URL url) throws IOException {
         LOGGER.debug("Open URL: " + url.toExternalForm());
 
-        final URLConnection urlConn = url.openConnection();
+        final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
         urlConn.setConnectTimeout(this.connectionTimeout);
+        urlConn.setInstanceFollowRedirects(true);
         urlConn.setDoInput(true);
         urlConn.setUseCaches(false);
 
@@ -659,8 +661,9 @@ public class OPCConnector {
 
         LOGGER.debug("Open URL: " + urlString);
 
-        final URLConnection urlConn = url.openConnection();
+        final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
         urlConn.setConnectTimeout(this.connectionTimeout);
+        urlConn.setInstanceFollowRedirects(true);
         urlConn.setDoInput(true);
         urlConn.setUseCaches(false);
 
