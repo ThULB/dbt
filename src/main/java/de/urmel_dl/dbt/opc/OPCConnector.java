@@ -19,6 +19,7 @@ package de.urmel_dl.dbt.opc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -236,7 +237,7 @@ public class OPCConnector {
         IKTList iktList = (IKTList) CACHE.get(generateCacheKey("iktlist"), () -> {
             final URL pageURL = new URL(url + "/XML=1.0/MENUIKTLIST");
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             final IKTList ikts = new IKTList();
 
@@ -289,7 +290,7 @@ public class OPCConnector {
             final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
                 + "&SRT=YOP&SHRTST=" + maxread + "&TRM=" + URLEncoder.encode(trm, "UTF-8"));
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             return parseResult(xml);
         });
@@ -332,7 +333,7 @@ public class OPCConnector {
 
             final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/FAM?PPN=" + PPN + "&SHRTST=" + maxread);
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             return parseResult(xml);
         });
@@ -382,7 +383,7 @@ public class OPCConnector {
 
                     final URL pageURL = new URL(this.url + sessionpart + "/XML=1.0/NXT?FRST=" + pos + "&SHRTST="
                         + this.maxread + "&NORND=ON");
-                    final Document doc = new SAXBuilder().build(pageURL);
+                    final Document doc = new SAXBuilder().build(readContentFromUrl(pageURL));
 
                     entries = doc.getRootElement().getChildren("SET");
                     if (entries.size() == 1) {
@@ -634,6 +635,21 @@ public class OPCConnector {
         }
 
         return null;
+    }
+
+    private InputStream readContentFromUrl(final URL url) throws IOException {
+        LOGGER.debug("Open URL: " + url.toExternalForm());
+
+        final URLConnection urlConn = url.openConnection();
+        urlConn.setConnectTimeout(this.connectionTimeout);
+        urlConn.setDoInput(true);
+        urlConn.setUseCaches(false);
+
+        final String encoding = (urlConn.getContentEncoding() != null ? urlConn.getContentEncoding()
+            : "ISO-8859-1");
+        LOGGER.debug("Encoding set to: " + encoding);
+
+        return urlConn.getInputStream();
     }
 
     private String readWebPageFromUrl(final String urlString) throws IOException {
