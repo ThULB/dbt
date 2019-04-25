@@ -17,6 +17,9 @@
  */
 package de.urmel_dl.dbt.opc.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -309,18 +312,6 @@ public class PicaCharDecoder {
                 {
                     put(PicaCharDecoder.ISO_8859_1, "\u00E3");
                     put(PicaCharDecoder.UTF_8, "\u00C3\u00A3");
-                }
-            });
-            put("&acute;", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, "\u00E2");
-                    put(PicaCharDecoder.UTF_8, "\u00C3\u00A2");
-                }
-            });
-            put("&grave;", new HashMap<Integer, String>() {
-                {
-                    put(PicaCharDecoder.ISO_8859_1, "\u00E1");
-                    put(PicaCharDecoder.UTF_8, "\u00C3\u00A1");
                 }
             });
             put("&oonder;", new HashMap<Integer, String>() {
@@ -987,4 +978,29 @@ public class PicaCharDecoder {
 
         return StringEscapeUtils.unescapeHtml(ppDecoded);
     }
+
+    public static String asHexString(final String plain) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            ByteArrayInputStream is = new ByteArrayInputStream(plain.getBytes(StandardCharsets.UTF_8));
+
+            while (is.available() > 0) {
+                char[] line = new char[16];
+                for (int i = 0; i < 16; i++) {
+                    int readByte = is.read();
+                    String paddingZero = (readByte < 16) ? "0" : "";
+                    sb.append(paddingZero + (readByte == -1 ? "0" : Integer.toHexString(readByte)) + " ");
+                    line[i] = ((readByte >= 33 && readByte <= 126) ? (char) readByte : '.');
+                }
+                sb.append(new String(line) + "\n");
+            }
+            is.close();
+
+            return sb.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
