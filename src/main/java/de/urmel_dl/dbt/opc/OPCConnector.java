@@ -414,6 +414,9 @@ public class OPCConnector {
 
         String ppraw = (String) CACHE.get(generateCacheKey("raw_" + PPN),
             () -> readWebPageFromUrl(url + "/DB=" + db + "/PPN?PLAIN=ON&PPN=" + PPN));
+
+        LOGGER.debug("\n" + PicaCharDecoder.asHexString(ppraw));
+
         return ppraw;
     }
 
