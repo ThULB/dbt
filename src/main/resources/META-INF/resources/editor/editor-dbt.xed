@@ -45,4 +45,12 @@
       </xed:if>
     </xed:bind>
   </xed:template>
+  
+  <xed:template id="genres.submit">
+    <xed:include ref="i.agree" />
+    <xed:include ref="cancel.submit" />
+    <xed:include ref="cleanup-rules" />
+    <xed:include ref="validation-rules" />
+  </xed:template>
+  
 </xed:template>
