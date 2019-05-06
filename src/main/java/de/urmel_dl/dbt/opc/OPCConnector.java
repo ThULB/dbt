@@ -23,8 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -68,9 +68,13 @@ public class OPCConnector {
 
     private static final String GVK_URL = "https://kxp.k10plus.de";
 
+    private static final String GVK_DB = "2.1";
+
     private static final Logger LOGGER = LogManager.getLogger(OPCConnector.class);
 
     private static final Cache<Object, Object> CACHE;
+
+    private static final int MAX_REDIRECTS = 100;
 
     static {
         CACHE = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(10, TimeUnit.MINUTES).build();
@@ -118,7 +122,7 @@ public class OPCConnector {
      */
     public OPCConnector() throws MalformedURLException {
         this.url = new URL(GVK_URL);
-        this.db = "2.1";
+        this.db = GVK_DB;
     }
 
     /**
@@ -641,34 +645,60 @@ public class OPCConnector {
         return null;
     }
 
-    private InputStream readContentFromUrl(final URL url) throws IOException {
+    private HttpURLConnection buildConnection(final URL url) throws IOException {
+        return buildConnection(url, null);
+    }
+
+    private HttpURLConnection buildConnection(final URL url, final String cookies) throws IOException {
+        return buildConnection(url, cookies, 0);
+    }
+
+    private HttpURLConnection buildConnection(final URL url, final String cookies, int numRedirects)
+        throws IOException {
         LOGGER.debug("Open URL: " + url.toExternalForm());
 
-        final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+
         urlConn.setConnectTimeout(this.connectionTimeout);
-        urlConn.setInstanceFollowRedirects(true);
+        urlConn.setInstanceFollowRedirects(false);
         urlConn.setDoInput(true);
         urlConn.setUseCaches(false);
 
-        final String encoding = (urlConn.getContentEncoding() != null ? urlConn.getContentEncoding()
-            : "ISO-8859-1");
-        LOGGER.debug("Encoding set to: " + encoding);
+        if (cookies != null) {
+            urlConn.setRequestProperty("Cookie", cookies);
+        }
 
-        return urlConn.getInputStream();
+        boolean redirect = false;
+
+        int status = urlConn.getResponseCode();
+        if (status != HttpURLConnection.HTTP_OK && (status == HttpURLConnection.HTTP_MOVED_TEMP
+            || status == HttpURLConnection.HTTP_MOVED_PERM
+            || status == HttpURLConnection.HTTP_SEE_OTHER)) {
+            redirect = true;
+        }
+
+        if (redirect) {
+            if (numRedirects <= MAX_REDIRECTS) {
+                URL newUrl = new URL(urlConn.getHeaderField("Location"));
+
+                LOGGER.debug("Redirect to URL : {} ({})", newUrl.toExternalForm(), numRedirects + 1);
+                urlConn = buildConnection(newUrl, urlConn.getHeaderField("Set-Cookie"), numRedirects + 1);
+            } else {
+                throw new ProtocolException("Too many (" + numRedirects + ") redirects.");
+            }
+        }
+
+        return urlConn;
+    }
+
+    private InputStream readContentFromUrl(final URL url) throws IOException {
+        return buildConnection(url).getInputStream();
     }
 
     private String readWebPageFromUrl(final String urlString) throws IOException {
         String content = "";
 
-        final URL url = new URL(urlString);
-
-        LOGGER.debug("Open URL: " + urlString);
-
-        final HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
-        urlConn.setConnectTimeout(this.connectionTimeout);
-        urlConn.setInstanceFollowRedirects(true);
-        urlConn.setDoInput(true);
-        urlConn.setUseCaches(false);
+        HttpURLConnection urlConn = buildConnection(new URL(urlString));
 
         final String encoding = (urlConn.getContentEncoding() != null ? urlConn.getContentEncoding()
             : "ISO-8859-1");
