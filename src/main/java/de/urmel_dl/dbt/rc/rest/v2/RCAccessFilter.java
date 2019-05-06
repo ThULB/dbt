@@ -62,7 +62,7 @@ public class RCAccessFilter implements ReaderInterceptor, WriterInterceptor {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @Context
-    HttpServletRequest httpServletRequest;
+    protected HttpServletRequest httpServletRequest;
 
     /* (non-Javadoc)
      * @see javax.ws.rs.ext.ReaderInterceptor#aroundReadFrom(javax.ws.rs.ext.ReaderInterceptorContext)

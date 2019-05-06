@@ -59,7 +59,7 @@ public class RCResource {
     private static final SlotManager SLOT_MGR = SlotManager.instance();
 
     @Context
-    ContainerRequestContext requestContext;
+    protected ContainerRequestContext requestContext;
 
     /**
      * Returns the {@link SlotList}.
