@@ -7,10 +7,8 @@ module.exports = function(grunt) {
 	};
 
 	var globalConfig = {
-		lessFile : grunt.option("lessFile"),
 		resourceDirectory : getAbsoluteDir(grunt.option("resourceDirectory")),
 		targetDirectory : getAbsoluteDir(grunt.option("targetDirectory")),
-		cssDirectory : getAbsoluteDir(grunt.option("cssDirectory")),
 		assetsDirectory : getAbsoluteDir(grunt.option("assetsDirectory")),
 	};
 
@@ -35,9 +33,9 @@ module.exports = function(grunt) {
 							src : [ "./css/**", "./img/**", "./js/*min.js" ]
 						}, {
 							expand : true,
-							cwd : "./node_modules/summernote",
+							cwd : "./node_modules/summernote/dist",
 							dest : "<%=globalConfig.assetsDirectory%>/summernote",
-							src : [ "./lang/**", ]
+							src : [ "./font/**", "./lang/**" ]
 						}, {
 							expand : true,
 							cwd : "./node_modules/summernote",
@@ -83,35 +81,6 @@ module.exports = function(grunt) {
 				} ]
 			}
 		},
-		less : {
-			build : {
-				options : {
-					banner : "/*!\n" + " * <%= pkg.name %> v${project.version}\n" + " * Homepage: <%= pkg.homepage %>\n"
-							+ " * Copyright 2013-<%= grunt.template.today(\"yyyy\") %> <%= pkg.author %> and others\n"
-							+ " * Licensed under <%= pkg.license %>\n" + " * Based on Bootstrap\n" + "*/\n",
-					compress : true,
-					cleancss : true,
-					ieCompat : false,
-					sourceMap : false,
-					sourceMapURL : "",
-					sourceMapFilename : "",
-					outputSourceFiles : true,
-					modifyVars : {
-						"icon-font-path" : "\"../../assets/bootstrap/fonts/\"",
-						"fa-font-path" : "\"../../assets/font-awesome/fonts\"",
-						"brand-primary" : "#008855",
-						"brand-success" : "#5cb85c",
-						"brand-warning" : "#f0ad4e",
-						"brand-danger" : "#d9534f",
-						"brand-info" : "#5bc0de",
-						"input-border-focus" : "@brand-primary"
-					}
-				},
-				files : {
-					"<%=globalConfig.cssDirectory%>/layout.min.css" : "<%=globalConfig.lessFile%>"
-				}
-			}
-		},
 		uglify : {
 			build : {
 				options : {
@@ -135,8 +104,7 @@ module.exports = function(grunt) {
 
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-imagemin");
-	grunt.loadNpmTasks("grunt-contrib-less");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 
-	grunt.registerTask("default", [ "copy", "imagemin", "less", "uglify" ]);
+	grunt.registerTask("default", [ "copy", "imagemin", "uglify" ]);
 };
