@@ -46,11 +46,14 @@ import org.mycore.common.content.MCRByteContent;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRStreamContent;
 
+import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
+
 /**
  * The Class FileEntry.
  *
  * @author Ren\u00E9 Adler (eagle)
  */
+@RCAccessCheck
 @XmlRootElement(name = "file")
 @XmlAccessorType(XmlAccessType.NONE)
 public class FileEntry implements Serializable {

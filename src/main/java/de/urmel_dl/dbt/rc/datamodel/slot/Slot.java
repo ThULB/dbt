@@ -46,12 +46,14 @@ import de.urmel_dl.dbt.rc.datamodel.Lecturer;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
 import de.urmel_dl.dbt.rc.datamodel.Status;
 import de.urmel_dl.dbt.rc.datamodel.WarningDate;
+import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 
 /**
  * Represents an Reserve Collection slot.
  *
  * @author Ren\u00E9 Adler (eagle)
  */
+@RCAccessCheck
 @XmlRootElement(name = "slot")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType(name = "slot", propOrder = { "slotId", "status", "pendingStatus", "onlineOnly", "title", "lecturers",

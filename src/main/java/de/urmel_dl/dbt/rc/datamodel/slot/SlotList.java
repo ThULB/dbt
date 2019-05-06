@@ -30,9 +30,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.mycore.common.MCRException;
 
+import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
+
 /**
  * @author René Adler (eagle)
  */
+@RCAccessCheck
 @XmlRootElement(name = "slots")
 @XmlAccessorType(XmlAccessType.NONE)
 public class SlotList implements Serializable {
