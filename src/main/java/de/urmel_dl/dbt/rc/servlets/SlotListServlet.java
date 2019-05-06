@@ -89,7 +89,7 @@ public class SlotListServlet extends MCRServlet {
                 : null;
             final String nId = xml.getChild("location") != null
                 ? xml.getChild("location").getAttributeValue("newId") : null;
-            final Integer newId = location != null && nId != null ? new Integer(nId) : null;
+            final Integer newId = location != null && nId != null ? Integer.parseInt(nId) : null;
 
             MCREvent evt = null;
 

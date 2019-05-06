@@ -12,7 +12,8 @@ class IBWRCClient {
     public static CFG_PREFIX: string = "RC";
     public static LOCAL_URI_PREFIX: string = "chrome://IBWRCClient/";
 
-    public static FORMAT_7100: string = "!{0}!{1} @ {2}\n";
+    public static FORMAT_7100: string = "$f{0}$a{1}$d{2}\n";
+    public static FORMAT_7100_MIGRATE: string = "!{0}!{1} @ {2}\n";
     public static FORMAT_4801: string = "4801 Band im Semesterapparat <a href=\"{0}\" target=\"_blank\">{1}</a>.\n";
     public static FORMAT_4802: string = "4802 {0} RC {1}\n";
     public static FORMAT_4802_MIGRATE: string = "4802 {0} SSTold {1}\n";
@@ -501,7 +502,7 @@ class IBWRCClient {
                 ibw.getTitle().lineDown(1, false);
                 ibw.getTitle().insertText(
                     IBWRCClient.FORMAT_4802.format(this.slot.id,
-                        IBWRCClient.FORMAT_7100.format(
+                        IBWRCClient.FORMAT_7100_MIGRATE.format(
                             copy.backup[0].location,
                             copy.backup[0].shelfmark,
                             copy.backup[0].loanIndicator + (copy.backup[0].isBundle ? " \\ c:" + copy.backup[0].bundleEPN : "")
@@ -520,7 +521,13 @@ class IBWRCClient {
                 );
                 if (!presence)
                     ibw.getTitle().insertText(IBWRCClient.FORMAT_4801.format(this.clientURL + "/rc/" + this.slot.id, this.slot.id));
-                ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id, cat7100 + (copy.isBundle ? ":" + bundleEPN : "")));
+                ibw.getTitle().insertText(IBWRCClient.FORMAT_4802.format(this.slot.id,
+                    IBWRCClient.FORMAT_7100_MIGRATE.format(
+                        copy.location,
+                        copy.shelfmark,
+                        copy.loanIndicator + (copy.isBundle ? " \\ c:" + bundleEPN : "")
+                    )
+                ));
             }
 
             // save title
@@ -584,6 +591,11 @@ class IBWRCClient {
                     backup.shelfmark,
                     backup.loanIndicator + (backup.isBundle ? " \\ c" : "")
                 );
+                var cat4802 = IBWRCClient.FORMAT_7100_MIGRATE.format(
+                    backup.location,
+                    backup.shelfmark,
+                    backup.loanIndicator + (backup.isBundle ? " \\ c" : "")
+                );
 
                 var f4802 = IBWRCClient.FORMAT_4802;
                 var slotId = this.slot.id.escapeRegExp();
@@ -595,7 +607,7 @@ class IBWRCClient {
                 if (ibw.titleFindRegExp("4801", new RegExp(IBWRCClient.FORMAT_4801.replaceAll(".", "\.").format(".*" + "\/rc\/" + slotId, slotId).trim() + "|" + IBWRCClient.FORMAT_4801.replaceAll(".", "\.").format(".*" + "\/esa\/" + slotId.replaceAll(".", ":"), slotId.replaceAll(".", ":")).trim()), true, true))
                     ibw.getTitle().deleteToEndOfLine();
 
-                if (ibw.titleFindRegExp("4802", new RegExp(f4802.format(slotId, cat7100.escapeRegExp()).trim()), true, true))
+                if (ibw.titleFindRegExp("4802", new RegExp(f4802.format(slotId, cat4802.escapeRegExp()).trim()), true, true))
                     ibw.getTitle().deleteToEndOfLine();
 
                 if (copy.backup.length == 1) {

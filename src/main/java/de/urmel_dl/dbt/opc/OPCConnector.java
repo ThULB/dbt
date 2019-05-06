@@ -19,10 +19,12 @@ package de.urmel_dl.dbt.opc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -63,9 +65,16 @@ import de.urmel_dl.dbt.opc.utils.PicaCharDecoder;
  *
  */
 public class OPCConnector {
+
+    private static final String GVK_URL = "https://kxp.k10plus.de";
+
+    private static final String GVK_DB = "2.1";
+
     private static final Logger LOGGER = LogManager.getLogger(OPCConnector.class);
 
     private static final Cache<Object, Object> CACHE;
+
+    private static final int MAX_REDIRECTS = 100;
 
     static {
         CACHE = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(10, TimeUnit.MINUTES).build();
@@ -73,7 +82,7 @@ public class OPCConnector {
 
     private String db;
 
-    private URL url = new URL("http://gso.gbv.de/");
+    private URL url = new URL(GVK_URL);
 
     private int maxhits = 500;
 
@@ -112,8 +121,8 @@ public class OPCConnector {
      * @throws MalformedURLException thrown on malformed url
      */
     public OPCConnector() throws MalformedURLException {
-        this.url = new URL("http://gso.gbv.de");
-        this.db = "2.1";
+        this.url = new URL(GVK_URL);
+        this.db = GVK_DB;
     }
 
     /**
@@ -233,7 +242,7 @@ public class OPCConnector {
         IKTList iktList = (IKTList) CACHE.get(generateCacheKey("iktlist"), () -> {
             final URL pageURL = new URL(url + "/XML=1.0/MENUIKTLIST");
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             final IKTList ikts = new IKTList();
 
@@ -286,7 +295,7 @@ public class OPCConnector {
             final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
                 + "&SRT=YOP&SHRTST=" + maxread + "&TRM=" + URLEncoder.encode(trm, "UTF-8"));
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             return parseResult(xml);
         });
@@ -329,7 +338,7 @@ public class OPCConnector {
 
             final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/FAM?PPN=" + PPN + "&SHRTST=" + maxread);
 
-            final Document xml = new SAXBuilder().build(pageURL);
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
 
             return parseResult(xml);
         });
@@ -379,7 +388,7 @@ public class OPCConnector {
 
                     final URL pageURL = new URL(this.url + sessionpart + "/XML=1.0/NXT?FRST=" + pos + "&SHRTST="
                         + this.maxread + "&NORND=ON");
-                    final Document doc = new SAXBuilder().build(pageURL);
+                    final Document doc = new SAXBuilder().build(readContentFromUrl(pageURL));
 
                     entries = doc.getRootElement().getChildren("SET");
                     if (entries.size() == 1) {
@@ -409,6 +418,9 @@ public class OPCConnector {
 
         String ppraw = (String) CACHE.get(generateCacheKey("raw_" + PPN),
             () -> readWebPageFromUrl(url + "/DB=" + db + "/PPN?PLAIN=ON&PPN=" + PPN));
+
+        LOGGER.debug("\n" + PicaCharDecoder.asHexString(ppraw));
+
         return ppraw;
     }
 
@@ -633,17 +645,60 @@ public class OPCConnector {
         return null;
     }
 
+    private HttpURLConnection buildConnection(final URL url) throws IOException {
+        return buildConnection(url, null);
+    }
+
+    private HttpURLConnection buildConnection(final URL url, final String cookies) throws IOException {
+        return buildConnection(url, cookies, 0);
+    }
+
+    private HttpURLConnection buildConnection(final URL url, final String cookies, int numRedirects)
+        throws IOException {
+        LOGGER.debug("Open URL: " + url.toExternalForm());
+
+        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+
+        urlConn.setConnectTimeout(this.connectionTimeout);
+        urlConn.setInstanceFollowRedirects(false);
+        urlConn.setDoInput(true);
+        urlConn.setUseCaches(false);
+
+        if (cookies != null) {
+            urlConn.setRequestProperty("Cookie", cookies);
+        }
+
+        boolean redirect = false;
+
+        int status = urlConn.getResponseCode();
+        if (status != HttpURLConnection.HTTP_OK && (status == HttpURLConnection.HTTP_MOVED_TEMP
+            || status == HttpURLConnection.HTTP_MOVED_PERM
+            || status == HttpURLConnection.HTTP_SEE_OTHER)) {
+            redirect = true;
+        }
+
+        if (redirect) {
+            if (numRedirects <= MAX_REDIRECTS) {
+                URL newUrl = new URL(urlConn.getHeaderField("Location"));
+
+                LOGGER.debug("Redirect to URL : {} ({})", newUrl.toExternalForm(), numRedirects + 1);
+                urlConn = buildConnection(newUrl, urlConn.getHeaderField("Set-Cookie"), numRedirects + 1);
+            } else {
+                throw new ProtocolException("Too many (" + numRedirects + ") redirects.");
+            }
+        }
+
+        return urlConn;
+    }
+
+    private InputStream readContentFromUrl(final URL url) throws IOException {
+        return buildConnection(url).getInputStream();
+    }
+
     private String readWebPageFromUrl(final String urlString) throws IOException {
         String content = "";
 
-        final URL url = new URL(urlString);
-
-        LOGGER.debug("Open URL: " + urlString);
-
-        final URLConnection urlConn = url.openConnection();
-        urlConn.setConnectTimeout(this.connectionTimeout);
-        urlConn.setDoInput(true);
-        urlConn.setUseCaches(false);
+        HttpURLConnection urlConn = buildConnection(new URL(urlString));
 
         final String encoding = (urlConn.getContentEncoding() != null ? urlConn.getContentEncoding()
             : "ISO-8859-1");

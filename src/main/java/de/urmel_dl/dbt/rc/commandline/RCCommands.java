@@ -42,7 +42,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
-import org.mycore.common.content.MCRVFSContent;
+import org.mycore.common.content.MCRPathContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
 import org.mycore.common.xml.MCRXMLParserFactory;
@@ -183,7 +183,7 @@ public class RCCommands extends MCRAbstractCommands {
         }
 
         final Slot slot = new EntityFactory<>(Slot.class)
-            .fromDocument(MCRXMLParserFactory.getParser(false).parseXML(new MCRVFSContent(file.toURI())));
+            .fromDocument(MCRXMLParserFactory.getParser(false).parseXML(new MCRPathContent(file.toPath())));
         final Slot oldSlot = mgr.getSlotById(slot.getSlotId());
 
         boolean update = oldSlot != null;

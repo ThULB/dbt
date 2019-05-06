@@ -423,7 +423,7 @@ public final class SlotManager {
         MCRVersionedMetadata vm;
         try {
             vm = MCRXMLMetadataManager.instance().getVersionedMetaData(slot.getMCRObjectID());
-            return new Long(vm.getLastPresentRevision());
+            return vm.getLastPresentRevision();
         } catch (SVNException | IOException e) {
             return null;
         }

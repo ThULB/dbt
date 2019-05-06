@@ -32,6 +32,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.transformer.MCRXSLTransformer;
@@ -300,8 +302,11 @@ public class OPCResource {
         if (entity == null) {
             return Response.status(Response.Status.NO_CONTENT).build();
         }
-
+        boolean hasSession = MCRSessionMgr.hasCurrentSession();
         try {
+            if (!hasSession) {
+                MCRSessionMgr.unlock();
+            }
             MCRParameterCollector pc = new MCRParameterCollector();
             pc.setParameters(parameters);
 
@@ -315,6 +320,12 @@ public class OPCResource {
             final StreamingOutput so = (OutputStream os) -> e
                 .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+        } finally {
+            if (!hasSession && MCRSessionMgr.hasCurrentSession()) {
+                MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+                MCRSessionMgr.releaseCurrentSession();
+                mcrSession.close(); //created for XSLT transformation
+            }
         }
     }
 }

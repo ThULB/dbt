@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.mycore.mir</groupId>
-    <artifactId>mir-parent</artifactId>
-    <version>2019.02-SNAPSHOT</version>
+    <groupId>org.mycore</groupId>
+    <artifactId>mycore-parent</artifactId>
+    <version>40-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2019.02-SNAPSHOT</version>
+  <version>2019.05-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
 
@@ -33,8 +33,9 @@
 
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
+    <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
-    <maven.compiler.target>${java.target.version}</maven.compiler.target>
+    <mir.version>2019.05-SNAPSHOT</mir.version>
     <node.version>v6.9.2</node.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
@@ -44,7 +45,6 @@
   </properties>
 
   <build>
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -314,7 +314,7 @@
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>datamodel-plugin</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.7</version>
         <executions>
           <execution>
             <goals>
@@ -676,6 +676,13 @@
         <artifactId>javax.json</artifactId>
         <version>1.0.4</version>
         <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mycore.mir</groupId>
+        <artifactId>mir-parent</artifactId>
+        <version>${mir.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.geronimo.specs</groupId>

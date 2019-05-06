@@ -1,0 +1,56 @@
+<xed:template xmlns:xed="http://www.mycore.de/xeditor"
+>
+  <xed:template id="i.agree">
+    <xed:bind xpath="../../../../service">
+      <!-- When publication is new, force to select "I agree": -->
+      <xed:choose>
+        <xed:when test="contains(/mycoreobject/@ID, '_00000000')">
+          <xed:bind xpath="iagree" initially="false"/>
+        </xed:when>
+        <xed:otherwise>
+          <xed:bind xpath="iagree" initially="true"/>
+        </xed:otherwise>
+      </xed:choose>
+
+      <xed:bind xpath="iagree">
+        <div class="form-group {$xed-validation-marker}">
+          <label class="col-md-3 control-label required">
+            <xed:output i18n="editor.contract.publish" />
+          </label>
+          <div class="col-md-6 form-inline">
+            <div style="padding:1ex">
+              <xed:output i18n="editor.contract.text" />
+            </div>
+            <div class="controls form-control">
+              <input id="iagree_true" type="radio" value="true"/>
+              <label style="margin-left:1ex" for="iagree_true">
+                <xed:output i18n="editor.contract.agree" />
+              </label>
+            </div>
+            <div class="controls form-control">
+              <input id="iagree_false" type="radio" value="false"/>
+              <label style="margin-left:1ex" for="iagree_false">
+                <xed:output i18n="editor.contract.disagree" />
+              </label>
+            </div>
+          </div>
+          <xed:validate xpath="/mycoreobject/service/iagree" required="true" matches="true" display="global">
+            <xed:output i18n="editor.contract.validation" />
+          </xed:validate>
+          <xed:cleanup-rule xpath="/mycoreobject/service/iagree" relevant-if="false()"/>
+        </div>
+      </xed:bind>
+      <xed:if test="contains(/mycoreobject/@ID, '_00000000')">
+        <xed:bind xpath="servflags[@class='MCRMetaLangText']/servflag[@type='dbt-version']" initially="{xed:call-java('de.urmel_dl.dbt.common.DBTVersion','getCompleteVersion')}" />
+      </xed:if>
+    </xed:bind>
+  </xed:template>
+  
+  <xed:template id="genres.submit">
+    <xed:include ref="i.agree" />
+    <xed:include ref="cancel.submit" />
+    <xed:include ref="cleanup-rules" />
+    <xed:include ref="validation-rules" />
+  </xed:template>
+  
+</xed:template>

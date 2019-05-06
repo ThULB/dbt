@@ -195,9 +195,27 @@
   <xsl:template name="cleanString">
     <xsl:param name="str" select="''" />
 
+    <xsl:variable name="before" select="substring-before($str, '@')" />
+    <xsl:variable name="after" select="substring-after($str, '@')" />
+
     <xsl:choose>
-      <xsl:when test="substring($str, 1, 1) = '@'">
-        <xsl:value-of select="substring($str, 2)" />
+      <xsl:when test="string-length($before) &gt; 0">
+        <xsl:value-of select="$before" />
+        <xsl:if test="string-length($after) &gt; 0">
+          <xsl:choose>
+            <xsl:when test="substring($after, 1, 1) = '@'">
+              <xsl:call-template name="cleanString">
+                <xsl:with-param name="str" select="substring($after, 2)" />
+              </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="cleanString">
+                <xsl:with-param name="str" select="$after" />
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+
+        </xsl:if>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$str" />
