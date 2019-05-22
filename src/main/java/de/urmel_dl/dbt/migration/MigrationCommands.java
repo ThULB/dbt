@@ -41,7 +41,8 @@ import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
-import org.mycore.datamodel.metadata.MCRMetaDerivateLinkID;
+import org.mycore.datamodel.metadata.MCRMetaEnrichedDerivateLinkIDFactory;
+import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -164,9 +165,8 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
 
         // add the link to metadata
-        MCRMetaDerivateLinkID der = new MCRMetaDerivateLinkID();
-        der.setReference(mcrDerivate.getId(), null, mcrDerivate.getLabel());
-        der.setSubTag("derobject");
+        final MCRMetaEnrichedLinkID der = MCRMetaEnrichedDerivateLinkIDFactory.getInstance()
+            .getDerivateLink(mcrDerivate);
 
         try {
             LOGGER.debug("adding Derivate in data store");
