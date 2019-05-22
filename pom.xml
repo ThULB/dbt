@@ -36,12 +36,12 @@
     <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
     <mir.version>2019.05-SNAPSHOT</mir.version>
-    <node.version>v6.9.2</node.version>
+    <node.version>v8.15.0</node.version>
+    <npm.version>6.5.0</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
-    <yarn.version>v1.13.0</yarn.version>
   </properties>
 
   <build>
@@ -205,22 +205,22 @@
 
         <configuration>
           <nodeVersion>${node.version}</nodeVersion>
-          <yarnVersion>${yarn.version}</yarnVersion>
-          <installDirectory>${settings.localRepository}/node-yarn-${node.version}-${yarn.version}</installDirectory>
+          <npmVersion>${npm.version}</npmVersion>
+          <installDirectory>${settings.localRepository}/node-npm-${node.version}-${npm.version}</installDirectory>
         </configuration>
 
         <executions>
           <execution>
-            <id>install node and yarn</id>
+            <id>install node and npm</id>
             <goals>
-              <goal>install-node-and-yarn</goal>
+              <goal>install-node-and-npm</goal>
             </goals>
           </execution>
 
           <execution>
             <id>webapp-deps</id>
             <goals>
-              <goal>yarn</goal>
+              <goal>npm</goal>
             </goals>
             <phase>process-resources</phase>
             <configuration>
@@ -246,7 +246,7 @@
           <execution>
             <id>rcclient-deps</id>
             <goals>
-              <goal>yarn</goal>
+              <goal>npm</goal>
             </goals>
             <phase>process-resources</phase>
             <configuration>
