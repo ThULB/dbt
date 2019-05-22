@@ -45,6 +45,16 @@
             </p>
           </div>
         </xsl:when>
+        <xsl:when test="@pendingStatus = 'free'">
+          <div class="alert alert-danger" role="alert">
+            <p>
+              <xsl:value-of select="i18n:translate('component.rc.slot.message.delete')" />
+            </p>
+          </div>
+          <xsl:if test="$hasAdminPermission or $hasEditorPermission">
+            <xsl:apply-templates select="entries" />
+          </xsl:if>
+        </xsl:when>
         <xsl:otherwise>
           <xsl:if test="$writePermission and (@pendingStatus = 'validating')">
             <div class="alert alert-warning">
