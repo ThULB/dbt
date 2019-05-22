@@ -125,7 +125,7 @@
                     </xsl:choose>
                   </li>
                 </xsl:if>
-                <xsl:if test="$hasAdminPermission">
+                <xsl:if test="$hasAdminPermission or $isOwner">
                   <xsl:if test="not(contains($RequestURL, '/attendees'))">
                     <li class="divider" />
                     <li role="presentation">
@@ -141,8 +141,6 @@
                       </a>
                     </li>
                   </xsl:if>
-                </xsl:if>
-                <xsl:if test="$hasAdminPermission or $isOwner">
                   <li class="divider" />
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1"
@@ -157,6 +155,17 @@
                       <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
                     </a>
                   </li>
+                  <xsl:if test="@status != 'pending'">
+                    <li role="presentation">
+                      <a role="menuitem" tabindex="-1"
+                        href="{$WebApplicationBaseURL}content/rc/slot.xed?action=deleteConfirm&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                      >
+                        <span class="text-danger">
+                          <xsl:value-of select="i18n:translate('component.rc.slot.delete')" />
+                        </span>
+                      </a>
+                    </li>
+                  </xsl:if>
                 </xsl:if>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($hasEditorPermission) and not($writePermission)">
