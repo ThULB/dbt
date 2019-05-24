@@ -125,7 +125,7 @@
                     </xsl:choose>
                   </li>
                 </xsl:if>
-                <xsl:if test="$hasAdminPermission or $isOwner">
+                <xsl:if test="$hasAdminPermission">
                   <xsl:if test="not(contains($RequestURL, '/attendees'))">
                     <li class="divider" />
                     <li role="presentation">
@@ -141,6 +141,8 @@
                       </a>
                     </li>
                   </xsl:if>
+                </xsl:if>
+                <xsl:if test="$hasAdminPermission or $isOwner">
                   <li class="divider" />
                   <li role="presentation">
                     <a role="menuitem" tabindex="-1"
