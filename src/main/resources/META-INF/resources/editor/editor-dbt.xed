@@ -1,4 +1,4 @@
-<xed:template xmlns:xed="http://www.mycore.de/xeditor"
+<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir"
 >
   <xed:template id="i.agree">
     <xed:bind xpath="../../../../service">
@@ -52,5 +52,28 @@
     <xed:include ref="cleanup-rules" />
     <xed:include ref="validation-rules" />
   </xed:template>
+
+  <xed:template id="oai">
+    <xed:bind xpath="mods:classification[@authority='oai'][@displayLabel='oai']">
+      <div class="form-group {$xed-validation-marker}">
+        <label class="col-md-3 control-label">
+          <xed:output i18n="editor.oai" />
+          :
+        </label>
+        <div class="col-md-6">
+          <select class="form-control form-control-inline">
+            <option value="">
+              <xed:output i18n="mir.select.optional" />
+            </option>
+            <xed:include uri="xslStyle:items2options:classification:editor:-1:children:oai" />
+          </select>
+        </div>
+        <mir:help-pmud help-text="{i18n:editor.oai.help}" />
+      </div>
+    </xed:bind>
+  </xed:template>
+  <xed:modify ref="admin.fields">
+    <xed:include ref="oai" after="related.item.search.of.all.items" />
+  </xed:modify>
   
 </xed:template>
