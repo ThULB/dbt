@@ -31,17 +31,14 @@ import org.mycore.services.queuedjob.MCRJobMaster;
 public class MailJobThreadStarter implements MCRStartupHandler.AutoExecutable {
     private static Logger LOGGER = LogManager.getLogger(MailJobThreadStarter.class);
 
-    @Override
     public String getName() {
         return "Mailer Thread";
     }
 
-    @Override
     public int getPriority() {
         return 0;
     }
 
-    @Override
     public void startUp(ServletContext servletContext) {
         if (servletContext != null && !MCRJobMaster.isRunning(MailJob.class)) {
             LOGGER.info("Starting Mailer thread.");
