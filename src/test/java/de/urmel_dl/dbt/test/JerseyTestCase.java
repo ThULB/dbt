@@ -30,8 +30,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.glassfish.jersey.test.JerseyTest;
-import org.glassfish.jersey.test.spi.TestContainerException;
-import org.glassfish.jersey.test.spi.TestContainerFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;

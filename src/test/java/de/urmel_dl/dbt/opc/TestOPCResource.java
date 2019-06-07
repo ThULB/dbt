@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
