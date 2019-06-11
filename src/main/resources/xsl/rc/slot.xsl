@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:mgr="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager" xmlns:encoder="xalan://java.net.URLEncoder"
-  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="mgr encoder i18n mcrxsl xlink"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink"
+  exclude-result-prefixes="mgr encoder i18n mcrxsl xlink"
 >
 
   <xsl:include href="MyCoReLayout.xsl" />
@@ -16,7 +17,8 @@
     <div id="slot-body">
       <xsl:choose>
         <xsl:when test="mcrxsl:isCurrentUserGuestUser() and not($readPermission)">
-          <xsl:variable name="loginURL" select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )" />
+          <xsl:variable name="loginURL"
+            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )" />
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_access')" />
             <xsl:text> </xsl:text>
@@ -45,7 +47,7 @@
             </p>
           </div>
         </xsl:when>
-        <xsl:when test="@pendingStatus = 'free'">
+        <xsl:when test="(@pendingStatus = 'free') and not($isActive)">
           <div class="alert alert-danger" role="alert">
             <p>
               <xsl:value-of select="i18n:translate('component.rc.slot.message.delete')" />

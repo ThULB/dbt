@@ -286,6 +286,10 @@ public final class SlotManager {
         return false;
     }
 
+    public static boolean isActive(String slotId) {
+        return Optional.ofNullable(instance().getSlotById(slotId)).map(Slot::isActive).orElse(false);
+    }
+
     /**
      * Synchronize the {@link SlotList}.
      */
