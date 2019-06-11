@@ -1,4 +1,4 @@
-<xed:template xmlns:xed="http://www.mycore.de/xeditor" xmlns:mir="http://www.mycore.de/mir">
+<xed:template xmlns:xed="http://www.mycore.de/xeditor">
   <xed:template id="i.agree">
     <xed:bind xpath="../../../../service">
       <!-- When publication is new, force to select "I agree": -->
@@ -68,12 +68,16 @@
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:OAI" />
           </select>
         </div>
-        <mir:help-pmud help-text="{i18n:editor.oai.help}" />
+        <div class="col-md-3">
+          <a tabindex="0" class="btn btn-default info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.oai.help}">
+            <i class="fa fa-info"></i>
+          </a>
+        </div>
       </div>
     </xed:bind>
   </xed:template>
   <xed:modify ref="admin.fields">
-    <xed:include ref="oai" after="related.item.search.of.all.items" />
+    <xed:include ref="oai" after="institutes" />
   </xed:modify>
 
 </xed:template>
