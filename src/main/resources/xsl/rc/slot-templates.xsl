@@ -11,6 +11,7 @@
   <xsl:param name="Mode" select="'view'" />
 
   <xsl:variable name="slotId" select="/slot/@id" />
+  <xsl:variable name="isActive" select="mgr:isActive($slotId)" />
   <xsl:variable name="onlineOnly" select="/slot/@onlineOnly" />
   <xsl:variable name="objectId" select="document(concat('slot:slotId=', $slotId, '&amp;objectId'))/mcrobject" />
 
