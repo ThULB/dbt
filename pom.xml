@@ -35,7 +35,7 @@
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
-    <mir.version>2019.05-SNAPSHOT</mir.version>
+    <mir.version>2019.06.0-SNAPSHOT</mir.version>
     <node.version>v8.15.0</node.version>
     <npm.version>6.5.0</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
