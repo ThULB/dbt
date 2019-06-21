@@ -36,7 +36,7 @@
       </xsl:for-each>
     </xsl:variable>
     <!-- MIR-339 solr query if there is any "wav"/"mp3" file in this object? -->
-    <xsl:variable name="solrQuery" select="concat('+(stream_content_type:audio/x-wav) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
+    <xsl:variable name="solrQuery" select="concat('+(stream_content_type:audio/x-wav OR stream_content_type:audio/mpeg) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
     <xsl:if test="(mcrsolr:getNumFound($solrQuery) &gt; 0) or (count(xalan:nodeset($encDerivates)/der/file) &gt; 0)">
       <xsl:variable name="completeQuery" select="concat('solr:q=', encoder:encode($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')" />
       <xsl:variable name="solrResult" select="document($completeQuery)" /> <!-- [string-length(str[@name='groupValue']/text()) &gt; 0] -->
