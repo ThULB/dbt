@@ -1,10 +1,9 @@
-.mir-player {
-  div.panel-body {
-    padding: 0;
-  }
+$icon-font-path:"../../node_modules/video.js/dist/font/";
+//@import "~video.js/src/css/video-js.scss";
 
-  .video-js {
+.video-js {
     color: #000;
+    background-color: rgba(0, 0, 0, 0.5);
     &:focus {
       outline-style: none ! important;
       outline-color: transparent ! important;
@@ -16,11 +15,14 @@
     }
 
     .vjs-big-play-button {
-      background-color: transparentize($brand-primary, 0.8);
+      background-color: transparentize($primary, 0.2);
       border-color: #fff;
       left: 50%;
       margin: -0.75em 0 0 -1.5em;
       top: 50%;
+      &:before {
+        color: #fff;
+      }
       > .vjs-icon-placeholder {
         color: #fff;
       }
@@ -31,7 +33,7 @@
       position: absolute;
       bottom: 0px;
       .vjs-icon-placeholder:hover {
-        color: $brand-primary;
+        color: $primary;
       }
     }
 
@@ -46,14 +48,14 @@
     .vjs-menu {
       li.vjs-menu-item {
         &:hover {
-          background-color: transparentize($brand-primary, 0.2);
-          color: $brand-primary;
+          background-color: transparentize($primary, 0.8);
+          color: $primary;
         }
       }
     }
 
     .vjs-slider {
-      background: transparentize(#808080, 0.6);
+      background: transparentize(#808080, 0.4);
     }
 
     .vjs-play-progress , .vjs-volume-level {
@@ -61,8 +63,6 @@
     }
 
     .vjs-load-progress , .vjs-load-progress div {
-      background: transparentize($brand-primary, 0.4);
+      background: transparentize($primary, 0.6);
     }
   }
-}
-

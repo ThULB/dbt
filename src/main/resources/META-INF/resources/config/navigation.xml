@@ -16,6 +16,7 @@
     <label xml:lang="de">Kopfzeilen-Menü</label>
     <label xml:lang="en">Header menu</label>
     <item href="/content/top/faq.xml" type="intern">
+      <icon>fa fa-question-circle</icon>
       <label xml:lang="de">FAQ</label>
       <label xml:lang="en">FAQ</label>
     </item>
@@ -65,6 +66,7 @@
   <!-- search menu  -->
     <label xml:lang="de">Blättern</label>
     <label xml:lang="en">Browse</label>
+    <icon>fa fa-sitemap</icon>
     <item href="/content/browse/institutes.xml" type="intern">
       <label xml:lang="de">Einrichtungen</label>
       <label xml:lang="en">Institutions</label>
@@ -121,6 +123,7 @@
   <menu id="user">
     <label xml:lang="de">Nutzermenü</label>
     <label xml:lang="en">User menu</label>
+    <icon>fa fa-tasks</icon>
     <group id="contentadmin">
       <item href="/modules/classeditor/classificationEditor.xml?XSL.classeditor.showId=true" type="extern">
         <label xml:lang="de">Klassifikationseditor</label>
