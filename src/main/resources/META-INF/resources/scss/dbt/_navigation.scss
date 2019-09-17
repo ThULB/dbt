@@ -312,6 +312,27 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 }
 
 // ---------------------------------------------------
+// breadcrumb styles
+// ---------------------------------------------------
+.breadcrumb {
+  .dropdown-item {
+    a {
+      color: $body-color;
+    }
+          
+    &:hover, &:focus {
+      a {
+        color: darken($body-color, 40%);
+      }
+    }
+          
+    &.active a, &:active a {
+      color: #fff;
+    }
+  }
+}
+
+// ---------------------------------------------------
 // searchbar styles
 // ---------------------------------------------------
 .searchbar {
