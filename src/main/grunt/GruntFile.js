@@ -33,6 +33,11 @@ module.exports = function(grunt) {
 							src : [ "./css/**", "./img/**", "./js/*min.js" ]
 						}, {
 							expand : true,
+							cwd : "./node_modules/@fortawesome/fontawesome-free",
+							dest : "<%=globalConfig.assetsDirectory%>/fontawesome-free",
+							src : [ "./scss/**", "./webfonts/**" ]
+						}, {
+							expand : true,
 							cwd : "./node_modules/summernote/dist",
 							dest : "<%=globalConfig.assetsDirectory%>/summernote",
 							src : [ "./font/**", "./lang/**" ]

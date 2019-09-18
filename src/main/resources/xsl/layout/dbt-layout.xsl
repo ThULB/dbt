@@ -85,7 +85,6 @@
   <!-- CSS Links -->
 
   <xsl:template name="layout.cssLinks">
-    <link href="{$WebApplicationBaseURL}assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
 
