@@ -73,7 +73,7 @@
         <col align="center" valign="top">
           <div class="btn-group btn-group-xs">
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit" title="{i18n:translate('component.rc.slot.edit')}">
-              <span class="glyphicon glyphicon-pencil" />
+              <i class="fas fa-edit" />
             </a>
           </div>
         </col>
@@ -84,12 +84,12 @@
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
               title="{i18n:translate('component.rc.slot.edit')}"
             >
-              <span class="glyphicon glyphicon-pencil" />
+              <i class="fas fa-edit" />
             </a>
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
               title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
             >
-              <span class="glyphicon glyphicon-lock" />
+              <i class="fas fa-lock" />
             </a>
           </div>
         </col>
@@ -98,7 +98,7 @@
             <xsl:value-of select="@id" />
           </a>
           <xsl:if test="@status = 'new'">
-            <span class="label label-danger pull-right">
+            <span class="label label-danger float-right">
               <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
             </span>
           </xsl:if>
