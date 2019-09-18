@@ -47,8 +47,12 @@
   margin-top: -5px;
 }
 
-// Bootstrap - cards
+// Bootstrap - button
+.btn-secondary {
+  border-color: #ccc;
+}
 
+// Bootstrap - cards
 .card {
   .card-header {
     -webkit-hyphens: inherit;
