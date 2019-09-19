@@ -85,6 +85,7 @@
   <!-- CSS Links -->
 
   <xsl:template name="layout.cssLinks">
+    <link href="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.css" rel="stylesheet" />
     <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
 
@@ -113,6 +114,7 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.bundle.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
