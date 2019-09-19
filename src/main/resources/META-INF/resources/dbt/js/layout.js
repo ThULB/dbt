@@ -137,7 +137,7 @@ var initWaves = function () {
 	Waves.attach(".navbar-toggler", ["waves-block", "waves-light"]);
 	Waves.attach("a.nav-link", ["waves-block", "waves-light"]);
 	Waves.attach(".btn.btn-default, .btn.btn-secondary", ["waves-block"]);
-	Waves.attach(".btn.btn-primary", ["waves-block", "waves-light"]);
+	Waves.attach(".btn.btn-primary, .btn.btn-danger, .btn.btn-warning", ["waves-block", "waves-light"]);
 	Waves.attach(".dropdown-menu > .dropdown-item", ["waves-block", "waves-light"]);
 
 	Waves.init({
