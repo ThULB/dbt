@@ -35,35 +35,34 @@
           </xsl:otherwise>
         </xsl:choose>
       </a>
-      <ul class="dropdown-menu {$dropdownClass}" role="menu" aria-labelledby="{$menuId}">
+      <div class="dropdown-menu {$dropdownClass}" role="menu" aria-labelledby="{$menuId}">
         <xsl:apply-templates select="item|group">
           <xsl:with-param name="class" select="'dropdown-item'" />
         </xsl:apply-templates>
-      </ul>
+      </div>
     </li>
   </xsl:template>
 
   <xsl:template match="/navigation//group[@id and item]">
     <xsl:param name="rootNode" select="." />
     <xsl:if test="name(preceding-sibling::*[1])='item'">
-      <li role="presentation" class="dropdown-divider" />
+      <div role="presentation" class="dropdown-divider" />
     </xsl:if>
     <xsl:if test="label">
-      <li role="presentation" class="dropdown-header">
+      <div class="dropdown-header">
         <xsl:apply-templates select="." mode="linkText" />
-      </li>
+      </div>
     </xsl:if>
     <xsl:apply-templates select="item">
       <xsl:with-param name="class" select="'dropdown-item'" />
     </xsl:apply-templates>
     <xsl:if test="position() != last()">
-      <li role="presentation" class="dropdown-divider" />
+      <div role="presentation" class="dropdown-divider" />
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="/navigation//item[@href]">
-    <xsl:param name="class" select="''" />
-    <xsl:param name="linkClass" select="''" />
+    <xsl:param name="class" select="'dropdown-item'" />
     <xsl:param name="showIcon" select="false()" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
     <xsl:param name="url">
@@ -81,7 +80,7 @@
     </xsl:param>
     <xsl:choose>
       <xsl:when test="string-length($url) &gt; 0">
-        <li>
+        <a href="{$url}">
           <xsl:attribute name="class">
             <xsl:value-of select="$class" />
             <xsl:if test="$active">
@@ -91,20 +90,19 @@
               <xsl:value-of select="'active'" />
             </xsl:if>
           </xsl:attribute>
-          <a class="{$linkClass}" href="{$url}">
-            <xsl:choose>
-              <xsl:when test="$showIcon and string-length(icon) &gt; 0">
-                <i class="{icon}" aria-hidden="true"></i>
-                <span class="d-none d-xl-inline ml-1">
-                  <xsl:apply-templates select="." mode="linkText" />
-                </span>
-              </xsl:when>
-              <xsl:otherwise>
+
+          <xsl:choose>
+            <xsl:when test="$showIcon and string-length(icon) &gt; 0">
+              <i class="{icon}" aria-hidden="true"></i>
+              <span class="d-none d-xl-inline ml-1">
                 <xsl:apply-templates select="." mode="linkText" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </a>
-        </li>
+              </span>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="." mode="linkText" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
       </xsl:when>
       <xsl:otherwise>
         <xsl:comment>

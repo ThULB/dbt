@@ -343,10 +343,11 @@
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
         <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
       </xsl:apply-templates>
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
-        <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
-        <xsl:with-param name="linkClass" select="'nav-link'" />
-      </xsl:apply-templates>
+      <li class="nav-item d-xs-inline d-sm-inline d-md-none">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
+          <xsl:with-param name="class" select="'nav-link'" />
+        </xsl:apply-templates>
+      </li>
       <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
           <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
@@ -367,11 +368,12 @@
         <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
         <xsl:with-param name="showIcon" select="true()" />
       </xsl:apply-templates>
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
-        <xsl:with-param name="class" select="'d-none d-md-inline'" />
-        <xsl:with-param name="linkClass" select="'nav-link'" />
-        <xsl:with-param name="showIcon" select="true()" />
-      </xsl:apply-templates>
+      <li class="nav-item d-none d-md-inline">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
+          <xsl:with-param name="class" select="'nav-link'" />
+          <xsl:with-param name="showIcon" select="true()" />
+        </xsl:apply-templates>
+      </li>
 
       <xsl:choose>
         <xsl:when test="mcrxsl:isCurrentUserGuestUser()">
@@ -454,7 +456,13 @@
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <ul class="nav-footer">
-            <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='footer']//item" />
+            <xsl:for-each select="$loaded_navigation_xml/menu[@id='footer']//item">
+              <li>
+                <xsl:apply-templates select=".">
+                  <xsl:with-param name="class" select="''" />
+                </xsl:apply-templates>
+              </li>
+            </xsl:for-each>
           </ul>
           <p class="info mb-2">
             <xsl:value-of select="i18n:translate('dbt.copyright')" />
