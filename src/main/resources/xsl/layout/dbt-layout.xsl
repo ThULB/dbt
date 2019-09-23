@@ -86,7 +86,7 @@
 
   <xsl:template name="layout.cssLinks">
     <link href="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.css" rel="stylesheet" />
-    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
+    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
 
     <xsl:if test="$include.HTML.Head.CSS">
