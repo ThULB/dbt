@@ -466,9 +466,9 @@
           </ul>
           <p class="info mb-2">
             <xsl:value-of select="i18n:translate('dbt.copyright')" />
-          </p>
-          <p class="info" title="{concat('MIR ',mirver:getCompleteVersion())}">
-            <xsl:value-of select="concat('Version ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')')" />
+            <i class="fas fa-info-circle text-info ml-2 pt-1" data-toggle="tooltip" data-html="true" data-placement="top"
+              title="{concat('DBT: ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')', '&lt;br&gt;MIR: ',mirver:getCompleteVersion())}"
+            ></i>
           </p>
         </div>
 
