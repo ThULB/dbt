@@ -241,8 +241,8 @@
 
   <xed:template id="location">
     <xed:bind xpath="location">
-      <div class="form-group">
-        <label class="col-md-3 control-label" for="locationSelect">
+      <div class="form-group row">
+        <label class="col-md-3 col-form-label text-md-right" for="locationSelect">
           <xed:output i18n="component.rc.slot.location" />
         </label>
         <div class="col-md-7">
@@ -268,11 +268,11 @@
 
   <xed:template id="changeLocation">
     <xed:bind xpath="location">
-      <div class="form-group {$xed-validation-marker}">
-        <label class="col-md-3 control-label" for="locationSelect">
+      <div class="form-group row {$xed-validation-marker}">
+        <label class="col-md-3 col-form-label text-md-right" for="locationSelect">
           <xed:output i18n="component.rc.slot.location" />
         </label>
-        <div class="col-md-7 text-ellipsis">
+        <div class="col-md-7 text-truncate">
           <mir:template name="submitButton" id="locationSelect" i18n="component.rc.button.select" target="subselect"
             href="RCSlotLocationServlet?categID=RCLOC&amp;action=chooseCategory" />
           <xed:choose>

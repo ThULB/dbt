@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:mgr="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager" xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
-  xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan"
-  exclude-result-prefixes="mgr acl encoder i18n mcrxsl xlink xalan"
+<xsl:stylesheet version="1.0" xmlns:mgr="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
+  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="mgr acl encoder i18n mcrxsl xlink xalan"
 >
 
   <xsl:param name="CurrentLang" />
@@ -64,7 +64,7 @@
         </xsl:otherwise>
       </xsl:choose>
       <xsl:if test="position() != last()">
-        <xsl:text disable-output-escaping="yes">&amp;nbsp;&amp;raquo;&amp;nbsp;</xsl:text>
+        <xsl:text disable-output-escaping="yes"> &amp;raquo; </xsl:text>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -85,113 +85,98 @@
 
   <xsl:template match="slot" mode="slotHead">
     <div id="slot-head">
-      <h1>
-        <xsl:if test="contains($RequestURL, '/attendees')">
-          <xsl:value-of select="i18n:translate('component.rc.attendees')" />
-          <xsl:text> - </xsl:text>
-        </xsl:if>
-        <xsl:value-of select="title" />
+      <div class="d-flex flex-row justify-content-between align-items-start">
+        <h1>
+          <xsl:if test="contains($RequestURL, '/attendees')">
+            <xsl:value-of select="i18n:translate('component.rc.attendees')" />
+            <xsl:text> - </xsl:text>
+          </xsl:if>
+          <xsl:value-of select="title" />
+        </h1>
         <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and ($readPermission or $writePermission)">
-          <div class="dropdown pull-right">
-            <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
-              <span class="glyphicon glyphicon-cog" aria-hidden="true" />
-              <span class="caret" />
+          <div class="dropdown mt-2">
+            <button class="btn btn-default dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-cogs" aria-hidden="true" />
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="rcOptionMenu">
+            <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$writePermission and (@status = 'archived')">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1"
-                    href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
-                  >
-                    <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
-                  </a>
-                </li>
+                <a class="dropdown-item" role="menuitem" tabindex="-1"
+                  href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                >
+                  <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
+                </a>
               </xsl:if>
               <xsl:if test="$hasAdminPermission or $hasEditorPermission or ($writePermission and (@status != 'archived'))">
                 <xsl:if
                   test="(($hasAdminPermission or $hasEditorPermission) or ($writePermission and (@status != 'archived'))) and not(contains($RequestURL, '/attendees'))"
                 >
-                  <li role="presentation">
-                    <xsl:choose>
-                      <xsl:when test="$effectiveMode = 'view'">
-                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
-                        </a>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                          <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
-                        </a>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </li>
+                  <xsl:choose>
+                    <xsl:when test="$effectiveMode = 'view'">
+                      <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
+                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
+                      </a>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
+                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
+                      </a>
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:if>
                 <xsl:if test="$hasAdminPermission">
                   <xsl:if test="not(contains($RequestURL, '/attendees'))">
-                    <li class="divider" />
-                    <li role="presentation">
-                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}/attendees">
-                        <xsl:value-of select="i18n:translate('component.rc.attendees')" />
-                      </a>
-                    </li>
+                    <div class="dropdown-divider" />
+                    <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}/attendees">
+                      <xsl:value-of select="i18n:translate('component.rc.attendees')" />
+                    </a>
                   </xsl:if>
                   <xsl:if test="contains($RequestURL, '/attendees')">
-                    <li role="presentation">
-                      <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.show.entries')" />
-                      </a>
-                    </li>
+                    <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
+                      <xsl:value-of select="i18n:translate('component.rc.slot.show.entries')" />
+                    </a>
                   </xsl:if>
                 </xsl:if>
                 <xsl:if test="$hasAdminPermission or $isOwner">
-                  <li class="divider" />
-                  <li role="presentation">
-                    <a role="menuitem" tabindex="-1"
-                      href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
-                    >
-                      <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
-                    </a>
-                  </li>
-                  <li class="divider" />
-                  <li role="presentation">
-                    <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}">
-                      <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
-                    </a>
-                  </li>
+                  <div class="dropdown-divider" />
+                  <a class="dropdown-item" role="menuitem" tabindex="-1"
+                    href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                  >
+                    <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                  </a>
+                  <div class="dropdown-divider" />
+                  <a class="dropdown-item" role="menuitem" tabindex="-1"
+                    href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                  >
+                    <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                  </a>
                   <xsl:if test="@status != 'pending'">
-                    <li role="presentation">
-                      <a role="menuitem" tabindex="-1"
-                        href="{$WebApplicationBaseURL}content/rc/slot.xed?action=deleteConfirm&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
-                      >
-                        <span class="text-danger">
-                          <xsl:value-of select="i18n:translate('component.rc.slot.delete')" />
-                        </span>
-                      </a>
-                    </li>
+                    <a class="dropdown-item" role="menuitem" tabindex="-1"
+                      href="{$WebApplicationBaseURL}content/rc/slot.xed?action=deleteConfirm&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                    >
+                      <span class="text-danger">
+                        <xsl:value-of select="i18n:translate('component.rc.slot.delete')" />
+                      </span>
+                    </a>
                   </xsl:if>
                 </xsl:if>
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($hasEditorPermission) and not($writePermission)">
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1"
-                    href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}"
-                  >
-                    <xsl:value-of select="i18n:translate('component.rc.slot.change_accesskey')" />
-                  </a>
-                </li>
+                <a class="dropdown-item" role="menuitem" tabindex="-1"
+                  href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}"
+                >
+                  <xsl:value-of select="i18n:translate('component.rc.slot.change_accesskey')" />
+                </a>
               </xsl:if>
               <xsl:if test="$hasAdminPermission">
-                <li class="divider" />
-                <li role="presentation">
-                  <a role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
-                    <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
-                  </a>
-                </li>
+                <div class="dropdown-divider" />
+                <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
+                  <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
+                </a>
               </xsl:if>
-            </ul>
+            </div>
           </div>
         </xsl:if>
-      </h1>
+      </div>
       <div class="info">
         <xsl:variable name="date">
           <xsl:choose>

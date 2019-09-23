@@ -9,19 +9,15 @@
       <xed:cancel url="/rc/{$slotId}?XSL.Mode=edit" />
 
       <xed:bind xpath="entry">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">
-              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="title" />
-            </h3>
-          </div>
-          <div class="panel-body">
+        <div class="card shadow-sm rounded my-2">
+          <h5 class="card-header">
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="title" />
+          </h5>
+          <div class="card-body">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="editor" />
           </div>
-          <div class="panel-footer clearfix">
-            <div class="pull-right">
-              <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="buttons" />
-            </div>
+          <div class="card-footer d-flex justify-content-end align-items-start">
+            <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/entry-includes.xed" ref="buttons" />
           </div>
         </div>
       </xed:bind>
