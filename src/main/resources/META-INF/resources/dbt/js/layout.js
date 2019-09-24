@@ -144,7 +144,7 @@ var initWaves = function () {
 		duration: 500,
 		delay: 200
 	});
-}
+};
 
 /**
  * The Main on DOM ready.
