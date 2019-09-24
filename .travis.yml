@@ -7,6 +7,6 @@ cache:
     - $HOME/.m2/repository
 env:
   global:
-    - MAVEN_OPTS="-Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"    
+    - JAVA_OPTS="-Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2"    
 after_success:
   - mvn com.gavinmogan:codacy-maven-plugin:coverage -DcoverageReportFile=target/site/jacoco/jacoco.xml -DprojectToken=${CODACY_PROJECT_TOKEN} -DapiToken=${CODACY_API_TOKEN}
