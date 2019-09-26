@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
 >
 
   <!-- include custom templates for supported objecttypes -->
@@ -74,40 +75,52 @@
   <!-- ==== MAIN LAYOUT =================================================== -->
 
   <xsl:template match="entries">
-    <xsl:apply-templates select="xalan:nodeset($groupedEntries)" mode="toc" />
-    <xsl:apply-templates select="xalan:nodeset($groupedEntries)//group" />
+    <div class="d-xl-flex flex-xl-row-reverse">
+      <xsl:apply-templates select="xalan:nodeset($groupedEntries)" mode="toc" />
+      <div class="flex-xl-column flex-grow-1 mw-xl-75 minw-0">
+        <xsl:apply-templates select="xalan:nodeset($groupedEntries)//group" />
+      </div>
+    </div>
   </xsl:template>
 
   <xsl:template match="entries" mode="toc">
     <xsl:if test="count(group/entry/headline) &gt; 0">
-      <div class="slot-toc">
-        <h2>
-          <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
-        </h2>
-        <ul>
-          <xsl:for-each select="group/entry/headline">
-            <li>
-              <a href="{concat('#', ../@id)}">
+      <div class="flex-xl-column mb-2 ml-xl-2 minw-25">
+        <div class="slot-toc card">
+          <h5 class="card-header">
+            <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
+          </h5>
+          <div class="list-group list-group-flush" id="slot-toc">
+            <xsl:for-each select="group/entry/headline">
+              <a class="list-group-item list-group-item-action" href="{concat('#', ../@id)}">
                 <xsl:value-of select="." />
               </a>
-            </li>
-          </xsl:for-each>
-        </ul>
+            </xsl:for-each>
+          </div>
+        </div>
       </div>
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="group">
-    <div class="slot-section">
+    <div class="slot-section card mb-2">
       <xsl:choose>
         <xsl:when test="$effectiveMode = 'edit'">
-          <xsl:apply-templates select="entry" mode="edit" />
-          <xsl:call-template name="addNewEntry">
-            <xsl:with-param name="lastEntry" select=".//entry[last()]/@id" />
-          </xsl:call-template>
+          <xsl:apply-templates select="entry/headline" mode="edit" />
+          <div class="card-body p-0">
+            <xsl:apply-templates select="entry" mode="edit" />
+          </div>
+          <div class="card-footer">
+            <xsl:call-template name="addNewEntry">
+              <xsl:with-param name="lastEntry" select=".//entry[last()]/@id" />
+            </xsl:call-template>
+          </div>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:apply-templates select="entry" mode="view" />
+          <xsl:apply-templates select="entry/headline" mode="view" />
+          <div class="card-body p-0">
+            <xsl:apply-templates select="entry" mode="view" />
+          </div>
         </xsl:otherwise>
       </xsl:choose>
     </div>
@@ -118,13 +131,14 @@
   <xsl:template name="addNewEntry">
     <xsl:param name="lastEntry" select="''" />
 
-    <div class="new-entry-actions">
+    <div class="new-entry-actions d-flex flex-column flex-md-row justify-content-between">
       <b>
         <xsl:value-of select="i18n:translate('component.rc.slot.entry.add')" />
       </b>
-      <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
-        <a>
-          <xsl:attribute name="href">
+      <div>
+        <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
+          <a>
+            <xsl:attribute name="href">
             <xsl:choose>
               <xsl:when test="@name = 'file'">
                 <xsl:value-of select="concat($WebApplicationBaseURL, 'content/rc/entry-file.xml')" />
@@ -138,63 +152,112 @@
               <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
             </xsl:if>
           </xsl:attribute>
-          <xsl:value-of select="i18n:translate(i18n/@single)" />
-        </a>
-        <xsl:if test="position() != last()">
-          <xsl:text> | </xsl:text>
-        </xsl:if>
-      </xsl:for-each>
+            <xsl:value-of select="i18n:translate(i18n/@single)" />
+          </a>
+          <xsl:if test="position() != last()">
+            <xsl:text> | </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </div>
     </div>
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|file|opcrecord" mode="view" />
+    <div class="media">
+      <xsl:apply-templates select="text|webLink|mcrobject|file|opcrecord" mode="view" />
+    </div>
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
-    <xsl:apply-templates select="headline|text|webLink|mcrobject|file|opcrecord" mode="edit" />
+    <div class="media">
+      <xsl:apply-templates select="text|webLink|mcrobject|file|opcrecord" mode="edit" />
+    </div>
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="view">
-    <div class="entry-{name()}">
+  <xsl:template match="headline" mode="view">
+    <div id="{../@id}">
+      <xsl:attribute name="class">
+        <xsl:value-of select="concat('entry-', name(), ' card-header ')" />
+        <xsl:apply-templates select="." mode="extraClasses" />
+      </xsl:attribute>
       <xsl:apply-templates select="." />
     </div>
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="edit">
-    <div class="entry-{name()}" id="{../@id}">
-      <xsl:apply-templates select="." mode="extraAttributes" />
-      <xsl:apply-templates select="." mode="editButtons" />
+  <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="view">
+    <div>
+      <xsl:attribute name="class">
+        <xsl:value-of select="concat('entry-', name(), ' media-body mw-100 p-2 ')" />
+        <xsl:apply-templates select="." mode="extraClasses" />
+      </xsl:attribute>
       <xsl:apply-templates select="." />
+    </div>
+  </xsl:template>
+
+  <xsl:template match="headline" mode="edit">
+    <div id="{../@id}">
+      <xsl:attribute name="class">
+        <xsl:value-of select="concat('entry-', name(), ' card-header pr-2 ')" />
+        <xsl:apply-templates select="." mode="extraClasses" />
+      </xsl:attribute>
+      <xsl:apply-templates select="." mode="extraAttributes" />
+      <div class="d-flex justify-content-between">
+        <xsl:apply-templates select="." />
+        <xsl:apply-templates select="." mode="editButtons" />
+      </div>
       <xsl:apply-templates select="." mode="infoLine" />
     </div>
+  </xsl:template>
+
+  <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="edit">
+    <div id="{../@id}">
+      <xsl:attribute name="class">
+        <xsl:value-of select="concat('entry-', name(), ' media-body mw-100 p-2 ')" />
+        <xsl:apply-templates select="." mode="extraClasses" />
+      </xsl:attribute>
+      <xsl:apply-templates select="." mode="extraAttributes" />
+      <div class="d-flex justify-content-between">
+        <xsl:apply-templates select="." />
+        <xsl:apply-templates select="." mode="editButtons" />
+      </div>
+      <xsl:apply-templates select="." mode="infoLine" />
+    </div>
+  </xsl:template>
+
+  <xsl:template match="*" mode="extraClasses">
   </xsl:template>
 
   <xsl:template match="*" mode="extraAttributes">
   </xsl:template>
 
   <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="editButtons">
-    <div class="entry-buttons">
-      <div class="btn-group">
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" title="{i18n:translate('component.rc.slot.entry.edit')}">
-          <span class="glyphicon glyphicon-pencil" />
+    <div class="ml-2 entry-buttons">
+      <div class="btn-group" role="group">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
+        >
+          <i class="fas fa-pencil-alt"></i>
         </a>
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" title="{i18n:translate('component.rc.slot.entry.delete')}">
-          <span class="glyphicon glyphicon-trash text-danger" />
+        <a class="btn btn-danger"
+          href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
+        >
+          <i class="far fa-trash-alt"></i>
         </a>
-        <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
-          <span class=" entry-mover glyphicon glyphicon-screenshot " />
-        </a>
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
+          <i class="fas fa-arrows-alt"></i>
+        </button>
       </div>
     </div>
   </xsl:template>
 
   <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="infoLine">
     <xsl:if test="$hasAdminPermission">
-      <div class="entry-infoline">
-        <xsl:value-of select="i18n:translate('component.rc.slot.entry.infoLine', concat(../@id, ';', ../date[@type='created'], ';', ../date[@type='modified']))"
+      <small class="entry-infoline text-muted">
+        <xsl:value-of
+          select="i18n:translate('component.rc.slot.entry.infoLine', concat(../@id, ';', ../date[@type='created'], ';', ../date[@type='modified']))"
           disable-output-escaping="yes" />
-      </div>
+      </small>
     </xsl:if>
   </xsl:template>
   
@@ -202,19 +265,18 @@
   
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
-    <a id="{../@id}" />
-    <h2>
+    <h5 class="my-0">
       <xsl:value-of select="." />
-    </h2>
+    </h5>
   </xsl:template>
   
   <!-- TextEntry -->
   <xsl:template match="text">
     <xsl:choose>
       <xsl:when test="@format = 'plain'">
-        <div>
+        <p class="mb-0 text-justify">
           <xsl:value-of select="." />
-        </div>
+        </p>
       </xsl:when>
       <xsl:when test="@format = 'preformatted'">
         <pre class="pre-scrollable">
@@ -239,17 +301,18 @@
   
   <!-- WebLinkEntry -->
   <xsl:template match="webLink">
-    <a href="{@url}" target="_blank">
-      <xsl:choose>
-        <xsl:when test="string-length(.) &gt; 0">
-          <xsl:value-of select="." />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="@url" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </a>
-    <br />
+    <div class="d-flex flex-row flex-fill">
+      <a href="{@url}" target="_blank">
+        <xsl:choose>
+          <xsl:when test="string-length(.) &gt; 0">
+            <xsl:value-of select="." />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="@url" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </a>
+    </div>
   </xsl:template>
   
   <!-- MCRObjectEntry -->
@@ -265,7 +328,7 @@
   
   <!-- File -->
   <xsl:template match="file">
-    <h4>
+    <div class="d-flex flex-row flex-fill justify-content-between">
       <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
         <xsl:choose>
           <xsl:when test="string-length(.) &gt; 0">
@@ -276,67 +339,70 @@
           </xsl:otherwise>
         </xsl:choose>
       </a>
-      <xsl:if test="not($hasAdminPermission)">
-        <small>
-          <xsl:text> - </xsl:text>
-          <xsl:call-template name="formatFileSize">
-            <xsl:with-param name="size" select="@size" />
-          </xsl:call-template>
-        </small>
-      </xsl:if>
-    </h4>
-    <xsl:if test="$hasAdminPermission">
-      <p>
-        <xsl:text>SHA-1: </xsl:text>
-        <code>
-          <xsl:value-of select="@hash" />
-        </code>
-        <xsl:text> - </xsl:text>
+      <span class="text-nowrap text-muted">
         <xsl:call-template name="formatFileSize">
           <xsl:with-param name="size" select="@size" />
         </xsl:call-template>
-      </p>
-    </xsl:if>
+      </span>
+    </div>
   </xsl:template>
   
   <!-- OPCRecordEntry -->
 
   <xsl:template match="opcrecord" mode="editButtons">
-    <div class="entry-buttons">
+    <div class="ml-2 entry-buttons">
       <div class="btn-group">
-        <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}" title="{i18n:translate('component.rc.slot.entry.edit')}">
-          <span class="glyphicon glyphicon-pencil" />
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
+        >
+          <i class="fas fa-pencil-alt"></i>
         </a>
         <xsl:if test="$hasAdminPermission or (string-length(@deleted) = 0) or (@deleted != 'true')">
-          <a href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete" title="{i18n:translate('component.rc.slot.entry.delete')}">
-            <span class="glyphicon glyphicon-trash text-danger" />
+          <a class="btn btn-danger"
+            href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
+            title="{i18n:translate('component.rc.slot.entry.delete')}"
+          >
+            <i class="far fa-trash-alt"></i>
           </a>
         </xsl:if>
-        <a href="#" title="{i18n:translate('component.rc.slot.entry.move')}">
-          <span class=" entry-mover glyphicon glyphicon-screenshot " />
-        </a>
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
+          <i class="fas fa-arrows-alt"></i>
+        </button>
       </div>
     </div>
   </xsl:template>
 
-  <xsl:template match="opcrecord">
+  <xsl:template match="opcrecord" mode="extraClasses">
     <xsl:if test="$writePermission or (($onlineOnly = 'false') and (string-length(@epn) &gt; 0)) or ($onlineOnly = 'true')">
-      <xsl:apply-templates select="pica:record" mode="isbd" />
-      <xsl:if test="string-length(comment) &gt; 0">
-        <span class="comment">
-          <xsl:value-of select="comment" />
-        </span>
-      </xsl:if>
       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)">
-        <span class="label label-warning">
-          <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.release_required')" />
-        </span>
+        <xsl:text>border-left border-warning</xsl:text>
       </xsl:if>
       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (@deleted = 'true')">
-        <span class="label label-danger">
-          <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.deletion_mark')" />
-        </span>
+        <xsl:text>border-left border-danger</xsl:text>
       </xsl:if>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="opcrecord">
+    <xsl:if test="$writePermission or (($onlineOnly = 'false') and (string-length(@epn) &gt; 0)) or ($onlineOnly = 'true')">
+      <div>
+        <xsl:apply-templates select="pica:record" mode="isbd" />
+        <xsl:if test="string-length(comment) &gt; 0">
+          <span class="comment">
+            <xsl:value-of select="comment" />
+          </span>
+        </xsl:if>
+      </div>
+<!--       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)"> -->
+<!--         <span class="label label-warning"> -->
+<!--           <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.release_required')" /> -->
+<!--         </span> -->
+<!--       </xsl:if> -->
+<!--       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (@deleted = 'true')"> -->
+<!--         <span class="label label-danger"> -->
+<!--           <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.deletion_mark')" /> -->
+<!--         </span> -->
+<!--       </xsl:if> -->
     </xsl:if>
   </xsl:template>
 

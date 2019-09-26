@@ -15,16 +15,29 @@
   }
 }
 
+#rcOptionMenu + div {
+  z-index: 2000;
+}
+
 .slot-body {
   .entry-text {
+    &[format="html"] {
+      @include hyphens();
+    }
+
     img {
       max-width: 100%;
     }
+
+    pre>code {
+      white-space: pre-wrap;
+    }
   }
 
-  .entry-text {
-    pre > code {
-      white-space: pre-wrap;
+  .entry-webLink,
+  .entry-file {
+    a {
+      @include hyphens();
     }
   }
 }

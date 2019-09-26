@@ -14,7 +14,7 @@
 
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
-    <div id="slot-body">
+    <div class="slot-body mt-3">
       <xsl:choose>
         <xsl:when test="mcrxsl:isCurrentUserGuestUser() and not($readPermission)">
           <xsl:variable name="loginURL"
@@ -49,9 +49,7 @@
         </xsl:when>
         <xsl:when test="(@pendingStatus = 'free') and not($isActive)">
           <div class="alert alert-danger" role="alert">
-            <p>
-              <xsl:value-of select="i18n:translate('component.rc.slot.message.delete')" />
-            </p>
+            <xsl:value-of select="i18n:translate('component.rc.slot.message.delete')" />
           </div>
           <xsl:if test="$hasAdminPermission or $hasEditorPermission">
             <xsl:apply-templates select="entries" />
@@ -76,6 +74,8 @@
         </xsl:otherwise>
       </xsl:choose>
     </div>
+    
+    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/sticky-toc.js"></script>
     <xsl:if test="$effectiveMode = 'edit'">
       <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery-sortable-min.js" />
       <script type="text/javascript">
@@ -88,7 +88,7 @@
               group: 'slot-entries',
               containerSelector: 'div.slot-section',
               itemSelector: 'div[class|="entry"][class!="entry-buttons"][class!="entry-infoline"]',
-              handle: 'span.entry-mover',
+              handle: '.entry-mover',
               placeholder: '<div class="entry-placeholder" />',
               pullPlaceholder: true,
               
@@ -125,7 +125,8 @@
               onDrop: function ($item, container, _super) {
                 var data = slotEntries.sortable("serialize").get().join();
                 if (oldData != data) {
-                  $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data });
+                  console.log(data);
+                  //$.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data });
                 }
                 _super($item, container);
               }
