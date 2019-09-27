@@ -345,7 +345,7 @@
       test="(string-length(accesskeys/@readkey) &gt; 0) and (string-length(accesskeys/@writekey) &gt; 0) and (accesskeys/@readkey != accesskeys/@writekey)"
       i18n="component.rc.slot.accesskey.matches" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/password-generator.min.js"></script>
   </xed:template>
 
 </xed:template>
