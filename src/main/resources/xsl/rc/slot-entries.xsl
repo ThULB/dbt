@@ -320,9 +320,9 @@
       <!-- simpler, call mode title -->
     <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
     <xsl:if test="string-length(.) &gt; 0">
-      <span class="comment">
+      <i class="comment text-muted">
         <xsl:value-of select="." />
-      </span>
+      </i>
     </xsl:if>
   </xsl:template>
   
@@ -388,9 +388,9 @@
       <div>
         <xsl:apply-templates select="pica:record" mode="isbd" />
         <xsl:if test="string-length(comment) &gt; 0">
-          <span class="comment">
-            <xsl:value-of select="comment" />
-          </span>
+          <i class="comment">
+            <xsl:value-of select="comment text-muted" />
+          </i>
         </xsl:if>
       </div>
 <!--       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)"> -->
