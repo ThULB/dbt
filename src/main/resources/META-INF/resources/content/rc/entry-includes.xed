@@ -60,8 +60,8 @@
   <!-- ====[ Entry Templates ]============= -->
 
   <xed:template id="headline-edit">
-    <mir:template name="textInput" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline" i18n.error="component.rc.slot.entry.headline.required"
-      required="true" />
+    <mir:template name="textInput" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline"
+      i18n.error="component.rc.slot.entry.headline.required" required="true" />
   </xed:template>
 
   <xed:template id="headline-delete">
@@ -70,8 +70,8 @@
 
   <xed:template id="mcrobject-edit">
     <xed:bind xpath="mcrobject">
-      <mir:template name="textInput" xpath="@id" placeholder='dbt_mods_12345678' id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
-        required="true" />
+      <mir:template name="textInput" xpath="@id" placeholder='dbt_mods_12345678' id="id" i18n="component.rc.slot.entry.mcrobject"
+        i18n.error="component.rc.slot.entry.mcrobject.required" required="true" />
       <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
     </xed:bind>
   </xed:template>
@@ -161,10 +161,12 @@
 
   <xed:template id="search-opcrecord">
     <xed:bind xpath="search">
-      <mir:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
-        uri="xslStyle:opc/iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
-      <mir:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term" i18n.error="component.rc.slot.entry.opcrecord.term.required"
-        required="true" />
+      <div class="form-group row">
+        <mir:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
+          uri="xslStyle:opc/iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+        <mir:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term"
+          i18n.error="component.rc.slot.entry.opcrecord.term.required" required="true" />
+      </div>
     </xed:bind>
   </xed:template>
 
@@ -221,10 +223,10 @@
 
   <xed:template id="webLink-edit">
     <xed:bind xpath="webLink">
-      <mir:template name="textInput" xpath="@url" default="http://" id="url" i18n="component.rc.slot.entry.webLink.url" i18n.error="component.rc.slot.entry.webLink.url.required"
-        required="true" />
-      <mir:template name="textArea" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description" i18n.error="component.rc.slot.entry.webLink.description.required"
-        required="true" />
+      <mir:template name="textInput" xpath="@url" default="http://" id="url" i18n="component.rc.slot.entry.webLink.url"
+        i18n.error="component.rc.slot.entry.webLink.url.required" required="true" />
+      <mir:template name="textArea" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description"
+        i18n.error="component.rc.slot.entry.webLink.description.required" required="true" />
     </xed:bind>
   </xed:template>
 
