@@ -8,7 +8,7 @@
       <xed:cancel url="/rc/{$slotId}" />
 
       <xed:bind xpath="slot">
-        <div class="card shadow-sm rounded my-2">
+        <div class="card my-2">
           <h5 class="card-header">
             <xed:include uri="xslStyle:xeditor-mir-templates:webapp:content/rc/slot-includes.xed" ref="title" />
           </h5>
