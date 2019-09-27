@@ -388,8 +388,8 @@
       <div>
         <xsl:apply-templates select="pica:record" mode="isbd" />
         <xsl:if test="string-length(comment) &gt; 0">
-          <i class="comment">
-            <xsl:value-of select="comment text-muted" />
+          <i class="comment text-muted">
+            <xsl:value-of select="comment" />
           </i>
         </xsl:if>
       </div>
