@@ -171,8 +171,8 @@
   </xed:template>
 
   <xed:template id="text-edit">
-    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote.css" />
-    <script src="../../dbt/assets/summernote/summernote.min.js" />
+    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote-bs4.css" />
+    <script src="../../dbt/assets/summernote/summernote-bs4.min.js" />
 
     <xed:if test="$CurrentLang = 'de'">
       <script src="../../dbt/assets/summernote/lang/summernote-de-DE.js" />
