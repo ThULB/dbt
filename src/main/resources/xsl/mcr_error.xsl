@@ -36,26 +36,24 @@
           <xsl:choose>
             <xsl:when test="@errorServlet and string-length(text()) &gt; 1 or exception">
               <xsl:if test="@errorServlet and string-length(text()) &gt; 1">
-                <xsl:if test="@errorServlet and string-length(text()) &gt; 1">
-                  <div class="alert alert-warning my-2" role="alert">
-                    <xsl:attribute name="title">
+                <div class="alert alert-warning my-2" role="alert">
+                  <xsl:attribute name="title">
                       <xsl:value-of select="i18n:translate('mir.error.message')" />
                     </xsl:attribute>
-                    <xsl:call-template name="lf2br">
-                      <xsl:with-param name="string" select="text()" />
-                    </xsl:call-template>
-                  </div>
-                </xsl:if>
+                  <xsl:call-template name="lf2br">
+                    <xsl:with-param name="string" select="text()" />
+                  </xsl:call-template>
+                </div>
+              </xsl:if>
 
-                <xsl:if test="exception">
-                  <xsl:for-each select="exception/trace">
-                    <pre class="bg-dark text-light p-1 rounded">
-                      <code>
-                        <xsl:value-of select="." />
-                      </code>
-                    </pre>
-                  </xsl:for-each>
-                </xsl:if>
+              <xsl:if test="exception">
+                <xsl:for-each select="exception/trace">
+                  <pre class="bg-dark text-light p-1 rounded">
+                    <code>
+                      <xsl:value-of select="." />
+                    </code>
+                  </pre>
+                </xsl:for-each>
               </xsl:if>
             </xsl:when>
 
