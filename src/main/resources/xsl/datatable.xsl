@@ -163,7 +163,7 @@
       </xsl:choose>
     </xsl:variable>
 
-    <div id="{$id}_wrapper" class="datatable card shadow-sm rounded mb-4">
+    <div id="{$id}_wrapper" class="datatable card">
       <div class="card-header">
         <form id="{$id}_form" class="form-inline d-flex justify-content-between" role="form">
           <!-- build hidden values -->
