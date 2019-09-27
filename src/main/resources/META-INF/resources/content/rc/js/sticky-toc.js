@@ -1,10 +1,11 @@
 var makeTocSticky = function () {
   var $elm = $(".slot-toc");
-  if ($elm) {
+
+  if ($elm && window.innerWidth >= 1200) {
     var container = document.getElementById("container-main");
     var tocOffset = container.offsetTop + 10;
 
-    if ($elm[0].offsetHeight < (window.innerHeight - tocOffset)) {
+    if ($elm.height() < (window.innerHeight - tocOffset)) {
       $elm.addClass("sticky-top");
       $elm.css("top", tocOffset + "px");
     } else {
