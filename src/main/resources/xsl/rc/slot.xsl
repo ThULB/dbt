@@ -75,7 +75,7 @@
       </xsl:choose>
     </div>
     
-    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/sticky-toc.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/sticky-toc.min.js"></script>
     <xsl:if test="$effectiveMode = 'edit'">
       <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery-sortable-min.js" />
       <script type="text/javascript">
