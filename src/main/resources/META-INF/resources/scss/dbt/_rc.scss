@@ -40,6 +40,41 @@
       @include hyphens();
     }
   }
+
+  .entry-mcrobject {
+    .hit_download_box {
+      float: left;
+      display: none;
+      img {
+        max-width: 75px;
+      }
+    }
+
+    .hit_tnd_container, .hit_title, .hit_author, .hit_abstract {
+      padding-left: 0;
+    }
+
+    .hit_tnd_container {
+      .hit_tnd_content {
+        display: flex;
+        flex-direction: row;
+
+        .badge {
+          margin-right: 0.5em;
+        }
+      }
+    }
+
+    .hit_title {
+      font-size: 1rem;
+      margin-bottom: 0;
+    }
+
+    .hit_author {
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+  }
 }
 
 #validTo > option.not-setable {

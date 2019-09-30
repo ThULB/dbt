@@ -317,13 +317,15 @@
   
   <!-- MCRObjectEntry -->
   <xsl:template match="mcrobject">
+    <div class="mcr-object">
       <!-- simpler, call mode title -->
-    <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
-    <xsl:if test="string-length(.) &gt; 0">
-      <i class="comment text-muted">
-        <xsl:value-of select="." />
-      </i>
-    </xsl:if>
+      <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
+      <xsl:if test="string-length(.) &gt; 0">
+        <i class="comment text-muted">
+          <xsl:value-of select="." />
+        </i>
+      </xsl:if>
+    </div>
   </xsl:template>
   
   <!-- File -->
