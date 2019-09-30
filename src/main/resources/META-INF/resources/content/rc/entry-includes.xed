@@ -112,11 +112,11 @@
   </xed:template>
 
   <xed:template id="opcrecord-delete">
-    <div class="form-group">
+    <div class="form-group row">
       <label class="col-md-3 control-label" for="isbd">
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
-      <div class="col-md-9 entry-opcrecord">
+      <div class="col-md-9 entry-opcrecord text-md-right">
         <h6>
           <xed:output value="opcrecord/display/h6" />
         </h6>
@@ -134,8 +134,8 @@
   </xed:template>
 
   <xed:template id="edit-opcrecord">
-    <div class="form-group">
-      <label class="col-md-3 control-label" for="isbd">
+    <div class="form-group row">
+      <label class="col-md-3 control-label text-md-right" for="isbd">
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
       <div class="col-md-9 entry-opcrecord">
