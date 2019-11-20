@@ -20,7 +20,7 @@
         "grunt-contrib-copy": "^1.0.0",
         "grunt-contrib-imagemin": "3.1.0",
         "grunt-contrib-uglify": "^4.0.1",
-        "angular": "~1.5.11",
+        "angular": "~1.7.9",
         "angular-translate": "~2.18.1",
         "angular-translate-loader-partial": "~2.18.1",
         "angular-modal-service": "~0.15.2",
