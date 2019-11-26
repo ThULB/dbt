@@ -23,8 +23,7 @@
   <!-- *           Parameters for MyCoRe LayoutService            * -->
   <!-- ************************************************************ -->
   <xsl:variable name="PageTitle" select="/*/@title" />
-  <xsl:variable name="fontawesome.version" select="'4.0.3'" />
-  
+
   <!-- ************************************************************ -->
   <!-- *            Optional includes within <head />             * -->
   <!-- ************************************************************ -->
@@ -86,7 +85,7 @@
 
   <xsl:template name="layout.cssLinks">
     <link href="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.css" rel="stylesheet" />
-    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.css" rel="stylesheet" />
+    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
 
     <xsl:if test="$include.HTML.Head.CSS">
@@ -214,8 +213,10 @@
   <xsl:template name="layout.head.login">
     <li class="nav-item">
       <a class="nav-link" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
-        <i class="fa fa-power-off" aria-hidden="true"></i>
-        <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+        <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
+        <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
+          <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+        </span>
       </a>
     </li>
   </xsl:template>
@@ -260,7 +261,7 @@
 
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
-        <i class="fa fa-power-off" aria-hidden="true"></i>
+        <i class="fa fa-user" aria-hidden="true"></i>
         <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
           <xsl:choose>
             <xsl:when test="$userData/realName">
@@ -337,15 +338,23 @@
 
   <xsl:template name="layout.head.mainMenu">
     <ul class="navbar-nav">
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']" />
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']">
+        <xsl:with-param name="showIcon" select="true()" />
+      </xsl:apply-templates>
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
         <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
       </xsl:apply-templates>
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
+        <xsl:with-param name="class" select="'d-none d-md-inline'" />
+        <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
+        <xsl:with-param name="showIcon" select="true()" />
+      </xsl:apply-templates>
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
       <li class="nav-item d-xs-inline d-sm-inline d-md-none">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
           <xsl:with-param name="class" select="'nav-link'" />
+          <xsl:with-param name="showIcon" select="false()" />
         </xsl:apply-templates>
       </li>
       <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
@@ -363,11 +372,6 @@
         <xsl:with-param name="class" select="'d-none d-md-inline'" />
         <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
       </xsl:call-template>
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
-        <xsl:with-param name="class" select="'d-none d-md-inline'" />
-        <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
-        <xsl:with-param name="showIcon" select="true()" />
-      </xsl:apply-templates>
       <li class="nav-item d-none d-md-inline">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
           <xsl:with-param name="class" select="'nav-link'" />

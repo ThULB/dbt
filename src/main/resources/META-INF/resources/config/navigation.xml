@@ -41,6 +41,7 @@
     <!-- search menu  -->
     <label xml:lang="de">Suche</label>
     <label xml:lang="en">Search</label>
+    <icon>fas fa-search d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/search/simple.xed" type="intern">
       <label xml:lang="de">einfach</label>
       <label xml:lang="en">simple</label>
@@ -66,7 +67,7 @@
   <!-- search menu  -->
     <label xml:lang="de">Blättern</label>
     <label xml:lang="en">Browse</label>
-    <icon>fas fa-sitemap</icon>
+    <icon>fas fa-sitemap d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/browse/institutes.xml" type="intern">
       <label xml:lang="de">Einrichtungen</label>
       <label xml:lang="en">Institutions</label>
@@ -87,6 +88,7 @@
   <menu id="rc">
     <label xml:lang="de">Semesterapparate</label>
     <label xml:lang="en">Reserve Collections</label>
+    <icon>fas fa-clipboard-check d-none d-sm-inline-block d-lg-none</icon>
     <item href="/rc" type="intern">
       <label xml:lang="de">Aktuelle Liste</label>
       <label xml:lang="en">Current list</label>
@@ -103,6 +105,7 @@
   <menu id="publish" dir="/content/publish">
     <label xml:lang="de">Publizieren</label>
     <label xml:lang="en">Publish</label>
+    <icon>fas fa-upload d-none d-sm-inline-block d-lg-none</icon>
     <item href="/servlets/MCRActionMappingServlet/mods/create" type="intern">
       <label xml:lang="de">Dokumente einreichen</label>
       <label xml:lang="en">Submit Document</label>
@@ -123,7 +126,7 @@
   <menu id="user">
     <label xml:lang="de">Nutzermenü</label>
     <label xml:lang="en">User menu</label>
-    <icon>fas fa-tasks</icon>
+    <icon>fas fa-tasks d-none d-sm-inline-block d-lg-none</icon>
     <group id="contentadmin">
       <item href="/modules/classeditor/classificationEditor.xml?XSL.classeditor.showId=true" type="extern">
         <label xml:lang="de">Klassifikationseditor</label>

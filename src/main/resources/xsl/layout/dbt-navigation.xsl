@@ -12,7 +12,7 @@
     <xsl:param name="class" select="'nav-item'" />
     <xsl:param name="linkClass" select="'nav-link'" />
     <xsl:param name="dropdownClass" select="''" />
-    <xsl:param name="showIcon" select="false()" />
+    <xsl:param name="showIcon" select="string-length(icon) &gt; 0" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress]" />
 
     <xsl:variable name="menuId" select="generate-id(.)" />
@@ -26,7 +26,7 @@
         <xsl:choose>
           <xsl:when test="$showIcon and string-length(icon) &gt; 0">
             <i class="{icon}" aria-hidden="true"></i>
-            <span class="d-none d-xl-inline ml-1">
+            <span class="d-inline d-sm-none d-lg-inline ml-1">
               <xsl:apply-templates select="." mode="linkText" />
             </span>
           </xsl:when>
@@ -63,7 +63,7 @@
 
   <xsl:template match="/navigation//item[@href]">
     <xsl:param name="class" select="'dropdown-item'" />
-    <xsl:param name="showIcon" select="false()" />
+    <xsl:param name="showIcon" select="string-length(icon) &gt; 0" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
     <xsl:param name="url">
       <xsl:choose>
@@ -94,7 +94,7 @@
           <xsl:choose>
             <xsl:when test="$showIcon and string-length(icon) &gt; 0">
               <i class="{icon}" aria-hidden="true"></i>
-              <span class="d-none d-xl-inline ml-1">
+              <span class="d-none d-lg-inline ml-1">
                 <xsl:apply-templates select="." mode="linkText" />
               </span>
             </xsl:when>
