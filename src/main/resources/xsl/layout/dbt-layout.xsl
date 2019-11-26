@@ -256,7 +256,6 @@
     <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
       <xsl:with-param name="class" select="'nav-item d-none d-md-inline'" />
       <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
-      <xsl:with-param name="showIcon" select="true()" />
     </xsl:apply-templates>
 
     <li class="nav-item dropdown">
@@ -338,17 +337,8 @@
 
   <xsl:template name="layout.head.mainMenu">
     <ul class="navbar-nav">
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']">
-        <xsl:with-param name="showIcon" select="true()" />
-      </xsl:apply-templates>
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
-        <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
-      </xsl:apply-templates>
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']">
-        <xsl:with-param name="class" select="'d-none d-md-inline'" />
-        <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
-        <xsl:with-param name="showIcon" select="true()" />
-      </xsl:apply-templates>
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
       <li class="nav-item d-xs-inline d-sm-inline d-md-none">
@@ -375,7 +365,6 @@
       <li class="nav-item d-none d-md-inline">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
           <xsl:with-param name="class" select="'nav-link'" />
-          <xsl:with-param name="showIcon" select="true()" />
         </xsl:apply-templates>
       </li>
 

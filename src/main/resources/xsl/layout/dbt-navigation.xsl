@@ -26,7 +26,7 @@
         <xsl:choose>
           <xsl:when test="$showIcon and string-length(icon) &gt; 0">
             <i class="{icon}" aria-hidden="true"></i>
-            <span class="d-inline d-sm-none d-lg-inline ml-1">
+            <span class="d-inline d-sm-none d-lg-inline">
               <xsl:apply-templates select="." mode="linkText" />
             </span>
           </xsl:when>
@@ -94,7 +94,7 @@
           <xsl:choose>
             <xsl:when test="$showIcon and string-length(icon) &gt; 0">
               <i class="{icon}" aria-hidden="true"></i>
-              <span class="d-none d-lg-inline ml-1">
+              <span class="d-none d-lg-inline">
                 <xsl:apply-templates select="." mode="linkText" />
               </span>
             </xsl:when>
