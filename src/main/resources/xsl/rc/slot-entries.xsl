@@ -230,7 +230,7 @@
   <xsl:template match="*" mode="extraAttributes">
   </xsl:template>
 
-  <xsl:template match="headline|text|webLink|mcrobject|file|opcrecord" mode="editButtons">
+  <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="editButtons">
     <div class="ml-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
@@ -247,6 +247,24 @@
         <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
           <i class="fas fa-arrows-alt"></i>
         </button>
+      </div>
+    </div>
+  </xsl:template>
+
+  <xsl:template match="headline" mode="editButtons">
+    <div class="ml-2 entry-buttons">
+      <div class="btn-group" role="group">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
+        >
+          <i class="fas fa-pencil-alt"></i>
+        </a>
+        <a class="btn btn-danger"
+          href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
+        >
+          <i class="far fa-trash-alt"></i>
+        </a>
       </div>
     </div>
   </xsl:template>

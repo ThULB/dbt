@@ -74,7 +74,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </div>
-    
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/sticky-toc.min.js"></script>
     <xsl:if test="$effectiveMode = 'edit'">
       <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/jquery/plugins/jquery-sortable-min.js" />
@@ -83,54 +83,65 @@
         <xsl:value-of select="concat('var servletsBaseURL = &quot;', $ServletsBaseURL, '&quot;;')" disable-output-escaping="yes" />
         <xsl:value-of select="concat('var slotId = &quot;', $slotId, '&quot;;')" disable-output-escaping="yes" />
           <![CDATA[
-            var oldData;
-            var slotEntries = $("div.slot-section").sortable({
-              group: 'slot-entries',
-              containerSelector: 'div.slot-section',
-              itemSelector: 'div[class|="entry"][class!="entry-buttons"][class!="entry-infoline"]',
-              handle: '.entry-mover',
-              placeholder: '<div class="entry-placeholder" />',
-              pullPlaceholder: true,
-              
-              // set item relative to cursor position
-              onDragStart: function ($item, container, _super) {
-                var offset = $item.offset(),
+          var oldData;
+          var slotEntries = $("div.slot-section").sortable({
+            group: 'slot-entries',
+            containerSelector: '.slot-section',
+            itemPath: ".card-body",
+            itemSelector: '.media',
+            handle: '.entry-mover',
+            placeholderClass: 'entry-placeholder',
+            placeholder: '<div class="media entry-placeholder"><div class="media-body mw-100"></div></div>',
+            pullPlaceholder: true,
+            nested: true,
+    
+            // set item relative to cursor position
+            onDragStart: function ($item, container, _super) {
+              var offset = $item.offset(),
                 pointer = container.rootGroup.pointer,
                 placeholder = container.rootGroup.placeholder;
-            
-                oldData = slotEntries.sortable("serialize").get().join();
-  
-                adjustment = {
-                  left: pointer.left - offset.left,
-                  top: pointer.top - offset.top
-                }
-                
-                placeholder.height($item.height());
-            
-                _super($item, container)
-              },
-              
-              onDrag: function ($item, position) {
-                $item.css({
-                  left: position.left - adjustment.left,
-                  top: position.top - adjustment.top
-                })
-              },
-              
-              // persists new order of entries
-              serialize: function (parent, children, isContainer) {
-                return isContainer ? children : parent.attr("id");
-              },
-              
-              onDrop: function ($item, container, _super) {
-                var data = slotEntries.sortable("serialize").get().join();
-                if (oldData != data) {
-                  console.log(data);
-                  //$.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data });
-                }
-                _super($item, container);
+    
+              oldData = slotEntries.sortable("serialize").get().join();
+    
+              adjustment = {
+                left: pointer.left - offset.left,
+                top: pointer.top - offset.top
               }
-            });
+    
+              placeholder.height($item.height());
+    
+              _super($item, container)
+            },
+    
+            onDrag: function ($item, position) {
+              $item.css({
+                left: position.left - adjustment.left,
+                top: position.top - adjustment.top
+              })
+            },
+    
+            // persists new order of entries
+            serialize: function (parent, children, isContainer) {
+              if (isContainer && parent.find(".entry-headline") && parent.find(".entry-headline").attr("id")) {
+                children = [parent.find(".entry-headline").attr("id")].concat(children);
+              }
+    
+              return isContainer ? 
+                children : 
+                  parent.find("div[class|='entry'][class!='entry-buttons'][class!='entry-infoline'][class!='entry-placeholder']").attr("id");
+            },
+    
+            onDrop: function ($item, container, _super) {
+              var data = slotEntries.sortable("serialize").get().join();
+    
+              if (oldData !== data) {
+                $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data });
+                $item.removeClass("dragged");
+                $item.removeAttr("style");
+              }
+              _super($item, container);
+            }
+          });
           ]]>
         });
       </script>
