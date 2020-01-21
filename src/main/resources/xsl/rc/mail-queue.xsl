@@ -35,7 +35,7 @@
 
       <div ng-controller="queueCtrl">
         <div ng-hide="!jobs.loading">
-          <span class="fas fa-sync spinning"></span>
+          <span class="fas fa-sync fa-spin"></span>
           <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
           <xsl:value-of select="i18n:translate('component.rc.mailqueue.loading')" />
         </div>
