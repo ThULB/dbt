@@ -10,18 +10,18 @@
       <td class="file_preview col-1 text-center text-nowrap">
         {{#is type "file"}}
         {{#contains "pdf|ps" extension}}
-        <span class="fa {{getFileIcon extension}}" data-toggle="tooltip" data-placement="right" data-html="true"
+        <span class="fas {{getFileIcon extension}}" data-toggle="tooltip" data-placement="right" data-html="true"
           data-title='&lt;img src="{{../serverBaseURL}}img/pdfthumb/{{../mycorederivate}}{{path}}?centerThumb=no"&gt;'></span>
         {{else}}
-        <span class="fa {{getFileIcon extension}}" title="{{getFileLabel extension}}" aria-hidden="true"></span>
+        <span class="fas {{getFileIcon extension}}" title="{{getFileLabel extension}}" aria-hidden="true"></span>
         {{/contains}}
         {{else}}
-        <span class="fa fa-folder" aria-hidden="true"></span>
+        <span class="fas fa-folder" aria-hidden="true"></span>
         {{/is}}
       </td>
       {{#isNot type "directory"}}
       {{#containsIgnoreCase "mp4|f4v|flv|rm|avi|wmv|mov" extension}}
-      <td class="file_name file_video col-sm-6">
+      <td class="file_name file_video col-6">
         <a data-deriid="{{../mycorederivate}}" data-name="{{name}}" href="{{href}}">
           {{name}}
         </a>
