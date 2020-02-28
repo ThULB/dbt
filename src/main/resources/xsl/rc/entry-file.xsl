@@ -81,7 +81,7 @@
           </div>
           <div class="form-group">
             <label for="comment" class="col-md-3 control-label">
-              <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.comment')" />
+              <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.description')" />
             </label>
             <div class="col-md-9">
               <textarea rows="3" id="comment" class="form-control input-md" name="comment" />
