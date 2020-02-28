@@ -536,7 +536,6 @@
           Über die Schaltfläche
           <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
             <span aria-hidden="true" class="fa fa-cogs"></span>
-            <span class="caret"></span>
           </button>
           &gt; „Semesterapparat verwalten“ können Sie einen Ansprechpartner (Name + E-Mailadresse) für Ihren ESA angeben. Mit dem Einrichten
           eines ESA haben Sie
@@ -568,7 +567,6 @@
           Über die Schaltfläche
           <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
             <span aria-hidden="true" class="fa fa-cogs"></span>
-            <span class="caret"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie Ihren ESA mit verschiedenen Inhalten füllen:
         </p>
@@ -684,7 +682,6 @@
           der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
           <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
             <span aria-hidden="true" class="fa fa-cogs"></span>
-            <span class="caret"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie die gewünschten Änderungen vornehmen.
           Als beauftragte Person geben Sie bitte zusätzlich den
@@ -815,7 +812,6 @@
           Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und öffnen Sie den entsprechenden Semesterapparat. Über die Schaltfläche
           <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
             <span aria-hidden="true" class="fa fa-cogs"></span>
-            <span class="caret"></span>
           </button>
           &gt; „Zugriffsschlüssel bearbeiten“ haben Sie die Möglichkeit, Lese- und Schreibschlüssel einzusehen und ggf. zu ändern.
         </p>
