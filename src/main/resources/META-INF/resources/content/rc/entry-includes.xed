@@ -240,14 +240,14 @@
   <xed:template id="file-edit">
     <xed:bind xpath="file">
       <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
-      <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+      <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.description" />
     </xed:bind>
   </xed:template>
 
   <xed:template id="file-delete">
     <xed:bind xpath="file">
       <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
-      <mir:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+      <mir:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.file.description" />
     </xed:bind>
   </xed:template>
 </xed:template>
