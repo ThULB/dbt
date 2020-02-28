@@ -76,7 +76,7 @@
         </ul>
         <p>
           Nähere Informationen zur Belegung eines Formularfeldes erhält man über den jeweiligen Informationsbutton:
-          <a tabindex="0" class="btn btn-default btn-xs info-button" role="button" data-toggle="popover" data-placement="right"
+          <a tabindex="0" class="btn btn-secondary btn-sm info-button" role="button" data-toggle="popover" data-placement="right"
             data-content="Nach einem Klick erscheint ein kurzer Hilfetext"
           >
             <i class="fa fa-info"></i>
@@ -510,7 +510,7 @@
           Fachbereich zu.
           Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren
           diesen über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs">
+          <button type="button" class="btn btn-secondary btn-sm">
             <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           . Der Leseschlüssel stellt sicher,
@@ -534,8 +534,8 @@
       <answer>
         <p>
           Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
             <span class="caret"></span>
           </button>
           &gt; „Semesterapparat verwalten“ können Sie einen Ansprechpartner (Name + E-Mailadresse) für Ihren ESA angeben. Mit dem Einrichten
@@ -566,8 +566,8 @@
       <answer>
         <p>
           Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
             <span class="caret"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie Ihren ESA mit verschiedenen Inhalten füllen:
@@ -682,8 +682,8 @@
           URZ-Nutzerkennung
           in
           der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
             <span class="caret"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie die gewünschten Änderungen vornehmen.
@@ -813,8 +813,8 @@
       <answer>
         <p>
           Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und öffnen Sie den entsprechenden Semesterapparat. Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
             <span class="caret"></span>
           </button>
           &gt; „Zugriffsschlüssel bearbeiten“ haben Sie die Möglichkeit, Lese- und Schreibschlüssel einzusehen und ggf. zu ändern.
