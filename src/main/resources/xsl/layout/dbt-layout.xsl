@@ -185,7 +185,7 @@
 
     <div class="searchbar">
       <div class="container">
-        <form class="navbar-form navbar-right" role="search" action="{$WebApplicationBaseURL}servlets/solr/find">
+        <form class="navbar-form form-inline navbar-right" role="search" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="input-group">
             <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <span class="input-group-btn">
@@ -422,6 +422,8 @@
   <xsl:template name="layout.content">
     <div id="container-main">
       <a id="top"></a>
+      <!-- include Internet Explorer warning -->
+      <xsl:call-template name="msie-note" />
       <div class="container">
         <xsl:call-template name="navigation.breadcrumbPath">
           <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
