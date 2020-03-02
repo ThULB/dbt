@@ -6,7 +6,7 @@
   <xsl:variable name="recordURLPrefix" select="''" />
 
   <xsl:template match="pica:record" mode="isbd">
-    <h4>
+    <h6 class="mb-0">
       <xsl:choose>
         <xsl:when test="string-length($recordURLPrefix) &gt; 0">
           <a href="{$recordURLPrefix}{@ppn}" target="_blank">
@@ -17,8 +17,8 @@
           <xsl:apply-templates select="." mode="isbdTitle" />
         </xsl:otherwise>
       </xsl:choose>
-    </h4>
-    <p>
+    </h6>
+    <p class="mb-0">
       <xsl:apply-templates select="." mode="isbdInfo" />
     </p>
   </xsl:template>

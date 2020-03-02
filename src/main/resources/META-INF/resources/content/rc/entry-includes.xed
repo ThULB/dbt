@@ -60,8 +60,8 @@
   <!-- ====[ Entry Templates ]============= -->
 
   <xed:template id="headline-edit">
-    <mir:template name="textInput" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline" i18n.error="component.rc.slot.entry.headline.required"
-      required="true" />
+    <mir:template name="textInput" xpath="headline" id="headline" i18n="component.rc.slot.entry.headline"
+      i18n.error="component.rc.slot.entry.headline.required" required="true" />
   </xed:template>
 
   <xed:template id="headline-delete">
@@ -70,8 +70,8 @@
 
   <xed:template id="mcrobject-edit">
     <xed:bind xpath="mcrobject">
-      <mir:template name="textInput" xpath="@id" placeholder='dbt_mods_12345678' id="id" i18n="component.rc.slot.entry.mcrobject" i18n.error="component.rc.slot.entry.mcrobject.required"
-        required="true" />
+      <mir:template name="textInput" xpath="@id" placeholder='dbt_mods_12345678' id="id" i18n="component.rc.slot.entry.mcrobject"
+        i18n.error="component.rc.slot.entry.mcrobject.required" required="true" />
       <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.mcrobject.comment" />
     </xed:bind>
   </xed:template>
@@ -112,14 +112,14 @@
   </xed:template>
 
   <xed:template id="opcrecord-delete">
-    <div class="form-group">
+    <div class="form-group row">
       <label class="col-md-3 control-label" for="isbd">
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
-      <div class="col-md-9 entry-opcrecord">
-        <h4>
-          <xed:output value="opcrecord/display/h4" />
-        </h4>
+      <div class="col-md-9 entry-opcrecord text-md-right">
+        <h6>
+          <xed:output value="opcrecord/display/h6" />
+        </h6>
         <p>
           <xed:output value="opcrecord/display/p" />
         </p>
@@ -134,14 +134,14 @@
   </xed:template>
 
   <xed:template id="edit-opcrecord">
-    <div class="form-group">
-      <label class="col-md-3 control-label" for="isbd">
+    <div class="form-group row">
+      <label class="col-md-3 control-label text-md-right" for="isbd">
         <xed:output i18n="component.rc.slot.entry.opcrecord.recordShort" />
       </label>
       <div class="col-md-9 entry-opcrecord">
-        <h4>
-          <xed:output value="opcrecord/display/h4" />
-        </h4>
+        <h6>
+          <xed:output value="opcrecord/display/h6" />
+        </h6>
         <p>
           <xed:output value="opcrecord/display/p" />
         </p>
@@ -161,16 +161,18 @@
 
   <xed:template id="search-opcrecord">
     <xed:bind xpath="search">
-      <mir:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
-        uri="xslStyle:opc/iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
-      <mir:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term" i18n.error="component.rc.slot.entry.opcrecord.term.required"
-        required="true" />
+      <div class="form-group row">
+        <mir:template name="selectInput" xpath="@ikt" id="ikt" inline="true" colwidth="4" inlcudeOnly="true"
+          uri="xslStyle:opc/iktlist2options:opc:catalogId={$catalogId}&amp;iktList" />
+        <mir:template name="textInput" xpath="." id="term" inline="true" colwidth="8" i18n="component.rc.slot.entry.opcrecord.term"
+          i18n.error="component.rc.slot.entry.opcrecord.term.required" required="true" />
+      </div>
     </xed:bind>
   </xed:template>
 
   <xed:template id="text-edit">
-    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote.css" />
-    <script src="../../dbt/assets/summernote/summernote.min.js" />
+    <link rel="stylesheet" type="text/css" href="../../dbt/assets/summernote/summernote-bs4.css" />
+    <script src="../../dbt/assets/summernote/summernote-bs4.min.js" />
 
     <xed:if test="$CurrentLang = 'de'">
       <script src="../../dbt/assets/summernote/lang/summernote-de-DE.js" />
@@ -221,10 +223,10 @@
 
   <xed:template id="webLink-edit">
     <xed:bind xpath="webLink">
-      <mir:template name="textInput" xpath="@url" default="http://" id="url" i18n="component.rc.slot.entry.webLink.url" i18n.error="component.rc.slot.entry.webLink.url.required"
-        required="true" />
-      <mir:template name="textArea" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description" i18n.error="component.rc.slot.entry.webLink.description.required"
-        required="true" />
+      <mir:template name="textInput" xpath="@url" default="http://" id="url" i18n="component.rc.slot.entry.webLink.url"
+        i18n.error="component.rc.slot.entry.webLink.url.required" required="true" />
+      <mir:template name="textArea" xpath="." id="label" i18n="component.rc.slot.entry.webLink.description"
+        i18n.error="component.rc.slot.entry.webLink.description.required" required="true" />
     </xed:bind>
   </xed:template>
 
@@ -238,14 +240,14 @@
   <xed:template id="file-edit">
     <xed:bind xpath="file">
       <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
-      <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+      <mir:template name="textArea" xpath="." id="comment" i18n="component.rc.slot.entry.file.description" />
     </xed:bind>
   </xed:template>
 
   <xed:template id="file-delete">
     <xed:bind xpath="file">
       <mir:template name="static" xpath="@name" id="name" i18n="component.rc.slot.entry.file" />
-      <mir:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.file.comment" />
+      <mir:template name="static" xpath="." id="comment" i18n="component.rc.slot.entry.file.description" />
     </xed:bind>
   </xed:template>
 </xed:template>

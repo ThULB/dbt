@@ -5,7 +5,7 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-globe" />
+            <i class="fas fa-globe" />
             E-Publikationen
           </h3>
           <p>
@@ -19,7 +19,7 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-th-list" />
+            <i class="fas fa-th-list" />
             Elektronische Semesterapparate
           </h3>
           <p>Ein elektronischer Semesterapparat stellt alle vom Dozenten ausgewählten Materialien, digitalisierte Kopiervorlagen und Links zu weiteren Ressourcen
@@ -32,7 +32,7 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-graduation-cap" />
+            <i class="fas fa-graduation-cap" />
             Wissenschaftliche Abschlussarbeiten
           </h3>
           <p>In der DBT werden alle digital abgegebenen Dissertationen und Habilitationen sowie bestimmten Kriterien genügende Studienabschlussarbeiten
@@ -42,7 +42,7 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="glyphicon glyphicon-facetime-video" />
+            <i class="fas fa-video"></i>
             Vorlesungsmitschnitte
           </h3>
           <p>
@@ -61,7 +61,7 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-globe" />
+            <i class="fas fa-globe" />
             E-publications
           </h3>
           <p>
@@ -74,7 +74,7 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-th-list" />
+            <i class="fas fa-th-list" />
             Electronic course reserve collection
           </h3>
           <p>
@@ -87,7 +87,7 @@
       <div class="row">
         <div class="col-md-6">
           <h3>
-            <span class="fa fa-graduation-cap" />
+            <i class="fas fa-graduation-cap" />
             Scientific dissertations
           </h3>
           <p>
@@ -97,7 +97,7 @@
         </div>
         <div class="col-md-6">
           <h3>
-            <span class="glyphicon glyphicon-facetime-video" />
+            <i class="fas fa-video"></i>
             Recordings of lectures
           </h3>
           <p>

@@ -1,32 +1,46 @@
-@import "./dbt/variables";
-@import "./dbt/mixins";
+@import "./dbt/_variables";
 
-@import  "../mir-layout/assets/bootstrap/stylesheets/bootstrap";
+/*
+ * FontAwesome
+ */
+$fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
+
+@import "../dbt/assets/fontawesome-free/scss/fontawesome.scss";
+@import "../dbt/assets/fontawesome-free/scss/brands.scss";
+@import "../dbt/assets/fontawesome-free/scss/solid.scss";
+@import "../dbt/assets/fontawesome-free/scss/regular.scss";
+
+@import  "../mir-layout/assets/bootstrap/bootstrap";
 
 @import "../mir-layout/scss/common/fileupload";
 @import "../mir-layout/scss/common/print";
 @import "../mir-layout/scss/common/mir_basket";
 @import "../mir-layout/scss/common/mir_browse";
 @import "../mir-layout/scss/common/mir_details";
-@import "../mir-layout/scss/common/mir_metadata";                      
+@import "../mir-layout/scss/common/mir_metadata";
 @import "../mir-layout/scss/common/mir_results";
 @import "../mir-layout/scss/common/mir_viewer";
 @import "../mir-layout/scss/common/responsive";
 
-@import "./dbt/animations";
-@import "./dbt/general";
-@import "./dbt/header";
-@import "./dbt/content";
-@import "./dbt/forms";
-@import "./dbt/footer";
-@import "./dbt/pagination";
-@import "./dbt/datatable";
 
-@import "./dbt/classificationbrowser";
-@import "./dbt/results";
-@import "./dbt/metadata";
-@import "./dbt/document";
+@import "./dbt/mixins/_animation";
+@import "./dbt/mixins/_download-icon";
+@import "./dbt/mixins/_gradients";
+@import "./dbt/mixins/_transform";
+@import "./dbt/mixins/_helpers";
 
-@import "./dbt/rc";
-
-@import "./dbt/video-js";
+@import "./dbt/_animations";
+@import "./dbt/_navigation";
+@import "./dbt/_footer";
+//@import "./dbt/_spinner";
+//@import "./dbt/_scroll-container";
+@import "./dbt/_general";
+@import "./dbt/_overwrites";
+@import "./dbt/_panel";
+//@import "./dbt/_metadata";
+//@import "./dbt/_browse";
+@import "./dbt/_rc";
+@import "./dbt/_video-js";
+@import "./dbt/mir2fix/metadata";
+@import "./dbt/mir2fix/resultlist";
+@import "./dbt/mir2fix/login";

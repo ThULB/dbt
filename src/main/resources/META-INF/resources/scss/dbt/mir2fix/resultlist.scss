@@ -1,0 +1,150 @@
+div.result_searchline {
+  form.search_form {
+    .input-group-sm {
+
+      .btn,
+      .form-control {
+        font-size: 1rem;
+      }
+
+      .fa-search {
+        margin-right: 0.4rem;
+      }
+    }
+  }
+}
+
+.result_body {
+  @extend .flex-column-reverse;
+  @extend .flex-md-row;
+
+  .result-filter {
+    float: unset;
+
+    .card {
+      @media (min-width: 768px) {
+        min-width: 339px;
+        max-width: 340px;
+      }
+    }
+  }
+
+  .result_list {
+    #hit_list {
+      $cover-height: 90px;
+      $cover-width: 60px;
+
+      .hit_tnd_container {
+        .hit_tnd_content {
+          overflow: hidden;
+          overflow-y: hidden;
+          overflow-x: visible;
+          float: left;
+          height: 25px;
+          width: 100%;
+          white-space: nowrap;
+          @include hide-scrollbar ();
+
+          * {
+            display: inline;
+            margin-right: 5px;
+
+            &:nth-last-child(1) {
+              margin-right: 0;
+            }
+          }
+
+          >div {
+            float: none;
+
+            &:nth-child(n+1) {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+
+      .hit_download_box {
+        .hit_icon {
+          @mixin hitIcon () {
+            background-color: #fff;
+            background-size: cover;
+            background-repeat: no-repeat;
+            border: 1px solid $card-border-color;
+            height: $cover-height;
+          }
+
+          &[style *="icon_common.png"] {
+            background: none ! important;
+          }
+
+          &[src *="icon_common_disabled.png"] {
+            visibility: hidden;
+
+            @include media-breakpoint-up($float-breakpoint-max) {
+              display: none;
+            }
+          }
+
+          @include media-breakpoint-down($float-breakpoint) {
+            @include hitIcon ();
+          }
+
+          @include media-breakpoint-up($float-breakpoint-max) {
+            @media (orientation: landscape) {
+              @include hitIcon ();
+            }
+          }
+        }
+
+        .hit_icon_overlay {
+          display: none;
+
+          @mixin hitIconOverlay () {
+            &[src $=".svg"] {
+              display: none;
+
+              .vendor-webkit &+span {
+                position: absolute;
+                top: 5px;
+                display: block;
+                height: ($cover-height - 10px);
+                width: ($cover-width - 10px);
+                -webkit-mask-size: ($cover-width - 10px) ($cover-height - 10px);
+                mask-size: ($cover-width - 10px) ($cover-height - 10px);
+                background: $primary;
+              }
+
+              &+svg {
+                position: absolute;
+                top: 5px;
+                left: 12px;
+
+                &,
+                & div {
+                  display: block;
+                  height: ($cover-height - 10px);
+                  width: ($cover-width - 10px);
+                }
+
+                & div {
+                  background-color: $primary;
+                }
+              }
+            }
+          }
+
+          @include media-breakpoint-down($float-breakpoint) {
+            @include hitIconOverlay ();
+          }
+
+          @include media-breakpoint-up($float-breakpoint-max) {
+            @media (orientation: landscape) {
+              @include hitIconOverlay ();
+            }
+          }
+        }
+      }
+    }
+  }
+}

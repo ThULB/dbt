@@ -71,25 +71,25 @@
       </class>
       <xsl:if test="$hasEditorPermission and not($hasAdminPermission)">
         <col align="center" valign="top">
-          <div class="btn-group btn-group-xs">
+          <div class="btn-group">
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit" title="{i18n:translate('component.rc.slot.edit')}">
-              <span class="glyphicon glyphicon-pencil" />
+              <i class="fas fa-edit" />
             </a>
           </div>
         </col>
       </xsl:if>
       <xsl:if test="$hasAdminPermission">
         <col align="center" valign="top">
-          <div class="btn-group btn-group-xs">
+          <div class="btn-group ml-2">
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
               title="{i18n:translate('component.rc.slot.edit')}"
             >
-              <span class="glyphicon glyphicon-pencil" />
+              <i class="fas fa-edit" />
             </a>
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
               title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
             >
-              <span class="glyphicon glyphicon-lock" />
+              <i class="fas fa-lock" />
             </a>
           </div>
         </col>
@@ -98,7 +98,7 @@
             <xsl:value-of select="@id" />
           </a>
           <xsl:if test="@status = 'new'">
-            <span class="label label-danger pull-right">
+            <span class="label label-danger float-right">
               <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
             </span>
           </xsl:if>
@@ -120,7 +120,7 @@
         <xsl:value-of select="title" />
       </a>
     </col>
-    <col class="text-ellipsis" valign="top">
+    <col valign="top">
       <xsl:variable name="date">
         <xsl:choose>
           <xsl:when test="string-length(validTo) &gt; 0">
@@ -135,13 +135,10 @@
       <xsl:value-of
         select="concat($period//label[lang($CurrentLang)]/@shortText, '&#160;', substring-after($period//label[lang($CurrentLang)]/@description, concat($period//label[lang($CurrentLang)]/@text, ' ')))" />
     </col>
-    <col class="text-ellipsis" valign="top">
+    <col valign="top">
       <xsl:variable name="text">
         <xsl:apply-templates select="@id" mode="rcLocationText" />
       </xsl:variable>
-      <xsl:attribute name="title">
-        <xsl:value-of select="$text" />
-      </xsl:attribute>
       <xsl:value-of select="$text" />
     </col>
   </xsl:template>

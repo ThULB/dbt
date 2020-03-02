@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:decoder="xalan://java.net.URLDecoder"
-  exclude-result-prefixes="xalan decoder"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:decoder="xalan://java.net.URLDecoder" exclude-result-prefixes="xalan decoder"
 >
 
   <xsl:param name="Referer" />
@@ -9,44 +9,61 @@
   </xsl:template>
 
   <xsl:template match="/navigation//menu[@id and (group[item] or item)]">
-    <xsl:param name="class" select="''" />
+    <xsl:param name="class" select="'nav-item'" />
+    <xsl:param name="linkClass" select="'nav-link'" />
+    <xsl:param name="dropdownClass" select="''" />
+    <xsl:param name="showIcon" select="string-length(icon) &gt; 0" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress]" />
 
     <xsl:variable name="menuId" select="generate-id(.)" />
-    <li class="dropdown {$class}">
+    <li class="{$class} dropdown ">
       <xsl:if test="$active">
         <xsl:attribute name="class">
           <xsl:value-of select="concat($class,' dropdown active')" />
         </xsl:attribute>
       </xsl:if>
-      <a id="{$menuId}" class="dropdown-toggle" data-toggle="dropdown" href="#">
-        <xsl:apply-templates select="." mode="linkText" />
-        <span class="caret"></span>
+      <a id="{$menuId}" class="{$linkClass} dropdown-toggle" data-toggle="dropdown" href="#">
+        <xsl:choose>
+          <xsl:when test="$showIcon and string-length(icon) &gt; 0">
+            <i class="{icon}" aria-hidden="true"></i>
+            <span class="d-inline d-sm-none d-lg-inline">
+              <xsl:apply-templates select="." mode="linkText" />
+            </span>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates select="." mode="linkText" />
+          </xsl:otherwise>
+        </xsl:choose>
       </a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="{$menuId}">
-        <xsl:apply-templates select="item|group" />
-      </ul>
+      <div class="dropdown-menu {$dropdownClass}" role="menu" aria-labelledby="{$menuId}">
+        <xsl:apply-templates select="item|group">
+          <xsl:with-param name="class" select="'dropdown-item'" />
+        </xsl:apply-templates>
+      </div>
     </li>
   </xsl:template>
 
   <xsl:template match="/navigation//group[@id and item]">
     <xsl:param name="rootNode" select="." />
     <xsl:if test="name(preceding-sibling::*[1])='item'">
-      <li role="presentation" class="divider" />
+      <div role="presentation" class="dropdown-divider" />
     </xsl:if>
     <xsl:if test="label">
-      <li role="presentation" class="dropdown-header">
+      <div class="dropdown-header">
         <xsl:apply-templates select="." mode="linkText" />
-      </li>
+      </div>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:apply-templates select="item">
+      <xsl:with-param name="class" select="'dropdown-item'" />
+    </xsl:apply-templates>
     <xsl:if test="position() != last()">
-      <li role="presentation" class="divider" />
+      <div role="presentation" class="dropdown-divider" />
     </xsl:if>
   </xsl:template>
 
   <xsl:template match="/navigation//item[@href]">
-    <xsl:param name="class" select="''" />
+    <xsl:param name="class" select="'dropdown-item'" />
+    <xsl:param name="showIcon" select="string-length(icon) &gt; 0" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress ]" />
     <xsl:param name="url">
       <xsl:choose>
@@ -63,7 +80,7 @@
     </xsl:param>
     <xsl:choose>
       <xsl:when test="string-length($url) &gt; 0">
-        <li>
+        <a href="{$url}">
           <xsl:attribute name="class">
             <xsl:value-of select="$class" />
             <xsl:if test="$active">
@@ -73,10 +90,19 @@
               <xsl:value-of select="'active'" />
             </xsl:if>
           </xsl:attribute>
-          <a href="{$url}">
-            <xsl:apply-templates select="." mode="linkText" />
-          </a>
-        </li>
+
+          <xsl:choose>
+            <xsl:when test="$showIcon and string-length(icon) &gt; 0">
+              <i class="{icon}" aria-hidden="true"></i>
+              <span class="d-none d-lg-inline">
+                <xsl:apply-templates select="." mode="linkText" />
+              </span>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="." mode="linkText" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </a>
       </xsl:when>
       <xsl:otherwise>
         <xsl:comment>
@@ -237,16 +263,21 @@
 
 
     <xsl:choose>
-      <xsl:when test="(concat($WebApplicationBaseURL, substring-after(@href,'/')) = $RequestURL) or (concat($WebApplicationBaseURL, @href) = $RequestURL)">
-        <li class="active">
+      <xsl:when
+        test="(concat($WebApplicationBaseURL, substring-after(@href,'/')) = $RequestURL) or (concat($WebApplicationBaseURL, @href) = $RequestURL)"
+      >
+        <li class="breadcrumb-item active">
           <xsl:value-of select="./label[lang($CurrentLang)]" />
         </li>
       </xsl:when>
       <xsl:when test="name(.) = 'menu'">
-        <xsl:apply-templates select="." />
+        <xsl:apply-templates select=".">
+          <xsl:with-param name="class" select="'breadcrumb-item'" />
+          <xsl:with-param name="linkClass" select="''" />
+        </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>
-        <li>
+        <li class="breadcrumb-item">
           <a href="{$href}">
             <xsl:choose>
               <xsl:when test="name(.) = 'navigation'">

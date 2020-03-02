@@ -76,7 +76,7 @@
         </ul>
         <p>
           Nähere Informationen zur Belegung eines Formularfeldes erhält man über den jeweiligen Informationsbutton:
-          <a tabindex="0" class="btn btn-default btn-xs info-button" role="button" data-toggle="popover" data-placement="right"
+          <a tabindex="0" class="btn btn-secondary btn-sm info-button" role="button" data-toggle="popover" data-placement="right"
             data-content="Nach einem Klick erscheint ein kurzer Hilfetext"
           >
             <i class="fa fa-info"></i>
@@ -139,7 +139,7 @@
           uns unter:
           <ul>
             <li>
-              <a href="mailto:epublizieren@thulb.uni-jena.de">epublizieren@thulb.uni-jena.de</a>
+              <a href="mailto:epublizieren@uni-jena.de">epublizieren@uni-jena.de</a>
             </li>
             <li>
               Tel.:
@@ -331,7 +331,7 @@
           Interesse nehmen Sie bitte Kontakt mit dem UrMEL-Team unter:
           <ul>
             <li>
-              <a href="mailto:urmel_auskunft@thulb.uni-jena.de">urmel_auskunft@thulb.uni-jena.de</a>
+              <a href="mailto:urmel_auskunft@uni-jena.de">urmel_auskunft@uni-jena.de</a>
             </li>
             <li>
               Tel.:
@@ -510,7 +510,7 @@
           Fachbereich zu.
           Für die Teilnehmer der Veranstaltung vergeben Sie einen Leseschlüssel oder generieren
           diesen über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs">
+          <button type="button" class="btn btn-secondary btn-sm">
             <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           . Der Leseschlüssel stellt sicher,
@@ -534,9 +534,8 @@
       <answer>
         <p>
           Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
-            <span class="caret"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           &gt; „Semesterapparat verwalten“ können Sie einen Ansprechpartner (Name + E-Mailadresse) für Ihren ESA angeben. Mit dem Einrichten
           eines ESA haben Sie
@@ -566,9 +565,8 @@
       <answer>
         <p>
           Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
-            <span class="caret"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie Ihren ESA mit verschiedenen Inhalten füllen:
         </p>
@@ -682,9 +680,8 @@
           URZ-Nutzerkennung
           in
           der DBT an und wählen Sie den entsprechenden ESA aus. Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
-            <span class="caret"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           &gt; „Einträge bearbeiten“ können Sie die gewünschten Änderungen vornehmen.
           Als beauftragte Person geben Sie bitte zusätzlich den
@@ -767,7 +764,7 @@
       <answer>
         <p>
           Schreiben Sie eine E-Mail an
-          <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
+          <a href="mailto:elektronische_semesterapparate@uni-jena.de">elektronische_semesterapparate@uni-jena.de</a>
           . Die E-Mail zur Übernahme des ESA in der neuen DBT wird Ihnen erneut
           zugesandt. Mit der Anmeldung in der DBT und durch die Eingabe
           eines
@@ -783,7 +780,7 @@
       <answer>
         <p>
           Ja, schreiben Sie dazu eine E-Mail an
-          <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
+          <a href="mailto:elektronische_semesterapparate@uni-jena.de">elektronische_semesterapparate@uni-jena.de</a>
           . Die Person, die den ESA übernehmen soll, erhält eine E-Mail
           mit Aufforderung zur Übernahme des ESA und kann nach Anmeldung in der
           DBT und der Eingabe
@@ -801,7 +798,7 @@
       <answer>
         <p>
           Bitte wenden Sie sich in diesen Fällen an:
-          <a href="mailto:dbtadmin@thulb.uni-jena.de">dbtadmin@thulb.uni-jena.de</a>
+          <a href="mailto:dbtadmin@uni-jena.de">dbtadmin@uni-jena.de</a>
           .
         </p>
       </answer>
@@ -813,9 +810,8 @@
       <answer>
         <p>
           Melden Sie sich mit Ihrer URZ-Nutzerkennung in der DBT an und öffnen Sie den entsprechenden Semesterapparat. Über die Schaltfläche
-          <button type="button" class="btn btn-default btn-xs dropdown-toggle">
-            <span aria-hidden="true" class="glyphicon glyphicon-cog"></span>
-            <span class="caret"></span>
+          <button type="button" class="btn btn-secondary btn-sm dropdown-toggle">
+            <span aria-hidden="true" class="fa fa-cogs"></span>
           </button>
           &gt; „Zugriffsschlüssel bearbeiten“ haben Sie die Möglichkeit, Lese- und Schreibschlüssel einzusehen und ggf. zu ändern.
         </p>
@@ -885,7 +881,7 @@
       <answer>
         <p>
           Schreiben Sie uns:
-          <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
+          <a href="mailto:elektronische_semesterapparate@uni-jena.de">elektronische_semesterapparate@uni-jena.de</a>
           .
         </p>
       </answer>
