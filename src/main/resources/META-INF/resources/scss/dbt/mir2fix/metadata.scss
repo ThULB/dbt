@@ -4,3 +4,9 @@ div.detail_row {
     margin-bottom: 0;
   }
 }
+
+#aux_col {
+  .card:nth-child(1n+2) {
+    @extend .my-2;
+  }
+}

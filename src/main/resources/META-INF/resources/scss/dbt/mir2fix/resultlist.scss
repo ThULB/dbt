@@ -11,3 +11,19 @@ div.result_searchline {
     }
   }
 }
+
+.result_body {
+  @extend .flex-column-reverse;
+  @extend .flex-md-row;
+
+  .result-filter {
+    float: unset;
+
+    .card {
+      @media (min-width: 768px) {
+        min-width: 339px;
+        max-width: 340px;
+      }
+    }
+  }
+}
