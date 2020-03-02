@@ -210,7 +210,7 @@
       </to>
     </xsl:for-each>
     <bcc>
-      <xsl:value-of select="concat('Elektronische Semesterapparate', ' &lt;', 'elektronische_semesterapparate@thulb.uni-jena.de', '&gt;')" />
+      <xsl:value-of select="concat('Elektronische Semesterapparate', ' &lt;', 'elektronische_semesterapparate@uni-jena.de', '&gt;')" />
     </bcc>
     <subject>
       <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
@@ -328,7 +328,7 @@
         Elektronischen Semesterapparaten an allen erforderlichen Stellen zu aktualisieren.</p>
       <p>
         Bei Problemen mit der Übernahme eines Semesterapparates in die neue DBT leiten Sie diese Mail bitte mit einem kurzen Kommentar weiter an
-        <a href="mailto:elektronische_semesterapparate@thulb.uni-jena.de">elektronische_semesterapparate@thulb.uni-jena.de</a>
+        <a href="mailto:elektronische_semesterapparate@uni-jena.de">elektronische_semesterapparate@uni-jena.de</a>
         Informationen rund um die Elektronischen Semesterapparate finden Sie unter den neu zusammengestellten FAQ direkt auf der Seite der DBT.
       </p>
       -->
