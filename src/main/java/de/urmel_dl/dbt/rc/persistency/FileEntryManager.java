@@ -47,7 +47,7 @@ public final class FileEntryManager {
 
     private static MCRFileStore getStore() {
         String projectType = getStoryKey();
-        MCRFileStore store = MCRStoreManager.getStore(projectType, MCRFileStore.class);
+        MCRFileStore store = MCRStoreManager.getStore(projectType);
 
         if (store == null) {
             try {
