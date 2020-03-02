@@ -27,8 +27,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.MapJoin;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.SetJoin;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -65,6 +65,8 @@ import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 import org.mycore.solr.MCRSolrClientFactory;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
+import org.mycore.user2.MCRUserAttribute;
+import org.mycore.user2.MCRUserAttribute_;
 import org.tmatesoft.svn.core.SVNException;
 import org.xml.sax.SAXException;
 
@@ -516,8 +518,8 @@ public final class SlotManager {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MCRUser> cq = cb.createQuery(MCRUser.class);
         Root<MCRUser> root = cq.from(MCRUser.class);
-        MapJoin<MCRUser, String, String> attribs = root.joinMap("attributes");
-        cq.where(cb.equal(attribs.key(), filterStr));
+        SetJoin<MCRUser, MCRUserAttribute> attribs = root.joinSet("attributes");
+        cq.where(cb.equal(attribs.get(MCRUserAttribute_.NAME), filterStr));
 
         TypedQuery<MCRUser> q = em.createQuery(cq);
         final List<MCRUser> results = q.getResultList();
@@ -549,8 +551,8 @@ public final class SlotManager {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MCRUser> cq = cb.createQuery(MCRUser.class);
         Root<MCRUser> root = cq.from(MCRUser.class);
-        MapJoin<MCRUser, String, String> attribs = root.joinMap("attributes");
-        cq.where(cb.equal(attribs.key(), filterStr));
+        SetJoin<MCRUser, MCRUserAttribute> attribs = root.joinSet("attributes");
+        cq.where(cb.equal(attribs.get(MCRUserAttribute_.NAME), filterStr));
 
         TypedQuery<MCRUser> q = em.createQuery(cq);
         final List<MCRUser> results = q.getResultList();
