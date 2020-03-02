@@ -8,11 +8,11 @@
     <xsl:param name="extraStyles" select="''" />
     <xsl:param name="pages" />
 
-    <ul id="{$id}_paginate" class="pagination pagination-sm {$extraStyles}">
-      <li>
+    <ul id="{$id}_paginate" class="pagination {$extraStyles}">
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &gt; 1">
-            <a tabindex="0" id="{$id}_first">
+            <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:attribute name="href">
                   <xsl:call-template name="paginateQuerystring">
                     <xsl:with-param name="page" select="1" />
@@ -25,20 +25,20 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &gt; 1">
-            <a tabindex="0" id="{$id}_previous">
+            <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:attribute name="href">
                   <xsl:call-template name="paginateQuerystring">
                     <xsl:with-param name="page" select="$Page - 1" />
@@ -51,13 +51,13 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
@@ -101,10 +101,10 @@
         <xsl:with-param name="paginateEnd" select="$paginateEnd" />
       </xsl:call-template>
 
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &lt; $pages">
-            <a tabindex="0" id="{$id}_next">
+            <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:attribute name="href">
                   <xsl:call-template name="paginateQuerystring">
                     <xsl:with-param name="page" select="$Page + 1" />
@@ -117,20 +117,20 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &lt; $pages">
-            <a tabindex="0" id="{$id}_last">
+            <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:attribute name="href">
                 <xsl:call-template name="paginateQuerystring">
                   <xsl:with-param name="page" select="$pages" />
@@ -143,13 +143,13 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
@@ -162,15 +162,15 @@
     <xsl:param name="paginateEnd" />
 
     <xsl:if test="$paginateStart = number($Page)">
-      <li class="active">
-        <span>
+      <li class="page-item active">
+        <a class="page-link" tabindex="0">
           <xsl:value-of select="$paginateStart" />
-        </span>
+        </a>
       </li>
     </xsl:if>
     <xsl:if test="$paginateStart != number($Page)">
-      <li>
-        <a tabindex="0">
+      <li class="page-item">
+        <a class="page-link" tabindex="0">
           <xsl:attribute name="href">
             <xsl:call-template name="paginateQuerystring">
               <xsl:with-param name="page" select="$paginateStart" />

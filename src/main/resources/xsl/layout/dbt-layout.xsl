@@ -2,11 +2,12 @@
   <!-- ============================================== -->
   <!-- $Revision$ $Date$ -->
   <!-- ============================================== -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever" xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://de.urmel_dl.dbt.common.DBTVersion" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver mirver dbtver mcrxsl i18n encoder"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:basket="xalan://org.mycore.frontend.basket.MCRBasketManager" xmlns:mcr="http://www.mycore.org/"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:actionmapping="xalan://org.mycore.wfc.actionmapping.MCRURLRetriever"
+  xmlns:mcrver="xalan://org.mycore.common.MCRCoreVersion" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:mirver="xalan://org.mycore.mir.common.MIRCoreVersion" xmlns:dbtver="xalan://de.urmel_dl.dbt.common.DBTVersion"
+  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xalan xlink basket actionmapping mcr mcrver mirver dbtver mcrxsl i18n encoder"
 >
   <!-- ************************************************************ -->
   <!-- *                  additional stylesheets                  * -->
@@ -14,15 +15,15 @@
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
   <xsl:include href="resource:xsl/layout/dbt-navigation.xsl" />
 
-  <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5" encoding="UTF-8" />
+  <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5"
+    encoding="UTF-8" />
   <xsl:strip-space elements="*" />
 
   <!-- ************************************************************ -->
   <!-- *           Parameters for MyCoRe LayoutService            * -->
   <!-- ************************************************************ -->
   <xsl:variable name="PageTitle" select="/*/@title" />
-  <xsl:variable name="fontawesome.version" select="'4.0.3'" />
-  
+
   <!-- ************************************************************ -->
   <!-- *            Optional includes within <head />             * -->
   <!-- ************************************************************ -->
@@ -61,6 +62,9 @@
         <xsl:call-template name="layout.footer" />
       </footer>
 
+      <div id="container-overlay" class="collapse" data-toggle="collapse" data-target="#navbar,#container-overlay" aria-expanded="false"
+        aria-controls="navbar"
+      ></div>
       <xsl:call-template name="layout.scripts" />
     </body>
   </xsl:template>
@@ -80,10 +84,10 @@
   <!-- CSS Links -->
 
   <xsl:template name="layout.cssLinks">
-    <link href="{$WebApplicationBaseURL}assets/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.css" rel="stylesheet" />
     <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
-    
+
     <xsl:if test="$include.HTML.Head.CSS">
       <xsl:copy-of select="$include.HTML.Head.CSS" />
     </xsl:if>
@@ -106,14 +110,15 @@
       if (jQuery.fn.button){jQuery.fn.btn = jQuery.fn.button.noConflict();}
     </script>
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.min.js" />
-    
+    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.bundle.min.js" />
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.min.js" />
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.min.js"></script>
-    
+
     <script src="{$WebApplicationBaseURL}js/mir/session-polling.js" type="text/javascript"></script>
     <script src="{$WebApplicationBaseURL}modules/webtools/upload/js/upload-api.js"></script>
     <script src="{$WebApplicationBaseURL}modules/webtools/upload/js/upload-gui.js"></script>
@@ -159,21 +164,40 @@
   </xsl:template>
 
   <xsl:template name="layout.head">
-    <nav class="navbar navbar-default navbar-dbt navbar-fixed-top" role="navigation">
-      <div class="login-form">
-        <div class="container-fluid">
-          <xsl:choose>
-            <xsl:when test="mcrxsl:isCurrentUserGuestUser()">
-              <xsl:call-template name="layout.head.loginForm" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="layout.head.logoutForm" />
-            </xsl:otherwise>
-          </xsl:choose>
+    <nav class="navbar navbar-expand-md navbar-light navbar-dbt fixed-top scrolling-navbar" role="navigation">
+      <div class="container">
+        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}">
+          <span class="img-placeholder"></span>
+        </a>
+        <button type="button" class="navbar-toggler collapsed plus-sign" data-toggle="collapse" data-target="#navbar,#container-overlay"
+          aria-expanded="false" aria-controls="navbar"
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <div id="navbar" class="navbar-collapse collapse">
+          <xsl:call-template name="layout.head.mainMenu" />
         </div>
       </div>
-      <xsl:call-template name="layout.head.mainMenu" />
     </nav>
+
+    <div class="searchbar">
+      <div class="container">
+        <form class="navbar-form form-inline navbar-right" role="search" action="{$WebApplicationBaseURL}servlets/solr/find">
+          <div class="input-group">
+            <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
+            <span class="input-group-btn">
+              <button type="submit" class="btn btn-default">
+                <span class="fa fa-search" aria-hidden="true"></span>
+              </button>
+            </span>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <noscript>
       <div class="mir-no-script alert alert-warning text-center" style="border-radius: 0;">
         <xsl:value-of select="i18n:translate('mir.noScript.text')" />
@@ -186,46 +210,18 @@
     </noscript>
   </xsl:template>
 
-  <xsl:template name="layout.head.loginForm">
-    <xsl:variable name="realms" select="document('realm:all')/realms" />
-
-    <xsl:choose>
-      <xsl:when test="count($realms/realm) = 1">
-        <form id="loginForm" action="{$ServletsBaseURL}MCRLoginServlet" method="post" class="form-inline pull-right" role="form">
-          <input type="hidden" name="action" value="login" />
-          <input type="hidden" name="realm" value="local" />
-          <input type="hidden" name="url" value="{$RequestURL}" />
-          <div class="form-group">
-            <label class="sr-only" for="loginUID">
-              <xsl:value-of select="i18n:translate('dbt.login.uid.placeholder')" />
-            </label>
-            <input type="text" class="input-sm" id="loginUID" name="uid" placeholder="{i18n:translate('dbt.login.uid.placeholder')}" />
-          </div>
-          <div class="form-group">
-            <label class="sr-only" for="loginPWD">
-              <xsl:value-of select="i18n:translate('dbt.login.pwd.placeholder')" />
-            </label>
-            <input type="password" class="input-sm" id="loginPWD" name="pwd" placeholder="{i18n:translate('dbt.login.pwd.placeholder')}" />
-          </div>
-          <button type="submit" class="btn btn-primary" name="login">
-            <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
-          </button>
-        </form>
-      </xsl:when>
-      <xsl:otherwise>
-        <ul class="nav nav-userinfo pull-right">
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item" />
-          <li>
-            <a class="login" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
-              <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
-            </a>
-          </li>
-        </ul>
-      </xsl:otherwise>
-    </xsl:choose>
+  <xsl:template name="layout.head.login">
+    <li class="nav-item">
+      <a class="nav-link" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
+        <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
+        <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
+          <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
+        </span>
+      </a>
+    </li>
   </xsl:template>
 
-  <xsl:template name="layout.head.logoutForm">
+  <xsl:template name="layout.head.logout">
     <xsl:variable name="userData" select="document('user:current')/user" />
     <xsl:variable name="userRoles">
       <xsl:for-each select="$userData/groups/group">
@@ -257,20 +253,15 @@
       </xsl:choose>
     </xsl:variable>
 
-    <ul class="nav nav-userinfo pull-right">
-      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item" />
+    <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
+      <xsl:with-param name="class" select="'nav-item d-none d-md-inline'" />
+      <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
+    </xsl:apply-templates>
 
-      <li class="dropdown">
-        <a id="userActions" class="dropdown-toggle" data-toggle="dropdown" href="#">
-          <span class="glyphicon glyphicon-tasks" />
-          <span class="caret" />
-        </a>
-        <ul class="dropdown-menu pull-right" role="menu">
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']/*" />
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+        <i class="fa fa-user" aria-hidden="true"></i>
+        <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
           <xsl:choose>
             <xsl:when test="$userData/realName">
               <xsl:value-of select="$userData/realName" />
@@ -279,129 +270,131 @@
               <xsl:value-of select="$userId" />
             </xsl:otherwise>
           </xsl:choose>
-          <b class="caret" />
-        </a>
-        <div class="dropdown-menu pull-right no-padding">
-          <div id="user-info" class="panel">
-            <div class="panel-body">
-              <xsl:if test="$userData/realName">
-                <strong>
-                  <xsl:value-of select="i18n:translate('component.user2.admin.userAccount')" />
-                </strong>
-                <span class="pull-right">
-                  <xsl:value-of select="$userId" />
-                </span>
-                <br />
-              </xsl:if>
-              <xsl:if test="$userData/@realm != 'local'">
-                <strong>
-                  <xsl:value-of select="i18n:translate('component.user2.admin.user.realm')" />
-                </strong>
-                <span class="pull-right">
-                  <xsl:value-of select="$realm/label" />
-                </span>
-                <br />
-              </xsl:if>
-              <xsl:if test="$userData/eMail">
-                <strong>
-                  <xsl:value-of select="i18n:translate('component.user2.admin.user.email')" />
-                </strong>
-                <span class="pull-right">
-                  <xsl:value-of select="$userData/eMail" />
-                </span>
-                <br />
-              </xsl:if>
-              <xsl:if test="string-length($userRoles) &gt; 0">
-                <strong>
-                  <xsl:value-of select="i18n:translate('component.user2.admin.roles')" />
-                </strong>
-                <span class="pull-right">
-                  <xsl:value-of select="$userRoles" />
-                </span>
-                <br />
-              </xsl:if>
-              <xsl:if test="$userData/@locked = 'false'">
-                <a href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=save">
-                  <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
-                </a>
-                <xsl:text>&#160;-&#160;</xsl:text>
-              </xsl:if>
-              <xsl:if test="($userData/@locked = 'false') or ($userData/@realm != 'local')">
-                <a href="{$pwdChgURL}">
-                  <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
-                </a>
-              </xsl:if>
-            </div>
-            <div class="panel-footer">
-              <a href="{$ServletsBaseURL}logout" class="btn btn-primary btn-sm">
-                <span class="btn-label">
-                  <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
-                </span>
-              </a>
-            </div>
-          </div>
+        </span>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right py-0" id="user-info">
+        <dl class="row m-2 pt-2">
+          <xsl:if test="$userData/realName">
+            <dt class="col-3 p-0">
+              <xsl:value-of select="i18n:translate('component.user2.admin.userAccount')" />
+            </dt>
+            <dd class="col-9 p-0 my-0 text-right">
+              <xsl:value-of select="$userId" />
+            </dd>
+          </xsl:if>
+          <xsl:if test="$userData/@realm != 'local'">
+            <dt class="col-3 p-0">
+              <xsl:value-of select="i18n:translate('component.user2.admin.user.realm')" />
+            </dt>
+            <dd class="col-9 p-0 my-0 text-right">
+              <xsl:value-of select="$realm/label" />
+            </dd>
+          </xsl:if>
+          <xsl:if test="$userData/eMail">
+            <dt class="col-3 p-0">
+              <xsl:value-of select="i18n:translate('component.user2.admin.user.email')" />
+            </dt>
+            <dd class="col-9 p-0 my-0 text-right">
+              <xsl:value-of select="$userData/eMail" />
+            </dd>
+          </xsl:if>
+          <xsl:if test="string-length($userRoles) &gt; 0">
+            <dt class="col-3 p-0">
+              <xsl:value-of select="i18n:translate('component.user2.admin.roles')" />
+            </dt>
+            <dd class="col-9 p-0 my-0 text-right">
+              <xsl:value-of select="$userRoles" />
+            </dd>
+          </xsl:if>
+        </dl>
+
+        <div class="actions mx-2">
+          <xsl:if test="$userData/@locked = 'false'">
+            <a href="{$WebApplicationBaseURL}authorization/change-current-user.xed?action=save">
+              <xsl:value-of select="i18n:translate('component.user2.admin.changedata')" />
+            </a>
+            <xsl:text>&#160;-&#160;</xsl:text>
+          </xsl:if>
+          <xsl:if test="($userData/@locked = 'false') or ($userData/@realm != 'local')">
+            <a href="{$pwdChgURL}">
+              <xsl:value-of select="i18n:translate('component.user2.admin.changepw')" />
+            </a>
+          </xsl:if>
         </div>
-      </li>
-    </ul>
+
+        <div class="dropdown-divider mb-0"></div>
+        <div class="controls clearfix p-2">
+          <a href="{$ServletsBaseURL}logout" class="btn btn-primary float-right">
+            <span class="btn-label">
+              <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </li>
   </xsl:template>
 
   <xsl:template name="layout.head.mainMenu">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar" />
-          <span class="icon-bar" />
-          <span class="icon-bar" />
-        </button>
-        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}" />
-      </div>
-      <div class="navbar-collapse collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']" />
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
-          <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
-            <xsl:with-param name="class" select="'hidden-md hidden-lg'" />
-          </xsl:apply-templates>
-          <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
-            <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
-              <xsl:with-param name="class" select="'hidden-md hidden-lg'" />
-            </xsl:apply-templates>
-          </xsl:if>
-          <xsl:call-template name="layout.head.basketMenu" />
-        </ul>
-        <form id="searchForm" action="{$WebApplicationBaseURL}servlets/solr/find" class="navbar-form navbar-right visible-xs visible-md visible-lg" role="search">
-          <div class="input-group input-group-sm">
-            <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
-            <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
-              <input name="owner" type="hidden" value="createdby:{$CurrentUser}" />
-            </xsl:if>
-            <div class="input-group-btn">
-              <button class="btn btn-default" type="submit">
-                <span class="glyphicon glyphicon-search" />
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+    <ul class="navbar-nav">
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
+      <li class="nav-item d-xs-inline d-sm-inline d-md-none">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
+          <xsl:with-param name="class" select="'nav-link'" />
+          <xsl:with-param name="showIcon" select="false()" />
+        </xsl:apply-templates>
+      </li>
+      <xsl:if test="not(mcrxsl:isCurrentUserGuestUser())">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
+          <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
+          <xsl:with-param name="linkClass" select="'nav-link'" />
+        </xsl:apply-templates>
+      </xsl:if>
+      <xsl:call-template name="layout.head.basketMenu">
+        <xsl:with-param name="class" select="'d-xs-inline d-sm-inline d-md-none'" />
+      </xsl:call-template>
+    </ul>
+    <ul class="navbar-nav navbar-right">
+      <xsl:call-template name="layout.head.basketMenu">
+        <xsl:with-param name="class" select="'d-none d-md-inline'" />
+        <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
+      </xsl:call-template>
+      <li class="nav-item d-none d-md-inline">
+        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
+          <xsl:with-param name="class" select="'nav-link'" />
+        </xsl:apply-templates>
+      </li>
+
+      <xsl:choose>
+        <xsl:when test="mcrxsl:isCurrentUserGuestUser()">
+          <xsl:call-template name="layout.head.login" />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="layout.head.logout" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </ul>
   </xsl:template>
 
   <xsl:template name="layout.head.basketMenu">
+    <xsl:param name="class" select="''" />
+    <xsl:param name="dropdownClass" select="''" />
+
     <xsl:variable name="basketType" select="'objects'" />
     <xsl:variable name="basket" select="document(concat('basket:',$basketType))/basket" />
     <xsl:variable name="entryCount" select="count($basket/entry)" />
-    <li class="dropdown" id="basket-list-item">
-      <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
+    <li class="nav-item dropdown {$class}" id="basket-list-item">
+      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
         <i class="fa fa-bookmark" />
         <sup>
           <xsl:value-of select="$entryCount" />
         </sup>
       </a>
-      <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-        <li class="disabled">
+      <ul class="dropdown-menu {$dropdownClass}" role="menu" aria-labelledby="dLabel">
+        <li class="dropdown-item disabled">
           <a>
             <xsl:choose>
               <xsl:when test="$entryCount = 0">
@@ -416,8 +409,8 @@
             </xsl:choose>
           </a>
         </li>
-        <li class="divider" />
-        <li>
+        <li class="dropdown-divider" />
+        <li class="dropdown-item">
           <a href="{$ServletsBaseURL}MCRBasketServlet{$HttpSession}?type={$basket/@type}&amp;action=show">
             <xsl:value-of select="i18n:translate('basket.open')" />
           </a>
@@ -427,63 +420,69 @@
   </xsl:template>
 
   <xsl:template name="layout.content">
-    <div id="containerBackground">
-      <a id="All" />
+    <div id="container-main">
+      <a id="top"></a>
+      <!-- include Internet Explorer warning -->
+      <xsl:call-template name="msie-note" />
       <div class="container">
-        <div id="main">
-          <xsl:call-template name="navigation.breadcrumbPath">
-            <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
-          </xsl:call-template>
+        <xsl:call-template name="navigation.breadcrumbPath">
+          <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
+        </xsl:call-template>
 
 <!--           <xsl:call-template name="action.buttons" /> -->
-          <xsl:call-template name="print.writeProtectionMessage" />
-          <xsl:call-template name="print.statusMessage" />
+        <xsl:call-template name="print.writeProtectionMessage" />
+        <xsl:call-template name="print.statusMessage" />
 
-          <xsl:choose>
-            <xsl:when test="$readAccess='true'">
+        <xsl:choose>
+          <xsl:when test="$readAccess='true'">
 <!--               <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|scripts|', concat('|', name(), '|')))]" /> -->
-              <xsl:apply-templates select="@*[name != 'title']|node()" />
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:call-template name="printNotLoggedIn" />
-            </xsl:otherwise>
-          </xsl:choose>
-        </div>
+            <xsl:apply-templates select="@*[name != 'title']|node()" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="printNotLoggedIn" />
+          </xsl:otherwise>
+        </xsl:choose>
       </div>
     </div>
   </xsl:template>
 
   <xsl:template name="layout.footer">
-    <div id="nav" class="col-xs-12">
-      <ul class="nav-footer">
-        <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='footer']//item" />
-      </ul>
-    </div>
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <ul class="nav-footer">
+            <xsl:for-each select="$loaded_navigation_xml/menu[@id='footer']//item">
+              <li>
+                <xsl:apply-templates select=".">
+                  <xsl:with-param name="class" select="''" />
+                </xsl:apply-templates>
+              </li>
+            </xsl:for-each>
+          </ul>
+          <p class="info mb-2">
+            <xsl:value-of select="i18n:translate('dbt.copyright')" />
+            <i class="fas fa-info-circle text-info ml-2 pt-1" data-toggle="tooltip" data-html="true" data-placement="top"
+              title="{concat('DBT: ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')', '&lt;br&gt;MIR: ',mirver:getCompleteVersion())}"
+            ></i>
+          </p>
+        </div>
 
-    <div id="info" class="col-xs-10">
-      <p>
-        <xsl:value-of select="i18n:translate('dbt.copyright')" />
-      </p>
-      <p title="{concat('MIR ',mirver:getCompleteVersion())}">
-        <xsl:value-of select="concat('Version ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')')" />
-      </p>
-    </div>
-    <div class="col-xs-2">
-      <form id="langSelect" method="get">
-        <input type="hidden" name="lang" value="{$CurrentLang}" />
-        <div class="btn-group dropup pull-right">
-          <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-            <span class="language {$CurrentLang}">
-              <xsl:value-of select="i18n:translate('navigation.Language')" />
-            </span>
-            <span class="caret" />
-          </button>
-          <ul class="dropdown-menu">
-            <li>
-              <xsl:if test="$CurrentLang = 'de'">
-                <xsl:attribute name="class">active</xsl:attribute>
-              </xsl:if>
-              <a href="#" class="language de">
+        <div>
+          <div class="btn-group dropup float-right language-select">
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+              <span class="language {$CurrentLang}">
+                <xsl:value-of select="i18n:translate('navigation.Language')" />
+              </span>
+              <span class="caret" />
+            </button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <a href="#">
+                <xsl:attribute name="class">
+                  <xsl:text>dropdown-item language de</xsl:text>
+                  <xsl:if test="$CurrentLang = 'de'">
+                    <xsl:text> active</xsl:text>
+                  </xsl:if>
+                </xsl:attribute>
                 <xsl:attribute name="href">
                       <xsl:call-template name="UrlSetParam">
                         <xsl:with-param name="url" select="$RequestURL" />
@@ -493,12 +492,13 @@
                     </xsl:attribute>
                 <xsl:text>Deutsch</xsl:text>
               </a>
-            </li>
-            <li>
-              <xsl:if test="$CurrentLang = 'en'">
-                <xsl:attribute name="class">active</xsl:attribute>
-              </xsl:if>
-              <a href="#" class="language en">
+              <a href="#">
+                <xsl:attribute name="class">
+                  <xsl:text>dropdown-item language en</xsl:text>
+                  <xsl:if test="$CurrentLang = 'en'">
+                    <xsl:text> active</xsl:text>
+                  </xsl:if>
+                </xsl:attribute>
                 <xsl:attribute name="href">
                       <xsl:call-template name="UrlSetParam">
                         <xsl:with-param name="url" select="$RequestURL" />
@@ -508,17 +508,19 @@
                     </xsl:attribute>
                 <xsl:text>English</xsl:text>
               </a>
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
-      </form>
-    </div>
+      </div>
 
-    <xsl:variable name="mcr_version" select="concat('MyCoRe ',mcrver:getCompleteVersion())" />
-    <div id="powered_by" class="col-xs-12">
-      <a href="http://www.mycore.de">
-        <img src="{$WebApplicationBaseURL}dbt/images/mycore_logo_small_invert.png" class="img-responsive center-block" title="{$mcr_version}" alt="powered by MyCoRe" />
-      </a>
+      <div class="d-flex justify-content-center align-items-center" id="powered_by">
+        <xsl:variable name="mcr_version" select="concat('MyCoRe ',mcrver:getCompleteVersion())" />
+        <a href="http://www.mycore.de">
+          <img alt="powered by MyCoRe" class="img-responsive"
+            src="{$WebApplicationBaseURL}mir-layout/images/mycore_logo_powered_120x30_blaue_schrift_frei.png" title="{$mcr_version}" />
+        </a>
+      </div>
+
     </div>
   </xsl:template>
 
@@ -537,7 +539,7 @@
     <xsl:variable name="actions.combined" select="xalan:nodeset($actions)/action" />
 
     <xsl:if test="count($actions.combined) &gt; 0">
-      <div class="actionButtons btn-group btn-group-sm pull-right">
+      <div class="actionButtons btn-group btn-group-sm float-right">
         <xsl:apply-templates select="$actions.combined" mode="action.buttons" />
       </div>
       <div class="clearfix" />

@@ -20,6 +20,9 @@
         <xsl:attribute name="class">
           <xsl:text>not-setable</xsl:text>
         </xsl:attribute>
+        <xsl:attribute name="disabled">
+          <xsl:text>disabled</xsl:text>
+        </xsl:attribute>
       </xsl:if>
       <xsl:value-of select="concat(label[lang($CurrentLang)]/@description, ' (', @from, '-', @to, ')')" />
     </option>

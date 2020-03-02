@@ -9,7 +9,7 @@
       <label xml:lang="en" text="ThULB Jena" />
       <label xml:lang="de" text="ThULB Jena" />
       <label xml:lang="x-catid" text="2fd22120-5bc5-11e0-80e3-0800200c9a66" />
-      <label xml:lang="x-mail" text="thulb_semapp@thulb.uni-jena.de" />
+      <label xml:lang="x-mail" text="thulb_semapp@uni-jena.de" />
       <url xlink:href="http://www.thulb.uni-jena.de/" xlink:type="locator" />
       <category ID="0027.01">
         <label xml:lang="en" text="Testsemesterapparate" />
@@ -17,28 +17,28 @@
         <category ID="0027.01.01">
           <label xml:lang="en" text="Geisteswissenschaften" />
           <label xml:lang="de" text="Geisteswissenschaften" />
-          <label xml:lang="x-mail" text="thulb_esa_tbgeist1@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbgeist1@uni-jena.de" />
         </category>
         <category ID="0027.01.02">
           <label xml:lang="en" text="Naturwissenschaften" />
           <label xml:lang="de" text="Naturwissenschaften" />
-          <label xml:lang="x-mail" text="thulb_esa_tbnatwi1@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbnatwi1@uni-jena.de" />
         </category>
         <category ID="0027.01.03">
           <label xml:lang="de" text="Rechts-, Wirtschafts- und Sozialwissenschaften" />
           <label xml:lang="en" text="Rechts-, Wirtschafts- und Sozialwissenschaften" />
-          <label xml:lang="x-mail" text="thulb_esa_tbrewi1@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbrewi1@uni-jena.de" />
         </category>
         <category ID="0027.01.04">
           <label xml:lang="en" text="Medizin" />
           <label xml:lang="de" text="Medizin" />
-          <label xml:lang="x-mail" text="thulb_esa_tbklinmed@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbklinmed@uni-jena.de" />
         </category>
       </category>
       <category ID="0027.11">
         <label xml:lang="en" text="TB Geisteswissenschaften / Ebene 1" />
         <label xml:lang="de" text="TB Geisteswissenschaften / Ebene 1" />
-        <label xml:lang="x-mail" text="thulb_esa_tbgeist1@thulb.uni-jena.de" />
+        <label xml:lang="x-mail" text="thulb_esa_tbgeist1@uni-jena.de" />
         <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" xlink:type="locator" />
         <category ID="0027.11.01">
           <label xml:lang="en" text="Erziehungswissenschaften" />
@@ -69,7 +69,7 @@
       <category ID="0027.12">
         <label xml:lang="en" text="TB Geisteswissenschaften / Ebene 2" />
         <label xml:lang="de" text="TB Geisteswissenschaften / Ebene 2" />
-        <label xml:lang="x-mail" text="thulb_esa_tbgeist2@thulb.uni-jena.de" />
+        <label xml:lang="x-mail" text="thulb_esa_tbgeist2@uni-jena.de" />
         <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" xlink:type="locator" />
         <category ID="0027.12.01">
           <label xml:lang="en" text="Archäologie / Ur- und Frühgeschichte" />
@@ -105,7 +105,7 @@
       <category ID="0027.13">
         <label xml:lang="en" text="TB Geisteswissenschaften / Ebene 3" />
         <label xml:lang="de" text="TB Geisteswissenschaften / Ebene 3" />
-        <label xml:lang="x-mail" text="thulb_esa_tbgeist3@thulb.uni-jena.de" />
+        <label xml:lang="x-mail" text="thulb_esa_tbgeist3@uni-jena.de" />
         <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" xlink:type="locator" />
         <category ID="0027.13.01">
           <label xml:lang="en" text="Allg. u. vergl. Sprach- u. Literaturwiss." />
@@ -151,7 +151,7 @@
       <category ID="0027.14">
         <label xml:lang="en" text="TB Geisteswissenschaften / Ebene 4" />
         <label xml:lang="de" text="TB Geisteswissenschaften / Ebene 4" />
-        <label xml:lang="x-mail" text="thulb_esa_tbgeist4@thulb.uni-jena.de" />
+        <label xml:lang="x-mail" text="thulb_esa_tbgeist4@uni-jena.de" />
         <url xlink:href="http://www.thulb.uni-jena.de/tb_geist.html" xlink:type="locator" />
         <category ID="0027.14.01">
           <label xml:lang="de" text="Kunstgeschichte" />
@@ -171,13 +171,13 @@
         <category ID="0027.20.01">
           <label xml:lang="en" text="Rechtswissenschaft" />
           <label xml:lang="de" text="Rechtswissenschaft" />
-          <label xml:lang="x-mail" text="thulb_esa_tbrewi1@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbrewi1@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" xlink:type="locator" />
         </category>
         <category ID="0027.20.02">
           <label xml:lang="de" text="Wirtschaftswissenschaften" />
           <label xml:lang="en" text="Wirtschaftswissenschaften" />
-          <label xml:lang="x-mail" text="thulb_esa_tbrewi2@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbrewi2@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_rewi.html" xlink:type="locator" />
         </category>
         <category ID="0027.20.03">
@@ -194,19 +194,19 @@
         <category ID="0027.30.01">
           <label xml:lang="de" text="TB Naturwissenschaften" />
           <label xml:lang="en" text="TB Naturwissenschaften" />
-          <label xml:lang="x-mail" text="thulb_esa_tbnatwi1@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbnatwi1@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_natwi.html" xlink:type="locator" />
         </category>
         <category ID="0027.30.02">
           <label xml:lang="en" text="Chemie" />
           <label xml:lang="de" text="Chemie" />
-          <label xml:lang="x-mail" text="thulb_esa_tbnatwi2@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbnatwi2@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/14.html" xlink:type="locator" />
         </category>
         <category ID="0027.30.03">
           <label xml:lang="de" text="Physik" />
           <label xml:lang="en" text="Physik" />
-          <label xml:lang="x-mail" text="thulb_esa_tbnatwi3@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbnatwi3@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/16.html" xlink:type="locator" />
         </category>
       </category>
@@ -217,19 +217,19 @@
         <category ID="0027.40.01">
           <label xml:lang="en" text="Klinische Medizin" />
           <label xml:lang="de" text="Klinische Medizin" />
-          <label xml:lang="x-mail" text="thulb_esa_tbklinmed@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbklinmed@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_klinmed.html" xlink:type="locator" />
         </category>
         <category ID="0027.40.02">
           <label xml:lang="en" text="Vorklinische Medizin" />
           <label xml:lang="de" text="Vorklinische Medizin" />
-          <label xml:lang="x-mail" text="thulb_esa_tbmed2@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_esa_tbmed2@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_med2.html" xlink:type="locator" />
         </category>
         <category ID="0027.40.03">
           <label xml:lang="en" text="Sportwissenschaft" />
           <label xml:lang="de" text="Sportwissenschaft" />
-          <label xml:lang="x-mail" text="thulb_spowi@thulb.uni-jena.de" />
+          <label xml:lang="x-mail" text="thulb_spowi@uni-jena.de" />
           <url xlink:href="http://www.thulb.uni-jena.de/tb_medst.html" xlink:type="locator" />
         </category>
       </category>

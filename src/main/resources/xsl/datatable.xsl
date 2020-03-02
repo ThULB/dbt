@@ -4,8 +4,8 @@
 <!-- $Revision$ $Date$ -->
 <!-- ====================================================================== -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  xmlns:str="http://exslt.org/strings" exclude-result-prefixes="xsl xalan i18n str"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:str="http://exslt.org/strings" exclude-result-prefixes="xsl xalan i18n str"
 >
 
   <xsl:include href="str.tokenize.xsl" />
@@ -163,32 +163,20 @@
       </xsl:choose>
     </xsl:variable>
 
-    <div id="{$id}_wrapper" class="datatable panel panel-default">
-      <div class="panel-heading clearfix">
-        <form id="{$id}_form" class="row form-inline" role="form">
+    <div id="{$id}_wrapper" class="datatable card">
+      <div class="card-header">
+        <form id="{$id}_form" class="form-inline d-flex justify-content-between" role="form">
           <!-- build hidden values -->
           <xsl:call-template name="dataTableFormValues" />
 
-          <xsl:variable name="colWidth">
-            <xsl:choose>
-              <xsl:when test="$disableFilter = false()">
-                <xsl:value-of select="6" />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="12" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:variable>
-
-          <xsl:if test="$disableFilter = false()">
+          <xsl:choose>
+            <xsl:when test="$disableFilter = false()">
             <!-- entries filter -->
-            <div class="col-xs-{$colWidth}">
-              <div class="form-group no-margin" id="{$id}_filter">
-                <label>
-                  <span class="glyphicon glyphicon-filter" aria-hidden="true" />
+              <div class="form-group flex-fill m-0" id="{$id}_filter">
+                <label class="d-inline-flex justify-content-start flex-row w-100 align-items-center">
+                  <span class="fa fa-filter mr-1" aria-hidden="true" />
                   <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filter'))" />
-                  <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                  <input class="form-control input-sm" type="search" name="Filter">
+                  <input class="form-control ml-2" type="search" name="Filter">
                     <xsl:attribute name="value">
                       <xsl:if test="string-length($Filter) &gt; 0">
                         <xsl:value-of select="$Filter" />
@@ -197,52 +185,42 @@
                   </input>
                 </label>
               </div>
-            </div>
-          </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+              <div />
+            </xsl:otherwise>
+          </xsl:choose>
           
           <!-- numPerPage selector -->
-          <div>
-            <xsl:attribute name="class">
-              <xsl:choose>
-                <xsl:when test="$disableFilter = true()">
-                  <xsl:value-of select="concat('col-xs-offset-', $colWidth div 2, ' col-xs-', $colWidth div 2)" />
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="concat(' col-xs-', $colWidth)" />
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
-            <div id="{$id}_length" class="form-group pull-right no-margin">
-              <label>
-                <select class="form-control input-sm" name="numPerPage" size="1" onchange="this.form.submit()">
-                  <xsl:variable name="tokens">
-                    <xsl:call-template name="str:tokenize">
-                      <xsl:with-param name="string" select="$dataTableNumPerPageList" />
-                      <xsl:with-param name="delimiters" select="','" />
-                    </xsl:call-template>
-                  </xsl:variable>
-                  <xsl:for-each select="xalan:nodeset($tokens)/token">
-                    <option value="{.}">
-                      <xsl:if test="$numPerPage = .">
-                        <xsl:attribute name="selected"><xsl:text>selected</xsl:text></xsl:attribute>
-                      </xsl:if>
-                      <xsl:value-of select="." />
-                    </option>
-                  </xsl:for-each>
-                </select>
-                <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.lengthMenu'))" />
-                <noscript>
-                  <input class="btn" type="submit" name="Ok" value="Ok" />
-                </noscript>
-              </label>
-            </div>
+          <div id="{$id}_length" class="form-group d-none d-md-inline-flex m-0">
+            <select class="form-control custom-select mr-2" name="numPerPage" size="1" onchange="this.form.submit()">
+              <xsl:variable name="tokens">
+                <xsl:call-template name="str:tokenize">
+                  <xsl:with-param name="string" select="$dataTableNumPerPageList" />
+                  <xsl:with-param name="delimiters" select="','" />
+                </xsl:call-template>
+              </xsl:variable>
+              <xsl:for-each select="xalan:nodeset($tokens)/token">
+                <option value="{.}">
+                  <xsl:if test="$numPerPage = .">
+                    <xsl:attribute name="selected"><xsl:text>selected</xsl:text></xsl:attribute>
+                  </xsl:if>
+                  <xsl:value-of select="." />
+                </option>
+              </xsl:for-each>
+            </select>
+            <label class="d-inline">
+              <xsl:value-of select="i18n:translate(concat($i18nprefix, '.lengthMenu'))" />
+              <noscript>
+                <input class="btn" type="submit" name="Ok" value="Ok" />
+              </noscript>
+            </label>
           </div>
         </form>
       </div>
       <!-- build DataTable -->
-      <div class="table-responsive">
-        <table class="table table-striped" id="{$id}">
+      <div class="card-body table-responsive p-0">
+        <table class="table table-striped table-hover my-0" id="{$id}">
           <xsl:call-template name="dataTableHeader" />
           <xsl:choose>
             <xsl:when test="number($end) = 0">
@@ -262,13 +240,15 @@
           </xsl:choose>
         </table>
       </div>
-      <div class="panel-footer clearfix">
-        <span id="{$id}_info">
-          <xsl:if test="$pages &gt; 1">
-            <xsl:attribute name="class">hidden-xs</xsl:attribute>
-          </xsl:if>
-          <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filterInfo'), concat($start, ';', $end, ';', $total))" />
-        </span>
+      <div class="card-footer d-flex justify-content-between">
+        <div>
+          <span id="{$id}_info">
+            <xsl:if test="$pages &gt; 1">
+              <xsl:attribute name="class">d-none d-md-inline-block pt-2 pb-2</xsl:attribute>
+            </xsl:if>
+            <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filterInfo'), concat($start, ';', $end, ';', $total))" />
+          </span>
+        </div>
         <xsl:if test="$pages &gt; 1">
           <xsl:call-template name="dataTablePaginate">
             <xsl:with-param name="id" select="$id" />
@@ -298,13 +278,13 @@
           <xsl:variable name="iconClass">
             <xsl:choose>
               <xsl:when test="($SortBy = @sortBy) and ($SortOrder = 'asc')">
-                <xsl:text>glyphicon glyphicon-sort-by-attributes</xsl:text>
+                <xsl:text>fas fa-sort-up</xsl:text>
               </xsl:when>
               <xsl:when test="($SortBy = @sortBy) and ($SortOrder = 'desc')">
-                <xsl:text>glyphicon glyphicon-sort-by-attributes-alt</xsl:text>
+                <xsl:text>fas fa-sort-down</xsl:text>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:text>glyphicon glyphicon-sort</xsl:text>
+                <xsl:text>fas fa-sort</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:variable>
@@ -330,8 +310,8 @@
                       </xsl:with-param>
                     </xsl:call-template>
                   </xsl:attribute>
+                  <i class="{$iconClass} mr-2 sort-icon" />
                   <xsl:value-of select="text()" />
-                  <span class="pull-left {$iconClass} sort-icon" />
                 </a>
               </xsl:when>
               <xsl:otherwise>
@@ -432,11 +412,11 @@
     <xsl:param name="i18nprefix" select="'dataTable'" />
     <xsl:param name="pages" />
 
-    <ul id="{$id}_paginate" class="pagination pagination-sm pull-right no-margin">
-      <li>
+    <ul id="{$id}_paginate" class="pagination mb-0">
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &gt; 1">
-            <a tabindex="0" id="{$id}_first">
+            <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:attribute name="href">
                   <xsl:call-template name="dataTableQuerystring">
                     <xsl:with-param name="page" select="1" />
@@ -449,20 +429,20 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &gt; 1">
-            <a tabindex="0" id="{$id}_previous">
+            <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:attribute name="href">
                   <xsl:call-template name="dataTableQuerystring">
                     <xsl:with-param name="page" select="$Page - 1" />
@@ -475,13 +455,13 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
@@ -525,10 +505,10 @@
         <xsl:with-param name="paginateEnd" select="$paginateEnd" />
       </xsl:call-template>
 
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &lt; $pages">
-            <a tabindex="0" id="{$id}_next">
+            <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:attribute name="href">
                   <xsl:call-template name="dataTableQuerystring">
                     <xsl:with-param name="page" select="$Page + 1" />
@@ -541,20 +521,20 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
-      <li>
+      <li class="page-item">
         <xsl:choose>
           <xsl:when test="number($Page) &lt; $pages">
-            <a tabindex="0" id="{$id}_last">
+            <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:attribute name="href">
                 <xsl:call-template name="dataTableQuerystring">
                   <xsl:with-param name="page" select="$pages" />
@@ -567,13 +547,13 @@
             </a>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="class">disabled</xsl:attribute>
-            <span>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
-            </span>
+            </a>
           </xsl:otherwise>
         </xsl:choose>
       </li>
@@ -586,15 +566,15 @@
     <xsl:param name="paginateEnd" />
 
     <xsl:if test="$paginateStart = number($Page)">
-      <li class="active">
-        <span>
+      <li class="page-item active">
+        <a class="page-link" tabindex="0">
           <xsl:value-of select="$paginateStart" />
-        </span>
+        </a>
       </li>
     </xsl:if>
     <xsl:if test="$paginateStart != number($Page)">
-      <li>
-        <a tabindex="0">
+      <li class="page-item">
+        <a class="page-link" tabindex="0">
           <xsl:attribute name="href">
             <xsl:call-template name="dataTableQuerystring">
               <xsl:with-param name="page" select="$paginateStart" />

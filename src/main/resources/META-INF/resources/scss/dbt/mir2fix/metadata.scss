@@ -1,0 +1,35 @@
+div.detail_row {
+  h3.card-title {
+    font-size: 1.15rem;
+    margin-bottom: 0;
+  }
+}
+
+#aux_col {
+  .card:nth-child(1n+2) {
+    @extend .my-2;
+  }
+}
+
+#head_col {
+  #badges {
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: visible;
+    float: left;
+    height: 25px;
+    width: 100%;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+    @include hide-scrollbar ();
+
+    * {
+      display: inline;
+      margin-right: 5px;
+
+      &:nth-last-child(1) {
+        margin-right: 0;
+      }
+    }
+  }
+}

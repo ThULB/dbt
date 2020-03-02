@@ -125,7 +125,6 @@
   <xsl:template name="addPlayerScripts">
     <xsl:param name="generatedNodes" />
     <xsl:if test="$generatedNodes//div[contains(@class, 'mir-player')]">
-      <link href="{$WebApplicationBaseURL}dbt/assets/video.js/video-js.min.css" rel="stylesheet" />
       <script src="{$WebApplicationBaseURL}dbt/assets/video.js/video.min.js"></script>
       <script src="{$WebApplicationBaseURL}dbt/assets/video.js/plugins/videojs-contrib-hls.min.js"></script>
       <script src="{$WebApplicationBaseURL}dbt/js/player.min.js"></script>
