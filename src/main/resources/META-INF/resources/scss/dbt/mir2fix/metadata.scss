@@ -10,3 +10,26 @@ div.detail_row {
     @extend .my-2;
   }
 }
+
+#head_col {
+  #badges {
+    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: visible;
+    float: left;
+    height: 25px;
+    width: 100%;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+    @include hide-scrollbar ();
+
+    * {
+      display: inline;
+      margin-right: 5px;
+
+      &:nth-last-child(1) {
+        margin-right: 0;
+      }
+    }
+  }
+}

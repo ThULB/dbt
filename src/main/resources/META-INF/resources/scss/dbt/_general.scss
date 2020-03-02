@@ -6,7 +6,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a:hover , a:focus {
+a:hover,
+a:focus {
   text-decoration: none;
 }
 
@@ -16,7 +17,18 @@ body {
   backface-visibility: hidden;
 }
 
-h1 , h2 , h3 , h4 , h5 , h6 , .h1 , .h2 , .h3 , .h4 , .h5 , .h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
   @include hyphens ();
 }
 
@@ -26,7 +38,7 @@ h1 , h2 , h3 , h4 , h5 , h6 , .h1 , .h2 , .h3 , .h4 , .h5 , .h6 {
 
 .btn {
   @include box-shadow(0 -2px 0 rgba(0, 0, 0, 0.05) inset);
-  
+
   &.btn-default {
     color: #333;
     background-color: #fff;
@@ -64,7 +76,9 @@ h1 , h2 , h3 , h4 , h5 , h6 , .h1 , .h2 , .h3 , .h4 , .h5 , .h6 {
 hgroup {
   border-bottom: 1px solid #ccc;
   margin-bottom: 20px;
-  &:before , &:after {
+
+  &:before,
+  &:after {
     content: " ";
     display: table;
   }
@@ -101,7 +115,7 @@ hgroup {
 .badges {
   .badge {
     margin-right: 0.5rem;
-    
+
     &:nth-last-child(1) {
       margin-right: 0;
     }
@@ -110,8 +124,13 @@ hgroup {
 
 .card {
   .card-header {
-    > a, > button {
-      &[data-toggle="collapse"], &[aria-expanded="false"], &.collapsed {
+
+    >a,
+    >button {
+
+      &[data-toggle="collapse"],
+      &[aria-expanded="false"],
+      &.collapsed {
         &:after {
           content: "\f078";
           display: flex;
@@ -121,7 +140,7 @@ hgroup {
           margin-left: 0.5rem;
         }
       }
-    
+
       &[aria-expanded="true"] {
         &:after {
           content: "\f077";
@@ -133,7 +152,7 @@ hgroup {
       }
     }
   }
-  
+
   .card-body {
     .pagination {
       margin: 0;
@@ -144,7 +163,8 @@ hgroup {
 
 .ellipsis.ellipsis-text {
   position: relative;
-  > p {
+
+  >p {
     max-height: 240px;
     overflow: hidden;
     overflow-x: hidden;
@@ -152,6 +172,7 @@ hgroup {
     text-align: justify;
     -webkit-overflow-scrolling: touch;
     @include hide-scrollbar ();
+
     span {
       padding-bottom: 15px;
       margin-bottom: -15px;
@@ -165,10 +186,72 @@ hgroup {
     bottom: 0;
     height: 30px;
     width: 100%;
-    @include gradient-vertical (rgba(255, 255, 255, 0) , rgba(255, 255, 255, 1) , 20% , 90%);
+    @include gradient-vertical (rgba(255, 255, 255, 0), rgba(255, 255, 255, 1), 20%, 90%);
   }
 
-  .readless , .readmore {
+  .readless,
+  .readmore {
     display: none ! important;
+  }
+}
+
+.scroll-container {
+  $fade-color: transparentize(darken($content-bg-color, 2%), 0.4);
+  position: relative;
+
+  .scrolling-container {
+    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    @include hide-scrollbar();
+  }
+
+  .fade-left,
+  .fade-right {
+    visibility: hidden;
+    opacity: 0;
+    z-index: 2;
+    position: absolute;
+    display: block;
+    width: 30px;
+    top: 0;
+    bottom: 0;
+    transition-duration: .3s;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    margin: 0;
+    text-align: center;
+
+    &.scrolling {
+      visibility: visible;
+      opacity: 1;
+      transition-duration: .3s
+    }
+
+    .fa {
+      position: relative;
+      top: 5px;
+      font-size: 18px;
+      color: $brand-primary;
+    }
+  }
+
+  .fade-left {
+    background: linear-gradient(to right, $content-bg-color 45%, $fade-color);
+    left: -10px;
+
+    .fa {
+      left: -2px
+    }
+  }
+
+  .fade-right {
+    background: linear-gradient(to left, $content-bg-color 45%, $fade-color);
+    right: -10px;
+
+    .fa {
+      right: -2px
+    }
   }
 }
