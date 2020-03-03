@@ -32,10 +32,10 @@
 		 *            href
 		 * @return {Boolean} - Was the href an anchor.
 		 */
-		scrollIfAnchor : function(href, pushToHistory) {
+		scrollIfAnchor : function(href, pushToHistory, el) {
 			var match, anchorOffset;
 
-			if (!this.ANCHOR_REGEX.test(href)) {
+			if (!this.ANCHOR_REGEX.test(href) || el && el.getAttribute("data-toggle")) {
 				return false;
 			}
 
@@ -71,7 +71,7 @@
 		delegateAnchors : function(e) {
 			var elem = e.target;
 
-			if (this.scrollIfAnchor(elem.getAttribute("href"), true)) {
+			if (this.scrollIfAnchor(elem.getAttribute("href"), true, elem)) {
 				e.preventDefault();
 			}
 		}
