@@ -4,7 +4,7 @@
 	var anchorScrolls = {
 		ANCHOR_REGEX : /^#[^ ]+$/,
 		OFFSET_HEIGHT_PX : 100,
-		OFFSET_SPACER_PX : 5,
+		OFFSET_SPACER_PX : 25,
 
 		/**
 		 * Establish events, and fix initial scroll position if a hash is
@@ -21,7 +21,7 @@
 		 * Modify as appropriate to allow for dynamic calculations
 		 */
 		getFixedOffset : function() {
-			return $("nav.navbar-dbt").height() || this.OFFSET_HEIGHT_PX;
+			return $("navbar-brand").height() || this.OFFSET_HEIGHT_PX;
 		},
 
 		/**
