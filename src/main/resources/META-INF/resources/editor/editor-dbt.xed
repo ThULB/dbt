@@ -55,8 +55,8 @@
 
   <xed:template id="oai">
     <xed:bind xpath="mods:classification[@authority='OAI'][@displayLabel='OAI']">
-      <div class="form-group {$xed-validation-marker}">
-        <label class="col-md-3 control-label">
+      <div class="form-group row {$xed-validation-marker}">
+        <label class="col-md-3 control-label text-right">
           <xed:output i18n="editor.oai" />
           :
         </label>
