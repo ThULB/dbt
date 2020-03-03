@@ -194,6 +194,9 @@ hgroup {
   }
 }
 
+// SCROLLCONTAINER STYLES
+//--------------------------------------------------
+
 .scroll-container {
   $fade-color: transparentize(darken($content-bg-color, 2%), 0.4);
   position: relative;
@@ -253,4 +256,10 @@ hgroup {
       right: -2px
     }
   }
+}
+
+// UNSUPPORTED BROWSER WARING
+//--------------------------------------------------
+.alert.unsupported-browser {
+  @extend .alert-warning;
 }

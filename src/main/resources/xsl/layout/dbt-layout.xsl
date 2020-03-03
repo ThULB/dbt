@@ -422,12 +422,13 @@
   <xsl:template name="layout.content">
     <div id="container-main">
       <a id="top"></a>
-      <!-- include Internet Explorer warning -->
-      <xsl:call-template name="msie-note" />
       <div class="container">
         <xsl:call-template name="navigation.breadcrumbPath">
           <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
         </xsl:call-template>
+        
+        <!-- include Internet Explorer warning -->
+        <xsl:call-template name="msie-note" />
 
 <!--           <xsl:call-template name="action.buttons" /> -->
         <xsl:call-template name="print.writeProtectionMessage" />
