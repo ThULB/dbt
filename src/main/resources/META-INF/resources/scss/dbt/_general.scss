@@ -71,6 +71,9 @@ h6,
   padding-top: $content-padding-top;
   padding-bottom: 30px;
   height: 100%;
+  @include media-breakpoint-up($float-breakpoint) {
+    padding-top: $content-padding-top + 20px;
+  }
 }
 
 hgroup {
@@ -103,10 +106,6 @@ hgroup {
 }
 
 .breadcrumb {
-  @include media-breakpoint-up($float-breakpoint) {
-    margin-top: 20px;
-  }
-
   .dropdown-toggle.waves-effect {
     display: inline;
   }
