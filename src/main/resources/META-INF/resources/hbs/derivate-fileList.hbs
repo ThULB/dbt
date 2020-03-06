@@ -130,7 +130,7 @@
         </li>
         {{/paginate}}
         {{#paginate pagination type="middle" limit="5"}}
-        <li {{#if active}}class="active" {{/if}}><a href="#" data-page="{{n}}">{{n}}</a></li>
+        <li class="page-item{{#if active}} active{{/if}}"><a href="#" class="page-link" data-page="{{n}}">{{n}}</a></li>
         {{/paginate}}
         {{#paginate pagination type="next"}}
         <li class="page-item{{#if disabled}} disabled{{/if}}">
