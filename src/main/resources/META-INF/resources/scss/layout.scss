@@ -6,11 +6,12 @@
 $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 
 @import "../dbt/assets/fontawesome-free/scss/fontawesome.scss";
+
+@import  "../mir-layout/assets/bootstrap/bootstrap";
+
 @import "../dbt/assets/fontawesome-free/scss/brands.scss";
 @import "../dbt/assets/fontawesome-free/scss/solid.scss";
 @import "../dbt/assets/fontawesome-free/scss/regular.scss";
-
-@import  "../mir-layout/assets/bootstrap/bootstrap";
 
 @import "../mir-layout/scss/common/fileupload";
 @import "../mir-layout/scss/common/print";
