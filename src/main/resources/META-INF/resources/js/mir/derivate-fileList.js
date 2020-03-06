@@ -431,7 +431,7 @@
         }
 
         function buildBreadcrumbs(path) {
-            $(fileBox).append("<div class=\"col-xs-12\"><div class=\"file_set file\"><div class=\"file_box_breadcrumbs\"></div></div>");
+            $(fileBox).append("<div class=\"col-12\"><div class=\"file_set file\"><div class=\"file_box_breadcrumbs\"></div></div>");
             var currentPath = path;
             while (currentPath !== "/") {
                 var currentElm = getCurrentElm(currentPath);
