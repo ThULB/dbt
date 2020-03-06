@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:FilenameUtils="xalan://org.apache.commons.io.FilenameUtils" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions" xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
-  xmlns:media="xalan://org.mycore.media.frontend.MCRXMLFunctions" xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" xmlns:mcrsolr="xalan://org.mycore.solr.MCRXMLFunctions"
+  xmlns:FilenameUtils="xalan://org.apache.commons.io.FilenameUtils" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:media="xalan://org.mycore.media.frontend.MCRXMLFunctions"
+  xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" xmlns:mcrsolr="xalan://org.mycore.solr.MCRXMLFunctions"
   xmlns:mcrsolru="xalan://org.mycore.solr.MCRSolrUtils" xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder"
   exclude-result-prefixes="xalan i18n mcr media mods xlink FilenameUtils iview2 mcrxsl mcrsolr mcrsolru encoder menc"
 >
@@ -36,13 +37,14 @@
       </xsl:for-each>
     </xsl:variable>
     <!-- MIR-339 solr query if there is any "wav"/"mp3" file in this object? -->
-    <xsl:variable name="solrQuery" select="concat('+(stream_content_type:audio/x-wav OR stream_content_type:audio/mpeg) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
+    <xsl:variable name="solrQuery"
+      select="concat('+(stream_content_type:audio/x-wav OR stream_content_type:audio/mpeg) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
     <xsl:if test="(mcrsolr:getNumFound($solrQuery) &gt; 0) or (count(xalan:nodeset($encDerivates)/der/file) &gt; 0)">
-      <xsl:variable name="completeQuery" select="concat('solr:q=', encoder:encode($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')" />
+      <xsl:variable name="completeQuery"
+        select="concat('solr:q=', encoder:encode($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')" />
       <xsl:variable name="solrResult" select="document($completeQuery)" /> <!-- [string-length(str[@name='groupValue']/text()) &gt; 0] -->
       <div id="mir-player">
-
-        <div class="panel panel-default">
+        <div class="card mb-3">
         <!-- I want to make just one request, not for every derivate. So group by derivate id. -->
           <xsl:variable name="optionsFragment">
             <select id="videoChooser" class="form-control">
@@ -72,8 +74,8 @@
           <xsl:variable name="options" select="xalan:nodeset($optionsFragment)" />
 
           <xsl:variable name="playerNode">
-            <div class="embed-responsive embed-responsive-16by9 mir-player mir-preview">
-              <div class="panel-body">
+            <div class="card-body p-0">
+              <div class="embed-responsive embed-responsive-16by9 mir-player mir-preview">
                 <xsl:if
                   test="(count($options//optgroup/option[string-length(@data-sources-url) &gt; 0]) &gt; 0) or (count($options//optgroup/option[contains('mp4|smil', @data-file-extension)]) &gt; 0)"
                 >
@@ -103,7 +105,7 @@
           </xsl:variable>
 
           <xsl:if test="count($options//optgroup/option) &gt; 0">
-            <div class="panel-heading">
+            <div class="card-header">
               <xsl:copy-of select="$optionsFragment" />
             </div>
             <xsl:variable name="playerNodes" select="xalan:nodeset($playerNode)" />
@@ -140,15 +142,17 @@
     <xsl:variable name="derivateID" select="str[@name='derivateID']" />
     <xsl:variable name="fileName" select="str[@name='fileName']" />
 
-    <xsl:variable name="lowercaseExtension" select="translate(FilenameUtils:getExtension($fileName), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
+    <xsl:variable name="lowercaseExtension"
+      select="translate(FilenameUtils:getExtension($fileName), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
 
     <xsl:choose>
       <xsl:when test="$fileMimeType = 'video/mp4'">
         <!-- ignore -->
       </xsl:when>
       <xsl:otherwise>
-        <option data-file-extension="{$lowercaseExtension}" data-mime-type="{$fileMimeType}" data-src="{concat($ServletsBaseURL, 'MCRFileNodeServlet/', $derivateID, $filePath)}"
-          data-audio="true" data-is-main-doc="{mcr:getMainDocName($derivateID)=substring($filePath,2)}"
+        <option data-file-extension="{$lowercaseExtension}" data-mime-type="{$fileMimeType}"
+          data-src="{concat($ServletsBaseURL, 'MCRFileNodeServlet/', $derivateID, $filePath)}" data-audio="true"
+          data-is-main-doc="{mcr:getMainDocName($derivateID)=substring($filePath,2)}"
         >
           <xsl:value-of select="$fileName" />
         </option>
