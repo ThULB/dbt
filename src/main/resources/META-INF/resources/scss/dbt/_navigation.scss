@@ -12,13 +12,13 @@ $navbar-brand-width: 150px !default;
 $navbar-brand-padding-x: 15px !default;
 $navbar-brand-padding-y: 15px !default;
 
-$navbar-nav-link-padding-y: 0.8rem !default; 
+$navbar-nav-link-padding-y: 0.8rem !default;
 
 .navbar-right {
-    @include media-breakpoint-up($float-breakpoint-max) {
-      float: right !important;
-      margin-right: -15px;
-    }
+  @include media-breakpoint-up($float-breakpoint-max) {
+    float: right !important;
+    margin-right: -15px;
+  }
 }
 
 .navbar-dbt {
@@ -28,16 +28,17 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   backdrop-filter: blur(5px);
   padding: $navbar-padding;
   min-height: $navbar-height;
-  
+
   @include media-breakpoint-up($float-breakpoint-max) {
     margin-bottom: 20px;
     margin-left: -($navbar-margin);
     margin-right: -($navbar-margin);
   }
 
-  
+
   @include media-breakpoint-down($float-breakpoint) {
     background-color: transparentize(#fff, 0.02);
+
     @media (orientation: landscape) {
       @include box-shadow(-2px 0px 4px rgba(0, 0, 0, 0.2));
     }
@@ -47,12 +48,12 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     }
   }
 
-  > .container {
+  >.container {
     margin-left: auto;
     margin-right: auto;
     padding-left: 15px;
     padding-right: 15px;
-    
+
     @include media-breakpoint-down($float-breakpoint) {
       max-width: 100%;
     }
@@ -64,7 +65,9 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     }
 
     @include media-breakpoint-up($float-breakpoint-max) {
-      & , &:hover {
+
+      &,
+      &:hover {
         background-color: #fff;
         @include border-bottom-radius (5px);
         @include box-shadow(0px 2px 8px rgba(0, 0, 0, 0.2));
@@ -77,12 +80,13 @@ $navbar-nav-link-padding-y: 0.8rem !default;
       }
     }
 
-    > .img-placeholder {
+    >.img-placeholder {
       height: 40px;
       width: $navbar-brand-width;
       background: url('../../../dbt/images/dbt-logo.svg') 0 0 no-repeat;
       background-size: auto 40px;
       display: block;
+
       @include media-breakpoint-up($float-breakpoint-max) {
         background-position: 0 28px;
         background-size: 100% auto;
@@ -102,7 +106,9 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     margin-right: 5px;
     margin-bottom: 0;
     @include skew (-20deg, 0);
-    &:hover , &:focus {
+
+    &:hover,
+    &:focus {
       background-color: transparentize($primary, 0.2);
     }
 
@@ -112,7 +118,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
       width: 22px;
       height: 2px;
       border-radius: 1px;
-      
+
       &+.icon-bar {
         margin-top: 4px;
       }
@@ -165,7 +171,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     }
 
     .navbar-nav {
-      &.navbar-right > li {
+      &.navbar-right>li {
         text-align: center;
         min-width: 40px;
       }
@@ -179,33 +185,39 @@ $navbar-nav-link-padding-y: 0.8rem !default;
         &.navbar-right {
           float: right;
           margin: 0;
-          > li {
+
+          >li {
             float: left;
           }
         }
       }
 
-      & > .open > a , & > .open > a:hover , & > .open > a:focus {
+      &>.open>a,
+      &>.open>a:hover,
+      &>.open>a:focus {
         background-color: transparentize(#fff, 0.75);
         color: #fff;
+
         @include media-breakpoint-down($float-breakpoint) {
           background-color: transparentize($primary, 0.75);
           color: $body-color;
         }
       }
 
-      > li {
-        > a.nav-link {
+      >li {
+        >a.nav-link {
           padding-top: $navbar-nav-link-padding-y;
           padding-bottom: $navbar-nav-link-padding-y;
-          
+
           &:focus {
             outline: 0;
           }
         }
-      
+
         @include media-breakpoint-down($float-breakpoint) {
-          .dropdown-toggle , a {
+
+          .dropdown-toggle,
+          a {
             &.waves-effect.waves-light .waves-ripple {
               background: rgba(0, 0, 0, 0.2);
               $gradient: rgba(0, 0, 0, 0.2) 0, rgba(0, 0, 0, .3) 40%, rgba(0, 0, 0, .4) 50%, rgba(0, 0, 0, .5) 60%, rgba(255, 255, 255, 0) 70%;
@@ -220,45 +232,49 @@ $navbar-nav-link-padding-y: 0.8rem !default;
         .dropdown-menu {
           font-size: $navbar-font-size;
           border: none;
-          
+
           @include media-breakpoint-up($float-breakpoint) {
             @include box-shadow(0px 2px 8px rgba(0, 0, 0, 0.2));
             min-width: 168px;
             margin-top: 0;
           }
-        
+
           @include media-breakpoint-down($float-breakpoint) {
             background: none;
             box-shadow: none;
           }
-        
-          > li {
+
+          >li {
             a {
               color: $body-color;
             }
-          
-            &:hover, &:focus {
+
+            &:hover,
+            &:focus {
               a {
                 color: darken($body-color, 40%);
               }
             }
-          
-            &.active a, &:active a {
+
+            &.active a,
+            &:active a {
               color: #fff;
             }
           }
         }
 
-        > a {
+        >a {
           color: #fff;
           font-size: $navbar-font-size;
           text-transform: uppercase;
+
           &:hover {
             color: #ddd;
           }
 
           @include media-breakpoint-down($float-breakpoint) {
             color: $body-color;
+
             &:hover {
               color: darken($body-color, 40%);
             }
@@ -266,7 +282,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
         }
       }
     }
-  
+
     .navbar-right {
       margin-left: auto;
       margin-right: -($navbar-margin);
@@ -275,12 +291,14 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 
   #user-info {
     width: 300px;
+
     .controls {
       background-color: $body-bg-color;
     }
-    
+
     @include media-breakpoint-only(xs) {
       width: auto;
+
       .controls {
         background: none;
       }
@@ -303,7 +321,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   backdrop-filter: blur(5px);
   pointer-events: none;
   @include transition(opacity .15s linear);
-  
+
   &.collapse.show {
     z-index: 1025;
     pointer-events: all;
@@ -315,18 +333,28 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 // breadcrumb styles
 // ---------------------------------------------------
 .breadcrumb {
+  @include media-breakpoint-up($float-breakpoint) {
+    margin-top: 0;
+  }
+
+  .dropdown-toggle.waves-effect {
+    display: inline;
+  }
+
   .dropdown-item {
     a {
       color: $body-color;
     }
-          
-    &:hover, &:focus {
+
+    &:hover,
+    &:focus {
       a {
         color: darken($body-color, 40%);
       }
     }
-          
-    &.active a, &:active a {
+
+    &.active a,
+    &:active a {
       color: #fff;
     }
   }
@@ -348,13 +376,13 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   @include box-shadow(-2px 0px 4px rgba(0, 0, 0, 0.2));
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
-  
+
   .container {
     @include media-breakpoint-down($float-breakpoint) {
       max-width: 100%;
     }
   }
-  
+
   @include media-breakpoint-down($float-breakpoint) {
     @media (orientation: landscape) {
       position: absolute;
@@ -371,14 +399,19 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     padding: 0 $searchbar-padding;
     margin-left: -($navbar-margin);
     margin-right: -($navbar-margin);
+
     .input-group {
+      @include media-breakpoint-down($float-breakpoint) {
+        width: 100%;
+      }
+
       .form-control {
         background-color: transparentize(#f8f8f8, 0.1);
         font-size: 16px;
       }
 
       .input-group-btn {
-        > button {
+        >button {
           color: #888;
           border-left: 0;
         }
@@ -386,4 +419,3 @@ $navbar-nav-link-padding-y: 0.8rem !default;
     }
   }
 }
-
