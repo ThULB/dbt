@@ -80,6 +80,12 @@
     }
   }
 
+  .entry-opcrecord {
+    &.border-left {
+      border-width: 3px !important;
+    }
+  }
+
   .entry-placeholder {
     border: 1px dashed #ccc;
     background-color: #fafafa;
