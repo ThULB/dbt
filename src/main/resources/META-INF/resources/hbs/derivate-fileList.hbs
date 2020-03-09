@@ -1,5 +1,5 @@
 <div id="collapse{{mycorederivate}}" class="collapse in show">
-  <table class="table table-condensed table-striped">
+  <table class="table table-hover table-sm table-striped">
     {{#each children}}
     {{#is (concat '/' ../mainDoc) path}}
     <tr class="file_set active_file d-flex">
@@ -21,20 +21,20 @@
       </td>
       {{#isNot type "directory"}}
       {{#containsIgnoreCase "mp4|f4v|flv|rm|avi|wmv|mov" extension}}
-      <td class="file_name file_video {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-8 col-sm-7{{/isOr}}">
+      <td class="file_name file_video {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-7 col-sm-7{{/isOr}}">
         <a data-deriid="{{../mycorederivate}}" data-name="{{name}}" href="{{href}}">
           {{name}}
         </a>
       </td>
       {{else}}
-      <td class="file_name {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-8 col-sm-7{{/isOr}}">
+      <td class="file_name {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-7 col-sm-7{{/isOr}}">
         <a href="{{href}}">
           {{name}}
         </a>
       </td>
       {{/containsIgnoreCase}}
       {{else}}
-      <td class="file_name derivate_folder {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-8 col-sm-7{{/isOr}}">
+      <td class="file_name derivate_folder {{#isOr ../permWrite ../permDelete}}col-5{{else}}col-7 col-sm-7{{/isOr}}">
         <a data-path="{{path}}" href="#">
           {{name}}
         </a>
@@ -50,7 +50,7 @@
         {{formatFileSize size}}
         {{/isNot}}
       </td>
-      <td class="d-sm-none col-3 col-sm-4 text-right">
+      <td class="d-sm-none col-4 col-sm-4 text-right">
         {{#is type "file"}}
         {{formatDate time.modified}}<br>
         {{/is}}
@@ -58,8 +58,8 @@
       </td>
       {{#isOr ../permWrite ../permDelete}}
       {{#noDirOrURN type ../urn}}
-      <td class="options col-3 col-sm-2 text-right">
-        <div class="btn-group">
+      <td class="options col-2 col-sm-2 text-right">
+        <div class="btn-group btn-group-sm">
           <a href="#" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">
             <i class="fa fa-cog"></i>
           </a>
