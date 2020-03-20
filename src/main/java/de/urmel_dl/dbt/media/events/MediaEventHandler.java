@@ -58,10 +58,6 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
-        if (attrs.isDirectory()) {
-            return;
-        }
-
         MCRSessionMgr.getCurrentSession().onCommit(() -> deleteMediaFile(MCRPath.toMCRPath(path)));
     }
 
