@@ -60,18 +60,6 @@ module.exports = function (grunt) {
 						src: ["**", "!**/*.zip", "!alt/**", "!examples/**"]
 					}, {
 						expand: true,
-						cwd: "./node_modules/videojs-contrib-hls",
-						dest: "<%=globalConfig.assetsDirectory%>/video.js/plugins",
-						flatten: true,
-						src: ["./dist/*.js"]
-					}, {
-						expand: true,
-						cwd: "./node_modules/videojs-thumbnails",
-						dest: "<%=globalConfig.assetsDirectory%>/video.js/plugins",
-						flatten: true,
-						src: ["./dist/browser/*.js"]
-					}, {
-						expand: true,
 						cwd: "./node_modules/node-waves",
 						dest: "<%=globalConfig.assetsDirectory%>/waves",
 						flatten: true,

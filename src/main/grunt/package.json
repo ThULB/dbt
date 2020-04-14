@@ -30,7 +30,6 @@
         "node-waves": "~0.7.6",
         "summernote": "~0.8.11",
         "jquery-sortable": "~0.9.12",
-        "video.js": "7.4.1",
-        "videojs-contrib-hls" : "^5.15.0"
+        "video.js": "7.6.6"
     }
 }
