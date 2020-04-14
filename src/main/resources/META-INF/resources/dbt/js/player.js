@@ -44,7 +44,7 @@ $(document).ready(
 
 				$.getJSON(sourcesUrl).done(function (sources) {
 					if (sources.source) {
-						$.each(sources.source, function (i, src) {
+						$.each(sources.source, function (_i, src) {
 							if (src.type === "video/mp4") {
 								src.src = webApplicationBaseURL + "rsc/media/progressiv/" + sources.id + "/" + src.src;
 							}
@@ -78,7 +78,7 @@ $(document).ready(
 			if (typeof id !== "undefined") {
 				$.getJSON(webApplicationBaseURL + "rsc/media/thumbs/" + id).done(function (sources) {
 					if (sources.source) {
-						$.each(sources.source, function (i, src) {
+						$.each(sources.source, function (_i, src) {
 							src.src = webApplicationBaseURL + "rsc/media/thumb/" + id + "/" + src.src;
 						});
 						thumbCache[lookupKey] = sources.source;
@@ -94,8 +94,7 @@ $(document).ready(
 		var evtPlay = function () {
 			var fnUrl = $(this).data("fileNodeUrl");
 			if (fnUrl) {
-				$.get(fnUrl, function (data) {
-				});
+				$.get(fnUrl, function (_data) { });
 			}
 		};
 
@@ -123,6 +122,12 @@ $(document).ready(
 
 			getVideo(currentOption, function (sourceArr) {
 				sourceArr = sourceArr.sort(function (a, b) {
+					if (a.type.toLowerCase() === "application/x-mpegurl") {
+						return -1;
+					} else if (b.type.toLowerCase() === "application/x-mpegurl") {
+						return 1;
+					}
+
 					if (a.type > b.type) {
 						return 1;
 					}
@@ -141,7 +146,9 @@ $(document).ready(
 					playerToShow = myPlayerAudio;
 				} else {
 					getThumbs(currentOption, function (sourceArr) {
-						myPlayerVideo.poster(sourceArr[0].src);
+						if (sourceArr && sourceArr.length > 0) {
+							myPlayerVideo.poster(sourceArr[0].src);
+						}
 					});
 					playerToShow = myPlayerVideo;
 					playerToHide = myPlayerAudio;
