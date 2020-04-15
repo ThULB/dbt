@@ -24,6 +24,19 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
+  
+  <filter>
+    <filter-name>DBTZipServletFilter</filter-name>
+    <filter-class>de.urmel_dl.dbt.filter.DBTZipServletFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>DBTZipServletFilter</filter-name>
+    <servlet-name>MCRZipServlet</servlet-name>
+    <url-pattern>/servlets/MCRZipServlet</url-pattern>
+    <url-pattern>/servlets/MCRZipServlet/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
 
   <servlet id="RCSlotListServlet">
     <servlet-name>RCSlotListServlet</servlet-name>
@@ -80,6 +93,16 @@
   <servlet-mapping>
     <servlet-name>DBTLoginEndpointServlet</servlet-name>
     <url-pattern>/servlets/LoginEndpoint</url-pattern>
+  </servlet-mapping>
+
+  <servlet id="DBTZip">
+    <servlet-name>DBTZipServlet</servlet-name>
+    <servlet-class>de.urmel_dl.dbt.servlets.DBTZipServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DBTZipServlet</servlet-name>
+    <url-pattern>/servlets/DBTZipServlet</url-pattern>
+    <url-pattern>/servlets/DBTZipServlet/*</url-pattern>
   </servlet-mapping>
 
 </web-fragment>
