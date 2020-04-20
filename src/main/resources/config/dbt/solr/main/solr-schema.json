@@ -48,5 +48,11 @@
       "name": "slotId",
       "type": "string"
     }
+  },
+  {
+    "add-field": {
+      "name": "dbt.dini",
+      "type": "string"
+    }
   }
 ]
