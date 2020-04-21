@@ -36,7 +36,7 @@ import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.rules.TemporaryFolder;
 import org.mycore.common.config.MCRComponent;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfigurationBase;
 import org.mycore.common.config.MCRConfigurationLoader;
 import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.common.config.MCRRuntimeComponentDetector;
@@ -51,10 +51,6 @@ public class JerseyTestCase extends JerseyTest {
     public static TemporaryFolder junitFolder = new TemporaryFolder();
 
     protected File properties = null;
-
-    protected String oldProperties;
-
-    protected MCRConfiguration config;
 
     @BeforeClass
     public static void initBaseDir() throws IOException {
@@ -77,9 +73,9 @@ public class JerseyTestCase extends JerseyTest {
     /**
      * initializes MCRConfiguration with an empty property file. This can be used to test MyCoRe classes without any
      * propties set, using default. You may want to set Properties per TestCase with the set() method of
-     * <code>MCRConfiguration</code>
+     * <code>MCRConfiguration2</code>
      *
-     * @see MCRConfiguration#set(String, String)
+     * @see org.mycore.common.config.MCRConfiguration2#set(String, String)
      */
     @Override
     @Before
@@ -97,11 +93,10 @@ public class JerseyTestCase extends JerseyTest {
         System.out.printf("MyCoRe components detected: %s\nApplications modules detected: %s\n",
             mcrComp.isEmpty() ? "'none'" : mcrComp,
             appMod.isEmpty() ? "'none'" : appMod);
-        config = MCRConfiguration.instance();
         MCRConfigurationLoader configurationLoader = MCRConfigurationLoaderFactory.getConfigurationLoader();
         HashMap<String, String> testProperties = new HashMap<>(configurationLoader.load());
         testProperties.putAll(getTestProperties());
-        config.initialize(testProperties, true);
+        MCRConfigurationBase.initialize(testProperties, true);
     }
 
     @Override
@@ -111,7 +106,7 @@ public class JerseyTestCase extends JerseyTest {
             properties.delete();
             properties = null;
         }
-        MCRConfiguration.instance().initialize(Collections.<String, String> emptyMap(), true);
+        MCRConfigurationBase.initialize(Collections.<String, String> emptyMap(), true);
         super.tearDown();
     }
 

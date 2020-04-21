@@ -33,7 +33,7 @@ import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationDir;
 
 import de.urmel_dl.dbt.utils.EntityFactory;
@@ -91,7 +91,7 @@ public class Catalogues {
     }
 
     private static String getCataloguesConfigResourceName() {
-        return MCRConfiguration.instance().getString("DBT.OPC.CataloguesConfig", "catalogues.xml");
+        return MCRConfiguration2.getString("DBT.OPC.CataloguesConfig").orElse("catalogues.xml");
     }
 
     /**

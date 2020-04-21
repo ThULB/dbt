@@ -44,6 +44,7 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -88,7 +89,7 @@ public class TestSlot extends MCRJPATestCase {
     @Before()
     public void setUp() throws Exception {
         super.setUp();
-        config.set("MCR.datadir", folder.newFolder("data").getAbsolutePath());
+        MCRConfiguration2.set("MCR.datadir", folder.newFolder("data").getAbsolutePath());
 
         MCRSession session = MCRSessionMgr.getCurrentSession();
         session.setCurrentIP("127.0.0.1");

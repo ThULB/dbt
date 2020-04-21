@@ -48,7 +48,7 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
@@ -92,9 +92,9 @@ public final class SlotManager {
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
-    public static final String ADMIN_GROUP = MCRConfiguration.instance().getString("DBT.RC.Administrator.GroupName");
+    public static final String ADMIN_GROUP = MCRConfiguration2.getStringOrThrow("DBT.RC.Administrator.GroupName");
 
-    public static final String EDITOR_GROUP = MCRConfiguration.instance().getString("DBT.RC.Editor.GroupName");
+    public static final String EDITOR_GROUP = MCRConfiguration2.getStringOrThrow("DBT.RC.Editor.GroupName");
 
     public static final String PROJECT_ID = "rc";
 

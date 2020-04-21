@@ -30,6 +30,7 @@ import javax.xml.bind.annotation.XmlValue;
 import org.junit.Before;
 import org.junit.Test;
 import org.mycore.common.MCRTestCase;
+import org.mycore.common.config.MCRConfiguration2;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -44,11 +45,17 @@ public class TestEntityFactory extends MCRTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        config.set(
+    }
+
+    @Override
+    protected Map<String, String> getTestProperties() {
+        final Map<String, String> testProperties = super.getTestProperties();
+        testProperties.put(
             EntityFactory.CONFIG_PREFIX + TestEntity.class.getPackage().getName() + "."
                 + EntityFactory.CONFIG_MARSHALLER
                 + "eclipselink.json.include-root",
-            false);
+            "false");
+        return testProperties;
     }
 
     @Test
@@ -60,11 +67,11 @@ public class TestEntityFactory extends MCRTestCase {
 
     @Test
     public void testPropertiesClass() {
-        config.set(
+        MCRConfiguration2.set(
             EntityFactory.CONFIG_PREFIX + TestEntity.class.getName() + "."
                 + EntityFactory.CONFIG_MARSHALLER
                 + "eclipselink.json.include-root",
-            true);
+            "true");
 
         EntityFactory<TestEntity> ef = new EntityFactory<>(testEntity());
 

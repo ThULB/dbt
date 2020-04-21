@@ -41,6 +41,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.config.MCRConfiguration2;
 
 import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.opc.datamodel.IKTList;
@@ -67,7 +68,7 @@ public class TestOPCResource extends JerseyTestCase {
     @Before()
     public void setUp() throws Exception {
         super.setUp();
-        config.set("DBT.EntityFactory.Marshaller.eclipselink.json.include-root", true);
+        MCRConfiguration2.set("DBT.EntityFactory.Marshaller.eclipselink.json.include-root", "true");
         webResource = target();
     }
 

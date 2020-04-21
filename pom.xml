@@ -35,6 +35,7 @@
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
+    <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <mir.version>2020.05-SNAPSHOT</mir.version>
     <node.version>v8.15.0</node.version>
     <npm.version>6.5.0</npm.version>
