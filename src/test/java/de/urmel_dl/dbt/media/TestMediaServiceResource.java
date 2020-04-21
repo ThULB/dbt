@@ -34,6 +34,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.config.MCRConfiguration2;
 
 import de.urmel_dl.dbt.media.entity.ConverterJob;
 import de.urmel_dl.dbt.media.entity.ConverterJob.File;
@@ -62,11 +63,11 @@ public class TestMediaServiceResource extends JerseyTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        config.set("MCR.Media.Wowza.BaseURL", "http://localhost/woza");
-        config.set("MCR.Media.Wowza.RTMPBaseURL", "rtmp://localhost/woza");
-        config.set("MCR.Media.Wowza.SMILContentPathPrefix", "test/_definst_/smil:");
-        config.set("MCR.Media.Wowza.ContentPathPrefix", "test/_definst_/mp4:");
-        config.set("MCR.Media.Wowza.SharedSecred", "test");
+        MCRConfiguration2.set("MCR.Media.Wowza.BaseURL", "http://localhost/woza");
+        MCRConfiguration2.set("MCR.Media.Wowza.RTMPBaseURL", "rtmp://localhost/woza");
+        MCRConfiguration2.set("MCR.Media.Wowza.SMILContentPathPrefix", "test/_definst_/smil:");
+        MCRConfiguration2.set("MCR.Media.Wowza.ContentPathPrefix", "test/_definst_/mp4:");
+        MCRConfiguration2.set("MCR.Media.Wowza.SharedSecred", "test");
 
         webResource = target();
     }

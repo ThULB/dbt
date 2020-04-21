@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.support.MCRSecureTokenV2;
 
 import de.urmel_dl.dbt.media.MediaService;
@@ -47,8 +47,6 @@ import de.urmel_dl.dbt.utils.MimeType;
 @XmlRootElement(name = "sources")
 public class Sources {
 
-    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
-
     private static final String MEDIA_TYPE_MPEG_DASH = "application/dash+xml";
 
     private static final String MEDIA_TYPE_HLS = "application/x-mpegURL";
@@ -57,17 +55,20 @@ public class Sources {
 
     private static final Map<String, String> MEDIA_TYPE_SUFFIXES;
 
-    private static String wowzaBaseURL = CONFIG.getString("MCR.Media.Wowza.BaseURL");
+    private static String wowzaBaseURL = MCRConfiguration2.getStringOrThrow("MCR.Media.Wowza.BaseURL");
 
-    private static String wowzaRTMPBaseURL = CONFIG.getString("MCR.Media.Wowza.RTMPBaseURL");
+    private static String wowzaRTMPBaseURL = MCRConfiguration2.getStringOrThrow("MCR.Media.Wowza.RTMPBaseURL");
 
-    private static String wowzaSMILContentPathPrefix = CONFIG.getString("MCR.Media.Wowza.SMILContentPathPrefix");
+    private static String wowzaSMILContentPathPrefix = MCRConfiguration2
+        .getStringOrThrow("MCR.Media.Wowza.SMILContentPathPrefix");
 
-    private static String wowzaContentPathPrefix = CONFIG.getString("MCR.Media.Wowza.ContentPathPrefix");
+    private static String wowzaContentPathPrefix = MCRConfiguration2
+        .getStringOrThrow("MCR.Media.Wowza.ContentPathPrefix");
 
-    private static String wowzaSharedSecred = CONFIG.getString("MCR.Media.Wowza.SharedSecred");
+    private static String wowzaSharedSecred = MCRConfiguration2.getStringOrThrow("MCR.Media.Wowza.SharedSecred");
 
-    private static String wowzaHashParameter = CONFIG.getString("MCR.Media.Wowza.HashParameter", "wowzatokenhash");
+    private static String wowzaHashParameter = MCRConfiguration2.getString("MCR.Media.Wowza.HashParameter")
+        .orElse("wowzatokenhash");
 
     private String id;
 

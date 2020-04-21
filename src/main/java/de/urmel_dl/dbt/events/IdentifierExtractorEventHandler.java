@@ -36,7 +36,7 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 import org.mycore.common.MCRConstants;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
 import org.mycore.datamodel.metadata.MCRObject;
@@ -56,9 +56,9 @@ public class IdentifierExtractorEventHandler extends MCREventHandlerBase {
 
     private static final Logger LOGGER = LogManager.getLogger(IdentifierExtractorEventHandler.class);
 
-    private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration.instance()
-        .getInstanceOf("MIR.IdentifierExtractor.Prefix.Class",
-            IdentifierExtractorDefaultPrefixProvider.class.getCanonicalName());
+    private static final IdentifierExtractorPrefixProvider PREFIX_SINGELTON = MCRConfiguration2
+        .<IdentifierExtractorPrefixProvider> getInstanceOf("MIR.IdentifierExtractor.Prefix.Class")
+        .orElseGet(IdentifierExtractorDefaultPrefixProvider::new);
 
     private static final String URI_SYNTAX = "http://uri.gbv.de/document/{0}:ppn:{1}";
 

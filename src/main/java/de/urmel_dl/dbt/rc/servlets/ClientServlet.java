@@ -46,7 +46,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.common.MCRSession;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 import org.mycore.user2.MCRUser;
@@ -72,7 +72,7 @@ public class ClientServlet extends MCRServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(ClientServlet.class);
 
-    private static final String CLIENT_USER = MCRConfiguration.instance().getString("DBT.RC.ClientUser", "rc-client");
+    private static final String CLIENT_USER = MCRConfiguration2.getString("DBT.RC.ClientUser").orElse("rc-client");
 
     private static final String TOKEN = "rctoken";
 
@@ -132,8 +132,7 @@ public class ClientServlet extends MCRServlet {
 
                     String jsonStr = ClientData.decrypt(sessionToken, req.getInputStream());
                     if (jsonStr != null) {
-                        final JsonParser jsonParser = new JsonParser();
-                        final JsonObject jsonObj = jsonParser.parse(jsonStr).getAsJsonObject();
+                        final JsonObject jsonObj = JsonParser.parseString(jsonStr).getAsJsonObject();
 
                         final String jobAction = jsonObj.get("action").getAsString();
 
