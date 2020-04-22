@@ -23,7 +23,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -182,12 +181,6 @@ public class MigrationCommands extends MCRAbstractCommands {
             MCRPath rootPath = MCRPath.getPath(derId.toString(), "/");
             if (mcrDerivate.getDerivate().getInternals().getSourcePath() == null) {
                 rootPath.getFileSystem().createRoot(rootPath.getOwner());
-                BasicFileAttributes attrs = Files.readAttributes(rootPath, BasicFileAttributes.class);
-                if (!(attrs.fileKey() instanceof String)) {
-                    throw new MCRPersistenceException(
-                        "Cannot get ID from newely created directory, as it is not a String." + rootPath);
-                }
-                mcrDerivate.getDerivate().getInternals().setIFSID(attrs.fileKey().toString());
             } else {
                 final String sourcepath = mcrDerivate.getDerivate().getInternals().getSourcePath();
                 final File f = new File(sourcepath);
@@ -195,12 +188,6 @@ public class MigrationCommands extends MCRAbstractCommands {
                     try {
                         LOGGER.debug("Starting File-Import");
                         importDerivate(derId.toString(), f.toPath());
-                        BasicFileAttributes attrs = Files.readAttributes(rootPath, BasicFileAttributes.class);
-                        if (!(attrs.fileKey() instanceof String)) {
-                            throw new MCRPersistenceException(
-                                "Cannot get ID from newely created directory, as it is not a String." + rootPath);
-                        }
-                        mcrDerivate.getDerivate().getInternals().setIFSID(attrs.fileKey().toString());
                     } catch (final Exception e) {
                         throw new MCRPersistenceException("Can't add derivate to the IFS", e);
                     }

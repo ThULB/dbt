@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRUserInformation;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.jersey.MCRJWTUtil;
 import org.mycore.frontend.jersey.resources.MCRJWTResource;
 import org.mycore.frontend.servlets.MCRServlet;
@@ -57,7 +57,7 @@ public class DBTLoginEndpointServlet extends MCRServlet {
                 return;
             }
 
-            String url = MCRConfiguration.instance().getString("DBT.LoginEndpoint." + name);
+            String url = MCRConfiguration2.getStringOrThrow("DBT.LoginEndpoint." + name);
             res.sendRedirect(res.encodeRedirectURL(url.replace("{TOKEN}", token)));
             return;
         }

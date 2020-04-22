@@ -52,6 +52,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.client.Client;
@@ -69,7 +70,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
 import org.mycore.common.MCRCache;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfiguration;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.common.events.MCRShutdownHandler.Closeable;
 import org.mycore.common.inject.MCRInjectorConfig;
@@ -108,8 +109,6 @@ public class MediaService {
     public static final String SERVER_ADDRESS;
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final MCRConfiguration CONFIG = MCRConfiguration.instance();
 
     private static final MCRProcessableExecutor TASK_EXECUTOR;
 
@@ -157,7 +156,7 @@ public class MediaService {
     static {
         MCRProcessableRegistry registry = MCRInjectorConfig.injector().getInstance(MCRProcessableRegistry.class);
 
-        int poolSize = CONFIG.getInt(CONFIG_PREFIX + "ThreadCount", 4);
+        int poolSize = MCRConfiguration2.getInt(CONFIG_PREFIX + "ThreadCount").orElse(4);
 
         final ExecutorService threadPool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,
             MCRProcessableFactory.newPriorityBlockingQueue(),
@@ -171,11 +170,11 @@ public class MediaService {
 
         MCRShutdownHandler.getInstance().addCloseable(TASK_SHUTDOWNHANDLER);
 
-        SERVER_ADDRESS = CONFIG.getString(CONFIG_PREFIX + "ServerAddress");
+        SERVER_ADDRESS = MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "ServerAddress");
 
-        MEDIA_STORAGE_PATH = Paths.get(CONFIG.getString(CONFIG_PREFIX + "Media.StoragePath"));
-        THUMB_STORAGE_PATH = Paths.get(CONFIG.getString(CONFIG_PREFIX + "Thumb.StoragePath"));
-        THUMB_FORMAT_SCALED = CONFIG.getString(CONFIG_PREFIX + "Thumb.FormatScaled", "JPG");
+        MEDIA_STORAGE_PATH = Paths.get(MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Media.StoragePath"));
+        THUMB_STORAGE_PATH = Paths.get(MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Thumb.StoragePath"));
+        THUMB_FORMAT_SCALED = MCRConfiguration2.getString(CONFIG_PREFIX + "Thumb.FormatScaled").orElse("JPG");
     }
 
     protected static MCRProcessableExecutor executor() {
@@ -193,8 +192,10 @@ public class MediaService {
     }
 
     public static boolean isMediaSupported(Path path) {
-        return CONFIG.getStrings(CONFIG_PREFIX + "SupportedExtensions", Arrays.asList(".avi", ".mp4", ".mov", ".mkv"))
-            .stream().anyMatch(e -> {
+        return MCRConfiguration2.getString(CONFIG_PREFIX + "SupportedExtensions")
+            .map(MCRConfiguration2::splitValue)
+            .orElseGet(() -> Stream.of(".avi", ".mp4", ".mov", ".mkv"))
+            .anyMatch(e -> {
                 String fn = path.getFileName().toString();
                 return fn.length() > e.length() && fn.substring(fn.length() - e.length()).equalsIgnoreCase(e);
             });
