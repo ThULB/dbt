@@ -23,6 +23,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,8 @@ public class Sources {
 
     private static final Map<String, String> MEDIA_TYPE_SUFFIXES;
 
+    private static final Map<String, Integer> MEDIA_TYPE_PRIORITY;
+
     private static String wowzaBaseURL = MCRConfiguration2.getStringOrThrow("MCR.Media.Wowza.BaseURL");
 
     private static String wowzaRTMPBaseURL = MCRConfiguration2.getStringOrThrow("MCR.Media.Wowza.RTMPBaseURL");
@@ -79,7 +82,24 @@ public class Sources {
         MEDIA_TYPE_SUFFIXES.put(MEDIA_TYPE_MPEG_DASH, "/manifest.mpd");
         MEDIA_TYPE_SUFFIXES.put(MEDIA_TYPE_HLS, "/playlist.m3u8");
         MEDIA_TYPE_SUFFIXES.put(MEDIA_TYPE_RTMP, "");
+
+        MEDIA_TYPE_PRIORITY = new HashMap<>();
+        MEDIA_TYPE_PRIORITY.put(MEDIA_TYPE_HLS, 0);
+        MEDIA_TYPE_PRIORITY.put(MEDIA_TYPE_MPEG_DASH, 1);
+        MEDIA_TYPE_PRIORITY.put(MEDIA_TYPE_RTMP, 2);
     }
+
+    private static Comparator<Source> sortSources = (a, b) -> {
+        Integer aPrio = Optional.ofNullable(a.getType()).map(MEDIA_TYPE_PRIORITY::get).orElse(Integer.MAX_VALUE);
+        Integer bPrio = Optional.ofNullable(b.getType()).map(MEDIA_TYPE_PRIORITY::get).orElse(Integer.MAX_VALUE);
+
+        if (aPrio == Integer.MAX_VALUE && aPrio == bPrio) {
+            int tComp = a.getType().compareTo(b.getType());
+            return tComp == 0 ? a.getSrc().compareTo(b.getSrc()) : tComp;
+        }
+
+        return aPrio.compareTo(bPrio);
+    };
 
     /**
      * Builds the media sources.
@@ -95,6 +115,7 @@ public class Sources {
         sources.sources = Optional.ofNullable(files)
             .map(
                 fs -> fs.stream().map(s -> Source.build(s, MediaService.hasSMILFile(id))).flatMap(ss -> ss.stream())
+                    .sorted(sortSources)
                     .collect(Collectors.toList()))
             .orElse(null);
 
@@ -117,7 +138,7 @@ public class Sources {
         sources.sources = Optional.ofNullable(files)
             .map(
                 fs -> fs.stream().map(s -> Source.build(s, MediaService.hasSMILFile(id), ipAddress, queryParameters))
-                    .flatMap(ss -> ss.stream())
+                    .flatMap(ss -> ss.stream()).sorted(sortSources)
                     .collect(Collectors.toList()))
             .orElse(null);
 
@@ -235,7 +256,8 @@ public class Sources {
                 try {
                     return !hasSMIL ? MEDIA_TYPE_SUFFIXES.keySet().stream()
                         .map(mt -> new Source(mt, toURL(mt, file, wowzaContentPathPrefix)))
-                        .collect(Collectors.toList()) : Arrays
+                        .collect(Collectors.toList())
+                        : Arrays
                             .asList(
                                 new Source(Optional.ofNullable(MimeType.detect(file)).orElse("video/mp4"),
                                     file.getFileName().toString()));
@@ -265,7 +287,8 @@ public class Sources {
                     return !hasSMIL ? MEDIA_TYPE_SUFFIXES.keySet().stream()
                         .map(mt -> new Source(mt, toURL(mt, file, wowzaContentPathPrefix,
                             ipAddress, queryParameters)))
-                        .collect(Collectors.toList()) : Arrays
+                        .collect(Collectors.toList())
+                        : Arrays
                             .asList(
                                 new Source(Optional.ofNullable(MimeType.detect(file)).orElse("video/mp4"),
                                     file.getFileName().toString()));
