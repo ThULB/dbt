@@ -95,7 +95,6 @@ $(document).ready(function () {
 
         getThumbs($player, function (sourceArr) {
           if (sourceArr && sourceArr.length > 0) {
-            console.log(sourceArr[0].src);
             player.poster(sourceArr[0].src);
           }
         });
