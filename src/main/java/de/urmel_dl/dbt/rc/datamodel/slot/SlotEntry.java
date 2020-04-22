@@ -48,6 +48,8 @@ public class SlotEntry<V> implements Serializable {
 
     private String id;
 
+    private Slot slot;
+
     private TypedDate created = new TypedDate(TypedDate.Type.CREATED);
 
     private TypedDate modified = new TypedDate(TypedDate.Type.MODIFIED);
@@ -88,6 +90,20 @@ public class SlotEntry<V> implements Serializable {
      */
     public void setId(final String id) {
         this.id = id;
+    }
+
+    /**
+     * @return the slot
+     */
+    public Slot getSlot() {
+        return slot;
+    }
+
+    /**
+     * @param slot the slot to set
+     */
+    public void setSlot(Slot slot) {
+        this.slot = slot;
     }
 
     private void setDate(final TypedDate entryDate) {

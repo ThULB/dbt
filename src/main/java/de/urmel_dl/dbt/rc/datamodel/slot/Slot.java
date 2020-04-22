@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.StringTokenizer;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -494,6 +495,7 @@ public class Slot implements Serializable {
      */
     public void setEntries(final List<SlotEntry<?>> entries) {
         this.entries = entries;
+        Optional.ofNullable(this.entries).ifPresent(el -> el.forEach(e -> e.setSlot(this)));
     }
 
     /**
@@ -501,15 +503,9 @@ public class Slot implements Serializable {
      * @return a SlotEntry or <code>null</code> if nothing was found
      */
     public SlotEntry<?> getEntryById(final String id) {
-        if (entries != null) {
-            for (SlotEntry<?> entry : entries) {
-                if (id.equals(entry.getId())) {
-                    return entry;
-                }
-            }
-        }
-
-        return null;
+        return Optional.ofNullable(entries)
+            .map(el -> el.stream().filter(entry -> id.equals(entry.getId())).findFirst().orElse(null))
+            .orElse(null);
     }
 
     /**
@@ -521,6 +517,7 @@ public class Slot implements Serializable {
             entries = new ArrayList<>();
         }
 
+        entry.setSlot(this);
         return entries.add(entry);
     }
 
@@ -534,9 +531,12 @@ public class Slot implements Serializable {
             entries = new ArrayList<>();
         }
 
+        entry.setSlot(this);
+
         if (afterId != null && afterId.length() > 0) {
             for (int i = 0; i < entries.size(); i++) {
                 if (afterId.equals(entries.get(i).getId())) {
+                    entry.setSlot(this);
                     entries.add(i + 1, entry);
                     return true;
                 }
@@ -553,6 +553,7 @@ public class Slot implements Serializable {
         if (entries != null) {
             for (int c = 0; c < entries.size(); c++) {
                 if (entry.getId().equals(entries.get(c).getId())) {
+                    entry.setSlot(this);
                     entry.setModified(new Date());
                     entries.set(c, entry);
                     return;

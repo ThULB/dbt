@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xalan i18n xlink pica"
+  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService"
+  exclude-result-prefixes="xalan i18n xlink pica menc"
 >
 
   <!-- include custom templates for supported objecttypes -->
@@ -348,23 +349,57 @@
   
   <!-- File -->
   <xsl:template match="file">
-    <div class="d-flex flex-row flex-fill justify-content-between">
-      <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
-        <xsl:choose>
-          <xsl:when test="string-length(.) &gt; 0">
-            <xsl:value-of select="." />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="@name" />
-          </xsl:otherwise>
-        </xsl:choose>
-      </a>
-      <span class="text-nowrap text-muted">
-        <xsl:call-template name="formatFileSize">
-          <xsl:with-param name="size" select="@size" />
-        </xsl:call-template>
-      </span>
-    </div>
+    <xsl:variable name="internalId" select="menc:buildInternalId(concat($slotId, '_', ../@id, '_', @name))" />
+    <xsl:variable name="hasMediaFiles" select="menc:hasMediaFiles($internalId) = 'true'" />
+    <xsl:variable name="hasSMILFile" select="menc:hasSMILFile($internalId) = 'true'" />
+
+    <xsl:choose>
+      <xsl:when test="$hasMediaFiles and $hasSMILFile">
+        <div class="d-flex flex-column flex-fill">
+          <xsl:if test="string-length(.) = 0">
+            <h6>
+              <xsl:value-of select="@name" />
+            </h6>
+          </xsl:if>
+          <div class="embed-responsive embed-responsive-16by9">
+            <video id="player-{../@id}" class="video-js embed-responsive-item" controls="" preload="metadata" poster="" data-source-id="{$internalId}"
+              data-sources-url="{concat($WebApplicationBaseURL, 'rsc/media/sources/', $internalId)}"
+            >
+              <xsl:attribute name="data-setup">{}</xsl:attribute>
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider upgrading
+                to a web browser that
+                <a href="http://videojs.com/html5-video-support/">supports HTML5 video</a>
+              </p>
+            </video>
+          </div>
+          <xsl:if test="string-length(.) &gt; 0">
+            <i class="comment text-muted">
+              <xsl:value-of select="." />
+            </i>
+          </xsl:if>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <div class="d-flex flex-row flex-fill justify-content-between">
+          <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
+            <xsl:choose>
+              <xsl:when test="string-length(.) &gt; 0">
+                <xsl:value-of select="." />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="@name" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </a>
+          <span class="text-nowrap text-muted">
+            <xsl:call-template name="formatFileSize">
+              <xsl:with-param name="size" select="@size" />
+            </xsl:call-template>
+          </span>
+        </div>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
   
   <!-- OPCRecordEntry -->

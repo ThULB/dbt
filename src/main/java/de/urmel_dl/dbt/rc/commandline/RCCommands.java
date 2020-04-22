@@ -22,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.time.Duration;
@@ -55,6 +56,7 @@ import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
 import org.xml.sax.SAXParseException;
 
 import de.urmel_dl.dbt.common.MailQueue;
+import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
 import de.urmel_dl.dbt.rc.datamodel.Period;
@@ -548,6 +550,116 @@ public class RCCommands extends MCRAbstractCommands {
         }
 
         return Collections.emptyList();
+    }
+
+    @MCRCommand(syntax = "encode all media files of slots",
+        help = "encode all media files of slots with a supported media type")
+    public static List<String> encodeAll() {
+        return forAllSlots("encode all media files of slot {0}");
+    }
+
+    @MCRCommand(syntax = "force encode all media files of slots",
+        help = "force encode all media files of slots with a supported media type")
+    public static List<String> forceEncodeAll() {
+        return forAllSlots("force encode all media files of slot {0}");
+    }
+
+    @MCRCommand(syntax = "encode media file {1} of slot {0}", help = "encode media file {1} of slot {0}")
+    public static void encodeMediaFile(String slotId, String entryId) throws MCRPersistenceException, IOException {
+        encodeMediaFile(slotId, entryId, false);
+    }
+
+    @MCRCommand(syntax = "force encode media file {1} of slot {0}", help = "force encode media file {1} of slot {0}",
+        order = 1)
+    public static void forceEncodeMediaFile(String slotId, String entryId) throws MCRPersistenceException, IOException {
+        encodeMediaFile(slotId, entryId, true);
+    }
+
+    @MCRCommand(syntax = "encode all media files of slot {0}", help = "encode all media files of slot {0}")
+    public static void encodeMediaFiles(String slotId) throws MCRPersistenceException, IOException {
+        encodeMediaFiles(slotId, false);
+    }
+
+    @MCRCommand(syntax = "force encode all media files of slot {0}", help = "force encode all media files of slot {0}")
+    public static void forceEncodeMediaFiles(String slotId) throws MCRPersistenceException, IOException {
+        encodeMediaFiles(slotId, true);
+    }
+
+    private static String buildId(SlotEntry<FileEntry> entry) {
+        return entry.getSlot().getSlotId() + "_" + entry.getId() + "_" + entry.getEntry().getName();
+    }
+
+    private static List<String> forAllSlots(String batchCommandSyntax) {
+
+        List<String> ids = SlotManager.instance().getSlotList().getSlots().stream().map(Slot::getSlotId)
+            .collect(Collectors.toList());
+        List<String> cmds = new ArrayList<>(ids.size());
+
+        ids.stream().sorted(Collections.reverseOrder())
+            .forEach(id -> cmds.add(new MessageFormat(batchCommandSyntax, Locale.ROOT).format(new Object[] { id })));
+
+        return cmds;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void encodeMediaFile(String slotId, String entryId, boolean force)
+        throws MCRPersistenceException, IOException {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        final Slot slot = slotList.getSlotById(slotId);
+        if (slot != null) {
+            SlotEntry<FileEntry> fileEntry = slot.getEntries().stream()
+                .filter(e -> e.getEntry() instanceof FileEntry && e.getId().equals(entryId)).findFirst()
+                .map(e -> (SlotEntry<FileEntry>) e).orElse(null);
+
+            if (fileEntry == null) {
+                throw new MCRException("File entry " + entryId + " not found!");
+            }
+
+            encodeMediaFile(slot, fileEntry, force);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void encodeMediaFiles(String slotId, boolean force) throws MCRPersistenceException, IOException {
+        final SlotManager mgr = SlotManager.instance();
+        final SlotList slotList = mgr.getSlotList();
+
+        final Slot slot = slotList.getSlotById(slotId);
+        if (slot != null) {
+            slot.getEntries().stream().filter(e -> e.getEntry() instanceof FileEntry)
+                .forEach(e -> {
+                    try {
+                        encodeMediaFile(slot, (SlotEntry<FileEntry>) e, force);
+                    } catch (MCRPersistenceException | IOException ex) {
+                        throw new MCRException(ex.getMessage(), ex.getCause());
+                    }
+                });
+        }
+    }
+
+    private static void encodeMediaFile(Slot slot, SlotEntry<FileEntry> fileEntry, boolean force)
+        throws MCRPersistenceException, IOException {
+        if (!FileEntryManager.exists(slot, fileEntry)) {
+            throw new MCRException("File entry " + fileEntry.getId() + " does not exist!");
+        }
+
+        Path mediaFile = FileEntryManager.getLocalPath(slot, fileEntry);
+
+        if (!MediaService.isMediaSupported(mediaFile)) {
+            LOGGER.info("Skipping encoding of " + fileEntry.getEntry().getName() + ", because isn't supported.");
+            return;
+        }
+
+        if (!force
+            && MediaService.hasMediaFiles(MediaService.buildInternalId(buildId(fileEntry)))) {
+            LOGGER
+                .info("Skipping encoding of " + fileEntry.getEntry().getName() + ", because it's already encoded.");
+            return;
+        }
+
+        MediaService.encodeMediaFile(buildId(fileEntry), mediaFile, 0);
     }
 
 }

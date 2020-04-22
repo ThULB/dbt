@@ -17,6 +17,9 @@
  */
 package de.urmel_dl.dbt.rc.persistency;
 
+import java.io.IOException;
+import java.nio.file.Path;
+
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.datamodel.ifs2.MCRDirectory;
@@ -137,7 +140,6 @@ public final class FileEntryManager {
         }
 
         final int id = slot.getMCRObjectID().getNumberAsInteger();
-        final Long lastRev = SlotManager.instance().getLastRevision(slot);
         final FileEntry fileEntry = slotEntry.getEntry();
 
         try {
@@ -147,7 +149,7 @@ public final class FileEntryManager {
             MCRStoredNode dir = (MCRStoredNode) col.getNodeByPath(slotEntry.getId());
 
             if (dir != null && dir.isDirectory()) {
-                dir.renameTo(slotEntry.getId() + (lastRev != null ? "-" + lastRev.toString() : ""));
+                dir.delete();
                 create(slot, slotEntry);
             }
         } catch (MCRException ex) {
@@ -193,21 +195,36 @@ public final class FileEntryManager {
         }
     }
 
+    private static MCRStoredNode getStoreNode(final Slot slot, final SlotEntry<FileEntry> slotEntry)
+        throws MCRPersistenceException, IOException {
+        final int id = slot.getMCRObjectID().getNumberAsInteger();
+        final FileEntry fileEntry = slotEntry.getEntry();
+
+        final MCRFileStore store = getStore();
+
+        MCRFileCollection col = store.retrieve(id);
+        MCRStoredNode dir = (MCRStoredNode) col.getNodeByPath(slotEntry.getId());
+        return (MCRStoredNode) dir.getNodeByPath(fileEntry.getName());
+    }
+
+    /**
+     * Retries an {@link FileEntry} from filesystem.
+     * 
+     * @param slot the {@link Slot}
+     * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
+     * @throws MCRPersistenceException thrown if {@link FileEntry} couldn't retrieved
+     */
     public static void retrieve(final Slot slot, final SlotEntry<FileEntry> slotEntry) throws MCRPersistenceException {
         if (!exists(slot, slotEntry)) {
             throw new MCRPersistenceException("Couldn't retrieve non existence fileEntry.");
         }
 
-        final int id = slot.getMCRObjectID().getNumberAsInteger();
         final FileEntry fileEntry = slotEntry.getEntry();
 
         try {
-            final MCRFileStore store = getStore();
-
-            MCRFileCollection col = store.retrieve(id);
-            MCRStoredNode dir = (MCRStoredNode) col.getNodeByPath(slotEntry.getId());
-            MCRStoredNode fileNode = (MCRStoredNode) dir.getNodeByPath(fileEntry.getName());
+            MCRStoredNode fileNode = getStoreNode(slot, slotEntry);
             fileEntry.setContent(fileNode.getContent());
+            fileEntry.setLocalPath(fileNode.getLocalPath());
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;
@@ -217,4 +234,19 @@ public final class FileEntryManager {
             throw new MCRPersistenceException(msg, ex);
         }
     }
+
+    /**
+     * Returns the {@link Path} for an {@link FileEntry}.
+     * 
+     * @param slot the {@link Slot}
+     * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
+     * @return the {@link Path}
+     * @throws MCRPersistenceException
+     * @throws IOException
+     */
+    public static Path getLocalPath(final Slot slot, final SlotEntry<FileEntry> slotEntry)
+        throws MCRPersistenceException, IOException {
+        return getStoreNode(slot, slotEntry).getLocalPath();
+    }
+
 }
