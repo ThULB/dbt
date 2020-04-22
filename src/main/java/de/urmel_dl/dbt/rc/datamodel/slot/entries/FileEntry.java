@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -85,6 +86,8 @@ public class FileEntry implements Serializable {
     private MCRContent content;
 
     private String comment;
+
+    private Path localPath;
 
     /**
      * Creates an {@link FileEntry} from given {@link InputStream}.
@@ -409,6 +412,20 @@ public class FileEntry implements Serializable {
      */
     public void setComment(final String comment) {
         this.comment = comment;
+    }
+
+    /**
+     * @return the localPath
+     */
+    public Path getLocalPath() {
+        return localPath;
+    }
+
+    /**
+     * @param localPath the localPath to set
+     */
+    public void setLocalPath(Path localPath) {
+        this.localPath = localPath;
     }
 
     /* (non-Javadoc)

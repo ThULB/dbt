@@ -19,9 +19,13 @@ package de.urmel_dl.dbt.rc.persistency;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -37,7 +41,6 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -108,7 +111,7 @@ public final class SlotManager {
 
     public static final String OWNER_TRANSFER_EVENT = "ownerTransfer";
 
-    private static final Logger LOGGER = LogManager.getLogger(SlotManager.class);
+    private static final Logger LOGGER = LogManager.getLogger();
 
     private static SlotManager singelton;
 
@@ -435,6 +438,8 @@ public final class SlotManager {
         }
     }
 
+    private Predicate<SlotEntry<?>> filterFileEntry = (se) -> se.getEntry() instanceof FileEntry;
+
     /**
      * Saves or updates the metadata of given {@link Slot}.
      *
@@ -448,8 +453,11 @@ public final class SlotManager {
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
+        Slot oldSlot = null;
+
         if (objID != null && MCRMetadataManager.exists(objID)) {
             final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objID);
+            oldSlot = SlotWrapper.unwrapMCRObject(obj);
             final SlotWrapper wrapper = new SlotWrapper(obj);
             wrapper.setSlot(slot);
             MCRMetadataManager.update(wrapper.getMCRObject());
@@ -460,13 +468,12 @@ public final class SlotManager {
         }
 
         if (slot.getEntries() != null) {
-            for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                if (slotEntry.getEntry() instanceof FileEntry
-                    && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                    FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry);
-                }
-            }
+            slot.getEntries().stream().filter(filterFileEntry)
+                .filter(slotEntry -> !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry))
+                .forEach(slotEntry -> FileEntryManager.create(slot, (SlotEntry<FileEntry>) slotEntry));
         }
+
+        removeDeletedFileEntries(oldSlot, slot);
     }
 
     /**
@@ -477,29 +484,33 @@ public final class SlotManager {
      * @throws MCRActiveLinkException thrown from underlying classes
      * @throws MCRAccessException thrown from underlying classes
      */
-    @SuppressWarnings("unchecked")
     public synchronized void delete(final Slot slot)
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
         if (objID != null && MCRMetadataManager.exists(objID)) {
-            if (slot.getEntries() != null) {
-                for (SlotEntry<?> slotEntry : slot.getEntries()) {
-                    if (slotEntry.getEntry() instanceof FileEntry
-                        && !FileEntryManager.exists(slot, (SlotEntry<FileEntry>) slotEntry)) {
-                        FileEntryManager.delete(slot, (SlotEntry<FileEntry>) slotEntry);
-                    }
-                }
-            }
-
             final MCRObject obj = MCRMetadataManager.retrieveMCRObject(objID);
             final SlotWrapper wrapper = new SlotWrapper(obj);
             wrapper.setSlot(slot);
             MCRMetadataManager.delete(wrapper.getMCRObject());
 
+            removeDeletedFileEntries(slot, null);
             removeSlot(slot);
         } else {
             throw new MCRException("No reserve collection found for ID \"" + objID + "\".");
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void removeDeletedFileEntries(Slot slotBefore, Slot slot) {
+        if (slotBefore != null && slotBefore.getEntries() != null) {
+            slotBefore.getEntries().stream().filter(filterFileEntry)
+                .filter(se -> Optional.ofNullable(slot).map(Slot::getEntries)
+                    .map(nse -> !nse.stream().filter(filterFileEntry)
+                        .anyMatch(e -> e.getId().equals(se.getId())))
+                    .orElse(true))
+                .peek(e -> LOGGER.info("remove {}", e))
+                .forEach(se -> FileEntryManager.delete(slotBefore, (SlotEntry<FileEntry>) se));
         }
     }
 
@@ -617,15 +628,13 @@ public final class SlotManager {
         final QueryResponse response = client.query(query);
 
         SolrDocumentList results = response.getResults();
-        for (SolrDocument doc : results) {
-            for (Object val : (ArrayList<Object>) doc.getFieldValues("slotId")) {
-                final Slot slot = getSlotById((String) val);
-                if (slot != null) {
-                    slotList.addSlot(slot);
-                }
-            }
-        }
-        slotList.setTotal(results.getNumFound());
+
+        List<Slot> slots = results.stream().map(doc -> doc.getFieldValues("slotId")).flatMap(Collection::stream)
+            .map(val -> getSlotById((String) val))
+            .filter(Objects::nonNull).collect(Collectors.toList());
+
+        slotList.setSlots(slots);
+        slotList.setTotal((long) slots.size());
 
         return slotList;
     }
