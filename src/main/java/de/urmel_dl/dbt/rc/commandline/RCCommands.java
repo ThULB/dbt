@@ -609,9 +609,11 @@ public class RCCommands extends MCRAbstractCommands {
 
         final Slot slot = slotList.getSlotById(slotId);
         if (slot != null) {
-            SlotEntry<FileEntry> fileEntry = slot.getEntries().stream()
-                .filter(e -> e.getEntry() instanceof FileEntry && e.getId().equals(entryId)).findFirst()
-                .map(e -> (SlotEntry<FileEntry>) e).orElse(null);
+            SlotEntry<FileEntry> fileEntry = Optional.ofNullable(slot.getEntries())
+                .map(entries -> entries.stream()
+                    .filter(e -> e.getEntry() instanceof FileEntry && e.getId().equals(entryId)).findFirst()
+                    .map(e -> (SlotEntry<FileEntry>) e).orElse(null))
+                .orElse(null);
 
             if (fileEntry == null) {
                 throw new MCRException("File entry " + entryId + " not found!");
