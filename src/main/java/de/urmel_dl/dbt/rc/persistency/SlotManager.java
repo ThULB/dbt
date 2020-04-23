@@ -634,7 +634,7 @@ public final class SlotManager {
             .filter(Objects::nonNull).collect(Collectors.toList());
 
         slotList.setSlots(slots);
-        slotList.setTotal((long) slots.size());
+        slotList.setTotal(results.getNumFound());
 
         return slotList;
     }
