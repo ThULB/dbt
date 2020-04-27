@@ -21,6 +21,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -42,9 +46,24 @@ public class SlotList implements Serializable {
 
     private static final long serialVersionUID = 8484254848235412462L;
 
-    private List<Slot> slots = Collections.synchronizedList(new ArrayList<Slot>());
+    private List<Slot> slots;
 
     private Long total;
+
+    public SlotList() {
+        this(null);
+    }
+
+    public SlotList(List<Slot> slots) {
+        Optional.ofNullable(slots).ifPresentOrElse(this::setSlots,
+            () -> setSlots(Collections.synchronizedList(new ArrayList<Slot>())));
+    }
+
+    private <T> T syncronizedSlots(List<Slot> slots, Function<List<Slot>, T> func) {
+        synchronized (slots) {
+            return func.apply(slots);
+        }
+    }
 
     /**
      * @return the slots
@@ -58,7 +77,7 @@ public class SlotList implements Serializable {
      */
     @XmlElement(name = "slot")
     public void setSlots(final List<Slot> slots) {
-        this.slots = Collections.synchronizedList(slots);
+        this.slots = Optional.ofNullable(slots).orElse(Collections.synchronizedList(new ArrayList<Slot>()));
     }
 
     /**
@@ -69,23 +88,17 @@ public class SlotList implements Serializable {
             throw new MCRException("Slot with id " + slot.getSlotId() + " already exists!");
         }
 
-        slots.add(slot);
+        syncronizedSlots(slots, (sl) -> sl.add(slot));
     }
 
     /**
      * @param slot the slot to set
      */
     public void setSlot(final Slot slot) {
-        if (slots != null) {
-            for (int c = 0; c < slots.size(); c++) {
-                if (slot.getSlotId().equals(slots.get(c).getSlotId())) {
-                    slots.set(c, slot);
-                    return;
-                }
-            }
-        }
-
-        throw new IllegalArgumentException("Couldn't find Slot with id \"" + slot.getSlotId() + "\"!");
+        IntStream.range(0, slots.size())
+            .filter(c -> slot.getSlotId().equals(syncronizedSlots(slots, (sl) -> sl.get(c).getSlotId()))).findFirst()
+            .ifPresentOrElse(c -> slots.set(c, slot),
+                () -> new IllegalArgumentException("Couldn't find Slot with id \"" + slot.getSlotId() + "\"!"));
     }
 
     public void removeSlot(final Slot slot) {
@@ -94,7 +107,7 @@ public class SlotList implements Serializable {
 
     @XmlAttribute(name = "total")
     public long getTotal() {
-        return total != null ? total : slots.size();
+        return total != null ? total : (long) syncronizedSlots(slots, (sl) -> sl.size());
     }
 
     public void setTotal(final Long total) {
@@ -112,15 +125,8 @@ public class SlotList implements Serializable {
      * @return the slot
      */
     public Slot getSlotById(final String slotId) {
-        synchronized (slots) {
-            for (Slot slot : slots) {
-                if (slotId.equals(slot.getSlotId())) {
-                    return slot;
-                }
-            }
-        }
-
-        return null;
+        return syncronizedSlots(slots,
+            (sl) -> sl.stream().filter(slot -> slotId.equals(slot.getSlotId())).findFirst().orElse(null));
     }
 
     /**
@@ -129,16 +135,8 @@ public class SlotList implements Serializable {
      * @return the {@link SlotList}
      */
     public SlotList getBasicSlots() {
-        final SlotList slotList = new SlotList();
-        slotList.total = this.total;
-
-        synchronized (slots) {
-            for (Slot slot : slots) {
-                slotList.addSlot(slot.getBasicCopy());
-            }
-        }
-
-        return slotList;
+        return syncronizedSlots(slots,
+            (sl) -> new SlotList(sl.stream().map(Slot::getBasicCopy).distinct().collect(Collectors.toList())));
     }
 
     /**
@@ -147,16 +145,8 @@ public class SlotList implements Serializable {
      * @return the {@link SlotList}
      */
     public SlotList getActiveSlots() {
-        final SlotList slotList = new SlotList();
-
-        synchronized (slots) {
-            for (Slot slot : slots) {
-                if (slot.isActive()) {
-                    slotList.addSlot(slot.getBasicCopy());
-                }
-            }
-        }
-
-        return slotList;
+        return syncronizedSlots(slots, (sl) -> new SlotList(
+            sl.stream().filter(Slot::isActive).map(Slot::getBasicCopy).distinct().collect(Collectors.toList())));
     }
+
 }

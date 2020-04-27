@@ -311,7 +311,7 @@ public final class SlotManager {
         final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.instance();
         final List<String> ids = xmlManager.listIDsForBase(getMCRObjectBaseID());
 
-        for (String objId : ids) {
+        ids.forEach(objId -> {
             try {
                 if (MCRMetadataManager.exists(MCRObjectID.getInstance(objId))) {
                     final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
@@ -321,7 +321,7 @@ public final class SlotManager {
             } catch (final Exception e) {
                 LOGGER.error("Error on loading " + objId + "!", e);
             }
-        }
+        });
     }
 
     /**
@@ -608,8 +608,6 @@ public final class SlotManager {
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
         final List<SortClause> sortClauses) throws SolrServerException, IOException {
-        final SlotList slotList = new SlotList();
-
         final SolrClient client = MCRSolrClientFactory.getMainSolrClient();
 
         final SolrQuery query = new SolrQuery();
@@ -629,11 +627,10 @@ public final class SlotManager {
 
         SolrDocumentList results = response.getResults();
 
-        List<Slot> slots = results.stream().map(doc -> doc.getFieldValues("slotId")).flatMap(Collection::stream)
-            .map(val -> getSlotById((String) val))
-            .filter(Objects::nonNull).collect(Collectors.toList());
-
-        slotList.setSlots(slots);
+        final SlotList slotList = new SlotList(
+            results.stream().map(doc -> doc.getFieldValues("slotId")).flatMap(Collection::stream)
+                .map(val -> getSlotById((String) val))
+                .filter(Objects::nonNull).distinct().collect(Collectors.toList()));
         slotList.setTotal(results.getNumFound());
 
         return slotList;
