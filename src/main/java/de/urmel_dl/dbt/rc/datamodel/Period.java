@@ -465,7 +465,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      *         <code>null</code> otherwise
      * @throws ParseException should never occur
      */
-    public Date getLectureEndDate(final Date date) throws ParseException {
+    public synchronized Date getLectureEndDate(final Date date) throws ParseException {
         Date result = null;
 
         final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
@@ -656,7 +656,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         return result;
     }
 
-    private String constructShort(final Date inputDate) {
+    private synchronized String constructShort(final Date inputDate) {
         if (inputDate != null) {
             final Date date = new Date(inputDate.getTime());
             final String dateStr = PERIOD_FORMAT.format(date);
@@ -666,7 +666,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         throw new IllegalArgumentException("invalid input date \"" + inputDate + "\"");
     }
 
-    private String constructShort(final String inputStr) {
+    private synchronized String constructShort(final String inputStr) {
         if (inputStr != null) {
             Date date;
             if (inputStr.matches(SHORT_FORMAT)) {
@@ -691,11 +691,11 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         throw new IllegalArgumentException("invalid input string \"" + inputStr + "\"");
     }
 
-    protected String constructDateString(final Date date) throws ParseException {
+    protected synchronized String constructDateString(final Date date) throws ParseException {
         return PERIOD_FORMAT.format(date);
     }
 
-    private Date constructDate(final String fieldShort) throws ParseException {
+    private synchronized Date constructDate(final String fieldShort) throws ParseException {
         final Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         cal.setTime(getBaseDate());
         final int year = cal.get(Calendar.YEAR);
@@ -784,7 +784,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      *         could be calculated, <code>null</code> otherwise
      * @throws ParseException should never occurs
      */
-    private static Date getPeriodDate(final Date base, final String from, final String to, final boolean end)
+    private synchronized static Date getPeriodDate(final Date base, final String from, final String to,
+        final boolean end)
         throws ParseException {
         Date result = null;
 
