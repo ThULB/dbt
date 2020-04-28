@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.text.MessageFormat;
-import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -440,7 +439,7 @@ public class RCCommands extends MCRAbstractCommands {
                         MCREventManager.instance().handleEvent(evt);
                         continue;
                     }
-                } catch (IllegalArgumentException | ParseException | CloneNotSupportedException
+                } catch (IllegalArgumentException | CloneNotSupportedException
                     | MCRPersistenceException | MCRActiveLinkException e) {
                     LOGGER.error(e.getMessage());
                 }

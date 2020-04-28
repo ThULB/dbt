@@ -44,6 +44,7 @@ import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.content.MCRSourceContent;
 import org.xml.sax.SAXException;
 
+import de.urmel_dl.dbt.rc.utils.DateUtils;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
@@ -180,7 +181,8 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
                         p.setFullyQualified(true);
 
-                        final Calendar nextDay = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                        final Calendar nextDay = Calendar.getInstance(TimeZone.getTimeZone(DateUtils.TIME_ZONE),
+                            Locale.GERMANY);
                         nextDay.setTime(p.getToDate());
                         nextDay.add(Calendar.DATE, 1);
 

@@ -17,16 +17,23 @@
  */
 package de.urmel_dl.dbt.rc.utils;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
 public class DateUtils {
+
+    public static final String TIME_ZONE = "Europe/Berlin";
+
+    public static final String DATE_PATTERN = "dd.MM.yyyy";
 
     /**
      * Return the given date with time <code>00:00:00</code>.
@@ -35,13 +42,8 @@ public class DateUtils {
      * @return the date with time <code>00:00:00</code>
      */
     public static Date getStartOfDay(final Date date) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+        LocalDate localDate = LocalDate.ofInstant(date.toInstant(), ZoneId.of(TIME_ZONE));
+        return Date.from(localDate.atStartOfDay(ZoneId.of(TIME_ZONE)).toInstant());
     }
 
     /**
@@ -50,12 +52,41 @@ public class DateUtils {
      * @return the date with time <code>23:59:59</code>
      */
     public static Date getEndOfDay(final Date date) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-        return calendar.getTime();
+        LocalDate localDate = LocalDate.ofInstant(date.toInstant(), ZoneId.of(TIME_ZONE));
+        return Date.from(LocalDateTime.of(localDate, LocalTime.MAX).atZone(ZoneId.of(TIME_ZONE)).toInstant());
     }
+
+    /**
+     * Return the year for given {@link Date}.
+     * @param date the date
+     * @return the year
+     */
+    public static int getYear(final Date date) {
+        LocalDate localDate = LocalDate.ofInstant(date.toInstant(), ZoneId.of(TIME_ZONE));
+        return localDate.getYear();
+    }
+
+    /**
+     * Parse string and return a {@link Date}. 
+     * @param dateStr the date string
+     * @return the parsed {@link Date}
+     */
+    public static Date parseDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.GERMANY);
+        LocalDate localDate = LocalDate.parse(dateStr, formatter);
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.of(TIME_ZONE)).toInstant());
+    }
+
+    /**
+     * Return a formated date string.
+     * @param date the date
+     * @return the formated date string
+     * @see {@link DateUtils#DATE_PATTERN}
+     */
+    public static String formatDate(Date date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.GERMANY);
+        LocalDate localDate = LocalDate.ofInstant(date.toInstant(), ZoneId.of(TIME_ZONE));
+        return localDate.format(formatter);
+    }
+
 }
