@@ -88,7 +88,8 @@ public class SlotListServlet extends MCRServlet {
             final String location = xml.getChild("location") != null ? xml.getChild("location").getAttributeValue("id")
                 : null;
             final String nId = xml.getChild("location") != null
-                ? xml.getChild("location").getAttributeValue("newId") : null;
+                ? xml.getChild("location").getAttributeValue("newId")
+                : null;
             final Integer newId = location != null && nId != null ? Integer.parseInt(nId) : null;
 
             MCREvent evt = null;
@@ -239,8 +240,9 @@ public class SlotListServlet extends MCRServlet {
             final String sortOrder = req.getParameter("SortOrder");
 
             final Integer start = page != null && numPerPage != null
-                ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage) : 0;
-            final Integer rows = numPerPage != null ? Integer.parseInt(numPerPage) : null;
+                ? (Integer.parseInt(page) - 1) * Integer.parseInt(numPerPage)
+                : 0;
+            final Integer rows = numPerPage != null ? Integer.parseInt(numPerPage) : 50;
 
             final MCRUserInformation currentUser = MCRSessionMgr.getCurrentSession().getUserInformation();
 
@@ -256,13 +258,15 @@ public class SlotListServlet extends MCRServlet {
             final SlotList slotList = SLOT_MGR.getFilteredSlotList(filter,
                 !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)
                     && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_EDIT_SLOT)
-                        ? "slot.status:active or slot.status:pending or createdby:"
-                            + currentUser.getUserID()
+                        ? "slot.status:active or slot.status:pending or createdby:" + currentUser.getUserID()
                         : null,
                 start, rows, sortClauses);
 
+            final SlotList basicSlotList = slotList.getBasicSlots();
+            basicSlotList.setTotal(slotList.getTotal());
+
             getLayoutService().doLayout(job.getRequest(), job.getResponse(),
-                new MCRJDOMContent(new EntityFactory<>(slotList.getBasicSlots()).toDocument()));
+                new MCRJDOMContent(new EntityFactory<>(basicSlotList).toDocument()));
         }
 
     }
