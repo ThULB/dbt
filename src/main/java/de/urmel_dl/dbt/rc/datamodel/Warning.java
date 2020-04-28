@@ -194,11 +194,7 @@ public class Warning implements Serializable {
                 throw new IllegalArgumentException("A date value isn't allowed for type validTo!");
             }
 
-            Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-
-            inDate.setTime(toDate);
-
-            int year = inDate.get(Calendar.YEAR);
+            int year = DateUtils.getYear(toDate);
 
             Date atDate = DateUtils.parseDate(at + year);
 
@@ -208,10 +204,7 @@ public class Warning implements Serializable {
             if (period.equals(periodAt)) {
                 result = atDate;
             } else if (atDate.before(period.getFromDate())) {
-                Calendar fDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-
-                fDate.setTime(toDate);
-                atDate = DateUtils.parseDate(at + fDate.get(Calendar.YEAR));
+                atDate = DateUtils.parseDate(at + year);
 
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);
@@ -220,10 +213,7 @@ public class Warning implements Serializable {
                     result = atDate;
                 }
             } else if (atDate.after(toDate)) {
-                Calendar tDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-
-                tDate.setTime(period.getFromDate());
-                atDate = DateUtils.parseDate(at + tDate.get(Calendar.YEAR));
+                atDate = DateUtils.parseDate(at + DateUtils.getYear(period.getFromDate()));
 
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);
@@ -250,7 +240,7 @@ public class Warning implements Serializable {
      * @return
      */
     private static Date rollDate(Date date, int field, int amount) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(DateUtils.TIME_ZONE), Locale.GERMANY);
 
         calendar.setTime(date);
         calendar.add(field, amount);

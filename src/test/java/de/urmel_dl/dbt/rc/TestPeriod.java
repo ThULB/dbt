@@ -21,10 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
@@ -69,10 +66,7 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
         period.setFullyQualified(true);
 
-        Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        cal.setTime(new Date());
-
-        final int year = cal.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(new Date());
 
         final Date base = DateUtils.parseDate("30.11." + year);
 
@@ -99,10 +93,7 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
         period.setFullyQualified(true);
 
-        Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        cal.setTime(new Date());
-
-        final int year = cal.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(new Date());
 
         final Date base = DateUtils.parseDate("30.06." + year);
 
@@ -267,10 +258,7 @@ public class TestPeriod extends MCRTestCase {
         period.setMatchingLocation(".*");
         period.setFullyQualified(true);
 
-        Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        cal.setTime(new Date());
-
-        final int year = cal.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(new Date());
 
         final Date base = DateUtils.parseDate("30.11." + year);
 

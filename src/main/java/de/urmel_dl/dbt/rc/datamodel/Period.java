@@ -18,11 +18,8 @@
 package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -449,10 +446,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     public Date getLectureEndDate(final Date date) {
         Date result = null;
 
-        final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        inDate.setTime(date);
-
-        final int year = inDate.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(date);
 
         // calculate _from and _to according to given date. _from is before _to!
         final Date _from = getFromDate(date);
@@ -612,25 +606,17 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     private String getLabelExtension(Date date) {
         String result = null;
 
-        Calendar fromDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Calendar toDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-
         Date from = getFromDate(date);
         Date to = getToDate(date);
 
         if (from != null && to != null) {
-            fromDate.setTime(from);
-            toDate.setTime(to);
-
-            int fromYear = fromDate.get(Calendar.YEAR);
-            int toYear = toDate.get(Calendar.YEAR);
+            int fromYear = DateUtils.getYear(from);
+            int toYear = DateUtils.getYear(to);
 
             result = fromYear < toYear ? Integer.toString(fromYear) + "/" + Integer.toString(toYear)
                 : Integer.toString(fromYear);
         } else {
-            Calendar c = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-            c.setTime(date);
-            result = Integer.toString(c.get(Calendar.YEAR));
+            result = Integer.toString(DateUtils.getYear(date));
         }
 
         return result;
@@ -668,9 +654,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     }
 
     private Date constructDate(final String fieldShort) {
-        final Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        cal.setTime(getBaseDate());
-        final int year = cal.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(getBaseDate());
 
         return DateUtils.parseDate(fieldShort + year);
     }
@@ -757,10 +741,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     private static Date getPeriodDate(final Date base, final String from, final String to, final boolean end) {
         Date result = null;
 
-        final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        inDate.setTime(base);
-
-        final int year = inDate.get(Calendar.YEAR);
+        final int year = DateUtils.getYear(base);
 
         Date _from = DateUtils.getStartOfDay(DateUtils.parseDate(from + year));
         Date _to = DateUtils.getEndOfDay(DateUtils.parseDate(to + year));
