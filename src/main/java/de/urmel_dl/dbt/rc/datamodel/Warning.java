@@ -18,7 +18,6 @@
 package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -33,6 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
+import de.urmel_dl.dbt.rc.utils.DateUtils;
 
 /**
  * <p>This object represents a warning within or outside a period to be send as
@@ -164,13 +164,11 @@ public class Warning implements Serializable {
      * {@link #at} and the different dates of the period this warning belongs to.
      *
      * @return Date the warning date
-     * @throws ParseException thrown if date couldn't parsed
      * @throws CloneNotSupportedException thrown to indicate clone is not supported
      */
-    public Date getWarningDate() throws IllegalArgumentException, ParseException, CloneNotSupportedException {
+    public Date getWarningDate() throws IllegalArgumentException, CloneNotSupportedException {
         Date result = null;
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
         Date toDate = this.type == WarningType.PERIODEND ? period.getToDate() // end of current period
             : this.type == WarningType.LECTUREEND ? period.getLectureEndDate() // lecture end of current period
                 : period.getBaseDate(); // if all goes wrong we use the base date
@@ -202,7 +200,7 @@ public class Warning implements Serializable {
 
             int year = inDate.get(Calendar.YEAR);
 
-            Date atDate = df.parse(at + year);
+            Date atDate = DateUtils.parseDate(at + year);
 
             Period periodAt = period.clone();
             periodAt.setBaseDate(atDate);
@@ -213,7 +211,7 @@ public class Warning implements Serializable {
                 Calendar fDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 
                 fDate.setTime(toDate);
-                atDate = df.parse(at + fDate.get(Calendar.YEAR));
+                atDate = DateUtils.parseDate(at + fDate.get(Calendar.YEAR));
 
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);
@@ -225,7 +223,7 @@ public class Warning implements Serializable {
                 Calendar tDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
 
                 tDate.setTime(period.getFromDate());
-                atDate = df.parse(at + tDate.get(Calendar.YEAR));
+                atDate = DateUtils.parseDate(at + tDate.get(Calendar.YEAR));
 
                 periodAt = period.clone();
                 periodAt.setBaseDate(atDate);

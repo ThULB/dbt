@@ -21,8 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -35,6 +33,7 @@ import org.junit.Test;
 import org.mycore.common.MCRTestCase;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
+import de.urmel_dl.dbt.rc.utils.DateUtils;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
@@ -45,10 +44,8 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  */
 public class TestPeriod extends MCRTestCase {
 
-    private static final DateFormat PERIOD_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
-
     @Test
-    public void testPeriod() throws IOException, ParseException {
+    public void testPeriod() throws IOException {
         Period period = new Period();
 
         period.setFrom("01.10.");
@@ -68,7 +65,7 @@ public class TestPeriod extends MCRTestCase {
     }
 
     @Test
-    public void testPeriodFQFromAfterTo() throws IOException, ParseException {
+    public void testPeriodFQFromAfterTo() throws IOException {
         Period period = new Period();
         period.setFullyQualified(true);
 
@@ -77,7 +74,7 @@ public class TestPeriod extends MCRTestCase {
 
         final int year = cal.get(Calendar.YEAR);
 
-        final Date base = PERIOD_FORMAT.parse("30.11." + year);
+        final Date base = DateUtils.parseDate("30.11." + year);
 
         period.setBaseDate(base);
 
@@ -98,7 +95,7 @@ public class TestPeriod extends MCRTestCase {
     }
 
     @Test
-    public void testPeriodFQToAfterFrom() throws IOException, ParseException {
+    public void testPeriodFQToAfterFrom() throws IOException {
         Period period = new Period();
         period.setFullyQualified(true);
 
@@ -107,7 +104,7 @@ public class TestPeriod extends MCRTestCase {
 
         final int year = cal.get(Calendar.YEAR);
 
-        final Date base = PERIOD_FORMAT.parse("30.06." + year);
+        final Date base = DateUtils.parseDate("30.06." + year);
 
         period.setBaseDate(base);
 
@@ -128,78 +125,77 @@ public class TestPeriod extends MCRTestCase {
     }
 
     @Test
-    public void testPeriodFromShort() throws IOException, ParseException {
+    public void testPeriodFromShort() throws IOException {
         Period period = new Period();
 
         period.setFrom("01.10.");
         assertEquals("01.10.", period.getFrom());
 
-        period.setFrom("31.11.");
+        period.setFrom("01.12.");
         assertEquals("01.12.", period.getFrom());
     }
 
     @Test
-    public void testPeriodFromLong() throws IOException, ParseException {
+    public void testPeriodFromLong() throws IOException {
         Period period = new Period();
 
         period.setFrom("01.10.2014");
         assertEquals("01.10.", period.getFrom());
 
-        period.setFrom("31.11.2014");
+        period.setFrom("01.12.2014");
         assertEquals("01.12.", period.getFrom());
     }
 
     @Test
-    public void testPeriodToShort() throws IOException, ParseException {
+    public void testPeriodToShort() throws IOException {
         Period period = new Period();
 
         period.setTo("01.10.");
         assertEquals("01.10.", period.getTo());
 
-        period.setTo("31.11.");
+        period.setTo("01.12.");
         assertEquals("01.12.", period.getTo());
     }
 
     @Test
-    public void testPeriodToLong() throws IOException, ParseException {
+    public void testPeriodToLong() throws IOException {
         Period period = new Period();
 
         period.setTo("01.10.2014");
         assertEquals("01.10.", period.getTo());
 
-        period.setTo("31.11.2014");
+        period.setTo("01.12.2014");
         assertEquals("01.12.", period.getTo());
     }
 
-    //
     @Test
-    public void testPeriodSetableFromShort() throws IOException, ParseException {
+    public void testPeriodSetableFromShort() throws IOException {
         Period period = new Period();
 
         period.setSetableFrom("01.10.");
         period.setSetableTo("02.10.");
         assertEquals("01.10.", period.getSetableFrom());
 
-        period.setSetableFrom("31.11.");
+        period.setSetableFrom("01.12.");
         period.setSetableTo("02.12.");
         assertEquals("01.12.", period.getSetableFrom());
     }
 
     @Test
-    public void testPeriodSetableFromLong() throws IOException, ParseException {
+    public void testPeriodSetableFromLong() throws IOException {
         Period period = new Period();
 
         period.setSetableFrom("01.10.2014");
         period.setSetableTo("02.10.2014");
         assertEquals("01.10.", period.getSetableFrom());
 
-        period.setSetableFrom("31.11.2014");
+        period.setSetableFrom("01.12.2014");
         period.setSetableTo("02.12.2014");
         assertEquals("01.12.", period.getSetableFrom());
     }
 
     @Test
-    public void testPeriodSetableToShort() throws IOException, ParseException {
+    public void testPeriodSetableToShort() throws IOException {
         Period period = new Period();
 
         period.setSetableFrom("01.10.");
@@ -207,12 +203,12 @@ public class TestPeriod extends MCRTestCase {
         assertEquals("02.10.", period.getSetableTo());
 
         period.setSetableFrom("30.11.");
-        period.setSetableTo("31.11.");
+        period.setSetableTo("01.12.");
         assertEquals("01.12.", period.getSetableTo());
     }
 
     @Test
-    public void testPeriodSetableToLong() throws IOException, ParseException {
+    public void testPeriodSetableToLong() throws IOException {
         Period period = new Period();
 
         period.setSetableFrom("01.10.2014");
@@ -220,29 +216,29 @@ public class TestPeriod extends MCRTestCase {
         assertEquals("01.10.", period.getSetableTo());
 
         period.setSetableFrom("30.11.2014");
-        period.setSetableTo("31.11.2014");
+        period.setSetableTo("01.12.2014");
         assertEquals("01.12.", period.getSetableTo());
     }
 
     @Test
-    public void testPeriodLectureEndShort() throws IOException, ParseException {
+    public void testPeriodLectureEndShort() throws IOException {
         Period period = new Period();
 
         period.setLectureEnd("01.10.");
         assertEquals("01.10.", period.getLectureEnd());
 
-        period.setLectureEnd("31.11.");
+        period.setLectureEnd("01.12.");
         assertEquals("01.12.", period.getLectureEnd());
     }
 
     @Test
-    public void testPeriodLectureEndLong() throws IOException, ParseException {
+    public void testPeriodLectureEndLong() throws IOException {
         Period period = new Period();
 
         period.setLectureEnd("01.10.2014");
         assertEquals("01.10.", period.getLectureEnd());
 
-        period.setLectureEnd("31.11.2014");
+        period.setLectureEnd("01.12.2014");
         assertEquals("01.12.", period.getLectureEnd());
     }
 
@@ -265,7 +261,7 @@ public class TestPeriod extends MCRTestCase {
     }
 
     @Test
-    public void testPeriodFQTransform() throws IOException, ParseException {
+    public void testPeriodFQTransform() throws IOException {
         Period period = new Period();
 
         period.setMatchingLocation(".*");
@@ -276,7 +272,7 @@ public class TestPeriod extends MCRTestCase {
 
         final int year = cal.get(Calendar.YEAR);
 
-        final Date base = PERIOD_FORMAT.parse("30.11." + year);
+        final Date base = DateUtils.parseDate("30.11." + year);
 
         period.setBaseDate(base);
 

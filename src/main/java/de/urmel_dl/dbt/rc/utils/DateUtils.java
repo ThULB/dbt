@@ -17,6 +17,9 @@
  */
 package de.urmel_dl.dbt.rc.utils;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -27,6 +30,10 @@ import java.util.TimeZone;
  *
  */
 public class DateUtils {
+
+    private static final String PERIOD_DATE_ZONE = "Europe/Berlin";
+
+    private static final String PERIOD_DATE_PATTERN = "dd.MM.yyyy";
 
     /**
      * Return the given date with time <code>00:00:00</code>.
@@ -58,4 +65,28 @@ public class DateUtils {
         calendar.set(Calendar.MILLISECOND, 999);
         return calendar.getTime();
     }
+
+    /**
+     * Parse string and return a {@link Date}. 
+     * @param dateStr the date string
+     * @return the parsed {@link Date}
+     */
+    public static Date parseDate(String dateStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PERIOD_DATE_PATTERN, Locale.GERMANY);
+        LocalDate localDate = LocalDate.parse(dateStr, formatter);
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.of(PERIOD_DATE_ZONE)).toInstant());
+    }
+
+    /**
+     * Return a formated date string.
+     * @param date the date
+     * @return the formated date string
+     * @see {@link DateUtils#PERIOD_DATE_PATTERN}
+     */
+    public static String formatDate(Date date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(PERIOD_DATE_PATTERN, Locale.GERMANY);
+        LocalDate localDate = LocalDate.ofInstant(date.toInstant(), ZoneId.of(PERIOD_DATE_ZONE));
+        return localDate.format(formatter);
+    }
+
 }

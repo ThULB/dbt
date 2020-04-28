@@ -18,8 +18,6 @@
 package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -47,9 +45,6 @@ import de.urmel_dl.dbt.rc.utils.DateUtils;
 public class Period implements Serializable, Comparable<Period>, Cloneable {
 
     private static final long serialVersionUID = -1389892190013532300L;
-
-    /** DateFormat.MEDIUM, Locale.GERMANY: dd.MM.yyyy */
-    private static final DateFormat PERIOD_FORMAT = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
 
     private static final String SHORT_FORMAT = "[0-3][0-9]\\.[0-1][0-9]\\.";
 
@@ -106,9 +101,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * Sets this date to the values combined of fromShort and the year of target date.
      * 
      * @param base the basic date
-     * @throws ParseException should never occurs
      */
-    public void setStartDate(final Date base) throws ParseException {
+    public void setStartDate(final Date base) {
         this.baseDate = getPeriodDate(base, fromShort, toShort, false);
         if (this.baseDate == null) {
             this.baseDate = getPeriodDate(base, setableFromShort, setableToShort, true);
@@ -149,10 +143,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
      * @return the from date
-     * @throws ParseException should never occur
      */
     @XmlAttribute(name = "from")
-    public String getFrom() throws ParseException {
+    public String getFrom() {
         return fqDate ? constructDateString(getPeriodDate(getBaseDate(), false)) : fromShort;
     }
 
@@ -160,10 +153,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * Returns the from date as Date.
      * 
      * @return the from date
-     * @throws ParseException should never occur
      * @see #getFromDate(Date)
      */
-    public Date getFromDate() throws ParseException {
+    public Date getFromDate() {
         return getFromDate(getBaseDate());
     }
 
@@ -172,9 +164,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @param base the basis date
      * @return the from date
-     * @throws ParseException should never occur
      */
-    public Date getFromDate(final Date base) throws ParseException {
+    public Date getFromDate(final Date base) {
         return getPeriodDate(base, false);
     }
 
@@ -219,10 +210,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
      * @return the setableFrom date
-     * @throws ParseException should never occur
      */
     @XmlAttribute(name = "setableFrom")
-    public String getSetableFrom() throws ParseException {
+    public String getSetableFrom() {
         final Date date = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, false);
         return fqDate && date != null ? constructDateString(date) : setableFromShort;
     }
@@ -232,9 +222,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @param base the basis date
      * @return the setableFrom date
-     * @throws ParseException should never occur
      */
-    public Date getSetableFromDate(final Date base) throws ParseException {
+    public Date getSetableFromDate(final Date base) {
         return getPeriodDate(base, setableFromShort, setableToShort, false);
     }
 
@@ -279,10 +268,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
      * @return the to date
-     * @throws ParseException should never occur
      */
     @XmlAttribute(name = "to")
-    public String getTo() throws ParseException {
+    public String getTo() {
         return fqDate ? constructDateString(getPeriodDate(getBaseDate(), true)) : toShort;
     }
 
@@ -290,10 +278,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * Returns the to date as Date.
      * 
      * @return the to date
-     * @throws ParseException should never occur
      * @see #getToDate(Date)
      */
-    public Date getToDate() throws ParseException {
+    public Date getToDate() {
         return getToDate(getBaseDate());
     }
 
@@ -302,9 +289,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @param base the basis date
      * @return the to date
-     * @throws ParseException should never occur
      */
-    public Date getToDate(final Date base) throws ParseException {
+    public Date getToDate(final Date base) {
         return getPeriodDate(base, true);
     }
 
@@ -349,9 +335,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @param base the basis date
      * @return the setableTo date
-     * @throws ParseException should never occur
      */
-    public Date getSetableToDate(final Date base) throws ParseException {
+    public Date getSetableToDate(final Date base) {
         return getPeriodDate(base, setableFromShort, setableToShort, true);
     }
 
@@ -360,10 +345,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
      * @return the setableTo date
-     * @throws ParseException should never occur
      */
     @XmlAttribute(name = "setableTo")
-    public String getSetableTo() throws ParseException {
+    public String getSetableTo() {
         final Date date = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
         return fqDate && date != null ? constructDateString(date) : setableToShort;
     }
@@ -405,7 +389,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     }
 
     @XmlAttribute(name = "setable", required = false)
-    public boolean isSetable() throws ParseException {
+    public boolean isSetable() {
         final Date today = new Date();
         final Date to = getToDate();
 
@@ -424,7 +408,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         return true;
     }
 
-    public boolean isSetable(final Date base) throws ParseException {
+    public boolean isSetable(final Date base) {
         return getPeriodDate(base, setableFromShort, setableToShort, false) != null;
     }
 
@@ -433,10 +417,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
      * @return the lectureEnd date
-     * @throws ParseException should never occur
      */
     @XmlAttribute(name = "lectureEnd")
-    public String getLectureEnd() throws ParseException {
+    public String getLectureEnd() {
         return fqDate ? constructDateString(getLectureEndDate(getBaseDate())) : lectureEndShort;
     }
 
@@ -445,10 +428,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * 
      * @return The {@link Date} of the end of the lecture if one could be found,
      *         <code>null</code> otherwise
-     * @throws ParseException should never occur
      * @see #getLectureEndDate(Date)
      */
-    public Date getLectureEndDate() throws ParseException {
+    public Date getLectureEndDate() {
         return getLectureEndDate(getBaseDate());
     }
 
@@ -463,9 +445,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      * @param date the date
      * @return The {@link Date} of the end of the lecture if one could be found,
      *         <code>null</code> otherwise
-     * @throws ParseException should never occur
      */
-    public synchronized Date getLectureEndDate(final Date date) throws ParseException {
+    public Date getLectureEndDate(final Date date) {
         Date result = null;
 
         final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
@@ -477,7 +458,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         final Date _from = getFromDate(date);
         final Date _to = getToDate(date);
 
-        Date _lEnd = PERIOD_FORMAT.parse(this.lectureEndShort + year);
+        Date _lEnd = DateUtils.parseDate(this.lectureEndShort + year);
 
         if (_from != null && _to != null) {
             /*
@@ -492,13 +473,13 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
             } else {
                 // test later period
                 final int yearInc = year + 1;
-                _lEnd = PERIOD_FORMAT.parse(this.lectureEndShort + yearInc);
+                _lEnd = DateUtils.parseDate(this.lectureEndShort + yearInc);
                 if (isInsideExclusive(_from, _to, _lEnd)) {
                     result = _lEnd;
                 } else {
                     // test earlier period
                     final int yearDec = year - 1;
-                    _lEnd = PERIOD_FORMAT.parse(this.lectureEndShort + yearDec);
+                    _lEnd = DateUtils.parseDate(this.lectureEndShort + yearDec);
                     if (isInsideExclusive(_from, _to, _lEnd)) {
                         result = _lEnd;
                     }
@@ -547,10 +528,9 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
     /**
      * @return the labels
-     * @throws ParseException  should never occur
      */
     @XmlElement(name = "label")
-    public List<Label> getLabels() throws ParseException {
+    public List<Label> getLabels() {
         if (labels != null) {
             for (Label label : labels) {
                 if (fqDate) {
@@ -621,7 +601,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
                     }
                 }
                 return warning;
-            } catch (IllegalArgumentException | ParseException | CloneNotSupportedException e) {
+            } catch (IllegalArgumentException | CloneNotSupportedException e) {
                 return null;
             }
         }
@@ -629,7 +609,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         return null;
     }
 
-    private String getLabelExtension(Date date) throws ParseException {
+    private String getLabelExtension(Date date) {
         String result = null;
 
         Calendar fromDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
@@ -656,31 +636,23 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         return result;
     }
 
-    private synchronized String constructShort(final Date inputDate) {
+    private String constructShort(final Date inputDate) {
         if (inputDate != null) {
             final Date date = new Date(inputDate.getTime());
-            final String dateStr = PERIOD_FORMAT.format(date);
+            final String dateStr = DateUtils.formatDate(date);
             return dateStr.substring(0, dateStr.length() - dateStr.replaceFirst(SHORT_FORMAT, "").length());
         }
 
         throw new IllegalArgumentException("invalid input date \"" + inputDate + "\"");
     }
 
-    private synchronized String constructShort(final String inputStr) {
+    private String constructShort(final String inputStr) {
         if (inputStr != null) {
             Date date;
             if (inputStr.matches(SHORT_FORMAT)) {
-                try {
-                    date = constructDate(inputStr);
-                } catch (final ParseException e) {
-                    date = null;
-                }
+                date = constructDate(inputStr);
             } else {
-                try {
-                    date = PERIOD_FORMAT.parse(inputStr);
-                } catch (final ParseException e) {
-                    date = null;
-                }
+                date = DateUtils.parseDate(inputStr);
             }
 
             if (date != null) {
@@ -691,16 +663,16 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
         throw new IllegalArgumentException("invalid input string \"" + inputStr + "\"");
     }
 
-    protected synchronized String constructDateString(final Date date) throws ParseException {
-        return PERIOD_FORMAT.format(date);
+    protected String constructDateString(final Date date) {
+        return DateUtils.formatDate(date);
     }
 
-    private synchronized Date constructDate(final String fieldShort) throws ParseException {
+    private Date constructDate(final String fieldShort) {
         final Calendar cal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         cal.setTime(getBaseDate());
         final int year = cal.get(Calendar.YEAR);
 
-        return PERIOD_FORMAT.parse(fieldShort + year);
+        return DateUtils.parseDate(fieldShort + year);
     }
 
     /**
@@ -745,9 +717,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      *            <code>false</code> for the beginning
      * @return A new {@link Date} with the begin or the end of a period if one
      *         could be calculated, <code>null</code> otherwise
-     * @throws ParseException should never occur
      */
-    private Date getPeriodDate(final Date base, final boolean end) throws ParseException {
+    private Date getPeriodDate(final Date base, final boolean end) {
         return getPeriodDate(base, fromShort, toShort, end);
     }
 
@@ -782,11 +753,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      *            <code>false</code> for the beginning
      * @return A new {@link Date} with the begin or the end of a period if one
      *         could be calculated, <code>null</code> otherwise
-     * @throws ParseException should never occurs
      */
-    private synchronized static Date getPeriodDate(final Date base, final String from, final String to,
-        final boolean end)
-        throws ParseException {
+    private static Date getPeriodDate(final Date base, final String from, final String to, final boolean end) {
         Date result = null;
 
         final Calendar inDate = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
@@ -794,8 +762,8 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
         final int year = inDate.get(Calendar.YEAR);
 
-        Date _from = DateUtils.getStartOfDay(PERIOD_FORMAT.parse(from + year));
-        Date _to = DateUtils.getEndOfDay(PERIOD_FORMAT.parse(to + year));
+        Date _from = DateUtils.getStartOfDay(DateUtils.parseDate(from + year));
+        Date _to = DateUtils.getEndOfDay(DateUtils.parseDate(to + year));
 
         // check if the period is inside one single year
         if (_from.before(_to)) {
@@ -816,14 +784,14 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
             // check the later period -> add one year to _to
             final int yearInc = year + 1;
-            _to = DateUtils.getEndOfDay(PERIOD_FORMAT.parse(to + yearInc));
+            _to = DateUtils.getEndOfDay(DateUtils.parseDate(to + yearInc));
             if (isInsideInclusive(_from, _to, base)) {
                 result = end ? DateUtils.getEndOfDay(_to) : DateUtils.getStartOfDay(_from);
             } else {
                 // check the earlier period -> substract one year of _from
                 final int yearDec = year - 1;
-                _from = DateUtils.getStartOfDay(PERIOD_FORMAT.parse(from + yearDec));
-                _to = DateUtils.getEndOfDay(PERIOD_FORMAT.parse(to + year));
+                _from = DateUtils.getStartOfDay(DateUtils.parseDate(from + yearDec));
+                _to = DateUtils.getEndOfDay(DateUtils.parseDate(to + year));
                 if (isInsideInclusive(_from, _to, base)) {
                     result = end ? DateUtils.getEndOfDay(_to) : DateUtils.getStartOfDay(_from);
                 }
