@@ -333,12 +333,41 @@
       </a>
     </div>
   </xsl:template>
+
+  <!-- MCRObjectEntry Helper -->
+  <xsl:template match="mcrobject/*" mode="mcrObject">
+    <xsl:copy-of select="." />
+  </xsl:template>
+
+  <xsl:template match="mcrobject/*[@class='hit_title']" mode="mcrObject">
+    <xsl:variable name="objId" select="ancestor::mcrobject/@id" />
+
+    <xsl:choose>
+      <xsl:when test="count(./a/img[contains(@src, 'paper_lock')]) &gt; 0">
+        <h3 class="hit_title">
+          <a href="{concat($WebApplicationBaseURL, 'receive/', $objId)}">
+            <xsl:value-of select="." />
+          </a>
+          <i class="fas fa-info-circle text-info ml-1" data-toggle="tooltip" data-placement="top"
+            title="{i18n:translate('component.rc.slot.entry.mcrobject.secured')}" />
+        </h3>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="." />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
   
   <!-- MCRObjectEntry -->
   <xsl:template match="mcrobject">
     <div class="mcr-object">
-      <!-- simpler, call mode title -->
-      <xsl:apply-templates select="document(concat('mcrobject:', @id))/*" mode="basketContent" />
+      <xsl:variable name="mcrObject">
+        <!-- simpler, call mode title -->
+        <mcrobject id="{@id}">
+          <xsl:apply-templates select="document(concat('notnull:mcrobject:', @id))/*" mode="basketContent" />
+        </mcrobject>
+      </xsl:variable>
+      <xsl:apply-templates select="xalan:nodeset($mcrObject)" mode="mcrObject" />
       <xsl:if test="string-length(.) &gt; 0">
         <i class="comment text-muted">
           <xsl:value-of select="." />
