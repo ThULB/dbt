@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
 
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
@@ -59,12 +60,12 @@ public class FileEntryMessageBodyWriter implements MessageBodyWriter<FileEntry> 
         MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
         throws IOException, WebApplicationException {
 
-        if (fileEntry.getContent() != null) {
+        if (fileEntry.getPath() != null) {
             httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename = \"" + fileEntry.getName() + "\"");
-            httpHeaders.add(HttpHeaders.CONTENT_TYPE, fileEntry.getContent().getMimeType());
+            httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM);
             httpHeaders.add(HttpHeaders.ETAG, fileEntry.getHash());
-            fileEntry.getContent().sendTo(entityStream);
+            Files.copy(fileEntry.getPath(), entityStream);
             return;
         }
 

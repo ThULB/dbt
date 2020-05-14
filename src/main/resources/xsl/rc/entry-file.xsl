@@ -61,7 +61,7 @@
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file')" />
             </label>
             <div class="col-md-9">
-              <input type="file" class="form-control file" name="file" id="file" multiple="true" data-show-upload="false" data-show-caption="true"
+              <input type="file" class="form-control file" name="file" id="file" multiple="false" data-show-upload="false" data-show-caption="true"
                 data-browse-label="{i18n:translate('component.rc.slot.entry.file.browse')}"
                 data-remove-label="{i18n:translate('component.rc.slot.entry.file.remove')}"
                 data-msg-selected="{i18n:translate('component.rc.slot.entry.file.msgSelected')}"

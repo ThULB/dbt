@@ -18,6 +18,7 @@
 package de.urmel_dl.dbt.rc.resources;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
@@ -31,7 +32,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.solr.client.solrj.SolrServerException;
-import org.mycore.common.content.MCRContent;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
@@ -160,16 +160,16 @@ public class RCResource {
             SlotEntry<?> entry = slot.getEntryById(entryId);
             if (entry != null && FileEntry.class.isAssignableFrom(entry.getEntry().getClass())) {
                 FileEntry fileEntry = (FileEntry) entry.getEntry();
-                MCRContent content = Optional.ofNullable(fileEntry.getContent()).orElseGet(() -> {
+                Optional.ofNullable(fileEntry.getPath()).orElseGet(() -> {
                     FileEntryManager.retrieve(slot, (SlotEntry<FileEntry>) entry);
-                    return fileEntry.getContent();
+                    return fileEntry.getPath();
                 });
 
-                StreamingOutput streamer = output -> content.sendTo(output);
+                StreamingOutput streamer = output -> Files.copy(fileEntry.getPath(), output);
 
                 return Response.ok(streamer)
                     .header("content-disposition", "attachment; filename = \"" + fileEntry.getName() + "\"")
-                    .tag(fileEntry.getHash()).type(content.getMimeType()).build();
+                    .tag(fileEntry.getHash()).type(MediaType.APPLICATION_OCTET_STREAM).build();
             }
 
             msg = String.format(Locale.ROOT, "File for slot id %s and entry id %s not found.", slotId, entryId);

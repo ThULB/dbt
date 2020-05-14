@@ -17,19 +17,15 @@
  */
 package de.urmel_dl.dbt.rc.servlets;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.BufferedInputStream;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
@@ -40,7 +36,6 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.XMLOutputter;
 import org.mycore.access.MCRAccessManager;
-import org.mycore.common.content.MCRContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -62,7 +57,6 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-@MultipartConfig
 public class SlotServlet extends MCRServlet {
 
     private static final long serialVersionUID = -3138681111200495882L;
@@ -103,8 +97,7 @@ public class SlotServlet extends MCRServlet {
                     final FileEntry fileEntry = slotEntry.getEntry();
                     if (fileEntry != null && fileName.equals(fileEntry.getName())) {
                         FileEntryManager.retrieve(slot, slotEntry);
-                        MCRContent content = fileEntry.getContent();
-                        content.sendTo(res.getOutputStream());
+                        Files.copy(fileEntry.getPath(), res.getOutputStream());
                         return;
                     }
                 }
@@ -115,10 +108,10 @@ public class SlotServlet extends MCRServlet {
         }
 
         // edit slot entries
-        final String action = getParameter(req, "action");
-        final String entry = getParameter(req, "entry");
-        final String slotId = getParameter(req, "slotId");
-        final String afterId = getParameter(req, "afterId");
+        final String action = req.getParameter("action");
+        final String entry = req.getParameter("entry");
+        final String slotId = req.getParameter("slotId");
+        final String afterId = req.getParameter("afterId");
 
         Element xml = null;
         final Document doc = (Document) (req.getAttribute("MCRXEditorSubmission"));
@@ -147,7 +140,8 @@ public class SlotServlet extends MCRServlet {
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "opc/"
                     + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
-                        ? catalog.getISIL().get(0) : catalogId)
+                        ? catalog.getISIL().get(0)
+                        : catalogId)
                     + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), "UTF-8")
                     + toQueryString(params, true));
             } else {
@@ -156,7 +150,7 @@ public class SlotServlet extends MCRServlet {
                 boolean success = true;
 
                 if (slotEntry == null && "upload".equals(action)) {
-                    if (getParameter(req, "cancel") != null) {
+                    if (req.getParameter("cancel") != null) {
                         res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
                         return;
                     }
@@ -167,12 +161,14 @@ public class SlotServlet extends MCRServlet {
                     params.put("afterId", afterId);
                     params.put("invalid", "true");
 
-                    final Part filePart = req.getPart("file");
+                    Part filePart = req.getPart("file");
 
                     slotEntry = new SlotEntry<FileEntry>();
                     try {
-                        final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(), getFilename(filePart),
-                            getParameter(req, "comment"), Boolean.parseBoolean(getParameter(req, "copyrighted")),
+                        final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(),
+                            filePart.getSubmittedFileName(),
+                            req.getParameter("comment"),
+                            Boolean.parseBoolean(req.getParameter("copyrighted")),
                             filePart.getInputStream());
                         ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
                     } catch (FileEntryProcessingException pe) {
@@ -187,7 +183,7 @@ public class SlotServlet extends MCRServlet {
                 MCREvent evt = null;
 
                 if ("order".equals(action)) {
-                    final String items = getParameter(req, "items");
+                    final String items = req.getParameter("items");
                     final StringTokenizer st = new StringTokenizer(items, ",");
 
                     final List<SlotEntry<?>> sortedEntries = new ArrayList<>();
@@ -266,6 +262,7 @@ public class SlotServlet extends MCRServlet {
                     + slotEntry.getId());
             }
         }
+
     }
 
     private static String toQueryString(final Map<String, String> parameters, final boolean withXSLPrefix) {
@@ -281,37 +278,4 @@ public class SlotServlet extends MCRServlet {
         return queryStr.length() > 0 ? "?" + queryStr.toString() : queryStr.toString();
     }
 
-    private static String getFilename(final Part part) {
-        for (String cd : part.getHeader("content-disposition").split(";")) {
-            if (cd.trim().startsWith("filename")) {
-                final String filename = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-                return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
-            }
-        }
-        return null;
-    }
-
-    private static String getParameter(final HttpServletRequest req, final String name) {
-        if (req.getContentType() != null
-            && req.getContentType().toLowerCase(Locale.ROOT).indexOf("multipart/form-data") > -1) {
-            try {
-                Part part = req.getPart(name);
-
-                if (part == null) {
-                    return null;
-                }
-
-                InputStream is = part.getInputStream();
-                try (java.util.Scanner s = new java.util.Scanner(is, StandardCharsets.UTF_8.name())) {
-                    return s.useDelimiter("\\A").hasNext() ? s.next() : "";
-                } finally {
-                    is.close();
-                }
-            } catch (IOException | ServletException e) {
-                return null;
-            }
-        }
-
-        return req.getParameter(name);
-    }
 }

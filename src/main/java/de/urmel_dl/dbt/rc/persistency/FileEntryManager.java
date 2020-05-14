@@ -18,7 +18,9 @@
 package de.urmel_dl.dbt.rc.persistency;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -115,7 +117,12 @@ public final class FileEntryManager {
 
             MCRDirectory dir = col.createDir(slotEntry.getId());
             MCRFile file = dir.createFile(fileEntry.getName());
-            file.setContent(fileEntry.getContent());
+
+            Files.copy(fileEntry.getPath(), file.getLocalPath(), StandardCopyOption.REPLACE_EXISTING);
+
+            if (fileEntry.deleteIsTmpFile()) {
+                fileEntry.setPath(file.getLocalPath());
+            }
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;
@@ -223,8 +230,7 @@ public final class FileEntryManager {
 
         try {
             MCRStoredNode fileNode = getStoreNode(slot, slotEntry);
-            fileEntry.setContent(fileNode.getContent());
-            fileEntry.setLocalPath(fileNode.getLocalPath());
+            fileEntry.setPath(fileNode.getLocalPath());
         } catch (Exception ex) {
             if (ex instanceof MCRException) {
                 throw (MCRException) ex;

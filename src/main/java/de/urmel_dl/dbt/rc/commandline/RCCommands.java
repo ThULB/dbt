@@ -22,7 +22,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -40,7 +43,6 @@ import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
-import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.common.content.MCRPathContent;
 import org.mycore.common.events.MCREvent;
@@ -116,11 +118,17 @@ public class RCCommands extends MCRAbstractCommands {
                         if (fileDir.isDirectory() || fileDir.mkdirs()) {
                             try {
                                 FileEntryManager.retrieve(slot, slotEntry);
-                                File f = new File(fileDir, slotEntry.getEntry().getName());
-                                MCRContent content = slotEntry.getEntry().getExportableContent(entry.getId());
-                                content.sendTo(f);
+                                Path f = Paths.get(fileDir.getAbsolutePath(), slotEntry.getEntry().getName());
+                                Path ef = slotEntry.getEntry().getExportablePath(entry.getId());
+                                Files.copy(ef, f,
+                                    StandardCopyOption.REPLACE_EXISTING);
+
+                                if (FileEntry.isTempFile(ef)) {
+                                    Files.deleteIfExists(ef);
+                                }
+
                                 LOGGER.info("File \"" + slotEntry.getEntry().getName() + "\" saved to "
-                                    + f.getCanonicalPath() + ".");
+                                    + f.toAbsolutePath().toString() + ".");
                             } catch (Exception ex) {
                                 LOGGER.error(ex.getMessage());
                                 LOGGER.error("Exception while store file to " + fileDir.getAbsolutePath());
