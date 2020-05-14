@@ -23,8 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
@@ -75,6 +79,8 @@ public class FileEntry implements Serializable {
     // Error code: for a unsupported PDF document
     private static final int ERROR_NOT_SUPPORTED = 102;
 
+    private static final String TEMP_FILE_EXTENSION = ".rctmp";
+
     private String name;
 
     private boolean copyrighted;
@@ -83,11 +89,9 @@ public class FileEntry implements Serializable {
 
     private long size = 0;
 
-    private MCRContent content;
-
     private String comment;
 
-    private Path localPath;
+    private Path path;
 
     /**
      * Creates an {@link FileEntry} from given {@link InputStream}.
@@ -117,16 +121,21 @@ public class FileEntry implements Serializable {
         if (isCopyrighted) {
             processContent(entryId, fileEntry, is);
         } else {
-            fileEntry.setContent(is);
+            createTempFileEntry(fileEntry, is);
         }
 
         return fileEntry;
+    }
+
+    public static boolean isTempFile(Path file) {
+        return file.getFileName().toString().endsWith(TEMP_FILE_EXTENSION);
     }
 
     private static void processContent(final String entryId, final FileEntry fileEntry, final InputStream is)
         throws FileEntryProcessingException, IOException {
 
         final MCRContent content = new MCRByteContent(IOUtils.toByteArray(is));
+
         if (isPDF(content.getInputStream())) {
             final String fileName = fileEntry.getName();
 
@@ -161,14 +170,21 @@ public class FileEntry implements Serializable {
                 }
             }
         } else {
-            fileEntry.setContent(content.getInputStream());
+            createTempFileEntry(fileEntry, is);
         }
+    }
+
+    private static void createTempFileEntry(final FileEntry fileEntry, final InputStream is) throws IOException {
+        Path tmpFile = Files.createTempFile(fileEntry.getName(), TEMP_FILE_EXTENSION);
+        Files.copy(is, tmpFile, StandardCopyOption.REPLACE_EXISTING);
+        fileEntry.setPath(tmpFile);
     }
 
     private static boolean isPDF(final InputStream is) {
         try {
-            PDDocument doc = PDDocument.load(is);
-            return doc != null;
+            try (is; PDDocument doc = PDDocument.load(is)) {
+                return doc != null;
+            }
         } catch (IOException e) {
             return false;
         }
@@ -182,8 +198,9 @@ public class FileEntry implements Serializable {
      * @throws IOException thrown if file not found or other
      */
     private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
-        PDDocument doc = PDDocument.load(pdfInput);
-        return doc.getNumberOfPages();
+        try (pdfInput; PDDocument doc = PDDocument.load(pdfInput)) {
+            return doc.getNumberOfPages();
+        }
     }
 
     /**
@@ -196,13 +213,13 @@ public class FileEntry implements Serializable {
     private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
         throws IOException {
         COSWriter writer = null;
-        try {
-            PDDocument document = PDDocument.load(pdfInput);
-            COSDocument doc = document.getDocument();
-
-            writer = new COSWriter(pdfOutput);
-
-            writer.write(doc);
+        try (pdfInput) {
+            try (PDDocument document = PDDocument.load(pdfInput)) {
+                try (COSDocument doc = document.getDocument()) {
+                    writer = new COSWriter(pdfOutput);
+                    writer.write(doc);
+                }
+            }
         } finally {
             if (writer != null) {
                 writer.close();
@@ -220,35 +237,60 @@ public class FileEntry implements Serializable {
      */
     private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
         throws IOException {
-        PDDocument doc = PDDocument.load(pdfInput);
+        try (pdfInput; PDDocument doc = PDDocument.load(pdfInput)) {
 
-        AccessPermission ap = new AccessPermission();
+            AccessPermission ap = new AccessPermission();
 
-        ap.setCanAssembleDocument(false);
-        ap.setCanExtractContent(false);
-        ap.setCanExtractForAccessibility(false);
-        ap.setCanFillInForm(false);
-        ap.setCanModify(false);
-        ap.setCanModifyAnnotations(false);
-        ap.setCanPrint(false);
-        ap.setCanPrintDegraded(false);
-        ap.setReadOnly();
+            ap.setCanAssembleDocument(false);
+            ap.setCanExtractContent(false);
+            ap.setCanExtractForAccessibility(false);
+            ap.setCanFillInForm(false);
+            ap.setCanModify(false);
+            ap.setCanModifyAnnotations(false);
+            ap.setCanPrint(false);
+            ap.setCanPrintDegraded(false);
+            ap.setReadOnly();
 
-        if (!doc.isEncrypted()) {
-            StandardProtectionPolicy spp = new StandardProtectionPolicy(password, null, ap);
-            doc.protect(spp);
+            if (!doc.isEncrypted()) {
+                StandardProtectionPolicy spp = new StandardProtectionPolicy(password, null, ap);
+                doc.protect(spp);
 
-            doc.save(pdfOutput);
+                doc.save(pdfOutput);
+            }
         }
     }
 
     private static void decryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
         throws IOException {
-        PDDocument doc = PDDocument.load(pdfInput, password);
+        try (pdfInput; PDDocument doc = PDDocument.load(pdfInput, password)) {
 
-        if (doc.isEncrypted()) {
-            doc.setAllSecurityToBeRemoved(true);
-            doc.save(pdfOutput);
+            if (doc.isEncrypted()) {
+                doc.setAllSecurityToBeRemoved(true);
+                doc.save(pdfOutput);
+            }
+        }
+    }
+
+    private static String buildHash(Path file) {
+        try {
+            byte[] buffer = new byte[8192];
+            MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
+            try (InputStream is = Files.newInputStream(file);
+                DigestInputStream dis = new DigestInputStream(is, md)) {
+                int numRead;
+
+                do {
+                    numRead = dis.read(buffer);
+                    if (numRead > 0) {
+                        md.update(buffer, 0, numRead);
+                    }
+                } while (numRead != -1);
+
+                return String.format(Locale.ROOT, "%032X", new BigInteger(1, md.digest()));
+            }
+        } catch (NoSuchAlgorithmException | IOException e) {
+            LOGGER.error(e);
+            return null;
         }
     }
 
@@ -325,38 +367,33 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * Gets the content.
-     *
-     * @return the content
-     */
-    public MCRContent getContent() {
-        return content;
-    }
-
-    /**
      * Gets the exportable content.
      *
      * @param entryId the entry id
-     * @return the exportable content
+     * @return the exportable path
      */
-    public MCRContent getExportableContent(final String entryId) {
+    public Path getExportablePath(final String entryId) {
         if (this.copyrighted) {
             try {
-                if (isPDF(content.getInputStream())) {
+                if (isPDF(Files.newInputStream(getPath()))) {
                     ByteArrayOutputStream pdf = new ByteArrayOutputStream();
 
-                    decryptPDF(entryId, content.getInputStream(), pdf);
-                    final byte[] pdfBytes = pdf.toByteArray();
-                    pdf.close();
+                    decryptPDF(entryId, Files.newInputStream(getPath()), pdf);
 
-                    return new MCRByteContent(pdfBytes);
+                    Path tmpFile = Files.createTempFile(entryId, TEMP_FILE_EXTENSION);
+
+                    try (OutputStream fos = Files.newOutputStream(tmpFile)) {
+                        pdf.writeTo(fos);
+                    }
+
+                    return tmpFile;
                 }
             } catch (IOException e) {
                 LOGGER.error(e);
             }
         }
 
-        return content;
+        return getPath();
     }
 
     /**
@@ -365,14 +402,13 @@ public class FileEntry implements Serializable {
      * @param content the content to set
      */
     public void setContent(final MCRContent content) {
+        Path tmpFile;
         try {
-            this.content = content;
-            this.size = content.length();
-
-            MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
-            this.hash = String.format(Locale.ROOT, "%032X", new BigInteger(1, md.digest(content.asByteArray())));
-        } catch (NoSuchAlgorithmException | IOException e) {
-            LOGGER.error(e);
+            tmpFile = Files.createTempFile(name, TEMP_FILE_EXTENSION);
+            Files.copy(content.getInputStream(), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+            setPath(tmpFile);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -415,17 +451,29 @@ public class FileEntry implements Serializable {
     }
 
     /**
-     * @return the localPath
+     * @return the path
      */
-    public Path getLocalPath() {
-        return localPath;
+    public Path getPath() {
+        return path;
     }
 
     /**
-     * @param localPath the localPath to set
+     * @param path the path to set
      */
-    public void setLocalPath(Path localPath) {
-        this.localPath = localPath;
+    public void setPath(Path path) {
+        this.path = path;
+        if (this.path != null) {
+            this.size = this.path.toFile().length();
+            this.hash = buildHash(this.path);
+        }
+    }
+
+    public boolean deleteIsTmpFile() throws IOException {
+        if (isTempFile(path)) {
+            return Files.deleteIfExists(path);
+        }
+
+        return false;
     }
 
     /* (non-Javadoc)

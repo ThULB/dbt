@@ -48,16 +48,6 @@
     <url-pattern>/rc/*</url-pattern>
   </servlet-mapping>
 
-  <servlet id="RCSlotServlet">
-    <servlet-name>RCSlotServlet</servlet-name>
-    <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>RCSlotServlet</servlet-name>
-    <url-pattern>/servlets/RCSlotServlet</url-pattern>
-    <url-pattern>/rcentry/*</url-pattern>
-  </servlet-mapping>
-
   <servlet id="RCSlotLocationServlet">
     <servlet-name>RCSlotLocationServlet</servlet-name>
     <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotLocationServlet</servlet-class>

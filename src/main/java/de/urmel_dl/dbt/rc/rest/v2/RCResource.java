@@ -174,9 +174,9 @@ public class RCResource {
             SlotEntry<?> entry = slot.getEntryById(entryId);
             if (entry != null && FileEntry.class.isAssignableFrom(entry.getEntry().getClass())) {
                 FileEntry fileEntry = (FileEntry) entry.getEntry();
-                Optional.ofNullable(fileEntry.getContent()).orElseGet(() -> {
+                Optional.ofNullable(fileEntry.getPath()).orElseGet(() -> {
                     FileEntryManager.retrieve(slot, (SlotEntry<FileEntry>) entry);
-                    return fileEntry.getContent();
+                    return fileEntry.getPath();
                 });
 
                 return fileEntry;
@@ -214,7 +214,8 @@ public class RCResource {
     @Path("/permission/{type:.+}/{id:[0-9\\.]+}")
     public Response permission(@PathParam("type") String type, @PathParam("id") String id) {
         return Response.status(SlotManager.checkPermission(SLOT_MGR.getSlotById(id).getMCRObjectID(), type)
-            ? Response.Status.OK : Response.Status.FORBIDDEN)
+            ? Response.Status.OK
+            : Response.Status.FORBIDDEN)
             .build();
     }
 
