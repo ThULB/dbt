@@ -7,7 +7,7 @@
   <xsl:include href="MyCoReLayout.xsl" />
 
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.entry.file.title.add')" />
-
+  
   <xsl:variable name="entry">
     <xsl:call-template name="UrlGetParam">
       <xsl:with-param name="url" select="$RequestURL" />
@@ -40,6 +40,7 @@
   </xsl:variable>
 
   <xsl:template match="entry-file">
+    <link type="text/css" href="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
     <form action="{$ServletsBaseURL}RCSlotServlet" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
       <input type="hidden" name="action" value="upload" />
       <input type="hidden" name="entry" value="{$entry}" />
@@ -61,7 +62,7 @@
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file')" />
             </label>
             <div class="col-md-9">
-              <input type="file" class="form-control file" name="file" id="file" multiple="false" data-show-upload="false" data-show-caption="true"
+              <input type="file" class="form-control" name="file" id="file"
                 data-browse-label="{i18n:translate('component.rc.slot.entry.file.browse')}"
                 data-remove-label="{i18n:translate('component.rc.slot.entry.file.remove')}"
                 data-msg-selected="{i18n:translate('component.rc.slot.entry.file.msgSelected')}"
@@ -101,8 +102,21 @@
         </div>
       </div>
     </form>
-    <link type="text/css" href="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/js/fileinput.min.js" />
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/themes/fas/theme.min.js" />
+    <script type="text/javascript">
+      <xsl:value-of select="concat('var servletsBaseURL = &quot;', $ServletsBaseURL, '&quot;;')" disable-output-escaping="yes" />
+      <![CDATA[
+        $(document).ready(function() {
+          $("#file").fileinput({
+            theme: "fas",
+            maxFileCount: 1,
+            showUpload: false,
+            hideThumbnailContent: true
+          });
+        });
+      ]]>
+    </script>
   </xsl:template>
 
 </xsl:stylesheet>

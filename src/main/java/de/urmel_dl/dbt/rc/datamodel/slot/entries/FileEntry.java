@@ -277,6 +277,7 @@ public class FileEntry implements Serializable {
             MessageDigest md = MessageDigest.getInstance(DEFAULT_HASH_TYPE);
             try (InputStream is = Files.newInputStream(file);
                 DigestInputStream dis = new DigestInputStream(is, md)) {
+                long start = System.currentTimeMillis();
                 int numRead;
 
                 do {
@@ -286,6 +287,8 @@ public class FileEntry implements Serializable {
                     }
                 } while (numRead != -1);
 
+                LOGGER.info("generate hash for {} in {}ms", file.getFileName(),
+                    (System.currentTimeMillis() - start));
                 return String.format(Locale.ROOT, "%032X", new BigInteger(1, md.digest()));
             }
         } catch (NoSuchAlgorithmException | IOException e) {

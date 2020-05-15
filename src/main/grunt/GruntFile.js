@@ -30,7 +30,7 @@ module.exports = function (grunt) {
 						expand: true,
 						cwd: "./node_modules/bootstrap-fileinput",
 						dest: "<%=globalConfig.assetsDirectory%>/bootstrap-fileinput",
-						src: ["./css/**", "./img/**", "./js/*min.js"]
+						src: ["./css/**", "./img/**", "./js/*min.js", "./themes/fas/*min.js"]
 					}, {
 						expand: true,
 						cwd: "./node_modules/@fortawesome/fontawesome-free",
