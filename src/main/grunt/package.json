@@ -13,7 +13,7 @@
     	"node": ">= 0.8.11"
   	},
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "5.10.1",
+        "@fortawesome/fontawesome-free": "5.13.0",
         "grunt": "^1.0.0",
         "grunt-cli": "^1.2.0",
         "grunt-contrib-concat": "^1.0.0",
@@ -25,8 +25,8 @@
         "angular-translate": "~2.18.1",
         "angular-translate-loader-partial": "~2.18.1",
         "angular-modal-service": "~0.15.2",
-        "bootstrap": "4.4.1",
-        "bootstrap-fileinput": "~4.5.3",
+        "bootstrap": "4.5.0",
+        "bootstrap-fileinput": "~5.0.8",
         "node-waves": "~0.7.6",
         "summernote": "~0.8.11",
         "jquery-sortable": "~0.9.12",
