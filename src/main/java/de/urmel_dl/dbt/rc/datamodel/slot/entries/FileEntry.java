@@ -32,6 +32,7 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -123,6 +124,11 @@ public class FileEntry implements Serializable {
         } else {
             createTempFileEntry(fileEntry, is);
         }
+
+        Optional.ofNullable(fileEntry.getPath()).ifPresent((p) -> {
+            fileEntry.setSize(p.toFile().length());
+            fileEntry.setHash(buildHash(p));
+        });
 
         return fileEntry;
     }
@@ -465,10 +471,6 @@ public class FileEntry implements Serializable {
      */
     public void setPath(Path path) {
         this.path = path;
-        if (this.path != null) {
-            this.size = this.path.toFile().length();
-            this.hash = buildHash(this.path);
-        }
     }
 
     public boolean deleteIsTmpFile() throws IOException {
