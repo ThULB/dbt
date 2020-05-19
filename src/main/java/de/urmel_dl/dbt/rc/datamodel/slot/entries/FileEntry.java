@@ -17,7 +17,6 @@
  */
 package de.urmel_dl.dbt.rc.datamodel.slot.entries;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +32,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -40,7 +41,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
 
-import org.apache.commons.compress.utils.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.pdfbox.cos.COSDocument;
@@ -48,9 +48,6 @@ import org.apache.pdfbox.pdfwriter.COSWriter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.encryption.AccessPermission;
 import org.apache.pdfbox.pdmodel.encryption.StandardProtectionPolicy;
-import org.mycore.common.content.MCRByteContent;
-import org.mycore.common.content.MCRContent;
-import org.mycore.common.content.MCRStreamContent;
 
 import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 
@@ -119,10 +116,10 @@ public class FileEntry implements Serializable {
         fileEntry.setComment(comment);
         fileEntry.setCopyrighted(isCopyrighted);
 
+        createTempFileEntry(fileEntry, is);
+
         if (isCopyrighted) {
-            processContent(entryId, fileEntry, is);
-        } else {
-            createTempFileEntry(fileEntry, is);
+            processContent(entryId, fileEntry);
         }
 
         Optional.ofNullable(fileEntry.getPath()).ifPresent((p) -> {
@@ -137,19 +134,16 @@ public class FileEntry implements Serializable {
         return file.getFileName().toString().endsWith(TEMP_FILE_EXTENSION);
     }
 
-    private static void processContent(final String entryId, final FileEntry fileEntry, final InputStream is)
+    private static void processContent(final String entryId, final FileEntry fileEntry)
         throws FileEntryProcessingException, IOException {
 
-        final MCRContent content = new MCRByteContent(IOUtils.toByteArray(is));
-
-        if (isPDF(content.getInputStream())) {
+        if (entryAsInputStream(fileEntry, is -> FileEntry.isPDF(is))) {
             final String fileName = fileEntry.getName();
 
-            ByteArrayOutputStream pdfCopy = null;
-            ByteArrayOutputStream pdfEncrypted = null;
+            Path pdfCopy = null;
 
             try {
-                final int numPages = getNumPagesFromPDF(content.getInputStream());
+                int numPages = entryAsInputStream(fileEntry, is -> getNumPagesFromPDF(is));
 
                 LOGGER.info("Check num pages for \"" + fileName + "\": " + numPages);
                 if (numPages == -1 || numPages > 50) {
@@ -157,27 +151,34 @@ public class FileEntry implements Serializable {
                 }
 
                 LOGGER.info("Make an supported copy for \"" + fileName + "\".");
-                pdfCopy = new ByteArrayOutputStream();
-                copyPDF(content.getInputStream(), pdfCopy);
+                pdfCopy = entryInputStreamToPathConsumer(fileEntry, FileEntry::copyPDF);
 
                 LOGGER.info("Encrypt \"" + fileName + "\".");
-                pdfEncrypted = new ByteArrayOutputStream();
-                encryptPDF(entryId, new ByteArrayInputStream(pdfCopy.toByteArray()), pdfEncrypted);
-
-                fileEntry.setContent(pdfEncrypted.toByteArray());
+                fileEntry.setPath(entryInputStreamToPathConsumer(fileEntry, (is, os) -> encryptPDF(entryId, is, os)));
             } catch (IOException e) {
                 throw new FileEntryProcessingException(e.getMessage(), ERROR_NOT_SUPPORTED);
             } finally {
                 if (pdfCopy != null) {
-                    pdfCopy.close();
-                }
-                if (pdfEncrypted != null) {
-                    pdfEncrypted.close();
+                    Files.deleteIfExists(pdfCopy);
                 }
             }
-        } else {
-            createTempFileEntry(fileEntry, is);
         }
+    }
+
+    private static <T> T entryAsInputStream(FileEntry entry, Function<InputStream, T> func) throws IOException {
+        try (InputStream is = Files.newInputStream(entry.getPath())) {
+            return func.apply(is);
+        }
+    }
+
+    private static Path entryInputStreamToPathConsumer(FileEntry entry,
+        BiConsumer<InputStream, OutputStream> consumer) throws IOException {
+        Path tmpFile = Files.createTempFile(entry.getName(), ".pdf");
+        OutputStream os = Files.newOutputStream(tmpFile);
+        try (InputStream is = Files.newInputStream(entry.getPath())) {
+            consumer.accept(is, os);
+        }
+        return tmpFile;
     }
 
     private static void createTempFileEntry(final FileEntry fileEntry, final InputStream is) throws IOException {
@@ -201,11 +202,13 @@ public class FileEntry implements Serializable {
      *
      * @param pdfInput the {@link InputStream}
      * @return the number of pages
-     * @throws IOException thrown if file not found or other
+     * @throws UncheckedIOException thrown if file not found or other
      */
-    private static int getNumPagesFromPDF(final InputStream pdfInput) throws IOException {
+    private static int getNumPagesFromPDF(final InputStream pdfInput) {
         try (pdfInput; PDDocument doc = PDDocument.load(pdfInput)) {
             return doc.getNumberOfPages();
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -214,22 +217,25 @@ public class FileEntry implements Serializable {
      *
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException  hrown if file not found or other
+     * @throws UncheckedIOException  hrown if file not found or other
      */
-    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput)
-        throws IOException {
+    private static void copyPDF(final InputStream pdfInput, final OutputStream pdfOutput) {
         COSWriter writer = null;
-        try (pdfInput) {
-            try (PDDocument document = PDDocument.load(pdfInput)) {
-                try (COSDocument doc = document.getDocument()) {
-                    writer = new COSWriter(pdfOutput);
-                    writer.write(doc);
+        try {
+            try (pdfInput) {
+                try (PDDocument document = PDDocument.load(pdfInput)) {
+                    try (COSDocument doc = document.getDocument()) {
+                        writer = new COSWriter(pdfOutput);
+                        writer.write(doc);
+                    }
+                }
+            } finally {
+                if (writer != null) {
+                    writer.close();
                 }
             }
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -239,10 +245,9 @@ public class FileEntry implements Serializable {
      * @param password the password
      * @param pdfInput the PDF {@link InputStream}
      * @param pdfOutput the PDF {@link OutputStram}
-     * @throws IOException thrown if file not found or other
+     * @throws UncheckedIOException thrown if file not found or other
      */
-    private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput)
-        throws IOException {
+    private static void encryptPDF(final String password, final InputStream pdfInput, final OutputStream pdfOutput) {
         try (pdfInput; PDDocument doc = PDDocument.load(pdfInput)) {
 
             AccessPermission ap = new AccessPermission();
@@ -263,6 +268,8 @@ public class FileEntry implements Serializable {
 
                 doc.save(pdfOutput);
             }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
@@ -408,36 +415,17 @@ public class FileEntry implements Serializable {
     /**
      * Sets the content.
      *
-     * @param content the content to set
-     */
-    public void setContent(final MCRContent content) {
-        Path tmpFile;
-        try {
-            tmpFile = Files.createTempFile(name, TEMP_FILE_EXTENSION);
-            Files.copy(content.getInputStream(), tmpFile, StandardCopyOption.REPLACE_EXISTING);
-            setPath(tmpFile);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
-
-    /**
-     * Sets the content.
-     *
-     * @param content the byte array
-     */
-    public void setContent(final byte[] content) {
-        setContent(new MCRByteContent(content));
-    }
-
-    /**
-     * Sets the content.
-     *
      * @param is the InputStream
      * @throws IOException thrown if couldn't write to inputstream.
      */
     public void setContent(final InputStream is) throws IOException {
-        setContent(new MCRStreamContent(is).asByteArray());
+        try {
+            Path tmpFile = Files.createTempFile(name, TEMP_FILE_EXTENSION);
+            Files.copy(is, tmpFile, StandardCopyOption.REPLACE_EXISTING);
+            setPath(tmpFile);
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     /**

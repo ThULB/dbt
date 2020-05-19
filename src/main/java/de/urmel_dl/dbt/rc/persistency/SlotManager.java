@@ -449,7 +449,7 @@ public final class SlotManager {
      * @throws MCRAccessException thrown from underlying classes
      */
     @SuppressWarnings("unchecked")
-    public synchronized void saveOrUpdate(final Slot slot)
+    public void saveOrUpdate(final Slot slot)
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 
@@ -484,7 +484,7 @@ public final class SlotManager {
      * @throws MCRActiveLinkException thrown from underlying classes
      * @throws MCRAccessException thrown from underlying classes
      */
-    public synchronized void delete(final Slot slot)
+    public void delete(final Slot slot)
         throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
         final MCRObjectID objID = slot.getMCRObjectID();
 

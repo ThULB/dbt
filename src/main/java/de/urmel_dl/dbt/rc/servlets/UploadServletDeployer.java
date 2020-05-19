@@ -34,17 +34,19 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.common.events.MCRStartupHandler.AutoExecutable;
 
+import de.urmel_dl.dbt.rc.servlets.listener.UploadContextListener;
+
 /**
  * @author Ren\u00E9 Adler (eagle)
  *
  */
-public class SlotServletDeployer implements AutoExecutable {
+public class UploadServletDeployer implements AutoExecutable {
 
     private static final String MCR_FILE_UPLOAD_TEMP_STORAGE_PATH = "MCR.FileUpload.TempStoragePath";
 
     @Override
     public String getName() {
-        return SlotServlet.class.getSimpleName() + " Deployer";
+        return UploadServlet.class.getSimpleName() + " Deployer";
     }
 
     @Override
@@ -55,16 +57,19 @@ public class SlotServletDeployer implements AutoExecutable {
     @Override
     public void startUp(ServletContext servletContext) {
         if (servletContext != null) {
-            String servletName = "RCSlotServlet";
+            String servletName = "RCUploadServlet";
             MultipartConfigElement multipartConfig = getMultipartConfig();
             try {
                 checkTempStoragePath(multipartConfig.getLocation());
             } catch (IOException e) {
                 throw new MCRConfigurationException("Could not setup " + servletName + "!", e);
             }
-            Dynamic slotServlet = servletContext.addServlet(servletName, SlotServlet.class);
-            slotServlet.addMapping("/servlets/RCSlotServlet", "/rcentry/*");
-            slotServlet.setMultipartConfig(multipartConfig);
+            servletContext.addListener(UploadContextListener.class);
+
+            Dynamic uploadServlet = servletContext.addServlet(servletName, UploadServlet.class);
+            uploadServlet.addMapping("/servlets/RCUploadServlet");
+            uploadServlet.setAsyncSupported(true);
+            uploadServlet.setMultipartConfig(multipartConfig);
         }
 
     }
@@ -89,7 +94,7 @@ public class SlotServletDeployer implements AutoExecutable {
         long maxFileSize = MCRConfiguration2.getLong("MCR.FileUpload.MaxSize").orElse(5000000L);
         int fileSizeThreshold = MCRConfiguration2.getInt("MCR.FileUpload.MemoryThreshold").orElse(1000000);
         LogManager.getLogger()
-            .info(() -> SlotServlet.class.getSimpleName() + " accept files and requests up to "
+            .info(() -> UploadServlet.class.getSimpleName() + " accept files and requests up to "
                 + maxFileSize + " bytes and uses " + location + " as tempory storage for files larger "
                 + fileSizeThreshold + " bytes.");
         return new MultipartConfigElement(location, maxFileSize, maxFileSize,
