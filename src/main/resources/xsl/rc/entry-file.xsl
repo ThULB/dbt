@@ -7,7 +7,7 @@
   <xsl:include href="MyCoReLayout.xsl" />
 
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.entry.file.title.add')" />
-  
+
   <xsl:variable name="entry">
     <xsl:call-template name="UrlGetParam">
       <xsl:with-param name="url" select="$RequestURL" />
@@ -26,22 +26,10 @@
       <xsl:with-param name="par" select="'afterId'" />
     </xsl:call-template>
   </xsl:variable>
-  <xsl:variable name="invalid">
-    <xsl:call-template name="UrlGetParam">
-      <xsl:with-param name="url" select="$RequestURL" />
-      <xsl:with-param name="par" select="'invalid'" />
-    </xsl:call-template>
-  </xsl:variable>
-  <xsl:variable name="errorcode">
-    <xsl:call-template name="UrlGetParam">
-      <xsl:with-param name="url" select="$RequestURL" />
-      <xsl:with-param name="par" select="'errorcode'" />
-    </xsl:call-template>
-  </xsl:variable>
 
   <xsl:template match="entry-file">
     <link type="text/css" href="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
-    <form action="{$ServletsBaseURL}RCSlotServlet" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+    <form action="{$ServletsBaseURL}RCUploadServlet" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
       <input type="hidden" name="action" value="upload" />
       <input type="hidden" name="entry" value="{$entry}" />
       <input type="hidden" name="slotId" value="{$slotId}" />
@@ -52,18 +40,12 @@
           <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.title.add')" />
         </h5>
         <div class="card-body">
-          <xsl:if test="$invalid = 'true'">
-            <div class="alert alert-danger">
-              <xsl:value-of select="i18n:translate(concat('component.rc.slot.entry.file.errorcode.', $errorcode))" />
-            </div>
-          </xsl:if>
           <div class="form-group row">
             <label for="file" class="col-md-3 control-label text-md-right">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file')" />
             </label>
             <div class="col-md-9">
-              <input type="file" class="form-control" name="file" id="file"
-                data-browse-label="{i18n:translate('component.rc.slot.entry.file.browse')}"
+              <input type="file" class="form-control" name="file" id="file" data-browse-label="{i18n:translate('component.rc.slot.entry.file.browse')}"
                 data-remove-label="{i18n:translate('component.rc.slot.entry.file.remove')}"
                 data-msg-selected="{i18n:translate('component.rc.slot.entry.file.msgSelected')}"
                 data-msg-loading="{i18n:translate('component.rc.slot.entry.file.msgLoading')}"
@@ -106,17 +88,8 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/bootstrap-fileinput/themes/fas/theme.min.js" />
     <script type="text/javascript">
       <xsl:value-of select="concat('var servletsBaseURL = &quot;', $ServletsBaseURL, '&quot;;')" disable-output-escaping="yes" />
-      <![CDATA[
-        $(document).ready(function() {
-          $("#file").fileinput({
-            theme: "fas",
-            maxFileCount: 1,
-            showUpload: false,
-            hideThumbnailContent: true
-          });
-        });
-      ]]>
     </script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/upload.min.js" />
   </xsl:template>
 
 </xsl:stylesheet>

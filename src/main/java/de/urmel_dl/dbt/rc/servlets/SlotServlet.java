@@ -27,7 +27,6 @@ import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,7 +45,6 @@ import de.urmel_dl.dbt.opc.datamodel.Catalogues;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
-import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry.FileEntryProcessingException;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import de.urmel_dl.dbt.rc.persistency.FileEntryManager;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
@@ -108,7 +106,6 @@ public class SlotServlet extends MCRServlet {
 
         // edit slot entries
         final String action = req.getParameter("action");
-        final String entry = req.getParameter("entry");
         final String slotId = req.getParameter("slotId");
         final String afterId = req.getParameter("afterId");
 
@@ -147,37 +144,6 @@ public class SlotServlet extends MCRServlet {
                 SlotEntry<?> slotEntry = xml != null ? new EntityFactory<>(SlotEntry.class).fromElement(xml) : null;
 
                 boolean success = true;
-
-                if (slotEntry == null && "upload".equals(action)) {
-                    if (req.getParameter("cancel") != null) {
-                        res.sendRedirect(MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId() + "?XSL.Mode=edit");
-                        return;
-                    }
-
-                    final Map<String, String> params = new HashMap<>();
-                    params.put("entry", entry);
-                    params.put("slotId", slotId);
-                    params.put("afterId", afterId);
-                    params.put("invalid", "true");
-
-                    Part filePart = req.getPart("file");
-
-                    slotEntry = new SlotEntry<FileEntry>();
-                    try {
-                        final FileEntry fe = FileEntry.createFileEntry(slotEntry.getId(),
-                            filePart.getSubmittedFileName(),
-                            req.getParameter("comment"),
-                            Boolean.parseBoolean(req.getParameter("copyrighted")),
-                            filePart.getInputStream());
-                        ((SlotEntry<FileEntry>) slotEntry).setEntry(fe);
-                    } catch (FileEntryProcessingException pe) {
-                        params.put("errorcode", Integer.toString(pe.getErrorCode()));
-
-                        res.sendRedirect(MCRFrontendUtil.getBaseURL() + "content/rc/entry-file.xml"
-                            + toQueryString(params, false));
-                        return;
-                    }
-                }
 
                 MCREvent evt = null;
 
