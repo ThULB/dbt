@@ -1,171 +1,106 @@
-$(document).ready(
-	function () {
-		var videoChooserElement = $("#videoChooser");
+$(document).ready(function () {
+  var videoChooserElement = $("#videoChooser");
 
-		$(".mir-player video, .mir-player audio").ready(function () {
+  $(".mir-player video").ready(function () {
+    var videoOptions = videoChooserElement.find("option");
+    if (videoOptions.length === 1) {
+      videoChooserElement.closest(".card-header").hide() || videoChooserElement.hide();
+    } else {
+      videoOptions.filter("[data-is-main-doc=true]").first().prop("selected", true);
+    }
 
-			var videoOptions = videoChooserElement.find("option");
-			if (videoOptions.length === 1) {
-				videoChooserElement.closest(".card-header").hide() || videoChooserElement.hide();
-			} else {
-				videoOptions.filter("[data-is-main-doc=true]").first().prop("selected", true);
-			}
+    videoChooserElement.change();
+  });
 
-			videoChooserElement.change();
-		});
+  // get all sources of selected item in a var and give it to player
+  var hidePlayer = function (player) {
+    if (typeof player !== "undefined") {
+      player.hide();
+      player.pause();
+    }
+  };
 
-		// get all sources of selected item in a var and give it to player
-		var hidePlayer = function (player) {
-			if (typeof player !== "undefined") {
-				player.hide();
-				player.pause();
-			}
-		};
+  var evtPlay = function () {
+    var fnUrl = $(this).data("fileNodeUrl");
+    if (fnUrl) {
+      $.get(fnUrl, function (_data) { });
+    }
+  };
 
-		var sourceCache = {};
+  videoChooserElement.change(function () {
+    // reuse player
+    var myPlayerVideo, myPlayerAudio;
+    var mPlayer;
+    var selectElement = $(this);
+    var currentOption = selectElement.find(":selected");
 
-		var getVideo = function (currentOption, callback) {
-			var src = currentOption.attr("data-src");
-			var mimeType = currentOption.attr("data-mime-type");
-			var sourceArr = [];
-			var lookupKey = currentOption.parent().index() + "_" + currentOption.index();
+    if ($(".mir-player video").length > 0) {
+      myPlayerVideo = selectElement.data("playerVideo");
+      mPlayer = selectElement.data("mediaPlayer");
 
-			if (lookupKey in sourceCache) {
-				callback(sourceCache[lookupKey]);
-				return;
-			}
+      if (!mPlayer) {
+        var id = myPlayerVideo.id();
+        if (myPlayerVideo) {
+          var parent = $("#" + id).parent();
+          var cls = $("#" + id).attr("class").split(/\s+/);
 
-			if (typeof src === "undefined" || typeof mimeType === "undefined") {
-				var sourcesUrl = currentOption.attr("data-sources-url");
-				if (typeof sourcesUrl === "undefined") {
-					callback([]);
-					return;
-				}
+          myPlayerVideo.reset();
+          myPlayerVideo.dispose();
 
-				$.getJSON(sourcesUrl).done(function (sources) {
-					if (sources.source) {
-						$.each(sources.source, function (_i, src) {
-							if (src.type === "video/mp4") {
-								src.src = webApplicationBaseURL + "rsc/media/progressiv/" + sources.id + "/" + src.src;
-							}
-						});
-						sourceCache[lookupKey] = sources.source;
-						callback(sourceCache[lookupKey]);
-					}
-				});
-			} else {
-				sourceArr.push({
-					type: mimeType.trim(),
-					src: src.trim()
-				});
-				sourceCache[lookupKey] = sourceArr;
-				callback(sourceCache[lookupKey]);
-			}
-		};
+          var newPlayer = $(document.createElement("video"));
+          newPlayer.attr("id", id);
+          newPlayer.attr("controls", "");
+          newPlayer.attr("poster", "");
+          newPlayer.attr("preload", "metadata");
 
-		var thumbCache = {};
+          for (var i = 0; i < cls.length; i++) {
+            if (cls[i].indexOf("vjs-") !== 0) {
+              newPlayer.addClass(cls[i]);
+            }
+          }
+          parent.append(newPlayer);
 
-		var getThumbs = function (currentOption, callback) {
-			var id = currentOption.attr("data-source-id");
-			var sourceArr = [];
-			var lookupKey = currentOption.parent().index() + "_" + currentOption.index();
+          myPlayerVideo = undefined;
+        }
 
-			if (lookupKey in thumbCache) {
-				callback(thumbCache[lookupKey]);
-				return;
-			}
+        mPlayer = mediaPlayer(webApplicationBaseURL, id, {});
+      }
+      if (!myPlayerVideo) {
+        myPlayerVideo = mPlayer.player;
+        selectElement.data("playerVideo", myPlayerVideo);
+      }
+    }
 
-			if (typeof id !== "undefined") {
-				$.getJSON(webApplicationBaseURL + "rsc/media/thumbs/" + id).done(function (sources) {
-					if (sources.source) {
-						$.each(sources.source, function (_i, src) {
-							src.src = webApplicationBaseURL + "rsc/media/thumb/" + id + "/" + src.src;
-						});
-						thumbCache[lookupKey] = sources.source;
-						callback(thumbCache[lookupKey]);
-					}
-				});
-			} else {
-				thumbCache[lookupKey] = sourceArr;
-				callback(thumbCache[lookupKey]);
-			}
-		};
+    if ($(".mir-player audio").length > 0) {
+      myPlayerAudio = selectElement.data("playerAudio");
+      if (!myPlayerAudio) {
+        myPlayerAudio = videojs($(".mir-player audio").attr("id"));
+        selectElement.data("playerAudio", myPlayerAudio);
+      }
+    }
 
-		var evtPlay = function () {
-			var fnUrl = $(this).data("fileNodeUrl");
-			if (fnUrl) {
-				$.get(fnUrl, function (_data) { });
-			}
-		};
+    var playerToHide, playerToShow;
+    var isAudio = currentOption.attr("data-audio") === "true";
 
-		videoChooserElement.change(function () {
-			// reuse player
-			var myPlayerVideo, myPlayerAudio;
-			var selectElement = $(this);
-			var currentOption = selectElement.find(":selected");
+    if (isAudio) {
+      playerToHide = myPlayerVideo;
+      playerToShow = myPlayerAudio;
+    } else {
+      playerToShow = myPlayerVideo;
+      playerToHide = myPlayerAudio;
+      mPlayer.changeOptions({ id: currentOption.data("source-id") });
+    }
 
-			if ($(".mir-player video").length > 0) {
-				myPlayerVideo = selectElement.data("playerVideo");
-				if (!myPlayerVideo) {
-					myPlayerVideo = videojs($(".mir-player video").attr("id"));
-					selectElement.data("playerVideo", myPlayerVideo);
-				}
-			}
+    hidePlayer(playerToHide);
 
-			if ($(".mir-player audio").length > 0) {
-				myPlayerAudio = selectElement.data("playerAudio");
-				if (!myPlayerAudio) {
-					myPlayerAudio = videojs($(".mir-player audio").attr("id"));
-					selectElement.data("playerAudio", myPlayerAudio);
-				}
-			}
+    $(playerToShow)
+      .data(
+        "fileNodeUrl",
+        webApplicationBaseURL + "rsc/stat/" + currentOption.parent().attr("label") + "/" + currentOption.text() +
+        ".css");
 
-			getVideo(currentOption, function (sourceArr) {
-				sourceArr = sourceArr.sort(function (a, b) {
-					if (a.type.toLowerCase() === "application/x-mpegurl") {
-						return -1;
-					} else if (b.type.toLowerCase() === "application/x-mpegurl") {
-						return 1;
-					}
-
-					if (a.type > b.type) {
-						return 1;
-					}
-					if (a.type < b.type) {
-						return -1;
-					}
-					return 0;
-				});
-
-				var playerToHide, playerToShow;
-				var isAudio = currentOption.attr("data-audio") === "true";
-				var htmlEmbed = jQuery(".mir-player");
-
-				if (isAudio) {
-					playerToHide = myPlayerVideo;
-					playerToShow = myPlayerAudio;
-				} else {
-					getThumbs(currentOption, function (sourceArr) {
-						if (sourceArr && sourceArr.length > 0) {
-							myPlayerVideo.poster(sourceArr[0].src);
-						}
-					});
-					playerToShow = myPlayerVideo;
-					playerToHide = myPlayerAudio;
-				}
-
-				hidePlayer(playerToHide);
-
-				$(playerToShow)
-					.data(
-						"fileNodeUrl",
-						webApplicationBaseURL + "rsc/stat/" + currentOption.parent().attr("label") + "/" + currentOption.text() +
-						".css");
-
-				playerToShow.off("play", evtPlay);
-				playerToShow.show();
-				playerToShow.on("play", evtPlay);
-				playerToShow.src(sourceArr);
-			});
-		});
-	});
+    playerToShow.off("play", evtPlay);
+    playerToShow.show();
+    playerToShow.on("play", evtPlay);
+  });
+});

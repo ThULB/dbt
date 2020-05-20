@@ -10,7 +10,6 @@
   <version>2020.05-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
-
   <licenses>
     <license>
       <name>GNU General Public License, version 3</name>
@@ -18,33 +17,30 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-
   <issueManagement>
     <system>JIRA</system>
     <url>https://mycore.atlassian.net/browse/DBT</url>
   </issueManagement>
-
   <scm>
     <connection>scm:git:https://github.com/ThULB/dbt.git</connection>
     <developerConnection>scm:git:https://github.com/ThULB/dbt.git</developerConnection>
     <url>https://github.com/ThULB/dbt/tree/master</url>
     <tag>HEAD</tag>
   </scm>
-
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
     <java.target.version>11</java.target.version>
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
+    <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir.version>2020.05-SNAPSHOT</mir.version>
-    <node.version>v8.15.0</node.version>
-    <npm.version>6.5.0</npm.version>
+    <node.version>v12.14.1</node.version>
+    <npm.version>6.13.6</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
   </properties>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -83,7 +79,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -96,7 +92,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -109,7 +105,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore />
+                    <ignore></ignore>
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -127,7 +123,7 @@
             <manifest>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               <mainClass>de.urmel_dl.dbt.common.DBTVersion</mainClass>
-              <addExtensions />
+              <addExtensions></addExtensions>
             </manifest>
             <manifestEntries>
               <MCR-Artifact-Id>${project.artifactId}</MCR-Artifact-Id>
@@ -137,7 +133,6 @@
           </archive>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -174,7 +169,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>pl.project13.maven</groupId>
         <artifactId>git-commit-id-plugin</artifactId>
@@ -199,17 +193,14 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>com.github.eirslett</groupId>
         <artifactId>frontend-maven-plugin</artifactId>
-
         <configuration>
           <nodeVersion>${node.version}</nodeVersion>
           <npmVersion>${npm.version}</npmVersion>
           <installDirectory>${settings.localRepository}/node-npm-${node.version}-${npm.version}</installDirectory>
         </configuration>
-
         <executions>
           <execution>
             <id>install node and npm</id>
@@ -217,7 +208,6 @@
               <goal>install-node-and-npm</goal>
             </goals>
           </execution>
-
           <execution>
             <id>webapp-deps</id>
             <goals>
@@ -243,7 +233,6 @@
                 --assetsDirectory=${template.assetsdir}</arguments>
             </configuration>
           </execution>
-
           <execution>
             <id>rcclient-deps</id>
             <goals>
@@ -267,9 +256,30 @@
               <arguments>--verbose</arguments>
             </configuration>
           </execution>
+          <execution>
+            <id>media-deps</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <workingDirectory>${media.projectBase}</workingDirectory>
+              <arguments>install</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>media-build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <workingDirectory>${media.projectBase}</workingDirectory>
+              <arguments>run build</arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
-
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
@@ -309,9 +319,29 @@
               </resources>
             </configuration>
           </execution>
+          <execution>
+            <id>media-resources</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <outputDirectory>${media.projectBase}</outputDirectory>
+              <resources>
+                <resource>
+                  <filtering>true</filtering>
+                  <directory>${basedir}/src/main/media</directory>
+                  <includes>
+                    <include>package.json</include>
+                    <include>tsconfig.json</include>
+                    <include>webpack.config.js</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>datamodel-plugin</artifactId>
@@ -324,7 +354,6 @@
           </execution>
         </executions>
       </plugin>
-
       <!-- Facilitates downloading source and javadoc in Eclipse -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -335,7 +364,6 @@
           <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>license-maven-plugin</artifactId>
@@ -354,7 +382,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
@@ -373,11 +400,9 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
       </plugin>
-
       <plugin>
         <groupId>de.thetaphi</groupId>
         <artifactId>forbiddenapis</artifactId>
@@ -391,12 +416,10 @@
       </plugin>
     </plugins>
   </build>
-
   <ciManagement>
     <system>bamboo</system>
     <url>https://bamboo.mycore.de/browse/DBT</url>
   </ciManagement>
-
   <repositories>
     <repository>
       <releases>
@@ -409,7 +432,6 @@
       <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <releases>
@@ -591,7 +613,6 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
   <profiles>
     <profile>
       <id>build-deploy-package</id>
@@ -600,7 +621,6 @@
           <name>deploy-package</name>
         </property>
       </activation>
-
       <dependencies>
         <dependency>
           <groupId>org.mycore.mir</groupId>
@@ -615,7 +635,6 @@
           <scope>runtime</scope>
         </dependency>
       </dependencies>
-
       <build>
         <plugins>
           <plugin>

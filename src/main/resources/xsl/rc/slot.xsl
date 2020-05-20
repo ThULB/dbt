@@ -10,7 +10,8 @@
   <xsl:include href="slot-templates.xsl" />
   <xsl:include href="slot-entries.xsl" />
 
-  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', /slot/@id))" />
+  <xsl:variable name="slotId" select="/slot/@id" />
+  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', $slotId))" />
 
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
@@ -76,7 +77,10 @@
     </div>
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/sticky-toc.min.js"></script>
-    <script src="{$WebApplicationBaseURL}dbt/assets/video.js/video.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/media/player.min.js"></script>
+    <script type="text/javascript">
+      <xsl:value-of select="concat('var webappBaseURL = &quot;', $WebApplicationBaseURL, '&quot;;')" disable-output-escaping="yes" />
+    </script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}content/rc/js/player.min.js"></script>
 
     <xsl:if test="$effectiveMode = 'edit'">

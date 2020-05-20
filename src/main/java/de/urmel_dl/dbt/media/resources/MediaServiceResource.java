@@ -20,11 +20,16 @@ package de.urmel_dl.dbt.media.resources;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -47,11 +52,19 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.mycore.common.MCRSession;
+import org.mycore.common.MCRSessionMgr;
+import org.mycore.common.content.MCRContent;
+import org.mycore.common.content.MCRJDOMContent;
+import org.mycore.common.content.transformer.MCRXSLTransformer;
+import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.frontend.jersey.MCRStaticContent;
 
 import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.media.entity.ConverterJob;
+import de.urmel_dl.dbt.media.entity.Media;
 import de.urmel_dl.dbt.media.entity.Sources;
+import de.urmel_dl.dbt.utils.EntityFactory;
 import de.urmel_dl.dbt.utils.MimeType;
 import de.urmel_dl.dbt.utils.RangeStreamingOutput;
 
@@ -153,6 +166,16 @@ public class MediaServiceResource {
         }
     }
 
+    @GET
+    @Path("embed/{id:.+}")
+    @Produces("text/html")
+    public Response embed(@PathParam("id") String id) throws IOException {
+        Media media = new Media();
+        media.setId(id);
+
+        return transformedResponse(media, "xsl/media/embed.xsl", Collections.emptyMap());
+    }
+
     private Response buildStream(final java.nio.file.Path asset, final String range) throws Exception {
         final String mimeType = MimeType.detect(asset);
 
@@ -195,5 +218,36 @@ public class MediaServiceResource {
                         "inline; filename = \"" + asset.getFileName().toString() + "\"")
                     .build();
             });
+    }
+
+    private <T> Response transformedResponse(T entity, String stylesheet, Map<String, String> parameters) {
+        if (entity == null) {
+            return Response.status(Response.Status.NO_CONTENT).build();
+        }
+        boolean hasSession = MCRSessionMgr.hasCurrentSession();
+        try {
+            if (!hasSession) {
+                MCRSessionMgr.unlock();
+            }
+            MCRParameterCollector pc = new MCRParameterCollector();
+            pc.setParameters(parameters);
+
+            MCRXSLTransformer transformer = MCRXSLTransformer.getInstance(stylesheet);
+            MCRContent result = transformer
+                .transform(new MCRJDOMContent(new EntityFactory<>(entity).toDocument()), pc);
+
+            final StreamingOutput so = (OutputStream os) -> result.sendTo(os);
+            return Response.ok().status(Response.Status.OK).entity(so).build();
+        } catch (Exception e) {
+            final StreamingOutput so = (OutputStream os) -> e
+                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
+        } finally {
+            if (!hasSession && MCRSessionMgr.hasCurrentSession()) {
+                MCRSession mcrSession = MCRSessionMgr.getCurrentSession();
+                MCRSessionMgr.releaseCurrentSession();
+                mcrSession.close(); //created for XSLT transformation
+            }
+        }
     }
 }

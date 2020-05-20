@@ -231,7 +231,7 @@
   <xsl:template match="*" mode="extraAttributes">
   </xsl:template>
 
-  <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="editButtons">
+  <xsl:template match="text|webLink|mcrobject|opcrecord" mode="editButtons">
     <div class="ml-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
@@ -391,10 +391,7 @@
             </h6>
           </xsl:if>
           <div class="embed-responsive embed-responsive-16by9">
-            <video id="player-{../@id}" class="video-js embed-responsive-item" controls="" preload="metadata" poster="" data-source-id="{$internalId}"
-              data-sources-url="{concat($WebApplicationBaseURL, 'rsc/media/sources/', $internalId)}"
-            >
-              <xsl:attribute name="data-setup">{}</xsl:attribute>
+            <video id="player-{../@id}" class="video-js embed-responsive-item" controls="" preload="metadata" poster="" data-source-id="{$internalId}">
               <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading
                 to a web browser that
@@ -429,6 +426,39 @@
         </div>
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+
+  <xsl:template match="file" mode="editButtons">
+    <xsl:variable name="entryId" select="../@id" />
+    <xsl:variable name="internalId" select="menc:buildInternalId(concat($slotId, '_', ../@id, '_', @name))" />
+    <xsl:variable name="hasMediaFiles" select="menc:hasMediaFiles($internalId) = 'true'" />
+    <xsl:variable name="hasSMILFile" select="menc:hasSMILFile($internalId) = 'true'" />
+
+    <div class="ml-2 entry-buttons">
+      <div class="btn-group" role="group">
+        <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
+        >
+          <i class="fas fa-pencil-alt"></i>
+        </a>
+        <xsl:if test="$hasMediaFiles and $hasSMILFile">
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#share-player-{$entryId}"
+            title="{i18n:translate('component.rc.slot.entry.share')}"
+          >
+            <i class="fas fa-share"></i>
+          </button>
+        </xsl:if>
+        <a class="btn btn-danger"
+          href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
+        >
+          <i class="far fa-trash-alt"></i>
+        </a>
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
+          <i class="fas fa-arrows-alt"></i>
+        </button>
+      </div>
+    </div>
   </xsl:template>
   
   <!-- OPCRecordEntry -->
