@@ -327,27 +327,31 @@ export class Player {
     const trans: ShareTranslation = DefaultShareTranslation[this.getCurrentLang()];
 
     if (this.options && this.options.id) {
-      const id = `#share-${this.playerId}`;
+      const id = `share-${this.playerId}`;
+      const bdId = `share-bd-${this.playerId}`;
+      const codeId = `share-code-${this.playerId}`;
+      const btnId = `share-btn-${this.playerId}`;
+
       const htmlTemplate = `
-      <div class="modal fade" id="share-${this.playerId}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="share-bd-${this.playerId}"
+      <div class="modal fade" id="${id}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="${bdId}"
         aria-hidden="true"
       >
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="share-bd-${this.playerId}">${trans.title}</h5>
+              <h5 class="modal-title" id="${bdId}">${trans.title}</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <div class="form-group">
-                <label for="share-code-${this.playerId}">${trans.embedCode}</label>
-                <textarea class="form-control" id="share-code-${this.playerId}" rows="5" readonly="true">${this.buildShare()}</textarea>
+                <label for="${codeId}">${trans.embedCode}</label>
+                <textarea class="form-control" id="${codeId}" rows="5" readonly="true">${this.buildShare()}</textarea>
               </div>
             </div>
             <div class="modal-footer">
-              <button id="share-code-btn-${this.playerId}" type="button" class="btn btn-primary" data-dismiss="modal">${trans.copy}</button>
+              <button id="${btnId}" type="button" class="btn btn-primary" data-clipboard-target="#${codeId}" data-dismiss="modal">${trans.copy}</button>
             </div>
           </div>
         </div>
@@ -356,12 +360,12 @@ export class Player {
 
       const parent: HTMLElement = document.querySelector(parentSel);
       if (parent) {
-        const modal = document.querySelector(id);
+        const modal = document.querySelector(`#${id}`);
         if (!modal) {
           parent.insertAdjacentHTML("beforeend", htmlTemplate);
-          this.registerClipboardCopy(`#share-code-btn-${this.playerId}`);
+          this.registerClipboardCopy(`#${btnId}`);
         } else {
-          var input: HTMLInputElement = document.querySelector(`share-code-${this.playerId}`);
+          var input: HTMLInputElement = document.querySelector(`#${codeId}`);
           input.value = this.buildShare();
         }
         return id;
