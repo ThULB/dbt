@@ -1,35 +1,36 @@
 {
-    "name": "${project.artifactId}",
-    "description": "${project.description}",
-    "version": "1.0.0",
-    "author": "René Adler (eagle)",
-  	"homepage": "${project.url}",
-  	"repository": {
-    	"type": "svn",
-    	"url": "${project.scm.url}"
-  	},
-  	"license": "GPL-3.0",
-    "engines": {
-    	"node": ">= 0.8.11"
-  	},
-    "devDependencies": {
-        "@fortawesome/fontawesome-free": "5.13.0",
-        "grunt": "^1.0.0",
-        "grunt-cli": "^1.2.0",
-        "grunt-contrib-concat": "^1.0.0",
-        "grunt-replace": "^1.0.0",
-        "grunt-contrib-copy": "^1.0.0",
-        "grunt-contrib-imagemin": "3.1.0",
-        "grunt-contrib-uglify": "^4.0.1",
-        "angular": "~1.5.11",
-        "angular-translate": "~2.18.1",
-        "angular-translate-loader-partial": "~2.18.1",
-        "angular-modal-service": "~0.15.2",
-        "bootstrap": "4.5.0",
-        "bootstrap-fileinput": "~5.0.8",
-        "node-waves": "~0.7.6",
-        "summernote": "~0.8.11",
-        "jquery-sortable": "~0.9.12",
-        "video.js": "7.6.6"
-    }
+  "name": "${project.artifactId}",
+  "description": "${project.description}",
+  "version": "1.0.0",
+  "author": "René Adler (eagle)",
+  "homepage": "${project.url}",
+  "repository": {
+    "type": "svn",
+    "url": "${project.scm.url}"
+  },
+  "license": "GPL-3.0",
+  "engines": {
+    "node": ">= 0.8.11"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "5.13.0",
+    "grunt": "^1.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-replace": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-imagemin": "3.1.0",
+    "grunt-contrib-uglify": "^4.0.1",
+    "angular": "~1.5.11",
+    "angular-translate": "~2.18.1",
+    "angular-translate-loader-partial": "~2.18.1",
+    "angular-modal-service": "~0.15.2",
+    "bootstrap": "4.5.0",
+    "bootstrap-fileinput": "~5.0.8",
+    "node-waves": "~0.7.6",
+    "summernote": "~0.8.11",
+    "jquery-sortable": "~0.9.12",
+    "video.js": "7.6.6",
+    "videojs-share": "^3.2.1"
+  }
 }

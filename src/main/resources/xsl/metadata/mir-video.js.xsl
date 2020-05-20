@@ -80,7 +80,6 @@
                   test="(count($options//optgroup/option[string-length(@data-sources-url) &gt; 0]) &gt; 0) or (count($options//optgroup/option[contains('mp4|smil', @data-file-extension)]) &gt; 0)"
                 >
                   <video id="player_video" class="video-js embed-responsive-item" controls="" preload="metadata" poster="">
-                    <xsl:attribute name="data-setup">{}</xsl:attribute>
                     <p class="vjs-no-js">
                       To view this video please enable JavaScript, and consider upgrading
                       to a web browser that
@@ -128,6 +127,9 @@
     <xsl:param name="generatedNodes" />
     <xsl:if test="$generatedNodes//div[contains(@class, 'mir-player')]">
       <script src="{$WebApplicationBaseURL}dbt/assets/video.js/video.min.js"></script>
+      <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/assets/videojs-share/videojs-share.css" />
+      <script src="{$WebApplicationBaseURL}dbt/assets/videojs-share/videojs-share.min.js"></script>
+      <script src="{$WebApplicationBaseURL}dbt/assets/media/player-small.min.js"></script>
       <script src="{$WebApplicationBaseURL}dbt/js/player.min.js"></script>
     </xsl:if>
   </xsl:template>
@@ -163,27 +165,11 @@
     <xsl:param name="derivateId" />
     <xsl:variable name="internalId" select="@id" />
     <xsl:variable name="fileName" select="name" />
-<!--     <xsl:variable name="sources" select="document(concat('mediasource:', $internalId))/sources" /> -->
 
-    <option data-audio="false" data-is-main-doc="{mcr:getMainDocName($derivateId) = $fileName}" data-source-id="{$internalId}"
-      data-sources-url="{concat($WebApplicationBaseURL, 'rsc/media/sources/', $internalId)}"
-    >
+    <option data-audio="false" data-is-main-doc="{mcr:getMainDocName($derivateId) = $fileName}" data-source-id="{$internalId}">
       <xsl:if test="file/@smil">
         <xsl:attribute name="data-file-extension"><xsl:text>smil</xsl:text></xsl:attribute>
       </xsl:if>
-<!--       <xsl:attribute name="data-sources"> -->
-<!--         <xsl:for-each select="$sources/source"> -->
-<!--           <xsl:sort select="@type" /> -->
-<!--           <xsl:choose> -->
-<!--             <xsl:when test="@type = 'video/mp4'"> -->
-<!--               <xsl:value-of select="concat(@type, ',', $WebApplicationBaseURL, 'rsc/media/progressiv/', $internalId, '/', @src, ';')" /> -->
-<!--             </xsl:when> -->
-<!--             <xsl:otherwise> -->
-<!--               <xsl:value-of select="concat(@type, ',', @src, ';')" /> -->
-<!--             </xsl:otherwise> -->
-<!--           </xsl:choose> -->
-<!--         </xsl:for-each> -->
-<!--       </xsl:attribute> -->
       <xsl:value-of select="$fileName" />
     </option>
   </xsl:template>

@@ -1,0 +1,125 @@
+// ---------------------------------------------------
+// imports
+// ---------------------------------------------------
+
+@import "../../resources/META-INF/resources/scss/dbt/_variables";
+@import "../../resources/META-INF/resources/scss/dbt/_video-js";
+
+// ---------------------------------------------------
+// variables
+// ---------------------------------------------------
+
+$brand-max-width: 383px;
+$brand-max-height: 149px;
+
+$brand-aratio: $brand-max-width / $brand-max-height;
+
+// player-size: (attrib: value,...)
+$brand-sizes: (
+  320px: (
+    width: $brand-max-width / 6,
+    height: $brand-max-width / 6 / $brand-aratio,
+  ),
+  640px: (
+    width: $brand-max-width / 4,
+    height: $brand-max-width / 4 / $brand-aratio,
+  ),
+  960px: (
+    width: $brand-max-width / 2,
+    height: $brand-max-width / 2 / $brand-aratio,
+  ),
+  1240px: (
+    width: $brand-max-width,
+    height: $brand-max-height,
+  )
+);
+
+$brand-styles: (
+  320px: (
+    top: 0.5rem,
+    padding: 3px,
+    padding-right: 6px,
+    border-top-left-radius: 0.125rem,
+    border-bottom-left-radius: 0.125rem,
+  ),
+  640px: (
+    top: 1rem,
+    padding: 6px,
+    padding-right: 12px,
+    border-top-left-radius: 0.25rem,
+    border-bottom-left-radius: 0.25rem,
+  ),
+  960px: (
+    top: 1.5rem,
+    padding: 12px,
+    padding-right: 24px,
+    border-top-left-radius: 0.5rem,
+    border-bottom-left-radius: 0.5rem,
+  ),
+  1240px: (
+    top: 2rem,
+    padding: 24px,
+    padding-right: 48px,
+    border-top-left-radius: 0.75rem,
+    border-bottom-left-radius: 0.75rem,
+  )
+);
+
+// ---------------------------------------------------
+// styles
+// ---------------------------------------------------
+
+.brand {
+  background-color: rgba($color: #fff, $alpha: 0.3);
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  pointer-events: auto;
+  transition: right 0.5s ease-out 0s;
+  right: 0px;
+  z-index: 1000;
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+
+  @each $player-width, $brand-style in $brand-styles {
+    @media (min-width: $player-width) {
+      @each $attrib,
+      $value in $brand-style {
+        #{$attrib}: $value;
+      }
+    }
+  }
+
+  &.hide {
+    pointer-events: none;
+    @each $player-width, $brand-size in $brand-sizes {
+      $brand-style: map-get($brand-styles, $player-width);
+
+      $width: map-get($brand-size, "width");
+      $padding: map-get($brand-style, "padding") + map-get($brand-style, "padding-right");
+
+      @media (min-width: $player-width) {
+        right: ($width + $padding) * -1;
+      }
+    }
+  }
+
+  &::after {
+    background-image: url("../../resources/META-INF/resources/dbt/images/dbt-logo.svg");
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    display: block;
+    content: "";
+    
+    @each $player-width, $brand-size in $brand-sizes {
+      @media (min-width: $player-width) {
+
+        @each $attrib,
+        $value in $brand-size {
+          #{$attrib}: $value;
+        }
+      }
+    }
+  }
+}
