@@ -18,6 +18,7 @@
 package de.urmel_dl.dbt.rc.persistency;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -73,6 +74,7 @@ import org.mycore.user2.MCRUserAttribute_;
 import org.tmatesoft.svn.core.SVNException;
 import org.xml.sax.SAXException;
 
+import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.rc.datamodel.Attendee;
 import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.Status;
@@ -293,6 +295,32 @@ public final class SlotManager {
 
     public static boolean isActive(String slotId) {
         return Optional.ofNullable(instance().getSlotById(slotId)).map(Slot::isActive).orElse(false);
+    }
+
+    /**
+     * Check if given entry is supported by {@link MediaSerice}.
+     * 
+     * @param slotId
+     * @param entryId
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static boolean isStreamingSupported(String slotId, String entryId) {
+        Slot slot = SlotManager.instance().getSlotById(slotId);
+        if (slot != null) {
+            SlotEntry<?> entry = slot.getEntryById(entryId);
+            if (entry != null && entry.getEntry() instanceof FileEntry) {
+                Path path;
+                try {
+                    path = FileEntryManager.getLocalPath(slot, (SlotEntry<FileEntry>) entry);
+                    return MediaService.isMediaSupported(path);
+                } catch (MCRPersistenceException | IOException e) {
+                    LOGGER.warn(e);
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

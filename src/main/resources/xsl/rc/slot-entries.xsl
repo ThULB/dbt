@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
   xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService"
-  exclude-result-prefixes="xalan i18n xlink pica menc"
+  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" xmlns:sm="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
+  xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" exclude-result-prefixes="xalan i18n xlink pica menc"
 >
 
   <!-- include custom templates for supported objecttypes -->
@@ -407,17 +407,37 @@
         </div>
       </xsl:when>
       <xsl:otherwise>
+        <xsl:variable name="isStreamingSupported" select="sm:isStreamingSupported($slotId, ../@id)" />
+
         <div class="d-flex flex-row flex-fill justify-content-between">
-          <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
-            <xsl:choose>
-              <xsl:when test="string-length(.) &gt; 0">
-                <xsl:value-of select="." />
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="@name" />
-              </xsl:otherwise>
-            </xsl:choose>
-          </a>
+          <xsl:choose>
+            <xsl:when test="not($writePermission) and $isStreamingSupported">
+              <xsl:choose>
+                <xsl:when test="string-length(.) &gt; 0">
+                  <xsl:value-of select="." />
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="@name" />
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:when>
+            <xsl:otherwise>
+              <a href="{$WebApplicationBaseURL}rcentry/{$slotId}/{../@id}/{@name}">
+                <xsl:choose>
+                  <xsl:when test="string-length(.) &gt; 0">
+                    <xsl:value-of select="." />
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="@name" />
+                  </xsl:otherwise>
+                </xsl:choose>
+                <xsl:if test="$writePermission and $isStreamingSupported">
+                  <i class="fas fa-sync fa-spin text-info ml-2" data-toggle="tooltip" data-placement="top"
+                    title="{i18n:translate('component.rc.slot.entry.file.encoding')}" />
+                </xsl:if>
+              </a>
+            </xsl:otherwise>
+          </xsl:choose>
           <span class="text-nowrap text-muted">
             <xsl:call-template name="formatFileSize">
               <xsl:with-param name="size" select="@size" />
