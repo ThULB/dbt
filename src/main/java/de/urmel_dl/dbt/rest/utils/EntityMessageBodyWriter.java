@@ -46,8 +46,10 @@ public class EntityMessageBodyWriter<T> implements MessageBodyWriter<T> {
      */
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return (mediaType.equals(MediaType.APPLICATION_JSON_TYPE) || mediaType.equals(MediaType.APPLICATION_XML_TYPE))
-            && type.getAnnotation(XmlRootElement.class) != null;
+        return (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)
+            || MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType))
+            && type.getAnnotation(XmlRootElement.class) != null
+            && type.getPackageName().contains("de.urmel_dl.dbt.rc"); //do not mess with MIR or MyCoRe here
     }
 
     /* (non-Javadoc)
