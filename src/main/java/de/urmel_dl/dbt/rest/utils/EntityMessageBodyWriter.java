@@ -46,8 +46,9 @@ public class EntityMessageBodyWriter<T> implements MessageBodyWriter<T> {
      */
     @Override
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
-        return (mediaType.equals(MediaType.APPLICATION_JSON_TYPE) || mediaType.equals(MediaType.APPLICATION_XML_TYPE))
-            && type.getAnnotation(XmlRootElement.class) != null;
+        return (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)
+            || MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType))
+            && type.getAnnotation(XmlRootElement.class) != null && new EntityFactory<>(type).canHandle();
     }
 
     /* (non-Javadoc)

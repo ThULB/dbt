@@ -210,6 +210,21 @@ public class EntityFactory<T> {
     }
 
     /**
+     * Check if entity can be handled.
+     * 
+     * @param entity the entity
+     * @return <code>true</code> if can be handled
+     */
+    public boolean canHandle() {
+        return entityType != null && MCRConfiguration2.getPropertiesMap().entrySet().stream()
+            .filter(e -> e.getKey().startsWith(CONFIG_PREFIX))
+            .anyMatch(e -> Stream.of(CONFIG_MARSHALLER, CONFIG_UNMARSHALLER).map(a -> e.getKey().indexOf(a))
+                .filter(i -> i != -1 && CONFIG_PREFIX.length() < i)
+                .map(i -> e.getKey().substring(CONFIG_PREFIX.length(), i - 1))
+                .anyMatch(p -> entityType.getPackage().getName().contains(p) || entityType.getName().contains(p)));
+    }
+
+    /**
      * Marshals a entity with specified marshal function.
      *
      * @param <R> the return type
