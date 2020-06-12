@@ -48,8 +48,7 @@ public class EntityMessageBodyWriter<T> implements MessageBodyWriter<T> {
     public boolean isWriteable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)
             || MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType))
-            && type.getAnnotation(XmlRootElement.class) != null
-            && type.getPackageName().contains("de.urmel_dl.dbt.rc"); //do not mess with MIR or MyCoRe here
+            && type.getAnnotation(XmlRootElement.class) != null && new EntityFactory<>(type).canHandle();
     }
 
     /* (non-Javadoc)

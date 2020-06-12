@@ -49,7 +49,7 @@ public class EntityMessageBodyReader<T> implements MessageBodyReader<T> {
     public boolean isReadable(Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType) {
         return (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)
             || MediaType.APPLICATION_XML_TYPE.isCompatible(mediaType))
-            && type.getAnnotation(XmlRootElement.class) != null;
+            && type.getAnnotation(XmlRootElement.class) != null && new EntityFactory<>(type).canHandle();
     }
 
     /* (non-Javadoc)
