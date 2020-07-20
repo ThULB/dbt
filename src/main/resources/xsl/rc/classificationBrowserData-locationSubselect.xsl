@@ -3,8 +3,8 @@
 <!-- XSL to transform XML output from MCRClassificationBrowser servlet to HTML for client browser, which is loaded by AJAX. The browser sends data of all child categories 
   of the requested node. -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xsl xalan encoder"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xsl xalan encoder"
 >
 
   <xsl:output method="xml" omit-xml-declaration="yes" />
@@ -37,11 +37,15 @@
           <xsl:choose>
             <xsl:when test="@children = 'true'">
               <a href="#" onclick="toggleClass('{@id}','{$folder.closed}','{$folder.open}');">
-                <i class="{$folder.closed}" id="cbButton_{$id}" />
+                <i class="{$folder.closed}" id="cbButton_{$id}"><!-- WebKit bugfix: no empty divs please -->
+                  <xsl:comment />
+                </i>
               </a>
             </xsl:when>
             <xsl:otherwise>
-              <i class="{$folder.leaf}" id="cbButton_{$id}" />
+              <i class="{$folder.leaf}" id="cbButton_{$id}"><!-- WebKit bugfix: no empty divs please -->
+                <xsl:comment />
+              </i>
             </xsl:otherwise>
           </xsl:choose>
           <a>
