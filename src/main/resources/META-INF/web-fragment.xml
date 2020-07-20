@@ -15,6 +15,17 @@
   </filter-mapping>
 
   <filter>
+    <filter-name>MediaFilter</filter-name>
+    <filter-class>de.urmel_dl.dbt.filter.MediaFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>MediaFilter</filter-name>
+    <servlet-name>MCRFileNodeServlet</servlet-name>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter>
     <filter-name>DerivateServletFilter</filter-name>
     <filter-class>de.urmel_dl.dbt.filter.DerivateServletFilter</filter-class>
   </filter>
@@ -24,7 +35,7 @@
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
-  
+
   <filter>
     <filter-name>DBTZipServletFilter</filter-name>
     <filter-class>de.urmel_dl.dbt.filter.DBTZipServletFilter</filter-class>
@@ -47,7 +58,7 @@
     <url-pattern>/servlets/RCSlotListServlet</url-pattern>
     <url-pattern>/rc/*</url-pattern>
   </servlet-mapping>
-  
+
   <servlet id="RCSlotServlet">
     <servlet-name>RCSlotServlet</servlet-name>
     <servlet-class>de.urmel_dl.dbt.rc.servlets.SlotServlet</servlet-class>
