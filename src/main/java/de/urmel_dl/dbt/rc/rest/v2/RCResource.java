@@ -155,7 +155,7 @@ public class RCResource {
     /**
      * Returns the {@link FileEntry} for given slot id and entry id.
      *
-     * @see {@link FileEntryMessageBodyWriter} for output file content
+     * @see FileEntryMessageBodyWriter FileEntryMessageBodyWriter for output file content
      * @param id the slot id
      * @param entryId the entry id
      * @return the {@link FileEntry}
@@ -194,7 +194,7 @@ public class RCResource {
      * Checks permission by type.
      *
      * @param type the permission type
-     * @return {@link Response.Status.OK} if allowed or {@link Response.Status.FORBIDDEN}
+     * @return {@link Response.Status#OK} if allowed or {@link Response.Status#FORBIDDEN}
      */
     @GET
     @Path("/permission/{type:.+}")
@@ -208,7 +208,7 @@ public class RCResource {
      *
      * @param type the permission type
      * @param id the slot id
-     * @return {@link Response.Status.OK} if allowed or {@link Response.Status.FORBIDDEN}
+     * @return {@link Response.Status#OK} if allowed or {@link Response.Status#FORBIDDEN}
      */
     @GET
     @Path("/permission/{type:.+}/{id:[0-9\\.]+}")

@@ -298,7 +298,7 @@ public final class SlotManager {
     }
 
     /**
-     * Check if given entry is supported by {@link MediaSerice}.
+     * Check if given entry is supported by {@link MediaService}.
      * 
      * @param slotId
      * @param entryId

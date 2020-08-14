@@ -212,7 +212,6 @@ public class EntityFactory<T> {
     /**
      * Check if entity can be handled.
      * 
-     * @param entity the entity
      * @return <code>true</code> if can be handled
      */
     public boolean canHandle() {

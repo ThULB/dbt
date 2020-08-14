@@ -81,7 +81,7 @@ public class DateUtils {
      * Return a formated date string.
      * @param date the date
      * @return the formated date string
-     * @see {@link DateUtils#DATE_PATTERN}
+     * @see DateUtils#DATE_PATTERN
      */
     public static String formatDate(Date date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN, Locale.GERMANY);
