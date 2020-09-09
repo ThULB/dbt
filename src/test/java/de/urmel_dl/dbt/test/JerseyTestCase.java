@@ -96,7 +96,7 @@ public class JerseyTestCase extends JerseyTest {
         MCRConfigurationLoader configurationLoader = MCRConfigurationLoaderFactory.getConfigurationLoader();
         HashMap<String, String> testProperties = new HashMap<>(configurationLoader.load());
         testProperties.putAll(getTestProperties());
-        MCRConfigurationBase.initialize(testProperties, true);
+        MCRConfigurationBase.initialize(Collections.emptyMap(), testProperties, true);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class JerseyTestCase extends JerseyTest {
             properties.delete();
             properties = null;
         }
-        MCRConfigurationBase.initialize(Collections.<String, String> emptyMap(), true);
+        MCRConfigurationBase.initialize(Collections.emptyMap(), Collections.emptyMap(), true);
         super.tearDown();
     }
 
