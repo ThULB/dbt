@@ -132,8 +132,6 @@ public class MigrationCommands extends MCRAbstractCommands {
             LOGGER.info("Source path --> " + path);
         }
 
-        LOGGER.info("Label --> " + derivate.getLabel());
-
         repairDerivate(derivate);
 
         return true;
