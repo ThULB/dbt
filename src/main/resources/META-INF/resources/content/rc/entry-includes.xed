@@ -207,7 +207,7 @@
           if ($("input:checked").val() == "html") {
             $("#text").summernote(options);
           } else {
-            $("#text").destroy();
+            $("#text").summernote("destroy");
           }
         });
       });
