@@ -18,6 +18,7 @@
           <xsl:for-each select="document(concat('notnull:ifs:', @xlink:href, '/'))/mcr_directory/children/child[@type='file']">
             <xsl:variable name="internalId" select="menc:buildInternalId(concat($derId, '_', name))" />
             <xsl:variable name="hasMediaFiles" select="menc:hasMediaFiles($internalId) = 'true'" />
+            <!--
             <xsl:message>
               internal Id:
               <xsl:value-of select="$internalId" />
@@ -26,6 +27,7 @@
               hasMediaFiles:
               <xsl:value-of select="$hasMediaFiles" />
             </xsl:message>
+            -->
             <xsl:if test="$hasMediaFiles">
               <xsl:variable name="hasSMILFile" select="menc:hasSMILFile($internalId) = 'true'" />
               <file id="{$internalId}" smil="{$hasSMILFile}">
