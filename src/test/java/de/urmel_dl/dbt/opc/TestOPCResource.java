@@ -111,7 +111,7 @@ public class TestOPCResource extends JerseyTestCase {
 
     @Test
     public void testRecord() {
-        final String PPN = "837382513";
+        final String PPN = "211917842";
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 String response = webResource.path("opc/record" + cat + "/" + PPN).request(mt).get(String.class);
