@@ -191,6 +191,22 @@ public class RCResource {
     }
 
     /**
+     * Check is streaming is supported.
+     * 
+     * @param id
+     * @param entryId
+     * @return {@link Response.Status#OK} is possible or {@link Response.Status.NOT_IMPLEMENTED} isn't
+     */
+    @GET
+    @Path("{id:[0-9\\.]+}/streamable/{entryId:.+}")
+    public Response isStreamingSupported(@PathParam("id") String id, @PathParam("entryId") String entryId) {
+        return Response
+            .status(
+                SlotManager.isStreamingSupported(id, entryId) ? Response.Status.OK : Response.Status.NOT_IMPLEMENTED)
+            .build();
+    }
+
+    /**
      * Checks permission by type.
      *
      * @param type the permission type
