@@ -135,8 +135,10 @@ public class SlotList implements Serializable {
      * @return the {@link SlotList}
      */
     public SlotList getBasicSlots() {
-        return syncronizedSlots(slots,
+        SlotList l = syncronizedSlots(slots,
             (sl) -> new SlotList(sl.stream().map(Slot::getBasicCopy).distinct().collect(Collectors.toList())));
+        l.total = total;
+        return l;
     }
 
     /**
