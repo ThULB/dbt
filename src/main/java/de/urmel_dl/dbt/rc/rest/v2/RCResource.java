@@ -195,7 +195,7 @@ public class RCResource {
      * 
      * @param id
      * @param entryId
-     * @return {@link Response.Status#OK} is possible or {@link Response.Status.NOT_IMPLEMENTED} isn't
+     * @return {@link Response.Status#OK} is possible or {@link Response.Status#NOT_IMPLEMENTED} isn't
      */
     @GET
     @Path("{id:[0-9\\.]+}/streamable/{entryId:.+}")
