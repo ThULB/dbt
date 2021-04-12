@@ -313,7 +313,7 @@ public final class SlotManager {
                 Path path;
                 try {
                     path = FileEntryManager.getLocalPath(slot, (SlotEntry<FileEntry>) entry);
-                    return MediaService.isMediaSupported(path);
+                    return Optional.ofNullable(path).map(MediaService::isMediaSupported).orElse(false);
                 } catch (MCRPersistenceException | IOException e) {
                     LOGGER.warn(e);
                 }
