@@ -73,7 +73,6 @@ import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.common.events.MCRShutdownHandler.Closeable;
-import org.mycore.common.inject.MCRInjectorConfig;
 import org.mycore.common.processing.MCRProcessableDefaultCollection;
 import org.mycore.common.processing.MCRProcessableRegistry;
 import org.mycore.frontend.MCRFrontendUtil;
@@ -154,7 +153,7 @@ public class MediaService {
     private static Path tempDirThumbs;
 
     static {
-        MCRProcessableRegistry registry = MCRInjectorConfig.injector().getInstance(MCRProcessableRegistry.class);
+        MCRProcessableRegistry registry = MCRProcessableRegistry.getSingleInstance();
 
         int poolSize = MCRConfiguration2.getInt(CONFIG_PREFIX + "ThreadCount").orElse(4);
 
