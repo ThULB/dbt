@@ -386,7 +386,27 @@ public class RCCommands extends MCRAbstractCommands {
                                             LOGGER.info("reserve slot with id \"" + slot.getSlotId() + "\"");
 
                                             slot.setStatus(Status.RESERVED);
-                                            slot.getEntries().clear();
+
+                                            if (slot.isOnlineOnly() || slot.getEntries() == null ||
+                                                slot.getEntries().stream()
+                                                    .filter(se -> se.getEntry() instanceof OPCRecordEntry
+                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
+                                                    .count() == 0) {
+                                                slot.getEntries().clear();
+                                            } else {
+                                                // send warning every 10 days
+                                                if (Duration
+                                                    .between(validTo.toInstant(), today.toInstant()).toDays()
+                                                    % 10 == 0) {
+                                                    evt = new MCREvent(SlotManager.SLOT_TYPE,
+                                                        SlotManager.INACTIVATE_EVENT);
+                                                }
+                                            }
+
+                                            if (evt != null) {
+                                                evt.put(SlotManager.SLOT_TYPE, slot);
+                                                MCREventManager.instance().handleEvent(evt);
+                                            }
 
                                             evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
                                             break;
