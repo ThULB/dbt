@@ -60,7 +60,7 @@ public class MediaEventHandler extends EventHandlerBase {
         try {
             Path mediaFile = FileEntryManager.getLocalPath(entry.getSlot(), entry);
 
-            if (MediaService.isMediaSupported(mediaFile)) {
+            if (mediaFile != null && MediaService.isMediaSupported(mediaFile)) {
                 MediaService.encodeMediaFile(buildId(entry), mediaFile, 0);
             }
         } catch (IOException e) {

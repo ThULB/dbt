@@ -656,7 +656,7 @@ public class RCCommands extends MCRAbstractCommands {
 
         Path mediaFile = FileEntryManager.getLocalPath(slot, fileEntry);
 
-        if (!MediaService.isMediaSupported(mediaFile)) {
+        if (mediaFile == null || !MediaService.isMediaSupported(mediaFile)) {
             LOGGER.info("Skipping encoding of " + fileEntry.getEntry().getName() + ", because isn't supported.");
             return;
         }

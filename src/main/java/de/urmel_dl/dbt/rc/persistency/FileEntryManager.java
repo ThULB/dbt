@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -246,13 +247,14 @@ public final class FileEntryManager {
      * 
      * @param slot the {@link Slot}
      * @param slotEntry the {@link SlotEntry} of type {@link FileEntry}
-     * @return the {@link Path}
+     * @return the {@link Path}, or null if no {@link MCRStoredNode} was found
      * @throws MCRPersistenceException
      * @throws IOException
      */
     public static Path getLocalPath(final Slot slot, final SlotEntry<FileEntry> slotEntry)
         throws MCRPersistenceException, IOException {
-        return getStoreNode(slot, slotEntry).getLocalPath();
+        MCRStoredNode sn = getStoreNode(slot, slotEntry);
+        return Optional.ofNullable(sn).map(MCRStoredNode::getLocalPath).orElse(null);
     }
 
 }
