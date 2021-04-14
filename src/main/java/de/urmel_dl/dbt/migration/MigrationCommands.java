@@ -25,7 +25,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -37,7 +36,6 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventManager;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs2.MCRMetadataStore;
 import org.mycore.datamodel.metadata.MCRBase;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetaEnrichedLinkID;
@@ -77,14 +75,13 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
 
         List<String> cmds = new ArrayList<String>();
+        String sf = styleFile.toString();
 
-        MCRMetadataStore store = MCRXMLMetadataManager.instance().getStore(base);
-        Iterator<Integer> IDs = store.listIDs(true);
-        while (IDs.hasNext()) {
-            final String id = MCRObjectID.formatID(base, IDs.next());
+        MCRXMLMetadataManager mm = MCRXMLMetadataManager.instance();
+        mm.listIDsForBase(base).forEach(id -> {
             cmds.add(new MessageFormat("xslt {0} with file {1}", Locale.ROOT)
-                .format(new Object[] { id, styleFile.toString() }));
-        }
+                .format(new Object[] { id, sf }));
+        });
 
         return cmds;
     }
