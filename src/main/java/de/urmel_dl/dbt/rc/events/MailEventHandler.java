@@ -120,6 +120,8 @@ public class MailEventHandler extends EventHandlerBase {
                 uri.append("&revision=" + rev);
         }
 
+        uri.append("&timestamp=" + Long.toString(System.currentTimeMillis()));
+
         MailQueue.addJob(uri.toString());
     }
 
@@ -141,6 +143,8 @@ public class MailEventHandler extends EventHandlerBase {
             if (rev != null && !rev.isEmpty())
                 uri.append("&revision=" + rev);
         }
+
+        uri.append("&timestamp=" + Long.toString(System.currentTimeMillis()));
 
         MailQueue.addJob(uri.toString());
     }
