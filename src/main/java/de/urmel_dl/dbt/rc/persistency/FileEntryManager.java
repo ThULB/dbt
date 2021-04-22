@@ -212,7 +212,7 @@ public final class FileEntryManager {
 
         MCRFileCollection col = store.retrieve(id);
         MCRStoredNode dir = (MCRStoredNode) col.getNodeByPath(slotEntry.getId());
-        return (MCRStoredNode) dir.getNodeByPath(fileEntry.getName());
+        return dir != null ? (MCRStoredNode) dir.getNodeByPath(fileEntry.getName()) : null;
     }
 
     /**
