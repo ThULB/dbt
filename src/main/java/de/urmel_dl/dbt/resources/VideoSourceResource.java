@@ -53,7 +53,7 @@ import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
-import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
 
 import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.media.entity.Sources;

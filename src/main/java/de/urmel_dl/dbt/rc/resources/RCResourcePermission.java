@@ -34,7 +34,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationException;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
-import org.mycore.mir.authorization.accesskeys.MIRAccessKeyPair;
+import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
