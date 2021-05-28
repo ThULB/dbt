@@ -1,4 +1,4 @@
-# DBT [![Build Status](https://travis-ci.org/ThULB/dbt.svg?branch=master)](https://travis-ci.org/ThULB/dbt) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/67f4010b74ca40c0898d2e60714dff5b)](https://www.codacy.com/gh/ThULB/dbt/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ThULB/dbt&amp;utm_campaign=Badge_Grade)
+# DBT [![Build Status](https://travis-ci.org/ThULB/dbt.svg?branch=main)](https://travis-ci.org/ThULB/dbt) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/67f4010b74ca40c0898d2e60714dff5b)](https://www.codacy.com/gh/ThULB/dbt/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ThULB/dbt&amp;utm_campaign=Badge_Grade)
 DBT (acronym for Digitale Bibliothek Thüringen) is an open source repository software that is build upon [MyCoRe](https://github.com/MyCoRe-Org/mycore), [MIR](https://github.com/MyCoRe-Org/mir) and [MODS](http://www.loc.gov/standards/mods/).
 
 ## Git-Style-Guide
