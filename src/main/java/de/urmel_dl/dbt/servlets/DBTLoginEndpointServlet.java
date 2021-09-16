@@ -65,11 +65,10 @@ public class DBTLoginEndpointServlet extends MCRServlet {
         res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private String getToken(HttpServletRequest req) throws UnsupportedEncodingException {
+    private String getToken(HttpServletRequest req) {
         final MCRSession mcrSession = Objects.requireNonNull(getSession(req));
-        MCRUserInformation userInformation = mcrSession.getUserInformation();
         String issuer = req.getRequestURL().toString();
-        return MCRJWTUtil.getJWTBuilder(userInformation)
+        return MCRJWTUtil.getJWTBuilder(mcrSession)
             .withJWTId(mcrSession.getID())
             .withIssuer(issuer)
             .withAudience(MCRJWTResource.AUDIENCE)
