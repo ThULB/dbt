@@ -54,6 +54,7 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.common.MCRAbstractMetadataVersion;
@@ -405,13 +406,9 @@ public final class SlotManager {
 
         if (slot != null && revision != null) {
             try {
-                var selectedRevision = MCRXMLMetadataManager.instance()
-                    .listRevisions(slot.getMCRObjectID()).stream()
-                    .filter(v -> v.getRevision().equals(revision.toString()))
-                    .findAny();
-                if (selectedRevision.isPresent()) {
-                    return SlotWrapper.unwrapMCRObject(new MCRObject(selectedRevision.get().retrieve().asXML()));
-                }
+                MCRContent cont = MCRXMLMetadataManager.instance().retrieveContent(slot.getMCRObjectID(),
+                    revision.toString());
+                return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
             } catch (IOException | JDOMException | SAXException e) {
                 return null;
             }
