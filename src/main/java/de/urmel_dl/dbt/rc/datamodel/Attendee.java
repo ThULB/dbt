@@ -24,6 +24,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.mycore.mcr.acl.accesskey.MCRAccessKeyUtils;
+import org.mycore.mcr.acl.accesskey.model.MCRAccessKey;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
 import org.mycore.user2.MCRUser;
@@ -93,9 +95,8 @@ public class Attendee extends Person implements Serializable {
      */
     @XmlAttribute(name = "readKey")
     public boolean isReadKeySet() {
-        final String key = user
-            .getUserAttribute(MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString());
-        return key != null && accKP != null ? key.equals(accKP.getReadKey()) : false;
+        final MCRAccessKey key = MCRAccessKeyUtils.getLinkedAccessKey(user, slot.getMCRObjectID());
+        return key != null && accKP != null ? key.getSecret().equals(accKP.getReadKey()) : false;
     }
 
     /**
@@ -105,9 +106,8 @@ public class Attendee extends Person implements Serializable {
      */
     @XmlAttribute(name = "writeKey")
     public boolean isWriteKeySet() {
-        final String key = user
-            .getUserAttribute(MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString());
-        return key != null && accKP != null ? key.equals(accKP.getWriteKey()) : false;
+        final MCRAccessKey key = MCRAccessKeyUtils.getLinkedAccessKey(user, slot.getMCRObjectID());
+        return key != null && accKP != null ? key.getSecret().equals(accKP.getWriteKey()) : false;
     }
 
     /**

@@ -45,7 +45,7 @@ import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
-import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
+import org.mycore.mcr.acl.accesskey.MCRAccessKeyUtils;
 
 import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
@@ -188,7 +188,7 @@ public class SlotListServlet extends MCRServlet {
 
             if (slot.getWriteKey() != null
                 && !MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
-                MIRAccessKeyManager.addAccessKey(slot.getMCRObjectID(), slot.getWriteKey());
+                MCRAccessKeyUtils.addAccessKeySecretToCurrentUser(slot.getMCRObjectID(), slot.getWriteKey());
             }
 
             String redirectURL = job.getRequest().getParameter("url");

@@ -6,6 +6,7 @@
     <mapping-file>META-INF/mycore-user2-mappings.xml</mapping-file>
     <mapping-file>META-INF/mycore-pi-mappings.xml</mapping-file>
     <mapping-file>META-INF/mir-module-mappings.xml</mapping-file>
+    <mapping-file>META-INF/mycore-acl-mappings.xml</mapping-file>
     <properties>
       <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
       <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:dbt" />
