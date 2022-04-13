@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalLong;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -56,14 +57,15 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
+import org.mycore.datamodel.common.MCRAbstractMetadataVersion;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRCreatorCache;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
-import org.mycore.datamodel.ifs2.MCRVersionedMetadata;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectService;
+import org.mycore.mcr.acl.accesskey.MCRAccessKeyUtils;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
 import org.mycore.solr.MCRSolrClientFactory;
@@ -71,7 +73,6 @@ import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserAttribute_;
-import org.tmatesoft.svn.core.SVNException;
 import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.media.MediaService;
@@ -405,10 +406,9 @@ public final class SlotManager {
         final Slot slot = getSlotById(slotId);
 
         if (slot != null && revision != null) {
-            MCRVersionedMetadata vm;
             try {
-                vm = MCRXMLMetadataManager.instance().getVersionedMetaData(slot.getMCRObjectID());
-                MCRContent cont = vm.getRevision(revision).retrieve();
+                MCRContent cont = MCRXMLMetadataManager.instance().retrieveContent(slot.getMCRObjectID(),
+                    revision.toString());
                 return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
             } catch (IOException | JDOMException | SAXException e) {
                 return null;
@@ -457,11 +457,16 @@ public final class SlotManager {
      * @return an number or <code>null</code> on Exception
      */
     public synchronized Long getLastRevision(final Slot slot) {
-        MCRVersionedMetadata vm;
         try {
-            vm = MCRXMLMetadataManager.instance().getVersionedMetaData(slot.getMCRObjectID());
-            return vm.getLastPresentRevision();
-        } catch (SVNException | IOException e) {
+            final OptionalLong maxRevision = MCRXMLMetadataManager.instance().listRevisions(slot.getMCRObjectID())
+                .stream()
+                .filter(Predicate.not(
+                    v -> v.getType() == MCRAbstractMetadataVersion.DELETED))
+                .map(MCRAbstractMetadataVersion::getRevision)
+                .mapToLong(Long::valueOf)
+                .max();
+            return maxRevision.isPresent() ? maxRevision.getAsLong() : null;
+        } catch (IOException e) {
             return null;
         }
     }
@@ -551,7 +556,7 @@ public final class SlotManager {
     public Attendees getAttendees(final Slot slot) {
         final List<Attendee> attendees = new ArrayList<>();
 
-        final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
+        final String filterStr = MCRAccessKeyUtils.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -584,7 +589,7 @@ public final class SlotManager {
         final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(slot.getMCRObjectID());
         final List<Attendee> attendees = new ArrayList<>();
 
-        final String filterStr = MIRAccessKeyManager.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
+        final String filterStr = MCRAccessKeyUtils.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -602,7 +607,7 @@ public final class SlotManager {
 
             if (!key.equals(accKP.getReadKey()) && !key.equals(accKP.getWriteKey())) {
                 attendees.add(new Attendee(slot, user));
-                MIRAccessKeyManager.deleteAccessKey(user, slot.getMCRObjectID());
+                MCRAccessKeyUtils.removeAccessKeySecret(user, slot.getMCRObjectID());
             }
         }
 

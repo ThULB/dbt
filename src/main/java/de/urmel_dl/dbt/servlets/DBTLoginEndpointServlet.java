@@ -25,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.mycore.common.MCRSession;
-import org.mycore.common.MCRUserInformation;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.frontend.jersey.MCRJWTUtil;
 import org.mycore.frontend.jersey.resources.MCRJWTResource;
@@ -67,9 +66,8 @@ public class DBTLoginEndpointServlet extends MCRServlet {
 
     private String getToken(HttpServletRequest req) throws UnsupportedEncodingException {
         final MCRSession mcrSession = Objects.requireNonNull(getSession(req));
-        MCRUserInformation userInformation = mcrSession.getUserInformation();
         String issuer = req.getRequestURL().toString();
-        return MCRJWTUtil.getJWTBuilder(userInformation)
+        return MCRJWTUtil.getJWTBuilder(mcrSession)
             .withJWTId(mcrSession.getID())
             .withIssuer(issuer)
             .withAudience(MCRJWTResource.AUDIENCE)

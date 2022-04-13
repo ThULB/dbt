@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.mycore</groupId>
@@ -33,7 +35,7 @@
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
-    <mir.version>2021.05</mir.version>
+    <mir.version>2021.06.1-SNAPSHOT</mir.version>
     <node.version>v12.14.1</node.version>
     <npm.version>6.13.6</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
