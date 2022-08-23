@@ -116,4 +116,13 @@
     <url-pattern>/servlets/DBTZipServlet/*</url-pattern>
   </servlet-mapping>
 
+  <servlet id="OAI2DiscoveryProvider">
+    <servlet-name>OAI2Discovery</servlet-name>
+    <servlet-class>org.mycore.oai.MCROAIDataProvider</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>OAI2Discovery</servlet-name>
+    <url-pattern>/oai/discovery</url-pattern>
+  </servlet-mapping>
+
 </web-fragment>
