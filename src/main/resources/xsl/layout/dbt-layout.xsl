@@ -112,7 +112,6 @@
 
     <script type="text/javascript" src="{$WebApplicationBaseURL}assets/bootstrap/js/bootstrap.bundle.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/anchorScrollFix.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.min.js" />
 
@@ -164,7 +163,7 @@
   </xsl:template>
 
   <xsl:template name="layout.head">
-    <nav class="navbar navbar-expand-md navbar-light navbar-dbt fixed-top scrolling-navbar" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-light navbar-dbt fixed-top" role="navigation">
       <div class="container">
         <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}">
           <span class="img-placeholder"></span>
