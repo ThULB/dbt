@@ -26,7 +26,7 @@
     <label xml:lang="en">Footer menu</label>
     <item href="/content/footer/impressum.xml" type="intern">
       <label xml:lang="de">Impressum</label>
-      <label xml:lang="en">Imprint</label>
+      <label xml:lang="en">Legal Notice</label>
     </item>
     <item href="/content/footer/privacy-policy.xml" type="intern">
       <label xml:lang="de">Datenschutzerklärung</label>
