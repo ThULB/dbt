@@ -34,8 +34,8 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir.version>2021.06.2-SNAPSHOT</mir.version>
-    <node.version>v12.14.1</node.version>
-    <npm.version>6.13.6</npm.version>
+    <node.version>v16.19.1</node.version>
+    <npm.version>6.14.18</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
