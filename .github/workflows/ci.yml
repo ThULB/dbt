@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: Verify
+    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v3
+    with:
+      ff-site-goal: ''
+      ff-os: 'ubuntu-22.04'
+      ff-goal: '-P run-its verify'
+      ff-site-run: false
+      failure-upload-path: |
+          ./**/surefire-reports
+          ./**/failsafe-reports
+          ./**/screenshots
+          ./**/*error*.log
+          ./**/*test.log
+      matrix-exclude: >
+        [
+          {"os": "macOS-latest"},
+          {"jdk": "8"}
+        ]
