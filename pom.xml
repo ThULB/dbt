@@ -40,10 +40,29 @@
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
+    <toolchain.jdk.version>[${java.target.version},)</toolchain.jdk.version>
   </properties>
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-toolchains-plugin</artifactId>
+          <configuration>
+            <toolchains>
+              <jdk>
+                <version>${toolchain.jdk.version}</version>
+              </jdk>
+            </toolchains>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>toolchain</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
