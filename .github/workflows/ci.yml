@@ -22,5 +22,7 @@ jobs:
       matrix-exclude: >
         [
           {"os": "macOS-latest"},
-          {"jdk": "8"}
+          {"os": "windows-latest"},
+          {"jdk": "8"},
+          {"jdk": "11"}
         ]
