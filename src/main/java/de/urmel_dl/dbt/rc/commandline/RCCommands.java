@@ -242,7 +242,7 @@ public class RCCommands extends MCRAbstractCommands {
         MCREvent evt = null;
 
         if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER) {
-            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
+            evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
             // rebuild new keys
             String readKey = SlotManager.buildKey();
             String writeKey = null;
@@ -335,7 +335,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                                     slot.setStatus(Status.ARCHIVED);
 
-                                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
 
                                     break;
                                 case PENDING:
@@ -348,14 +348,16 @@ public class RCCommands extends MCRAbstractCommands {
                                                 .getPeriodBySetable(slot.getLocation().toString(), new Date())
                                                 .getToDate());
 
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                                            evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
+                                                SlotManager.REACTIVATE_EVENT);
                                             break;
                                         case ARCHIVED:
                                             LOGGER.info("archive slot with id \"" + slot.getSlotId() + "\"");
 
                                             slot.setStatus(Status.ARCHIVED);
 
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                                            evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
+                                                SlotManager.INACTIVATE_EVENT);
                                             break;
                                         case FREE:
                                             if (slot.isOnlineOnly() || slot.getEntries() == null ||
@@ -365,13 +367,14 @@ public class RCCommands extends MCRAbstractCommands {
                                                     .count() == 0) {
                                                 LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
                                                 mgr.delete(slot);
-                                                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                                evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
+                                                    MCREvent.EventType.DELETE);
                                             } else {
                                                 // send warning every 10 days
                                                 if (Duration
                                                     .between(validTo.toInstant(), today.toInstant()).toDays()
                                                     % 10 == 0) {
-                                                    evt = new MCREvent(SlotManager.SLOT_TYPE,
+                                                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
                                                         SlotManager.INACTIVATE_EVENT);
                                                 }
                                             }
@@ -398,7 +401,7 @@ public class RCCommands extends MCRAbstractCommands {
                                                 if (Duration
                                                     .between(validTo.toInstant(), today.toInstant()).toDays()
                                                     % 10 == 0) {
-                                                    evt = new MCREvent(SlotManager.SLOT_TYPE,
+                                                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
                                                         SlotManager.INACTIVATE_EVENT);
                                                 }
                                             }
@@ -408,7 +411,8 @@ public class RCCommands extends MCRAbstractCommands {
                                                 MCREventManager.instance().handleEvent(evt);
                                             }
 
-                                            evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                                            evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
+                                                MCREvent.EventType.DELETE);
                                             break;
                                         case VALIDATING:
                                         default:
@@ -462,10 +466,9 @@ public class RCCommands extends MCRAbstractCommands {
 
                         mgr.delete(slot);
 
-                        evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.DELETE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, MCREvent.EventType.DELETE);
                         evt.put(SlotManager.SLOT_TYPE, slot);
                         MCREventManager.instance().handleEvent(evt);
-                        continue;
                     }
                 } catch (IllegalArgumentException | CloneNotSupportedException
                     | MCRPersistenceException | MCRActiveLinkException e) {
@@ -497,7 +500,7 @@ public class RCCommands extends MCRAbstractCommands {
                 if ((slot.getStatus() == Status.ARCHIVED)
                     && (slotPrefix == null || slot.getSlotId().startsWith(slotPrefix))) {
                     LOGGER.info("resend mails for archived slot " + slot.getSlotId());
-                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 }
 
                 if (evt != null) {

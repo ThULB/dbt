@@ -24,9 +24,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 import java.util.Optional;
 
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.PathSegment;
-import javax.xml.bind.DatatypeConverter;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.PathSegment;
+import jakarta.xml.bind.DatatypeConverter;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

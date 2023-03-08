@@ -17,9 +17,9 @@
  */
 package de.urmel_dl.dbt.migration;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.servlet.ServletContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.servlet.ServletContext;
 
 import org.mycore.backend.jpa.MCREntityManagerProvider;
 import org.mycore.common.events.MCRStartupHandler;

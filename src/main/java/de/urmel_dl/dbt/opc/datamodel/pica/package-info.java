@@ -29,7 +29,7 @@
 @XmlSchema(elementFormDefault = XmlNsForm.QUALIFIED, namespace = "http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd", xmlns = { @XmlNs(prefix = "pica", namespaceURI = "http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd") })
 package de.urmel_dl.dbt.opc.datamodel.pica;
 
-import javax.xml.bind.annotation.XmlNs;
-import javax.xml.bind.annotation.XmlNsForm;
-import javax.xml.bind.annotation.XmlSchema;
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlNsForm;
+import jakarta.xml.bind.annotation.XmlSchema;
 

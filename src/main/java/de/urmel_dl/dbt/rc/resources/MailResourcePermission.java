@@ -17,10 +17,10 @@
  */
 package de.urmel_dl.dbt.rc.resources;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 import org.mycore.access.MCRAccessManager;
 import org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker;

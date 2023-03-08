@@ -17,7 +17,7 @@
  */
 package de.urmel_dl.dbt.viewer;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.frontend.MCRFrontendUtil;

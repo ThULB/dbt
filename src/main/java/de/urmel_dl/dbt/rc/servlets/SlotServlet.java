@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,7 +51,7 @@ import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class SlotServlet extends MCRServlet {
@@ -176,14 +176,14 @@ public class SlotServlet extends MCRServlet {
                             success = slot.removeEntry(se);
                         }
 
-                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.DELETE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.DELETE);
                         evt.put(SlotManager.ENTRY_TYPE, se);
                     }
                 } else if (slot.getEntries() == null) {
                     LOGGER.debug("Add new entry: " + slotEntry);
                     success = slot.addEntry(slotEntry);
 
-                    evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.CREATE);
                     evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                 } else {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
@@ -191,13 +191,13 @@ public class SlotServlet extends MCRServlet {
                         LOGGER.debug("Update entry: " + slotEntry);
                         slot.setEntry(slotEntry);
 
-                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.UPDATE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.UPDATE);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     } else {
                         LOGGER.debug("Add new entry after \"" + afterId + "\".");
                         success = slot.addEntry(slotEntry, afterId);
 
-                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.CREATE);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
                 }
@@ -215,7 +215,7 @@ public class SlotServlet extends MCRServlet {
                             evt.put("slotId", slot.getSlotId());
                         }
 
-                        if (MCREvent.DELETE_EVENT.equals(evt.getEventType())) {
+                        if (MCREvent.EventType.DELETE.equals(evt.getEventType())) {
                             MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
                         } else {
                             MCREventManager.instance().handleEvent(evt);

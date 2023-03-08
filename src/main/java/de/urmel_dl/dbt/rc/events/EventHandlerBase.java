@@ -31,7 +31,7 @@ import de.urmel_dl.dbt.rc.persistency.SlotManager;
  * Abstract helper class that can be subclassed to implement event handlers more
  * easily.
  * 
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public abstract class EventHandlerBase implements MCREventHandler {
@@ -47,21 +47,21 @@ public abstract class EventHandlerBase implements MCREventHandler {
      */
     @Override
     public void doHandleEvent(MCREvent evt) throws MCRException {
-        if (evt.getObjectType().equals(SlotManager.SLOT_TYPE)) {
+        if (SlotManager.SLOT_TYPE.equals(evt.getCustomObjectType())) {
             final Slot slot = (Slot) evt.get(SlotManager.SLOT_TYPE);
 
             if (slot != null) {
-                if (evt.getEventType().equals(MCREvent.CREATE_EVENT)) {
+                if (evt.getEventType().equals(MCREvent.EventType.CREATE)) {
                     handleSlotCreated(evt, slot);
-                } else if (evt.getEventType().equals(MCREvent.UPDATE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.UPDATE)) {
                     handleSlotUpdated(evt, slot);
-                } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
                     handleSlotDeleted(evt, slot);
-                } else if (evt.getEventType().equals(SlotManager.INACTIVATE_EVENT)) {
+                } else if (SlotManager.INACTIVATE_EVENT.equals(evt.getCustomEventType())) {
                     handleSlotInactivate(evt, slot);
-                } else if (evt.getEventType().equals(SlotManager.REACTIVATE_EVENT)) {
+                } else if (SlotManager.REACTIVATE_EVENT.equals(evt.getCustomEventType())) {
                     handleSlotReactivate(evt, slot);
-                } else if (evt.getEventType().equals(SlotManager.OWNER_TRANSFER_EVENT)) {
+                } else if (SlotManager.OWNER_TRANSFER_EVENT.equals(evt.getCustomEventType())) {
                     handleSlotOwnerTransfer(evt, slot);
                 } else {
                     LOGGER.warn("Can't find method for an slot data handler for event type " + evt.getEventType());
@@ -73,15 +73,15 @@ public abstract class EventHandlerBase implements MCREventHandler {
             return;
         }
 
-        if (evt.getObjectType().equals(SlotManager.ENTRY_TYPE)) {
+        if (SlotManager.ENTRY_TYPE.equals(evt.getCustomObjectType())) {
             final SlotEntry<?> entry = (SlotEntry<?>) evt.get(SlotManager.ENTRY_TYPE);
 
             if (entry != null) {
-                if (evt.getEventType().equals(MCREvent.CREATE_EVENT)) {
+                if (evt.getEventType().equals(MCREvent.EventType.CREATE)) {
                     handleEntryCreated(evt, entry);
-                } else if (evt.getEventType().equals(MCREvent.UPDATE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.UPDATE)) {
                     handleEntryUpdated(evt, entry);
-                } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
                     handleEntryDeleted(evt, entry);
                 } else {
                     LOGGER.warn("Can't find method for an slot data handler for event type " + evt.getEventType());
@@ -90,7 +90,6 @@ public abstract class EventHandlerBase implements MCREventHandler {
             }
 
             LOGGER.warn("Can't find method for " + SlotManager.ENTRY_TYPE + " for event type " + evt.getEventType());
-            return;
         }
     }
 
@@ -103,15 +102,15 @@ public abstract class EventHandlerBase implements MCREventHandler {
      */
     @Override
     public void undoHandleEvent(MCREvent evt) throws MCRException {
-        if (evt.getObjectType().equals(SlotManager.SLOT_TYPE)) {
+        if (SlotManager.SLOT_TYPE.equals(evt.getCustomObjectType())) {
             final Slot slot = (Slot) evt.get(SlotManager.SLOT_TYPE);
 
             if (slot != null) {
-                if (evt.getEventType().equals(MCREvent.CREATE_EVENT)) {
+                if (evt.getEventType().equals(MCREvent.EventType.CREATE)) {
                     undoSlotCreated(evt, slot);
-                } else if (evt.getEventType().equals(MCREvent.UPDATE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.UPDATE)) {
                     undoSlotUpdated(evt, slot);
-                } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
                     undoSlotDeleted(evt, slot);
                 } else {
                     LOGGER.warn("Can't find method for an slot data handler for event type " + evt.getEventType());
@@ -123,15 +122,15 @@ public abstract class EventHandlerBase implements MCREventHandler {
             return;
         }
 
-        if (evt.getObjectType().equals(SlotManager.ENTRY_TYPE)) {
+        if (SlotManager.ENTRY_TYPE.equals(evt.getCustomObjectType())) {
             final SlotEntry<?> entry = (SlotEntry<?>) evt.get(SlotManager.ENTRY_TYPE);
 
             if (entry != null) {
-                if (evt.getEventType().equals(MCREvent.CREATE_EVENT)) {
+                if (evt.getEventType().equals(MCREvent.EventType.CREATE)) {
                     undoEntryCreated(evt, entry);
-                } else if (evt.getEventType().equals(MCREvent.UPDATE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.UPDATE)) {
                     undoEntryUpdated(evt, entry);
-                } else if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+                } else if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
                     undoEntryDeleted(evt, entry);
                 } else {
                     LOGGER.warn("Can't find method for an slot data handler for event type " + evt.getEventType());
@@ -140,7 +139,6 @@ public abstract class EventHandlerBase implements MCREventHandler {
             }
 
             LOGGER.warn("Can't find method for " + SlotManager.ENTRY_TYPE + " for event type " + evt.getEventType());
-            return;
         }
     }
 

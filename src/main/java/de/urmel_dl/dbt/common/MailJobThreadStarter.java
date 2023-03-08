@@ -17,7 +17,7 @@
  */
 package de.urmel_dl.dbt.common;
 
-import javax.servlet.ServletContext;
+import jakarta.servlet.ServletContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

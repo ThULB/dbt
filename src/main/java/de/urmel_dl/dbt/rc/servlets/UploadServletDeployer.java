@@ -25,9 +25,9 @@ import java.nio.file.NotDirectoryException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.servlet.MultipartConfigElement;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRegistration.Dynamic;
+import jakarta.servlet.MultipartConfigElement;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletRegistration.Dynamic;
 
 import org.apache.logging.log4j.LogManager;
 import org.mycore.common.config.MCRConfiguration2;

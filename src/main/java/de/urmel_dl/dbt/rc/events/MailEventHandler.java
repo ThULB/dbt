@@ -24,7 +24,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class MailEventHandler extends EventHandlerBase {
@@ -114,7 +114,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append(":notnull:slot:");
         uri.append("slotId=" + slot.getSlotId());
 
-        if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+        if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
             final String rev = (String) evt.get("revision");
             if (rev != null && !rev.isEmpty())
                 uri.append("&revision=" + rev);
@@ -138,7 +138,7 @@ public class MailEventHandler extends EventHandlerBase {
         uri.append("slotId=" + evt.get("slotId"));
         uri.append("&entryId=" + entry.getId());
 
-        if (evt.getEventType().equals(MCREvent.DELETE_EVENT)) {
+        if (evt.getEventType().equals(MCREvent.EventType.DELETE)) {
             final String rev = (String) evt.get("revision");
             if (rev != null && !rev.isEmpty())
                 uri.append("&revision=" + rev);

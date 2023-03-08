@@ -38,7 +38,7 @@ import org.mycore.mods.MCRMODSWrapper;
 import org.xml.sax.SAXParseException;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class TestIdentifierExtractorEventHandler extends MCRTestCase {
@@ -52,7 +52,7 @@ public class TestIdentifierExtractorEventHandler extends MCRTestCase {
 
             assertNotNull(obj);
 
-            MCREvent evt = new MCREvent(MCREvent.OBJECT_TYPE, MCREvent.CREATE_EVENT);
+            MCREvent evt = new MCREvent(MCREvent.ObjectType.OBJECT, MCREvent.EventType.CREATE);
             evt.put(MCREvent.OBJECT_KEY, obj);
 
             IdentifierExtractorEventHandler eh = new IdentifierExtractorEventHandler();
@@ -62,12 +62,12 @@ public class TestIdentifierExtractorEventHandler extends MCRTestCase {
 
             MCRMODSWrapper mods = new MCRMODSWrapper(obj);
             Optional<String> ppnURI = mods.getElements("mods:identifier[@type='uri']").stream()
-                .filter(elm -> elm.getTextTrim().contains("gvk:ppn"))
-                .map(Element::getTextTrim).findFirst();
+                .map(Element::getTextTrim)
+                .filter(textTrim -> textTrim.contains("gvk:ppn")).findFirst();
 
             assertTrue("we should have a ppn URI", ppnURI.isPresent());
 
-            String ppn = ppnURI.map(uri -> uri.substring(uri.indexOf("ppn:") + 4, uri.length())).orElse(null);
+            String ppn = ppnURI.map(uri -> uri.substring(uri.indexOf("ppn:") + 4)).orElse(null);
 
             assertEquals("should match", wantedPPN, ppn);
         }

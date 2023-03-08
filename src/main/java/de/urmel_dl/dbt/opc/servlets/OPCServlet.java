@@ -20,8 +20,8 @@ package de.urmel_dl.dbt.opc.servlets;
 import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.frontend.servlets.MCRServlet;

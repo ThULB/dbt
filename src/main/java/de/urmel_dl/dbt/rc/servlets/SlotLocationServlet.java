@@ -20,8 +20,8 @@ package de.urmel_dl.dbt.rc.servlets;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
