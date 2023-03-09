@@ -51,7 +51,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.xml.sax.SAXParseException;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @MCRCommandGroup(name = "Migration Commands")
@@ -152,10 +152,10 @@ public class MigrationCommands extends MCRAbstractCommands {
         // handle events
         try {
             LOGGER.info("Fire create event.");
-            fireEvent(mcrDerivate, null, MCREvent.CREATE_EVENT);
+            fireEvent(mcrDerivate, null, MCREvent.EventType.CREATE.name());
         } catch (MCRException ex) {
             LOGGER.info("Fire update event.");
-            fireEvent(mcrDerivate, null, MCREvent.UPDATE_EVENT);
+            fireEvent(mcrDerivate, null, MCREvent.EventType.UPDATE.name());
         }
 
         // add the link to metadata
@@ -205,8 +205,15 @@ public class MigrationCommands extends MCRAbstractCommands {
 
     private static void fireEvent(MCRBase base, MCRBase oldBase, String eventType) {
         boolean objectEvent = base instanceof MCRObject;
-        String type = objectEvent ? MCREvent.OBJECT_TYPE : MCREvent.DERIVATE_TYPE;
-        final MCREvent evt = new MCREvent(type, eventType);
+        MCREvent.ObjectType type = objectEvent ? MCREvent.ObjectType.OBJECT : MCREvent.ObjectType.DERIVATE;
+        MCREvent.EventType enumEventType;
+        try {
+            enumEventType = MCREvent.EventType.valueOf(eventType);
+        } catch (IllegalArgumentException e) {
+            enumEventType = MCREvent.EventType.CUSTOM;
+        }
+        final MCREvent evt = enumEventType == MCREvent.EventType.CUSTOM ? MCREvent.customEvent(type, eventType)
+            : new MCREvent(type, enumEventType);
         if (objectEvent) {
             evt.put(MCREvent.OBJECT_KEY, base);
         } else {
@@ -214,7 +221,7 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
         Optional.ofNullable(oldBase)
             .ifPresent(b -> evt.put(objectEvent ? MCREvent.OBJECT_OLD_KEY : MCREvent.DERIVATE_OLD_KEY, b));
-        if (MCREvent.DELETE_EVENT.equals(eventType)) {
+        if (MCREvent.EventType.DELETE.equals(enumEventType)) {
             MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
         } else {
             MCREventManager.instance().handleEvent(evt);

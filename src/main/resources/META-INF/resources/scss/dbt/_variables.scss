@@ -21,6 +21,10 @@ $input-focus-border-color: $primary;
 $input-btn-focus-box-shadow: none; 
 
 $enable-shadows: true;
+// required for bootstrap 4.6.0 or higher, due to bug with $enable-shadows
+$custom-control-indicator-checked-box-shadow:   none !default;
+$custom-control-indicator-active-box-shadow:    none !default;
+$custom-checkbox-indicator-indeterminate-box-shadow:   none !default;
 
 // ---------------------------------------------------
 // General

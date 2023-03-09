@@ -19,7 +19,7 @@ package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author René Adler (eagle)

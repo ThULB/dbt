@@ -22,8 +22,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -104,7 +104,7 @@ public class SlotListServlet extends MCRServlet {
 
                 SLOT_MGR.addSlot(slot);
 
-                evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.CREATE_EVENT);
+                evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, MCREvent.EventType.CREATE);
                 evt.put(SlotManager.SLOT_TYPE, slot);
             } else {
                 final Slot s = SLOT_MGR.getSlotById(slotId);
@@ -118,7 +118,7 @@ public class SlotListServlet extends MCRServlet {
                 slot.setMCRObjectID(s.getMCRObjectID());
 
                 if (s.getStatus() != slot.getStatus() && slot.getStatus() == Status.ARCHIVED) {
-                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.INACTIVATE_EVENT);
                 } else if (slot.getPendingStatus() == PendingStatus.OWNERTRANSFER
                     && s.getPendingStatus() != slot.getPendingStatus()) {
 
@@ -127,7 +127,7 @@ public class SlotListServlet extends MCRServlet {
                         return;
                     }
 
-                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.OWNER_TRANSFER_EVENT);
 
                     // rebuild new keys
                     String readKey = SlotManager.buildKey();
@@ -140,11 +140,11 @@ public class SlotListServlet extends MCRServlet {
                     slot.setReadKey(readKey);
                     slot.setWriteKey(writeKey);
                 } else if ("reactivateComplete".equals(action)) {
-                    evt = new MCREvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
                         RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
                 } else {
-                    evt = new MCREvent(SlotManager.SLOT_TYPE, MCREvent.UPDATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, MCREvent.EventType.UPDATE);
                 }
 
                 // remove warning dates on new validTo date

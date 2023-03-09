@@ -24,10 +24,10 @@ import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import javax.servlet.AsyncContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +50,7 @@ import de.urmel_dl.dbt.rc.servlets.listener.UploadContextListener;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class UploadServlet extends MCRServlet {
@@ -95,7 +95,7 @@ public class UploadServlet extends MCRServlet {
         }
     }
 
-    public class UploadProcessor implements Runnable {
+    public static class UploadProcessor implements Runnable {
 
         private AsyncContext asyncContext;
 
@@ -150,7 +150,7 @@ public class UploadServlet extends MCRServlet {
                     LOGGER.debug("Add new entry: " + slotEntry);
                     success = slot.addEntry(slotEntry);
 
-                    evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                    evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.CREATE);
                     evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                 } else {
                     final SlotEntry<?> se = slot.getEntryById(slotEntry.getId());
@@ -158,13 +158,13 @@ public class UploadServlet extends MCRServlet {
                         LOGGER.debug("Update entry: " + slotEntry);
                         slot.setEntry(slotEntry);
 
-                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.UPDATE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.UPDATE);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     } else {
                         LOGGER.debug("Add new entry after \"" + afterId + "\".");
                         success = slot.addEntry(slotEntry, afterId);
 
-                        evt = new MCREvent(SlotManager.ENTRY_TYPE, MCREvent.CREATE_EVENT);
+                        evt = MCREvent.customEvent(SlotManager.ENTRY_TYPE, MCREvent.EventType.CREATE);
                         evt.put(SlotManager.ENTRY_TYPE, slotEntry);
                     }
                 }
