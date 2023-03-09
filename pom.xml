@@ -166,7 +166,7 @@
               <createDependencyReducedPom>false</createDependencyReducedPom>
               <artifactSet>
                 <includes>
-                  <include>org.glassfish*:*</include>
+                  <include>org.glassfish:jakarta.json</include>
                   <include>org.eclipse.persistence:*</include>
                 </includes>
               </artifactSet>
@@ -560,6 +560,13 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-mods</artifactId>
+      <exclusions>
+        <exclusion>
+          <!-- Do not resolve dependencies from https://dev.bibsonomy.org/maven2 -->
+          <groupId>org.bibsonomy</groupId>
+          <artifactId>bibsonomy-bibtex-parser</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -576,6 +583,13 @@
     <dependency>
       <groupId>org.mycore.mir</groupId>
       <artifactId>mir-module</artifactId>
+      <exclusions>
+        <exclusion>
+          <!-- Do not resolve dependencies from https://dev.bibsonomy.org/maven2 -->
+          <groupId>org.bibsonomy</groupId>
+          <artifactId>bibsonomy-bibtex-parser</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.glassfish</groupId>
