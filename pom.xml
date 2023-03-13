@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>51</version>
+    <version>52-SNAPSHOT</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2022.06-SNAPSHOT</version>
+  <version>2023.02-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
   <licenses>
@@ -34,36 +34,17 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
-    <mir.version>2022.06.2-SNAPSHOT</mir.version>
+    <mir.version>2023.02-SNAPSHOT</mir.version>
     <node.version>v16.19.1</node.version>
     <npm.version>6.14.18</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
-    <toolchain.jdk.version>[${java.target.version},)</toolchain.jdk.version>
   </properties>
   <build>
     <pluginManagement>
       <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-toolchains-plugin</artifactId>
-          <configuration>
-            <toolchains>
-              <jdk>
-                <version>${toolchain.jdk.version}</version>
-              </jdk>
-            </toolchains>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>toolchain</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
