@@ -53,6 +53,10 @@
     <xed:include ref="validation-rules" />
   </xed:template>
 
+  <xed:template id="genres.final_report">
+    <xed:include ref="genres.report.common" />
+  </xed:template>
+
   <xed:template id="oai">
     <xed:bind xpath="mods:classification[@authority='OAI'][@displayLabel='OAI']">
       <div class="form-group row {$xed-validation-marker}">
