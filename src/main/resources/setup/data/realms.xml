@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <realms local="local">
   <!--
@@ -10,7 +10,7 @@
       <label xml:lang="en">Login with servlet container user account (Servlet 3)</label>
       <info>
         <label xml:lang="de">
-          Diese Kennung gilt für alle Anwendungen innerhalb des Servlet-Containers.
+          Diese Kennung gilt fÃ¼r alle Anwendungen innerhalb des Servlet-Containers.
         </label>
         <label xml:lang="en">
           This account is available to all applications of this servlet container.
@@ -27,7 +27,7 @@
       <label xml:lang="en">Login with your user credentials of your university</label>
       <info>
         <label xml:lang="de">
-	  &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
+	  &lt;strong class="text-danger"&gt;Anmeldung fÃ¼r Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
         </label>
         <label xml:lang="en">
 	  &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt and Nordhausen.&lt;/strong&gt;
@@ -70,7 +70,7 @@
     <passwordChangeURL>https://portal.uni-jena.de/</passwordChangeURL>
   </realm>
   <realm id="uni-erfurt.de">
-    <label xml:lang="de">Universität Erfurt</label>
+    <label xml:lang="de">UniversitÃ¤t Erfurt</label>
     <label xml:lang="en">University Erfurt</label>
     <attributeMapping>
       <attribute name="userName" mapping="eppn" />
@@ -92,7 +92,7 @@
       <label xml:lang="en">Login with local user account</label>
       <info>
         <label xml:lang="de">
-          Diese Kennung gilt nur für diese Anwendung.
+          Diese Kennung gilt nur fÃ¼r diese Anwendung.
         </label>
         <label xml:lang="en">
           This account is local for this application only.
@@ -101,10 +101,10 @@
     </login>
 <!--
     <create url="../authorization/create-account.xed">
-      <label xml:lang="de">Neue persönliche Benutzerkennung einrichten</label>
+      <label xml:lang="de">Neue persÃ¶nliche Benutzerkennung einrichten</label>
       <label xml:lang="en">Generate a new personal user account</label>
       <info>
-        <label xml:lang="de">Sie können Sie hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten, Gasthörer oder Mitglied einer externe Einrichtung sein.</label>
+        <label xml:lang="de">Sie kÃ¶nnen Sie hier selbst eine neue Benutzerkennung nur fÃ¼r diese Anwendung erstellen, sollten Sie Gaststudenten, GasthÃ¶rer oder Mitglied einer externe Einrichtung sein.</label>
         <label xml:lang="en">If you still have no user account for this application, here you can generate yourself a personal user
           account.
           You need an own, personal user account, however, only if you want to place documents in this application.
@@ -123,7 +123,7 @@
       <label xml:lang="en">Create User ID</label>
       <info>
         <label xml:lang="de">
-          Sie können sich hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten/-hörer (der FSU Jena, TU Ilmenau, Uni Erfurt) oder Mitglied einer externe Einrichtung sein.
+          Sie kÃ¶nnen sich hier selbst eine neue Benutzerkennung nur fÃ¼r diese Anwendung erstellen, sollten Sie Gaststudenten/-hÃ¶rer (der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, Hochschule Nordhausen) oder Mitglied einer externe Einrichtung sein.
         </label>
         <label xml:lang="en">
           If you still have no user account for this application and your are a student or member of a external institution, you can generate yourself a personal user account.
