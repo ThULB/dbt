@@ -116,13 +116,13 @@
     <label xml:lang="en">I have no user ID</label>
     <login url="../authorization/new-author.xed" redirectParameter="url">
       <label xml:lang="de">Benutzerkennung anlegen</label>
-      <label xml:lang="en">Create User ID</label>
+      <label xml:lang="en">Create user ID</label>
       <info>
         <label xml:lang="de">
-          Sie können sich hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten/-hörer (der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, Hochschule Nordhausen) oder Mitglied einer externe Einrichtung sein.
+          Sie können sich hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten/-hörer (der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, Hochschule Nordhausen) oder Mitglied einer externen Einrichtung sein.
         </label>
         <label xml:lang="en">
-          If you still have no user account for this application and your are a student or member of a external institution, you can generate yourself a personal user account.
+          You can create a new user ID here specifically for this application if you are a guest student/auditor (of FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, Hochschule Nordhausen) or a member of an external institution.
         </label>
       </info>
     </login>
