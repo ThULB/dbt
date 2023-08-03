@@ -14,6 +14,7 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../dbt/assets/fontawesome-free/scss/solid.scss";
 @import "../dbt/assets/fontawesome-free/scss/regular.scss";
 
+@import "../mir-layout/scss/common/forms";
 @import "../mir-layout/scss/common/fileupload";
 @import "../mir-layout/scss/common/print";
 @import "../mir-layout/scss/common/mir_basket";
@@ -47,3 +48,4 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "./dbt/mir2fix/resultlist";
 @import "./dbt/mir2fix/login";
 @import "./dbt/mir2fix/dropdown";
+@import "./dbt/mir2fix/xeditor";
