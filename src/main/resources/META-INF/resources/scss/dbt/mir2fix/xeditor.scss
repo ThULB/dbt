@@ -1,29 +1,38 @@
-.expand-item {
-  position: inherit;
-}
+#container-main {
+  form {
+    .expand-item {
+      position: inherit;
+    }
 
-.mir-fieldset-legend {
-  border-color: $input-fieldset-border-color;
-}
+    div.is-invalid {
+      color: map-get(map-get($form-validation-states, 'invalid'),'color');
+      input, select {
+        border-color: map-get(map-get($form-validation-states, 'invalid'),'color');
+      }
+    }
 
-div.mir-fieldset-content {
-  & > div.form-group {
-    & > div.col-md-6 {
+    .mir-fieldset-legend {
       border-color: $input-fieldset-border-color;
     }
+
+    div.mir-fieldset-content {
+      & > div.form-group {
+        & > div.col-md-6 {
+          border-color: $input-fieldset-border-color;
+        }
+      }
+    }
+
+    .search-completion {
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
+    }
+    .select2-selection {
+      border: 1px solid $input-border-color;
+      height: calc(1.5em + 0.75rem + 2px);;
+      padding: 0.175rem 0.75rem;
+    }
+    .select2-selection__arrow {
+      top: 8px;
+    }
   }
-}
-
-.search-completion {
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2), 0 2px 5px 0 rgba(0, 0, 0, 0.19);
-}
-
-#container-main .select2-selection {
-  border: 1px solid $input-border-color;
-  height: calc(1.5em + 0.75rem + 2px);;
-  padding: 0.175rem 0.75rem;
-}
-
-#container-main .select2-selection__arrow {
-  top: 8px;
 }
