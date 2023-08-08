@@ -87,6 +87,7 @@ import de.urmel_dl.dbt.media.entity.Sources.Source;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
+ *
  */
 public class MediaService {
 
@@ -102,8 +103,6 @@ public class MediaService {
 
     public static final Path THUMB_STORAGE_PATH;
 
-    public static final Path SUBT_STORAGE_PATH;
-
     public static final String THUMB_FORMAT_SCALED;
 
     public static final String SERVER_ADDRESS;
@@ -117,10 +116,6 @@ public class MediaService {
     private static final MCRCache<String, List<Path>> MEDIA_FILES_CACHE = new MCRCache<>(1000L, "MediaFileCache");
 
     private static final MCRCache<String, List<Path>> THUMB_FILES_CACHE = new MCRCache<>(1000L, "ThumbFileCache");
-
-    private static final MCRCache<String, List<Path>> SUBT_FILES_CACHE = new MCRCache<>(1000L, "SubFileCache");
-
-    private static final List<String> CP_SUBT_FILE_EXT = Arrays.asList(".vtt", ".srt");
 
     private static final Closeable TASK_SHUTDOWNHANDLER = new Closeable() {
         @Override
@@ -163,8 +158,8 @@ public class MediaService {
         int poolSize = MCRConfiguration2.getInt(CONFIG_PREFIX + "ThreadCount").orElse(4);
 
         final ExecutorService threadPool = new ThreadPoolExecutor(poolSize, poolSize, 0L, TimeUnit.MILLISECONDS,
-                MCRProcessableFactory.newPriorityBlockingQueue(),
-                new ThreadFactoryBuilder().setNameFormat("MediaService-#%d").build());
+            MCRProcessableFactory.newPriorityBlockingQueue(),
+            new ThreadFactoryBuilder().setNameFormat("MediaService-#%d").build());
 
         TASK_COLLECTION = new MCRProcessableDefaultCollection("MediaService");
         TASK_COLLECTION.setProperty("pool size (threads)", poolSize);
@@ -178,7 +173,6 @@ public class MediaService {
 
         MEDIA_STORAGE_PATH = Paths.get(MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Media.StoragePath"));
         THUMB_STORAGE_PATH = Paths.get(MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Thumb.StoragePath"));
-        SUBT_STORAGE_PATH = Paths.get(MCRConfiguration2.getStringOrThrow(CONFIG_PREFIX + "Subtitle.StoragePath"));
         THUMB_FORMAT_SCALED = MCRConfiguration2.getString(CONFIG_PREFIX + "Thumb.FormatScaled").orElse("JPG");
     }
 
@@ -198,31 +192,31 @@ public class MediaService {
 
     public static boolean isMediaSupported(Path path) {
         return MCRConfiguration2.getString(CONFIG_PREFIX + "SupportedExtensions")
-                .map(MCRConfiguration2::splitValue)
-                .orElseGet(() -> Stream.of(".avi", ".mp4", ".mov", ".mkv"))
-                .anyMatch(e -> {
-                    String fn = path.getFileName().toString();
-                    return fn.length() > e.length() && fn.substring(fn.length() - e.length()).equalsIgnoreCase(e);
-                });
+            .map(MCRConfiguration2::splitValue)
+            .orElseGet(() -> Stream.of(".avi", ".mp4", ".mov", ".mkv"))
+            .anyMatch(e -> {
+                String fn = path.getFileName().toString();
+                return fn.length() > e.length() && fn.substring(fn.length() - e.length()).equalsIgnoreCase(e);
+            });
     }
 
     public static boolean hasMediaFiles(String id) {
         return Optional.ofNullable(getMediaFiles(id)).map(fs -> fs.stream()
-                .map(f -> CP_MEDIA_FILE_EXT.stream().anyMatch(ext -> f.getFileName().toString().endsWith(ext))).findAny()
-                .isPresent()).orElse(false);
+            .map(f -> CP_MEDIA_FILE_EXT.stream().anyMatch(ext -> f.getFileName().toString().endsWith(ext))).findAny()
+            .isPresent()).orElse(false);
     }
 
     public static boolean hasSMILFile(String id) {
         return Optional.ofNullable(getMediaFiles(id))
-                .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findAny().isPresent())
-                .orElse(false);
+            .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findAny().isPresent())
+            .orElse(false);
     }
 
     public static String getSMILFile(String id) {
         return Optional.ofNullable(getMediaFiles(id))
-                .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findFirst()
-                        .map(op -> op.getFileName().toString()).orElse(null))
-                .orElse(null);
+            .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findFirst()
+                .map(op -> op.getFileName().toString()).orElse(null))
+            .orElse(null);
     }
 
     public static Path getMediaFile(String id, String fileName) {
@@ -233,11 +227,10 @@ public class MediaService {
         List<Path> files = MEDIA_FILES_CACHE.get(id);
 
         if (files == null) {
-            Path parent = MEDIA_STORAGE_PATH.resolve(id);
-
-            try (Stream<Path> fs = Files.walk(parent)) {
-                files = fs.filter(f -> !f.equals(parent))
-                        .collect(Collectors.toList());
+            try {
+                Path parent = MEDIA_STORAGE_PATH.resolve(id);
+                files = Files.walk(parent).filter(f -> !f.equals(parent))
+                    .collect(Collectors.toList());
                 MEDIA_FILES_CACHE.put(id, files);
             } catch (IOException e) {
                 files = null;
@@ -293,18 +286,18 @@ public class MediaService {
     private static String scaledFileName(Path file, int width, int height) {
         String fileName = file.getFileName().toString();
         return Optional.of(fileName.lastIndexOf(".")).filter(o -> o != -1).map(o -> fileName.substring(0, o))
-                .orElse(fileName) + "-" + (width > 0 ? Integer.toString(width) + "w" : "")
-                + (height > 0 ? Integer.toString(height) + "h" : "") + "." + THUMB_FORMAT_SCALED.toLowerCase(Locale.ROOT);
+            .orElse(fileName) + "-" + (width > 0 ? Integer.toString(width) + "w" : "")
+            + (height > 0 ? Integer.toString(height) + "h" : "") + "." + THUMB_FORMAT_SCALED.toLowerCase(Locale.ROOT);
     }
 
     public static List<Path> getThumbFiles(String id) {
         List<Path> files = THUMB_FILES_CACHE.get(id);
 
         if (files == null) {
-            Path parent = THUMB_STORAGE_PATH.resolve(id);
-            try (Stream<Path> fs = Files.walk(parent)) {
-                files = fs.filter(f -> !f.equals(parent))
-                        .collect(Collectors.toList());
+            try {
+                Path parent = THUMB_STORAGE_PATH.resolve(id);
+                files = Files.walk(parent).filter(f -> !f.equals(parent))
+                    .collect(Collectors.toList());
                 THUMB_FILES_CACHE.put(id, files);
             } catch (IOException e) {
                 files = null;
@@ -314,51 +307,25 @@ public class MediaService {
         return files;
     }
 
-    public static List<Path> getSubtitleFiles(String id) {
-        List<Path> files = SUBT_FILES_CACHE.get(id);
-
-        if (files == null) {
-            Path parent = SUBT_STORAGE_PATH.resolve(id);
-            try (Stream<Path> fs = Files.walk(parent)) {
-                files = fs.filter(f -> !f.equals(parent))
-                        .collect(Collectors.toList());
-                SUBT_FILES_CACHE.put(id, files);
-            } catch (IOException e) {
-                files = null;
-            }
-        }
-
-        return files;
-    }
-
-    public static Path getSubtitleFile(String id, String fileName) {
-        return SUBT_STORAGE_PATH.resolve(id).resolve(fileName);
-    }
-
     public static void deleteMediaFiles(String id) throws IOException {
         deleteFiles(MEDIA_STORAGE_PATH.resolve(id));
         MEDIA_FILES_CACHE.remove(id);
         deleteFiles(THUMB_STORAGE_PATH.resolve(id));
         THUMB_FILES_CACHE.remove(id);
-        deleteFiles(SUBT_STORAGE_PATH.resolve(id));
-        SUBT_FILES_CACHE.remove(id);
     }
 
     private static void deleteFiles(Path path) throws IOException {
-        if (Files.exists(path)) {
-            try (Stream<Path> walk = Files.walk(path, FileVisitOption.FOLLOW_LINKS)) {
-                walk.sorted(Comparator.reverseOrder())
-                        .map(Path::toFile)
-                        .forEach(File::delete);
-            }
-        }
+        Files.walk(path, FileVisitOption.FOLLOW_LINKS)
+            .sorted(Comparator.reverseOrder())
+            .map(Path::toFile)
+            .forEach(File::delete);
     }
 
     public static String buildInternalId(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             return String.format(Locale.ROOT, "%032X",
-                    new BigInteger(1, md.digest(input.getBytes(StandardCharsets.UTF_8))));
+                new BigInteger(1, md.digest(input.getBytes(StandardCharsets.UTF_8))));
         } catch (NoSuchAlgorithmException e) {
             return input;
         }
@@ -370,45 +337,23 @@ public class MediaService {
 
     public static Sources buildMediaSources(String id, String ipAddress, String... queryParameters) {
         return Optional.ofNullable(getMediaFiles(id)).map(f -> Sources.build(id, f, ipAddress, queryParameters))
-                .orElse(null);
+            .orElse(null);
     }
 
     public static Sources buildThumbSources(String id) {
         return Optional.ofNullable(getThumbFiles(id))
-                .map(f -> new Sources(id,
-                        f.stream().map(file -> file.getFileName()).sorted()
-                                .map(file -> new Source("image/jpeg", file.toString()))
-                                .collect(Collectors.toList())))
-                .orElse(null);
-    }
-
-    public static String getSubtitleMimeType(Path file) {
-        String fn = file.getFileName().toString();
-        String ext = fn.substring(fn.lastIndexOf(".")).toLowerCase(Locale.ROOT);
-
-        switch (ext) {
-            case ".vtt":
-                return "text/vtt";
-            case ".srt":
-                return "application/x-subrip";
-            default:
-                return null;
-        }
-    }
-
-    public static Sources buildSubtitleSources(String id) {
-        return Optional.ofNullable(getSubtitleFiles(id))
-                .map(f -> new Sources(id,
-                        f.stream().map(file -> file.getFileName()).sorted()
-                                .map(file -> new Source(getSubtitleMimeType(file), file.toString()))
-                                .collect(Collectors.toList())))
-                .orElse(null);
+            .map(f -> new Sources(id,
+                f.stream().map(file -> file.getFileName()).sorted()
+                    .map(file -> new Source("image/jpeg", file.toString()))
+                    .collect(Collectors.toList())))
+            .orElse(null);
     }
 
     /**
      * Task for media encoding.
      *
      * @author Ren\u00E9 Adler (eagle)
+     *
      */
     static class EncodeTask implements Runnable {
 
@@ -435,28 +380,28 @@ public class MediaService {
                 Path tmpFile = Files.createTempDirectory("media").resolve(mediaFile.getFileName().toString());
                 try {
                     Client client = ClientBuilder.newBuilder()
-                            .register(MultiPartFeature.class).build();
+                        .register(MultiPartFeature.class).build();
                     client.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024);
                     client.property(ClientProperties.REQUEST_ENTITY_PROCESSING, "CHUNKED");
 
                     WebTarget webTarget = client
-                            .target(MediaService.SERVER_ADDRESS + MediaService.CONVERTER_ADD_JOB_PATH);
+                        .target(MediaService.SERVER_ADDRESS + MediaService.CONVERTER_ADD_JOB_PATH);
 
                     FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
                     formDataMultiPart.field("id", id);
                     formDataMultiPart.field("filename", mediaFile.getFileName().toString());
                     formDataMultiPart.field("priority", Integer.toString(priority));
                     formDataMultiPart.field("callback",
-                            MCRFrontendUtil.getBaseURL() + "rsc/media/completeCallback");
+                        MCRFrontendUtil.getBaseURL() + "rsc/media/completeCallback");
 
                     Files.copy(mediaFile, tmpFile, StandardCopyOption.REPLACE_EXISTING);
 
                     formDataMultiPart.bodyPart(new FileDataBodyPart("file",
-                            tmpFile.toFile(),
-                            MediaType.APPLICATION_OCTET_STREAM_TYPE));
+                        tmpFile.toFile(),
+                        MediaType.APPLICATION_OCTET_STREAM_TYPE));
 
                     Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE)
-                            .post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+                        .post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
 
                     if (response.getStatus() != 200) {
                         LOGGER.error("Encoder service send status info {}.", response.getStatusInfo());
@@ -477,6 +422,7 @@ public class MediaService {
      * Task for encoded media files.
      *
      * @author Ren\u00E9 Adler (eagle)
+     *
      */
     static class CompletedJobTask implements Runnable {
 
@@ -499,7 +445,7 @@ public class MediaService {
                 Path tmpFile = Files.createTempDirectory("media").resolve(job.getId() + ".zip");
                 try {
                     URL website = new URL(SERVER_ADDRESS + new MessageFormat(CONVERTER_DOWNLOAD_PATH, Locale.ROOT)
-                            .format(new Object[]{job.getId().replaceAll(" ", "%20")}));
+                        .format(new Object[] { job.getId().replaceAll(" ", "%20") }));
                     ReadableByteChannel rbc = Channels.newChannel(website.openStream());
 
                     try (FileOutputStream fos = new FileOutputStream(tmpFile.toFile())) {
@@ -509,7 +455,6 @@ public class MediaService {
                     String internalId = buildInternalId(job.getId());
                     Path mediaStorePath = MEDIA_STORAGE_PATH.resolve(internalId);
                     Path thumbStorePath = THUMB_STORAGE_PATH.resolve(internalId);
-                    Path subtStorePath = SUBT_STORAGE_PATH.resolve(internalId);
 
                     if (Files.notExists(mediaStorePath)) {
                         Files.createDirectories(mediaStorePath);
@@ -519,63 +464,39 @@ public class MediaService {
                         Files.createDirectories(thumbStorePath);
                     }
 
-                    if (Files.notExists(subtStorePath)) {
-                        Files.createDirectories(subtStorePath);
-                    }
-
                     Map<String, String> env = new HashMap<>();
                     env.put("create", "false");
 
                     URI zipUri = URI.create("jar:" + tmpFile.toFile().toURI());
                     try (FileSystem fs = FileSystems.newFileSystem(zipUri, env)) {
                         Path root = fs.getPath("/");
-                        try (Stream<Path> zfs = Files.walk(root)) {
-                            zfs.filter(p -> Optional.ofNullable(p.getFileName())
-                                            .map(fn -> CP_MEDIA_FILE_EXT.stream().anyMatch(ext -> fn.toString().endsWith(ext)))
-                                            .orElse(false))
-                                    .forEach(p -> {
-                                        try {
-                                            LOGGER.info("copy media file {} to {}", p,
-                                                    mediaStorePath.resolve(root.relativize(p).toString()));
-                                            Files.copy(p, mediaStorePath.resolve(root.relativize(p).toString()),
-                                                    StandardCopyOption.REPLACE_EXISTING);
-                                        } catch (IOException e) {
-                                            throw new UncheckedIOException(e);
-                                        }
-                                    });
-                        }
+                        Files.walk(root).filter(p -> Optional.ofNullable(p.getFileName())
+                            .map(fn -> CP_MEDIA_FILE_EXT.stream().anyMatch(ext -> fn.toString().endsWith(ext)))
+                            .orElse(false))
+                            .forEach(p -> {
+                                try {
+                                    LOGGER.info("copy media file {} to {}", p,
+                                        mediaStorePath.resolve(root.relativize(p).toString()));
+                                    Files.copy(p, mediaStorePath.resolve(root.relativize(p).toString()),
+                                        StandardCopyOption.REPLACE_EXISTING);
+                                } catch (IOException e) {
+                                    throw new UncheckedIOException(e);
+                                }
+                            });
 
-                        try (Stream<Path> zfs = Files.walk(root)) {
-                            zfs.filter(p -> Optional.ofNullable(p.getFileName())
-                                            .map(fn -> CP_THUMB_FILE_EXT.stream().anyMatch(ext -> fn.toString().endsWith(ext)))
-                                            .orElse(false))
-                                    .forEach(p -> {
-                                        try {
-                                            LOGGER.info("copy thumb {} to {}", p,
-                                                    thumbStorePath.resolve(root.relativize(p).toString()));
-                                            Files.copy(p, thumbStorePath.resolve(root.relativize(p).toString()),
-                                                    StandardCopyOption.REPLACE_EXISTING);
-                                        } catch (IOException e) {
-                                            throw new UncheckedIOException(e);
-                                        }
-                                    });
-                        }
-
-                        try (Stream<Path> zfs = Files.walk(root)) {
-                            zfs.filter(p -> Optional.ofNullable(p.getFileName())
-                                            .map(fn -> CP_SUBT_FILE_EXT.stream().anyMatch(ext -> fn.toString().endsWith(ext)))
-                                            .orElse(false))
-                                    .forEach(p -> {
-                                        try {
-                                            LOGGER.info("copy subtitle {} to {}", p,
-                                                    subtStorePath.resolve(root.relativize(p).toString()));
-                                            Files.copy(p, subtStorePath.resolve(root.relativize(p).toString()),
-                                                    StandardCopyOption.REPLACE_EXISTING);
-                                        } catch (IOException e) {
-                                            throw new UncheckedIOException(e);
-                                        }
-                                    });
-                        }
+                        Files.walk(root).filter(p -> Optional.ofNullable(p.getFileName())
+                            .map(fn -> CP_THUMB_FILE_EXT.stream().anyMatch(ext -> fn.toString().endsWith(ext)))
+                            .orElse(false))
+                            .forEach(p -> {
+                                try {
+                                    LOGGER.info("copy thumb {} to {}", p,
+                                        thumbStorePath.resolve(root.relativize(p).toString()));
+                                    Files.copy(p, thumbStorePath.resolve(root.relativize(p).toString()),
+                                        StandardCopyOption.REPLACE_EXISTING);
+                                } catch (IOException e) {
+                                    throw new UncheckedIOException(e);
+                                }
+                            });
                     }
 
                     removeJob();
@@ -593,8 +514,8 @@ public class MediaService {
             Client client = ClientBuilder.newBuilder().build();
 
             WebTarget webTarget = client
-                    .target(MediaService.SERVER_ADDRESS + new MessageFormat(CONVERTER_REMOVE_JOB_PATH, Locale.ROOT)
-                            .format(new Object[]{job.getId()}));
+                .target(MediaService.SERVER_ADDRESS + new MessageFormat(CONVERTER_REMOVE_JOB_PATH, Locale.ROOT)
+                    .format(new Object[] { job.getId() }));
 
             Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
 
