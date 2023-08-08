@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,7 +42,6 @@ import de.urmel_dl.dbt.media.MediaService;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
- *
  */
 @MCRCommandGroup(name = "Media Service Commands")
 public class MediaServiceCommands extends MCRAbstractCommands {
@@ -49,22 +49,22 @@ public class MediaServiceCommands extends MCRAbstractCommands {
     private static final Logger LOGGER = LogManager.getLogger();
 
     @MCRCommand(syntax = "encode all media files of derivates",
-        help = "encode all media files of derivates with a supported media type",
-        order = 10)
+            help = "encode all media files of derivates with a supported media type",
+            order = 10)
     public static List<String> encodeAll() {
         return forAllDerivates("encode all media files of derivate {0}");
     }
 
     @MCRCommand(syntax = "force encode all media files of derivates",
-        help = "force encode all media files of derivates with a supported media type",
-        order = 20)
+            help = "force encode all media files of derivates with a supported media type",
+            order = 20)
     public static List<String> forceEncodeAll() {
         return forAllDerivates("force encode all media files of derivate {0}");
     }
 
     @MCRCommand(syntax = "encode all media files of derivate {0}",
-        help = "encode all media files of derivate {0} with a supported media type",
-        order = 11)
+            help = "encode all media files of derivate {0} with a supported media type",
+            order = 11)
     public static List<String> encodeMediaFilesOfDerivate(String derivateId) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -72,15 +72,17 @@ public class MediaServiceCommands extends MCRAbstractCommands {
             throw new MCRException("Derivate " + derivateId + " does not exist or is not a directory!");
         }
 
-        return Files.walk(derivateRoot).filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
-            .map(f -> new MessageFormat("encode media file {0} of derivate {1}", Locale.ROOT)
-                .format(new Object[] { f.getFileName().toString(), derivateId }))
-            .collect(Collectors.toList());
+        try (Stream<Path> fs = Files.walk(derivateRoot)) {
+            return fs.filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
+                    .map(f -> new MessageFormat("encode media file {0} of derivate {1}", Locale.ROOT)
+                            .format(new Object[]{f.getFileName().toString(), derivateId}))
+                    .collect(Collectors.toList());
+        }
     }
 
     @MCRCommand(syntax = "force encode all media files of derivate {0}",
-        help = "force encode all media files of derivate {0} with a supported media type",
-        order = 21)
+            help = "force encode all media files of derivate {0} with a supported media type",
+            order = 21)
     public static List<String> forceEncodeMediaFilesOfDerivate(String derivateId) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -88,22 +90,24 @@ public class MediaServiceCommands extends MCRAbstractCommands {
             throw new MCRException("Derivate " + derivateId + " does not exist or is not a directory!");
         }
 
-        return Files.walk(derivateRoot).filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
-            .map(f -> new MessageFormat("force encode media file {0} of derivate {1}", Locale.ROOT)
-                .format(new Object[] { f.getFileName().toString(), derivateId }))
-            .collect(Collectors.toList());
+        try (Stream<Path> fs = Files.walk(derivateRoot)) {
+            return fs.filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
+                    .map(f -> new MessageFormat("force encode media file {0} of derivate {1}", Locale.ROOT)
+                            .format(new Object[]{f.getFileName().toString(), derivateId}))
+                    .collect(Collectors.toList());
+        }
     }
 
     @MCRCommand(syntax = "encode media file {1} of derivate {0}",
-        help = "encode media file {1} of derivate {0}",
-        order = 1)
+            help = "encode media file {1} of derivate {0}",
+            order = 1)
     public static void encodeMediaFileOfDerivate(String derivateId, String fileName) {
         encodeMediaFileOfDerivate(derivateId, fileName, false);
     }
 
     @MCRCommand(syntax = "force encode media file {1} of derivate {0}",
-        help = "force encode media file {1} of derivate {0}",
-        order = 2)
+            help = "force encode media file {1} of derivate {0}",
+            order = 2)
     public static void forceEncodeMediaFileOfDerivate(String derivateId, String fileName) {
         encodeMediaFileOfDerivate(derivateId, fileName, true);
     }
@@ -126,7 +130,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
         }
 
         if (!force
-            && MediaService.hasMediaFiles(MediaService.buildInternalId(derivateRoot.getOwner() + "_" + fileName))) {
+                && MediaService.hasMediaFiles(MediaService.buildInternalId(derivateRoot.getOwner() + "_" + fileName))) {
             LOGGER.info("Skipping encoding of " + fileName + ", because it's already encoded.");
             return;
         }
@@ -139,7 +143,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
         List<String> cmds = new ArrayList<>(ids.size());
 
         ids.stream().sorted(Collections.reverseOrder())
-            .forEach(id -> cmds.add(new MessageFormat(batchCommandSyntax, Locale.ROOT).format(new Object[] { id })));
+                .forEach(id -> cmds.add(new MessageFormat(batchCommandSyntax, Locale.ROOT).format(new Object[]{id})));
 
         return cmds;
     }
