@@ -187,8 +187,12 @@ public class MediaService {
     }
 
     public static void encodeMediaFile(String id, Path mediaFile, int priority) {
+        encodeMediaFile(id, mediaFile, priority, null);
+    }
+
+    public static void encodeMediaFile(String id, Path mediaFile, int priority, String language) {
         if (isMediaSupported(mediaFile)) {
-            executor().submit(new EncodeTask(id, mediaFile, priority));
+            executor().submit(new EncodeTask(id, mediaFile, priority, language));
         }
     }
 
@@ -418,10 +422,13 @@ public class MediaService {
 
         private final int priority;
 
-        EncodeTask(String id, Path mediaFile, int priority) {
+        private final String language;
+
+        EncodeTask(String id, Path mediaFile, int priority, String language) {
             this.id = id;
             this.mediaFile = mediaFile;
             this.priority = priority;
+            this.language = language;
         }
 
         /* (non-Javadoc)
@@ -446,6 +453,7 @@ public class MediaService {
                     formDataMultiPart.field("id", id);
                     formDataMultiPart.field("filename", mediaFile.getFileName().toString());
                     formDataMultiPart.field("priority", Integer.toString(priority));
+                    formDataMultiPart.field("lang", language);
                     formDataMultiPart.field("callback",
                             MCRFrontendUtil.getBaseURL() + "rsc/media/completeCallback");
 
