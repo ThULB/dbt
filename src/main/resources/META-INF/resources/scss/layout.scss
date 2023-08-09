@@ -10,6 +10,8 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 
 @import "../mir-layout/assets/bootstrap/bootstrap";
 
+@import "./dbt/_variables_derived";
+
 @import "../dbt/assets/fontawesome-free/scss/brands.scss";
 @import "../dbt/assets/fontawesome-free/scss/solid.scss";
 @import "../dbt/assets/fontawesome-free/scss/regular.scss";

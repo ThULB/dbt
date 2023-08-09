@@ -1,0 +1,6 @@
+// ---------------------------------------------------
+// Badges (Results, Metadata)
+// ---------------------------------------------------
+$badge-state-delete-color: theme-color-level('danger', $alert-color-level);
+$badge-state-delete-bg: theme-color-level('danger', $alert-bg-level);
+$badge-state-delete-span-bg: darken($secondary, 80%);

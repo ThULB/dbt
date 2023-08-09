@@ -25,7 +25,7 @@
     "angular-translate": "~2.18.1",
     "angular-translate-loader-partial": "~2.18.1",
     "angular-modal-service": "~0.15.2",
-    "bootstrap": "4.5.0",
+    "bootstrap": "4.6.2",
     "bootstrap-fileinput": "~5.1.1",
     "node-waves": "~0.7.6",
     "summernote": "~0.8.11",
