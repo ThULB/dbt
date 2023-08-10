@@ -98,21 +98,71 @@ public class MediaServiceCommands extends MCRAbstractCommands {
         }
     }
 
+    @MCRCommand(syntax = "encode all media files of derivate {0} with language {1}",
+            help = "encode all media files of derivate {0} with a supported media type and given language {1}",
+            order = 12)
+    public static List<String> encodeMediaFilesOfDerivateWithLanguage(String derivateId, String language) throws IOException {
+        MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
+
+        if (!Files.exists(derivateRoot)) {
+            throw new MCRException("Derivate " + derivateId + " does not exist or is not a directory!");
+        }
+
+        try (Stream<Path> fs = Files.walk(derivateRoot)) {
+            return fs.filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
+                    .map(f -> new MessageFormat("encode media file {0} of derivate {1} with language {2}", Locale.ROOT)
+                            .format(new Object[]{f.getFileName().toString(), derivateId, language}))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    @MCRCommand(syntax = "force encode all media files of derivate {0} with language {1}",
+            help = "force encode all media files of derivate {0} with a supported media type and given language {1}",
+            order = 22)
+    public static List<String> forceEncodeMediaFilesOfDerivateWithLanguage(String derivateId, String language) throws IOException {
+        MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
+
+        if (!Files.exists(derivateRoot)) {
+            throw new MCRException("Derivate " + derivateId + " does not exist or is not a directory!");
+        }
+
+        try (Stream<Path> fs = Files.walk(derivateRoot)) {
+            return fs.filter(f -> !f.equals(derivateRoot) && MediaService.isMediaSupported(f))
+                    .map(f -> new MessageFormat("force encode media file {0} of derivate {1} with language {2}", Locale.ROOT)
+                            .format(new Object[]{f.getFileName().toString(), derivateId, language}))
+                    .collect(Collectors.toList());
+        }
+    }
+
     @MCRCommand(syntax = "encode media file {1} of derivate {0}",
             help = "encode media file {1} of derivate {0}",
             order = 1)
     public static void encodeMediaFileOfDerivate(String derivateId, String fileName) {
-        encodeMediaFileOfDerivate(derivateId, fileName, false);
+        encodeMediaFileOfDerivate(derivateId, fileName, false, null);
     }
 
     @MCRCommand(syntax = "force encode media file {1} of derivate {0}",
             help = "force encode media file {1} of derivate {0}",
             order = 2)
-    public static void forceEncodeMediaFileOfDerivate(String derivateId, String fileName) {
-        encodeMediaFileOfDerivate(derivateId, fileName, true);
+    public static void forceEncodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName) {
+        encodeMediaFileOfDerivate(derivateId, fileName, true, null);
     }
 
-    private static void encodeMediaFileOfDerivate(String derivateId, String fileName, boolean force) {
+    @MCRCommand(syntax = "encode media file {1} of derivate {0} with language {2}",
+            help = "encode media file {1} of derivate {0} with language {2}",
+            order = 3)
+    public static void encodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName, String language) {
+        encodeMediaFileOfDerivate(derivateId, fileName, false, language);
+    }
+
+    @MCRCommand(syntax = "force encode media file {1} of derivate {0} with language {2}",
+            help = "force encode media file {1} of derivate {0} with language {2}",
+            order = 4)
+    public static void forceEncodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName, String language) {
+        encodeMediaFileOfDerivate(derivateId, fileName, true, language);
+    }
+
+    private static void encodeMediaFileOfDerivate(String derivateId, String fileName, boolean force, String language) {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
         if (!Files.exists(derivateRoot)) {
@@ -135,7 +185,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
             return;
         }
 
-        MediaService.encodeMediaFile(derivateRoot.getOwner() + "_" + fileName, mediaFile, 0);
+        MediaService.encodeMediaFile(derivateRoot.getOwner() + "_" + fileName, mediaFile, 0, language);
     }
 
     private static List<String> forAllDerivates(String batchCommandSyntax) {
