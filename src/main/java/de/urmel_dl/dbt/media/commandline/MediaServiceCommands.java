@@ -64,7 +64,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "encode all media files of derivate {0}",
             help = "encode all media files of derivate {0} with a supported media type",
-            order = 11)
+            order = 12)
     public static List<String> encodeMediaFilesOfDerivate(String derivateId) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -82,7 +82,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "force encode all media files of derivate {0}",
             help = "force encode all media files of derivate {0} with a supported media type",
-            order = 21)
+            order = 22)
     public static List<String> forceEncodeMediaFilesOfDerivate(String derivateId) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -100,7 +100,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "encode all media files of derivate {0} with language {1}",
             help = "encode all media files of derivate {0} with a supported media type and given language {1}",
-            order = 12)
+            order = 11)
     public static List<String> encodeMediaFilesOfDerivateWithLanguage(String derivateId, String language) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -118,7 +118,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "force encode all media files of derivate {0} with language {1}",
             help = "force encode all media files of derivate {0} with a supported media type and given language {1}",
-            order = 22)
+            order = 21)
     public static List<String> forceEncodeMediaFilesOfDerivateWithLanguage(String derivateId, String language) throws IOException {
         MCRPath derivateRoot = MCRPath.getPath(derivateId, "/");
 
@@ -136,28 +136,28 @@ public class MediaServiceCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "encode media file {1} of derivate {0}",
             help = "encode media file {1} of derivate {0}",
-            order = 1)
+            order = 3)
     public static void encodeMediaFileOfDerivate(String derivateId, String fileName) {
         encodeMediaFileOfDerivate(derivateId, fileName, false, null);
     }
 
     @MCRCommand(syntax = "force encode media file {1} of derivate {0}",
             help = "force encode media file {1} of derivate {0}",
-            order = 2)
-    public static void forceEncodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName) {
+            order = 4)
+    public static void forceEncodeMediaFileOfDerivate(String derivateId, String fileName) {
         encodeMediaFileOfDerivate(derivateId, fileName, true, null);
     }
 
     @MCRCommand(syntax = "encode media file {1} of derivate {0} with language {2}",
             help = "encode media file {1} of derivate {0} with language {2}",
-            order = 3)
+            order = 1)
     public static void encodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName, String language) {
         encodeMediaFileOfDerivate(derivateId, fileName, false, language);
     }
 
     @MCRCommand(syntax = "force encode media file {1} of derivate {0} with language {2}",
             help = "force encode media file {1} of derivate {0} with language {2}",
-            order = 4)
+            order = 2)
     public static void forceEncodeMediaFileOfDerivateWithLanguage(String derivateId, String fileName, String language) {
         encodeMediaFileOfDerivate(derivateId, fileName, true, language);
     }
