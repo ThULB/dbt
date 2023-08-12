@@ -453,7 +453,7 @@ public class MediaService {
                     formDataMultiPart.field("id", id);
                     formDataMultiPart.field("filename", mediaFile.getFileName().toString());
                     formDataMultiPart.field("priority", Integer.toString(priority));
-                    formDataMultiPart.field("lang", language);
+                    Optional.ofNullable(language).ifPresent(l -> formDataMultiPart.field("lang", l));
                     formDataMultiPart.field("callback",
                             MCRFrontendUtil.getBaseURL() + "rsc/media/completeCallback");
 
