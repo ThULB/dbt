@@ -34,22 +34,6 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HEAD;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.StreamingOutput;
-import jakarta.xml.bind.JAXBException;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSession;
@@ -67,10 +51,24 @@ import de.urmel_dl.dbt.media.entity.Sources;
 import de.urmel_dl.dbt.utils.EntityFactory;
 import de.urmel_dl.dbt.utils.MimeType;
 import de.urmel_dl.dbt.utils.RangeStreamingOutput;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HEAD;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.StreamingOutput;
+import jakarta.xml.bind.JAXBException;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
- *
  */
 @MCRStaticContent
 @Path("media")
@@ -110,6 +108,13 @@ public class MediaServiceResource {
     }
 
     @GET
+    @Path("subtitles/{id:.+}")
+    @Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+    public Sources subtitleSources(@PathParam("id") String id) {
+        return MediaService.buildSubtitleSources(id);
+    }
+
+    @GET
     @Path("thumb/{id:.+}/{fileName:.+}")
     @Produces("*/*")
     public Response thumb(@PathParam("id") String id,
@@ -133,6 +138,20 @@ public class MediaServiceResource {
             Optional.of(width).filter(s -> !s.isEmpty()).map(Integer::parseInt).orElse(-1),
             Optional.ofNullable(height.replaceAll(":", "")).filter(s -> !s.isEmpty()).map(Integer::parseInt)
                 .orElse(-1));
+        if (file != null) {
+            return buildStream(file, null);
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+
+    @GET
+    @Path("subtitle/{id:.+}/{fileName:.+}")
+    @Produces("*/*")
+    public Response subtitle(@PathParam("id") String id,
+        @PathParam("fileName") String fileName) throws Exception {
+        java.nio.file.Path file = MediaService.getSubtitleFile(id, fileName);
+
         if (file != null) {
             return buildStream(file, null);
         } else {
