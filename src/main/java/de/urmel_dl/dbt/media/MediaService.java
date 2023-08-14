@@ -18,50 +18,10 @@
  */
 package de.urmel_dl.dbt.media;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.math.BigInteger;
-import java.net.URI;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.FileVisitOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.imageio.ImageIO;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import de.urmel_dl.dbt.media.entity.ConverterJob;
+import de.urmel_dl.dbt.media.entity.Sources;
+import de.urmel_dl.dbt.media.entity.Sources.Source;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.client.ClientProperties;
@@ -79,11 +39,36 @@ import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.util.concurrent.processing.MCRProcessableExecutor;
 import org.mycore.util.concurrent.processing.MCRProcessableFactory;
 
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
-
-import de.urmel_dl.dbt.media.entity.ConverterJob;
-import de.urmel_dl.dbt.media.entity.Sources;
-import de.urmel_dl.dbt.media.entity.Sources.Source;
+import javax.imageio.ImageIO;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.math.BigInteger;
+import java.net.URI;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -587,6 +572,10 @@ public class MediaService {
                     }
 
                     removeJob();
+
+                    MediaService.MEDIA_FILES_CACHE.remove(internalId);
+                    MediaService.THUMB_FILES_CACHE.remove(internalId);
+                    MediaService.SUBT_FILES_CACHE.remove(internalId);
                 } catch (Exception e) {
                     throw new MCRException(e);
                 } finally {
