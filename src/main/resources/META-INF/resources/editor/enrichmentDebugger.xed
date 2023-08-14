@@ -93,6 +93,7 @@
                   </xed:repeat>
                 </tbody>
               </table>
+            </xed:bind>
 
             <fieldset class="mt-4">
               <legend>Aufzulösender Identifikator als Ausgangsbasis:</legend>
@@ -121,7 +122,6 @@
                     <div class="col-md-9">
                       <input type="text" class="form-control {$xed-validation-marker}" />
                     </div>
-
                   </div>
                 </xed:bind>
 
@@ -129,7 +129,6 @@
                 <xed:validate xpath="//mods:identifier[@type='urn']" matches="urn:nbn:[a-z]{2}:\S*" i18n="ubo.identifier.urn.validation" display="global" />
                 <xed:validate xpath="//mods:identifier[@type='issn']" matches="[0-9X]{4}\-[0-9X]{4}" i18n="ubo.identifier.issn.validation" display="global" />
                 <xed:validate xpath="//mods:identifier[@type='isbn']" matches="^((978|979)-?)?([\d -]{12}|\d{9})(\d|X)$" i18n="ubo.identifier.isbn.validation" display="global" />
-
               </xed:bind>
 
             </fieldset>
@@ -142,9 +141,6 @@
                 <button class="ml-2 btn btn-secondary" type="submit" xed:target="debug">Debug</button>
               </div>
             </div>
-
-            </xed:bind>
-
           </xed:bind>
 
         </xed:form>
