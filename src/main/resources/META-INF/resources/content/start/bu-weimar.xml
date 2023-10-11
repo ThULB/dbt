@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Online-Publikations-System der Bauhaus-Universität Weimar">
+    <div class="container">
+      <h3>Online-Publikations-System der Bauhaus-Universität Weimar</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Die Bibliothek bietet allen Angehörigen der Hochschule – Lehrenden und Studierenden – die
+            Möglichkeit, elektronisch erzeugte, qualifizierte Dokumente über ihr Online-Publikations-System
+            kostenlos zu veröffentlichen. Die Texte stehen nach ihrer Veröffentlichung weltweit im Internet
+            zur Verfügung und werden von der Bibliothek dauerhaft archiviert. Die Dokumente sind über
+            Bibliothekskataloge und über die Suchmaschinen des WWW erschlossen und zugänglich.
+          </p>
+        </div>
+
+        <div class="col-md-6">
+          <p>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte das Menü "Suchen"; dort
+            stehen Ihnen verschiedene Recherchemöglichkeiten zur Verfügung. Wollen Sie ein Dokument
+            publizieren, wählen Sie bitte das Menü "Publizieren"; mit wenigen Schritten können Sie dort Ihr
+            Dokument an den Publikationsserver übertragen.
+          </p>
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-6">
+          <form action="../../servlets/solr/find" role="search" class="form">
+            <div class="input-group">
+              <input placeholder="Suchen im Bestand" name="condQuery" id="searchTerm" type="text"
+                     class="form-control"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <span aria-hidden="true" class="fa fa-search"></span>
+                </button>
+              </span>
+            </div>
+            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section xml:lang="en" title="Publication Server of Weimar Bauhaus-University">
+    <div class="container">
+      <h3>Publication Server of Weimar Bauhaus-University</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <p>The library offers to publish electronically generated and qualified documents on its online
+            publication system. This service is for university members only and free of charge. After
+            publication, the texts are available worldwide on the Internet and will be archived permanently
+            by the library. The documents are indexed and made accessible in library catalogues and Web
+            search engines.
+          </p>
+        </div>
+
+        <div class="col-md-6">
+          <p>If you want to search for documents of the university, please choose the menu "Search" where you
+            will find several search options. If you want to publish a document, please select the menu
+            "Publish"; here you can submit your document to the publication server in just a few steps.
+          </p>
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-6">
+          <form action="../../servlets/solr/find" role="search" class="form">
+            <div class="input-group">
+              <input placeholder="search in inventory" name="condQuery" id="searchTerm" type="text"
+                     class="form-control"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <span aria-hidden="true" class="fa fa-search"></span>
+                </button>
+              </span>
+            </div>
+            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</MyCoReWebPage>

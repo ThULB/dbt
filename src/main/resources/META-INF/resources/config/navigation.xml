@@ -166,4 +166,12 @@
       </item>
     </group>
   </menu>
+  <menu id="start">
+    <label xml:lang="de">Startseiten</label>
+    <label xml:lang="en">Start Pages</label>
+    <item href="/content/start/bu-weimar.xml" type="intern" replaceMenu="false" constrainPopUp="false">
+      <label xml:lang="de">Bauhaus-Universität Weimar</label>
+      <label xml:lang="en">Weimar Bauhaus-University</label>
+    </item>
+  </menu>
 </navigation>
