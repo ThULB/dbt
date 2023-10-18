@@ -6,7 +6,8 @@
 $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 
 @import "../dbt/assets/fontawesome-free/scss/fontawesome.scss";
-@import "../dbt/assets/video.js/video-js.css";
+// use css import as fallback
+@import "../../../dbt/assets/video.js/video-js.css";
 
 @import "../mir-layout/assets/bootstrap/bootstrap";
 
