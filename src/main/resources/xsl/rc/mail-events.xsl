@@ -17,7 +17,7 @@
   <xsl:param name="type" />
   <xsl:param name="slotId" />
   <xsl:param name="entryId" />
-  
+
   <!-- OPC vars -->
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />
   <xsl:variable name="catalogId" select="document(concat('slot:slotId=',$slotId,'&amp;catalogId'))" />
@@ -210,7 +210,7 @@
       </to>
     </xsl:for-each>
     <bcc>
-      <xsl:value-of select="concat('Elektronische Semesterapparate', ' &lt;', 'elektronische_semesterapparate@uni-jena.de', '&gt;')" />
+      <xsl:value-of select="concat('Elektronische Semesterapparate', ' &lt;', 'dbtadmin@uni-jena.de', '&gt;')" />
     </bcc>
     <subject>
       <xsl:value-of select="concat('ESA ', $slotId, ': Eigentümerwechsel')" />
@@ -237,7 +237,7 @@
         entspricht dem Status des ESA vor der
         Übernahme (aktiv / inaktiv).
       </p>
-      <!-- 
+      <!--
       <strong>Sehr geehrte Damen und Herren,</strong>
       <br />
       <p>
@@ -342,7 +342,7 @@
   <xsl:template match="entry" mode="email">
     <xsl:apply-templates select="opcrecord" mode="email" />
   </xsl:template>
-  
+
   <!-- Entry Templates -->
   <xsl:template match="opcrecord" mode="email">
     <xsl:variable name="slot" select="document(concat('slot:slotId=', $slotId))/slot" />
