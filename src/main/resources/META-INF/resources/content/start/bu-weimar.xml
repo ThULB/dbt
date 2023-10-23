@@ -2,22 +2,33 @@
 <MyCoReWebPage>
   <section xml:lang="de" title="Online-Publikations-System der Bauhaus-Universität Weimar">
     <div class="container">
-      <h3>Online-Publikations-System der Bauhaus-Universität Weimar</h3>
+      <div class="row">
+        <div class="col-md-3">
+          <img src="images/logo-weimar_r0_g155_b180.png"
+               class="img-fluid mb-4"
+               alt="Logo der Universitätsbibliothek Weimar" />
+        </div>
+      </div>
+      <h3>Digitale Bibliothek Thüringen – Portal Weimar</h3>
       <div class="row">
         <div class="col-md-6">
-          <p>Die Bibliothek bietet allen Angehörigen der Hochschule – Lehrenden und Studierenden – die
-            Möglichkeit, elektronisch erzeugte, qualifizierte Dokumente über ihr Online-Publikations-System
-            kostenlos zu veröffentlichen. Die Texte stehen nach ihrer Veröffentlichung weltweit im Internet
-            zur Verfügung und werden von der Bibliothek dauerhaft archiviert. Die Dokumente sind über
-            Bibliothekskataloge und über die Suchmaschinen des WWW erschlossen und zugänglich.
+          <p>Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</p>
+          <p>Die veröffentlichten Texte sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
+            Sie sind über Bibliothekskataloge und Suchmaschinen des World Wide Web erschlossen und leicht zugänglich.
+            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch veröffentlicht werden.
           </p>
         </div>
 
         <div class="col-md-6">
-          <p>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte das Menü "Suchen"; dort
-            stehen Ihnen verschiedene Recherchemöglichkeiten zur Verfügung. Wollen Sie ein Dokument
-            publizieren, wählen Sie bitte das Menü "Publizieren"; mit wenigen Schritten können Sie dort Ihr
-            Dokument an den Publikationsserver übertragen.
+          <p><strong>Wenn Sie nach Texten der Bauhaus-Universität Weimar suchen möchten,</strong>
+            wählen Sie bitte die <strong>„Suchen“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
+            stehen Ihnen weitere Recherchemöglichkeiten zur Verfügung.
+          </p>
+          <p>
+            <strong>Wenn Sie ein Dokument veröffentlichen möchten,</strong> nutzen Sie bitte die
+            <strong>„Publizieren“</strong>-Option im Menü.
+            Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an.
+            In nur wenigen Schritten können Sie Ihr Dokument an unseren Publikationsservice übertragen.
           </p>
         </div>
       </div>
@@ -41,21 +52,33 @@
   </section>
   <section xml:lang="en" title="Publication Server of Weimar Bauhaus-University">
     <div class="container">
-      <h3>Publication Server of Weimar Bauhaus-University</h3>
+      <div class="row">
+        <div class="col-md-3">
+          <img src="images/logo-weimar_r0_g155_b180.png"
+               class="img-fluid mb-4"
+               alt="Logo of university library Weimar" />
+        </div>
+      </div>
+      <h3>Digitale Bibliothek Thüringen – Portal Weimar</h3>
       <div class="row">
         <div class="col-md-6">
-          <p>The library offers to publish electronically generated and qualified documents on its online
-            publication system. This service is for university members only and free of charge. After
-            publication, the texts are available worldwide on the Internet and will be archived permanently
-            by the library. The documents are indexed and made accessible in library catalogues and Web
-            search engines.
-          </p>
+          <p>Welcome to the Publication Service of the Bauhaus University Weimar.</p>
+          <p>The published texts are accessible worldwide on the internet and are permanently archived.
+            They are accessible through library catalogs and search engines of the World Wide Web and
+            are easily accessible.
+            Both initial publications and secondary publications can be electronically published.</p>
         </div>
 
         <div class="col-md-6">
-          <p>If you want to search for documents of the university, please choose the menu "Search" where you
-            will find several search options. If you want to publish a document, please select the menu
-            "Publish"; here you can submit your document to the publication server in just a few steps.
+          <p><strong>If you wish to search for texts from Bauhaus University Weimar,</strong>
+            please select the <strong>“Search”</strong> option in the menu.
+            Additional research options are available under <strong>“Browse.”</strong>
+          </p>
+          <p>
+            <strong>If you'd like to publish a document,</strong> please use the <strong>“Publish”</strong>
+            option in the menu.
+            Log in with your Bauhaus University Weimar credentials.
+            In just a few steps, you can transfer your document to our publication service.
           </p>
         </div>
       </div>
