@@ -40,7 +40,7 @@
     </xsl:variable>
     <!-- MIR-339 solr query if there is any "wav"/"mp3" file in this object? -->
     <xsl:variable name="solrQuery"
-      select="concat('+(stream_content_type:audio/x-wav OR stream_content_type:audio/mpeg) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
+      select="concat('+stream_content_type:(audio/x-wav audio/mpeg audio/mp4) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
     <xsl:if test="(mcrsolr:getNumFound($solrQuery) &gt; 0) or (count(xalan:nodeset($encDerivates)/der/file) &gt; 0)">
       <xsl:variable name="completeQuery"
         select="concat('solr:q=', encoder:encode($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')" />
@@ -89,9 +89,7 @@
                     </p>
                   </video>
                 </xsl:if>
-                <xsl:if
-                  test="count($options//optgroup/option[@data-file-extension ='mp3']) &gt; 0 or count($options//optgroup/option[@data-file-extension ='wav']) &gt; 0"
-                >
+                <xsl:if test="$options//optgroup/option[contains('mp3,wav,m4a', @data-file-extension)]">
                   <audio id="player_audio" class="video-js embed-responsive-item" controls="" preload="metadata" poster="">
                     <xsl:attribute name="data-setup">{}</xsl:attribute>
                     <p class="vjs-no-js">
