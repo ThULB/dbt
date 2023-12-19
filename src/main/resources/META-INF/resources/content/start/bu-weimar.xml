@@ -9,13 +9,13 @@
                alt="Logo der Universitätsbibliothek Weimar" />
         </div>
       </div>
-      <h3>Digitale Bibliothek Thüringen – Portal Weimar</h3>
+      <h3>Digitale Bibliothek Thüringen – Startseite Bauhaus-Universität Weimar</h3>
       <div class="row">
         <div class="col-md-6">
           <p>Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</p>
-          <p>Die veröffentlichten Texte sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
-            Sie sind über Bibliothekskataloge und Suchmaschinen des World Wide Web erschlossen und leicht zugänglich.
-            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch veröffentlicht werden.
+          <p>Die eingestellten Dokumente sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
+            Sie sind über Bibliothekskataloge und Suchmaschinen erschlossen und leicht zugänglich.
+            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch eingestellt werden.
           </p>
         </div>
 
@@ -30,6 +30,8 @@
             Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an.
             In nur wenigen Schritten können Sie Ihr Dokument an unseren Publikationsservice übertragen.
           </p>
+          <p>
+            Bitte beachten Sie die Voraussetzungen für studentische Abschlussarbeiten in den <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
         </div>
       </div>
       <div class="row justify-content-md-center">
