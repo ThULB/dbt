@@ -42,7 +42,7 @@
         Wer darf in der DBT veröffentlichen?
       </question>
       <answer>
-        <p>Alle Angehörigen der FSU Jena, der TU Ilmenau und der Universität Erfurt sowie Angehörige der übrigen Thüringer Universitäten und
+        <p>Alle Angehörigen der FSU Jena, der TU Ilmenau, der Universität Erfurt und der Bauhaus-Universität Weimar sowie Angehörige der übrigen Thüringer Universitäten und
           Fachhochschulen
           können wissenschaftliche Dokumente in der DBT publizieren. In Einzelfällen können auch Landesnutzer (über die ThULB
           Jena) Dokumente in der DBT
@@ -238,6 +238,17 @@
               </li>
               <li>
                 <a href="http://www.tu-ilmenau.de/ilmedia/elektr-publizieren/abschlussarbeiten/">Master-, Bachelor- und Diplomarbeiten</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <b>Bauhaus-Universität Weimar</b>
+            <ul>
+              <li>
+                <a href="https://www.uni-weimar.de/de/universitaet/struktur/zentrale-einrichtungen/universitaetsbibliothek/service/hochschulschriftenstelle/">Dissertationen und Habilitationen</a>
+              </li>
+              <li>
+                <a href="https://www.uni-weimar.de/de/universitaet/struktur/zentrale-einrichtungen/universitaetsbibliothek/service/hochschulschriftenstelle/">Bachelor- und Masterarbeiten</a>
               </li>
             </ul>
           </li>
