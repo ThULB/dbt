@@ -24,22 +24,29 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
+import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.niofs.MCRPath;
+import org.mycore.datamodel.niofs.utils.MCRFileCollectingFileVisitor;
 import org.mycore.frontend.cli.MCRAbstractCommands;
+import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 
@@ -111,4 +118,49 @@ public class RepairCommands extends MCRAbstractCommands {
                 }));
         });
     }
+
+    @MCRCommand(syntax = "set main file on derivates {0} if missing",
+        help = "set the main file on derviate {0} when this is missing")
+    public static void setMainFileIfMissing(String derid) throws MCRAccessException {
+        MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derid));
+        String mainFile = der.getDerivate().getInternals().getMainDoc();
+        LOGGER.info("Check derivate {} ({})", derid, mainFile);
+        if (mainFile == null || mainFile.isEmpty()) {
+            Optional<String> defaultMainFile = getDefaultMainFile(der);
+            if (defaultMainFile.isPresent()) {
+                MCRDerivateCommands.setMainFile(der.getId().toString(), defaultMainFile.get());
+            }
+        }
+    }
+
+    private static Optional<String> getDefaultMainFile(MCRDerivate derivate) {
+        MCRPath path = MCRPath.getPath(derivate.getId().toString(), "/");
+        List<String> ignoreMainfileList = MCRConfiguration2.getString("MCR.Upload.NotPreferredFiletypeForMainfile")
+            .map(MCRConfiguration2::splitValue)
+            .map(s -> s.collect(Collectors.toList()))
+            .orElseGet(Collections::emptyList);
+        try {
+            MCRFileCollectingFileVisitor<Path> visitor = new MCRFileCollectingFileVisitor<>();
+            Files.walkFileTree(path, visitor);
+
+            //sort files by name
+            ArrayList<java.nio.file.Path> paths = visitor.getPaths();
+            paths.sort(Comparator.comparing(java.nio.file.Path::getNameCount)
+                .thenComparing(java.nio.file.Path::getFileName));
+            //extract first file, before filtering
+            MCRPath firstPath = MCRPath.toMCRPath(paths.get(0));
+
+            //filter files, remove files that should be ignored for mainfile
+            return paths.stream()
+                .map(MCRPath.class::cast)
+                .filter(p -> ignoreMainfileList.stream().noneMatch(p.getOwnerRelativePath()::endsWith))
+                .findFirst()
+                .or(() -> Optional.of(firstPath))
+                .map(MCRPath::getOwnerRelativePath);
+        } catch (IOException e) {
+            LOGGER.error("Could not get main file!", e);
+        }
+        return Optional.empty();
+    }
+
 }
