@@ -21,7 +21,7 @@
 
         <div class="col-md-6">
           <p><strong>Wenn Sie nach Texten der Bauhaus-Universität Weimar suchen möchten,</strong>
-            wählen Sie bitte die <strong>„Suchen“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
+            wählen Sie bitte die <strong>„Suche“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
             stehen Ihnen weitere Recherchemöglichkeiten zur Verfügung.
           </p>
           <p>
@@ -62,10 +62,10 @@
                alt="Logo of university library Weimar" />
         </div>
       </div>
-      <h3>Digitale Bibliothek Thüringen – Portal Weimar</h3>
+      <h3>Digitale Bibliothek Thüringen – Bauhaus-Universität Weimar</h3>
       <div class="row">
         <div class="col-md-6">
-          <p>Welcome to the Publication Service of the Bauhaus University Weimar.</p>
+          <p>Welcome to the Publication Service of the Bauhaus-Universität Weimar.</p>
           <p>The published texts are accessible worldwide on the internet and are permanently archived.
             They are accessible through library catalogs and search engines of the World Wide Web and
             are easily accessible.
@@ -73,15 +73,18 @@
         </div>
 
         <div class="col-md-6">
-          <p><strong>If you wish to search for texts from Bauhaus University Weimar,</strong>
+          <p><strong>If you wish to search for texts from Bauhaus-Universität Weimar,</strong>
             please select the <strong>“Search”</strong> option in the menu.
             Additional research options are available under <strong>“Browse.”</strong>
           </p>
           <p>
             <strong>If you'd like to publish a document,</strong> please use the <strong>“Publish”</strong>
             option in the menu.
-            Log in with your Bauhaus University Weimar credentials.
+            Log in with your Bauhaus-Universität Weimar credentials.
             In just a few steps, you can transfer your document to our publication service.
+          </p>
+          <p>
+            Please note the requirements for student theses in the <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
           </p>
         </div>
       </div>
