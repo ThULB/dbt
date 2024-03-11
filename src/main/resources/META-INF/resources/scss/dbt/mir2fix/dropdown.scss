@@ -2,6 +2,7 @@
   .dropdown-item {
     a {
       color: $body-color;
+      display: block; //larger area to click while size is the same
     }
 
     &:hover, &:focus {
