@@ -211,7 +211,7 @@ public class SlotServlet extends MCRServlet {
                     SLOT_MGR.saveOrUpdate(slot);
 
                     if (evt != null) {
-                        if (evt.getObjectType().equals(SlotManager.ENTRY_TYPE)) {
+                        if (evt.getCustomObjectType().equals(SlotManager.ENTRY_TYPE)) {
                             evt.put("slotId", slot.getSlotId());
                         }
 
