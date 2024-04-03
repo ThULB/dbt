@@ -301,17 +301,11 @@
         <category ID="3210">
           <label xml:lang="de" text="Lehramt an Gymnasien: Kunsterziehung" />
         </category>
-        <category ID="3211">
-          <label xml:lang="de" text="Medienkunst/Mediengestaltung" />
-        </category>
         <category ID="3212">
           <label xml:lang="de" text="Produktdesign" />
         </category>
         <category ID="3213">
           <label xml:lang="de" text="Promotionsstudiengang Kunst und Design-Freie Kunst-Medienkunst (Ph.D)" />
-        </category>
-        <category ID="3214">
-          <label xml:lang="de" text="Theorie und Geschichte des Design" />
         </category>
         <category ID="3215">
           <label xml:lang="de" text="Visuelle Kommunikation" />
