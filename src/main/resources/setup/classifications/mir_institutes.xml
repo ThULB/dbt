@@ -121,6 +121,18 @@
         <category ID="3037">
           <label xml:lang="de" text="Professur Theorie und Geschichte der modernen Architektur" />
         </category>
+        <category ID="3038">
+          <label xml:lang="de" text="Professur Denkmalpflege und Baugeschichte 1" />
+        </category>
+        <category ID="3039">
+          <label xml:lang="de" text="Professur Denkmalpflege und Baugeschichte 2" />
+        </category>
+        <category ID="3040">
+          <label xml:lang="de" text="Professur Bauentwurfslehre" />
+        </category>
+        <category ID="3041">
+          <label xml:lang="de" text="Professur Stadt Raum Entwerfen" />
+        </category>
       </category>
       <category ID="3100">
         <label xml:lang="de" text="Fakultät Bauingenieurwesen" />
@@ -268,6 +280,12 @@
         <category ID="3148">
           <label xml:lang="de" text="Graduiertenkolleg 1462" />
         </category>
+        <category ID="3149">
+          <label xml:lang="de" text="Professur Stahl- und Hybridbau" />
+        </category>
+        <category ID="3150">
+          <label xml:lang="de" text="Professur Komplexe Tragwerke" />
+        </category>
       </category>
       <category ID="3200">
         <label xml:lang="de" text="Fakultät Kunst und Gestaltung" />
@@ -315,6 +333,9 @@
         </category>
         <category ID="3215">
           <label xml:lang="de" text="Visuelle Kommunikation" />
+        </category>
+        <category ID="3216">
+          <label xml:lang="de" text="Professur Akustische Ökologien und Sound Studies" />
         </category>
       </category>
       <category ID="3300">
@@ -417,6 +438,21 @@
         </category>
         <category ID="3333">
           <label xml:lang="de" text="Internationales Kolleg für Kulturtechnikforschung und Medienphilosophie (IKKM)" />
+        </category>
+         <category ID="3334">
+          <label xml:lang="de" text="Professur Philosophie audiovisueller Medien" />
+        </category>
+         <category ID="3335">
+          <label xml:lang="de" text="Professur Bildtheorie" />
+        </category>
+         <category ID="3336">
+          <label xml:lang="de" text="Dozentur Gesellschaft und Digitalisierung" />
+        </category>
+         <category ID="3337">
+          <label xml:lang="de" text="Professur Medienökonomik" />
+        </category>
+         <category ID="3338">
+          <label xml:lang="de" text="Professur Usability" />
         </category>
       </category>
       <category ID="3400">
