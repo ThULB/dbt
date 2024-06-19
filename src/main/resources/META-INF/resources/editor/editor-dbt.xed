@@ -101,6 +101,68 @@
   <xed:modify ref="admin.fields">
     <xed:include ref="oai" after="institutes" />
     <xed:include ref="itunes-podcast" after="genre" />
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.book.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.thesis.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.teaching_material">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.publication.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.report.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.entry">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.preface">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.interview">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.speech">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.patent">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.poster">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.av.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.research_data">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.lecture">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.picture">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
   </xed:modify>
 
 </xed:template>
