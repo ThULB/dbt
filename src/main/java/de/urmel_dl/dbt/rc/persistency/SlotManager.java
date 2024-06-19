@@ -29,13 +29,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.SetJoin;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
@@ -73,7 +66,6 @@ import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserAttribute_;
-import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.rc.datamodel.Attendee;
@@ -85,6 +77,12 @@ import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.utils.SlotWrapper;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.SetJoin;
 
 /**
  * @author René Adler (eagle)
@@ -410,7 +408,7 @@ public final class SlotManager {
                 MCRContent cont = MCRXMLMetadataManager.instance().retrieveContent(slot.getMCRObjectID(),
                     revision.toString());
                 return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
-            } catch (IOException | JDOMException | SAXException e) {
+            } catch (IOException | JDOMException e) {
                 return null;
             }
         }

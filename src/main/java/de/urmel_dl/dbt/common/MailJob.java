@@ -29,13 +29,10 @@ import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class MailJob extends MCRJobAction {
-
-    public MailJob() {
-    }
 
     /**
      * @param job the mail job

@@ -25,6 +25,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.mycore.datamodel.metadata.MCRMetaElement;
 import org.mycore.datamodel.metadata.MCRMetaXML;
+import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.datamodel.metadata.MCRObjectMetadata;
@@ -82,8 +83,10 @@ public class SlotWrapper {
     }
 
     public MCRObjectID setID(String projectID, int ID) {
-        MCRObjectID objID = ID == 0 ? MCRObjectID.getNextFreeId(SlotManager.getMCRObjectBaseID()) : MCRObjectID
-            .getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
+        MCRObjectID objID;
+        objID = ID == 0 ? MCRMetadataManager.getMCRObjectIDGenerator()
+            .getNextFreeId(SlotManager.getMCRObjectBaseID())
+            : MCRObjectID.getInstance(MCRObjectID.formatID(projectID, SlotManager.SLOT_TYPE, ID));
         object.setId(objID);
         return objID;
     }

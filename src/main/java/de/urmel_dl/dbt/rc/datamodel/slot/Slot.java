@@ -52,7 +52,7 @@ import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 /**
  * Represents an Reserve Collection slot.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @RCAccessCheck
 @XmlRootElement(name = "slot")
@@ -155,7 +155,7 @@ public class Slot implements Serializable {
      */
     @XmlAttribute(name = "id")
     public String getSlotId() {
-        return location.getID() + DEFAULT_ID_SPACER + String.format(Locale.ROOT, DEFAULT_ID_FORMAT, id);
+        return location.getId() + DEFAULT_ID_SPACER + String.format(Locale.ROOT, DEFAULT_ID_FORMAT, id);
     }
 
     /**

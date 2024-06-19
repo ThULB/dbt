@@ -153,7 +153,7 @@ public class SlotListServlet extends MCRServlet {
                 }
 
                 if (location != null && newId != null
-                    && (!location.equals(s.getLocation().getID()) || newId != slot.getId())) {
+                    && (!location.equals(s.getLocation().getId()) || newId != slot.getId())) {
 
                     if (!MCRAccessManager.checkPermission(SlotManager.POOLPRIVILEGE_ADMINISTRATE_SLOT)) {
                         job.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);

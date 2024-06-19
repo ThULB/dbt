@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -54,7 +55,6 @@ import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
-import org.xml.sax.SAXParseException;
 
 import de.urmel_dl.dbt.common.MailQueue;
 import de.urmel_dl.dbt.media.MediaService;
@@ -76,7 +76,7 @@ import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @MCRCommandGroup(name = "RC Commands")
@@ -177,7 +177,7 @@ public class RCCommands extends MCRAbstractCommands {
     @SuppressWarnings("unchecked")
     @MCRCommand(syntax = "import slot from file {0}", help = "imports a slot from given file")
     public static void importSlot(final String filename)
-        throws IOException, MCRActiveLinkException, MCRAccessException, MCRException, SAXParseException {
+        throws IOException, MCRActiveLinkException, MCRAccessException, MCRException, JDOMException {
         final SlotManager mgr = SlotManager.instance();
 
         File file = new File(filename);

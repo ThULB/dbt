@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Test;
@@ -35,7 +36,6 @@ import org.mycore.common.content.MCRStreamContent;
 import org.mycore.common.events.MCREvent;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.mods.MCRMODSWrapper;
-import org.xml.sax.SAXParseException;
 
 /**
  * @author René Adler (eagle)
@@ -44,7 +44,7 @@ import org.xml.sax.SAXParseException;
 public class TestIdentifierExtractorEventHandler extends MCRTestCase {
 
     @Test
-    public void testIdentfierExtract() throws SAXParseException, IOException {
+    public void testIdentfierExtract() throws IOException, JDOMException {
         for (String wantedPPN : Arrays.asList("101233726X", "1012341062", "502025298", "39170155X")) {
             MCRStreamContent sc = new MCRStreamContent(
                 getClass().getClassLoader().getResourceAsStream("mods_id_extract_" + wantedPPN + ".xml"));

@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import org.apache.log4j.Logger;
+import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -88,7 +89,7 @@ public class MigrationCommands extends MCRAbstractCommands {
 
     @MCRCommand(syntax = "repair derivate from file {0}", help = "try to repair a derivate from given file {0}")
     public static boolean repairDerivate(final String from)
-        throws SAXParseException, IOException, MCRPersistenceException, MCRAccessException {
+        throws IOException, MCRPersistenceException, JDOMException {
         File file = new File(from);
 
         if (!file.getName().endsWith(".xml")) {
@@ -164,7 +165,7 @@ public class MigrationCommands extends MCRAbstractCommands {
 
         try {
             LOGGER.debug("adding Derivate in data store");
-            MCRMetadataManager.addOrUpdateDerivateToObject(objid, der);
+            MCRMetadataManager.addOrUpdateDerivateToObject(objid, der, false);
         } catch (final Exception e) {
             // throw final exception
             throw new MCRPersistenceException("Error while creatlink to MCRObject " + objid + ".", e);
@@ -263,7 +264,7 @@ public class MigrationCommands extends MCRAbstractCommands {
     }
 
     @MCRCommand(syntax = "check derivate from file {0}", help = "check derivate from given file {0} has missing files")
-    public static boolean checkDerivate(final String from) throws SAXParseException, IOException {
+    public static boolean checkDerivate(final String from) throws IOException, JDOMException {
         File file = new File(from);
 
         if (!file.getName().endsWith(".xml")) {

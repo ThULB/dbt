@@ -23,15 +23,17 @@ import java.util.Map;
 import org.jdom2.Element;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
+import org.mycore.services.queuedjob.MCRJobDAO;
 import org.mycore.services.queuedjob.MCRJobQueue;
+import org.mycore.services.queuedjob.MCRJobQueueManager;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class MailQueue {
 
-    private static final MCRJobQueue MAIL_QUEUE = MCRJobQueue.getInstance(MailJob.class);
+    private static final MCRJobQueue MAIL_QUEUE = MCRJobQueueManager.getInstance().getJobQueue(MailJob.class);
 
     public static void addJob(final String uri) {
         final Element xml = MCRURIResolver.instance().resolve(uri);
@@ -51,7 +53,7 @@ public class MailQueue {
             params.put("uri", uri);
         }
 
-        MCRJob job = MAIL_QUEUE.getJob(params);
+        MCRJob job = MCRJobQueueManager.getInstance().getJobDAO().getJob(MailJob.class, params, null);
         if (job == null) {
             job = new MCRJob(MailJob.class);
             job.setParameters(params);

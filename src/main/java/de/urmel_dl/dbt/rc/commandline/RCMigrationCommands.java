@@ -50,7 +50,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @MCRCommandGroup(name = "RC Migration Commands")
@@ -151,12 +151,12 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     File xmlOutput = new File(dir, "slot-" + slot.getSlotId() + ".xml");
                     new MCRJDOMContent(new EntityFactory<>(slot).toDocument()).sendTo(xmlOutput);
                     LOGGER.info("Slot " + slot.getSlotId() + " saved to " + xmlOutput.getCanonicalPath() + ".");
-                } catch (IOException | JDOMException | SAXException e) {
+                } catch (IOException | JDOMException e) {
                     LOGGER.error("Couldn't migrate slot from file " + file.getAbsolutePath() + ".", e);
                     return;
                 }
             });
-        } catch (MCRException | SAXException e) {
+        } catch (MCRException | JDOMException | IOException e) {
             LOGGER.error("Couldn't process slot file " + file.getAbsolutePath() + ".", e);
         }
     }

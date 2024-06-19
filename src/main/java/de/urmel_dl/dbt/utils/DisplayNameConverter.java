@@ -17,19 +17,20 @@
  */
 package de.urmel_dl.dbt.utils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import org.mycore.user2.MCRUserAttributeConverter;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class DisplayNameConverter implements MCRUserAttributeConverter<String, String> {
 
     @Override
-    public String convert(String value, String separator, Map<String, String> valueMapping) throws Exception {
-        return new String(((String) value).getBytes("ISO-8859-1"), "UTF-8");
+    public String convert(String value, String separator, Map<String, String> valueMapping) {
+        return new String(value.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
     }
 
 }
