@@ -125,4 +125,13 @@
     <url-pattern>/oai/discovery</url-pattern>
   </servlet-mapping>
 
+  <servlet id="EnrichmentDebuggerServlet">
+    <servlet-name>EnrichmentDebuggerServlet</servlet-name>
+    <servlet-class>de.urmel_dl.dbt.enrichment.EnrichmentDebuggerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EnrichmentDebuggerServlet</servlet-name>
+    <url-pattern> /servlets/EnrichmentDebuggerServlet </url-pattern>
+  </servlet-mapping>
+
 </web-fragment>

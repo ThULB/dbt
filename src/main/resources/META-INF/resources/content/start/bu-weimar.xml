@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MyCoReWebPage>
+  <section xml:lang="de" title="Online-Publikations-System der Bauhaus-Universität Weimar">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <img src="images/logo-weimar_r0_g155_b180.png"
+               class="img-fluid mb-4"
+               alt="Logo der Universitätsbibliothek Weimar" />
+        </div>
+      </div>
+      <h3>Digitale Bibliothek Thüringen – Startseite Bauhaus-Universität Weimar</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</p>
+          <p>Die eingestellten Dokumente sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
+            Sie sind über Bibliothekskataloge und Suchmaschinen erschlossen und leicht zugänglich.
+            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch eingestellt werden.
+          </p>
+        </div>
+
+        <div class="col-md-6">
+          <p><strong>Wenn Sie nach Texten der Bauhaus-Universität Weimar suchen möchten,</strong>
+            wählen Sie bitte die <strong>„Suche“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
+            stehen Ihnen weitere Recherchemöglichkeiten zur Verfügung.
+          </p>
+          <p>
+            <strong>Wenn Sie ein Dokument veröffentlichen möchten,</strong> nutzen Sie bitte die
+            <strong>„Publizieren“</strong>-Option im Menü.
+            Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an.
+            In nur wenigen Schritten können Sie Ihr Dokument an unseren Publikationsservice übertragen.
+          </p>
+          <p>
+            Bitte beachten Sie die Voraussetzungen für studentische Abschlussarbeiten in den <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
+          </p>
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-6">
+          <form action="../../servlets/solr/find" role="search" class="form">
+            <div class="input-group">
+              <input placeholder="Suchen im Bestand" name="condQuery" id="searchTerm" type="text"
+                     class="form-control"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <span aria-hidden="true" class="fa fa-search"></span>
+                </button>
+              </span>
+            </div>
+            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section xml:lang="en" title="Publication Server of Weimar Bauhaus-University">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <img src="images/logo-weimar_r0_g155_b180.png"
+               class="img-fluid mb-4"
+               alt="Logo of university library Weimar" />
+        </div>
+      </div>
+      <h3>Digitale Bibliothek Thüringen – Bauhaus-Universität Weimar</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <p>Welcome to the Publication Service of the Bauhaus-Universität Weimar.</p>
+          <p>The published texts are accessible worldwide on the internet and are permanently archived.
+            They are accessible through library catalogs and search engines of the World Wide Web and
+            are easily accessible.
+            Both initial publications and secondary publications can be electronically published.</p>
+        </div>
+
+        <div class="col-md-6">
+          <p><strong>If you wish to search for texts from Bauhaus-Universität Weimar,</strong>
+            please select the <strong>“Search”</strong> option in the menu.
+            Additional research options are available under <strong>“Browse.”</strong>
+          </p>
+          <p>
+            <strong>If you'd like to publish a document,</strong> please use the <strong>“Publish”</strong>
+            option in the menu.
+            Log in with your Bauhaus-Universität Weimar credentials.
+            In just a few steps, you can transfer your document to our publication service.
+          </p>
+          <p>
+            Please note the requirements for student theses in the <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
+          </p>
+        </div>
+      </div>
+      <div class="row justify-content-md-center">
+        <div class="col-md-6">
+          <form action="../../servlets/solr/find" role="search" class="form">
+            <div class="input-group">
+              <input placeholder="search in inventory" name="condQuery" id="searchTerm" type="text"
+                     class="form-control"/>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                  <span aria-hidden="true" class="fa fa-search"></span>
+                </button>
+              </span>
+            </div>
+            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</MyCoReWebPage>

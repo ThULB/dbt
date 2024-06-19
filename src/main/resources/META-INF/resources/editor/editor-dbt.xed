@@ -11,25 +11,19 @@
         </xed:otherwise>
       </xed:choose>
 
-      <xed:bind xpath="iagree">
-        <div class="form-group {$xed-validation-marker}">
-          <label class="col-md-3 control-label required">
+      <xed:bind xpath="iagree" initially="false" default="false">
+        <fieldset class="form-group {$xed-validation-marker}">
+          <legend class="mir-fieldset-legend required">
             <xed:output i18n="editor.contract.publish" />
-          </label>
-          <div class="col-md-6 form-inline">
-            <div style="padding:1ex">
-              <xed:output i18n="editor.contract.text" />
-            </div>
-            <div class="controls form-control">
-              <input id="iagree_true" type="radio" value="true" />
-              <label style="margin-left:1ex" for="iagree_true">
+          </legend>
+          <div class="bg-secondary p-1">
+            <xed:output i18n="editor.contract.text" />
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-switch offset-md-2 pt-2">
+              <input id="iagree_true" type="checkbox" value="true" class="custom-control-input" />
+              <label class="custom-control-label" for="iagree_true">
                 <xed:output i18n="editor.contract.agree" />
-              </label>
-            </div>
-            <div class="controls form-control">
-              <input id="iagree_false" type="radio" value="false" />
-              <label style="margin-left:1ex" for="iagree_false">
-                <xed:output i18n="editor.contract.disagree" />
               </label>
             </div>
           </div>
@@ -37,7 +31,7 @@
             <xed:output i18n="editor.contract.validation" />
           </xed:validate>
           <xed:cleanup-rule xpath="/mycoreobject/service/iagree" relevant-if="false()" />
-        </div>
+        </fieldset>
       </xed:bind>
       <xed:if test="contains(/mycoreobject/@ID, '_00000000')">
         <xed:bind xpath="servflags[@class='MCRMetaLangText']/servflag[@type='dbt-version']"
@@ -107,6 +101,68 @@
   <xed:modify ref="admin.fields">
     <xed:include ref="oai" after="institutes" />
     <xed:include ref="itunes-podcast" after="genre" />
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.book.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.thesis.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.teaching_material">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.publication.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.report.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.entry">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.preface">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.interview">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.speech">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.patent">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.poster">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.av.common">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.research_data">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.lecture">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
+  </xed:modify>
+  <xed:modify ref="genres.picture">
+    <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="institutes" />
   </xed:modify>
 
 </xed:template>

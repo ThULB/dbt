@@ -145,6 +145,18 @@ div.result_searchline {
           }
         }
       }
+
+      .hit_item {
+        .hit_state {
+          .mir-deleted {
+            color: $badge-state-delete-color;
+            background-color: $badge-state-delete-bg;
+          }
+          span {
+            background-color: $badge-state-delete-span-bg;
+          }
+        }
+      }
     }
   }
 }

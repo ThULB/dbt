@@ -3,12 +3,12 @@
     "jsx": "preserve",
     "moduleResolution": "node",
     "module": "es6",
-    "target": "es5",
+    "target": "es6",
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "video.js": [
-        "node_modules/video.js"
+      "*": [
+        "node_modules/*"
       ]
     }
   },

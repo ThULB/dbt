@@ -1,3 +1,4 @@
+// @ts-ignore
 import videojs from "video.js";
 
 import { Player } from "./_player/player";

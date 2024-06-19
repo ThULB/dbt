@@ -9,10 +9,10 @@
       <label xml:lang="en">Login with your user credentials of your university</label>
       <info>
         <label xml:lang="de">
-	  &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
+          &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt, BU Weimar, FH Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
         </label>
         <label xml:lang="en">
-	  &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt and Nordhausen.&lt;/strong&gt;
+          &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt, Weimar and Nordhausen.&lt;/strong&gt;
         </label>
       </info>
     </login>
@@ -79,6 +79,20 @@
     </attributeMapping>
     <passwordChangeURL>https://oas.fh-erfurt.de/</passwordChangeURL>
   </realm>
+  <realm id="uni-weimar.de">
+    <label xml:lang="de">Bauhaus-Universität Weimar</label>
+    <label xml:lang="en">Weimar Bauhaus-University</label>
+    <attributeMapping>
+      <attribute name="userName" mapping="eppn" />
+      <attribute name="realName" mapping="displayName" converter="de.urmel_dl.dbt.utils.DisplayNameConverter" />
+      <attribute name="eMail" mapping="mail" />
+      <attribute name="roles" mapping="eduPersonAffiliation">
+        <valueMapping name="employee">submitter</valueMapping>
+        <valueMapping name="member">reader</valueMapping>
+      </attribute>
+    </attributeMapping>
+    <passwordChangeURL>https://passwort.uni-weimar.de/</passwordChangeURL>
+  </realm>
   <realm id="hs-nordhausen.de">
     <label xml:lang="de">Hochschule Nordhausen</label>
     <label xml:lang="en">Hochschule Nordhausen</label>
@@ -110,19 +124,19 @@
     </login>
     <passwordChangeURL>../authorization/change-password.xed?action=password</passwordChangeURL>
   </realm>
-  
+
   <realm id="registerUser" setable="false">
     <label xml:lang="de">Ich habe noch keine Benutzerkennung</label>
     <label xml:lang="en">I have no user ID</label>
     <login url="../authorization/new-author.xed" redirectParameter="url">
       <label xml:lang="de">Benutzerkennung anlegen</label>
-      <label xml:lang="en">Create User ID</label>
+      <label xml:lang="en">Create user ID</label>
       <info>
         <label xml:lang="de">
-          Sie können sich hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten/-hörer (der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, Hochschule Nordhausen) oder Mitglied einer externe Einrichtung sein.
+          Sie können sich hier selbst eine neue Benutzerkennung nur für diese Anwendung erstellen, sollten Sie Gaststudenten/-hörer (der FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, BU Weimar, Hochschule Nordhausen) oder Mitglied einer externen Einrichtung sein.
         </label>
         <label xml:lang="en">
-          If you still have no user account for this application and your are a student or member of a external institution, you can generate yourself a personal user account.
+          You can create a new user ID here specifically for this application if you are a guest student/auditor (of FSU Jena, TU Ilmenau, Uni Erfurt, FH Erfurt, BU Weimar, Hochschule Nordhausen) or a member of an external institution.
         </label>
       </info>
     </login>

@@ -9,8 +9,8 @@
       <br />
       <a href="mailto:epublizieren@thulb.uni-jena.de">epublizieren@thulb.uni-jena.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 9404206
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+4936419404206">+49 (0) 3641 9404206</a>
     </address>
     <h3>Für die teilnehmenden Einrichtungen:</h3>
     <address>
@@ -20,8 +20,8 @@
       <br />
       <a href="mailto:etc@uni-erfurt.de">etc@uni-erfurt.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 361 7375857
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+493617375857">+49 (0) 361 7375857</a>
     </address>
     <address>
       <strong>Dr. Johannes Wilken</strong>
@@ -30,8 +30,18 @@
       <br />
       <a href="mailto:johannes.wilken@tu-ilmenau.de">johannes.wilken@tu-ilmenau.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3677 694594
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+493677694594">+49 (0) 3677 694594</a>
+    </address>
+    <address>
+      <strong>Heidi Körner</strong>
+      <br />
+      Bauhaus-Universität Weimar, Universitätsbibliothek
+      <br />
+      <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a>
+      <br />
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+493643582823">+49 (0) 3643 582823</a>
     </address>
     <h2>Technische Fragen:</h2>
     <address>
@@ -39,16 +49,16 @@
       <br />
       <a href="mailto:dbtadmin@uni-jena.de">dbtadmin@uni-jena.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 9404027
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+4936419404027">+49 (0) 3641 9404027</a>
     </address>
     <address>
       <strong>René Adler</strong>
       <br />
       <a href="mailto:dbtadmin@uni-jena.de">dbtadmin@uni-jena.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 9404503
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+4936419404019">+49 (0) 3641 9404019</a>
     </address>
     <h2>Einstellung und Bearbeitung von Videomaterial:</h2>
     <address>
@@ -56,10 +66,10 @@
       <br />
       Multimediazentrum
       <br />
-      <a href="mailto:tino.tschiesche@uni-jena.de">tino.tschiesche@uni-jena.de</a>
+      <a href="mailto:mmz@uni-jena.de">mmz@uni-jena.de</a>
       <br />
-      <abbr title="Telefon">Tel:</abbr>
-      +49 (0) 3641 9404551
+      <abbr title="Telefon">Tel:</abbr>&#160;
+      <a href="tel:+4936419404553">+49 (0) 3641 9404553</a>
     </address>
   </section>
 </MyCoReWebPage>

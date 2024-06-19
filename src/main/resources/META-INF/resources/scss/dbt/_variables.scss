@@ -18,6 +18,7 @@ $border-radius-lg: .2rem;
 $border-radius-sm: .05rem;
 
 $input-focus-border-color: $primary;
+$input-fieldset-border-color: transparentize($primary, 0.75);
 $input-btn-focus-box-shadow: none; 
 
 $enable-shadows: true;
