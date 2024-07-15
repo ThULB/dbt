@@ -2,17 +2,17 @@
 
 <!-- XSL to display data of slot locations -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
-  exclude-result-prefixes="xsl xalan i18n"
->
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+                exclude-result-prefixes="xsl mcri18n">
 
-  <xsl:include href="MyCoReLayout.xsl" />
+  <xsl:include href="resource:xslt/MyCoReLayout.xsl" />
   <xsl:include href="classificationBrowser.xsl" />
   <xsl:param name="RequestURL" />
 
   <xsl:variable name="PageID" select="'select-rclocation'" />
 
-  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.locationSelectDisplay')" />
+  <xsl:variable name="PageTitle" select="mcri18n:translate('component.rc.locationSelectDisplay')"/>
   
   <xsl:template match="locations[@classID]">
     <xsl:call-template name="mcrClassificationBrowser">

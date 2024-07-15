@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mets="http://www.loc.gov/METS/"
-  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:str="http://exslt.org/strings" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  exclude-result-prefixes="iview2 str mcr">
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mets="http://www.loc.gov/METS/"
+                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
+                xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                exclude-result-prefixes="iview2 mcr fn">
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:include href="mods2record.xsl" />
   <xsl:include href="mods2mods.xsl" />
@@ -42,7 +44,7 @@
         </xsl:when>
         <xsl:otherwise>
           <xsl:variable name="maindoc" select="$derivate/mycorederivate/derivate/internals/internal/@maindoc" />
-          <xsl:if test="translate(str:tokenize($maindoc,'.')[position()=last()],'PDF','pdf') = 'pdf'">
+          <xsl:if test="translate(fn:tokenize($maindoc,'.')[position()=last()],'PDF','pdf') = 'pdf'">
             <xsl:variable name="filePath" select="concat(@xlink:href,'/',mcr:encodeURIPath($maindoc))" />
             <mets:file ID="{@xlink:href}" MIMETYPE="image/jpeg">
               <mets:FLocat LOCTYPE="URL" xlink:href="{$WebApplicationBaseURL}img/pdfthumb/{$filePath}?centerThumb=no" />

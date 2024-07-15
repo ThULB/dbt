@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5"
     encoding="UTF-8" />
@@ -25,9 +25,9 @@
           </p>
         </video>
 
-        <script src="{$WebApplicationBaseURL}dbt/assets/media/embed.min.js"></script>
+        <script src="{$WebApplicationBaseURL}dbt/assets/media/embed.min.js"/>
         <script type="text/javascript">
-          <xsl:value-of select="concat('embeddedPlayer(&quot;', $WebApplicationBaseURL, '&quot;, &quot;dbt-player-', $mediaId, '&quot;);')"
+          &lt;xsl:value-of select="concat('embeddedPlayer(&quot;', $WebApplicationBaseURL, '&quot;, &quot;dbt-player-', $mediaId, '&quot;);')"
             disable-output-escaping="yes" />
         </script>
       </body>

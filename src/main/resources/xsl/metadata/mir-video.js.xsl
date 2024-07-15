@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:FilenameUtils="xalan://org.apache.commons.io.FilenameUtils" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions" xmlns:media="xalan://org.mycore.media.frontend.MCRXMLFunctions"
-  xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" xmlns:mcrsolr="xalan://org.mycore.solr.MCRXMLFunctions"
-  xmlns:mcrsolru="xalan://org.mycore.solr.MCRSolrUtils" xmlns:xalan="http://xml.apache.org/xalan" xmlns:encoder="xalan://java.net.URLEncoder"
-  exclude-result-prefixes="xalan i18n mcr media mods xlink FilenameUtils iview2 mcrxsl mcrsolr mcrsolru encoder menc"
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mcr="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:mcri18n="http://www.mycore.de/xslt/i18n" xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:FilenameUtils="xalan://org.apache.commons.io.FilenameUtils"
+                xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:iview2="xalan://org.mycore.iview2.frontend.MCRIView2XSLFunctions"
+                xmlns:media="xalan://org.mycore.media.frontend.MCRXMLFunctions"
+                xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService"
+                xmlns:mcrsolr="xalan://org.mycore.solr.MCRXMLFunctions"
+                xmlns:mcrsolru="xalan://org.mycore.solr.MCRSolrUtils"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                exclude-result-prefixes="xalan mcri18n mcr media mods xlink FilenameUtils iview2 mcrxsl mcrsolr mcrsolru menc fn"
 >
   <xsl:import href="xslImport:modsmeta:metadata/mir-video.js.xsl" />
   <xsl:param name="UserAgent" />
@@ -41,9 +48,9 @@
     <!-- MIR-339 solr query if there is any "wav"/"mp3" file in this object? -->
     <xsl:variable name="solrQuery"
       select="concat('+stream_content_type:(audio/x-wav audio/mpeg audio/mp4) +returnId:',mcrsolru:escapeSearchValue(mycoreobject/@ID))" />
-    <xsl:if test="(mcrsolr:getNumFound($solrQuery) &gt; 0) or (count(xalan:nodeset($encDerivates)/der/file) &gt; 0)">
+    <xsl:if test="(mcrsolr:getNumFound($solrQuery) &gt; 0) or (count($encDerivates/der/file) &gt; 0)">
       <xsl:variable name="completeQuery"
-        select="concat('solr:q=', encoder:encode($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')" />
+                    select="concat('solr:q=', fn:encode-for-uri($solrQuery), '&amp;group=true&amp;group.field=derivateID&amp;group.limit=999')"/>
       <xsl:variable name="solrResult" select="document($completeQuery)" /> <!-- [string-length(str[@name='groupValue']/text()) &gt; 0] -->
       <div id="mir-player">
         <div class="card mb-3">
@@ -60,7 +67,7 @@
                   </optgroup>
                 </xsl:if>
               </xsl:for-each>
-              <xsl:for-each select="xalan:nodeset($encDerivates)/der">
+              <xsl:for-each select="$encDerivates/der">
                 <xsl:variable name="currentDerivateID" select="@id" />
                 <xsl:variable name="read" select="count($docContext[key('rights', $currentDerivateID)/@read]) &gt; 0" />
                 <xsl:if test="$read">
@@ -73,7 +80,7 @@
               </xsl:for-each>
             </select>
           </xsl:variable>
-          <xsl:variable name="options" select="xalan:nodeset($optionsFragment)" />
+          <xsl:variable name="options" select="$optionsFragment"/>
 
           <xsl:variable name="playerNode">
             <div class="card-body p-0">
@@ -107,7 +114,7 @@
             <div class="card-header">
               <xsl:copy-of select="$optionsFragment" />
             </div>
-            <xsl:variable name="playerNodes" select="xalan:nodeset($playerNode)" />
+            <xsl:variable name="playerNodes" select="$playerNode" />
             <xsl:call-template name="addPlayerScripts">
               <xsl:with-param name="generatedNodes" select="$playerNodes" />
             </xsl:call-template>
@@ -144,7 +151,7 @@
     <xsl:variable name="fileName" select="str[@name='fileName']" />
 
     <xsl:variable name="lowercaseExtension"
-      select="translate(FilenameUtils:getExtension($fileName), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')" />
+                  select="mcri18n:translate(FilenameUtils:getExtension($fileName), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz')"/>
 
     <xsl:choose>
       <xsl:when test="$fileMimeType = 'video/mp4'">

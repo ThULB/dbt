@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:mgr="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
-  xmlns:acl="xalan://org.mycore.access.MCRAccessManager" xmlns:encoder="xalan://java.net.URLEncoder" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="mgr acl encoder i18n mcrxsl xlink xalan"
+<xsl:stylesheet version="3.0" xmlns:mgr="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
+                xmlns:acl="xalan://org.mycore.access.MCRAccessManager"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:mcrxsl="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                exclude-result-prefixes="mgr fn acl mcrxsl xlink xalan mcri18n"
 >
 
   <xsl:param name="CurrentLang" />
@@ -88,7 +93,7 @@
       <div class="d-flex flex-row justify-content-between align-items-start">
         <h1>
           <xsl:if test="contains($RequestURL, '/attendees')">
-            <xsl:value-of select="i18n:translate('component.rc.attendees')" />
+            <xsl:value-of select="mcri18n:translate('component.rc.attendees')"/>
             <xsl:text> - </xsl:text>
           </xsl:if>
           <xsl:value-of select="title" />
@@ -101,9 +106,9 @@
             <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$writePermission and (@status = 'archived')">
                 <a class="dropdown-item" role="menuitem" tabindex="-1"
-                  href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                  href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
                 >
-                  <xsl:value-of select="i18n:translate('component.rc.slot.reactivate')" />
+                  <xsl:value-of select="mcri18n:translate('component.rc.slot.reactivate')"/>
                 </a>
               </xsl:if>
               <xsl:if test="$hasAdminPermission or $hasEditorPermission or ($writePermission and (@status != 'archived'))">
@@ -113,12 +118,12 @@
                   <xsl:choose>
                     <xsl:when test="$effectiveMode = 'view'">
                       <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.entries')" />
+                        <xsl:value-of select="mcri18n:translate('component.rc.slot.edit.entries')"/>
                       </a>
                     </xsl:when>
                     <xsl:otherwise>
                       <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.edit.cancel')" />
+                        <xsl:value-of select="mcri18n:translate('component.rc.slot.edit.cancel')"/>
                       </a>
                     </xsl:otherwise>
                   </xsl:choose>
@@ -127,34 +132,34 @@
                   <xsl:if test="not(contains($RequestURL, '/attendees'))">
                     <div class="dropdown-divider" />
                     <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}/attendees">
-                      <xsl:value-of select="i18n:translate('component.rc.attendees')" />
+                      <xsl:value-of select="mcri18n:translate('component.rc.attendees')"/>
                     </a>
                   </xsl:if>
                   <xsl:if test="contains($RequestURL, '/attendees')">
                     <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}">
-                      <xsl:value-of select="i18n:translate('component.rc.slot.show.entries')" />
+                      <xsl:value-of select="mcri18n:translate('component.rc.slot.show.entries')"/>
                     </a>
                   </xsl:if>
                 </xsl:if>
                 <xsl:if test="$hasAdminPermission or $isOwner">
                   <div class="dropdown-divider" />
                   <a class="dropdown-item" role="menuitem" tabindex="-1"
-                    href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                    href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
                   >
-                    <xsl:value-of select="i18n:translate('component.rc.slot.edit.accesskeys')" />
+                    <xsl:value-of select="mcri18n:translate('component.rc.slot.edit.accesskeys')"/>
                   </a>
                   <div class="dropdown-divider" />
                   <a class="dropdown-item" role="menuitem" tabindex="-1"
-                    href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                    href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
                   >
-                    <xsl:value-of select="i18n:translate('component.rc.slot.edit')" />
+                    <xsl:value-of select="mcri18n:translate('component.rc.slot.edit')"/>
                   </a>
                   <xsl:if test="@status != 'pending'">
                     <a class="dropdown-item" role="menuitem" tabindex="-1"
-                      href="{$WebApplicationBaseURL}content/rc/slot.xed?action=deleteConfirm&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"
+                      href="{$WebApplicationBaseURL}content/rc/slot.xed?action=deleteConfirm&amp;slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
                     >
                       <span class="text-danger">
-                        <xsl:value-of select="i18n:translate('component.rc.slot.delete')" />
+                        <xsl:value-of select="mcri18n:translate('component.rc.slot.delete')"/>
                       </span>
                     </a>
                   </xsl:if>
@@ -162,15 +167,15 @@
               </xsl:if>
               <xsl:if test="not($hasAdminPermission) and not($hasEditorPermission) and not($writePermission)">
                 <a class="dropdown-item" role="menuitem" tabindex="-1"
-                  href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={encoder:encode(string($RequestURL))}"
+                  href="{$WebApplicationBaseURL}authorization/accesskey.xed?objId={$objectId}&amp;url={fn:encode-for-uri($RequestURL)}"
                 >
-                  <xsl:value-of select="i18n:translate('component.rc.slot.change_accesskey')" />
+                  <xsl:value-of select="mcri18n:translate('component.rc.slot.change_accesskey')"/>
                 </a>
               </xsl:if>
               <xsl:if test="$hasAdminPermission">
                 <div class="dropdown-divider" />
                 <a class="dropdown-item" role="menuitem" tabindex="-1" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Style=xml">
-                  <xsl:value-of select="i18n:translate('component.rc.slot.showXML')" />
+                  <xsl:value-of select="mcri18n:translate('component.rc.slot.showXML')"/>
                 </a>
               </xsl:if>
             </div>
@@ -210,7 +215,7 @@
           </xsl:if>
         </xsl:for-each>
         <xsl:text disable-output-escaping="yes">&amp;nbsp;-&amp;nbsp;</xsl:text>
-        <xsl:value-of select="i18n:translate('component.rc.slot.header', @id)" />
+        <xsl:value-of select="mcri18n:translate('component.rc.slot.header', @id)"/>
         <xsl:text disable-output-escaping="yes">&amp;nbsp;(</xsl:text>
         <xsl:apply-templates select="@id" mode="rcLocation" />
         <xsl:text>)</xsl:text>
@@ -219,7 +224,7 @@
         <xsl:if test="string-length(contact/@name) &gt; 0">
           <div class="contact">
             <strong>
-              <xsl:value-of select="i18n:translate('component.rc.slot.contact')" />
+              <xsl:value-of select="mcri18n:translate('component.rc.slot.contact')"/>
               <xsl:text>: </xsl:text>
             </strong>
             <xsl:choose>
@@ -253,7 +258,7 @@
             <xsl:with-param name="delimiter" select="' '" />
           </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="last" select="xalan:nodeset($parts)/token[count(../token)]" />
+        <xsl:variable name="last" select="$parts/token[count(../token)]" />
         <xsl:variable name="first" select="substring-before($name, $last)" />
         <xsl:value-of select="concat($last, ', ', $first)" />
       </xsl:when>

@@ -3,14 +3,13 @@
 <!-- XSL to transform XML output from MCRClassificationBrowser servlet to HTML for client browser, which is loaded by AJAX. The browser sends data of all child categories 
   of the requested node. -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-  xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="xsl xalan encoder"
->
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:fn="http://www.w3.org/2005/xpath-functions"
+                exclude-result-prefixes="xsl fn">
 
   <xsl:output method="xml" omit-xml-declaration="yes" />
 
   <xsl:include href="coreFunctions.xsl" />
-
   <xsl:param name="WebApplicationBaseURL" />
   <xsl:param name="ServletsBaseURL" />
   <xsl:param name="template" />
@@ -75,9 +74,9 @@
                   </xsl:variable>
                 
                   <xsl:value-of select="concat($ServletsBaseURL,'XEditor?_xed_submit_return= ')" />
-                  <xsl:value-of select="concat('&amp;_xed_session=',encoder:encode($xedSession,'UTF-8'))" />
-                  <xsl:value-of select="concat('&amp;@id=',encoder:encode($groupName,'UTF-8'))" />
-                  <xsl:value-of select="concat('&amp;label/@text=',encoder:encode($label,'UTF-8'))" />
+                  <xsl:value-of select="concat('&amp;_xed_session=',fn:encode-for-uri($xedSession))"/>
+                  <xsl:value-of select="concat('&amp;@id=',fn:encode-for-uri($groupName))"/>
+                  <xsl:value-of select="concat('&amp;label/@text=',fn:encode-for-uri($label))"/>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:text>#</xsl:text>

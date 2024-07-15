@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" xmlns:xlink="http://www.w3.org/1999/xlink"
-  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:mcrld="xalan://org.mycore.common.MCRLanguageDetector" xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
-  xmlns:mcrdataurl="xalan://org.mycore.datamodel.common.MCRDataURL" xmlns:migutils="xalan://de.urmel_dl.dbt.migration.MigrationUtils" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  exclude-result-prefixes="xsl xlink mods mcrld mcrxml mcrdataurl migutils xalan"
->
+<xsl:stylesheet version="3.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xalan="http://xml.apache.org/xalan"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                xmlns:mods="http://www.loc.gov/mods/v3"
+                xmlns:mcrld="xalan://org.mycore.common.MCRLanguageDetector"
+                xmlns:mcrxml="xalan://org.mycore.common.xml.MCRXMLFunctions"
+                xmlns:mcrdataurl="xalan://org.mycore.datamodel.common.MCRDataURL"
+                xmlns:migutils="xalan://de.urmel_dl.dbt.migration.MigrationUtils"
+                exclude-result-prefixes="xsl xlink mods mcrld mcrxml mcrdataurl migutils xalan">
 
   <xsl:output method="xml" encoding="UTF-8" indent="yes" />
 
@@ -54,11 +59,11 @@
       <xsl:variable name="content" select="document(@altFormat)/abstract" />
       <xsl:variable name="contentEscaped">
         <xsl:copy>
-          <xsl:apply-templates select="xalan:nodeset($content)/child::node()" mode="serialize" />
+          <xsl:apply-templates select="$content/child::node()" mode="serialize" />
         </xsl:copy>
       </xsl:variable>
       <xsl:variable name="processedContent">
-        <xsl:apply-templates select="xalan:nodeset($contentEscaped)" mode="processAbstract" />
+        <xsl:apply-templates select="$contentEscaped" mode="processAbstract" />
       </xsl:variable>
 
       <xsl:if test="string-length($processedContent) &gt; 0">
