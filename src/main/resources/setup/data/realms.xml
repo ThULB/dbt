@@ -9,10 +9,10 @@
       <label xml:lang="en">Login with your user credentials of your university</label>
       <info>
         <label xml:lang="de">
-          &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt, BU Weimar, FH Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
+          &lt;strong class="text-danger"&gt;Anmeldung für Benutzer der FSU Jena, TU Ilmenau, Uni Erfurt, BU Weimar, HfM Weimar, FH Erfurt und Hochschule Nordhausen.&lt;/strong&gt;
         </label>
         <label xml:lang="en">
-          &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt, Weimar and Nordhausen.&lt;/strong&gt;
+          &lt;strong class="text-danger"&gt;Login for university users of FSU Jena, TU Ilmenau, Erfurt, Weimar (BU &amp; HfM) and Nordhausen.&lt;/strong&gt;
         </label>
       </info>
     </login>
@@ -88,10 +88,24 @@
       <attribute name="eMail" mapping="mail" />
       <attribute name="roles" mapping="eduPersonAffiliation">
         <valueMapping name="employee">submitter</valueMapping>
-        <valueMapping name="member">reader</valueMapping>
+        <valueMapping name="member">submitter</valueMapping>
+        <valueMapping name="affiliate">submitter</valueMapping>
       </attribute>
     </attributeMapping>
     <passwordChangeURL>https://passwort.uni-weimar.de/</passwordChangeURL>
+  </realm>
+  <realm id="hfm-weimar.de">
+    <label xml:lang="de">Hochschule für Musik Franz Liszt Weimar</label>
+    <label xml:lang="en">University of Music Franz Liszt Weimar</label>
+    <attributeMapping>
+      <attribute name="userName" mapping="eppn" />
+      <attribute name="realName" mapping="displayName" converter="de.urmel_dl.dbt.utils.DisplayNameConverter" />
+      <attribute name="eMail" mapping="mail" />
+      <attribute name="roles" mapping="eduPersonAffiliation">
+        <valueMapping name="employee">submitter</valueMapping>
+        <valueMapping name="member">reader</valueMapping>
+      </attribute>
+    </attributeMapping>
   </realm>
   <realm id="hs-nordhausen.de">
     <label xml:lang="de">Hochschule Nordhausen</label>
