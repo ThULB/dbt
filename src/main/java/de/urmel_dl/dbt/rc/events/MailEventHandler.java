@@ -3,15 +3,15 @@
  * Copyright (c) 2000 - 2016
  * See <https://www.db-thueringen.de/> and <https://github.com/ThULB/dbt/>
  *
- * This program is free software: you can redistribute it and/or modify it under the 
+ * This program is free software: you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software Foundation,
  * either version 3 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful, 
- * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this
  * program. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -60,7 +60,7 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleSlotInactivate(MCREvent evt, Slot slot) {
-        handleEvent(evt, slot);
+        handleEvent(evt, slot, true);
     }
 
     /* (non-Javadoc)
@@ -68,7 +68,7 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleSlotReactivate(MCREvent evt, Slot slot) {
-        handleEvent(evt, slot);
+        handleEvent(evt, slot, true);
     }
 
     /* (non-Javadoc)
@@ -76,7 +76,7 @@ public class MailEventHandler extends EventHandlerBase {
      */
     @Override
     protected void handleSlotOwnerTransfer(MCREvent evt, Slot slot) {
-        handleEvent(evt, slot);
+        handleEvent(evt, slot, true);
     }
 
     /* (non-Javadoc)
@@ -104,10 +104,14 @@ public class MailEventHandler extends EventHandlerBase {
     }
 
     private void handleEvent(MCREvent evt, Slot slot) {
+        handleEvent(evt, slot, false);
+    }
+
+    private void handleEvent(MCREvent evt, Slot slot, boolean customEvent) {
         final StringBuilder uri = new StringBuilder();
 
         uri.append("xslStyle:" + MAIL_STYLESHEET);
-        uri.append("?action=" + evt.getEventType());
+        uri.append("?action=" + (customEvent ? evt.getCustomEventType() : evt.getEventType()));
         uri.append("&type=" + evt.getObjectType());
         uri.append("&slotId=" + slot.getSlotId());
 
