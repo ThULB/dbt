@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  exclude-result-prefixes=" mcri18n xsl" version="3.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  exclude-result-prefixes="xsl i18n" version="1.0"
 >
 
-  <xsl:include href="resource:xsl/copynodes.xsl" />
+  <xsl:include href="copynodes.xsl" />
 
   <xsl:param name="i18nPrefix" select="'common'" />
 
@@ -17,7 +17,7 @@
   <xsl:template match="value">
     <option value="{text()}">
       <xsl:copy-of select="@*" />
-      <xsl:value-of select="mcri18n:translate(concat($i18nPrefix, '.', $enumName, '.', text()))" />
+      <xsl:value-of select="i18n:translate(concat($i18nPrefix, '.', $enumName, '.', text()))" />
     </option>
   </xsl:template>
 

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-                xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
-                xmlns:mods="http://www.loc.gov/mods/v3"
-                xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl xsi xlink mods mcri18n pica"
+<xsl:stylesheet version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
+  xmlns:mods="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl xsi xlink mods i18n pica"
 >
 
-  <xsl:include href="resource:xslt/MyCoReLayout.xsl" />
+  <xsl:include href="MyCoReLayout.xsl" />
   <xsl:include href="pagination.xsl" />
   <xsl:include href="pica-record-isbd.xsl" />
 
-  <xsl:variable name="PageTitle" select="mcri18n:translate('component.opc.result.pageTitle')" />
+  <xsl:variable name="PageTitle" select="i18n:translate('component.opc.result.pageTitle')" />
 
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />
 
@@ -51,7 +47,7 @@
 
     <div class="card">
       <h5 class="card-header">
-        <xsl:value-of select="mcri18n:translate('component.opc.result.pageTitle')" />
+        <xsl:value-of select="i18n:translate('component.opc.result.pageTitle')" />
       </h5>
       <div class="card-body p-0">
         <xsl:for-each select="./pica:record">
@@ -71,7 +67,7 @@
                         <xsl:value-of
                           select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=opcrecord&amp;slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;catalogId=', $catalogId, '&amp;ppn=', @ppn)" />
                       </xsl:attribute>
-                        <xsl:value-of select="mcri18n:translate('button.add')" />
+                        <xsl:value-of select="i18n:translate('button.add')" />
                       </a>
                     </div>
                   </xsl:if>
@@ -84,7 +80,7 @@
       <div class="card-footer d-flex justify-content-between">
         <div>
           <span class="d-none d-md-inline-block pt-2 pb-2">
-            <xsl:value-of select="mcri18n:translate('component.opc.result.head.hits', concat($Page, ';', count(./pica:record)))" />
+            <xsl:value-of select="i18n:translate('component.opc.result.head.hits', concat($Page, ';', count(./pica:record)))" />
           </span>
         </div>
         <xsl:if test="$needsPagination = 'true'">

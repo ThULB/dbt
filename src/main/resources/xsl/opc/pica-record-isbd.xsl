@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="xsl xsi xlink pica"
+<xsl:stylesheet version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
+  xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xsl xsi xlink pica"
 >
 
   <xsl:variable name="recordURLPrefix" select="''" />

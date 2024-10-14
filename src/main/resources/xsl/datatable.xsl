@@ -3,12 +3,12 @@
 <!-- ====================================================================== -->
 <!-- $Revision$ $Date$ -->
 <!-- ====================================================================== -->
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
 
-                xmlns:fn="http://www.w3.org/2005/xpath-functions"
-                exclude-result-prefixes="xsl fn mcri18n">
-<!--  <xsl:include href="str.tokenize.xsl" />-->
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:str="http://exslt.org/strings" exclude-result-prefixes="xsl xalan i18n str"
+>
+
+  <xsl:include href="str.tokenize.xsl" />
 
   <xsl:param name="SortBy" select="''" />
   <xsl:param name="SortOrder" select="''" />
@@ -24,10 +24,10 @@
   <xsl:variable name="defaultNumPerPage" select="10" />
   <xsl:variable name="defaultSortBy">
     <xsl:value-of
-      select="$headerCols/col[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy|$headerCols/th[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy" />
+      select="xalan:nodeset($headerCols)/col[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy|xalan:nodeset($headerCols)/th[(position() = 1) and (string-length(@sortOrder) &gt; 0)]/@sortBy" />
   </xsl:variable>
   <xsl:variable name="defaultSortOrder">
-    <xsl:value-of select="$headerCols/col[1]/@sortOrder|$headerCols/th[1]/@sortOrder" />
+    <xsl:value-of select="xalan:nodeset($headerCols)/col[1]/@sortOrder|xalan:nodeset($headerCols)/th[1]/@sortOrder" />
   </xsl:variable>
 
   <xsl:variable name="SortBy">
@@ -49,7 +49,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="type">
-      <xsl:value-of select="$headerCols/col[1]/@sortType|$headerCols/th[1]/@sortType" />
+      <xsl:value-of select="xalan:nodeset($headerCols)/col[1]/@sortType|xalan:nodeset($headerCols)/th[1]/@sortType" />
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="(string-length($sortType) = 0) and (string-length($type) &gt; 0)">
@@ -85,7 +85,7 @@
     <xsl:text>10,25,50,100</xsl:text>
   </xsl:variable>
 
-  <xsl:template name="getParam">
+  <xsl:template name="getParam" xmlns:decoder="xalan://java.net.URLDecoder">
     <xsl:param name="par" />
     <xsl:param name="default" select="''" />
 
@@ -98,7 +98,7 @@
 
     <xsl:choose>
       <xsl:when test="string-length($urlParam) &gt; 0">
-        <xsl:value-of select="$urlParam" disable-output-escaping="yes"/>
+        <xsl:value-of select="decoder:decode(string($urlParam), 'UTF-8')" />
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$default" />
@@ -175,7 +175,7 @@
               <div class="form-group flex-fill m-0" id="{$id}_filter">
                 <label class="d-inline-flex justify-content-start flex-row w-100 align-items-center">
                   <span class="fa fa-filter mr-1" aria-hidden="true" />
-                  <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.filter'))" />
+                  <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filter'))" />
                   <input class="form-control ml-2" type="search" name="Filter">
                     <xsl:attribute name="value">
                       <xsl:if test="string-length($Filter) &gt; 0">
@@ -195,12 +195,12 @@
           <div id="{$id}_length" class="form-group d-none d-md-inline-flex m-0">
             <select class="form-control custom-select mr-2" name="numPerPage" size="1" onchange="this.form.submit()">
               <xsl:variable name="tokens">
-                <xsl:call-template name="fn:tokenize">
+                <xsl:call-template name="str:tokenize">
                   <xsl:with-param name="string" select="$dataTableNumPerPageList" />
                   <xsl:with-param name="delimiters" select="','" />
                 </xsl:call-template>
               </xsl:variable>
-              <xsl:for-each select="$tokens/token">
+              <xsl:for-each select="xalan:nodeset($tokens)/token">
                 <option value="{.}">
                   <xsl:if test="$numPerPage = .">
                     <xsl:attribute name="selected"><xsl:text>selected</xsl:text></xsl:attribute>
@@ -210,7 +210,7 @@
               </xsl:for-each>
             </select>
             <label class="d-inline">
-              <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.lengthMenu'))" />
+              <xsl:value-of select="i18n:translate(concat($i18nprefix, '.lengthMenu'))" />
               <noscript>
                 <input class="btn" type="submit" name="Ok" value="Ok" />
               </noscript>
@@ -226,7 +226,7 @@
             <xsl:when test="number($end) = 0">
               <tr class="odd" align="center">
                 <td colspan="{$dataTableHeaderColCount}">
-                  <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.noItemFound'))" />
+                  <xsl:value-of select="i18n:translate(concat($i18nprefix, '.noItemFound'))" />
                 </td>
               </tr>
             </xsl:when>
@@ -246,7 +246,7 @@
             <xsl:if test="$pages &gt; 1">
               <xsl:attribute name="class">d-none d-md-inline-block pt-2 pb-2</xsl:attribute>
             </xsl:if>
-            <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.filterInfo'), concat($start, ';', $end, ';', $total))" />
+            <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filterInfo'), concat($start, ';', $end, ';', $total))" />
           </span>
         </div>
         <xsl:if test="$pages &gt; 1">
@@ -263,7 +263,7 @@
   <xsl:template name="dataTableHeader">
     <thead>
       <tr>
-        <xsl:for-each select="$headerCols/col|$headerCols/th">
+        <xsl:for-each select="xalan:nodeset($headerCols)/col|xalan:nodeset($headerCols)/th">
           <xsl:variable name="sortOrderAfter">
             <xsl:choose>
               <xsl:when test="($SortBy = @sortBy) and ($SortOrder = 'asc')">
@@ -365,7 +365,7 @@
 
           <xsl:variable name="row">
             <xsl:choose>
-              <xsl:when test="count($drow/row|$drow/tr) &gt; 0">
+              <xsl:when test="count(xalan:nodeset($drow)/row|xalan:nodeset($drow)/tr) &gt; 0">
                 <xsl:copy-of select="$drow" />
               </xsl:when>
               <xsl:otherwise>
@@ -376,7 +376,7 @@
             </xsl:choose>
           </xsl:variable>
 
-          <xsl:for-each select="$row/row|$row/tr">
+          <xsl:for-each select="xalan:nodeset($row)/row|xalan:nodeset($row)/tr">
             <tr class="{$trClass}">
               <!-- extra css class for row -->
               <xsl:if test="./class">
@@ -424,7 +424,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
           </xsl:when>
@@ -433,7 +433,7 @@
             <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -450,7 +450,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
           </xsl:when>
@@ -459,7 +459,7 @@
             <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -516,7 +516,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
           </xsl:when>
@@ -525,7 +525,7 @@
             <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -542,7 +542,7 @@
               </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>
           </xsl:when>
@@ -551,7 +551,7 @@
             <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -597,12 +597,12 @@
   <!-- Helper Variables/Functions -->
 
   <xsl:variable name="dataTableHeaderColCount">
-    <xsl:value-of select="count($headerCols/col|$headerCols/th)" />
+    <xsl:value-of select="count(xalan:nodeset($headerCols)/col|xalan:nodeset($headerCols)/th)" />
   </xsl:variable>
 
   <xsl:variable name="dataTableSortedCol">
     <xsl:variable name="pos">
-      <xsl:for-each select="$headerCols/col|$headerCols/th">
+      <xsl:for-each select="xalan:nodeset($headerCols)/col|xalan:nodeset($headerCols)/th">
         <xsl:if test="$SortBy = @sortBy">
           <xsl:value-of select="position()" />
         </xsl:if>
@@ -691,12 +691,12 @@
     </xsl:variable>
 
     <xsl:variable name="params">
-      <xsl:call-template name="fn:tokenize">
+      <xsl:call-template name="str:tokenize">
         <xsl:with-param name="string" select="$queryString" />
         <xsl:with-param name="delimiters" select="'&amp;'" />
       </xsl:call-template>
     </xsl:variable>
-    <xsl:for-each select="$params/token">
+    <xsl:for-each select="xalan:nodeset($params)/token">
       <xsl:variable name="name" select="substring-before(., '=')" />
       <xsl:variable name="value" select="substring-after(., '=')" />
 

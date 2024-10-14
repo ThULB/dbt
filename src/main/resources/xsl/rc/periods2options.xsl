@@ -2,8 +2,8 @@
 <!-- ======================================================================= -->
 <!-- $Revision$ $Date$ -->
 <!-- ======================================================================= -->
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-  exclude-result-prefixes="xsl mcri18n"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  exclude-result-prefixes="xsl i18n"
 >
 
   <xsl:include href="coreFunctions.xsl" />

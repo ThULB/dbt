@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:mcri18n="http://www.mycore.de/xslt/i18n" exclude-result-prefixes="xsl mcri18n"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" exclude-result-prefixes="xsl xalan i18n"
 >
 
-  <xsl:include href="resource:xslt/MyCoReLayout.xsl" />
+  <xsl:include href="MyCoReLayout.xsl" />
 
-  <xsl:variable name="PageTitle" select="mcri18n:translate('component.rc.mailqueue.pageTitle')" />
+  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.mailqueue.pageTitle')" />
 
   <xsl:template match="/mail-queue">
     <h2>
@@ -37,7 +37,7 @@
         <div ng-hide="!jobs.loading">
           <span class="fas fa-sync fa-spin"></span>
           <xsl:text disable-output-escaping="yes">&amp;nbsp;</xsl:text>
-          <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.loading')" />
+          <xsl:value-of select="i18n:translate('component.rc.mailqueue.loading')" />
         </div>
         <div class="datatable card" ng-show="jobs.job &amp;&amp; jobs.job.length != 0">
           <div class="card-header">
@@ -47,7 +47,7 @@
                 <select size="1" name="numPerPage" ng-model="jobs.limit" class="form-control custom-select mr-2"
                   ng-options="np for np in [10, 25, 50, 100]" />
                 <label class="d-inline">
-                  <xsl:value-of select="mcri18n:translate('dataTable.lengthMenu')" />
+                  <xsl:value-of select="i18n:translate('dataTable.lengthMenu')" />
                 </label>
               </div>
             </form>
@@ -58,7 +58,7 @@
                 <tr>
                   <th>
                     <a ng-click="setSort('id')">
-                      <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.id')" />
+                      <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.id')" />
                       <span class="ml-2 fas sort-icon">
                         <xsl:attribute name="ng-class">
                           <xsl:text>{'fa-sort':!isSort('id'),'fa-sort-up':isSort('id') &amp;&amp; !sort.reverse,'fa-sort-down':isSort('id') &amp;&amp; sort.reverse}</xsl:text>
@@ -68,7 +68,7 @@
                   </th>
                   <th>
                     <a ng-click="setSort('status')">
-                      <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.status')" />
+                      <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.status')" />
                       <span class="ml-2 fas sort-icon">
                         <xsl:attribute name="ng-class">
                       <xsl:text>{'fa-sort':!isSort('status'),'fa-sort-up':isSort('status') &amp;&amp; !sort.reverse,'fa-sort-down':isSort('status') &amp;&amp; sort.reverse}</xsl:text>
@@ -77,11 +77,11 @@
                     </a>
                   </th>
                   <th class="text-right">
-                    <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.slotId')" />
+                    <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.slotId')" />
                   </th>
                   <th class="text-right">
                     <a ng-click="setSort('date', 'added')">
-                      <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.added')" />
+                      <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.added')" />
                       <span class="ml-2 fas sort-icon">
                         <xsl:attribute name="ng-class">
                       <xsl:text>{'fa-sort':!isSort('date', 'added'),'fa-sort-up':isSort('date', 'added') &amp;&amp; !sort.reverse,'fa-sort-down':isSort('date', 'added') &amp;&amp; sort.reverse}</xsl:text>
@@ -91,7 +91,7 @@
                   </th>
                   <th class="text-right">
                     <a ng-click="setSort('date', 'start')">
-                      <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.start')" />
+                      <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.start')" />
                       <span class="ml-2 fas sort-icon">
                         <xsl:attribute name="ng-class">
                       <xsl:text>{'fa-sort':!isSort('date', 'start'),'fa-sort-up':isSort('date', 'start') &amp;&amp; !sort.reverse,'fa-sort-down':isSort('date', 'start') &amp;&amp; sort.reverse}</xsl:text>
@@ -101,7 +101,7 @@
                   </th>
                   <th class="text-right">
                     <a ng-click="setSort('date', 'finished')">
-                      <xsl:value-of select="mcri18n:translate('component.rc.mailqueue.job.finished')" />
+                      <xsl:value-of select="i18n:translate('component.rc.mailqueue.job.finished')" />
                       <span class="ml-2 fas sort-icon">
                         <xsl:attribute name="ng-class">
                       <xsl:text>{'fa-sort':!isSort('date', 'finished'),'fa-sort-up':isSort('date', 'finished') &amp;&amp; !sort.reverse,'fa-sort-down':isSort('date', 'finished') &amp;&amp; sort.reverse}</xsl:text>
@@ -160,12 +160,11 @@
       </div>
     </div>
 
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-translate.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-translate-loader-partial.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-modal-service.min.js" />
-
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/mail-queue.min.js" />
   </xsl:template>
-
 </xsl:stylesheet>

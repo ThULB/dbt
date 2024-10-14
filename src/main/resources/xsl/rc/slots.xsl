@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:fn="http://www.w3.org/2005/xpath-functions"
-                exclude-result-prefixes="mcri18n xlink fn">
-
-  <xsl:include href="resource:xslt/MyCoReLayout.xsl" />
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:encoder="xalan://java.net.URLEncoder" exclude-result-prefixes="i18n xlink encoder"
+>
+  <xsl:include href="MyCoReLayout.xsl" />
 
   <xsl:include href="slot-templates.xsl" />
 
   <xsl:include href="datatable.xsl" />
 
-  <xsl:variable name="PageTitle" select="mcri18n:translate('component.rc.slots.title')"/>
+  <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slots.title')" />
 
   <xsl:variable name="rcLocations" select="document('classification:metadata:-1:children:RCLOC')//categories" />
 
@@ -19,7 +16,7 @@
 
   <xsl:template match="/slots">
     <h2>
-      <xsl:value-of select="mcri18n:translate('component.rc.slots.title')"/>
+      <xsl:value-of select="i18n:translate('component.rc.slots.title')" />
     </h2>
 
     <xsl:apply-templates mode="dataTable" select=".">
@@ -31,32 +28,32 @@
   <xsl:template mode="dataTableHeader" match="slots">
     <xsl:if test="$hasAdminPermission">
       <col align="center" width="5%">
-        <xsl:value-of select="mcri18n:translate('component.rc.slot.actions')"/>
+        <xsl:value-of select="i18n:translate('component.rc.slot.actions')" />
       </col>
       <col sortBy="slotId" sortOrder="asc" width="10%">
-        <xsl:value-of select="mcri18n:translate('component.rc.slot.id')"/>
+        <xsl:value-of select="i18n:translate('component.rc.slot.id')" />
       </col>
     </xsl:if>
     <xsl:if test="$hasEditorPermission and not($hasAdminPermission)">
       <col align="center" width="5%">
-        <xsl:value-of select="mcri18n:translate('component.rc.slot.actions')"/>
+        <xsl:value-of select="i18n:translate('component.rc.slot.actions')" />
       </col>
     </xsl:if>
     <col sortBy="slot.lecturers" width="15%">
-      <xsl:value-of select="mcri18n:translate('component.rc.slot.lecturer')"/>
+      <xsl:value-of select="i18n:translate('component.rc.slot.lecturer')" />
     </col>
     <col sortBy="slot.title" width="*">
-      <xsl:value-of select="mcri18n:translate('component.rc.slot.title')"/>
+      <xsl:value-of select="i18n:translate('component.rc.slot.title')" />
     </col>
     <col sortBy="slot.validTo" width="15%">
-      <xsl:value-of select="mcri18n:translate('component.rc.slot.period')"/>
+      <xsl:value-of select="i18n:translate('component.rc.slot.period')" />
     </col>
     <col width="25%">
       <xsl:if test="not($hasAdminPermission)">
         <xsl:attribute name="sortBy">slotId</xsl:attribute>
         <xsl:attribute name="sortOrder">asc</xsl:attribute>
       </xsl:if>
-      <xsl:value-of select="mcri18n:translate('component.rc.slot.location')"/>
+      <xsl:value-of select="i18n:translate('component.rc.slot.location')" />
     </col>
   </xsl:template>
 
@@ -75,8 +72,7 @@
       <xsl:if test="$hasEditorPermission and not($hasAdminPermission)">
         <col align="center" valign="top">
           <div class="btn-group">
-            <a class="btn btn-primary" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit"
-               title="{mcri18n:translate('component.rc.slot.edit')}">
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}rc/{@id}?XSL.Mode=edit" title="{i18n:translate('component.rc.slot.edit')}">
               <i class="fas fa-edit" />
             </a>
           </div>
@@ -85,13 +81,13 @@
       <xsl:if test="$hasAdminPermission">
         <col align="center" valign="top">
           <div class="btn-group ml-2">
-            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
-               title="{mcri18n:translate('component.rc.slot.edit')}"
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+              title="{i18n:translate('component.rc.slot.edit')}"
             >
               <i class="fas fa-edit" />
             </a>
-            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={fn:encode-for-uri($RequestURL)}"
-               title="{mcri18n:translate('component.rc.slot.edit.accesskeys')}"
+            <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/edit-accesskeys.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
+              title="{i18n:translate('component.rc.slot.edit.accesskeys')}"
             >
               <i class="fas fa-lock" />
             </a>
@@ -103,7 +99,7 @@
           </a>
           <xsl:if test="@status = 'new'">
             <span class="label label-danger float-right">
-              <xsl:value-of select="mcri18n:translate('component.rc.slot.new')"/>
+              <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
             </span>
           </xsl:if>
         </col>

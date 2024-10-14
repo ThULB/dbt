@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan" exclude-result-prefixes="xalan">
 
   <xsl:include href="resource:xsl/email-functions.xsl" />
 
@@ -48,7 +47,7 @@ a:hover {
               <xsl:apply-templates select="child::node()" />
             </div>
           </xsl:variable>
-          <xsl:apply-templates select="$html" mode="html" />
+          <xsl:apply-templates select="xalan:nodeset($html)" mode="html" />
         </body>
       </xsl:when>
       <xsl:otherwise>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
-                xmlns:sm="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
-                xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-                exclude-result-prefixes="xalan xlink pica menc: mcri18n"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation" xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" xmlns:sm="xalan://de.urmel_dl.dbt.rc.persistency.SlotManager"
+  xmlns:menc="xalan://de.urmel_dl.dbt.media.MediaService" exclude-result-prefixes="xalan i18n xlink pica menc"
 >
 
   <!-- include custom templates for supported objecttypes -->
@@ -79,9 +77,9 @@
 
   <xsl:template match="entries">
     <div class="d-xl-flex flex-xl-row-reverse">
-      <xsl:apply-templates select="$groupedEntries" mode="toc" />
+      <xsl:apply-templates select="xalan:nodeset($groupedEntries)" mode="toc" />
       <div class="flex-xl-column flex-grow-1 mw-xl-75 minw-0">
-        <xsl:apply-templates select="$groupedEntries//group" />
+        <xsl:apply-templates select="xalan:nodeset($groupedEntries)//group" />
       </div>
     </div>
   </xsl:template>
@@ -91,7 +89,7 @@
       <div class="flex-xl-column mb-2 ml-xl-2 minw-25">
         <div class="slot-toc card">
           <h5 class="card-header">
-            <xsl:value-of select="mcri18n:translate('component.rc.slot.toc')"/>
+            <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
           </h5>
           <div class="list-group list-group-flush" id="slot-toc">
             <xsl:for-each select="group/entry/headline">
@@ -136,10 +134,10 @@
 
     <div class="new-entry-actions d-flex flex-column flex-md-row justify-content-between">
       <b>
-        <xsl:value-of select="mcri18n:translate('component.rc.slot.entry.add')"/>
+        <xsl:value-of select="i18n:translate('component.rc.slot.entry.add')" />
       </b>
       <div>
-        <xsl:for-each select="$entryTypes//entry-type">
+        <xsl:for-each select="xalan:nodeset($entryTypes)//entry-type">
           <a>
             <xsl:attribute name="href">
             <xsl:choose>
@@ -155,7 +153,7 @@
               <xsl:value-of select="concat('&amp;catalogId=', $catalogId)" />
             </xsl:if>
           </xsl:attribute>
-            <xsl:value-of select="mcri18n:translate(i18n/@single)"/>
+            <xsl:value-of select="i18n:translate(i18n/@single)" />
           </a>
           <xsl:if test="position() != last()">
             <xsl:text> | </xsl:text>
@@ -237,17 +235,17 @@
     <div class="ml-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
-           title="{mcri18n:translate('component.rc.slot.entry.edit')}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
         >
           <i class="fas fa-pencil-alt"></i>
         </a>
         <a class="btn btn-danger"
           href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
-           title="{mcri18n:translate('component.rc.slot.entry.delete')}"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
         >
           <i class="far fa-trash-alt"></i>
         </a>
-        <button class="btn btn-info entry-mover" title="{mcri18n:translate('component.rc.slot.entry.move')}">
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
           <i class="fas fa-arrows-alt"></i>
         </button>
       </div>
@@ -258,13 +256,13 @@
     <div class="ml-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
-           title="{mcri18n:translate('component.rc.slot.entry.edit')}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
         >
           <i class="fas fa-pencil-alt"></i>
         </a>
         <a class="btn btn-danger"
           href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
-           title="{mcri18n:translate('component.rc.slot.entry.delete')}"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
         >
           <i class="far fa-trash-alt"></i>
         </a>
@@ -276,7 +274,7 @@
     <xsl:if test="$hasAdminPermission">
       <small class="entry-infoline text-muted">
         <xsl:value-of
-                select="mcri18n:translate('component.rc.slot.entry.infoLine', concat(../@id, ';', ../date[@type='created'], ';', ../date[@type='modified']))"
+          select="i18n:translate('component.rc.slot.entry.infoLine', concat(../@id, ';', ../date[@type='created'], ';', ../date[@type='modified']))"
           disable-output-escaping="yes" />
       </small>
     </xsl:if>
@@ -351,7 +349,7 @@
             <xsl:value-of select="." />
           </a>
           <i class="fas fa-info-circle text-info ml-1" data-toggle="tooltip" data-placement="top"
-             title="{mcri18n:translate('component.rc.slot.entry.mcrobject.secured')}"/>
+            title="{i18n:translate('component.rc.slot.entry.mcrobject.secured')}" />
         </h3>
       </xsl:when>
       <xsl:otherwise>
@@ -369,7 +367,7 @@
           <xsl:apply-templates select="document(concat('notnull:mcrobject:', @id))/*" mode="basketContent" />
         </mcrobject>
       </xsl:variable>
-      <xsl:apply-templates select="$mcrObject" mode="mcrObject" />
+      <xsl:apply-templates select="xalan:nodeset($mcrObject)" mode="mcrObject" />
       <xsl:if test="string-length(.) &gt; 0">
         <i class="comment text-muted">
           <xsl:value-of select="." />
@@ -435,7 +433,7 @@
                 </xsl:choose>
                 <xsl:if test="$writePermission and $isStreamingSupported">
                   <i class="fas fa-sync fa-spin text-info ml-2" data-toggle="tooltip" data-placement="top"
-                     title="{mcri18n:translate('component.rc.slot.entry.file.encoding')}"/>
+                    title="{i18n:translate('component.rc.slot.entry.file.encoding')}" />
                 </xsl:if>
               </a>
             </xsl:otherwise>
@@ -459,24 +457,24 @@
     <div class="ml-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
-           title="{mcri18n:translate('component.rc.slot.entry.edit')}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
         >
           <i class="fas fa-pencil-alt"></i>
         </a>
         <xsl:if test="$hasMediaFiles and $hasSMILFile">
           <button type="button" class="btn btn-info" data-toggle="modal" data-target="#share-player-{$entryId}"
-                  title="{mcri18n:translate('component.rc.slot.entry.share')}"
+            title="{i18n:translate('component.rc.slot.entry.share')}"
           >
             <i class="fas fa-share"></i>
           </button>
         </xsl:if>
         <a class="btn btn-danger"
           href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
-           title="{mcri18n:translate('component.rc.slot.entry.delete')}"
+          title="{i18n:translate('component.rc.slot.entry.delete')}"
         >
           <i class="far fa-trash-alt"></i>
         </a>
-        <button class="btn btn-info entry-mover" title="{mcri18n:translate('component.rc.slot.entry.move')}">
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
           <i class="fas fa-arrows-alt"></i>
         </button>
       </div>
@@ -489,19 +487,19 @@
     <div class="ml-2 entry-buttons">
       <div class="btn-group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
-           title="{mcri18n:translate('component.rc.slot.entry.edit')}"
+          title="{i18n:translate('component.rc.slot.entry.edit')}"
         >
           <i class="fas fa-pencil-alt"></i>
         </a>
         <xsl:if test="$hasAdminPermission or (string-length(@deleted) = 0) or (@deleted != 'true')">
           <a class="btn btn-danger"
             href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}&amp;action=delete"
-             title="{mcri18n:translate('component.rc.slot.entry.delete')}"
+            title="{i18n:translate('component.rc.slot.entry.delete')}"
           >
             <i class="far fa-trash-alt"></i>
           </a>
         </xsl:if>
-        <button class="btn btn-info entry-mover" title="{mcri18n:translate('component.rc.slot.entry.move')}">
+        <button class="btn btn-info entry-mover" title="{i18n:translate('component.rc.slot.entry.move')}">
           <i class="fas fa-arrows-alt"></i>
         </button>
       </div>
@@ -531,12 +529,12 @@
       </div>
 <!--       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)"> -->
 <!--         <span class="label label-warning"> -->
-      <!--           <xsl:value-of select="mcri18n:translate('component.rc.slot.entry.opcrecord.release_required')" /> -->
+<!--           <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.release_required')" /> -->
 <!--         </span> -->
 <!--       </xsl:if> -->
 <!--       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (@deleted = 'true')"> -->
 <!--         <span class="label label-danger"> -->
-      <!--           <xsl:value-of select="mcri18n:translate('component.rc.slot.entry.opcrecord.deletion_mark')" /> -->
+<!--           <xsl:value-of select="i18n:translate('component.rc.slot.entry.opcrecord.deletion_mark')" /> -->
 <!--         </span> -->
 <!--       </xsl:if> -->
     </xsl:if>

@@ -13,7 +13,7 @@
   <!-- *                  additional stylesheets                  * -->
   <!-- ************************************************************ -->
   <xsl:import href="resource:xsl/layout/mir-common-layout.xsl" />
-  <xsl:include href="resource:xsl/layout/dbt-navigation.xsl" />
+  <xsl:include href="dbt-navigation.xsl" />
 
   <xsl:output method="html" doctype-system="about:legacy-compat" indent="yes" omit-xml-declaration="yes" media-type="text/html" version="5"
     encoding="UTF-8" />

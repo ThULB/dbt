@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xalan="http://xml.apache.org/xalan"
+  xmlns:decoder="xalan://java.net.URLDecoder" exclude-result-prefixes="xalan decoder"
+>
 
   <xsl:param name="Referer" />
 
@@ -139,7 +141,7 @@
       <xsl:variable name="address">
         <xsl:choose>
           <xsl:when test="string-length($URLParam) &gt; 0">
-            <xsl:value-of select="concat('/', substring-after(($URLParam), $WebApplicationBaseURL))" disable-output-escaping="yes" />
+            <xsl:value-of select="concat('/', substring-after(decoder:decode(string($URLParam),'UTF-8'), $WebApplicationBaseURL))" />
           </xsl:when>
           <xsl:otherwise>
             <xsl:value-of select="concat('/', substring-after($Referer, $WebApplicationBaseURL))" />
@@ -224,7 +226,7 @@
               </label>
             </item>
           </xsl:variable>
-          <xsl:apply-templates select="$activeItem" mode="breadcrumbItem">
+          <xsl:apply-templates select="xalan:nodeset($activeItem)" mode="breadcrumbItem">
             <xsl:with-param name="navigation" select="$navigation" />
           </xsl:apply-templates>
         </xsl:if>

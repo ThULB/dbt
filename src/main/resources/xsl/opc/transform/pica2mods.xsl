@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0"
-                xmlns="http://www.loc.gov/mods/v3"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd"
-                exclude-result-prefixes="xsl pica">
+<xsl:stylesheet version="1.0" xmlns="http://www.loc.gov/mods/v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:pica="http://www.mycore.de/dbt/opc/pica-xml-1-0.xsd" exclude-result-prefixes="xsl pica"
+>
   <xsl:output method="xml" indent="yes" encoding="UTF-8" />
   
   <!-- http://www.oclc.org/contacts/libraries.en.html -->

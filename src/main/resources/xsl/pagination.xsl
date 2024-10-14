@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:mcri18n="http://www.mycore.de/xslt/i18n"
-                exclude-result-prefixes="xsl mcri18n"
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation"
+  exclude-result-prefixes="xsl i18n"
 >
   <xsl:template name="paginate">
     <xsl:param name="id" select="'pagination'" />
@@ -21,7 +20,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
           </xsl:when>
@@ -30,7 +29,7 @@
             <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -47,7 +46,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
           </xsl:when>
@@ -56,7 +55,7 @@
             <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -113,7 +112,7 @@
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
           </xsl:when>
@@ -122,7 +121,7 @@
             <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
           </xsl:otherwise>
@@ -139,7 +138,7 @@
               </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>
           </xsl:when>
@@ -148,7 +147,7 @@
             <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
               <span class="sr-only">
-                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+                <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>
           </xsl:otherwise>
