@@ -10,8 +10,8 @@ jobs:
     uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v3
     with:
       ff-site-goal: ''
-      ff-os: 'ubuntu-22.04'
-      ff-jdk: '17'
+      ff-os: 'ubuntu-24.04'
+      ff-jdk: '21'
       ff-goal: '-P run-its verify'
       ff-site-run: false
       failure-upload-path: |
@@ -26,5 +26,5 @@ jobs:
           {"os": "windows-latest"},
           {"jdk": "8"},
           {"jdk": "11"},
-          {"os": "ubuntu-latest", "jdk": "17"}
+          {"os": "ubuntu-latest", "jdk": "21"}
         ]

@@ -29,7 +29,7 @@
   </scm>
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
-    <java.target.version>17</java.target.version>
+    <java.target.version>21</java.target.version>
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
