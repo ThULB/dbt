@@ -304,6 +304,10 @@
                     <label xml:lang="de" text="Professur Bauentwurfslehre"/>
                     <label xml:lang="x-destatis" text="7320"/>
                 </category>
+                <category ID="3066">
+                    <label xml:lang="de" text="Professur Informatik in der Architektur und Urbanistik"/>
+                    <label xml:lang="x-destatis" text="7320"/>
+                </category>
                 <category ID="3068">
                     <label xml:lang="de" text="Professur Konstruktives Entwerfen und Tragwerkslehre"/>
                     <label xml:lang="en" text="Professorship Structural Design"/>
@@ -329,6 +333,11 @@
                     <label xml:lang="de" text="Professur Raumplanung und Raumforschung II"/>
                     <label xml:lang="en" text="Professorship Spatial Planning and Research II"/>
                     <label xml:lang="x-destatis" text="7400"/>
+                </category>
+                <category ID="3083">
+                    <label xml:lang="de" text="Professur Kulturgeschichte der Moderne"/>
+                    <label xml:lang="en" text="Professorship Cultural History"/>
+                    <label xml:lang="x-destatis" text="7310"/>
                 </category>
             </category>
             <category ID="3100">
@@ -615,6 +624,10 @@
                         <label xml:lang="en" text="Professorship Infrastructure Economics and Management"/>
                         <label xml:lang="x-destatis" text="7540"/>
                     </category>
+                    <category ID="3156.04">
+                        <label xml:lang="de" text="Professur Entrepreneurship und Technologietransfer"/>
+                        <label xml:lang="x-destatis" text="7540"/>
+                    </category>
                 </category>
             </category>
             <category ID="3200">
@@ -644,11 +657,6 @@
                 </category>
                 <category ID="3207">
                     <label xml:lang="de" text="Instructional Design - Didaktik medialer Lernumgebungen"/>
-                </category>
-                <category ID="3208">
-                    <label xml:lang="de" text="Professur Kulturgeschichte der Moderne"/>
-                    <label xml:lang="en" text="Professorship Cultural History"/>
-                    <label xml:lang="x-destatis" text="7310"/>
                 </category>
                 <category ID="3209">
                     <label xml:lang="de" text="Professur Kunst und ihre Didaktik"/>
@@ -784,6 +792,26 @@
                     <label xml:lang="de" text="Professur Immersive Medien"/>
                     <label xml:lang="en" text="Professorship Immersive Media"/>
                     <label xml:lang="x-destatis" text="7800"/>
+                </category>
+                <category ID="3248">
+                    <label xml:lang="de" text="Professur Transformatives Design"/>
+                    <label xml:lang="x-destatis" text="8010"/>
+                </category>
+                <category ID="3249">
+                    <label xml:lang="de" text="Professur Elektroakkustische Komposition und Klangkunst"/>
+                    <label xml:lang="x-destatis" text="8050"/>
+                </category>
+                <category ID="3250">
+                    <label xml:lang="de" text="Studio für Klangkunst"/>
+                    <label xml:lang="x-destatis" text="8050"/>
+                </category>
+                <category ID="3251">
+                    <label xml:lang="de" text="Professur Designtheorie und Designforschung"/>
+                    <label xml:lang="x-destatis" text="8070"/>
+                </category>
+                <category ID="3252">
+                    <label xml:lang="de" text="Professur Geschichte, Theorie und Ästhetik materialer Kulturen"/>
+                    <label xml:lang="x-destatis" text="8070"/>
                 </category>
             </category>
             <category ID="3300">
@@ -967,6 +995,10 @@
                     <label xml:lang="de" text="Dozentur Gesellschaft und Digitalisierung"/>
                     <label xml:lang="x-destatis" text="0130"/>
                 </category>
+                <category ID="3345">
+                    <label xml:lang="de" text="Professur Medienanthropologie"/>
+                    <label xml:lang="x-destatis" text="0130"/>
+                </category>
                 <category ID="3347">
                     <label xml:lang="de" text="Professur Medienökonomik"/>
                     <label xml:lang="en" text="Professorship Media Economics"/>
@@ -1035,6 +1067,14 @@
                     <label xml:lang="de" text="Professur Computational Social Science"/>
                     <label xml:lang="x-destatis" text="3520"/>
                 </category>
+                <category ID="3367">
+                    <label xml:lang="de" text="Kompetenzzentrum Medienanthropologie (KOMA)"/>
+                    <label xml:lang="x-destatis" text="0130"/>
+                </category>
+                <category ID="3368">
+                    <label xml:lang="de" text="Graduiertenkolleg Medienanthropologie (GRAMA)"/>
+                    <label xml:lang="x-destatis" text="0130"/>
+                </category>
             </category>
             <category ID="3800">
                 <label xml:lang="de" text="Sonstige Institute (Fakultätsübergreifende Einrichtungen)"/>
@@ -1053,6 +1093,10 @@
                     <label xml:lang="en" text="Research Training Group &quot;Identity and Heritage&quot;"/>
                     <label xml:lang="x-destatis" text="9200"/>
                     <label xml:lang="x-gnd" text="1169345719"/>
+                </category>
+                <category ID="3804">
+                    <label xml:lang="de" text="Internationales Kolleg für Kulturtechnikforschung und Medienphilosophie (IKKM)"/>
+                    <label xml:lang="x-destatis" text="9200"/>
                 </category>
             </category>
             <category ID="3700">
@@ -1080,9 +1124,13 @@
                     <label xml:lang="en" text="Chancellor´s Office"/>
                     <label xml:lang="x-destatis" text="8800"/>
                 </category>
+                <category ID="3705">
+                    <label xml:lang="de" text="Servicezentrum Sicherheit und Umwelt"/>
+                    <label xml:lang="x-destatis" text="8800"/>
+                </category>
             </category>
             <category ID="3400">
-                <label xml:lang="de" text="Zentrale Einrichtunge"/>
+                <label xml:lang="de" text="Zentrale Einrichtungen"/>
                 <label xml:lang="en" text="Central University Facilities"/>
                 <category ID="3404">
                     <label xml:lang="de" text="Gründerzentrum Neudeli"/>
