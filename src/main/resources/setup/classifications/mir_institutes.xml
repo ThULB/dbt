@@ -1132,11 +1132,17 @@
         <category ID="2">
             <label xml:lang="de" text="Universität Erfurt"/>
             <label xml:lang="x-place" text="Universität Erfurt | Erfurt | Nordhäuser Str. 63, 99089 Erfurt"/>
+            <category ID="9105">
+                <label xml:lang="de" text="Erfurt Laboratory for Empirical Research (ErfurtLab)" />
+            </category>
             <category ID="9110">
                 <label xml:lang="de" text="Erfurt School of Education (ESE)"/>
             </category>
             <category ID="9120">
                 <label xml:lang="de" text="Willy Brandt School of Public Policy (WBS)"/>
+            </category>
+            <category ID="9125">
+                <label xml:lang="de" text="Forschungskolleg Transkulturelle Studien / Sammlung Perthes" />
             </category>
             <category ID="9300">
                 <label xml:lang="de" text="Erziehungswissenschaftliche Fakultät"/>
@@ -1146,6 +1152,9 @@
             </category>
             <category ID="9130">
                 <label xml:lang="de" text="Forschungszentrum Gotha für kultur- und sozialwissenschaftliche Studien"/>
+            </category>
+            <category ID="9135">
+                <label xml:lang="de" text="Institute for Planetary Health Behaviour (IPB)" />
             </category>
             <category ID="9140">
                 <label xml:lang="de" text="Interdisziplinäres Forum Religion (IFR)"/>
@@ -1169,7 +1178,7 @@
                 <label xml:lang="de" text="Staatswissenschaftliche Fakultät"/>
             </category>
             <category ID="9400">
-                <label xml:lang="de" text="Theologische Fakultät"/>
+                <label xml:lang="de" text="Katholisch-Theologische Fakultät"/>
             </category>
             <category ID="9410">
                 <label xml:lang="de" text="Universitätsbibliothek"/>
