@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
@@ -506,10 +505,9 @@ public class MediaService {
 
                 Path tmpFile = Files.createTempDirectory("media").resolve(job.getId() + ".zip");
                 try {
-                    URL website = new URL(SERVER_ADDRESS + new MessageFormat(CONVERTER_DOWNLOAD_PATH, Locale.ROOT)
+                    URI website = URI.create(SERVER_ADDRESS + new MessageFormat(CONVERTER_DOWNLOAD_PATH, Locale.ROOT)
                         .format(new Object[] { job.getId().replaceAll(" ", "%20") }));
-                    ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-
+                    ReadableByteChannel rbc = Channels.newChannel(website.toURL().openStream());
                     try (FileOutputStream fos = new FileOutputStream(tmpFile.toFile())) {
                         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
                     }

@@ -21,7 +21,8 @@ package de.urmel_dl.dbt.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -55,8 +56,13 @@ public class DBTVersion {
 
     private static Properties loadVersionProperties() {
         Properties props = new Properties();
-        URL gitPropURL = MIRCoreVersion.class.getResource("/de/urmel_dl/dbt/git.properties");
-        try (InputStream gitPropStream = getInputStream(gitPropURL);) {
+        URI gitPropURI;
+        try {
+            gitPropURI = MIRCoreVersion.class.getResource("/de/urmel_dl/dbt/git.properties").toURI();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        try (InputStream gitPropStream = getInputStream(gitPropURI);) {
             props.load(gitPropStream);
         } catch (IOException e) {
             throw new UncheckedIOException("Error while initializing DBTVersion.", e);
@@ -64,16 +70,16 @@ public class DBTVersion {
         return props;
     }
 
-    private static InputStream getInputStream(URL gitPropURL) throws IOException {
-        if (gitPropURL == null) {
+    private static InputStream getInputStream(URI gitPropURI) throws IOException {
+        if (gitPropURI == null) {
             return new InputStream() {
                 @Override
-                public int read() throws IOException {
+                public int read() {
                     return -1;
                 }
             };
         }
-        return gitPropURL.openStream();
+        return gitPropURI.toURL().openStream();
     }
 
     public static String getBranch() {

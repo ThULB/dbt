@@ -109,7 +109,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testSetCatalog() throws Exception {
         Catalog catalog = Catalogues.instance().getCatalogByISIL("DE-ILM1");
 
-        OPCConnector opc = new OPCConnector(catalog.getOPC().getURL(), catalog.getOPC().getDB());
+        OPCConnector opc = new OPCConnector(catalog.getOPC().getURI(), catalog.getOPC().getDB());
         Result result = opc.search("papula");
         result.setCatalog(catalog);
 

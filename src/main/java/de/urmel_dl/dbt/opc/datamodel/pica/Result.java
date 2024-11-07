@@ -17,6 +17,7 @@
  */
 package de.urmel_dl.dbt.opc.datamodel.pica;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +64,7 @@ public class Result {
     }
 
     @XmlAttribute(name = "url", required = true)
-    public URL getURL() {
+    public URI getURL() {
         return connection.getURL();
     }
 
