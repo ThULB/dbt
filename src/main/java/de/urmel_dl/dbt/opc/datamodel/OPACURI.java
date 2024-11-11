@@ -58,7 +58,6 @@ public class OPACURI {
      *
      * @param uri the uri
      * @param db the db
-     * @throws MalformedURLException the malformed URL exception
      */
     public OPACURI(final String uri, final String db)  {
         this(URI.create(uri), db);
