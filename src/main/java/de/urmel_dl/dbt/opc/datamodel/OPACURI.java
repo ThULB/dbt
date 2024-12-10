@@ -18,7 +18,7 @@
 package de.urmel_dl.dbt.opc.datamodel;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -27,60 +27,59 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlValue;
 
 /**
- * The Class OPACURL.
+ * The Class OPACURI.
  *
  * @author Ren\u00E9 Adler (eagle)
  */
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlRootElement(name = "opacURL")
-public class OPACURL {
+@XmlRootElement(name = "opacURI")
+public class OPACURI {
 
-    private URL url;
+    private URI uri;
 
     private String db;
 
-    protected OPACURL() {
+    protected OPACURI() {
     }
 
     /**
-     * Instantiates a new opacurl.
+     * Instantiates a new opacuri.
      *
-     * @param url the url
+     * @param uri the uri
      * @param db the db
      */
-    public OPACURL(final URL url, final String db) {
-        this.url = url;
+    public OPACURI(final URI uri, final String db) {
+        this.uri = uri;
         this.db = db;
     }
 
     /**
-     * Instantiates a new opacurl.
+     * Instantiates a new opacuri.
      *
-     * @param url the url
+     * @param uri the uri
      * @param db the db
-     * @throws MalformedURLException the malformed URL exception
      */
-    public OPACURL(final String url, final String db) throws MalformedURLException {
-        this(new URL(url), db);
+    public OPACURI(final String uri, final String db)  {
+        this(URI.create(uri), db);
     }
 
     /**
-     * Returns the URL.
+     * Returns the URI.
      *
-     * @return the url
+     * @return the uri
      */
     @XmlValue
-    public URL getURL() {
-        return url;
+    public URI getURI() {
+        return uri;
     }
 
     /**
-     * Set the URL.
+     * Set the URI.
      *
-     * @param url the url to set
+     * @param uri the uri to set
      */
-    public void setURL(final URL url) {
-        this.url = url;
+    public void setURI(final URI uri) {
+        this.uri = uri;
     }
 
     /**

@@ -19,10 +19,8 @@ package de.urmel_dl.dbt.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -109,7 +107,7 @@ public class VideoDirectLinkFilter implements Filter {
             return false;
         }
         try {
-            final String pathInfo = new URL(referrer).getPath();
+            final String pathInfo =  URI.create(referrer).getPath();
             if (PATTERN_ALLOWED_REFERRER.matcher(pathInfo).matches()) {
                 Optional<String> optDerId = Arrays.stream(pathInfo.split("/"))
                     .filter(f -> PATTERN_DERIVATE_ID.matcher(f).matches())
@@ -122,7 +120,7 @@ public class VideoDirectLinkFilter implements Filter {
                     return Files.exists(MCRPath.getPath(derivateId, fileName));
                 }
             }
-        } catch (MalformedURLException | UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             LOGGER.error("Couldn't parse referrer " + referrer + ".", e);
         }
         return false;

@@ -45,7 +45,7 @@ public class Catalog {
 
     private boolean enabled;
 
-    private OPACURL opc;
+    private OPACURI opc;
 
     private OPCConnector opcConnector;
 
@@ -67,7 +67,7 @@ public class Catalog {
     public OPCConnector getOPCConnector() {
         if (opcConnector == null) {
             try {
-                opcConnector = new OPCConnector(opc.getURL().toString(), opc.getDB());
+                opcConnector = new OPCConnector(opc.getURI().toString(), opc.getDB());
             } catch (final Exception e) {
                 return null;
             }
@@ -156,10 +156,10 @@ public class Catalog {
      * Returns the OPC configuration.
      *
      * @return the opc configuration
-     * @see OPACURL#OPACURL()
+     * @see OPACURI#OPACURI()
      */
     @XmlElement(name = "opc")
-    public OPACURL getOPC() {
+    public OPACURI getOPC() {
         return opc;
     }
 
@@ -167,9 +167,9 @@ public class Catalog {
      * Set the OPC configuration.
      *
      * @param opc the opc configuration to set
-     * @see OPACURL#OPACURL()
+     * @see OPACURI#OPACURI()
      */
-    public void setOPC(final OPACURL opc) {
+    public void setOPC(final OPACURI opc) {
         this.opc = opc;
     }
 
@@ -181,7 +181,7 @@ public class Catalog {
      * @throws MalformedURLException thrown on malformed url
      */
     public void setOPC(final String url, final String db) throws MalformedURLException {
-        this.opc = new OPACURL(url, db);
+        this.opc = new OPACURI(url, db);
     }
 
     /**

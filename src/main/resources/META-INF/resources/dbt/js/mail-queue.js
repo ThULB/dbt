@@ -1,7 +1,35 @@
-"use strict";
-
 var appName = "MailQueue";
 var app = angular.module(appName, [ "pascalprecht.translate", "angularModalService" ]);
+var translations = {}
+var token = null;
+
+
+function getToken(callback) {
+	$.ajax({
+		url: webApplicationBaseURL + "rsc/jwt",
+		type: "GET",
+		dataType: "json",
+		success: function (data) {
+			if (data.login_success) {
+				token = data.access_token;
+				callback();
+			} else {
+				console.error("Fehler: Nicht autorisiert");
+			}
+		},
+		error: function () {
+			console.error("Token-Anforderung fehlgeschlagen.");
+		}
+	});
+}
+
+app.config(['$translateProvider', function ($translateProvider) {
+	$translateProvider.translations('en', translations);
+	$translateProvider.preferredLanguage('en');
+	// Enable escaping of HTML
+	$translateProvider.useSanitizeValueStrategy('escape');
+}]);
+app.controller('Ctrl', ['$scope', function ($scope) {}]);
 
 app.formatI18N = function(str, args) {
 	args = Array.prototype.slice.call(arguments, 1);
@@ -89,16 +117,25 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 	};
 
 	$scope.load = function() {
+		if (!token) {
+			return;
+		}
+
 		$scope.jobs.loading = true;
-		$http.get(webApplicationBaseURL + "rsc/jobqueue/de.urmel_dl.dbt.common.MailJob").then(function(result) {
+		$http.get(webApplicationBaseURL + "api/jobqueue/de.urmel_dl.dbt.common.MailJob", {
+			headers: {
+				"Authorization": "Bearer " + token
+			}
+		}).then(function(result) {
 			if (result.status === 200) {
 				$scope.jobs = result.data;
 				$scope.jobs.total = $scope.jobs.job.length;
 				$scope.jobs.limit = $scope.jobs.limit || 50;
 				$scope.jobs.start = 0;
 			}
-			$scope.jobs.loading = false;
+
 		}, function(error) {
+			//here
 			$rootScope.$emit("alertEvent", "error", error);
 			$log.error(error);
 			$scope.jobs.loading = false;
@@ -218,6 +255,14 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 		return m[1];
 	};
 
+
+
+
+
+	getToken(function() {
+		$scope.load();
+	});
+
 	$scope.showMailDialog = function(job) {
 		ModalService.showModal({
 			templateUrl : webApplicationBaseURL + "dbt/assets/templates/mail-dialog.html",
@@ -234,8 +279,6 @@ app.controller("queueCtrl", function($rootScope, $scope, $translate, $log, $http
 			});
 		});
 	};
-
-	$scope.load();
 });
 
 app.controller("mailDialogCtrl", function($scope, $http, $log, $sce, parameters, close) {

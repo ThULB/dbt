@@ -19,7 +19,7 @@ package de.urmel_dl.dbt.migration;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -63,7 +63,8 @@ public class MigrationCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "fix objects for base {0} with file {1}",
         help = "transforms all mycore objects for base {0} with the given file or URL {1}")
     public static List<String> xsltObjects(final String base, final String xslFile) throws Exception {
-        URL styleFile = MigrationCommands.class.getResource("/xsl/" + xslFile);
+        URI styleFile = MigrationCommands.class.getResource("/xsl/" + xslFile).toURI();
+
         if (styleFile == null) {
             final File file = new File(xslFile);
 
@@ -72,7 +73,7 @@ public class MigrationCommands extends MCRAbstractCommands {
                 return null;
             }
 
-            styleFile = file.toURI().toURL();
+            styleFile = file.toURI();
         }
 
         List<String> cmds = new ArrayList<String>();

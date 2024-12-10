@@ -160,12 +160,11 @@
       </div>
     </div>
 
+
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-translate.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-translate-loader-partial.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/angular/js/angular-modal-service.min.js" />
-
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/mail-queue.min.js" />
   </xsl:template>
-
 </xsl:stylesheet>

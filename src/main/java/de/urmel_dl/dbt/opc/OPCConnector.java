@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.net.URL;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -82,7 +82,7 @@ public class OPCConnector {
 
     private String db;
 
-    private URL url = new URL(GVK_URL);
+    private URI uri =  URI.create(GVK_URL);
 
     private int maxhits = 500;
 
@@ -93,24 +93,24 @@ public class OPCConnector {
     /**
      * Creates a new OPC connection.
      *
-     * @param url the URL
+     * @param uri the URL
      * @param db the database
      * @throws Exception thrown on malformed url
      */
-    public OPCConnector(final URL url, final String db) throws Exception {
-        this.url = url;
+    public OPCConnector(final URI uri, final String db) throws Exception {
+        this.uri = uri;
         this.db = (db == null) ? "1" : db;
     }
 
     /**
      * Creates a new OPC connection.
      *
-     * @param url the URL
+     * @param uri the URL
      * @param db the database
-     * @throws MalformedURLException thrown on malformed url
+     * @throws MalformedURLException thrown on malformed uri
      */
-    public OPCConnector(final String url, final String db) throws MalformedURLException {
-        this.url = new URL(url);
+    public OPCConnector(final String uri, final String db) throws MalformedURLException {
+        this.uri = URI.create(uri);
         this.db = (db == null) ? "1" : db;
     }
 
@@ -121,7 +121,7 @@ public class OPCConnector {
      * @throws MalformedURLException thrown on malformed url
      */
     public OPCConnector() throws MalformedURLException {
-        this.url = new URL(GVK_URL);
+        this.uri = URI.create(GVK_URL);
         this.db = GVK_DB;
     }
 
@@ -144,31 +144,31 @@ public class OPCConnector {
     }
 
     /**
-     * Set the URL.
+     * Set the URI.
      *
-     * @param url the URL
-     * @throws MalformedURLException thrown on malformed url
+     * @param uri the URI
+     * @throws MalformedURLException thrown on malformed uri
      */
-    public void setURL(final String url) throws MalformedURLException {
-        this.url = new URL(url);
+    public void setURL(final String uri) throws MalformedURLException {
+        this.uri =  URI.create(uri);
     }
 
     /**
-     * Set the URL
+     * Set the URI
      *
-     * @param url the URL
+     * @param uri the URI
      */
-    public void setURL(final URL url) {
-        this.url = url;
+    public void setURL(final URI uri) {
+        this.uri = uri;
     }
 
     /**
-     * Return the OPC URL.
+     * Return the OPC URI.
      *
-     * @return the OPC URL
+     * @return the OPC URI
      */
-    public URL getURL() {
-        return url;
+    public URI getURL() {
+        return uri;
     }
 
     /**
@@ -229,20 +229,20 @@ public class OPCConnector {
      * Returns the list of IKTs for the OPC.
      *
      * @return the list of ikts
-     * @see IKTList#IKTList()
+     * @see IKTList
      * @throws ExecutionException if cache couldn't generated
      */
     public IKTList getIKTList() throws ExecutionException {
-        if (this.url == null) {
+        if (this.uri == null) {
             throw new IllegalArgumentException("No OPC URL was set.");
         }
 
-        final URL url = this.url;
+        final URI uri = this.uri;
 
         IKTList iktList = (IKTList) CACHE.get(generateCacheKey("iktlist"), () -> {
-            final URL pageURL = new URL(url + "/XML=1.0/MENUIKTLIST");
+            final URI pageURI = URI.create(uri + "/XML=1.0/MENUIKTLIST");
 
-            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURI));
 
             final IKTList ikts = new IKTList();
 
@@ -281,21 +281,21 @@ public class OPCConnector {
      * @see Result#Result(OPCConnector)
      */
     public Result search(final String trm, final String ikt) throws ExecutionException {
-        if (this.url == null) {
+        if (this.uri == null) {
             throw new IllegalArgumentException("No OPC URL was set.");
         }
 
-        final URL url = this.url;
+        final URI uri = this.uri;
         final String db = this.db;
         final int maxread = this.maxread;
 
         Result result = (Result) CACHE.get(generateCacheKey(trm + "_" + ikt), () -> {
             LOGGER.info("Search OPAC for \"" + trm + "\" with IKT \"" + ikt + "\"...");
 
-            final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
+            final URI pageURI = URI.create(uri + "/XML=1.0/DB=" + db + "/SET=1/TTL=1/CMD?ACT=SRCHA&IKT=" + ikt
                 + "&SRT=YOP&SHRTST=" + maxread + "&TRM=" + URLEncoder.encode(trm, "UTF-8"));
 
-            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURI));
 
             return parseResult(xml);
         });
@@ -325,20 +325,20 @@ public class OPCConnector {
      * @see Result#Result(OPCConnector)
      */
     public Result family(final String PPN) throws ExecutionException {
-        if (this.url == null) {
+        if (this.uri == null) {
             throw new IllegalArgumentException("No OPC URL was set.");
         }
 
-        final URL url = this.url;
+        final URI uri = this.uri;
         final String db = this.db;
         final int maxread = this.maxread;
 
         Result result = (Result) CACHE.get(generateCacheKey("fam_" + PPN), () -> {
             LOGGER.info("Enumarates member publications of PPN " + PPN);
 
-            final URL pageURL = new URL(url + "/XML=1.0/DB=" + db + "/FAM?PPN=" + PPN + "&SHRTST=" + maxread);
+            final URI pageURI = URI.create(uri + "/XML=1.0/DB=" + db + "/FAM?PPN=" + PPN + "&SHRTST=" + maxread);
 
-            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURL));
+            final Document xml = new SAXBuilder().build(readContentFromUrl(pageURI));
 
             return parseResult(xml);
         });
@@ -386,9 +386,9 @@ public class OPCConnector {
                     LOGGER.info("  ...read part " + rc + "/" + (nums - 1) + " - " + pos + " to "
                         + (pos + this.maxread > hits ? hits : pos + this.maxread));
 
-                    final URL pageURL = new URL(this.url + sessionpart + "/XML=1.0/NXT?FRST=" + pos + "&SHRTST="
+                    final URI pageURI = URI.create(this.uri + sessionpart + "/XML=1.0/NXT?FRST=" + pos + "&SHRTST="
                         + this.maxread + "&NORND=ON");
-                    final Document doc = new SAXBuilder().build(readContentFromUrl(pageURL));
+                    final Document doc = new SAXBuilder().build(readContentFromUrl(pageURI));
 
                     entries = doc.getRootElement().getChildren("SET");
                     if (entries.size() == 1) {
@@ -413,11 +413,11 @@ public class OPCConnector {
     }
 
     private String getPicaPlus(final String PPN) throws ExecutionException {
-        final URL url = this.url;
+        final URI uri = this.uri;
         final String db = this.db;
 
         String ppraw = (String) CACHE.get(generateCacheKey("raw_" + PPN),
-            () -> readWebPageFromUrl(url + "/DB=" + db + "/PPN?PLAIN=ON&PPN=" + PPN));
+            () -> readWebPageFromUrl(uri + "/DB=" + db + "/PPN?PLAIN=ON&PPN=" + PPN));
 
         LOGGER.debug("\n" + PicaCharDecoder.asHexString(ppraw));
 
@@ -425,7 +425,7 @@ public class OPCConnector {
     }
 
     /**
-     * Return a set of {@link PPField#PPField()}.
+     * Return a set of {@link PPField}.
      *
      * @param PPN the PPN
      * @return a set of PICA+ fields
@@ -475,10 +475,10 @@ public class OPCConnector {
     }
 
     /**
-     * Return a new {@link Record#Record()}.
+     * Return a new {@link Record}.
      *
      * @param PPN the PPN
-     * @return a new {@link Record#Record()}
+     * @return a new {@link Record}
      * @throws ExecutionException if cache couldn't generated
      */
     public Record getRecord(final String PPN) throws ExecutionException {
@@ -645,19 +645,19 @@ public class OPCConnector {
         return null;
     }
 
-    private HttpURLConnection buildConnection(final URL url) throws IOException {
-        return buildConnection(url, null);
+    private HttpURLConnection buildConnection(final URI uri) throws IOException {
+        return buildConnection(uri, null);
     }
 
-    private HttpURLConnection buildConnection(final URL url, final String cookies) throws IOException {
-        return buildConnection(url, cookies, 0);
+    private HttpURLConnection buildConnection(final URI uri, final String cookies) throws IOException {
+        return buildConnection(uri, cookies, 0);
     }
 
-    private HttpURLConnection buildConnection(final URL url, final String cookies, int numRedirects)
+    private HttpURLConnection buildConnection(final URI uri, final String cookies, int numRedirects)
         throws IOException {
-        LOGGER.debug("Open URL: " + url.toExternalForm());
+        LOGGER.debug("Open URI: " + uri.toString());
 
-        HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
+        HttpURLConnection urlConn = (HttpURLConnection) uri.toURL().openConnection();
 
         urlConn.setConnectTimeout(this.connectionTimeout);
         urlConn.setInstanceFollowRedirects(false);
@@ -679,10 +679,10 @@ public class OPCConnector {
 
         if (redirect) {
             if (numRedirects <= MAX_REDIRECTS) {
-                URL newUrl = new URL(urlConn.getHeaderField("Location"));
+                URI newUri = URI.create(urlConn.getHeaderField("Location"));
+                String newCookies = urlConn.getHeaderField("Set-Cookie");
 
-                LOGGER.debug("Redirect to URL : {} ({})", newUrl.toExternalForm(), numRedirects + 1);
-                urlConn = buildConnection(newUrl, urlConn.getHeaderField("Set-Cookie"), numRedirects + 1);
+                urlConn = buildConnection(newUri, newCookies, numRedirects + 1);
             } else {
                 throw new ProtocolException("Too many (" + numRedirects + ") redirects.");
             }
@@ -691,14 +691,15 @@ public class OPCConnector {
         return urlConn;
     }
 
-    private InputStream readContentFromUrl(final URL url) throws IOException {
-        return buildConnection(url).getInputStream();
+
+    private InputStream readContentFromUrl(final URI uri) throws IOException {
+        return buildConnection(uri).getInputStream();
     }
 
-    private String readWebPageFromUrl(final String urlString) throws IOException {
+    private String readWebPageFromUrl(final String uriString) throws IOException {
         String content = "";
 
-        HttpURLConnection urlConn = buildConnection(new URL(urlString));
+        HttpURLConnection urlConn = buildConnection( URI.create(uriString));
 
         final String encoding = (urlConn.getContentEncoding() != null ? urlConn.getContentEncoding()
             : "ISO-8859-1");
@@ -718,7 +719,7 @@ public class OPCConnector {
     }
 
     private String generateCacheKey(final String key) {
-        return this.url.getHost() + "_" + this.db + "-" + key;
+        return this.uri.getHost() + "_" + this.db + "-" + key;
     }
 
     static {

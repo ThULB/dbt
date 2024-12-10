@@ -102,6 +102,7 @@
     <xed:include ref="oai" after="institutes" />
     <xed:include ref="itunes-podcast" after="genre" />
     <xed:include ref="institutes.repeat" after="institutes" />
+    <xed:remove ref="related.item.other.search.of.all.items" />
     <xed:remove ref="institutes" />
   </xed:modify>
   <xed:modify ref="genres.book.common">
