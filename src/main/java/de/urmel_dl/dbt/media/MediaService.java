@@ -501,12 +501,13 @@ public class MediaService {
         @Override
         public void run() {
             try {
-                LOGGER.info("download media package for {}...", job.getId());
+                LOGGER.info("download media package for {}…", job.getId());
 
                 Path tmpFile = Files.createTempDirectory("media").resolve(job.getId() + ".zip");
                 try {
                     URI website = URI.create(SERVER_ADDRESS + new MessageFormat(CONVERTER_DOWNLOAD_PATH, Locale.ROOT)
                         .format(new Object[] { job.getId().replaceAll(" ", "%20") }));
+                    LOGGER.info("download media package from {} to {}", website, tmpFile);
                     ReadableByteChannel rbc = Channels.newChannel(website.toURL().openStream());
                     try (FileOutputStream fos = new FileOutputStream(tmpFile.toFile())) {
                         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
@@ -592,7 +593,9 @@ public class MediaService {
                 } catch (Exception e) {
                     throw new MCRException(e);
                 } finally {
-                    Files.delete(tmpFile);
+                    if (Files.exists(tmpFile)) {
+                        Files.delete(tmpFile);
+                    }
                 }
             } catch (IOException e) {
                 throw new MCRException(e);
