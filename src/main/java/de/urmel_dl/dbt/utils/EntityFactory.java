@@ -41,13 +41,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import jakarta.ws.rs.core.MediaType;
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
-import jakarta.xml.bind.PropertyException;
-import jakarta.xml.bind.Unmarshaller;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
@@ -63,6 +56,14 @@ import org.mycore.common.config.MCRConfiguration2;
 
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
+
+import jakarta.ws.rs.core.MediaType;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.PropertyException;
+import jakarta.xml.bind.Unmarshaller;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * The <code>EntityFactory</code> class marshals/unmarshals a specified entity class
@@ -405,7 +406,7 @@ public class EntityFactory<T> {
     }
 
     private Marshaller marshaller(Optional<Map<String, ?>> extraProperties) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(populateEntities());
+        JAXBContext context = getContext();
         Marshaller marshaller = context.createMarshaller();
 
         Map<String, ?> props = extraProperties.orElse(new HashMap<>());
@@ -420,10 +421,15 @@ public class EntityFactory<T> {
             });
 
         return marshaller;
-    };
+    }
+
+    private JAXBContext getContext() throws JAXBException {
+        return JAXBContext.newInstance(populateEntities(),
+            Map.of(JAXBContext.JAXB_CONTEXT_FACTORY, "org.eclipse.persistence.jaxb.JAXBContextFactory"));
+    }
 
     private Unmarshaller unmarshaller(Optional<Map<String, ?>> extraProperties) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(populateEntities());
+        JAXBContext context = getContext();
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
         Map<String, ?> props = extraProperties.orElse(new HashMap<>());
