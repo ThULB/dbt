@@ -23,11 +23,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -35,8 +30,14 @@ import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationDir;
+import org.mycore.resource.MCRResourcePath;
+import org.mycore.resource.MCRResourceResolver;
 
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * The Class Catalogues.
@@ -87,7 +88,9 @@ public class Catalogues {
                 LOGGER.warn("Error while looking for: " + configFile, e);
             }
         }
-        return MCRConfigurationDir.getConfigResource(getCataloguesConfigResourceName());
+        return MCRResourceResolver.instance()
+            .resolve(MCRResourcePath.ofPath(getCataloguesConfigResourceName()))
+            .orElse(null);
     }
 
     private static String getCataloguesConfigResourceName() {

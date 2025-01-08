@@ -17,12 +17,12 @@
  */
 package de.urmel_dl.dbt.viewer;
 
-import jakarta.servlet.http.HttpServletRequest;
-
 import org.mycore.common.xml.MCRXMLFunctions;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.viewer.configuration.MCRViewerConfiguration;
 import org.mycore.viewer.configuration.MCRViewerDefaultConfigurationStrategy;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Provides Bootstrap JavaScript and CSS in DBT colors
@@ -43,7 +43,7 @@ public class DBTViewerConfigurationStrategy extends MCRViewerDefaultConfiguratio
             } else {
                 // Default JS
                 viewerConfiguration
-                    .addScript(baseURL + "assets/bootstrap/js/bootstrap.min.js");
+                    .addScript(baseURL + "assets/bootstrap/js/bootstrap.min.js", false);
             }
         }
         return viewerConfiguration;

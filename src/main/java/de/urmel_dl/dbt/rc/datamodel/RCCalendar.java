@@ -19,6 +19,7 @@ package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,10 +29,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.TimeZone;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.TransformerException;
 
 import org.apache.logging.log4j.LogManager;
@@ -40,12 +37,17 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.content.MCRSourceContent;
+import org.mycore.resource.MCRResourcePath;
+import org.mycore.resource.MCRResourceResolver;
 import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.rc.utils.DateUtils;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -90,7 +92,11 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     private static Document getCalendar()
         throws MCRException, TransformerException, JDOMException, IOException, SAXException {
-        return MCRSourceContent.getInstance(MCRConfigurationDir.getConfigResource(RESOURCE_URI).toString()).asXML();
+        String resourceSystemId = MCRResourceResolver.instance()
+            .resolve(MCRResourcePath.ofPath(RESOURCE_URI))
+            .map(URL::toString)
+            .orElseThrow(() -> new MCRException("Could not find " + RESOURCE_URI));
+        return MCRSourceContent.getInstance(resourceSystemId).asXML();
     }
 
     /**

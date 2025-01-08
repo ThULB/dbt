@@ -61,7 +61,7 @@ import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mcr.acl.accesskey.MCRAccessKeyUtils;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
-import org.mycore.solr.MCRSolrClientFactory;
+import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
@@ -639,7 +639,7 @@ public final class SlotManager {
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
         final List<SortClause> sortClauses) throws SolrServerException, IOException {
-        final SolrClient client = MCRSolrClientFactory.getMainSolrClient();
+        final SolrClient client = MCRSolrCoreManager.getMainSolrClient();
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"
