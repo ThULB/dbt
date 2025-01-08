@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>53</version>
+    <version>56</version>
   </parent>
   <artifactId>dbt-module</artifactId>
   <version>2023.06-SNAPSHOT</version>
@@ -29,7 +29,7 @@
   </scm>
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
-    <java.target.version>17</java.target.version>
+    <java.target.version>21</java.target.version>
     <lesscss.compress>true</lesscss.compress>
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
