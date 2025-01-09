@@ -37,7 +37,6 @@ import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
-import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -46,10 +45,8 @@ import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
-import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
-import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.common.MCRAbstractMetadataVersion;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRCreatorCache;
@@ -76,7 +73,6 @@ import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.utils.SlotWrapper;
-import de.urmel_dl.dbt.utils.EntityFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -96,10 +92,6 @@ public final class SlotManager {
 
     public static final String POOLPRIVILEGE_CREATE_SLOT = "create-slot";
 
-    public static final String ADMIN_GROUP = MCRConfiguration2.getStringOrThrow("DBT.RC.Administrator.GroupName");
-
-    public static final String EDITOR_GROUP = MCRConfiguration2.getStringOrThrow("DBT.RC.Editor.GroupName");
-
     public static final String PROJECT_ID = "rc";
 
     public static final String SLOT_TYPE = "slot";
@@ -114,9 +106,9 @@ public final class SlotManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static SlotManager singelton;
+    private static volatile SlotManager singleton;
 
-    private SlotList slotList;
+    private final SlotList slotList;
 
     private SlotManager() {
         slotList = new SlotList();
@@ -124,22 +116,26 @@ public final class SlotManager {
     }
 
     /**
-     * Returns a instance of the {@link SlotManager}.
+     * Returns an instance of the {@link SlotManager}.
      *
      * @return the SlotManager
      */
     public static SlotManager instance() {
-        if (singelton == null) {
-            singelton = new SlotManager();
+        if (singleton == null) {
+            synchronized (SlotManager.class) {
+                if (singleton == null) {
+                    singleton = new SlotManager();
+                }
+            }
         }
 
-        return singelton;
+        return singleton;
     }
 
     public static String buildKey() {
-        final StringBuffer buf = new StringBuffer();
-        buf.append(Long.toString(System.nanoTime(), 36));
-        return buf.reverse().toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append(Long.toString(System.nanoTime(), 36));
+        return sb.reverse().toString();
     }
 
     /**
@@ -174,14 +170,9 @@ public final class SlotManager {
     public static boolean checkPermission(final String objId, final String permission) {
         if (permission.equals(MCRAccessManager.PERMISSION_READ)
             || permission.equals(MCRAccessManager.PERMISSION_WRITE)) {
-            if (hasAdminPermission() || hasEditorPermission() || isOwner(objId)) {
-                return true;
-            }
-        } else if (permission.equals(MCRAccessManager.PERMISSION_DELETE) && hasAdminPermission()) {
-            return true;
-        }
-
-        return false;
+            return hasAdminPermission() || hasEditorPermission() || isOwner(objId);
+        } else
+            return permission.equals(MCRAccessManager.PERMISSION_DELETE) && hasAdminPermission();
     }
 
     /**
@@ -231,12 +222,12 @@ public final class SlotManager {
     }
 
     public static void setOwner(final String objId)
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRAccessException {
         setOwner(objId, MCRSessionMgr.getCurrentSession().getUserInformation());
     }
 
     public static void setOwner(final String objId, final MCRUserInformation user)
-        throws MCRPersistenceException, MCRActiveLinkException, MCRAccessException {
+        throws MCRPersistenceException, MCRAccessException {
         final MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(objId));
         final MCRObjectService os = obj.getService();
 
@@ -248,50 +239,6 @@ public final class SlotManager {
         MCRCreatorCache.invalidate(objId);
     }
 
-    /**
-     * Checks if given access key was previously used on slot.
-     *
-     * @param nodes the slot element
-     * @return <code>true</code> if key is matching
-     */
-    public static boolean isMatchPreviousAccessKeys(List<Element> nodes) {
-        if (nodes != null && !nodes.isEmpty()) {
-            final Slot slot = new EntityFactory<>(Slot.class).fromElement(nodes.get(0));
-            final Slot cSlot = SlotManager.instance().getSlotById(slot.getSlotId());
-
-            final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
-
-            return accKP != null
-                && (accKP.getReadKey().equals(slot.getReadKey()) || accKP.getWriteKey().equals(slot.getWriteKey()));
-        }
-        return false;
-    }
-
-    /**
-     * Checks if given slot location and new number is free.
-     *
-     * @param nodes the location element
-     * @return <code>true</code> if slot number is free
-     */
-    public static boolean isFreeId(List<Element> nodes) {
-        if (nodes != null && !nodes.isEmpty()) {
-            final Element xml = nodes.get(0);
-            final Element location = xml.getChild("location");
-            final String locId = location != null ? location.getAttributeValue("id") : null;
-            final String newId = location != null ? location.getAttributeValue("newId") : null;
-
-            if (locId != null && newId != null) {
-                final Slot slot = new EntityFactory<>(Slot.class).fromElement(xml);
-                final MCRCategoryID locCat = new MCRCategoryDAOImpl()
-                    .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
-                int id = Integer.parseInt(newId);
-
-                return slot.getLocation().equals(locCat) && slot.getId() == id || instance().isFreeId(locCat, id);
-            }
-        }
-        return false;
-    }
-
     public static boolean isActive(String slotId) {
         return Optional.ofNullable(instance().getSlotById(slotId)).map(Slot::isActive).orElse(false);
     }
@@ -299,9 +246,6 @@ public final class SlotManager {
     /**
      * Check if given entry is supported by {@link MediaService}.
      * 
-     * @param slotId
-     * @param entryId
-     * @return
      */
     @SuppressWarnings("unchecked")
     public static boolean isStreamingSupported(String slotId, String entryId) {
@@ -346,7 +290,7 @@ public final class SlotManager {
                     slotList.addSlot(slot);
                 }
             } catch (final Exception e) {
-                LOGGER.error("Error on loading " + objId + "!", e);
+                LOGGER.error(() -> "Error on loading " + objId + "!", e);
             }
         });
     }
@@ -452,7 +396,7 @@ public final class SlotManager {
      * Returns the current SVN revision of an {@link Slot}.
      *
      * @param slot the {@link Slot}
-     * @return an number or <code>null</code> on Exception
+     * @return a number or <code>null</code> on Exception
      */
     public synchronized Long getLastRevision(final Slot slot) {
         try {
@@ -469,7 +413,7 @@ public final class SlotManager {
         }
     }
 
-    private Predicate<SlotEntry<?>> filterFileEntry = (se) -> se.getEntry() instanceof FileEntry;
+    private final Predicate<SlotEntry<?>> filterFileEntry = (se) -> se.getEntry() instanceof FileEntry;
 
     /**
      * Saves or updates the metadata of given {@link Slot}.
@@ -537,8 +481,8 @@ public final class SlotManager {
         if (slotBefore != null && slotBefore.getEntries() != null) {
             slotBefore.getEntries().stream().filter(filterFileEntry)
                 .filter(se -> Optional.ofNullable(slot).map(Slot::getEntries)
-                    .map(nse -> !nse.stream().filter(filterFileEntry)
-                        .anyMatch(e -> e.getId().equals(se.getId())))
+                    .map(nse -> nse.stream().filter(filterFileEntry)
+                        .noneMatch(e -> e.getId().equals(se.getId())))
                     .orElse(true))
                 .peek(e -> LOGGER.info("remove {}", e))
                 .forEach(se -> FileEntryManager.delete(slotBefore, (SlotEntry<FileEntry>) se));

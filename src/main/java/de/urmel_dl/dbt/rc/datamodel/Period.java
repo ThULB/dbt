@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import de.urmel_dl.dbt.rc.utils.DateUtils;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
@@ -29,15 +30,13 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import de.urmel_dl.dbt.rc.utils.DateUtils;
-
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @XmlRootElement(name = "period")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType(name = "period", propOrder = { "from", "to", "lectureEnd", "matchingLocation", "setableFrom", "setableTo",
+@XmlType(name = "period", propOrder = { "from", "to", "lectureEnd", "matchingLocation", "settableFrom", "settableTo",
     "labels", "warnings" })
 public class Period implements Serializable, Comparable<Period>, Cloneable {
 
@@ -53,11 +52,11 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
 
     private String fromShort;
 
-    private String setableFromShort;
+    private String settableFromShort;
 
     private String toShort;
 
-    private String setableToShort;
+    private String settableToShort;
 
     private String lectureEndShort;
 
@@ -81,7 +80,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     /**
      * Set the base date for this {@link Period}. 
      * If {@link #getFrom()} or {@link #getTo()} resp.
-     * {@link #getSetableFrom()} or {@link #getSetableTo()}  
+     * {@link #getSettableFrom()} or {@link #getSettableTo()}
      * returns <code>null</code>, the period isn't a valid on.
      * 
      * @param base the base to set
@@ -102,7 +101,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     public void setStartDate(final Date base) {
         this.baseDate = getPeriodDate(base, fromShort, toShort, false);
         if (this.baseDate == null) {
-            this.baseDate = getPeriodDate(base, setableFromShort, setableToShort, true);
+            this.baseDate = getPeriodDate(base, settableFromShort, settableToShort, true);
         }
     }
 
@@ -203,61 +202,61 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     }
 
     /**
-     * Returns the setableFrom date as short string or 
+     * Returns the settableFrom date as short string or
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
-     * @return the setableFrom date
+     * @return the settableFrom date
      */
-    @XmlAttribute(name = "setableFrom")
-    public String getSetableFrom() {
-        final Date date = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, false);
-        return fqDate && date != null ? constructDateString(date) : setableFromShort;
+    @XmlAttribute(name = "settableFrom")
+    public String getSettableFrom() {
+        final Date date = getPeriodDate(getBaseDate(), settableFromShort, settableToShort, false);
+        return fqDate && date != null ? constructDateString(date) : settableFromShort;
     }
 
     /**
-     * Returns the setableFrom date as Date.
+     * Returns the settableFrom date as Date.
      * 
      * @param base the basis date
-     * @return the setableFrom date
+     * @return the settableFrom date
      */
-    public Date getSetableFromDate(final Date base) {
-        return getPeriodDate(base, setableFromShort, setableToShort, false);
+    public Date getSettableFromDate(final Date base) {
+        return getPeriodDate(base, settableFromShort, settableToShort, false);
     }
 
     /**
-     * Set the setableFrom date by given string.
+     * Set the settableFrom date by given string.
      * The input string should be as short format or as fully qualified date string.  
      * 
-     * @param setableFrom the setableFrom date
+     * @param settableFrom the settableFrom date
      */
-    public void setSetableFrom(final String setableFrom) {
-        setSetableFromShort(constructShort(setableFrom));
+    public void setSettableFrom(final String settableFrom) {
+        setSettableFromShort(constructShort(settableFrom));
     }
 
     /**
-     * Set the setableFrom date by given date.  
+     * Set the settableFrom date by given date.
      * 
-     * @param setableFrom the setableFrom date
+     * @param settableFrom the settableFrom date
      */
-    public void setSetableFrom(final Date setableFrom) {
-        setSetableFromShort(constructShort(setableFrom));
+    public void setSettableFrom(final Date settableFrom) {
+        setSettableFromShort(constructShort(settableFrom));
     }
 
     /**
-     * @return the setableFromShort
+     * @return the settableFromShort
      */
-    protected String getSetableFromShort() {
-        return setableFromShort;
+    protected String getSettableFromShort() {
+        return settableFromShort;
     }
 
     /**
-     * @param setableFromShort the setableFromShort to set
+     * @param settableFromShort the settableFromShort to set
      */
-    private void setSetableFromShort(final String setableFromShort) {
-        if (setableFromShort == null || !setableFromShort.matches(SHORT_FORMAT)) {
-            throw new IllegalArgumentException("invalid setableFrom format given");
+    private void setSettableFromShort(final String settableFromShort) {
+        if (settableFromShort == null || !settableFromShort.matches(SHORT_FORMAT)) {
+            throw new IllegalArgumentException("invalid settableFrom format given");
         }
-        this.setableFromShort = setableFromShort;
+        this.settableFromShort = settableFromShort;
     }
 
     /**
@@ -328,85 +327,81 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
     }
 
     /**
-     * Returns the setableTo date as Date.
+     * Returns the settableTo date as Date.
      * 
      * @param base the basis date
-     * @return the setableTo date
+     * @return the settableTo date
      */
-    public Date getSetableToDate(final Date base) {
-        return getPeriodDate(base, setableFromShort, setableToShort, true);
+    public Date getSettableToDate(final Date base) {
+        return getPeriodDate(base, settableFromShort, settableToShort, true);
     }
 
     /**
-     * Returns the setableTo date as short string or 
+     * Returns the settableTo date as short string or
      * if {@link #isFullyQualified()} equals <code>true</code> a fully qualified date string.
      * 
-     * @return the setableTo date
+     * @return the settableTo date
      */
-    @XmlAttribute(name = "setableTo")
-    public String getSetableTo() {
-        final Date date = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
-        return fqDate && date != null ? constructDateString(date) : setableToShort;
+    @XmlAttribute(name = "settableTo")
+    public String getSettableTo() {
+        final Date date = getPeriodDate(getBaseDate(), settableFromShort, settableToShort, true);
+        return fqDate && date != null ? constructDateString(date) : settableToShort;
     }
 
     /**
-     * Set the setableTo date by given string.
+     * Set the settableTo date by given string.
      * The input string should be as short format or as fully qualified date string.  
      * 
-     * @param setableTo the setableTo date
+     * @param settableTo the settableTo date
      */
-    public void setSetableTo(final String setableTo) {
-        setSetableToShort(constructShort(setableTo));
+    public void setSettableTo(final String settableTo) {
+        setSettableToShort(constructShort(settableTo));
     }
 
     /**
-     * Set the setableTo date by given date.  
+     * Set the settableTo date by given date.
      * 
-     * @param setableTo the setableTo date
+     * @param settableTo the settableTo date
      */
-    public void setSetableTo(final Date setableTo) {
-        setSetableToShort(constructShort(setableTo));
+    public void setSettableTo(final Date settableTo) {
+        setSettableToShort(constructShort(settableTo));
     }
 
     /**
-     * @return the setableToShort
+     * @return the settableToShort
      */
-    protected String getSetableToShort() {
-        return setableToShort;
+    protected String getSettableToShort() {
+        return settableToShort;
     }
 
     /**
-     * @param setableToShort the setableToShort to set
+     * @param settableToShort the settableToShort to set
      */
-    private void setSetableToShort(final String setableToShort) {
-        if (setableToShort == null || !setableToShort.matches(SHORT_FORMAT)) {
-            throw new IllegalArgumentException("invalid setableTo format given");
+    private void setSettableToShort(final String settableToShort) {
+        if (settableToShort == null || !settableToShort.matches(SHORT_FORMAT)) {
+            throw new IllegalArgumentException("invalid settableTo format given");
         }
-        this.setableToShort = setableToShort;
+        this.settableToShort = settableToShort;
     }
 
-    @XmlAttribute(name = "setable", required = false)
-    public boolean isSetable() {
+    @XmlAttribute(name = "settable", required = false)
+    public boolean isSettable() {
         final Date today = new Date();
         final Date to = getToDate();
 
         if (to != null && today.after(to)) {
             return false;
         } else {
-            Date setTo = getPeriodDate(getBaseDate(), setableFromShort, setableToShort, true);
+            Date setTo = getPeriodDate(getBaseDate(), settableFromShort, settableToShort, true);
             if (setTo == null)
-                setTo = getPeriodDate(today, setableFromShort, setableToShort, true);
+                setTo = getPeriodDate(today, settableFromShort, settableToShort, true);
 
-            if (setTo == null || today.after(setTo)) {
-                return false;
-            }
+            return setTo != null && !today.after(setTo);
         }
-
-        return true;
     }
 
-    public boolean isSetable(final Date base) {
-        return getPeriodDate(base, setableFromShort, setableToShort, false) != null;
+    public boolean isSettable(final Date base) {
+        return getPeriodDate(base, settableFromShort, settableToShort, false) != null;
     }
 
     /**
@@ -641,9 +636,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
                 date = DateUtils.parseDate(inputStr);
             }
 
-            if (date != null) {
-                return constructShort(date);
-            }
+            return constructShort(date);
         }
 
         throw new IllegalArgumentException("invalid input string \"" + inputStr + "\"");
@@ -789,8 +782,7 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Period) {
-            Period other = (Period) obj;
+        if (obj instanceof Period other) {
             if (!fromShort.equals(other.fromShort) || !toShort.equals(other.toShort))
                 return false;
 
@@ -818,13 +810,14 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
      */
     @Override
     public Period clone() throws CloneNotSupportedException {
+        Period period = (Period) super.clone();
         final Period clone = new Period();
 
         clone.baseDate = this.baseDate;
         clone.fromShort = this.fromShort;
         clone.toShort = this.toShort;
-        clone.setableFromShort = this.setableFromShort;
-        clone.setableToShort = this.setableToShort;
+        clone.settableFromShort = this.settableFromShort;
+        clone.settableToShort = this.settableToShort;
         clone.lectureEndShort = this.lectureEndShort;
         clone.labels = this.labels;
         clone.setWarnings(this.warnings);
@@ -859,16 +852,16 @@ public class Period implements Serializable, Comparable<Period>, Cloneable {
             builder.append(toShort);
             builder.append(", ");
         }
-        if (setableFromShort != null) {
-            builder.append("setableFromShort=");
-            builder.append(setableFromShort);
-            if (setableToShort != null) {
+        if (settableFromShort != null) {
+            builder.append("settableFromShort=");
+            builder.append(settableFromShort);
+            if (settableToShort != null) {
                 builder.append(", ");
             }
         }
-        if (setableToShort != null) {
-            builder.append("setableToShort=");
-            builder.append(setableToShort);
+        if (settableToShort != null) {
+            builder.append("settableToShort=");
+            builder.append(settableToShort);
         }
         builder.append("]");
         return builder.toString();

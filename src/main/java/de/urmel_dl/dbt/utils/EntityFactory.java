@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -72,7 +71,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  * <br>
  * <b>Examples:</b>
  * <p>
- * Marshalling a entity to output:
+ * Marshalling an entity to output:
  * </p>
  * <blockquote>
  * <pre>
@@ -90,7 +89,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
  * </pre>
  * </blockquote>
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  * @param <T> the generic type
  */
 public class EntityFactory<T> {
@@ -118,7 +117,7 @@ public class EntityFactory<T> {
 
     private T entity;
 
-    private BiConsumer<Callable<Marshaller>, Object> marshal = (marshallerCaller, output) -> {
+    private final BiConsumer<Callable<Marshaller>, Object> marshal = (marshallerCaller, output) -> {
         Marshaller marshaller;
         try {
             marshaller = marshallerCaller.call();
@@ -142,7 +141,7 @@ public class EntityFactory<T> {
         }
     };
 
-    private BiFunction<Callable<Unmarshaller>, Object, T> unmarshal = (unmarshallerCaller, input) -> {
+    private final BiFunction<Callable<Unmarshaller>, Object, T> unmarshal = (unmarshallerCaller, input) -> {
         Unmarshaller unmarshaller;
         try {
             unmarshaller = unmarshallerCaller.call();
@@ -166,7 +165,7 @@ public class EntityFactory<T> {
         }
     };
 
-    private BiFunction<Callable<Unmarshaller>, Object, T> jsonUnmarshal = (unmarshallerCaller, input) -> {
+    private final BiFunction<Callable<Unmarshaller>, Object, T> jsonUnmarshal = (unmarshallerCaller, input) -> {
         Unmarshaller unmarshaller;
         try {
             unmarshaller = unmarshallerCaller.call();
@@ -222,29 +221,6 @@ public class EntityFactory<T> {
                 .filter(i -> i != -1 && CONFIG_PREFIX.length() < i)
                 .map(i -> e.getKey().substring(CONFIG_PREFIX.length(), i - 1))
                 .anyMatch(p -> entityType.getPackage().getName().contains(p) || entityType.getName().contains(p)));
-    }
-
-    /**
-     * Marshals a entity with specified marshal function.
-     *
-     * @param <R> the return type
-     * @param f the f
-     * @return the return type
-     */
-    public <R> R marshal(Function<T, R> f) {
-        return f.apply(entity);
-    }
-
-    /**
-     * Unmarshals a entity with specified unmarshal function.
-     *
-     * @param <S> the source type
-     * @param s the source
-     * @param f the unmarshal function
-     * @return the entity class
-     */
-    public <S> T unmarshal(S s, Function<S, T> f) {
-        return f.apply(s);
     }
 
     /**
@@ -355,15 +331,6 @@ public class EntityFactory<T> {
     }
 
     /**
-     * Marshals the entity to {@link Element}.
-     *
-     * @return the {@link Element}
-     */
-    public Element toElement() {
-        return toDocument().getRootElement().clone();
-    }
-
-    /**
      * Unmarshals the {@link Element} to entity.
      *
      * @param elm the elm
@@ -374,7 +341,7 @@ public class EntityFactory<T> {
     }
 
     /**
-     * Returns the marshaled entity. By default outputs entity as XML.
+     * Returns the marshaled entity. By default, outputs entity as XML.
      *
      * @param mediaType the optional mediaType
      * @return the marshaled entity
@@ -388,7 +355,7 @@ public class EntityFactory<T> {
     }
 
     /**
-     * Returns the unmarshaled entity.
+     * Returns the unmarshalled entity.
      *
      * @param source the source
      * @param mediaType the mediaType
@@ -443,7 +410,7 @@ public class EntityFactory<T> {
         });
 
         return unmarshaller;
-    };
+    }
 
     private Optional<Method> findMethod(Class<?> cls, String name, Class<?>... parameterTypes) {
         return Arrays.stream(cls.getMethods()).filter(m -> name.equals(m.getName())).filter(m -> {
@@ -489,13 +456,13 @@ public class EntityFactory<T> {
             CONFIG_PREFIX + entityType.getName() + "." + propType);
 
         return MCRConfiguration2.getPropertiesMap().entrySet().stream()
-            .filter(e -> propNames.stream().anyMatch(n -> e.getKey().startsWith(n))).sorted(Comparator.comparing(
-                Entry::getKey, (k1, k2) -> {
+            .filter(e -> propNames.stream().anyMatch(n -> e.getKey().startsWith(n))).sorted(
+                Entry.comparingByKey((k1, k2) -> {
                     String fpn = keyFunc.apply(k1);
                     if (fpn.equals(keyFunc.apply(k2))) {
                         int pi1 = propNames.indexOf(k1.replace(fpn, ""));
                         int pi2 = propNames.indexOf(k2.replace(fpn, ""));
-                        return pi1 == pi2 ? 0 : pi1 < pi2 ? -1 : 1;
+                        return Integer.compare(pi1, pi2);
                     }
                     return k1.compareTo(k2);
                 }))

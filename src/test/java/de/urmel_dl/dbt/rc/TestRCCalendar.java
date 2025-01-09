@@ -42,7 +42,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 /**
  * Test Case for RCCalendar.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 public class TestRCCalendar extends MCRTestCase {
 
@@ -76,8 +76,8 @@ public class TestRCCalendar extends MCRTestCase {
     }
 
     @Test
-    public void testRCCalendarGetSetable() throws IOException {
-        Period period = RCCalendar.getPeriodBySetable("2700", new Date());
+    public void testRCCalendarGetSettable() throws IOException {
+        Period period = RCCalendar.getPeriodBySettable("2700", new Date());
         assertNotNull(period);
 
         Document p = new EntityFactory<>(period).toDocument();
@@ -97,27 +97,27 @@ public class TestRCCalendar extends MCRTestCase {
         Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertTrue(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+        assertTrue(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
     }
 
     @Test
     public void testPeriodResolverListAll() throws IOException {
         Element input = MCRURIResolver.instance()
-            .resolve("period:areacode=0&date=31.03.2015&onlySetable=false&list=true");
+            .resolve("period:areacode=0&date=31.03.2015&onlySettable=false&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+        assertFalse(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
     }
 
     @Test
     public void testPeriodResolverListFirstSemester() throws IOException, ParseException, CloneNotSupportedException {
         RCCalendar calendar = RCCalendar.instance();
-        Period p = calendar.getPeriods().get(0).clone();
+        Period p = calendar.getPeriods().getFirst().clone();
         p.setStartDate(new Date());
         p.setFullyQualified(true);
 
         Element input = MCRURIResolver.instance()
-            .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
+            .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertEquals(2, input.getChildren("period").size());
@@ -131,10 +131,10 @@ public class TestRCCalendar extends MCRTestCase {
         p.setFullyQualified(true);
 
         Element input = MCRURIResolver.instance()
-            .resolve("period:areacode=0&date=" + p.getSetableFrom() + "&list=true");
+            .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertTrue(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+        assertTrue(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
         assertEquals(2, input.getChildren("period").size());
     }
 
@@ -149,17 +149,17 @@ public class TestRCCalendar extends MCRTestCase {
     @Test
     public void testPeriodResolverListMoreAll() throws IOException {
         Element input = MCRURIResolver.instance()
-            .resolve("period:areacode=0&date=30.09.2014&list=true&onlySetable=false&numnext=1");
+            .resolve("period:areacode=0&date=30.09.2014&list=true&onlySettable=false&numnext=1");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertFalse(Boolean.parseBoolean(input.getChildren("period").get(0).getAttributeValue("setable")));
+        assertFalse(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
 
-        int numSetable = 0;
+        int numbSettable = 0;
         for (Element child : input.getChildren("period")) {
-            if (Boolean.parseBoolean(child.getAttributeValue("setable"))) {
-                numSetable++;
+            if (Boolean.parseBoolean(child.getAttributeValue("settable"))) {
+                numbSettable++;
             }
         }
-        assertEquals(2, numSetable);
+        assertEquals(2, numbSettable);
     }
 }

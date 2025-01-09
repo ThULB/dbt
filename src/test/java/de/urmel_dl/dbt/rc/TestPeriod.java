@@ -51,11 +51,11 @@ public class TestPeriod extends MCRTestCase {
         assertEquals("01.10.", period.getFrom());
         assertEquals("31.03.", period.getTo());
 
-        period.setSetableFrom("21.07.");
-        period.setSetableTo("02.02.");
+        period.setSettableFrom("21.07.");
+        period.setSettableTo("02.02.");
 
-        assertEquals("21.07.", period.getSetableFrom());
-        assertEquals("02.02.", period.getSetableTo());
+        assertEquals("21.07.", period.getSettableFrom());
+        assertEquals("02.02.", period.getSettableTo());
 
         period.setLectureEnd("02.03.");
         assertEquals("02.03.", period.getLectureEnd());
@@ -78,11 +78,11 @@ public class TestPeriod extends MCRTestCase {
         assertEquals("01.10." + year, period.getFrom());
         assertEquals("31.03." + (year + 1), period.getTo());
 
-        period.setSetableFrom("21.07.");
-        period.setSetableTo("02.02.");
+        period.setSettableFrom("21.07.");
+        period.setSettableTo("02.02.");
 
-        assertEquals("21.07." + year, period.getSetableFrom());
-        assertEquals("02.02." + (year + 1), period.getSetableTo());
+        assertEquals("21.07." + year, period.getSettableFrom());
+        assertEquals("02.02." + (year + 1), period.getSettableTo());
 
         period.setLectureEnd("02.03.");
         assertEquals("02.03." + (year + 1), period.getLectureEnd());
@@ -105,11 +105,11 @@ public class TestPeriod extends MCRTestCase {
         assertEquals("01.04." + year, period.getFrom());
         assertEquals("30.09." + year, period.getTo());
 
-        period.setSetableFrom("03.02.");
-        period.setSetableTo("20.07.");
+        period.setSettableFrom("03.02.");
+        period.setSettableTo("20.07.");
 
-        assertEquals("03.02." + year, period.getSetableFrom());
-        assertEquals("20.07." + year, period.getSetableTo());
+        assertEquals("03.02." + year, period.getSettableFrom());
+        assertEquals("20.07." + year, period.getSettableTo());
 
         period.setLectureEnd("03.08.");
         assertEquals("03.08." + year, period.getLectureEnd());
@@ -163,52 +163,52 @@ public class TestPeriod extends MCRTestCase {
     public void testPeriodSetableFromShort() throws IOException {
         Period period = new Period();
 
-        period.setSetableFrom("01.10.");
-        period.setSetableTo("02.10.");
-        assertEquals("01.10.", period.getSetableFrom());
+        period.setSettableFrom("01.10.");
+        period.setSettableTo("02.10.");
+        assertEquals("01.10.", period.getSettableFrom());
 
-        period.setSetableFrom("01.12.");
-        period.setSetableTo("02.12.");
-        assertEquals("01.12.", period.getSetableFrom());
+        period.setSettableFrom("01.12.");
+        period.setSettableTo("02.12.");
+        assertEquals("01.12.", period.getSettableFrom());
     }
 
     @Test
     public void testPeriodSetableFromLong() throws IOException {
         Period period = new Period();
 
-        period.setSetableFrom("01.10.2014");
-        period.setSetableTo("02.10.2014");
-        assertEquals("01.10.", period.getSetableFrom());
+        period.setSettableFrom("01.10.2014");
+        period.setSettableTo("02.10.2014");
+        assertEquals("01.10.", period.getSettableFrom());
 
-        period.setSetableFrom("01.12.2014");
-        period.setSetableTo("02.12.2014");
-        assertEquals("01.12.", period.getSetableFrom());
+        period.setSettableFrom("01.12.2014");
+        period.setSettableTo("02.12.2014");
+        assertEquals("01.12.", period.getSettableFrom());
     }
 
     @Test
     public void testPeriodSetableToShort() throws IOException {
         Period period = new Period();
 
-        period.setSetableFrom("01.10.");
-        period.setSetableTo("02.10.");
-        assertEquals("02.10.", period.getSetableTo());
+        period.setSettableFrom("01.10.");
+        period.setSettableTo("02.10.");
+        assertEquals("02.10.", period.getSettableTo());
 
-        period.setSetableFrom("30.11.");
-        period.setSetableTo("01.12.");
-        assertEquals("01.12.", period.getSetableTo());
+        period.setSettableFrom("30.11.");
+        period.setSettableTo("01.12.");
+        assertEquals("01.12.", period.getSettableTo());
     }
 
     @Test
     public void testPeriodSetableToLong() throws IOException {
         Period period = new Period();
 
-        period.setSetableFrom("01.10.2014");
-        period.setSetableTo("01.10.2014");
-        assertEquals("01.10.", period.getSetableTo());
+        period.setSettableFrom("01.10.2014");
+        period.setSettableTo("01.10.2014");
+        assertEquals("01.10.", period.getSettableTo());
 
-        period.setSetableFrom("30.11.2014");
-        period.setSetableTo("01.12.2014");
-        assertEquals("01.12.", period.getSetableTo());
+        period.setSettableFrom("30.11.2014");
+        period.setSettableTo("01.12.2014");
+        assertEquals("01.12.", period.getSettableTo());
     }
 
     @Test
@@ -241,8 +241,8 @@ public class TestPeriod extends MCRTestCase {
         period.setFrom("01.10.");
         period.setTo("31.03.");
 
-        period.setSetableFrom("21.07.");
-        period.setSetableTo("02.02.");
+        period.setSettableFrom("21.07.");
+        period.setSettableTo("02.02.");
 
         period.setLectureEnd("02.03.");
 
@@ -267,8 +267,8 @@ public class TestPeriod extends MCRTestCase {
         period.setFrom("01.10.");
         period.setTo("31.03.");
 
-        period.setSetableFrom("21.07.");
-        period.setSetableTo("02.02.");
+        period.setSettableFrom("21.07.");
+        period.setSettableTo("02.02.");
 
         period.setLectureEnd("02.03.");
 

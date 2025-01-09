@@ -42,7 +42,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 /**
  * The Class Catalogues.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "catalogues")
@@ -66,7 +66,7 @@ public class Catalogues {
                 throw new MCRException("Could not find " + getCataloguesConfigResourceName());
             }
 
-            Document doc = new Document();
+            Document doc;
             final SAXBuilder builder = new SAXBuilder();
             try {
                 doc = builder.build(cataloguesConfig);
@@ -85,7 +85,7 @@ public class Catalogues {
             try {
                 return configFile.toURI().toURL();
             } catch (final MalformedURLException e) {
-                LOGGER.warn("Error while looking for: " + configFile, e);
+                LOGGER.warn(()->"Error while looking for: " + configFile, e);
             }
         }
         return MCRResourceResolver.instance()
@@ -98,7 +98,7 @@ public class Catalogues {
     }
 
     /**
-     * Returns a list of calagogues.
+     * Returns a list of catalogues.
      *
      * @return the catalogues
      */
@@ -117,16 +117,7 @@ public class Catalogues {
     }
 
     /**
-     * Adds a catalog.
-     *
-     * @param catalog the catalog to set
-     */
-    public void addCatalog(final Catalog catalog) {
-        this.catalogues.add(catalog);
-    }
-
-    /**
-     * Returns the {@link Catalog#Catalog()} for given Id.
+     * Returns the {@link Catalog#Catalog()} for given id.
      *
      * @param id the catalog identifier
      * @return the {@link Catalog#Catalog()}
