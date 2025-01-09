@@ -44,10 +44,10 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * <ul>
  * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}]</code> get (set able) period for given date</li>
  * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;fq=true]</code> get (fq = full qualified) period for given date</li>
- * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;list=true][&amp;onlySetable=true][&amp;numnext=1]</code> get periods (+ next) for given date</li>
+ * <li><code>period:areacode=areaCode[&amp;date={now|31.12.2011}][&amp;list=true][&amp;onlySettable=true][&amp;numnext=1]</code> get periods (+ next) for given date</li>
  * </ul>
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class PeriodResolver implements URIResolver {
@@ -72,9 +72,9 @@ public class PeriodResolver implements URIResolver {
 
             final String areaCode = params.get("areacode");
             final String dateStr = params.get("date") != null ? params.get("date") : "now";
-            boolean fq = params.get("fq") != null ? Boolean.parseBoolean(params.get("fq")) : false;
-            boolean list = params.get("list") != null ? Boolean.parseBoolean(params.get("list")) : false;
-            boolean onlySetable = params.get("onlySetable") != null ? Boolean.parseBoolean(params.get("onlySetable"))
+            boolean fq = params.get("fq") != null && Boolean.parseBoolean(params.get("fq"));
+            boolean list = params.get("list") != null && Boolean.parseBoolean(params.get("list"));
+            boolean onlySettable = params.get("onlySettable") != null ? Boolean.parseBoolean(params.get("onlySettable"))
                 : true;
             int numNext = params.get("numnext") != null ? Integer.parseInt(params.get("numnext")) : 1;
 
@@ -89,10 +89,10 @@ public class PeriodResolver implements URIResolver {
 
             if (!list) {
                 final Period period = fq ? RCCalendar.getPeriod(areaCode, date)
-                    : RCCalendar.getPeriodBySetable(areaCode, date);
+                    : RCCalendar.getPeriodBySettable(areaCode, date);
                 return new JDOMSource(new EntityFactory<>(period).toDocument());
             } else {
-                final RCCalendar calendar = RCCalendar.getPeriodList(areaCode, date, onlySetable, numNext);
+                final RCCalendar calendar = RCCalendar.getPeriodList(areaCode, date, onlySettable, numNext);
                 return new JDOMSource(new EntityFactory<>(calendar).toDocument());
             }
         } catch (final Exception ex) {

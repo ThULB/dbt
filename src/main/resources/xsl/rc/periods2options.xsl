@@ -16,9 +16,9 @@
 
   <xsl:template match="period">
     <option value="{@to}">
-      <xsl:if test="@setable = 'false'">
+      <xsl:if test="@settable = 'false'">
         <xsl:attribute name="class">
-          <xsl:text>not-setable</xsl:text>
+          <xsl:text>not-settable</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="disabled">
           <xsl:text>disabled</xsl:text>

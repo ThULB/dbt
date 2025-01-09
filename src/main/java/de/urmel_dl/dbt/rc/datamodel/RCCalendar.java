@@ -19,6 +19,7 @@ package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -28,10 +29,6 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.TimeZone;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 import javax.xml.transform.TransformerException;
 
 import org.apache.logging.log4j.LogManager;
@@ -40,22 +37,27 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.common.MCRException;
-import org.mycore.common.config.MCRConfigurationDir;
 import org.mycore.common.content.MCRSourceContent;
+import org.mycore.resource.MCRResourcePath;
+import org.mycore.resource.MCRResourceResolver;
 import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.rc.utils.DateUtils;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @XmlRootElement(name = "calendar")
 @XmlAccessorType(XmlAccessType.NONE)
 public final class RCCalendar implements Serializable, Iterable<Period> {
 
-    protected static final String RESOURCE_URI = "rccalendar.xml";
+    private static final String RESOURCE_URI = "rccalendar.xml";
 
     private static final long serialVersionUID = -812825621316872737L;
 
@@ -71,7 +73,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     /**
      * Returns a {@link RCCalendar} instance.
      *
-     * @return a instance of {@link RCCalendar}
+     * @return an instance of {@link RCCalendar}
      */
     public static RCCalendar instance() {
         if (singleton == null) {
@@ -90,7 +92,11 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     private static Document getCalendar()
         throws MCRException, TransformerException, JDOMException, IOException, SAXException {
-        return MCRSourceContent.getInstance(MCRConfigurationDir.getConfigResource(RESOURCE_URI).toString()).asXML();
+        String resourceSystemId = MCRResourceResolver.instance()
+            .resolve(MCRResourcePath.ofPath(RESOURCE_URI))
+            .map(URL::toString)
+            .orElseThrow(() -> new MCRException("Could not find " + RESOURCE_URI));
+        return MCRSourceContent.getInstance(resourceSystemId).asXML();
     }
 
     /**
@@ -124,14 +130,14 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             }
         } catch (final Throwable e) {
             // Period is NULL
-            LOGGER.info("no period given for date " + date);
+            LOGGER.info(() -> "no period given for date " + date);
         }
 
         return null;
     }
 
     /**
-     * Returns a list of setable {@link Period} for given <code>areaCode</code>, <code>date</code> and
+     * Returns a list of settable {@link Period} for given <code>areaCode</code>, <code>date</code> and
      * <code>numNext</code> (number of next periods).
      *
      * @param areaCode specific area code for the period
@@ -149,11 +155,11 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      *
      * @param areaCode specific area code for the period
      * @param date date as starting point which should return period(s)
-     * @param onlySetable if <code>true</code> only setable periods are listed
-     * @param numNext number of periods after first setable one
+     * @param onlySettable if <code>true</code> only settable periods are listed
+     * @param numNext number of periods after first settable one
      * @return a list of {@link Period}
      */
-    public static RCCalendar getPeriodList(final String areaCode, final Date date, boolean onlySetable, int numNext) {
+    public static RCCalendar getPeriodList(final String areaCode, final Date date, boolean onlySettable, int numNext) {
         try {
             final Iterable<Period> periods = instance().iterable(areaCode);
 
@@ -166,16 +172,16 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             while (pos < numNext + 1) {
                 for (Period period : periods) {
                     period.setBaseDate(lastDate);
-                    if (!onlySetable && period.getFromDate(lastDate) == null && period.getToDate(lastDate) == null) {
+                    if (!onlySettable && period.getFromDate(lastDate) == null && period.getToDate(lastDate) == null) {
                         continue;
                     }
 
-                    if (pos < numNext + 1 && ((period.isSetable(lastDate) && onlySetable) || (!onlySetable && (period
-                        .isSetable(lastDate)
+                    if (pos < numNext + 1 && ((period.isSettable(lastDate) && onlySettable) || (!onlySettable && (period
+                        .isSettable(lastDate)
                         || (period.getFromDate(lastDate) != null && period.getToDate(lastDate) != null))))) {
                         final Period p = period.clone();
 
-                        if (onlySetable) {
+                        if (onlySettable) {
                             p.setStartDate(lastDate);
                         }
 
@@ -188,9 +194,9 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
                         lastDate = nextDay.getTime();
 
-                        boolean setAble = p.isSetable();
+                        boolean setAble = p.isSettable();
 
-                        if (setAble && onlySetable || !onlySetable) {
+                        if (setAble || !onlySettable) {
                             calendar.periods.add(p);
                         }
 
@@ -204,7 +210,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             return calendar;
         } catch (final Throwable e) {
             // Period is NULL
-            LOGGER.info("no periods given for date " + date);
+            LOGGER.info(() -> "no periods given for date " + date);
         }
 
         return null;
@@ -212,7 +218,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     /**
      * Tries to obtain a {@link Period}, which was defined inside RC periods, by
-     * calculating <b>setableFrom</b> and <b>setableTo</b> dates with the use of target date.
+     * calculating <b>settableFrom</b> and <b>settableTo</b> dates with the use of target date.
      *
      * @param areaCode
      *            specific area code for the period
@@ -221,10 +227,10 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      * @return the targeting {@link Period} if one could be calculated,
      *         <code>null</code> otherwise
      */
-    public static Period getPeriodBySetable(final String areaCode, final Date date) {
+    public static Period getPeriodBySettable(final String areaCode, final Date date) {
         try {
             for (Period period : instance().iterable(areaCode)) {
-                if (period.getSetableFromDate(date) != null && period.getSetableToDate(date) != null) {
+                if (period.getSettableFromDate(date) != null && period.getSettableToDate(date) != null) {
                     final Period p = period.clone();
                     p.setStartDate(date);
                     p.setFullyQualified(true);
@@ -233,7 +239,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
             }
         } catch (final Throwable e) {
             // Period is NULL
-            LOGGER.info("no period given for date " + date);
+            LOGGER.info(() -> "no period given for date " + date);
         }
 
         return null;
@@ -242,6 +248,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
     /**
      * @param periods the periods to set
      */
+    @SuppressWarnings("unused")
     protected void setPeriods(final List<Period> periods) {
         this.periods = periods;
     }
@@ -263,8 +270,8 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      * @see java.lang.Iterable#iterator()
      */
     public Iterator<Period> iterator(final String areaCode) {
-        return new Iterator<Period>() {
-            Iterator<Period> it = periods.iterator();
+        return new Iterator<>() {
+            final Iterator<Period> it = periods.iterator();
 
             Period next = null;
 

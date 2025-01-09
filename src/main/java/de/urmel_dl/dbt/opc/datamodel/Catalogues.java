@@ -23,11 +23,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jdom2.Document;
@@ -35,13 +30,19 @@ import org.jdom2.input.SAXBuilder;
 import org.mycore.common.MCRException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.config.MCRConfigurationDir;
+import org.mycore.resource.MCRResourcePath;
+import org.mycore.resource.MCRResourceResolver;
 
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  * The Class Catalogues.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlRootElement(name = "catalogues")
@@ -65,7 +66,7 @@ public class Catalogues {
                 throw new MCRException("Could not find " + getCataloguesConfigResourceName());
             }
 
-            Document doc = new Document();
+            Document doc;
             final SAXBuilder builder = new SAXBuilder();
             try {
                 doc = builder.build(cataloguesConfig);
@@ -84,10 +85,12 @@ public class Catalogues {
             try {
                 return configFile.toURI().toURL();
             } catch (final MalformedURLException e) {
-                LOGGER.warn("Error while looking for: " + configFile, e);
+                LOGGER.warn(()->"Error while looking for: " + configFile, e);
             }
         }
-        return MCRConfigurationDir.getConfigResource(getCataloguesConfigResourceName());
+        return MCRResourceResolver.instance()
+            .resolve(MCRResourcePath.ofPath(getCataloguesConfigResourceName()))
+            .orElse(null);
     }
 
     private static String getCataloguesConfigResourceName() {
@@ -95,7 +98,7 @@ public class Catalogues {
     }
 
     /**
-     * Returns a list of calagogues.
+     * Returns a list of catalogues.
      *
      * @return the catalogues
      */
@@ -114,16 +117,7 @@ public class Catalogues {
     }
 
     /**
-     * Adds a catalog.
-     *
-     * @param catalog the catalog to set
-     */
-    public void addCatalog(final Catalog catalog) {
-        this.catalogues.add(catalog);
-    }
-
-    /**
-     * Returns the {@link Catalog#Catalog()} for given Id.
+     * Returns the {@link Catalog#Catalog()} for given id.
      *
      * @param id the catalog identifier
      * @return the {@link Catalog#Catalog()}

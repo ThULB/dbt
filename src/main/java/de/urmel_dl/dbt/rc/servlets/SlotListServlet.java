@@ -142,7 +142,7 @@ public class SlotListServlet extends MCRServlet {
                 } else if ("reactivateComplete".equals(action)) {
                     evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, SlotManager.REACTIVATE_EVENT);
                     slot.setValidTo(
-                        RCCalendar.getPeriodBySetable(slot.getLocation().toString(), new Date()).getToDate());
+                        RCCalendar.getPeriodBySettable(slot.getLocation().toString(), new Date()).getToDate());
                 } else {
                     evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, MCREvent.EventType.UPDATE);
                 }

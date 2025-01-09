@@ -345,7 +345,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                                             slot.setStatus(Status.ACTIVE);
                                             slot.setValidTo(RCCalendar
-                                                .getPeriodBySetable(slot.getLocation().toString(), new Date())
+                                                .getPeriodBySettable(slot.getLocation().toString(), new Date())
                                                 .getToDate());
 
                                             evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
