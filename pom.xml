@@ -7,7 +7,7 @@
     <version>56</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2023.06-SNAPSHOT</version>
+  <version>2025.06-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
   <licenses>
@@ -34,7 +34,7 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
-    <mir.version>2024.06.1-SNAPSHOT</mir.version>
+    <mir.version>2025.02-SNAPSHOT</mir.version>
     <node.version>v16.19.1</node.version>
     <npm.version>6.14.18</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
