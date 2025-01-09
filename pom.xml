@@ -7,7 +7,7 @@
     <version>56</version>
   </parent>
   <artifactId>dbt-module</artifactId>
-  <version>2023.06-SNAPSHOT</version>
+  <version>2024.06-SNAPSHOT</version>
   <name>DBT: Application Module</name>
   <url>http://www.db-thueringen.de</url>
   <licenses>
