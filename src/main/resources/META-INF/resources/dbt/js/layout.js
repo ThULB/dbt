@@ -1,10 +1,11 @@
 /**
  * Makes person extended visible at all times
  */
-
-$(".personExtended_box").each(function() {
-	$(this).find("legend.mir-fieldset-legend.hiddenDetail").removeClass("hiddenDetail");
-	$(this).find("div.mir-fieldset-content.personExtended-container.d-none").removeClass("d-none");
+$(document).ready(function() {
+    $(".personExtended_box").each(function() {
+        $(this).find("legend.mir-fieldset-legend.hiddenDetail").removeClass("hiddenDetail");
+        $(this).find("div.mir-fieldset-content.personExtended-container.d-none").removeClass("d-none");
+    });
 });
 /**
  * Detect vendor prefix.
