@@ -144,7 +144,7 @@ public class RepairCommands extends MCRAbstractCommands {
             Files.walkFileTree(path, visitor);
 
             //sort files by name
-            ArrayList<java.nio.file.Path> paths = visitor.getPaths();
+            List<java.nio.file.Path> paths = visitor.getPaths();
             paths.sort(Comparator.comparing(java.nio.file.Path::getNameCount)
                 .thenComparing(java.nio.file.Path::getFileName));
             //extract first file, before filtering
