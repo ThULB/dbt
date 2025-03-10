@@ -87,14 +87,14 @@ public class TestRCCalendar extends MCRTestCase {
 
     @Test
     public void testPeriodResolverSingle() throws IOException {
-        Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now");
+        Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
         assertNotNull(input);
     }
 
     @Test
     public void testPeriodResolverList() throws IOException {
-        Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now&list=true");
+        Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertTrue(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
@@ -102,7 +102,7 @@ public class TestRCCalendar extends MCRTestCase {
 
     @Test
     public void testPeriodResolverListAll() throws IOException {
-        Element input = MCRURIResolver.instance()
+        Element input = MCRURIResolver.obtainInstance()
             .resolve("period:areacode=0&date=31.03.2015&onlySettable=false&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
@@ -116,7 +116,7 @@ public class TestRCCalendar extends MCRTestCase {
         p.setStartDate(new Date());
         p.setFullyQualified(true);
 
-        Element input = MCRURIResolver.instance()
+        Element input = MCRURIResolver.obtainInstance()
             .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
@@ -130,7 +130,7 @@ public class TestRCCalendar extends MCRTestCase {
         p.setStartDate(new Date());
         p.setFullyQualified(true);
 
-        Element input = MCRURIResolver.instance()
+        Element input = MCRURIResolver.obtainInstance()
             .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
@@ -140,7 +140,7 @@ public class TestRCCalendar extends MCRTestCase {
 
     @Test
     public void testPeriodResolverListMore() throws IOException {
-        Element input = MCRURIResolver.instance().resolve("period:areacode=0&date=now&list=true&numnext=2");
+        Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now&list=true&numnext=2");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
         assertEquals(3, input.getChildren("period").size());
@@ -148,7 +148,7 @@ public class TestRCCalendar extends MCRTestCase {
 
     @Test
     public void testPeriodResolverListMoreAll() throws IOException {
-        Element input = MCRURIResolver.instance()
+        Element input = MCRURIResolver.obtainInstance()
             .resolve("period:areacode=0&date=30.09.2014&list=true&onlySettable=false&numnext=1");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 

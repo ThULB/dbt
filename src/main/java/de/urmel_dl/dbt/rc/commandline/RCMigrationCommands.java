@@ -40,7 +40,6 @@ import org.mycore.common.xsl.MCRParameterCollector;
 import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
-import org.xml.sax.SAXException;
 
 import com.google.common.io.Files;
 
@@ -114,7 +113,7 @@ public class RCMigrationCommands extends MCRAbstractCommands {
                     final MCRParameterCollector params = new MCRParameterCollector();
                     params.setParameter("dirname", file.getParent());
 
-                    MCRContent xml = MCRXSLTransformer.getInstance("xsl/migrate/slot.xsl")
+                    MCRContent xml = MCRXSLTransformer.obtainInstance("xsl/migrate/slot.xsl")
                         .transform(new MCRJDOMContent(slotXML.clone()), params);
 
                     final Slot slot = new EntityFactory<>(Slot.class).fromDocument(xml.asXML());

@@ -67,6 +67,7 @@ import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.events.MCRShutdownHandler;
 import org.mycore.common.events.MCRShutdownHandler.Closeable;
 import org.mycore.common.processing.MCRProcessableDefaultCollection;
+import org.mycore.common.processing.MCRProcessableManager;
 import org.mycore.common.processing.MCRProcessableRegistry;
 import org.mycore.frontend.MCRFrontendUtil;
 import org.mycore.util.concurrent.processing.MCRProcessableExecutor;
@@ -85,7 +86,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 public class MediaService {
 
@@ -152,12 +153,12 @@ public class MediaService {
 
     private static final List<String> CP_MEDIA_FILE_EXT = Arrays.asList(".smil", ".mp4");
 
-    private static final List<String> CP_THUMB_FILE_EXT = Arrays.asList(".jpg");
+    private static final List<String> CP_THUMB_FILE_EXT = List.of(".jpg");
 
     private static Path tempDirThumbs;
 
     static {
-        MCRProcessableRegistry registry = MCRProcessableRegistry.getSingleInstance();
+        MCRProcessableRegistry registry = MCRProcessableManager.getInstance().getRegistry();
 
         int poolSize = MCRConfiguration2.getInt(CONFIG_PREFIX + "ThreadCount").orElse(4);
 
@@ -217,14 +218,14 @@ public class MediaService {
 
     public static boolean hasSMILFile(String id) {
         return Optional.ofNullable(getMediaFiles(id))
-            .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findAny().isPresent())
+            .map(f -> f.stream().anyMatch(p -> p.getFileName().toString().endsWith(".smil")))
             .orElse(false);
     }
 
     public static String getSMILFile(String id) {
         return Optional.ofNullable(getMediaFiles(id))
-            .map(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findFirst()
-                .map(op -> op.getFileName().toString()).orElse(null))
+            .flatMap(f -> f.stream().filter(p -> p.getFileName().toString().endsWith(".smil")).findFirst()
+                .map(op -> op.getFileName().toString()))
             .orElse(null);
     }
 
@@ -243,7 +244,7 @@ public class MediaService {
                     .collect(Collectors.toList());
                 MEDIA_FILES_CACHE.put(id, files);
             } catch (IOException e) {
-                files = null;
+                LOGGER.warn(() -> "Could not get media files for " + id, e);
             }
         }
 
@@ -310,7 +311,7 @@ public class MediaService {
                     .collect(Collectors.toList());
                 THUMB_FILES_CACHE.put(id, files);
             } catch (IOException e) {
-                files = null;
+                LOGGER.warn(() -> "Could not get thumb files for " + id, e);
             }
         }
 
@@ -327,7 +328,7 @@ public class MediaService {
                     .collect(Collectors.toList());
                 SUBT_FILES_CACHE.put(id, files);
             } catch (IOException e) {
-                files = null;
+                LOGGER.warn(() -> "Could not get subtitle files for " + id, e);
             }
         }
 
@@ -379,7 +380,7 @@ public class MediaService {
     public static Sources buildThumbSources(String id) {
         return Optional.ofNullable(getThumbFiles(id))
             .map(f -> new Sources(id,
-                f.stream().map(file -> file.getFileName()).sorted()
+                f.stream().map(Path::getFileName).sorted()
                     .map(file -> new Source("image/jpeg", file.toString()))
                     .collect(Collectors.toList())))
             .orElse(null);
@@ -402,7 +403,7 @@ public class MediaService {
     public static Sources buildSubtitleSources(String id) {
         return Optional.ofNullable(getSubtitleFiles(id))
             .map(f -> new Sources(id,
-                f.stream().map(file -> file.getFileName()).sorted()
+                f.stream().map(Path::getFileName).sorted()
                     .map(file -> new Source(getSubtitleMimeType(file), file.toString()))
                     .collect(Collectors.toList())))
             .orElse(null);
@@ -411,7 +412,7 @@ public class MediaService {
     /**
      * Task for media encoding.
      *
-     * @author Ren\u00E9 Adler (eagle)
+     * @author René Adler (eagle)
      */
     static class EncodeTask implements Runnable {
 
@@ -439,9 +440,7 @@ public class MediaService {
                 LOGGER.info("Send media file {} to encoder service.", mediaFile.getFileName());
 
                 Path tmpFile = Files.createTempDirectory("media").resolve(mediaFile.getFileName().toString());
-                try {
-                    Client client = ClientBuilder.newBuilder()
-                        .register(MultiPartFeature.class).build();
+                try (Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build()) {
                     client.property(ClientProperties.CHUNKED_ENCODING_SIZE, 1024);
                     client.property(ClientProperties.REQUEST_ENTITY_PROCESSING, "CHUNKED");
 
@@ -462,11 +461,12 @@ public class MediaService {
                         tmpFile.toFile(),
                         MediaType.APPLICATION_OCTET_STREAM_TYPE));
 
-                    Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE)
-                        .post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()));
+                    try (Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE)
+                        .post(Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType()))) {
 
-                    if (response.getStatus() != 200) {
-                        LOGGER.error("Encoder service send status info {}.", response.getStatusInfo());
+                        if (response.getStatus() != 200) {
+                            LOGGER.error("Encoder service send status info {}.", response.getStatusInfo());
+                        }
                     }
                 } catch (Exception e) {
                     throw new MCRException(e);
@@ -483,7 +483,7 @@ public class MediaService {
     /**
      * Task for encoded media files.
      *
-     * @author Ren\u00E9 Adler (eagle)
+     * @author René Adler (eagle)
      */
     static class CompletedJobTask implements Runnable {
 
@@ -603,19 +603,19 @@ public class MediaService {
         }
 
         private void removeJob() {
-            Client client = ClientBuilder.newBuilder().build();
+            try (Client client = ClientBuilder.newBuilder().build()) {
+                WebTarget webTarget = client
+                    .target(MediaService.SERVER_ADDRESS + new MessageFormat(CONVERTER_REMOVE_JOB_PATH, Locale.ROOT)
+                        .format(new Object[] { job.getId() }));
 
-            WebTarget webTarget = client
-                .target(MediaService.SERVER_ADDRESS + new MessageFormat(CONVERTER_REMOVE_JOB_PATH, Locale.ROOT)
-                    .format(new Object[] { job.getId() }));
-
-            Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get();
-
-            if (response.getStatus() == 200) {
-                if (Boolean.parseBoolean(response.readEntity(String.class))) {
-                    LOGGER.info("Job with id {} was removed.", job.getId());
-                } else {
-                    LOGGER.warn("Job with id {} wasn't removed.", job.getId());
+                try (Response response = webTarget.request(MediaType.TEXT_PLAIN_TYPE).get()) {
+                    if (response.getStatus() == 200) {
+                        if (Boolean.parseBoolean(response.readEntity(String.class))) {
+                            LOGGER.info("Job with id {} was removed.", job.getId());
+                        } else {
+                            LOGGER.warn("Job with id {} wasn't removed.", job.getId());
+                        }
+                    }
                 }
             }
         }

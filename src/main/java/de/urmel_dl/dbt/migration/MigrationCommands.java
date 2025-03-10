@@ -65,21 +65,10 @@ public class MigrationCommands extends MCRAbstractCommands {
     public static List<String> xsltObjects(final String base, final String xslFile) throws Exception {
         URI styleFile = MigrationCommands.class.getResource("/xsl/" + xslFile).toURI();
 
-        if (styleFile == null) {
-            final File file = new File(xslFile);
-
-            if (!file.exists()) {
-                LOGGER.error("Could not find the stylesheet \"" + xslFile + "\".");
-                return null;
-            }
-
-            styleFile = file.toURI();
-        }
-
         List<String> cmds = new ArrayList<String>();
         String sf = styleFile.toString();
 
-        MCRXMLMetadataManager mm = MCRXMLMetadataManager.instance();
+        MCRXMLMetadataManager mm = MCRXMLMetadataManager.getInstance();
         mm.listIDsForBase(base).forEach(id -> {
             cmds.add(new MessageFormat("xslt {0} with file {1}", Locale.ROOT)
                 .format(new Object[] { id, sf }));
@@ -161,7 +150,7 @@ public class MigrationCommands extends MCRAbstractCommands {
         }
 
         // add the link to metadata
-        final MCRMetaEnrichedLinkID der = MCRMetaEnrichedLinkIDFactory.getInstance()
+        final MCRMetaEnrichedLinkID der = MCRMetaEnrichedLinkIDFactory.obtainInstance()
             .getDerivateLink(mcrDerivate);
 
         try {
@@ -224,9 +213,9 @@ public class MigrationCommands extends MCRAbstractCommands {
         Optional.ofNullable(oldBase)
             .ifPresent(b -> evt.put(objectEvent ? MCREvent.OBJECT_OLD_KEY : MCREvent.DERIVATE_OLD_KEY, b));
         if (MCREvent.EventType.DELETE.equals(enumEventType)) {
-            MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
+            MCREventManager.getInstance().handleEvent(evt, MCREventManager.BACKWARD);
         } else {
-            MCREventManager.instance().handleEvent(evt);
+            MCREventManager.getInstance().handleEvent(evt);
         }
     }
 

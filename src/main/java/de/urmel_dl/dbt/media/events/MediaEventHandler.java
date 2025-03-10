@@ -31,7 +31,7 @@ import org.mycore.datamodel.niofs.MCRPath;
 import de.urmel_dl.dbt.media.MediaService;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class MediaEventHandler extends MCREventHandlerBase {
@@ -46,7 +46,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
         }
 
         handlePathDeleted(evt, path, attrs);
-        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.toMCRPath(path), 0));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.ofPath(path), 0));
     }
 
     /* (non-Javadoc)
@@ -58,7 +58,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
-        MCRSessionMgr.getCurrentSession().onCommit(() -> deleteMediaFile(MCRPath.toMCRPath(path)));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> deleteMediaFile(MCRPath.ofPath(path)));
     }
 
     /* (non-Javadoc)
@@ -69,13 +69,13 @@ public class MediaEventHandler extends MCREventHandlerBase {
         if (!(path instanceof MCRPath)) {
             return;
         }
-        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.toMCRPath(path), 10));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.ofPath(path), 10));
     }
 
     private void deleteMediaFile(MCRPath path) {
         try {
             String id = MediaService
-                .buildInternalId(MCRPath.toMCRPath(path).getOwner() + "_" + path.getFileName().toString());
+                .buildInternalId(MCRPath.ofPath(path).getOwner() + "_" + path.getFileName().toString());
             if (MediaService.hasMediaFiles(id)) {
                 MediaService.deleteMediaFiles(id);
             }

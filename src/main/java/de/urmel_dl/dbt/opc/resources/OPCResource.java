@@ -50,7 +50,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 /**
  * The OPC Rest API.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @Path("opc")
@@ -255,7 +255,7 @@ public class OPCResource {
         Optional<Catalog> c = catalog(catalog);
         if (c.isPresent()) {
             Map<String, String> params = new HashMap<>();
-            params.put(MODS_PARAM_SOURCE, c.get().getISIL().get(0));
+            params.put(MODS_PARAM_SOURCE, c.get().getISIL().getFirst());
             params.put(MODS_PARAM_PREFIX, "");
 
             return transformedResponse(record(catalog, ppn), MODS_STYLESHEET, params);
@@ -269,7 +269,7 @@ public class OPCResource {
 
         if (catalogId != null) {
             catalog = Optional.ofNullable(CATALOGUES.getCatalogById(catalogId));
-            if (!catalog.isPresent()) {
+            if (catalog.isEmpty()) {
                 catalog = Optional.ofNullable(CATALOGUES.getCatalogByISIL(catalogId));
             }
         }
@@ -310,15 +310,15 @@ public class OPCResource {
             MCRParameterCollector pc = new MCRParameterCollector();
             pc.setParameters(parameters);
 
-            MCRXSLTransformer transformer = MCRXSLTransformer.getInstance(stylesheet);
+            MCRXSLTransformer transformer = MCRXSLTransformer.obtainInstance(stylesheet);
             MCRContent result = transformer
                 .transform(new MCRJDOMContent(new EntityFactory<>(entity).toDocument()), pc);
 
-            final StreamingOutput so = (OutputStream os) -> result.sendTo(os);
+            final StreamingOutput so = result::sendTo;
             return Response.ok().status(Response.Status.OK).entity(so).build();
         } catch (Exception e) {
             final StreamingOutput so = (OutputStream os) -> e
-                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
+                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
         } finally {
             if (!hasSession && MCRSessionMgr.hasCurrentSession()) {

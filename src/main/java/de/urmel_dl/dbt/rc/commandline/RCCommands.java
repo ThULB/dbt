@@ -61,6 +61,7 @@ import de.urmel_dl.dbt.media.MediaService;
 import de.urmel_dl.dbt.rc.datamodel.Attendee.Attendees;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
 import de.urmel_dl.dbt.rc.datamodel.Period;
+import de.urmel_dl.dbt.rc.datamodel.Person;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
 import de.urmel_dl.dbt.rc.datamodel.Status;
 import de.urmel_dl.dbt.rc.datamodel.Warning;
@@ -95,7 +96,7 @@ public class RCCommands extends MCRAbstractCommands {
         if (slot != null) {
             File dir = new File(dirname);
             if (!dir.isDirectory()) {
-                LOGGER.error(dirname + " is not a dirctory.");
+                LOGGER.error(() -> dirname + " is not a dirctory.");
                 return;
             }
 
@@ -128,7 +129,7 @@ public class RCCommands extends MCRAbstractCommands {
                                 }
 
                                 LOGGER.info("File \"" + slotEntry.getEntry().getName() + "\" saved to "
-                                    + f.toAbsolutePath().toString() + ".");
+                                    + f.toAbsolutePath() + ".");
                             } catch (Exception ex) {
                                 LOGGER.error(ex.getMessage());
                                 LOGGER.error("Exception while store file to " + fileDir.getAbsolutePath());
@@ -153,7 +154,7 @@ public class RCCommands extends MCRAbstractCommands {
 
         File dir = new File(dirname);
         if (!dir.isDirectory()) {
-            LOGGER.error(dirname + " is not a dirctory.");
+            LOGGER.error(() -> dirname + " is not a dirctory.");
             return Collections.emptyList();
         }
 
@@ -182,12 +183,12 @@ public class RCCommands extends MCRAbstractCommands {
 
         File file = new File(filename);
         if (!file.isFile()) {
-            LOGGER.error(filename + " is not a file.");
+            LOGGER.error(() -> filename + " is not a file.");
             return;
         }
 
         if (!file.getName().endsWith(".xml")) {
-            LOGGER.error(file + " does not end with *.xml");
+            LOGGER.error(() -> file + " does not end with *.xml");
             return;
         }
 
@@ -208,9 +209,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                     File f = new File(file.getParent(), entry.getId() + File.separator + fileEntry.getName());
                     if (f.isFile()) {
-                        InputStream is = null;
-                        try {
-                            is = new FileInputStream(f);
+                        try (InputStream is = new FileInputStream(f)) {
                             slotEntry.setEntry(FileEntry.createFileEntry(entry.getId(), fileEntry.getName(),
                                 fileEntry.getComment(), fileEntry.isCopyrighted(), is));
                         } catch (FileNotFoundException e) {
@@ -220,10 +219,6 @@ public class RCCommands extends MCRAbstractCommands {
                             LOGGER.error("File processing returns error code " + e.getErrorCode() + " for file \""
                                 + f.getCanonicalPath() + "\".");
                             return;
-                        } finally {
-                            if (is != null) {
-                                is.close();
-                            }
                         }
 
                         if (update) {
@@ -267,7 +262,7 @@ public class RCCommands extends MCRAbstractCommands {
 
         if (evt != null) {
             evt.put(SlotManager.SLOT_TYPE, slot);
-            MCREventManager.instance().handleEvent(evt);
+            MCREventManager.getInstance().handleEvent(evt);
         }
 
     }
@@ -362,9 +357,8 @@ public class RCCommands extends MCRAbstractCommands {
                                         case FREE:
                                             if (slot.isOnlineOnly() || slot.getEntries() == null ||
                                                 slot.getEntries().stream()
-                                                    .filter(se -> se.getEntry() instanceof OPCRecordEntry
-                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
-                                                    .count() == 0) {
+                                                    .noneMatch(se -> se.getEntry() instanceof OPCRecordEntry
+                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)) {
                                                 LOGGER.info("delete slot with id \"" + slot.getSlotId() + "\"");
                                                 mgr.delete(slot);
                                                 evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
@@ -381,7 +375,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                                             if (evt != null) {
                                                 evt.put(SlotManager.SLOT_TYPE, slot);
-                                                MCREventManager.instance().handleEvent(evt);
+                                                MCREventManager.getInstance().handleEvent(evt);
                                             }
 
                                             continue;
@@ -392,9 +386,8 @@ public class RCCommands extends MCRAbstractCommands {
 
                                             if (slot.isOnlineOnly() || slot.getEntries() == null ||
                                                 slot.getEntries().stream()
-                                                    .filter(se -> se.getEntry() instanceof OPCRecordEntry
-                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)
-                                                    .count() == 0) {
+                                                    .noneMatch(se -> se.getEntry() instanceof OPCRecordEntry
+                                                        && ((OPCRecordEntry) se.getEntry()).getEPN() != null)) {
                                                 slot.getEntries().clear();
                                             } else {
                                                 // send warning every 10 days
@@ -408,7 +401,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                                             if (evt != null) {
                                                 evt.put(SlotManager.SLOT_TYPE, slot);
-                                                MCREventManager.instance().handleEvent(evt);
+                                                MCREventManager.getInstance().handleEvent(evt);
                                             }
 
                                             evt = MCREvent.customEvent(SlotManager.SLOT_TYPE,
@@ -427,12 +420,8 @@ public class RCCommands extends MCRAbstractCommands {
                                 mgr.setSlot(slot);
                                 mgr.saveOrUpdate(slot);
 
-                                if (evt != null) {
-                                    evt.put(SlotManager.SLOT_TYPE, slot);
-                                    MCREventManager.instance().handleEvent(evt);
-                                }
-
-                                continue;
+                                evt.put(SlotManager.SLOT_TYPE, slot);
+                                MCREventManager.getInstance().handleEvent(evt);
                             }
                         } else if (slot.getStatus() == Status.ACTIVE) {
                             final Warning pWarning = period.getWarning(today);
@@ -449,15 +438,13 @@ public class RCCommands extends MCRAbstractCommands {
 
                                     final StringBuilder uri = new StringBuilder();
 
-                                    uri.append("xslStyle:" + pWarning.getTemplate());
-                                    uri.append("?warningDate=" + sWarning.getWarningDate());
+                                    uri.append("xslStyle:").append(pWarning.getTemplate());
+                                    uri.append("?warningDate=").append(sWarning.getWarningDate());
                                     uri.append(":notnull:slot:");
-                                    uri.append("slotId=" + slot.getSlotId());
+                                    uri.append("slotId=").append(slot.getSlotId());
 
                                     LOGGER.info("...send mail");
                                     MailQueue.addJob(uri.toString());
-
-                                    continue;
                                 }
                             }
                         }
@@ -468,7 +455,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                         evt = MCREvent.customEvent(SlotManager.SLOT_TYPE, MCREvent.EventType.DELETE);
                         evt.put(SlotManager.SLOT_TYPE, slot);
-                        MCREventManager.instance().handleEvent(evt);
+                        MCREventManager.getInstance().handleEvent(evt);
                     }
                 } catch (IllegalArgumentException | CloneNotSupportedException
                     | MCRPersistenceException | MCRActiveLinkException e) {
@@ -505,7 +492,7 @@ public class RCCommands extends MCRAbstractCommands {
 
                 if (evt != null) {
                     evt.put(SlotManager.SLOT_TYPE, slot);
-                    MCREventManager.instance().handleEvent(evt);
+                    MCREventManager.getInstance().handleEvent(evt);
                 }
             }
         }
@@ -531,7 +518,7 @@ public class RCCommands extends MCRAbstractCommands {
             feMap.entrySet().stream().forEach(es -> {
                 Slot slot = es.getKey();
                 System.out.println(slot.getSlotId() + " : " + slot.getTitle() + " / "
-                    + slot.getLecturers().stream().map(l -> l.getName()).collect(Collectors.joining("; ")));
+                    + slot.getLecturers().stream().map(Person::getName).collect(Collectors.joining("; ")));
 
                 es.getValue().stream().collect(Collectors.groupingBy(e -> {
                     String name = ((SlotEntry<FileEntry>) e).getEntry().getName();
@@ -621,8 +608,7 @@ public class RCCommands extends MCRAbstractCommands {
 
     private static List<String> forAllSlots(String batchCommandSyntax) {
 
-        List<String> ids = SlotManager.instance().getSlotList().getSlots().stream().map(Slot::getSlotId)
-            .collect(Collectors.toList());
+        List<String> ids = SlotManager.instance().getSlotList().getSlots().stream().map(Slot::getSlotId).toList();
         List<String> cmds = new ArrayList<>(ids.size());
 
         ids.stream().sorted(Collections.reverseOrder())
@@ -640,9 +626,9 @@ public class RCCommands extends MCRAbstractCommands {
         final Slot slot = slotList.getSlotById(slotId);
         if (slot != null) {
             SlotEntry<FileEntry> fileEntry = Optional.ofNullable(slot.getEntries())
-                .map(entries -> entries.stream()
+                .flatMap(entries -> entries.stream()
                     .filter(e -> e.getEntry() instanceof FileEntry && e.getId().equals(entryId)).findFirst()
-                    .map(e -> (SlotEntry<FileEntry>) e).orElse(null))
+                    .map(e -> (SlotEntry<FileEntry>) e))
                 .orElse(null);
 
             if (fileEntry == null) {

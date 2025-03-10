@@ -174,7 +174,7 @@ public class UploadServlet extends MCRServlet {
 
                     if (evt != null) {
                         evt.put("slotId", slot.getSlotId());
-                        MCREventManager.instance().handleEvent(evt);
+                        MCREventManager.getInstance().handleEvent(evt);
                     }
                 }
 

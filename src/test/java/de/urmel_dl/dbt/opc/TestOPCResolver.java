@@ -29,7 +29,7 @@ import org.mycore.common.MCRTestCase;
 import org.mycore.common.xml.MCRURIResolver;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class TestOPCResolver extends MCRTestCase {
@@ -40,28 +40,28 @@ public class TestOPCResolver extends MCRTestCase {
 
     @Test
     public void testIKTList() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&iktList");
+        Element xml = MCRURIResolver.obtainInstance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&iktList");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 
     @Test
     public void testSearch() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&search=papula");
+        Element xml = MCRURIResolver.obtainInstance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&search=papula");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 
     @Test
     public void testSearchWoDB() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve("opc:url=" + OPC_URL + "&search=papula");
+        Element xml = MCRURIResolver.obtainInstance().resolve("opc:url=" + OPC_URL + "&search=papula");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 
     @Test
     public void testSearchIKT() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve(
+        Element xml = MCRURIResolver.obtainInstance().resolve(
             "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&search=papula&ikt=1004");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
@@ -69,21 +69,21 @@ public class TestOPCResolver extends MCRTestCase {
 
     @Test
     public void testFamily() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&family=785761829");
+        Element xml = MCRURIResolver.obtainInstance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&family=785761829");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 
     @Test
     public void testRecord() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=785761829");
+        Element xml = MCRURIResolver.obtainInstance().resolve("opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=785761829");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
     }
 
     @Test
     public void testRecordBasicCopy() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve(
+        Element xml = MCRURIResolver.obtainInstance().resolve(
             "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=785761829&copys=false");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
@@ -91,7 +91,7 @@ public class TestOPCResolver extends MCRTestCase {
 
     @Test
     public void testBarcode() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve(
+        Element xml = MCRURIResolver.obtainInstance().resolve(
             "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&barcode=ILM1$005419999");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
@@ -99,7 +99,7 @@ public class TestOPCResolver extends MCRTestCase {
 
     @Test
     public void testBarcodeBasicCopy() throws IOException {
-        Element xml = MCRURIResolver.instance().resolve(
+        Element xml = MCRURIResolver.obtainInstance().resolve(
             "opc:url=" + OPC_URL + "&db=" + OPC_DB + "&barcode=ILM1$005419999&copys=false");
         assertNotNull(xml);
         new XMLOutputter(Format.getPrettyFormat()).output(xml, System.out);
@@ -107,7 +107,7 @@ public class TestOPCResolver extends MCRTestCase {
 
     @Test
     public void testPica2Mods() throws Exception {
-        Element xml = MCRURIResolver.instance().resolve(
+        Element xml = MCRURIResolver.obtainInstance().resolve(
             "xslStyle:opc/transform/pica2mods?RecordIdSource=DE-ILM1"
                 + ":opc:url=" + OPC_URL + "&db=" + OPC_DB + "&record=729763749");
         assertNotNull(xml);
