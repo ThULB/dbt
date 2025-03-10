@@ -17,27 +17,28 @@
  */
 package de.urmel_dl.dbt.rc.datamodel.slot;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
 
 import org.jdom2.Element;
 import org.mycore.common.xml.MCRURIResolver;
 
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @XmlRootElement(name = "entry-types")
 @XmlAccessorType(XmlAccessType.NONE)
 public class SlotEntryTypes implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 6722322996282291627L;
 
     private static SlotEntryTypes singleton;
@@ -51,7 +52,7 @@ public class SlotEntryTypes implements Serializable {
      */
     public static SlotEntryTypes instance() {
         if (singleton == null) {
-            final Element xml = MCRURIResolver.instance().resolve("resource:slot-entry-types.xml");
+            final Element xml = MCRURIResolver.obtainInstance().resolve("resource:slot-entry-types.xml");
             if (xml != null) {
                 singleton = new EntityFactory<>(SlotEntryTypes.class).fromElement(xml);
             }

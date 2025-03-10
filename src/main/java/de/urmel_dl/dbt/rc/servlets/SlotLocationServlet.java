@@ -17,11 +17,10 @@
  */
 package de.urmel_dl.dbt.rc.servlets;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -34,6 +33,8 @@ import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
 
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author René Adler (eagle)
@@ -41,6 +42,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
  */
 public class SlotLocationServlet extends MCRServlet {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final String LAYOUT_ELEMENT_KEY = SlotLocationServlet.class.getName() + ".layoutElement";
@@ -53,7 +55,7 @@ public class SlotLocationServlet extends MCRServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        categoryDao = MCRCategoryDAOFactory.getInstance();
+        categoryDao = MCRCategoryDAOFactory.obtainInstance();
     }
 
     /* (non-Javadoc)
@@ -77,7 +79,7 @@ public class SlotLocationServlet extends MCRServlet {
     }
 
     private Collection<Element> getLocationElements() {
-        final MCRCategoryID categID = MCRCategoryID.rootID(Slot.CLASSIF_ROOT_LOCATION);
+        final MCRCategoryID categID = new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION);
 
         final ArrayList<Element> list = new ArrayList<Element>();
         final Element location = new Element("location");
@@ -102,11 +104,10 @@ public class SlotLocationServlet extends MCRServlet {
         MCRCategoryID categoryID;
         final String categID = getProperty(request, "categID");
         if (categID != null) {
-            categoryID = MCRCategoryID.fromString(categID);
+            categoryID = MCRCategoryID.ofString(categID);
         } else {
             final String rootID = getProperty(request, "classID");
-            categoryID = (rootID == null) ? MCRCategoryID.rootID(Slot.CLASSIF_ROOT_LOCATION)
-                    : MCRCategoryID.rootID(rootID);
+            categoryID = new MCRCategoryID(Objects.requireNonNullElse(rootID, Slot.CLASSIF_ROOT_LOCATION));
         }
         final Element rootElement = getRootElement(request);
         rootElement.setAttribute("classID", categoryID.getRootID());

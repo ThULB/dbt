@@ -17,6 +17,7 @@
  */
 package de.urmel_dl.dbt.rc.servlets;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +63,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  */
 public class SlotListServlet extends MCRServlet {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LogManager.getLogger(SlotListServlet.class);
@@ -178,9 +180,7 @@ public class SlotListServlet extends MCRServlet {
 
             SLOT_MGR.saveOrUpdate(slot);
 
-            if (evt != null) {
-                MCREventManager.instance().handleEvent(evt);
-            }
+            MCREventManager.getInstance().handleEvent(evt);
 
             if ("ownerTransfer".equals(action)) {
                 SlotManager.setOwner(slot.getMCRObjectID().toString());
@@ -192,7 +192,7 @@ public class SlotListServlet extends MCRServlet {
             }
 
             String redirectURL = job.getRequest().getParameter("url");
-            if (redirectURL == null || redirectURL.length() == 0) {
+            if (redirectURL == null || redirectURL.isEmpty()) {
                 redirectURL = MCRFrontendUtil.getBaseURL() + "rc/" + slot.getSlotId();
             } else {
                 // fix changed slotId

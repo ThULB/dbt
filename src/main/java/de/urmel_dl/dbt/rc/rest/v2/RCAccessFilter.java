@@ -52,7 +52,7 @@ import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 import de.urmel_dl.dbt.rest.utils.EntityMessageBodyReader;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @Provider
@@ -98,46 +98,49 @@ public class RCAccessFilter implements ReaderInterceptor, WriterInterceptor {
                 MCRSessionMgr.unlock();
                 MCRSession currentSession = MCRSessionMgr.getCurrentSession();
 
-                if (!MCRSystemUserInformation.getGuestInstance().equals(currentSession.getUserInformation())) {
+                if (!MCRSystemUserInformation.GUEST.equals(currentSession.getUserInformation())) {
                     // inject the user
                     Optional.ofNullable(MCRUserManager.getUser(currentSession.getUserInformation().getUserID()))
                         .ifPresent(currentSession::setUserInformation);
                 }
 
-                if (entity instanceof Attendees) {
-                    Attendees attendees = Attendees.class.cast(entity);
-                    Slot slot = SlotManager.instance().getSlotById(attendees.slotId);
+                switch (entity) {
+                    case Attendees attendees -> {
+                        Slot slot = SlotManager.instance().getSlotById(attendees.slotId);
 
-                    boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE);
+                        boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_WRITE);
 
-                    LOGGER.info("has access {} for {}", allowed, entity.getClass());
+                        LOGGER.info("has access {} for {}", allowed, entity.getClass());
 
-                    if (!allowed) {
-                        throw new WebApplicationException(Response.Status.FORBIDDEN);
+                        if (!allowed) {
+                            throw new WebApplicationException(Response.Status.FORBIDDEN);
+                        }
                     }
-                } else if (entity instanceof Slot) {
-                    Slot slot = Slot.class.cast(entity);
+                    case Slot slot -> {
+                        boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ);
 
-                    boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ);
+                        LOGGER.info("has access {} for {}", allowed, entity.getClass());
 
-                    LOGGER.info("has access {} for {}", allowed, entity.getClass());
-
-                    if (!allowed) {
-                        context.setEntity(slot.getBasicCopy());
-                    } else {
-                        context.setEntity(slot.getExportableCopy());
+                        if (!allowed) {
+                            context.setEntity(slot.getBasicCopy());
+                        } else {
+                            context.setEntity(slot.getExportableCopy());
+                        }
                     }
-                } else if (entity instanceof FileEntry) {
-                    Slot slot = Optional.ofNullable(context.getProperty(Slot.class.getName()))
-                        .map(o -> Slot.class.cast(o))
-                        .orElseThrow(() -> new WebApplicationException(Response.Status.BAD_REQUEST));
+                    case FileEntry ignored -> {
+                        Slot slot = Optional.ofNullable(context.getProperty(Slot.class.getName()))
+                            .map(Slot.class::cast)
+                            .orElseThrow(() -> new WebApplicationException(Response.Status.BAD_REQUEST));
 
-                    boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ);
+                        boolean allowed = checkPermission(slot.getMCRObjectID(), MCRAccessManager.PERMISSION_READ);
 
-                    LOGGER.info("has access {} for {}", allowed, entity.getClass());
+                        LOGGER.info("has access {} for {}", allowed, entity.getClass());
 
-                    if (!allowed) {
-                        throw new WebApplicationException(Response.Status.FORBIDDEN);
+                        if (!allowed) {
+                            throw new WebApplicationException(Response.Status.FORBIDDEN);
+                        }
+                    }
+                    default -> {
                     }
                 }
             }

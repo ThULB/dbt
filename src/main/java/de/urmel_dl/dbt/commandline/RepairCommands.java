@@ -53,7 +53,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 /**
  * The Class RepairCommands.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @MCRCommandGroup(name = "Repair Commands")
 public class RepairCommands extends MCRAbstractCommands {
@@ -73,7 +73,7 @@ public class RepairCommands extends MCRAbstractCommands {
             LOGGER.error("Could not find migration stylesheet. File a bug!");
             return null;
         }
-        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.instance().listIDsOfType("mods"));
+        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
         ArrayList<String> cmds = new ArrayList<>(ids.size());
         for (String id : ids) {
             cmds.add("xslt " + id + " with file " + styleFile.toString());
@@ -84,27 +84,27 @@ public class RepairCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "set main file on first derivate",
         help = "set the main file on first derviate with only one file")
     public static void setMainFile() {
-        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.instance().listIDsOfType("mods"));
+        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
         ids.forEach(id -> {
             MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
             Optional.ofNullable(obj.getStructure().getDerivates())
-                .ifPresent(ol -> ol.stream().filter(l -> l != null).findFirst().ifPresent(d -> {
+                .flatMap(ol -> ol.stream().filter(Objects::nonNull).findFirst())
+                .ifPresent(d -> {
                     String derid = d.getXLinkHref();
                     MCRDerivate der = MCRMetadataManager.retrieveMCRDerivate(MCRObjectID.getInstance(derid));
                     String mainFile = der.getDerivate().getInternals().getMainDoc();
                     LOGGER.info("Check derivate {} ({})", derid, mainFile);
                     if (mainFile == null || mainFile.isEmpty()) {
                         MCRPath rootPath = MCRPath.getPath(derid, "/");
-                        try {
-                            DirectoryStream<Path> stream = Files.newDirectoryStream(rootPath, "*.*");
+                        try (DirectoryStream<Path> stream = Files.newDirectoryStream(rootPath, "*.*")) {
                             List<Path> files = new ArrayList<>();
                             stream.forEach(f -> {
                                 if (!Files.isDirectory(f)) {
                                     files.add(f);
                                 }
                             });
-                            if (!files.isEmpty() && files.size() == 1) {
-                                Path file = files.get(0);
+                            if (files.size() == 1) {
+                                Path file = files.getFirst();
                                 LOGGER.info("set main file {} on derivate {}", file.getFileName().toString(), derid);
                                 der.getDerivate().getInternals().setMainDoc(file.getFileName().toString());
                                 MCRMetadataManager.update(der);
@@ -115,7 +115,7 @@ public class RepairCommands extends MCRAbstractCommands {
                             throw new MCRException(e);
                         }
                     }
-                }));
+                });
         });
     }
 
@@ -144,11 +144,11 @@ public class RepairCommands extends MCRAbstractCommands {
             Files.walkFileTree(path, visitor);
 
             //sort files by name
-            ArrayList<java.nio.file.Path> paths = visitor.getPaths();
+            List<java.nio.file.Path> paths = visitor.getPaths();
             paths.sort(Comparator.comparing(java.nio.file.Path::getNameCount)
                 .thenComparing(java.nio.file.Path::getFileName));
             //extract first file, before filtering
-            MCRPath firstPath = MCRPath.toMCRPath(paths.get(0));
+            MCRPath firstPath = MCRPath.ofPath(paths.getFirst());
 
             //filter files, remove files that should be ignored for mainfile
             return paths.stream()

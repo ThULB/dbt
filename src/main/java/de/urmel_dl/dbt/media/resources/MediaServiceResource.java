@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -68,7 +69,7 @@ import jakarta.ws.rs.core.StreamingOutput;
 import jakarta.xml.bind.JAXBException;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @MCRStaticContent
 @Path("media")
@@ -121,11 +122,7 @@ public class MediaServiceResource {
         @PathParam("fileName") String fileName) throws Exception {
 
         java.nio.file.Path file = MediaService.getThumbFile(id, fileName);
-        if (file != null) {
-            return buildStream(file, null);
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return buildStream(file, null);
     }
 
     @GET
@@ -136,13 +133,9 @@ public class MediaServiceResource {
         @PathParam("height") String height) throws Exception {
         java.nio.file.Path file = MediaService.getThumbFile(id, fileName,
             Optional.of(width).filter(s -> !s.isEmpty()).map(Integer::parseInt).orElse(-1),
-            Optional.ofNullable(height.replaceAll(":", "")).filter(s -> !s.isEmpty()).map(Integer::parseInt)
+            Optional.of(height.replaceAll(":", "")).filter(s -> !s.isEmpty()).map(Integer::parseInt)
                 .orElse(-1));
-        if (file != null) {
-            return buildStream(file, null);
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return buildStream(file, null);
     }
 
     @GET
@@ -152,23 +145,15 @@ public class MediaServiceResource {
         @PathParam("fileName") String fileName) throws Exception {
         java.nio.file.Path file = MediaService.getSubtitleFile(id, fileName);
 
-        if (file != null) {
-            return buildStream(file, null);
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return buildStream(file, null);
     }
 
     @HEAD
     @Path("progressiv/{id:.+}/{fileName:.+}")
     public Response progressivDownloadHeader(@PathParam("id") String id, @PathParam("fileName") String fileName) {
         java.nio.file.Path path = MediaService.getMediaFile(id, fileName);
-        if (path != null) {
-            return Response.ok().status(Response.Status.PARTIAL_CONTENT)
-                .header(HttpHeaders.CONTENT_LENGTH, path.toFile().length()).build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return Response.ok().status(Response.Status.PARTIAL_CONTENT)
+            .header(HttpHeaders.CONTENT_LENGTH, path.toFile().length()).build();
     }
 
     @GET
@@ -177,12 +162,7 @@ public class MediaServiceResource {
     public Response progressivDownload(@HeaderParam("Range") String range, @PathParam("id") String id,
         @PathParam("fileName") String fileName) throws Exception {
         java.nio.file.Path path = MediaService.getMediaFile(id, fileName);
-        if (path != null) {
-            return buildStream(path, range);
-        } else {
-            LOGGER.error("download path was empty.");
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return buildStream(path, range);
     }
 
     @GET
@@ -199,7 +179,7 @@ public class MediaServiceResource {
         final String mimeType = MimeType.detect(asset);
 
         return Stream.of(RANGE_PATTERN.matcher(Optional.ofNullable(range).orElse("")))
-            .filter(rm -> rm.find()).findFirst()
+            .filter(Matcher::find).findFirst()
             .map(rm -> {
                 try {
                     final File assetFile = asset.toFile();
@@ -251,15 +231,15 @@ public class MediaServiceResource {
             MCRParameterCollector pc = new MCRParameterCollector();
             pc.setParameters(parameters);
 
-            MCRXSLTransformer transformer = MCRXSLTransformer.getInstance(stylesheet);
+            MCRXSLTransformer transformer = MCRXSLTransformer.obtainInstance(stylesheet);
             MCRContent result = transformer
                 .transform(new MCRJDOMContent(new EntityFactory<>(entity).toDocument()), pc);
 
-            final StreamingOutput so = (OutputStream os) -> result.sendTo(os);
+            final StreamingOutput so = result::sendTo;
             return Response.ok().status(Response.Status.OK).entity(so).build();
         } catch (Exception e) {
             final StreamingOutput so = (OutputStream os) -> e
-                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.toString()));
+                .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
         } finally {
             if (!hasSession && MCRSessionMgr.hasCurrentSession()) {

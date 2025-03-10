@@ -35,7 +35,7 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @Path("rcmail")
@@ -49,7 +49,7 @@ public class MailResource {
         try {
             final StreamingOutput so = (OutputStream os) -> {
                 try {
-                    new MCRSourceContent(MCRURIResolver.instance().resolve(uri, null)).sendTo(os);
+                    new MCRSourceContent(MCRURIResolver.obtainInstance().resolve(uri, null)).sendTo(os);
                 } catch (TransformerException e) {
                     throw new RuntimeException(e.getMessage(), e);
                 }
@@ -58,7 +58,7 @@ public class MailResource {
                     .build();
         } catch (Exception e) {
             final StreamingOutput so = (OutputStream os) -> e
-                    .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8.name()));
+                    .printStackTrace(new PrintStream(os, false, StandardCharsets.UTF_8));
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(so).build();
         }
     }

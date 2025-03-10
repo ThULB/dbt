@@ -73,7 +73,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 /**
  * The {@link Slot} test cases.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class TestSlot extends MCRJPATestCase {
@@ -93,17 +93,17 @@ public class TestSlot extends MCRJPATestCase {
 
         MCRSession session = MCRSessionMgr.getCurrentSession();
         session.setCurrentIP("127.0.0.1");
-        session.setUserInformation(MCRSystemUserInformation.getSuperUserInstance());
+        session.setUserInformation(MCRSystemUserInformation.SUPER_USER);
 
         // Clears all stores
-        MCRStoreCenter.instance().clear();
+        MCRStoreCenter.getInstance().clear();
 
         if (SLOT_MANAGER == null) {
             SLOT_MANAGER = SlotManager.instance();
         }
         SLOT_MANAGER.getSlotList().getSlots().clear();
 
-        Document xml = new Document(MCRURIResolver.instance().resolve("resource:setup/classifications/RCLOC.xml"));
+        Document xml = new Document(MCRURIResolver.obtainInstance().resolve("resource:setup/classifications/RCLOC.xml"));
         MCRCategory category = MCRXMLTransformer.getCategory(xml);
         DAO.addCategory(null, category);
     }
@@ -223,7 +223,7 @@ public class TestSlot extends MCRJPATestCase {
         SlotList activeSlots = SLOT_MANAGER.getSlotList().getActiveSlots();
 
         assertEquals(1, activeSlots.getSlots().size());
-        assertNull(activeSlots.getSlots().get(0).getEntries());
+        assertNull(activeSlots.getSlots().getFirst().getEntries());
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(activeSlots).toDocument(), System.out);
     }
@@ -277,7 +277,7 @@ public class TestSlot extends MCRJPATestCase {
 
         assertEquals(slot.getSlotId(), ts.getSlotId());
 
-        assertEquals(slot.getEntries().get(0).getId(), ts.getEntries().get(0).getId());
+        assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
     }
 
     @Test
@@ -298,7 +298,7 @@ public class TestSlot extends MCRJPATestCase {
 
         assertEquals(slot.getSlotId(), ts.getSlotId());
 
-        assertEquals(slot.getEntries().get(0).getId(), ts.getEntries().get(0).getId());
+        assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
     }
 
     @Test
