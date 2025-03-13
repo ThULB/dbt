@@ -15,11 +15,12 @@
 
   <xsl:template match="/slot">
     <xsl:apply-templates mode="slotHead" select="." />
+    <xsl:param name="isUserGuest" select="document('userobjectrights:isCurrentUserGuestUser:')/boolean"/>
     <div class="slot-body mt-3">
       <xsl:choose>
-        <xsl:when test="mcrxsl:isCurrentUserGuestUser() and not($readPermission)">
+        <xsl:when test="$isUserGuest and not($readPermission)">
           <xsl:variable name="loginURL"
-            select="concat( $ServletsBaseURL, 'MCRLoginServlet',$HttpSession,'?url=', encoder:encode( string( $RequestURL ) ) )" />
+            select="concat( $ServletsBaseURL, 'MCRLoginServlet','?url=', encoder:encode( string( $RequestURL ) ) )" />
           <div class="alert alert-warning" role="alert">
             <xsl:value-of select="i18n:translate('component.rc.slot.no_access')" />
             <xsl:text> </xsl:text>
@@ -101,46 +102,46 @@
             placeholder: '<div class="media entry-placeholder"><div class="media-body mw-100"></div></div>',
             pullPlaceholder: true,
             nested: true,
-    
+
             // set item relative to cursor position
             onDragStart: function ($item, container, _super) {
               var offset = $item.offset(),
                 pointer = container.rootGroup.pointer,
                 placeholder = container.rootGroup.placeholder;
-    
+
               oldData = slotEntries.sortable("serialize").get().join();
-    
+
               adjustment = {
                 left: pointer.left - offset.left,
                 top: pointer.top - offset.top
               }
-    
+
               placeholder.height($item.height());
-    
+
               _super($item, container)
             },
-    
+
             onDrag: function ($item, position) {
               $item.css({
                 left: position.left - adjustment.left,
                 top: position.top - adjustment.top
               })
             },
-    
+
             // persists new order of entries
             serialize: function (parent, children, isContainer) {
               if (isContainer && parent.find(".entry-headline") && parent.find(".entry-headline").attr("id")) {
                 children = [parent.find(".entry-headline").attr("id")].concat(children);
               }
-    
-              return isContainer ? 
-                children : 
+
+              return isContainer ?
+                children :
                   parent.find("div[class|='entry'][class!='entry-buttons'][class!='entry-infoline'][class!='entry-placeholder']").attr("id");
             },
-    
+
             onDrop: function ($item, container, _super) {
               var data = slotEntries.sortable("serialize").get().join();
-    
+
               if (oldData !== data) {
                 $.post(servletsBaseURL + "RCSlotServlet", { 'action': 'order', 'slotId': slotId, 'items': data });
                 $item.removeClass("dragged");
