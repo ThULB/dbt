@@ -238,7 +238,7 @@
             <goals>
               <goal>npm</goal>
             </goals>
-            <phase>none</phase>
+            <phase>process-resources</phase>
             <configuration>
               <workingDirectory>${rcclient.projectBase}</workingDirectory>
               <arguments>install</arguments>
