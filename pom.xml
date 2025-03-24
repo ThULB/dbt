@@ -250,7 +250,7 @@
             <goals>
               <goal>grunt</goal>
             </goals>
-            <phase>none</phase>
+            <phase>process-resources</phase>
             <configuration>
               <workingDirectory>${rcclient.projectBase}</workingDirectory>
               <arguments>--verbose</arguments>
