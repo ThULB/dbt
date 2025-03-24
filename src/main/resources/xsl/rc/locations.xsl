@@ -26,30 +26,4 @@
       <xsl:apply-templates select="location" />
     </ul>
   </xsl:template>
-  <xsl:template match="location">
-    <xsl:variable name="url1">
-      <xsl:call-template name="UrlSetParam">
-        <xsl:with-param name="url" select="$RequestURL" />
-        <xsl:with-param name="par" select="'categID'" />
-        <xsl:with-param name="value" select="@categID" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="url2">
-      <xsl:call-template name="UrlSetParam">
-        <xsl:with-param name="url" select="$url1" />
-        <xsl:with-param name="par" select="'action'" />
-        <xsl:with-param name="value" select="'chooseCategory'" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:variable name="url">
-      <xsl:call-template name="UrlAddSession">
-        <xsl:with-param name="url" select="$url2" />
-      </xsl:call-template>
-    </xsl:variable>
-    <li>
-      <a href="{$url}">
-        <xsl:value-of select="@label" />
-      </a>
-    </li>
-  </xsl:template>
 </xsl:stylesheet>
