@@ -252,7 +252,7 @@ export class Player {
                 const sources = data;
 
                 this.api.getThumbs(this.options.id, (data: Array<string>) => {
-                    const thumbs = data;
+                    const thumbs = this.options.poster ? [this.options.poster].concat(data) : data;
 
                     if (thumbs && thumbs.length > 0) {
                         this.player.poster(thumbs[0]);

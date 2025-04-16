@@ -235,29 +235,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>rcclient-deps</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <workingDirectory>${rcclient.projectBase}</workingDirectory>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <!-- invoke goal with mvn frontend:grunt -->
-            <id>default-cli</id>
-            <goals>
-              <goal>grunt</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <workingDirectory>${rcclient.projectBase}</workingDirectory>
-              <arguments>--verbose</arguments>
-            </configuration>
-          </execution>
-          <execution>
             <id>media-deps</id>
             <goals>
               <goal>npm</goal>
