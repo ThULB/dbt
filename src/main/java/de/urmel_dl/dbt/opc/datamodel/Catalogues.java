@@ -88,7 +88,7 @@ public class Catalogues {
                 LOGGER.warn(()->"Error while looking for: " + configFile, e);
             }
         }
-        return MCRResourceResolver.instance()
+        return MCRResourceResolver.obtainInstance()
             .resolve(MCRResourcePath.ofPath(getCataloguesConfigResourceName()))
             .orElse(null);
     }

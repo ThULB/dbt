@@ -35,8 +35,7 @@
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir.version>2025.02-SNAPSHOT</mir.version>
-    <node.version>v16.19.1</node.version>
-    <npm.version>6.14.18</npm.version>
+    <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
@@ -232,29 +231,6 @@
                 --lessFile=${basedir}/src/main/less/build.less
                 --targetDirectory=${template.targetdir} --cssDirectory=${template.cssdir}
                 --assetsDirectory=${template.assetsdir}</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>rcclient-deps</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <workingDirectory>${rcclient.projectBase}</workingDirectory>
-              <arguments>install</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <!-- invoke goal with mvn frontend:grunt -->
-            <id>default-cli</id>
-            <goals>
-              <goal>grunt</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <workingDirectory>${rcclient.projectBase}</workingDirectory>
-              <arguments>--verbose</arguments>
             </configuration>
           </execution>
           <execution>

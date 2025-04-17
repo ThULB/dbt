@@ -62,7 +62,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 /**
  * A Jersey resource to return all video sources for video file in derivate.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @Path("video")
@@ -89,7 +89,7 @@ public class VideoSourceResource {
             if (errorCode == ErrorCode.OK) {
                 return Response.ok().status(Response.Status.OK)
                     .entity(new EntityFactory<>(
-                        buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8.toString())))
+                        buildSources(derivateId, URLDecoder.decode(path, StandardCharsets.UTF_8)))
                             .marshalByMediaType(Optional.ofNullable(request.getHeader("accept"))))
                     .build();
             } else {
@@ -105,6 +105,7 @@ public class VideoSourceResource {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static int checkPermission(String derivateId, String remoteAddr, String accessToken)
         throws NoSuchAlgorithmException {
         if (remoteAddr == null || !allowedIPs.contains(remoteAddr)) {
@@ -157,7 +158,7 @@ public class VideoSourceResource {
     /**
      * A wrapper for error codes.
      *
-     * @author Ren\u00E9 Adler (eagle)
+     * @author René Adler (eagle)
      *
      */
     @XmlRootElement(name = "error")

@@ -41,7 +41,7 @@ import org.mycore.frontend.cli.annotation.MCRCommandGroup;
 import de.urmel_dl.dbt.media.MediaService;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  */
 @MCRCommandGroup(name = "Media Service Commands")
 public class MediaServiceCommands extends MCRAbstractCommands {
@@ -192,7 +192,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
     }
 
     private static List<String> forAllDerivates(String batchCommandSyntax) {
-        List<String> ids = MCRXMLMetadataManager.instance().listIDsOfType("derivate");
+        List<String> ids = MCRXMLMetadataManager.getInstance().listIDsOfType("derivate");
         List<String> cmds = new ArrayList<>(ids.size());
 
         ids.stream().sorted(Collections.reverseOrder())

@@ -23,7 +23,6 @@ import java.util.Map;
 import org.jdom2.Element;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
-import org.mycore.services.queuedjob.MCRJobDAO;
 import org.mycore.services.queuedjob.MCRJobQueue;
 import org.mycore.services.queuedjob.MCRJobQueueManager;
 
@@ -36,7 +35,7 @@ public class MailQueue {
     private static final MCRJobQueue MAIL_QUEUE = MCRJobQueueManager.getInstance().getJobQueue(MailJob.class);
 
     public static void addJob(final String uri) {
-        final Element xml = MCRURIResolver.instance().resolve(uri);
+        final Element xml = MCRURIResolver.obtainInstance().resolve(uri);
         if (xml.getChildren("to").isEmpty()) {
             return;
         }

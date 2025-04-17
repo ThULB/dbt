@@ -279,7 +279,7 @@ public final class SlotManager {
      * You have to clear the {@link SlotManager#slotList} before.
      */
     public synchronized void loadList() {
-        final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.instance();
+        final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.getInstance();
         final List<String> ids = xmlManager.listIDsForBase(getMCRObjectBaseID());
 
         ids.forEach(objId -> {
@@ -349,7 +349,7 @@ public final class SlotManager {
 
         if (slot != null && revision != null) {
             try {
-                MCRContent cont = MCRXMLMetadataManager.instance().retrieveContent(slot.getMCRObjectID(),
+                MCRContent cont = MCRXMLMetadataManager.getInstance().retrieveContent(slot.getMCRObjectID(),
                     revision.toString());
                 return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
             } catch (IOException | JDOMException e) {
@@ -400,7 +400,7 @@ public final class SlotManager {
      */
     public synchronized Long getLastRevision(final Slot slot) {
         try {
-            final OptionalLong maxRevision = MCRXMLMetadataManager.instance().listRevisions(slot.getMCRObjectID())
+            final OptionalLong maxRevision = MCRXMLMetadataManager.getInstance().listRevisions(slot.getMCRObjectID())
                 .stream()
                 .filter(Predicate.not(
                     v -> v.getType() == MCRAbstractMetadataVersion.DELETED))
@@ -527,6 +527,7 @@ public final class SlotManager {
      * @param slot the {@link Slot}
      * @return a list of invalid {@link Attendee}
      */
+    @SuppressWarnings("deprecation")
     public Attendees removeInvalidAttendees(final Slot slot) {
         final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(slot.getMCRObjectID());
         final List<Attendee> attendees = new ArrayList<>();

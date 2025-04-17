@@ -17,16 +17,15 @@
  */
 package de.urmel_dl.dbt.rc.servlets;
 
+import java.io.Serial;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +48,8 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import de.urmel_dl.dbt.rc.persistency.FileEntryManager;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * @author René Adler (eagle)
@@ -56,6 +57,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  */
 public class SlotServlet extends MCRServlet {
 
+    @Serial
     private static final long serialVersionUID = -3138681111200495882L;
 
     private static final Logger LOGGER = LogManager.getLogger(SlotServlet.class);
@@ -124,7 +126,8 @@ public class SlotServlet extends MCRServlet {
                 return;
             }
 
-            final Element firstChild = xml != null && xml.getChildren().size() > 0 ? xml.getChildren().get(0) : null;
+            final Element firstChild =
+                xml != null && !xml.getChildren().isEmpty() ? xml.getChildren().getFirst() : null;
 
             if (firstChild != null && "search".equals(firstChild.getName())) {
                 final String catalogId = req.getParameter("catalogId");
@@ -135,10 +138,10 @@ public class SlotServlet extends MCRServlet {
                 params.put("afterId", afterId);
 
                 res.sendRedirect(MCRFrontendUtil.getBaseURL() + "opc/"
-                    + (catalog != null && catalog.getISIL() != null && catalog.getISIL().size() > 0
-                        ? catalog.getISIL().get(0)
+                    + (catalog != null && catalog.getISIL() != null && !catalog.getISIL().isEmpty()
+                        ? catalog.getISIL().getFirst()
                         : catalogId)
-                    + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), "UTF-8")
+                    + "/search/" + URLEncoder.encode(firstChild.getTextTrim(), StandardCharsets.UTF_8)
                     + toQueryString(params, true));
             } else {
                 SlotEntry<?> slotEntry = xml != null ? new EntityFactory<>(SlotEntry.class).fromElement(xml) : null;
@@ -216,9 +219,9 @@ public class SlotServlet extends MCRServlet {
                         }
 
                         if (MCREvent.EventType.DELETE.equals(evt.getEventType())) {
-                            MCREventManager.instance().handleEvent(evt, MCREventManager.BACKWARD);
+                            MCREventManager.getInstance().handleEvent(evt, MCREventManager.BACKWARD);
                         } else {
-                            MCREventManager.instance().handleEvent(evt);
+                            MCREventManager.getInstance().handleEvent(evt);
                         }
                     }
                 }
@@ -231,16 +234,16 @@ public class SlotServlet extends MCRServlet {
     }
 
     private static String toQueryString(final Map<String, String> parameters, final boolean withXSLPrefix) {
-        StringBuffer queryStr = new StringBuffer();
+        StringBuilder queryStr = new StringBuilder();
         for (String name : parameters.keySet()) {
             if (parameters.get(name) != null) {
-                if (queryStr.length() > 0) {
+                if (!queryStr.isEmpty()) {
                     queryStr.append("&");
                 }
-                queryStr.append((withXSLPrefix ? "XSL." : "") + name + "=" + parameters.get(name));
+                queryStr.append(withXSLPrefix ? "XSL." : "").append(name).append("=").append(parameters.get(name));
             }
         }
-        return queryStr.length() > 0 ? "?" + queryStr.toString() : queryStr.toString();
+        return !queryStr.isEmpty() ? "?" + queryStr.toString() : queryStr.toString();
     }
 
 }

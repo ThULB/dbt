@@ -18,6 +18,7 @@
 package de.urmel_dl.dbt.rc.datamodel;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
@@ -59,6 +60,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     private static final String RESOURCE_URI = "rccalendar.xml";
 
+    @Serial
     private static final long serialVersionUID = -812825621316872737L;
 
     private static final Logger LOGGER = LogManager.getLogger(RCCalendar.class);
@@ -92,11 +94,11 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
 
     private static Document getCalendar()
         throws MCRException, TransformerException, JDOMException, IOException, SAXException {
-        String resourceSystemId = MCRResourceResolver.instance()
+        String resourceSystemId = MCRResourceResolver.obtainInstance()
             .resolve(MCRResourcePath.ofPath(RESOURCE_URI))
             .map(URL::toString)
             .orElseThrow(() -> new MCRException("Could not find " + RESOURCE_URI));
-        return MCRSourceContent.getInstance(resourceSystemId).asXML();
+        return MCRSourceContent.createInstance(resourceSystemId).asXML();
     }
 
     /**
@@ -249,7 +251,7 @@ public final class RCCalendar implements Serializable, Iterable<Period> {
      * @param periods the periods to set
      */
     @SuppressWarnings("unused")
-    protected void setPeriods(final List<Period> periods) {
+    private void setPeriods(final List<Period> periods) {
         this.periods = periods;
     }
 

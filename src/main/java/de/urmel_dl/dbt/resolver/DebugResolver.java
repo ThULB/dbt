@@ -36,7 +36,7 @@ import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLParserFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class DebugResolver implements URIResolver {
@@ -50,12 +50,12 @@ public class DebugResolver implements URIResolver {
 
         LOGGER.info("target: {}", target);
 
-        if (subUri.length() == 0) {
+        if (subUri.isEmpty()) {
             return new JDOMSource(new Element("null"));
         }
 
         try {
-            Source result = MCRURIResolver.instance().resolve(target, base);
+            Source result = MCRURIResolver.obtainInstance().resolve(target, base);
             if (result != null) {
                 MCRContent content = new MCRSourceContent(result).getBaseContent();
                 Document document = MCRXMLParserFactory.getParser(false, true).parseXML(content);

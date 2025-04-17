@@ -40,7 +40,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
 import de.urmel_dl.dbt.rc.persistency.SlotManager;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class RCResourcePermission implements MCRResourceAccessChecker {
@@ -57,6 +57,7 @@ public class RCResourcePermission implements MCRResourceAccessChecker {
      * @see org.mycore.frontend.jersey.filter.access.MCRResourceAccessChecker#isPermitted(com.sun.jersey.spi.container.ContainerRequest)
      */
     @Override
+    @SuppressWarnings("deprecation")
     public boolean isPermitted(ContainerRequestContext context) {
         if (context.getUriInfo().getPath().contains("/slot/")) {
             String slotId = null;
@@ -68,7 +69,7 @@ public class RCResourcePermission implements MCRResourceAccessChecker {
             }
 
             if (slotId != null) {
-                if (!sharedSecret.isPresent()) {
+                if (sharedSecret.isEmpty()) {
                     throw new MCRConfigurationException("No shared secret defined!");
                 }
 

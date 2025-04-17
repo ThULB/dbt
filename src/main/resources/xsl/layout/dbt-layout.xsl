@@ -165,7 +165,7 @@
   <xsl:template name="layout.head">
     <nav class="navbar navbar-expand-md navbar-light navbar-dbt fixed-top" role="navigation">
       <div class="container">
-        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2),$HttpSession)}">
+        <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2))}">
           <span class="img-placeholder"></span>
         </a>
         <button type="button" class="navbar-toggler collapsed plus-sign" data-toggle="collapse" data-target="#navbar,#container-overlay"
@@ -410,7 +410,7 @@
         </li>
         <li class="dropdown-divider" />
         <li class="dropdown-item">
-          <a href="{$ServletsBaseURL}MCRBasketServlet{$HttpSession}?type={$basket/@type}&amp;action=show">
+          <a href="{$ServletsBaseURL}MCRBasketServlet?type={$basket/@type}&amp;action=show">
             <xsl:value-of select="i18n:translate('basket.open')" />
           </a>
         </li>
@@ -426,8 +426,6 @@
           <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
         </xsl:call-template>
         
-        <!-- include Internet Explorer warning -->
-        <xsl:call-template name="msie-note" />
 
 <!--           <xsl:call-template name="action.buttons" /> -->
         <xsl:call-template name="print.writeProtectionMessage" />

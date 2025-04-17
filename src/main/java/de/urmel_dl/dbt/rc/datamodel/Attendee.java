@@ -35,11 +35,12 @@ import de.urmel_dl.dbt.rc.persistency.SlotManager;
 import de.urmel_dl.dbt.rc.rest.v2.annotation.RCAccessCheck;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 @RCAccessCheck
 @XmlRootElement(name = "attendee")
+@SuppressWarnings("deprecation")
 public class Attendee extends Person implements Serializable {
 
     private static final long serialVersionUID = 3345191603685207161L;
@@ -96,7 +97,7 @@ public class Attendee extends Person implements Serializable {
     @XmlAttribute(name = "readKey")
     public boolean isReadKeySet() {
         final MCRAccessKey key = MCRAccessKeyUtils.getLinkedAccessKey(user, slot.getMCRObjectID());
-        return key != null && accKP != null ? key.getSecret().equals(accKP.getReadKey()) : false;
+        return key != null && accKP != null && key.getSecret().equals(accKP.getReadKey());
     }
 
     /**
@@ -107,7 +108,7 @@ public class Attendee extends Person implements Serializable {
     @XmlAttribute(name = "writeKey")
     public boolean isWriteKeySet() {
         final MCRAccessKey key = MCRAccessKeyUtils.getLinkedAccessKey(user, slot.getMCRObjectID());
-        return key != null && accKP != null ? key.getSecret().equals(accKP.getWriteKey()) : false;
+        return key != null && accKP != null && key.getSecret().equals(accKP.getWriteKey());
     }
 
     /**

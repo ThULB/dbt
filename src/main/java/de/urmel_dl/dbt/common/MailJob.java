@@ -63,7 +63,7 @@ public class MailJob extends MCRJobAction {
     @Override
     public void execute() throws ExecutionException {
         try {
-            final Element xml = MCRURIResolver.instance().resolve(buildURI(job.getParameters()));
+            final Element xml = MCRURIResolver.obtainInstance().resolve(buildURI(job.getParameters()));
 
             if (!xml.getChildren("to").isEmpty()) {
                 MCRMailer.send(xml, true);

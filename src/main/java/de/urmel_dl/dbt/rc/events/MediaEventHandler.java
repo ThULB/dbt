@@ -31,7 +31,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.persistency.FileEntryManager;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class MediaEventHandler extends EventHandlerBase {
