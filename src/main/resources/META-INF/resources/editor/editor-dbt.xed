@@ -98,6 +98,27 @@
       </div>
     </xed:bind>
   </xed:template>
+
+  <xed:template id="person.fields.noHidden.ownIdentifier">
+    <div class="search-person">
+      <xed:bind xpath="mods:displayForm">
+        <input type="hidden"/>
+        <div class="nameSearchApp" define-own-identifier="true">
+        </div>
+      </xed:bind>
+      <xed:repeat xpath="mods:nameIdentifier" min="10" max="10">
+        <input type="hidden" class="nameIdentifier"/>
+        <xed:bind xpath="@type">
+          <input type="hidden" class="nameIdentifierType"/>
+        </xed:bind>
+      </xed:repeat>
+    </div>
+  </xed:template>
+
+  <xed:modify ref="name.extended.full.repeated">
+    <xed:include ref="person.fields.noHidden.ownIdentifier" after="person.fields.noHidden"/>
+    <xed:remove uri="xslStyle:editor/mir2xeditor:webapp:editor/editor-includes.xed" ref="person.fields.noHidden"/>
+  </xed:modify>
   <xed:modify ref="admin.fields">
     <xed:include ref="oai" after="institutes" />
     <xed:include ref="itunes-podcast" after="genre" />
