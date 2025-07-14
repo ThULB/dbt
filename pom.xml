@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>mycore-parent</artifactId>
-    <version>56</version>
+    <version>57</version>
   </parent>
   <artifactId>dbt-module</artifactId>
   <version>2025.06-SNAPSHOT</version>
@@ -34,7 +34,7 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
-    <mir.version>2025.02-SNAPSHOT</mir.version>
+    <mir.version>2025.06.1-SNAPSHOT</mir.version>
     <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
@@ -405,8 +405,9 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </repository>
   </repositories>
   <pluginRepositories>
@@ -417,8 +418,9 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-portal-snapshots</id>
+      <name>Central Portal Snapshots</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </pluginRepository>
   </pluginRepositories>
   <dependencies>
