@@ -603,7 +603,7 @@ public final class SlotManager {
 
         QueryRequest request = new QueryRequest(query);
 
-        MCRSolrAuthenticationManager authManager = MCRSolrAuthenticationManager.getInstance();
+        MCRSolrAuthenticationManager authManager = MCRSolrAuthenticationManager.obtainInstance();
         authManager.applyAuthentication(request, MCRSolrAuthenticationLevel.SEARCH);
 
         final QueryResponse response = request.process(client);
