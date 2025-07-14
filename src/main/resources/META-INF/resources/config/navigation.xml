@@ -28,6 +28,10 @@
       <label xml:lang="de">Impressum</label>
       <label xml:lang="en">Legal Notice</label>
     </item>
+    <item href="/content/footer/accessibility.xml" type="intern">
+      <label xml:lang="de">Barrierefreiheit</label>
+      <label xml:lang="en">Accessibility</label>
+    </item>
     <item href="/content/footer/privacy-policy.xml" type="intern">
       <label xml:lang="de">Datenschutzerklärung</label>
       <label xml:lang="en">Privacy Policy</label>
