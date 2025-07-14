@@ -34,7 +34,7 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
-    <mir.version>2024.06.1-SNAPSHOT</mir.version>
+    <mir.version>2024.06.2-SNAPSHOT</mir.version>
     <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
