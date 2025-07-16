@@ -73,6 +73,7 @@ public class SlotListServlet extends MCRServlet {
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     @Override
+    @SuppressWarnings("deprecation")
     public void doGetPost(final MCRServletJob job) throws Exception {
         final HttpServletRequest req = job.getRequest();
 

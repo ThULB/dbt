@@ -26,12 +26,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
-import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.client.WebTarget;
-import jakarta.ws.rs.core.Application;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-
 import org.apache.logging.log4j.LogManager;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.jdom2.Document;
@@ -50,6 +44,11 @@ import de.urmel_dl.dbt.opc.resources.OPCResource;
 import de.urmel_dl.dbt.rest.utils.EntityMessageBodyWriter;
 import de.urmel_dl.dbt.test.JerseyTestCase;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 /**
  * @author Ren\u00E9 Adler (eagle)
@@ -118,6 +117,7 @@ public class TestOPCResource extends JerseyTestCase {
                 assertNotNull(response);
 
                 Record record = new EntityFactory<>(Record.class).unmarshalByMediaType(response, mt);
+                assertNotNull("Could not transform response to record: " + response, record);
                 assertEquals(PPN, record.getPPN());
             });
         });

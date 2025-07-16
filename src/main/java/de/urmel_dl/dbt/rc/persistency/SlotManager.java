@@ -498,6 +498,7 @@ public final class SlotManager {
     public Attendees getAttendees(final Slot slot) {
         final List<Attendee> attendees = new ArrayList<>();
 
+        @SuppressWarnings("deprecation")
         final String filterStr = MCRAccessKeyUtils.ACCESS_KEY_PREFIX + slot.getMCRObjectID().toString();
         EntityManager em = MCREntityManagerProvider.getCurrentEntityManager();
 
