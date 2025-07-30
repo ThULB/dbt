@@ -22,7 +22,7 @@
           <xsl:value-of select="concat($class,' dropdown active')" />
         </xsl:attribute>
       </xsl:if>
-      <a id="{$menuId}" class="{$linkClass} dropdown-toggle" data-toggle="dropdown" href="#">
+      <a id="{$menuId}" class="{$linkClass} dropdown-toggle" data-bs-toggle="dropdown" href="#">
         <xsl:choose>
           <xsl:when test="$showIcon and string-length(icon) &gt; 0">
             <i class="{icon}" aria-hidden="true"></i>

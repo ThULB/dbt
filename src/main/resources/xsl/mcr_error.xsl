@@ -25,7 +25,7 @@
     </div>
     <div class="card">
       <h5 class="card-header" id="error">
-        <a href="#" class="d-flex flex-row justify-content-between align-items-center" data-toggle="collapse" data-target="#error-details"
+        <a href="#" class="d-flex flex-row justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#error-details"
           aria-expanded="false" aria-controls="error-details"
         >
           <xsl:value-of select="i18n:translate('error.stackTrace')" />

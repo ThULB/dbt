@@ -16,7 +16,7 @@
     <label xml:lang="de">Kopfzeilen-Menü</label>
     <label xml:lang="en">Header menu</label>
     <item href="/content/top/faq.xml" type="intern">
-      <icon>fas fa-question-circle mr-1</icon>
+      <icon>fas fa-question-circle me-1</icon>
       <label xml:lang="de">FAQ</label>
       <label xml:lang="en">FAQ</label>
     </item>
@@ -45,7 +45,7 @@
     <!-- search menu  -->
     <label xml:lang="de">Suche</label>
     <label xml:lang="en">Search</label>
-    <icon>fas fa-search mr-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-search me-1 d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/search/simple.xed" type="intern">
       <label xml:lang="de">einfach</label>
       <label xml:lang="en">simple</label>
@@ -71,7 +71,7 @@
   <!-- search menu  -->
     <label xml:lang="de">Blättern</label>
     <label xml:lang="en">Browse</label>
-    <icon>fas fa-sitemap mr-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-sitemap me-1 d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/browse/institutes.xml" type="intern">
       <label xml:lang="de">Einrichtungen</label>
       <label xml:lang="en">Institutions</label>
@@ -92,7 +92,7 @@
   <menu id="rc">
     <label xml:lang="de">Semesterapparate</label>
     <label xml:lang="en">Reserve Collections</label>
-    <icon>fas fa-clipboard-check mr-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-clipboard-check me-1 d-none d-sm-inline-block d-lg-none</icon>
     <item href="/rc" type="intern">
       <label xml:lang="de">Aktuelle Liste</label>
       <label xml:lang="en">Current list</label>
@@ -109,7 +109,7 @@
   <menu id="publish" dir="/content/publish">
     <label xml:lang="de">Publizieren</label>
     <label xml:lang="en">Publish</label>
-    <icon>fas fa-upload mr-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-upload me-1 d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/publish/index.xml" type="intern" replaceMenu="false" constrainPopUp="false">
       <label xml:lang="de">Publizieren</label>
       <label xml:lang="en">Publish</label>
@@ -134,7 +134,7 @@
   <menu id="user">
     <label xml:lang="de">Nutzermenü</label>
     <label xml:lang="en">User menu</label>
-    <icon>fas fa-tasks mr-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-tasks me-1 d-none d-sm-inline-block d-lg-none</icon>
     <group id="contentadmin">
       <item href="/modules/classeditor/classificationEditor.xml?XSL.classeditor.showId=true" type="extern">
         <label xml:lang="de">Klassifikationseditor</label>

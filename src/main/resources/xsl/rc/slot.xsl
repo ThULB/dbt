@@ -98,7 +98,7 @@
             itemSelector: '.media',
             handle: '.entry-mover',
             placeholderClass: 'entry-placeholder',
-            placeholder: '<div class="media entry-placeholder"><div class="media-body mw-100"></div></div>',
+            placeholder: '<div class="d-flex entry-placeholder"><div class="flex-grow-1 mw-100"></div></div>',
             pullPlaceholder: true,
             nested: true,
     

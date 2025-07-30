@@ -62,7 +62,7 @@
         <xsl:call-template name="layout.footer" />
       </footer>
 
-      <div id="container-overlay" class="collapse" data-toggle="collapse" data-target="#navbar,#container-overlay" aria-expanded="false"
+      <div id="container-overlay" class="collapse" data-bs-toggle="collapse" data-bs-target="#navbar,#container-overlay" aria-expanded="false"
         aria-controls="navbar"
       ></div>
       <xsl:call-template name="layout.scripts" />
@@ -141,7 +141,7 @@
       cancelButtonClass: "btn-default",
       dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
       }
-      $('*[data-toggle="tooltip"]').tooltip();
+      $('*[data-bs-toggle="tooltip"]').tooltip();
       });
     </script>
     <script src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
@@ -168,10 +168,10 @@
         <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2))}">
           <span class="img-placeholder"></span>
         </a>
-        <button type="button" class="navbar-toggler collapsed plus-sign" data-toggle="collapse" data-target="#navbar,#container-overlay"
+        <button type="button" class="navbar-toggler collapsed plus-sign" data-bs-toggle="collapse" data-bs-target="#navbar,#container-overlay"
           aria-expanded="false" aria-controls="navbar"
         >
-          <span class="sr-only">Toggle navigation</span>
+          <span class="visually-hidden">Toggle navigation</span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -184,7 +184,7 @@
 
     <div class="searchbar">
       <div class="container">
-        <form class="navbar-form form-inline navbar-right" role="search" action="{$WebApplicationBaseURL}servlets/solr/find">
+        <form class="navbar-form d-flex align-items-center navbar-right" role="search" action="{$WebApplicationBaseURL}servlets/solr/find">
           <div class="input-group">
             <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <span class="input-group-btn">
@@ -213,7 +213,7 @@
     <li class="nav-item">
       <a class="nav-link" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
         <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
-        <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
+        <span class="d-inline d-xl-inline d-sm-inline d-md-none ms-1">
           <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
         </span>
       </a>
@@ -258,9 +258,9 @@
     </xsl:apply-templates>
 
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+      <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
         <i class="fa fa-user" aria-hidden="true"></i>
-        <span class="d-inline d-xl-inline d-sm-inline d-md-none ml-1">
+        <span class="d-inline d-xl-inline d-sm-inline d-md-none ms-1">
           <xsl:choose>
             <xsl:when test="$userData/realName">
               <xsl:value-of select="$userData/realName" />
@@ -271,13 +271,13 @@
           </xsl:choose>
         </span>
       </a>
-      <div class="dropdown-menu dropdown-menu-right py-0" id="user-info">
+      <div class="dropdown-menu dropdown-menu-end py-0" id="user-info">
         <dl class="row m-2 pt-2">
           <xsl:if test="$userData/realName">
             <dt class="col-3 p-0">
               <xsl:value-of select="i18n:translate('component.user2.admin.userAccount')" />
             </dt>
-            <dd class="col-9 p-0 my-0 text-right">
+            <dd class="col-9 p-0 my-0 text-end">
               <xsl:value-of select="$userId" />
             </dd>
           </xsl:if>
@@ -285,7 +285,7 @@
             <dt class="col-3 p-0">
               <xsl:value-of select="i18n:translate('component.user2.admin.user.realm')" />
             </dt>
-            <dd class="col-9 p-0 my-0 text-right">
+            <dd class="col-9 p-0 my-0 text-end">
               <xsl:value-of select="$realm/label" />
             </dd>
           </xsl:if>
@@ -293,7 +293,7 @@
             <dt class="col-3 p-0">
               <xsl:value-of select="i18n:translate('component.user2.admin.user.email')" />
             </dt>
-            <dd class="col-9 p-0 my-0 text-right">
+            <dd class="col-9 p-0 my-0 text-end">
               <xsl:value-of select="$userData/eMail" />
             </dd>
           </xsl:if>
@@ -301,7 +301,7 @@
             <dt class="col-3 p-0">
               <xsl:value-of select="i18n:translate('component.user2.admin.roles')" />
             </dt>
-            <dd class="col-9 p-0 my-0 text-right">
+            <dd class="col-9 p-0 my-0 text-end">
               <xsl:value-of select="$userRoles" />
             </dd>
           </xsl:if>
@@ -323,7 +323,7 @@
 
         <div class="dropdown-divider mb-0"></div>
         <div class="controls clearfix p-2">
-          <a href="{$ServletsBaseURL}logout" class="btn btn-primary float-right">
+          <a href="{$ServletsBaseURL}logout" class="btn btn-primary float-end">
             <span class="btn-label">
               <xsl:value-of select="i18n:translate('component.userlogin.button.logout')" />
             </span>
@@ -386,7 +386,7 @@
     <xsl:variable name="basket" select="document(concat('basket:',$basketType))/basket" />
     <xsl:variable name="entryCount" select="count($basket/entry)" />
     <li class="nav-item dropdown {$class}" id="basket-list-item">
-      <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
+      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
         <i class="fa fa-bookmark" />
         <sup>
           <xsl:value-of select="$entryCount" />
@@ -459,21 +459,21 @@
           </ul>
           <p class="info mb-2">
             <xsl:value-of select="i18n:translate('dbt.copyright')" />
-            <i class="fas fa-info-circle text-info ml-2 pt-1" data-toggle="tooltip" data-html="true" data-placement="top"
+            <i class="fas fa-info-circle text-info ms-2 pt-1" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top"
               title="{concat('DBT: ', dbtver:getVersion(), ' (',dbtver:getAbbRev(), ')', '&lt;br&gt;MIR: ',mirver:getCompleteVersion())}"
             ></i>
           </p>
         </div>
 
         <div>
-          <div class="btn-group dropup float-right language-select">
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+          <div class="btn-group dropup float-end language-select">
+            <button class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown">
               <span class="language {$CurrentLang}">
                 <xsl:value-of select="i18n:translate('navigation.Language')" />
               </span>
               <span class="caret" />
             </button>
-            <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-menu dropdown-menu-end">
               <a href="#">
                 <xsl:attribute name="class">
                   <xsl:text>dropdown-item language de</xsl:text>
@@ -537,7 +537,7 @@
     <xsl:variable name="actions.combined" select="xalan:nodeset($actions)/action" />
 
     <xsl:if test="count($actions.combined) &gt; 0">
-      <div class="actionButtons btn-group btn-group-sm float-right">
+      <div class="actionButtons btn-group btn-group-sm float-end">
         <xsl:apply-templates select="$actions.combined" mode="action.buttons" />
       </div>
       <div class="clearfix" />

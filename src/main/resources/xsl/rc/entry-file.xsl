@@ -40,8 +40,8 @@
           <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.title.add')" />
         </h5>
         <div class="card-body">
-          <div class="form-group row">
-            <label for="file" class="col-md-3 control-label text-md-right">
+          <div class="mb-3 row">
+            <label for="file" class="col-md-3 control-label text-md-end">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file')" />
             </label>
             <div class="col-md-9">
@@ -52,7 +52,7 @@
                 data-msg-progress="{i18n:translate('component.rc.slot.entry.file.msgProgress')}" />
             </div>
           </div>
-          <div class="form-group row">
+          <div class="mb-3 row">
             <div class="offset-md-3 col-md-9">
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="copyrighted" name="copyrighted" value="true" />
@@ -62,8 +62,8 @@
               </div>
             </div>
           </div>
-          <div class="form-group row">
-            <label for="comment" class="col-md-3 control-label text-md-right">
+          <div class="mb-3 row">
+            <label for="comment" class="col-md-3 control-label text-md-end">
               <xsl:value-of select="i18n:translate('component.rc.slot.entry.file.description')" />
             </label>
             <div class="col-md-9">

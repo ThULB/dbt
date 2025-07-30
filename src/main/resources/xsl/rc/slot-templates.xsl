@@ -95,10 +95,10 @@
         </h1>
         <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and ($readPermission or $writePermission)">
           <div class="dropdown mt-2">
-            <button class="btn btn-default dropdown-toggle" type="button" id="rcOptionMenu" data-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-default dropdown-toggle" type="button" id="rcOptionMenu" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-cogs" aria-hidden="true" />
             </button>
-            <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="rcOptionMenu">
+            <div class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="rcOptionMenu">
               <xsl:if test="$writePermission and (@status = 'archived')">
                 <a class="dropdown-item" role="menuitem" tabindex="-1"
                   href="{$WebApplicationBaseURL}content/rc/slot.xed?action=reactivate&amp;slotId={@id}&amp;url={encoder:encode(string($RequestURL))}"

@@ -53,15 +53,15 @@
         <xsl:for-each select="./pica:record">
           <xsl:if test="(position() &gt;= $start) and (position() &lt;= $end)">
             <xsl:variable name="fullRecord" select="document(concat('opc:catalogId=', $catalogId, '&amp;record=', @ppn))" />
-            <div class="media p-2">
-              <div class="search-result media-body">
+            <div class="d-flex p-2">
+              <div class="search-result flex-grow-1">
                 <div class="d-flex justify-content-between">
                   <div>
                     <xsl:apply-templates select="$fullRecord" mode="isbd" />
                   </div>
                   <xsl:variable name="matCode" select="$fullRecord//pica:field[@tag='002@']/pica:subfield[@code='0']" />
                   <xsl:if test="(string-length($slotId) &gt; 0) and not(starts-with($matCode, 'As') or starts-with($matCode, 'Ab'))">
-                    <div class="ml-2 align-self-start">
+                    <div class="ms-2 align-self-start">
                       <a class="btn btn-default">
                         <xsl:attribute name="href">
                         <xsl:value-of
