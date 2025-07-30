@@ -1,5 +1,7 @@
+@use "sass:color";
+
 .scroll-container {
-  $fade-color: transparentize(darken($content-bg-color, 2%), 0.9);
+  $fade-color: color.adjust(color.adjust($content-bg-color, $lightness: -2%), $alpha: -0.9);
   position: relative;
 
   .scrolling-container {

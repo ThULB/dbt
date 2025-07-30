@@ -85,7 +85,7 @@
 
   <xsl:template name="layout.cssLinks">
     <link href="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.css" rel="stylesheet" />
-    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.min.css" rel="stylesheet" />
+    <link href="{$WebApplicationBaseURL}rsc/sass/scss/layout.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{$WebApplicationBaseURL}modules/webtools/upload/css/upload-gui.css" />
 
     <xsl:if test="$include.HTML.Head.CSS">
@@ -163,7 +163,7 @@
   </xsl:template>
 
   <xsl:template name="layout.head">
-    <nav class="navbar navbar-expand-md navbar-light navbar-dbt fixed-top" role="navigation">
+    <nav class="navbar navbar-expand-md navbar-dbt fixed-top" role="navigation">
       <div class="container">
         <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2))}">
           <span class="img-placeholder"></span>
@@ -176,7 +176,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <div id="navbar" class="navbar-collapse collapse">
+        <div id="navbar" class="collapse navbar-collapse">
           <xsl:call-template name="layout.head.mainMenu" />
         </div>
       </div>
@@ -335,7 +335,7 @@
   </xsl:template>
 
   <xsl:template name="layout.head.mainMenu">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav me-auto">
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='search']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
@@ -356,7 +356,7 @@
         <xsl:with-param name="class" select="'d-xs-inline d-sm-inline d-md-none'" />
       </xsl:call-template>
     </ul>
-    <ul class="navbar-nav navbar-right">
+    <ul class="navbar-nav me-auto navbar-right">
       <xsl:call-template name="layout.head.basketMenu">
         <xsl:with-param name="class" select="'d-none d-md-inline'" />
         <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />

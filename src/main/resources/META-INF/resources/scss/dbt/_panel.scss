@@ -1,12 +1,19 @@
+// Bootstrap 5 compatibility: Panels were replaced by Cards
+// Keep panel styles for backward compatibility
+
 $panel-default-border: $table-border-color !default;
 $panel-default-heading-bg: $table-head-bg !default;
 $panel-footer-bg: $table-head-bg !default;
 
-.panel-default {
+// Panel styles (Bootstrap 4 compatibility)
+.panel-default,
+.card.panel-default {
   border: 1px solid $panel-default-border;
   border-radius: 2px;
   @include box-shadow (0 1px 1px rgba(0, 0, 0, 0.05));
-  .panel-heading {
+  
+  .panel-heading,
+  .card-header.panel-heading {
     background-color: $panel-default-heading-bg;
     @include border-top-radius (2px);
     @include box-shadow (0 -2px 0 rgba(0, 0, 0, 0.05) inset);
@@ -14,17 +21,22 @@ $panel-footer-bg: $table-head-bg !default;
     color: $text-color;
   }
 
-  .panel-footer {
+  .panel-footer,
+  .card-footer.panel-footer {
     background-color: $panel-footer-bg;
     @include border-bottom-radius (2px);
     border-top: 1px solid $panel-default-border;
   }
 }
 
-.panel {
-  .panel-heading.with-tabs {
+.panel,
+.card.panel {
+  .panel-heading.with-tabs,
+  .card-header.panel-heading.with-tabs {
     position: relative;
-    > .panel-title {
+    
+    > .panel-title,
+    > .card-title.panel-title {
       display: block;
       line-height: ceil(($font-size-base * 1.125) * 2 - 1);
       white-space: nowrap;
@@ -38,10 +50,10 @@ $panel-footer-bg: $table-head-bg !default;
       border-bottom: 0 none;
       bottom: 0;
       display: block;
-      > li {
-        a {
-          @include border-top-radius (0);
-        }
+      
+      > li a,
+      > .nav-item .nav-link {
+        @include border-top-radius (0);
       }
     }
   }

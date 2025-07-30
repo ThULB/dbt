@@ -1,6 +1,9 @@
+@use "sass:color";
+
 // ---------------------------------------------------
 // Badges (Results, Metadata)
 // ---------------------------------------------------
-$badge-state-delete-color: theme-color-level('danger', $alert-color-level);
-$badge-state-delete-bg: theme-color-level('danger', $alert-bg-level);
-$badge-state-delete-span-bg: darken($secondary, 80%);
+// Bootstrap 5 replacement for theme-color-level function
+$badge-state-delete-color: shift-color($danger, -40%);
+$badge-state-delete-bg: shift-color($danger, 80%);
+$badge-state-delete-span-bg: color.adjust($secondary, $lightness: -80%);

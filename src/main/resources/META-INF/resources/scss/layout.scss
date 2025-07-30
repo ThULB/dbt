@@ -17,15 +17,28 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../dbt/assets/fontawesome-free/scss/solid.scss";
 @import "../dbt/assets/fontawesome-free/scss/regular.scss";
 
-@import "../mir-layout/scss/common/forms";
+// MIR Layout imports - commented out as files don't exist
+@import "../mir-layout/scss/common/base";
+@import "../mir-layout/scss/common/buttons";
+@import "../mir-layout/scss/common/datatable";
 @import "../mir-layout/scss/common/fileupload";
-@import "../mir-layout/scss/common/print";
+@import "../mir-layout/scss/common/forms";
+@import "../mir-layout/scss/common/navbar";
+@import "../mir-layout/scss/common/pager";
+@import "../mir-layout/scss/common/pagination";
+@import "../mir-layout/scss/common/mir_badges";
 @import "../mir-layout/scss/common/mir_basket";
 @import "../mir-layout/scss/common/mir_browse";
-@import "../mir-layout/scss/common/mir_details";
-@import "../mir-layout/scss/common/mir_metadata";
+@import "../mir-layout/scss/common/mir_main_nav";
 @import "../mir-layout/scss/common/mir_results";
+@import "../mir-layout/scss/common/mir_metadata";
+@import "../mir-layout/scss/common/mir_top_nav";
+@import "../mir-layout/scss/common/mir_details";
 @import "../mir-layout/scss/common/mir_viewer";
+@import "../mir-layout/scss/common/helper";
+@import "../mir-layout/scss/common/panels";
+@import "../mir-layout/scss/common/print";
+@import "../mir-layout/scss/common/user-login";
 @import "../mir-layout/scss/common/responsive";
 
 
@@ -47,6 +60,7 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 //@import "./dbt/_browse";
 @import "./dbt/_rc";
 @import "./dbt/_video-js";
+@import "./dbt/mir2fix/base";
 @import "./dbt/mir2fix/metadata";
 @import "./dbt/mir2fix/resultlist";
 @import "./dbt/mir2fix/login";

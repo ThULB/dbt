@@ -1,3 +1,5 @@
+@use "sass:color";
+
 #rc-list {
   table {
     margin-bottom: 0;
@@ -121,9 +123,9 @@ body.dragging * {
   }
 
   @else {
-    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
-    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
-    background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, transparentize($endTo, 1) 10%);
+    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
+    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
+    background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
   }
 }
 

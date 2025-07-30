@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // ---------------------------------------------------
 // Navbar Styles
 // ---------------------------------------------------
@@ -26,7 +28,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 }
 
 .navbar-dbt {
-  background-color: transparentize($primary, 0.02);
+  background-color: color.adjust($primary, $alpha: -0.02);
   border-bottom: none;
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
@@ -41,7 +43,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 
 
   @include media-breakpoint-down($float-breakpoint) {
-    background-color: transparentize(#fff, 0.02);
+    background-color: color.adjust(#fff, $alpha: -0.02);
 
     @media (orientation: landscape) {
       @include box-shadow(-2px 0px 4px rgba(0, 0, 0, 0.2));
@@ -101,7 +103,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   }
 
   .navbar-toggler {
-    background-color: transparentize($primary, 0.03);
+    background-color: color.adjust($primary, $alpha: -0.03);
     border: 0;
     @include border-top-radius (0);
     @include border-bottom-radius (0);
@@ -113,7 +115,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 
     &:hover,
     &:focus {
-      background-color: transparentize($primary, 0.2);
+      background-color: color.adjust($primary, $alpha: -0.2);
     }
 
     .icon-bar {
@@ -199,11 +201,11 @@ $navbar-nav-link-padding-y: 0.8rem !default;
       &>.open>a,
       &>.open>a:hover,
       &>.open>a:focus {
-        background-color: transparentize(#fff, 0.75);
+        background-color: color.adjust(#fff, $alpha: -0.75);
         color: #fff;
 
         @include media-breakpoint-down($float-breakpoint) {
-          background-color: transparentize($primary, 0.75);
+          background-color: color.adjust($primary, $alpha: -0.75);
           color: $body-color;
         }
       }
@@ -320,7 +322,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   z-index: -10;
   opacity: 0;
   display: block;
-  background-color: transparentize(darken($content-bg-color, 80%), 0.1);
+  background-color: color.adjust(color.adjust($content-bg-color, $lightness: -80%), $alpha: -0.1);
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px);
   pointer-events: none;
@@ -368,7 +370,7 @@ $navbar-nav-link-padding-y: 0.8rem !default;
 // searchbar styles
 // ---------------------------------------------------
 .searchbar {
-  background-color: transparentize(#fff, 0.02);
+  background-color: color.adjust(#fff, $alpha: -0.02);
   position: fixed;
   top: $navbar-height;
   right: 0;
@@ -410,12 +412,15 @@ $navbar-nav-link-padding-y: 0.8rem !default;
       }
 
       .form-control {
-        background-color: transparentize(#f8f8f8, 0.1);
+        background-color: color.adjust(#f8f8f8, $alpha: -0.1);
         font-size: 16px;
       }
 
-      .input-group-btn {
-        >button {
+      // Bootstrap 5: .input-group-btn is replaced by direct button styling in .input-group
+      .input-group-btn,
+      .input-group > .btn {
+        >button,
+        &.btn {
           color: #888;
           border-left: 0;
         }

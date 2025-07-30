@@ -18,14 +18,14 @@ $border-radius-lg: .2rem;
 $border-radius-sm: .05rem;
 
 $input-focus-border-color: $primary;
-$input-fieldset-border-color: transparentize($primary, 0.75);
+@use "sass:color";
+$input-fieldset-border-color: color.adjust($primary, $alpha: -0.75);
 $input-btn-focus-box-shadow: none; 
 
 $enable-shadows: true;
-// required for bootstrap 4.6.0 or higher, due to bug with $enable-shadows
-$custom-control-indicator-checked-box-shadow:   none !default;
-$custom-control-indicator-active-box-shadow:    none !default;
-$custom-checkbox-indicator-indeterminate-box-shadow:   none !default;
+// required for bootstrap 5, replacing deprecated variables
+$form-check-input-checked-box-shadow: none !default;
+$form-check-input-focus-box-shadow: none !default;
 
 // ---------------------------------------------------
 // General
@@ -36,16 +36,18 @@ $text-color: $body-color;
 $content-padding-top: 15px;
 $content-bg-color: #fff;
 
-$body-bg-color: darken($content-bg-color, 5%);
+$body-bg-color: color.adjust($content-bg-color, $lightness: -5%);
 
 // ---------------------------------------------------
 // Breadcrumb
 // ---------------------------------------------------
 
+@use "sass:string";
+
 $breadcrumb-bg:            #fafafa;
-$breadcrumb-divider-color: darken($breadcrumb-bg, 40%);
-$breadcrumb-active-color:  darken($breadcrumb-bg, 40%);
-$breadcrumb-divider:       quote("/");
+$breadcrumb-divider-color: color.adjust($breadcrumb-bg, $lightness: -40%);
+$breadcrumb-active-color:  color.adjust($breadcrumb-bg, $lightness: -40%);
+$breadcrumb-divider:       string.quote("/");
 
 // ---------------------------------------------------
 // Float Breakpoints
@@ -120,3 +122,11 @@ $panel-default-border: #ddd;
 // ---------------------------------------------------
 
 $highlight: $primary;
+
+// ---------------------------------------------------
+// Brand colors
+// ---------------------------------------------------
+$brand-success:      #6EBA6B !default;
+$brand-info:         #4B8FBC !default;
+$brand-warning:      #F39C12 !default;
+

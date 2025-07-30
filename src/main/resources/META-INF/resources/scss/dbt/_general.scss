@@ -1,3 +1,5 @@
+@use "sass:color";
+
 // GLOBAL STYLES
 //--------------------------------------------------
 
@@ -14,6 +16,7 @@ a:focus {
 body {
   background-color: $body-bg-color;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 h1,
@@ -38,7 +41,9 @@ h6,
 .btn {
   @include box-shadow(0 -2px 0 rgba(0, 0, 0, 0.05) inset);
 
-  &.btn-default {
+  // Bootstrap 5: btn-default was replaced with btn-outline-secondary
+  &.btn-default,
+  &.btn-outline-secondary {
     color: #333;
     background-color: #fff;
     border-color: #ccc;
@@ -93,7 +98,7 @@ hgroup {
   h1 {
     color: #2a3644;
     font-weight: 500;
-    font-size: 1.625em / 1.15;
+    font-size: calc(1.625em / 1.15);
     margin-top: 0;
   }
 
@@ -127,7 +132,7 @@ hgroup {
         &:after {
           content: "\f078";
           display: flex;
-          font-family: "Font Awesome 5 Free";
+          font-family: "Font Awesome 6 Free";
           font-weight: 900;
           font-size: 1rem;
           margin-left: 0.5rem;
@@ -137,7 +142,7 @@ hgroup {
       &[aria-expanded="true"] {
         &:after {
           content: "\f077";
-          font-family: "Font Awesome 5 Free";
+          font-family: "Font Awesome 6 Free";
           font-weight: 900;
           font-size: 1rem;
           margin-left: 0.5rem;
@@ -192,7 +197,7 @@ hgroup {
 //--------------------------------------------------
 
 .scroll-container {
-  $fade-color: transparentize(darken($content-bg-color, 2%), 0.4);
+  $fade-color: color.adjust(color.adjust($content-bg-color, $lightness: -2%), $alpha: -0.4);
   position: relative;
 
   .scrolling-container {

@@ -7,7 +7,9 @@ div.result_searchline {
         font-size: 1rem;
       }
 
-      .fa-search {
+      // FontAwesome 6: fa-search is now fa-magnifying-glass
+      .fa-search,
+      .fa-magnifying-glass {
         margin-right: 0.4rem;
       }
     }
