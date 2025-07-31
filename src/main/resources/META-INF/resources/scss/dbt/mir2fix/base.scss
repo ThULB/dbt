@@ -1,4 +1,11 @@
+@use "sass:color";
+
 #powered_by {
   background-color: transparent;
   border-top: none;
+}
+
+footer{
+  $footer-link-color: color.adjust($primary, $lightness:-1%);
+  --bs-link-color-rgb: #{color.red($footer-link-color), color.green($footer-link-color), color.blue($footer-link-color)};
 }

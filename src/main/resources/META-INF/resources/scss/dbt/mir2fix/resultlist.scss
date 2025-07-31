@@ -1,3 +1,5 @@
+@use "sass:color";
+
 div.result_searchline {
   form.search_form {
     .input-group-sm {
@@ -21,6 +23,9 @@ div.result_searchline {
   @extend .flex-md-row;
 
   .result_filter {
+    //darker warning-text color
+    $result-warning-color: color.adjust($orange, $lightness: -16%);
+    --bs-warning-rgb: #{color.red($result-warning-color), color.green($result-warning-color), color.blue($result-warning-color)};
     float: unset;
 
     .card {

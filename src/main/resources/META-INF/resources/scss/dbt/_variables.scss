@@ -1,4 +1,6 @@
 @use "sass:color";
+@use "sass:string";
+
 // ---------------------------------------------------
 // animate-sass
 // ---------------------------------------------------
@@ -9,23 +11,47 @@ $use-fade: true;
 // Boostrap Overwrites
 // ---------------------------------------------------
 
-$primary: #008855;
-$secondary: #fafafa;
+$gray-100: #fafafa;
+$gray-200: #efefef;
+$gray-300: #e6e6e6;
+$gray-400: #dadada;
+$gray-500: #bdbdbd;
+$gray-600: #7d7d7d;
+$gray-700: #575757;
+$gray-800: #404040;
+$gray-900: #292929;
+$primary: color.adjust(#008855, $lightness: -1%);
+$secondary: $gray-100;
+$info: color.adjust(#005588, $lightness: 12%);
+$blue:    #1e69d2;
+$indigo:  #6c25d0;
+$purple:  #b72dd2;
+$pink:    #dc387c;
+$red:     #df2020;
+$orange:  #ed8a26;
+$yellow:  #f2c40d;
+$green:   $primary;
+$teal:    #17cfb0;
+$cyan:    #19b3e6;
 
-$body-color: #333;
 
+$color-contrast-dark: $gray-900;
+$color-contrast-light: $secondary;
+
+
+$body-color: $gray-900;
+
+$border-radius-sm: .05rem;
 $border-radius:    .1rem;
 $border-radius-lg: .2rem;
-$border-radius-sm: .05rem;
+$border-radius-xl: .4rem;
+$border-radius-xxl: .6rem;
 
 $input-focus-border-color: $primary;
 $input-fieldset-border-color: color.adjust($primary, $alpha: -0.75);
-$input-btn-focus-box-shadow: none; 
+$input-btn-focus-box-shadow: none;
 
 $enable-shadows: true;
-// required for bootstrap 4.6.0 or higher, due to bug with $enable-shadows
-$form-check-input-checked-box-shadow: none !default;
-$form-check-input-focus-box-shadow: none !default;
 
 // ---------------------------------------------------
 // General
@@ -42,7 +68,6 @@ $body-bg-color: color.adjust($content-bg-color, $lightness: -5%);
 // Breadcrumb
 // ---------------------------------------------------
 
-@use "sass:string";
 
 $breadcrumb-bg:            #fafafa;
 $breadcrumb-divider-color: color.adjust($breadcrumb-bg, $lightness: -40%);
@@ -110,23 +135,21 @@ $alert-success-color: #298703;
 
 
 // ---------------------------------------------------
-// Panels
-// ---------------------------------------------------
-
-$panel-default-heading-bg: #fafafa;
-$panel-footer-bg: #fff;
-$panel-default-border: #ddd;
-
-// ---------------------------------------------------
 // MIR ResultList
 // ---------------------------------------------------
 
 $highlight: $primary;
+$dark_neutral: $gray-900;
+$light_neutral: color.adjust($dark_neutral, $lightness:27%);
+$filter_back: $gray-100;
+$filter_border: $gray-200;
+$filter_headline: $gray-800;
+$filter_hits: $gray-700;
+$filter: $gray-800;
 
 // ---------------------------------------------------
 // Brand colors
 // ---------------------------------------------------
-$brand-success:      #6EBA6B !default;
-$brand-info:         #4B8FBC !default;
+$brand-success:      #28A745 !default;
+$brand-info:         #17A2B8 !default;
 $brand-warning:      #F39C12 !default;
-
