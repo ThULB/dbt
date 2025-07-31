@@ -24,7 +24,7 @@
 .slot-body {
   .entry-text {
     &[format="html"] {
-      @include hyphens();
+      hyphens: auto;
     }
 
     img {
@@ -39,7 +39,7 @@
   .entry-webLink,
   .entry-file {
     a {
-      @include hyphens();
+      hyphens: auto;
     }
   }
 
@@ -117,14 +117,10 @@ body.dragging * {
   background: transparent;
 
   @if ($ownerTransfer==true) {
-    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
-    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
     background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, $endTo 10%, #000 11%, rgba(255, 255, 255, 0) 14%);
   }
 
   @else {
-    background: -moz-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
-    background: -webkit-linear-gradient(left, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
     background: linear-gradient(to right, $startFrom 0%, $startTo 5%, $endFrom 6%, color.adjust($endTo, $alpha: -1) 10%);
   }
 }

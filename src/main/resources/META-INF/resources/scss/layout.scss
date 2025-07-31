@@ -42,10 +42,8 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../mir-layout/scss/common/responsive";
 
 
-@import "./dbt/mixins/_animation";
 @import "./dbt/mixins/_download-icon";
 @import "./dbt/mixins/_gradients";
-@import "./dbt/mixins/_transform";
 @import "./dbt/mixins/_helpers";
 
 @import "./dbt/_animations";

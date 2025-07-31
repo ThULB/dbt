@@ -30,11 +30,11 @@ h6,
 .h4,
 .h5,
 .h6 {
-  @include hyphens ();
+  hyphens: auto;
 }
 
 .hyphens {
-  @include hyphens ();
+  hyphens: auto;
 }
 
 .btn {
@@ -220,7 +220,6 @@ hgroup {
     top: 0;
     bottom: 0;
     transition-duration: .3s;
-    -webkit-transform: translateZ(0);
     transform: translateZ(0);
     margin: 0;
     text-align: center;

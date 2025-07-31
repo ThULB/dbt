@@ -119,7 +119,6 @@ div.result_searchline {
                 display: block;
                 height: ($cover-height - 10px);
                 width: ($cover-width - 10px);
-                -webkit-mask-size: ($cover-width - 10px) ($cover-height - 10px);
                 mask-size: ($cover-width - 10px) ($cover-height - 10px);
                 background: $primary;
               }
