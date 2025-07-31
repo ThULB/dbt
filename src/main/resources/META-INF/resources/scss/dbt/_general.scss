@@ -15,7 +15,6 @@ a:focus {
 
 body {
   background-color: $body-bg-color;
-  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 
@@ -41,8 +40,6 @@ h6,
 .btn {
   @include box-shadow(0 -2px 0 rgba(0, 0, 0, 0.05) inset);
 
-  // Bootstrap 5: btn-default was replaced with btn-outline-secondary
-  &.btn-default,
   &.btn-outline-secondary {
     color: #333;
     background-color: #fff;
@@ -69,7 +66,7 @@ h6,
   min-width: 75%;
 }
 
-#container-main {
+#main_content {
   background-color: $content-bg-color;
   margin-top: $navbar-height * 2;
   padding-top: $content-padding-top;
@@ -79,6 +76,10 @@ h6,
   @include media-breakpoint-up($float-breakpoint) {
     padding-top: $content-padding-top * 2;
   }
+}
+
+#page {
+  min-height: 100%;
 }
 
 hgroup {

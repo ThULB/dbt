@@ -1,3 +1,4 @@
+@use "sass:color";
 // ---------------------------------------------------
 // animate-sass
 // ---------------------------------------------------
@@ -18,12 +19,11 @@ $border-radius-lg: .2rem;
 $border-radius-sm: .05rem;
 
 $input-focus-border-color: $primary;
-@use "sass:color";
 $input-fieldset-border-color: color.adjust($primary, $alpha: -0.75);
 $input-btn-focus-box-shadow: none; 
 
 $enable-shadows: true;
-// required for bootstrap 5, replacing deprecated variables
+// required for bootstrap 4.6.0 or higher, due to bug with $enable-shadows
 $form-check-input-checked-box-shadow: none !default;
 $form-check-input-focus-box-shadow: none !default;
 

@@ -78,7 +78,7 @@
           <span>
             <xsl:text disable-output-escaping="yes"> &amp;nbsp;</xsl:text>
           </span>
-          <button type="submit" class="btn btn-default btn-md" name="cancel">
+          <button type="submit" class="btn btn-outline-secondary btn-md" name="cancel">
             <xsl:value-of select="i18n:translate('button.cancel')" />
           </button>
         </div>

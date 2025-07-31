@@ -138,7 +138,7 @@
       <xsl:value-of select="concat('cancelButton: &quot;',i18n:translate('mir.confirm.cancelButton'), '&quot;,')" />
       post: false,
       confirmButtonClass: "btn-danger",
-      cancelButtonClass: "btn-default",
+      cancelButtonClass: "btn-outline-secondary",
       dialogClass: "modal-dialog modal-lg" // Bootstrap classes for large modal
       }
       $('*[data-bs-toggle="tooltip"]').tooltip();
@@ -188,8 +188,8 @@
           <div class="input-group">
             <input class="form-control" type="text" id="searchTerm" name="condQuery" placeholder="{i18n:translate('dbt.search.placeholder')}" />
             <span class="input-group-btn">
-              <button type="submit" class="btn btn-default">
-                <span class="fa fa-search" aria-hidden="true"></span>
+              <button type="submit" class="btn btn-outline-secondary">
+                <span class="fa fa-magnifying-glass" aria-hidden="true"></span>
               </button>
             </span>
           </div>
@@ -419,29 +419,33 @@
   </xsl:template>
 
   <xsl:template name="layout.content">
-    <div id="container-main">
-      <a id="top"></a>
-      <div class="container">
-        <xsl:call-template name="navigation.breadcrumbPath">
-          <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
-        </xsl:call-template>
-        
+    <section>
+      <div class="container" id="page">
+        <div id="main_content">
+          <a id="top"></a>
+          <div class="container">
+            <xsl:call-template name="navigation.breadcrumbPath">
+              <xsl:with-param name="navigation" select="$loaded_navigation_xml" />
+            </xsl:call-template>
 
-<!--           <xsl:call-template name="action.buttons" /> -->
-        <xsl:call-template name="print.writeProtectionMessage" />
-        <xsl:call-template name="print.statusMessage" />
 
-        <xsl:choose>
-          <xsl:when test="$readAccess='true'">
-<!--               <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|scripts|', concat('|', name(), '|')))]" /> -->
-            <xsl:apply-templates select="@*[name != 'title']|node()" />
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:call-template name="printNotLoggedIn" />
-          </xsl:otherwise>
-        </xsl:choose>
+    <!--           <xsl:call-template name="action.buttons" /> -->
+            <xsl:call-template name="print.writeProtectionMessage" />
+            <xsl:call-template name="print.statusMessage" />
+
+            <xsl:choose>
+              <xsl:when test="$readAccess='true'">
+    <!--               <xsl:copy-of select="@*[name() != 'titel']|node()[not(contains('|head|breadcrumb|scripts|', concat('|', name(), '|')))]" /> -->
+                <xsl:apply-templates select="@*[name != 'title']|node()" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:call-template name="printNotLoggedIn" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   </xsl:template>
 
   <xsl:template name="layout.footer">
@@ -467,7 +471,7 @@
 
         <div>
           <div class="btn-group dropup float-end language-select">
-            <button class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
               <span class="language {$CurrentLang}">
                 <xsl:value-of select="i18n:translate('navigation.Language')" />
               </span>
@@ -556,7 +560,7 @@
             <xsl:value-of select="concat('btn btn-', @style)" />
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="'btn btn-default'" />
+            <xsl:value-of select="'btn btn-outline-secondary'" />
           </xsl:otherwise>
       </xsl:choose>
       </xsl:attribute>

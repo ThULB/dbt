@@ -62,7 +62,7 @@
                   <xsl:variable name="matCode" select="$fullRecord//pica:field[@tag='002@']/pica:subfield[@code='0']" />
                   <xsl:if test="(string-length($slotId) &gt; 0) and not(starts-with($matCode, 'As') or starts-with($matCode, 'Ab'))">
                     <div class="ms-2 align-self-start">
-                      <a class="btn btn-default">
+                      <a class="btn btn-outline-secondary">
                         <xsl:attribute name="href">
                         <xsl:value-of
                           select="concat($WebApplicationBaseURL, 'content/rc/entry.xed?entry=opcrecord&amp;slotId=', $slotId, '&amp;afterId=', $afterId, '&amp;catalogId=', $catalogId, '&amp;ppn=', @ppn)" />

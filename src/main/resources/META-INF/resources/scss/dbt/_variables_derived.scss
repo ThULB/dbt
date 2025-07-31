@@ -3,7 +3,6 @@
 // ---------------------------------------------------
 // Badges (Results, Metadata)
 // ---------------------------------------------------
-// Bootstrap 5 replacement for theme-color-level function
 $badge-state-delete-color: shift-color($danger, -40%);
 $badge-state-delete-bg: shift-color($danger, 80%);
 $badge-state-delete-span-bg: color.adjust($secondary, $lightness: -80%);

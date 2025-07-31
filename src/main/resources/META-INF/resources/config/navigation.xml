@@ -45,7 +45,7 @@
     <!-- search menu  -->
     <label xml:lang="de">Suche</label>
     <label xml:lang="en">Search</label>
-    <icon>fas fa-search me-1 d-none d-sm-inline-block d-lg-none</icon>
+    <icon>fas fa-magnifying-glass me-1 d-none d-sm-inline-block d-lg-none</icon>
     <item href="/content/search/simple.xed" type="intern">
       <label xml:lang="de">einfach</label>
       <label xml:lang="en">simple</label>

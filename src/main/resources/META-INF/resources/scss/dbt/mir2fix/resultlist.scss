@@ -20,13 +20,20 @@ div.result_searchline {
   @extend .flex-column-reverse;
   @extend .flex-md-row;
 
-  .result-filter {
+  .result_filter {
     float: unset;
 
     .card {
       @media (min-width: 768px) {
         min-width: 339px;
         max-width: 340px;
+      }
+      &.worldReadableComplete {
+        li[data-fq^='worldReadableComplete'] {
+          .title:before {
+            font-family: 'Font Awesome 6 Free';
+          }
+        }
       }
     }
   }

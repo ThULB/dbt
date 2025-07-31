@@ -416,8 +416,6 @@ $navbar-nav-link-padding-y: 0.8rem !default;
         font-size: 16px;
       }
 
-      // Bootstrap 5: .input-group-btn is replaced by direct button styling in .input-group
-      .input-group-btn,
       .input-group > .btn {
         >button,
         &.btn {

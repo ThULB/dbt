@@ -17,7 +17,7 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../dbt/assets/fontawesome-free/scss/solid.scss";
 @import "../dbt/assets/fontawesome-free/scss/regular.scss";
 
-// MIR Layout imports - commented out as files don't exist
+// MIR Layout imports
 @import "../mir-layout/scss/common/base";
 @import "../mir-layout/scss/common/buttons";
 @import "../mir-layout/scss/common/datatable";
@@ -25,7 +25,7 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../mir-layout/scss/common/forms";
 @import "../mir-layout/scss/common/navbar";
 @import "../mir-layout/scss/common/pager";
-@import "../mir-layout/scss/common/pagination";
+//@import "../mir-layout/scss/common/pagination";
 @import "../mir-layout/scss/common/mir_badges";
 @import "../mir-layout/scss/common/mir_basket";
 @import "../mir-layout/scss/common/mir_browse";
@@ -55,7 +55,6 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 //@import "./dbt/_scroll-container";
 @import "./dbt/_general";
 @import "./dbt/_overwrites";
-@import "./dbt/_panel";
 //@import "./dbt/_metadata";
 //@import "./dbt/_browse";
 @import "./dbt/_rc";

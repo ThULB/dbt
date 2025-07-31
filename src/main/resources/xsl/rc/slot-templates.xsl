@@ -95,7 +95,7 @@
         </h1>
         <xsl:if test="not(mcrxsl:isCurrentUserGuestUser()) and ($readPermission or $writePermission)">
           <div class="dropdown mt-2">
-            <button class="btn btn-default dropdown-toggle" type="button" id="rcOptionMenu" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="rcOptionMenu" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="fas fa-cogs" aria-hidden="true" />
             </button>
             <div class="dropdown-menu dropdown-menu-end" role="menu" aria-labelledby="rcOptionMenu">
