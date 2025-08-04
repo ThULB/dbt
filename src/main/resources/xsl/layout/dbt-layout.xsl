@@ -473,7 +473,7 @@
           <div class="btn-group dropup float-end language-select">
             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
               <span class="language {$CurrentLang}">
-                <xsl:value-of select="i18n:translate('navigation.Language')" />
+                <xsl:value-of select="i18n:translate('mir.language.change')" />
               </span>
               <span class="caret" />
             </button>

@@ -16,6 +16,9 @@ a:focus {
 body {
   background-color: $body-bg-color;
   backface-visibility: hidden;
+  & > section {
+    background-color: $content-bg-color;
+  }
 }
 
 h1,
