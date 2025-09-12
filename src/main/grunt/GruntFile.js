@@ -1,15 +1,17 @@
 module.exports = function (grunt) {
-	var fs = require("fs");
-	var path = require("path");
+    const fs = require("fs");
+    const path = require("path");
+    const sassImpl = require('sass');
 
-	var getAbsoluteDir = function (dir) {
+	const getAbsoluteDir = function (dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 	};
 
-	var globalConfig = {
+	const globalConfig = {
 		resourceDirectory: getAbsoluteDir(grunt.option("resourceDirectory")),
 		targetDirectory: getAbsoluteDir(grunt.option("targetDirectory")),
 		assetsDirectory: getAbsoluteDir(grunt.option("assetsDirectory")),
+        mirAssetsDirectory: getAbsoluteDir(grunt.option("mirAssetsDirectory"))
 	};
 
 	grunt.initConfig({
@@ -72,7 +74,51 @@ module.exports = function (grunt) {
 					}]
 			}
 		},
-		imagemin: {
+        sass: {
+            options: {
+                implementation: sassImpl,
+                sourceMap: true,
+                outputStyle: 'expanded', // lesbar, wird gleich von cssnano minifiziert
+                verbose: true,
+                loadPaths: ["<%=globalConfig.assetsDirectory%>/../","<%=globalConfig.mirAssetsDirectory%>"]
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: "<%=globalConfig.resourceDirectory%>/scss",
+                    src: ["*.scss"],
+                    dest: "<%=globalConfig.targetDirectory%>/dbt/css/",
+                    ext: ".css"
+                }]
+            }
+        },
+        postcss: {
+            options: {
+                syntax: require('postcss-scss'),
+                map: {
+                    inline: false //,
+                    //annotation: '<%=globalConfig.targetDirectory%>/dbt/css/maps/'
+                },
+
+                processors: [
+                    require('autoprefixer')(),
+                    require('cssnano')({
+                        preset: 'advanced'
+                    })
+                ]
+            },
+            dist: {
+                src: 'css/*.css'
+            },
+            files: {
+                expand: true,
+                cwd: "<%=globalConfig.targetDirectory%>/dbt/css/",
+                src: ["*.css"],
+                dest: "<%=globalConfig.targetDirectory%>/dbt/css/",
+                ext: ".min.css" // erzeugt dist/main.min.css (+ .map)
+            }
+        },
+        imagemin: {
 			build: {
 				options: {
 					optimizationLevel: 5
@@ -109,6 +155,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-imagemin");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('@lodder/grunt-postcss');
 
-	grunt.registerTask("default", ["copy", "imagemin", "uglify"]);
+	grunt.registerTask("default", ["copy", "sass", "postcss", "imagemin", "uglify"]);
 };

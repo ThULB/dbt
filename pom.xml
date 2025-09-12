@@ -34,11 +34,13 @@
     <maven.compiler.failOnWarning>true</maven.compiler.failOnWarning>
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
+    <mir-layout-assets>${project.build.directory}/mir-layout-assets</mir-layout-assets>
     <mir.version>2025.06.1-SNAPSHOT</mir.version>
     <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
+    <template.mirassetsdir>${mir-layout-assets}/META-INF/resources/mir-layout</template.mirassetsdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
   </properties>
   <build>
@@ -115,6 +117,32 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-sass-assets</id>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>generate-resources</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.mycore.mir</groupId>
+                  <artifactId>mir-layout</artifactId>
+                  <version>${mir.version}</version>
+                  <type>jar</type>
+                  <overWrite>false</overWrite>
+                  <outputDirectory>${mir-layout-assets}</outputDirectory>
+                  <includes>META-INF/resources/mir-layout/assets/bootstrap/**,META-INF/resources/mir-layout/scss/**</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -228,7 +256,7 @@
             <configuration>
               <workingDirectory>${grunt.projectBase}</workingDirectory>
               <arguments>--verbose --resourceDirectory=${basedir}/src/main/resources/META-INF/resources/
-                --lessFile=${basedir}/src/main/less/build.less
+                --mirAssetsDirectory=${template.mirassetsdir}
                 --targetDirectory=${template.targetdir} --cssDirectory=${template.cssdir}
                 --assetsDirectory=${template.assetsdir}</arguments>
             </configuration>
