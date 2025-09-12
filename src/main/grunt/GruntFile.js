@@ -11,7 +11,9 @@ module.exports = function (grunt) {
 		resourceDirectory: getAbsoluteDir(grunt.option("resourceDirectory")),
 		targetDirectory: getAbsoluteDir(grunt.option("targetDirectory")),
 		assetsDirectory: getAbsoluteDir(grunt.option("assetsDirectory")),
-        mirAssetsDirectory: getAbsoluteDir(grunt.option("mirAssetsDirectory"))
+        mirAssetsDirectory: getAbsoluteDir(grunt.option("mirAssetsDirectory")),
+        sassLoadPath: [getAbsoluteDir(grunt.option("assetsDirectory") + path.sep + '..' + path.sep),
+            getAbsoluteDir(grunt.option("mirAssetsDirectory"))]
 	};
 
 	grunt.initConfig({
@@ -78,9 +80,10 @@ module.exports = function (grunt) {
             options: {
                 implementation: sassImpl,
                 sourceMap: true,
+                sourceMapIncludeSources: true,
                 outputStyle: 'expanded', // lesbar, wird gleich von cssnano minifiziert
                 verbose: true,
-                loadPaths: ["<%=globalConfig.assetsDirectory%>/../","<%=globalConfig.mirAssetsDirectory%>"]
+                loadPaths: globalConfig.sassLoadPath
             },
             dist: {
                 files: [{
@@ -96,26 +99,30 @@ module.exports = function (grunt) {
             options: {
                 syntax: require('postcss-scss'),
                 map: {
-                    inline: false //,
-                    //annotation: '<%=globalConfig.targetDirectory%>/dbt/css/maps/'
+                    inline: false
                 },
-
                 processors: [
+                    require('@csstools/postcss-sass')({
+                        sass: sassImpl,
+                        includePaths: globalConfig.sassLoadPath
+                    }),
                     require('autoprefixer')(),
+                    require('postcss-normalize-whitespace')(),
+                    require('postcss-convert-values')(),
+
+                    require('postcss-combine-media-query')(),
+                    require('postcss-combine-duplicated-selectors')(),
                     require('cssnano')({
                         preset: 'advanced'
                     })
                 ]
             },
-            dist: {
-                src: 'css/*.css'
-            },
             files: {
                 expand: true,
-                cwd: "<%=globalConfig.targetDirectory%>/dbt/css/",
-                src: ["*.css"],
+                cwd: "<%=globalConfig.resourceDirectory%>/scss",
+                src: ["*.scss"],
                 dest: "<%=globalConfig.targetDirectory%>/dbt/css/",
-                ext: ".min.css" // erzeugt dist/main.min.css (+ .map)
+                ext: ".min.css"
             }
         },
         imagemin: {
@@ -158,5 +165,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('@lodder/grunt-postcss');
 
-	grunt.registerTask("default", ["copy", "sass", "postcss", "imagemin", "uglify"]);
+	grunt.registerTask("default", ["copy", "postcss", "imagemin", "uglify"]);
 };
