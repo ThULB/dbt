@@ -66,7 +66,7 @@
       </xsl:choose>
       <xsl:if test="$hasAdminPermission and @owner = 'false' and @readKey = 'false' and @writeKey = 'false'">
         <xsl:text>&#160;</xsl:text>
-        <span class="glyphicon glyphicon-exclamation-sign text-danger" data-toggle="tooltip" data-placement="right"
+        <span class="glyphicon glyphicon-exclamation-sign text-danger" data-bs-toggle="tooltip" data-bs-placement="right"
           title="{i18n:translate('component.rc.attendees.invalidKey')}" />
       </xsl:if>
     </col>

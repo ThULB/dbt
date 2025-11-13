@@ -80,7 +80,7 @@
       </xsl:if>
       <xsl:if test="$hasAdminPermission">
         <col align="center" valign="top">
-          <div class="btn-group ml-2">
+          <div class="btn-group ms-2">
             <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/slot.xed?slotId={@id}&amp;url={encoder:encode(string($RequestURL),'UTF-8')}"
               title="{i18n:translate('component.rc.slot.edit')}"
             >
@@ -98,7 +98,7 @@
             <xsl:value-of select="@id" />
           </a>
           <xsl:if test="@status = 'new'">
-            <span class="label label-danger float-right">
+            <span class="label label-danger float-end">
               <xsl:value-of select="i18n:translate('component.rc.slot.new')" />
             </span>
           </xsl:if>

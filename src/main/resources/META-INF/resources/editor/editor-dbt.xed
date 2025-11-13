@@ -20,9 +20,9 @@
             <xed:output i18n="editor.contract.text" />
           </div>
           <div class="form-group">
-            <div class="custom-control custom-switch offset-md-2 pt-2">
-              <input id="iagree_true" type="checkbox" value="true" class="custom-control-input" />
-              <label class="custom-control-label" for="iagree_true">
+            <div class="form-check form-switch offset-md-2 pt-2 pb-3">
+              <input id="iagree_true" type="checkbox" value="true" class="form-check-input" role="switch" />
+              <label class="form-check-label" for="iagree_true">
                 <xed:output i18n="editor.contract.agree" />
               </label>
             </div>
@@ -67,7 +67,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <a tabindex="0" class="btn btn-default info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.oai.help}">
+          <a tabindex="0" class="btn btn-outline-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.oai.help}">
             <i class="fa fa-info"></i>
           </a>
         </div>
@@ -91,7 +91,7 @@
           </select>
         </div>
         <div class="col-md-3">
-          <a tabindex="0" class="btn btn-default info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.itunes-podcast.help}">
+          <a tabindex="0" class="btn btn-outline-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.itunes-podcast.help}">
             <i class="fa fa-info"></i>
           </a>
         </div>

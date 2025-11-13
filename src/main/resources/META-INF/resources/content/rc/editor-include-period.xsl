@@ -6,10 +6,10 @@
   <xsl:template match="/period">
     <buttons>
       <div class="btn-group">
-        <button type="button" class="btn btn-default" onclick="jQuery('#validTo').val('{@lectureEnd}');">
+        <button type="button" class="btn btn-outline-secondary" onclick="jQuery('#validTo').val('{@lectureEnd}');">
           <xsl:value-of select="i18n:translate('component.rc.slot.validTo.labels.lectureEnd')" />
         </button>
-        <button type="button" class="btn btn-default" onclick="jQuery('#validTo').val('{@to}');">
+        <button type="button" class="btn btn-outline-secondary" onclick="jQuery('#validTo').val('{@to}');">
           <xsl:value-of select="i18n:translate('component.rc.slot.validTo.labels.to')" />
         </button>
       </div>

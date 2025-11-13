@@ -165,18 +165,18 @@
 
     <div id="{$id}_wrapper" class="datatable card">
       <div class="card-header">
-        <form id="{$id}_form" class="form-inline d-flex justify-content-between" role="form">
+        <form id="{$id}_form" class="d-flex align-items-center d-flex justify-content-between" role="form">
           <!-- build hidden values -->
           <xsl:call-template name="dataTableFormValues" />
 
           <xsl:choose>
             <xsl:when test="$disableFilter = false()">
             <!-- entries filter -->
-              <div class="form-group flex-fill m-0" id="{$id}_filter">
+              <div class="mb-3 flex-fill m-0" id="{$id}_filter">
                 <label class="d-inline-flex justify-content-start flex-row w-100 align-items-center">
-                  <span class="fa fa-filter mr-1" aria-hidden="true" />
+                  <span class="fa fa-filter me-1" aria-hidden="true" />
                   <xsl:value-of select="i18n:translate(concat($i18nprefix, '.filter'))" />
-                  <input class="form-control ml-2" type="search" name="Filter">
+                  <input class="form-control ms-2" type="search" name="Filter">
                     <xsl:attribute name="value">
                       <xsl:if test="string-length($Filter) &gt; 0">
                         <xsl:value-of select="$Filter" />
@@ -192,8 +192,8 @@
           </xsl:choose>
           
           <!-- numPerPage selector -->
-          <div id="{$id}_length" class="form-group d-none d-md-inline-flex m-0">
-            <select class="form-control custom-select mr-2" name="numPerPage" size="1" onchange="this.form.submit()">
+          <div id="{$id}_length" class="mb-3 d-none d-md-inline-flex m-0">
+            <select class="form-select form-select me-2" name="numPerPage" size="1" onchange="this.form.submit()">
               <xsl:variable name="tokens">
                 <xsl:call-template name="str:tokenize">
                   <xsl:with-param name="string" select="$dataTableNumPerPageList" />
@@ -310,7 +310,7 @@
                       </xsl:with-param>
                     </xsl:call-template>
                   </xsl:attribute>
-                  <i class="{$iconClass} mr-2 sort-icon" />
+                  <i class="{$iconClass} me-2 sort-icon" />
                   <xsl:value-of select="text()" />
                 </a>
               </xsl:when>
@@ -423,7 +423,7 @@
                   </xsl:call-template>
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
@@ -432,7 +432,7 @@
             <xsl:attribute name="class">page-item disabled</xsl:attribute>
             <a class="page-link" tabindex="0" id="{$id}_first">
               <xsl:text disable-output-escaping="yes">&amp;laquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.first'))" />
               </span>
             </a>
@@ -449,7 +449,7 @@
                   </xsl:call-template>
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
@@ -458,7 +458,7 @@
             <xsl:attribute name="class">page-item disabled</xsl:attribute>
             <a class="page-link" tabindex="0" id="{$id}_previous">
               <xsl:text disable-output-escaping="yes">&amp;lsaquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.previous'))" />
               </span>
             </a>
@@ -515,7 +515,7 @@
                   </xsl:call-template>
                 </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
@@ -524,7 +524,7 @@
             <xsl:attribute name="class">page-item disabled</xsl:attribute>
             <a class="page-link" tabindex="0" id="{$id}_next">
               <xsl:text disable-output-escaping="yes">&amp;rsaquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.next'))" />
               </span>
             </a>
@@ -541,7 +541,7 @@
                 </xsl:call-template>
               </xsl:attribute>
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>
@@ -550,7 +550,7 @@
             <xsl:attribute name="class">page-item disabled</xsl:attribute>
             <a class="page-link" tabindex="0" id="{$id}_last">
               <xsl:text disable-output-escaping="yes">&amp;raquo;</xsl:text>
-              <span class="sr-only">
+              <span class="visually-hidden">
                 <xsl:value-of select="i18n:translate(concat($i18nprefix, '.last'))" />
               </span>
             </a>

@@ -42,8 +42,8 @@
               <input placeholder="Suchen im Bestand" name="condQuery" id="searchTerm" type="text"
                      class="form-control"/>
               <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                  <span aria-hidden="true" class="fa fa-search"></span>
+                <button class="btn btn-outline-secondary" type="submit">
+                  <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
                 </button>
               </span>
             </div>
@@ -95,8 +95,8 @@
               <input placeholder="search in inventory" name="condQuery" id="searchTerm" type="text"
                      class="form-control"/>
               <span class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                  <span aria-hidden="true" class="fa fa-search"></span>
+                <button class="btn btn-outline-secondary" type="submit">
+                  <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
                 </button>
               </span>
             </div>

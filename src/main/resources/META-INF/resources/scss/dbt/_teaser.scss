@@ -29,7 +29,7 @@
     text-align: left;
     @include media-breakpoint-up($float-breakpoint) {
       h1 {
-        @include hyphens ();
+        hyphens: auto;
       }
     }
   
@@ -37,7 +37,7 @@
       animation-delay: 0.5s;
     }
  
-    .btn-default {
+    .btn-outline-secondary {
       background-color: #fff;
       border-color: #fff;
       color: #fff;

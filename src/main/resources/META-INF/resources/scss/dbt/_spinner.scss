@@ -36,7 +36,7 @@ $loader-spinner-size: 150px !default;
   .loaded & {
     visibility: hidden;
     opacity: 0;
-    @include transition(all 0.5s 0.1s ease-out);
+    transition: all 0.5s 0.1s ease-out;
   }
 
   .loader {
@@ -48,11 +48,11 @@ $loader-spinner-size: 150px !default;
     width: $loader-spinner-size;
     height: $loader-spinner-size;
     border-radius: 50%;
-    margin-left: -($loader-spinner-size / 2);
-    margin-top: -($loader-spinner-size / 2);
+    margin-left: calc(-($loader-spinner-size / 2));
+    margin-top: calc(-($loader-spinner-size / 2));
     border: 3px solid transparent;
     border-top-color: $primary;
-    @include animation (spin 2s linear infinite);
+    animation: spin 2s linear infinite;
     z-index: 1001;
     &:before {
       content: "";
@@ -64,7 +64,7 @@ $loader-spinner-size: 150px !default;
       border-radius: 50%;
       border: 3px solid transparent;
       border-top-color: lighten($primary, 20%);
-      @include animation (spin 3s linear infinite);
+      animation: spin 3s linear infinite;
     }
 
     &:after {
@@ -77,12 +77,12 @@ $loader-spinner-size: 150px !default;
       border-radius: 50%;
       border: 3px solid transparent;
       border-top-color: lighten($primary, 40%);
-      @include animation (spin 1.5s linear infinite);
+      animation: spin 1.5s linear infinite;
     }
 
     .loaded & {
       opacity: 0;
-      @include transition (all 0.3s ease-out);
+      transition: all 0.3s ease-out;
     }
   }
 }

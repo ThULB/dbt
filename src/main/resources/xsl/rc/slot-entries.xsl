@@ -86,7 +86,7 @@
 
   <xsl:template match="entries" mode="toc">
     <xsl:if test="count(group/entry/headline) &gt; 0">
-      <div class="flex-xl-column mb-2 ml-xl-2 minw-25">
+      <div class="flex-xl-column mb-2 ms-xl-2 minw-25">
         <div class="slot-toc card">
           <h5 class="card-header">
             <xsl:value-of select="i18n:translate('component.rc.slot.toc')" />
@@ -164,13 +164,13 @@
   </xsl:template>
 
   <xsl:template match="entry" mode="view">
-    <div class="media">
+    <div class="d-flex">
       <xsl:apply-templates select="text|webLink|mcrobject|file|opcrecord" mode="view" />
     </div>
   </xsl:template>
 
   <xsl:template match="entry" mode="edit">
-    <div class="media">
+    <div class="d-flex">
       <xsl:apply-templates select="text|webLink|mcrobject|file|opcrecord" mode="edit" />
     </div>
   </xsl:template>
@@ -232,7 +232,7 @@
   </xsl:template>
 
   <xsl:template match="text|webLink|mcrobject|opcrecord" mode="editButtons">
-    <div class="ml-2 entry-buttons">
+    <div class="ms-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
           title="{i18n:translate('component.rc.slot.entry.edit')}"
@@ -253,7 +253,7 @@
   </xsl:template>
 
   <xsl:template match="headline" mode="editButtons">
-    <div class="ml-2 entry-buttons">
+    <div class="ms-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
           title="{i18n:translate('component.rc.slot.entry.edit')}"
@@ -298,7 +298,7 @@
         </p>
       </xsl:when>
       <xsl:when test="@format = 'preformatted'">
-        <pre class="pre-scrollable">
+        <pre class="overflow-y-scroll">
           <code>
             <xsl:value-of select="." />
           </code>
@@ -348,7 +348,7 @@
           <a href="{concat($WebApplicationBaseURL, 'receive/', $objId)}">
             <xsl:value-of select="." />
           </a>
-          <i class="fas fa-info-circle text-info ml-1" data-toggle="tooltip" data-placement="top"
+          <i class="fas fa-info-circle text-info ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
             title="{i18n:translate('component.rc.slot.entry.mcrobject.secured')}" />
         </h3>
       </xsl:when>
@@ -390,8 +390,8 @@
               <xsl:value-of select="@name" />
             </h6>
           </xsl:if>
-          <div class="embed-responsive embed-responsive-16by9">
-            <video id="player-{../@id}" class="video-js embed-responsive-item" controls="" preload="metadata" poster="" data-source-id="{$internalId}">
+          <div class="ratio ratio-16x9">
+            <video id="player-{../@id}" class="video-js " controls="" preload="metadata" poster="" data-source-id="{$internalId}">
               <p class="vjs-no-js">
                 To view this video please enable JavaScript, and consider upgrading
                 to a web browser that
@@ -432,7 +432,7 @@
                   </xsl:otherwise>
                 </xsl:choose>
                 <xsl:if test="$writePermission and $isStreamingSupported">
-                  <i class="fas fa-sync fa-spin text-info ml-2" data-toggle="tooltip" data-placement="top"
+                  <i class="fas fa-sync fa-spin text-info ms-2" data-bs-toggle="tooltip" data-bs-placement="top"
                     title="{i18n:translate('component.rc.slot.entry.file.encoding')}" />
                 </xsl:if>
               </a>
@@ -454,7 +454,7 @@
     <xsl:variable name="hasMediaFiles" select="menc:hasMediaFiles($internalId) = 'true'" />
     <xsl:variable name="hasSMILFile" select="menc:hasSMILFile($internalId) = 'true'" />
 
-    <div class="ml-2 entry-buttons">
+    <div class="ms-2 entry-buttons">
       <div class="btn-group" role="group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
           title="{i18n:translate('component.rc.slot.entry.edit')}"
@@ -462,7 +462,7 @@
           <i class="fas fa-pencil-alt"></i>
         </a>
         <xsl:if test="$hasMediaFiles and $hasSMILFile">
-          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#share-player-{$entryId}"
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#share-player-{$entryId}"
             title="{i18n:translate('component.rc.slot.entry.share')}"
           >
             <i class="fas fa-share"></i>
@@ -484,7 +484,7 @@
   <!-- OPCRecordEntry -->
 
   <xsl:template match="opcrecord" mode="editButtons">
-    <div class="ml-2 entry-buttons">
+    <div class="ms-2 entry-buttons">
       <div class="btn-group">
         <a class="btn btn-primary" href="{$WebApplicationBaseURL}content/rc/entry.xed?entry={local-name(.)}&amp;slotId={$slotId}&amp;entryId={../@id}"
           title="{i18n:translate('component.rc.slot.entry.edit')}"

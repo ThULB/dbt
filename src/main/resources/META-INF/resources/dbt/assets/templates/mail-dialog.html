@@ -3,9 +3,8 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="mail-label">{{'component.rc.mailqueue.dialogTitle' | translate}}</h5>
-				<button type="button" class="close" ng-click="close()" data-dismiss="modal"
+				<button type="button" class="btn-close" ng-click="close()" data-bs-dismiss="modal"
 					aria-label="{{'btn.close' | translate}}">
-					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
 			<div class="modal-body" ng-if="!mail || (mail.to.length == 0 && !mail.loading)">
@@ -39,9 +38,9 @@
 				<div class="mail-content">
 					<ul class="nav nav-tabs" role="tablist" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
 						<li role="presentation" class="nav-item" ng-if="mail.body.html.length != 0"><a class="nav-link active"
-								href="#html" aria-controls="html" role="tab" data-toggle="tab">HTML</a></li>
+								href="#html" aria-controls="html" role="tab" data-bs-toggle="tab">HTML</a></li>
 						<li role="presentation" class="nav-item" ng-if="mail.body.plain.length != 0"><a class="nav-link"
-								href="#plain" aria-controls="plain" role="tab" data-toggle="tab">Text</a></li>
+								href="#plain" aria-controls="plain" role="tab" data-bs-toggle="tab">Text</a></li>
 					</ul>
 					<div class="tab-content" ng-if="mail.body.html.length != 0 || mail.body.plain.length != 0">
 						<div role="tabpanel" class="tab-pane active" id="html" ng-bind-html="mail.body.html"
@@ -54,7 +53,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" ng-click="close()" class="btn btn-primary"
-					data-dismiss="modal">{{'button.close' | translate}}</button>
+				 data-bs-dismiss="modal">{{'button.close' | translate}}</button>
 			</div>
 		</div>
 	</div>

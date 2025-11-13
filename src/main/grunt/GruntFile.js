@@ -1,15 +1,19 @@
 module.exports = function (grunt) {
-	var fs = require("fs");
-	var path = require("path");
+    const fs = require("fs");
+    const path = require("path");
+    const sassImpl = require('sass');
 
-	var getAbsoluteDir = function (dir) {
+	const getAbsoluteDir = function (dir) {
 		return path.isAbsolute(dir) ? dir : path.resolve(process.cwd(), dir);
 	};
 
-	var globalConfig = {
+	const globalConfig = {
 		resourceDirectory: getAbsoluteDir(grunt.option("resourceDirectory")),
 		targetDirectory: getAbsoluteDir(grunt.option("targetDirectory")),
 		assetsDirectory: getAbsoluteDir(grunt.option("assetsDirectory")),
+        mirAssetsDirectory: getAbsoluteDir(grunt.option("mirAssetsDirectory")),
+        sassLoadPath: [getAbsoluteDir(grunt.option("assetsDirectory") + path.sep + '..' + path.sep),
+            getAbsoluteDir(grunt.option("mirAssetsDirectory"))]
 	};
 
 	grunt.initConfig({
@@ -72,7 +76,56 @@ module.exports = function (grunt) {
 					}]
 			}
 		},
-		imagemin: {
+        sass: {
+            options: {
+                implementation: sassImpl,
+                sourceMap: true,
+                sourceMapIncludeSources: true,
+                outputStyle: 'expanded', // lesbar, wird gleich von cssnano minifiziert
+                verbose: true,
+                loadPaths: globalConfig.sassLoadPath
+            },
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: "<%=globalConfig.resourceDirectory%>/scss",
+                    src: ["*.scss"],
+                    dest: "<%=globalConfig.targetDirectory%>/dbt/css/",
+                    ext: ".css"
+                }]
+            }
+        },
+        postcss: {
+            options: {
+                syntax: require('postcss-scss'),
+                map: {
+                    inline: false
+                },
+                processors: [
+                    require('@csstools/postcss-sass')({
+                        sass: sassImpl,
+                        includePaths: globalConfig.sassLoadPath
+                    }),
+                    require('autoprefixer')(),
+                    require('postcss-normalize-whitespace')(),
+                    require('postcss-convert-values')(),
+
+                    require('postcss-combine-media-query')(),
+                    require('postcss-combine-duplicated-selectors')(),
+                    require('cssnano')({
+                        preset: 'advanced'
+                    })
+                ]
+            },
+            files: {
+                expand: true,
+                cwd: "<%=globalConfig.resourceDirectory%>/scss",
+                src: ["*.scss"],
+                dest: "<%=globalConfig.targetDirectory%>/dbt/css/",
+                ext: ".min.css"
+            }
+        },
+        imagemin: {
 			build: {
 				options: {
 					optimizationLevel: 5
@@ -109,6 +162,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks("grunt-contrib-copy");
 	grunt.loadNpmTasks("grunt-contrib-imagemin");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
+    grunt.loadNpmTasks('grunt-sass');
+    grunt.loadNpmTasks('@lodder/grunt-postcss');
 
-	grunt.registerTask("default", ["copy", "imagemin", "uglify"]);
+	grunt.registerTask("default", ["copy", "postcss", "imagemin", "uglify"]);
 };

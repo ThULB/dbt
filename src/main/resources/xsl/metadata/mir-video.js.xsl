@@ -49,7 +49,7 @@
         <div class="card mb-3">
         <!-- I want to make just one request, not for every derivate. So group by derivate id. -->
           <xsl:variable name="optionsFragment">
-            <select id="videoChooser" class="form-control">
+            <select id="videoChooser" class="form-select">
               <xsl:variable name="docContext" select="mycoreobject" />
               <xsl:for-each select="$solrResult/response/lst[@name='grouped']/lst[@name='derivateID']/arr[@name='groups']/lst">
                 <xsl:variable name="currentDerivateID" select="str[@name='groupValue']/text()" />
@@ -77,11 +77,11 @@
 
           <xsl:variable name="playerNode">
             <div class="card-body p-0">
-              <div class="embed-responsive embed-responsive-16by9 mir-player mir-preview">
+              <div class="ratio ratio-16x9 mir-player mir-preview">
                 <xsl:if
                   test="(count($options//optgroup/option[string-length(@data-sources-url) &gt; 0]) &gt; 0) or (count($options//optgroup/option[contains('mp4|smil', @data-file-extension)]) &gt; 0)"
                 >
-                  <video id="player_video" class="video-js embed-responsive-item" controls="" preload="metadata" poster="">
+                  <video id="player_video" class="video-js " controls="" preload="metadata" poster="">
                     <p class="vjs-no-js">
                       To view this video please enable JavaScript, and consider upgrading
                       to a web browser that
@@ -90,7 +90,7 @@
                   </video>
                 </xsl:if>
                 <xsl:if test="$options//optgroup/option[contains('mp3,wav,m4a', @data-file-extension)]">
-                  <audio id="player_audio" class="video-js embed-responsive-item" controls="" preload="metadata" poster="">
+                  <audio id="player_audio" class="video-js " controls="" preload="metadata" poster="">
                     <xsl:attribute name="data-setup">{}</xsl:attribute>
                     <p class="vjs-no-js">
                       To listen to this audio file please enable JavaScript, and consider upgrading
