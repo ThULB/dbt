@@ -473,6 +473,10 @@
       <artifactId>jakarta.activation-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>jakarta.activation</groupId>
+      <artifactId>jakarta.activation-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
@@ -606,11 +610,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-activation_1.1_spec</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.glassfish.jersey.containers</groupId>
       <artifactId>jersey-container-grizzly2-http</artifactId>
       <scope>test</scope>
@@ -726,19 +725,13 @@
       <dependency>
         <groupId>org.eclipse.persistence</groupId>
         <artifactId>org.eclipse.persistence.moxy</artifactId>
-        <version>4.0.7</version>
+        <version>4.0.8</version>
       </dependency>
       <dependency>
         <groupId>org.eclipse.parsson</groupId>
         <artifactId>parsson</artifactId>
         <version>1.1.7</version>
         <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.geronimo.specs</groupId>
-        <artifactId>geronimo-activation_1.1_spec</artifactId>
-        <version>1.1</version>
-        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>
