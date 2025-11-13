@@ -25,7 +25,7 @@
     <connection>scm:git:https://github.com/ThULB/dbt.git</connection>
     <developerConnection>scm:git:https://github.com/ThULB/dbt.git</developerConnection>
     <url>https://github.com/ThULB/dbt/tree/master</url>
-    <tag>HEAD</tag>
+    <tag>2025.06.x</tag>
   </scm>
   <properties>
     <grunt.projectBase>${project.build.directory}/grunt</grunt.projectBase>
