@@ -35,6 +35,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
+import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.jdom2.JDOMException;
@@ -60,6 +61,8 @@ import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
 import org.mycore.solr.MCRSolrCoreManager;
 import org.mycore.solr.MCRSolrUtils;
+import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
+import org.mycore.solr.auth.MCRSolrAuthenticationManager;
 import org.mycore.user2.MCRUser;
 import org.mycore.user2.MCRUserAttribute;
 import org.mycore.user2.MCRUserAttribute_;
@@ -600,7 +603,12 @@ public final class SlotManager {
         query.setStart(start);
         query.setRows(rows);
 
-        final QueryResponse response = client.query(query);
+        QueryRequest request = new QueryRequest(query);
+
+        MCRSolrAuthenticationManager authManager = MCRSolrAuthenticationManager.obtainInstance();
+        authManager.applyAuthentication(request, MCRSolrAuthenticationLevel.SEARCH);
+
+        final QueryResponse response = request.process(client);
 
         SolrDocumentList results = response.getResults();
 
@@ -612,5 +620,6 @@ public final class SlotManager {
 
         return slotList;
     }
+
 
 }
