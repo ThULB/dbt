@@ -32,6 +32,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.MCRStoreTestCase;
 import org.mycore.common.MCRTestCase;
 import org.mycore.common.xml.MCRURIResolver;
 
@@ -44,7 +45,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  *
  * @author René Adler (eagle)
  */
-public class TestRCCalendar extends MCRTestCase {
+public class TestRCCalendar extends MCRStoreTestCase {
 
     private static RCCalendar calendar;
 

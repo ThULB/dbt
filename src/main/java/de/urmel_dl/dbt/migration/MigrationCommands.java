@@ -149,18 +149,6 @@ public class MigrationCommands extends MCRAbstractCommands {
             fireEvent(mcrDerivate, null, MCREvent.EventType.UPDATE.name());
         }
 
-        // add the link to metadata
-        final MCRMetaEnrichedLinkID der = MCRMetaEnrichedLinkIDFactory.obtainInstance()
-            .getDerivateLink(mcrDerivate);
-
-        try {
-            LOGGER.debug("adding Derivate in data store");
-            MCRMetadataManager.addOrUpdateDerivateToObject(objid, der, false);
-        } catch (final Exception e) {
-            // throw final exception
-            throw new MCRPersistenceException("Error while creatlink to MCRObject " + objid + ".", e);
-        }
-
         // create data in IFS
         if (mcrDerivate.getDerivate().getInternals() != null) {
             MCRObjectID derId = mcrDerivate.getId();

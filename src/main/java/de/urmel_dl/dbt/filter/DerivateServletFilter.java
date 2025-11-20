@@ -40,7 +40,7 @@ import org.mycore.datamodel.metadata.MCRObjectID;
 import org.mycore.frontend.MCRFrontendUtil;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class DerivateServletFilter implements Filter {
@@ -80,7 +80,7 @@ public class DerivateServletFilter implements Filter {
                     if (MCRMetadataManager.exists(derivateId)) {
                         String redirectURL = null;
                         if (lp.endsWith(".xml")) {
-                            MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId, 10, TimeUnit.MINUTES);
+                            MCRObjectID objectId = MCRMetadataManager.getObjectId(derivateId);
                             if (objectId != null) {
                                 redirectURL = MCRFrontendUtil.getBaseURL(request) + "receive/"
                                     + objectId.toString();
@@ -94,7 +94,7 @@ public class DerivateServletFilter implements Filter {
                                     .getMainDoc();
                         }
 
-                        if (redirectURL != null && !redirectURL.isEmpty()) {
+                        if (redirectURL != null) {
                             LOGGER.info("Redirect to " + redirectURL);
                             httpServletResponse.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                             httpServletResponse.setHeader("Location", redirectURL);

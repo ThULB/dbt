@@ -57,7 +57,7 @@ import de.urmel_dl.dbt.test.JerseyTestCase;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class TestRCResource extends JerseyTestCase {

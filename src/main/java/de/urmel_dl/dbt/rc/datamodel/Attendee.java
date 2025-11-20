@@ -66,7 +66,7 @@ public class Attendee extends Person implements Serializable {
         this.accKP = MIRAccessKeyManager.getKeyPair(slot.getMCRObjectID());
 
         setName(user.getRealName());
-        setEmail(user.getEMailAddress());
+        setEmail(user.getEMail());
     }
 
     /**

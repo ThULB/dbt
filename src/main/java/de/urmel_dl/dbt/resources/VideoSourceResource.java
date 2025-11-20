@@ -114,8 +114,7 @@ public class VideoSourceResource {
         }
 
         if (MCRAccessManager.checkPermission(derivateId, MCRAccessManager.PERMISSION_READ)) {
-            MCRObjectID mcrobj = MCRMetadataManager.getObjectId(MCRObjectID.getInstance(derivateId), 10,
-                TimeUnit.MINUTES);
+            MCRObjectID mcrobj = MCRMetadataManager.getObjectId(MCRObjectID.getInstance(derivateId));
 
             if (!MCRAccessManager.checkPermission(mcrobj, MCRAccessManager.PERMISSION_READ)) {
                 if (MIRAccessKeyManager.existsKeyPair(mcrobj)) {
