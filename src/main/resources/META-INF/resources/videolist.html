@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video-Liste</title>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+    <script type="application/javascript">
+        let queryBase="https://www.db-thueringen.de/servlets/solr/select"
+        let queryURL=queryBase+"?q=fileName%3A%28*.mp4+*.wmv+*.avi+*.rm+*.rv+*.rmvb+*.f4v+*flv+*.mov%29&fl=id&group=true&group.field=returnId&group.limit=100&facet.field=returnId&facet.mincount=2&facet.limit=20000&wt=json";
+        $(function(){
+            jQuery.getJSON(queryURL, function(result) {
+                let list= [];
+                let docIds= [];
+                let titleBatchSize=300;
+                let facet=result.facet_counts.facet_fields.returnId;
+                for (let i=0;i<facet.length;i+=2) {
+                    let id= facet[i];
+                    docIds.push(id);
+                }
+                let titles={};
+                let titleQueryCount = docIds.length/titleBatchSize;
+                let waitFor=titleQueryCount;
+                for (let i=0; i<titleQueryCount; i++){
+                    jQuery.getJSON(queryBase+"?q=id%3A%28"+docIds.slice(i*titleBatchSize, (i+1)*titleBatchSize).join("+")+"%29&fl=id,search_result_link_text&wt=json&rows="+titleBatchSize, function(data){
+                        let docs=data.response.docs;
+                        docs.forEach(function(doc) {
+                            titles[doc.id]=doc.search_result_link_text;
+                        })
+                        if (--waitFor <= 0) {
+                            for (let i=0;i<facet.length;i+=2) {
+                                let key= facet[i];
+                                let value= facet[i+1];
+                                let title=titles[key];
+                                if (title == null){
+                                    title=key;
+                                }
+                                let link=$("<li>").append($("<a>").attr("href", "https://www.db-thueringen.de/receive/"+key).text(title)).append(" ("+value+")");
+                                list.push(link);
+                            }
+                            $("#count").text(list.length+ " Dokumente");
+                            $("#results").append($("<ul>").append(list));
+                        }
+                    })
+                }
+            })
+        })
+    </script>
+</head>
+<body>
+<h1>Liste von Video-Dokumenten mit mehr als einer Video-Datei</h1>
+<h2 id="count" ></h2>
+<div id="results"></div>
+</body>
+</html>

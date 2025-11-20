@@ -33,7 +33,7 @@ import de.urmel_dl.dbt.opc.datamodel.pica.Result;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class TestOPCConnector extends MCRTestCase {

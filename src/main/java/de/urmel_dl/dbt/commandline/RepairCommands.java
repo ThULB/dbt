@@ -40,6 +40,7 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.datamodel.common.MCRXMLMetadataManager;
 import org.mycore.datamodel.metadata.MCRDerivate;
+import org.mycore.datamodel.metadata.MCRExpandedObject;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.datamodel.metadata.MCRObjectID;
@@ -86,7 +87,7 @@ public class RepairCommands extends MCRAbstractCommands {
     public static void setMainFile() {
         TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
         ids.forEach(id -> {
-            MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+            MCRExpandedObject obj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(id));
             Optional.ofNullable(obj.getStructure().getDerivates())
                 .flatMap(ol -> ol.stream().filter(Objects::nonNull).findFirst())
                 .ifPresent(d -> {

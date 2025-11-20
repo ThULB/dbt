@@ -35,7 +35,7 @@
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir-layout-assets>${project.build.directory}/mir-layout-assets</mir-layout-assets>
-    <mir.version>2025.06.1-SNAPSHOT</mir.version>
+    <mir.version>2025.12.0-SNAPSHOT</mir.version>
     <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
@@ -117,6 +117,28 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- TODO: Replace JUnit4 with JUnit5 -->
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-testCompile</id>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+            <phase>test-compile</phase>
+            <configuration>
+              <showDeprecation>true</showDeprecation>
+              <showWarnings>true</showWarnings>
+              <failOnWarning>false</failOnWarning>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -457,6 +479,18 @@
       <artifactId>java-jwt</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
     </dependency>
@@ -467,6 +501,10 @@
     <dependency>
       <groupId>com.ibm.icu</groupId>
       <artifactId>icu4j</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations-jakarta</artifactId>
     </dependency>
     <dependency>
       <groupId>jakarta.activation</groupId>
@@ -503,6 +541,10 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -570,6 +612,10 @@
     <dependency>
       <groupId>org.mycore</groupId>
       <artifactId>mycore-pi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-restapi</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mycore</groupId>
@@ -643,6 +689,11 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
       <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mycore</groupId>
+      <artifactId>mycore-junit4</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
