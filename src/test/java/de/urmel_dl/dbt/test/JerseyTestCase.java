@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
 
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.ClassRule;
@@ -40,9 +42,10 @@ import org.mycore.common.config.MCRConfigurationBase;
 import org.mycore.common.config.MCRConfigurationLoader;
 import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.common.config.MCRRuntimeComponentDetector;
+import org.mycore.datamodel.niofs.utils.MCRRecursiveDeleter;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
 public class JerseyTestCase extends JerseyTest {
@@ -68,6 +71,14 @@ public class JerseyTestCase extends JerseyTest {
             System.getProperties().getProperty("MCR.AppName"));
         System.out.println("Creating config directory: " + configDir);
         configDir.mkdirs();
+    }
+
+    @AfterClass
+    public static void clearBaseDir() throws IOException {
+        File configDir = new File(System.getProperties().getProperty("MCR.Home"),
+            System.getProperties().getProperty("MCR.AppName"));
+        //delete configDir recursively
+        Files.walkFileTree(configDir.toPath(), new MCRRecursiveDeleter());
     }
 
     /**
