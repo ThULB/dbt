@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Optional;
 
+import de.urmel_dl.dbt.rest.utils.EntityMessageBodyBinding;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -45,9 +46,10 @@ import de.urmel_dl.dbt.rc.persistency.SlotManager;
 /**
  * The RC API Resource.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
+@EntityMessageBodyBinding
 @Path("rc")
 public class RCResource {
 

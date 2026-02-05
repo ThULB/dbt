@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import jakarta.annotation.Priority;
+import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
@@ -38,6 +40,8 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  *
  */
 @Provider
+@EntityMessageBodyBinding
+@Priority(Priorities.USER)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class EntityMessageBodyWriter<T> implements MessageBodyWriter<T> {
 
@@ -66,7 +70,7 @@ public class EntityMessageBodyWriter<T> implements MessageBodyWriter<T> {
     public void writeTo(T t, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
         MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
         throws IOException, WebApplicationException {
-        if (mediaType.equals(MediaType.APPLICATION_JSON_TYPE)) {
+        if (MediaType.APPLICATION_JSON_TYPE.isCompatible(mediaType)) {
             new EntityFactory<>(t).toJSON(entityStream);
             return;
         }
