@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import jakarta.annotation.Priority;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -39,6 +41,8 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @param <T> the generic type
  */
 @Provider
+@EntityMessageBodyBinding
+@Priority(Priorities.USER)
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class EntityMessageBodyReader<T> implements MessageBodyReader<T> {
 
