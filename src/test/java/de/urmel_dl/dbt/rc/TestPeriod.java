@@ -17,17 +17,15 @@
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.IOException;
 import java.util.Date;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Test;
-import org.mycore.common.MCRTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mycore.test.MyCoReTest;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.utils.DateUtils;
@@ -36,10 +34,11 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 /**
  * The {@link Period} test cases.
  *
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
-public class TestPeriod extends MCRTestCase {
+@MyCoReTest
+public class TestPeriod {
 
     @Test
     public void testPeriod() throws IOException {
@@ -48,17 +47,17 @@ public class TestPeriod extends MCRTestCase {
         period.setFrom("01.10.");
         period.setTo("31.03.");
 
-        assertEquals("01.10.", period.getFrom());
-        assertEquals("31.03.", period.getTo());
+        Assertions.assertEquals("01.10.", period.getFrom());
+        Assertions.assertEquals("31.03.", period.getTo());
 
         period.setSettableFrom("21.07.");
         period.setSettableTo("02.02.");
 
-        assertEquals("21.07.", period.getSettableFrom());
-        assertEquals("02.02.", period.getSettableTo());
+        Assertions.assertEquals("21.07.", period.getSettableFrom());
+        Assertions.assertEquals("02.02.", period.getSettableTo());
 
         period.setLectureEnd("02.03.");
-        assertEquals("02.03.", period.getLectureEnd());
+        Assertions.assertEquals("02.03.", period.getLectureEnd());
     }
 
     @Test
@@ -75,17 +74,17 @@ public class TestPeriod extends MCRTestCase {
         period.setFrom("01.10.");
         period.setTo("31.03.");
 
-        assertEquals("01.10." + year, period.getFrom());
-        assertEquals("31.03." + (year + 1), period.getTo());
+        Assertions.assertEquals("01.10." + year, period.getFrom());
+        Assertions.assertEquals("31.03." + (year + 1), period.getTo());
 
         period.setSettableFrom("21.07.");
         period.setSettableTo("02.02.");
 
-        assertEquals("21.07." + year, period.getSettableFrom());
-        assertEquals("02.02." + (year + 1), period.getSettableTo());
+        Assertions.assertEquals("21.07." + year, period.getSettableFrom());
+        Assertions.assertEquals("02.02." + (year + 1), period.getSettableTo());
 
         period.setLectureEnd("02.03.");
-        assertEquals("02.03." + (year + 1), period.getLectureEnd());
+        Assertions.assertEquals("02.03." + (year + 1), period.getLectureEnd());
     }
 
     @Test
@@ -102,17 +101,17 @@ public class TestPeriod extends MCRTestCase {
         period.setFrom("01.04.");
         period.setTo("30.09.");
 
-        assertEquals("01.04." + year, period.getFrom());
-        assertEquals("30.09." + year, period.getTo());
+        Assertions.assertEquals("01.04." + year, period.getFrom());
+        Assertions.assertEquals("30.09." + year, period.getTo());
 
         period.setSettableFrom("03.02.");
         period.setSettableTo("20.07.");
 
-        assertEquals("03.02." + year, period.getSettableFrom());
-        assertEquals("20.07." + year, period.getSettableTo());
+        Assertions.assertEquals("03.02." + year, period.getSettableFrom());
+        Assertions.assertEquals("20.07." + year, period.getSettableTo());
 
         period.setLectureEnd("03.08.");
-        assertEquals("03.08." + year, period.getLectureEnd());
+        Assertions.assertEquals("03.08." + year, period.getLectureEnd());
     }
 
     @Test
@@ -120,10 +119,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setFrom("01.10.");
-        assertEquals("01.10.", period.getFrom());
+        Assertions.assertEquals("01.10.", period.getFrom());
 
         period.setFrom("01.12.");
-        assertEquals("01.12.", period.getFrom());
+        Assertions.assertEquals("01.12.", period.getFrom());
     }
 
     @Test
@@ -131,10 +130,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setFrom("01.10.2014");
-        assertEquals("01.10.", period.getFrom());
+        Assertions.assertEquals("01.10.", period.getFrom());
 
         period.setFrom("01.12.2014");
-        assertEquals("01.12.", period.getFrom());
+        Assertions.assertEquals("01.12.", period.getFrom());
     }
 
     @Test
@@ -142,10 +141,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setTo("01.10.");
-        assertEquals("01.10.", period.getTo());
+        Assertions.assertEquals("01.10.", period.getTo());
 
         period.setTo("01.12.");
-        assertEquals("01.12.", period.getTo());
+        Assertions.assertEquals("01.12.", period.getTo());
     }
 
     @Test
@@ -153,10 +152,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setTo("01.10.2014");
-        assertEquals("01.10.", period.getTo());
+        Assertions.assertEquals("01.10.", period.getTo());
 
         period.setTo("01.12.2014");
-        assertEquals("01.12.", period.getTo());
+        Assertions.assertEquals("01.12.", period.getTo());
     }
 
     @Test
@@ -165,11 +164,11 @@ public class TestPeriod extends MCRTestCase {
 
         period.setSettableFrom("01.10.");
         period.setSettableTo("02.10.");
-        assertEquals("01.10.", period.getSettableFrom());
+        Assertions.assertEquals("01.10.", period.getSettableFrom());
 
         period.setSettableFrom("01.12.");
         period.setSettableTo("02.12.");
-        assertEquals("01.12.", period.getSettableFrom());
+        Assertions.assertEquals("01.12.", period.getSettableFrom());
     }
 
     @Test
@@ -178,11 +177,11 @@ public class TestPeriod extends MCRTestCase {
 
         period.setSettableFrom("01.10.2014");
         period.setSettableTo("02.10.2014");
-        assertEquals("01.10.", period.getSettableFrom());
+        Assertions.assertEquals("01.10.", period.getSettableFrom());
 
         period.setSettableFrom("01.12.2014");
         period.setSettableTo("02.12.2014");
-        assertEquals("01.12.", period.getSettableFrom());
+        Assertions.assertEquals("01.12.", period.getSettableFrom());
     }
 
     @Test
@@ -191,11 +190,11 @@ public class TestPeriod extends MCRTestCase {
 
         period.setSettableFrom("01.10.");
         period.setSettableTo("02.10.");
-        assertEquals("02.10.", period.getSettableTo());
+        Assertions.assertEquals("02.10.", period.getSettableTo());
 
         period.setSettableFrom("30.11.");
         period.setSettableTo("01.12.");
-        assertEquals("01.12.", period.getSettableTo());
+        Assertions.assertEquals("01.12.", period.getSettableTo());
     }
 
     @Test
@@ -204,11 +203,11 @@ public class TestPeriod extends MCRTestCase {
 
         period.setSettableFrom("01.10.2014");
         period.setSettableTo("01.10.2014");
-        assertEquals("01.10.", period.getSettableTo());
+        Assertions.assertEquals("01.10.", period.getSettableTo());
 
         period.setSettableFrom("30.11.2014");
         period.setSettableTo("01.12.2014");
-        assertEquals("01.12.", period.getSettableTo());
+        Assertions.assertEquals("01.12.", period.getSettableTo());
     }
 
     @Test
@@ -216,10 +215,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setLectureEnd("01.10.");
-        assertEquals("01.10.", period.getLectureEnd());
+        Assertions.assertEquals("01.10.", period.getLectureEnd());
 
         period.setLectureEnd("01.12.");
-        assertEquals("01.12.", period.getLectureEnd());
+        Assertions.assertEquals("01.12.", period.getLectureEnd());
     }
 
     @Test
@@ -227,10 +226,10 @@ public class TestPeriod extends MCRTestCase {
         Period period = new Period();
 
         period.setLectureEnd("01.10.2014");
-        assertEquals("01.10.", period.getLectureEnd());
+        Assertions.assertEquals("01.10.", period.getLectureEnd());
 
         period.setLectureEnd("01.12.2014");
-        assertEquals("01.12.", period.getLectureEnd());
+        Assertions.assertEquals("01.12.", period.getLectureEnd());
     }
 
     @Test
@@ -248,7 +247,7 @@ public class TestPeriod extends MCRTestCase {
 
         Document p = new EntityFactory<>(period).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
     }
 
     @Test
@@ -274,6 +273,6 @@ public class TestPeriod extends MCRTestCase {
 
         Document p = new EntityFactory<>(period).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
     }
 }

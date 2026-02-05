@@ -17,17 +17,13 @@
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Test;
-import org.mycore.common.MCRTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mycore.test.MyCoReTest;
 
 import de.urmel_dl.dbt.opc.OPCConnector;
 import de.urmel_dl.dbt.rc.datamodel.slot.Slot;
@@ -42,10 +38,11 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.WebLinkEntry;
 import de.urmel_dl.dbt.utils.EntityFactory;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
-public class TestSlotEntry extends MCRTestCase {
+@MyCoReTest
+public class TestSlotEntry {
 
     private SlotEntry<HeadlineEntry> newHeadLineEntry() {
         SlotEntry<HeadlineEntry> slotEntry = new SlotEntry<>();
@@ -137,7 +134,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testHeadlineEntry() throws IOException {
         SlotEntry<HeadlineEntry> slotEntry = newHeadLineEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -145,7 +142,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testMCRObjectEntry() throws IOException {
         SlotEntry<MCRObjectEntry> slotEntry = newMCRObjectEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -153,7 +150,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testTextEntryPlain() throws IOException {
         SlotEntry<TextEntry> slotEntry = newPlainTextEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -161,7 +158,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testTextEntryHTML() throws IOException {
         SlotEntry<TextEntry> slotEntry = newHtmlTextEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -169,7 +166,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testWebLinkEntry() throws IOException {
         SlotEntry<WebLinkEntry> slotEntry = newWebLinkEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -177,7 +174,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testOPCRecordEntry() throws Exception {
         SlotEntry<OPCRecordEntry> slotEntry = newOPCRecordEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -185,7 +182,7 @@ public class TestSlotEntry extends MCRTestCase {
     @Test
     public void testFileEntry() throws IOException {
         SlotEntry<FileEntry> slotEntry = newFileEntry();
-        assertNotNull(slotEntry);
+        Assertions.assertNotNull(slotEntry);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(slotEntry).toDocument(), System.out);
     }
@@ -202,7 +199,7 @@ public class TestSlotEntry extends MCRTestCase {
         slot.addEntry(newOPCRecordEntry());
         slot.addEntry(newFileEntry());
 
-        assertEquals(7, slot.getEntries().size());
+        Assertions.assertEquals(7, slot.getEntries().size());
     }
 
     @Test
@@ -217,13 +214,13 @@ public class TestSlotEntry extends MCRTestCase {
 
         slot.addEntry(newWebLinkEntry());
 
-        assertNotNull(pText.getId());
-        assertEquals(4, slot.getEntries().size());
+        Assertions.assertNotNull(pText.getId());
+        Assertions.assertEquals(4, slot.getEntries().size());
 
         SlotEntry<?> hText = newHtmlTextEntry();
         slot.addEntry(hText, pText.getId());
 
-        assertEquals(5, slot.getEntries().size());
+        Assertions.assertEquals(5, slot.getEntries().size());
 
         int iPT = -1;
         int iHT = -1;
@@ -236,16 +233,16 @@ public class TestSlotEntry extends MCRTestCase {
             }
         }
 
-        assertNotEquals(-1, iPT);
-        assertNotEquals(-1, iHT);
+        Assertions.assertNotEquals(-1, iPT);
+        Assertions.assertNotEquals(-1, iHT);
 
-        assertTrue(iPT < iHT);
+        Assertions.assertTrue(iPT < iHT);
     }
 
     @Test
     public void testSlotEntryTypes() throws IOException {
         SlotEntryTypes entryTypes = SlotEntryTypes.instance();
-        assertNotNull(entryTypes);
+        Assertions.assertNotNull(entryTypes);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(entryTypes).toDocument(), System.out);
     }

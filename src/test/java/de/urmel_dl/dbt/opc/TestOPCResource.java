@@ -18,9 +18,6 @@
  */
 package de.urmel_dl.dbt.opc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -33,8 +30,11 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mycore.common.MCRTestConfiguration;
+import org.mycore.common.MCRTestProperty;
 import org.mycore.common.config.MCRConfiguration2;
 
 import de.urmel_dl.dbt.opc.datamodel.Catalogues;
@@ -51,9 +51,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
+@MCRTestConfiguration(
+    properties = {
+        @MCRTestProperty(key="DBT.OPCResource.Marshaller.eclipselink.json.include-root", string="true")
+    }
+)
 public class TestOPCResource extends JerseyTestCase {
 
     private WebTarget webResource;
@@ -63,11 +68,9 @@ public class TestOPCResource extends JerseyTestCase {
         return new ResourceConfig(OPCResource.class, EntityMessageBodyWriter.class);
     }
 
-    @Override
-    @Before()
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
-        MCRConfiguration2.set("DBT.EntityFactory.Marshaller.eclipselink.json.include-root", "true");
         webResource = target();
     }
 
@@ -75,10 +78,10 @@ public class TestOPCResource extends JerseyTestCase {
     public void testCatalogues() {
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             String response = webResource.path("opc/catalogues").request(mt).get(String.class);
-            assertNotNull(response);
+            Assertions.assertNotNull(response);
 
             Catalogues catalogues = new EntityFactory<>(Catalogues.class).unmarshalByMediaType(response, mt);
-            assertNotNull(catalogues);
+            Assertions.assertNotNull(catalogues);
         });
     }
 
@@ -87,10 +90,10 @@ public class TestOPCResource extends JerseyTestCase {
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 String response = webResource.path("opc/ikts" + cat).request(mt).get(String.class);
-                assertNotNull(response);
+                Assertions.assertNotNull(response);
 
                 IKTList ikts = new EntityFactory<>(IKTList.class).unmarshalByMediaType(response, mt);
-                assertNotNull(ikts);
+                Assertions.assertNotNull(ikts);
             });
         });
     }
@@ -102,7 +105,7 @@ public class TestOPCResource extends JerseyTestCase {
                 Stream.of("", "/4").forEach(ikt -> {
                     String response = webResource.path("opc/search" + cat + ikt + "/duden").request(mt)
                         .get(String.class);
-                    assertNotNull(response);
+                    Assertions.assertNotNull(response);
                 });
             });
         });
@@ -114,11 +117,11 @@ public class TestOPCResource extends JerseyTestCase {
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 String response = webResource.path("opc/record" + cat + "/" + PPN).request(mt).get(String.class);
-                assertNotNull(response);
+                Assertions.assertNotNull(response);
 
                 Record record = new EntityFactory<>(Record.class).unmarshalByMediaType(response, mt);
-                assertNotNull("Could not transform response to record: " + response, record);
-                assertEquals(PPN, record.getPPN());
+                Assertions.assertNotNull(record, "Could not transform response to record: " + response);
+                Assertions.assertEquals(PPN, record.getPPN());
             });
         });
     }
@@ -129,7 +132,7 @@ public class TestOPCResource extends JerseyTestCase {
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 Response response = webResource.path("opc/record" + cat + "/" + PPN).request(mt).head();
-                assertEquals(204, response.getStatus());
+                Assertions.assertEquals(204, response.getStatus());
             });
         });
     }
@@ -140,7 +143,7 @@ public class TestOPCResource extends JerseyTestCase {
         Stream.of(MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML).forEach(mt -> {
             Stream.of("", "/DE-27").forEach(cat -> {
                 String response = webResource.path("opc/family" + cat + "/" + PPN).request(mt).get(String.class);
-                assertNotNull(response);
+                Assertions.assertNotNull(response);
             });
         });
     }
@@ -157,7 +160,7 @@ public class TestOPCResource extends JerseyTestCase {
                     } catch (WebApplicationException e) {
                         LogManager.getLogger().error(e.getResponse().readEntity(String.class));
                     }
-                    assertNotNull(response);
+                    Assertions.assertNotNull(response);
 
                     try {
                         SAXBuilder builder = new SAXBuilder();

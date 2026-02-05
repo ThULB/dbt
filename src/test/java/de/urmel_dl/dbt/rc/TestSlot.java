@@ -17,11 +17,6 @@
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,17 +29,15 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mycore.access.MCRAccessException;
-import org.mycore.common.MCRJPATestCase;
 import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
-import org.mycore.common.config.MCRConfiguration2;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -55,6 +48,10 @@ import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.ifs2.MCRStoreCenter;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
+import org.mycore.test.MCRJPAExtension;
+import org.mycore.test.MCRJPATestHelper;
+import org.mycore.test.MCRMetadataExtension;
+import org.mycore.test.MyCoReTest;
 import org.xml.sax.SAXException;
 
 import de.urmel_dl.dbt.rc.datamodel.Lecturer;
@@ -76,21 +73,17 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @author René Adler (eagle)
  *
  */
-public class TestSlot extends MCRJPATestCase {
+@MyCoReTest
+@ExtendWith(MCRJPAExtension.class)
+@ExtendWith(MCRMetadataExtension.class)
+public class TestSlot {
 
     private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
 
     private static SlotManager SLOT_MANAGER;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
-    @Override
-    @Before()
+    @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
-        MCRConfiguration2.set("MCR.datadir", folder.newFolder("data").getAbsolutePath());
-
         MCRSession session = MCRSessionMgr.getCurrentSession();
         session.setCurrentIP("127.0.0.1");
         session.setUserInformation(MCRSystemUserInformation.SUPER_USER);
@@ -128,7 +121,7 @@ public class TestSlot extends MCRJPATestCase {
         cal.add(Calendar.DAY_OF_MONTH, 7);
         slot.addWarningDate(cal.getTime());
 
-        assertEquals(1, slot.getWarningDates().get(1).compareTo(slot.getWarningDates().get(0)));
+        Assertions.assertEquals(1, slot.getWarningDates().get(1).compareTo(slot.getWarningDates().get(0)));
 
         Lecturer lecturer = new Lecturer();
         lecturer.setName("Mustermann, Max");
@@ -146,7 +139,7 @@ public class TestSlot extends MCRJPATestCase {
 
         slot.addEntry(slotEntry);
 
-        assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), slot.getLocation());
+        Assertions.assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), slot.getLocation());
 
         Document xml = new EntityFactory<>(slot).toDocument();
 
@@ -154,8 +147,8 @@ public class TestSlot extends MCRJPATestCase {
 
         Slot transSlot = new EntityFactory<>(Slot.class).fromElement(xml.getRootElement());
 
-        assertEquals(slot.getReadKey(), transSlot.getReadKey());
-        assertEquals(slot.getWriteKey(), transSlot.getWriteKey());
+        Assertions.assertEquals(slot.getReadKey(), transSlot.getReadKey());
+        Assertions.assertEquals(slot.getWriteKey(), transSlot.getWriteKey());
     }
 
     @Test
@@ -183,7 +176,7 @@ public class TestSlot extends MCRJPATestCase {
         Document xSL = new EntityFactory<>(slotList).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(xSL, System.out);
 
-        assertNotNull(xSL);
+        Assertions.assertNotNull(xSL);
     }
 
     @Test
@@ -218,12 +211,12 @@ public class TestSlot extends MCRJPATestCase {
 
         SLOT_MANAGER.addSlot(slot2);
 
-        assertEquals(2, SLOT_MANAGER.getSlotList().getSlots().size());
+        Assertions.assertEquals(2, SLOT_MANAGER.getSlotList().getSlots().size());
 
         SlotList activeSlots = SLOT_MANAGER.getSlotList().getActiveSlots();
 
-        assertEquals(1, activeSlots.getSlots().size());
-        assertNull(activeSlots.getSlots().getFirst().getEntries());
+        Assertions.assertEquals(1, activeSlots.getSlots().size());
+        Assertions.assertNull(activeSlots.getSlots().getFirst().getEntries());
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(activeSlots).toDocument(), System.out);
     }
@@ -238,9 +231,11 @@ public class TestSlot extends MCRJPATestCase {
         slot2.setStatus(Status.FREE);
         SLOT_MANAGER.addSlot(slot2);
 
-        assertEquals(3, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01")));
+        Assertions.assertEquals(3,
+            SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01")));
 
-        assertEquals(1, SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "0027.01.01")));
+        Assertions.assertEquals(1,
+            SLOT_MANAGER.getNextFreeId(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "0027.01.01")));
     }
 
     @Test
@@ -255,8 +250,8 @@ public class TestSlot extends MCRJPATestCase {
 
         Slot found = SLOT_MANAGER.getSlotById("3400.01.01.0001");
 
-        assertNotNull(found);
-        assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), found.getLocation());
+        Assertions.assertNotNull(found);
+        Assertions.assertEquals(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, "3400.01.01"), found.getLocation());
     }
 
     @Test
@@ -267,17 +262,17 @@ public class TestSlot extends MCRJPATestCase {
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
-        assertNotNull(slot.getMCRObjectID());
+        Assertions.assertNotNull(slot.getMCRObjectID());
 
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(slot.getMCRObjectID());
 
-        assertNotNull(obj);
+        Assertions.assertNotNull(obj);
 
         Slot ts = SlotWrapper.unwrapMCRObject(obj);
 
-        assertEquals(slot.getSlotId(), ts.getSlotId());
+        Assertions.assertEquals(slot.getSlotId(), ts.getSlotId());
 
-        assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
+        Assertions.assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
     }
 
     @Test
@@ -288,17 +283,17 @@ public class TestSlot extends MCRJPATestCase {
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
-        assertNotNull(slot.getMCRObjectID());
+        Assertions.assertNotNull(slot.getMCRObjectID());
 
         MCRObject obj = MCRMetadataManager.retrieveMCRObject(slot.getMCRObjectID());
 
-        assertNotNull(obj);
+        Assertions.assertNotNull(obj);
 
         Slot ts = SlotWrapper.unwrapMCRObject(obj);
 
-        assertEquals(slot.getSlotId(), ts.getSlotId());
+        Assertions.assertEquals(slot.getSlotId(), ts.getSlotId());
 
-        assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
+        Assertions.assertEquals(slot.getEntries().getFirst().getId(), ts.getEntries().getFirst().getId());
     }
 
     @Test
@@ -309,11 +304,11 @@ public class TestSlot extends MCRJPATestCase {
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
-        startNewTransaction();
+        MCRJPATestHelper.startNewTransaction();
 
         SLOT_MANAGER.delete(slot);
 
-        assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
+        Assertions.assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
     }
 
     @Test
@@ -324,11 +319,11 @@ public class TestSlot extends MCRJPATestCase {
 
         SLOT_MANAGER.saveOrUpdate(slot);
 
-        startNewTransaction();
+        MCRJPATestHelper.startNewTransaction();
 
         SLOT_MANAGER.delete(slot);
 
-        assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
+        Assertions.assertNull(SLOT_MANAGER.getSlotById(slot.getSlotId()));
     }
 
     @Test
@@ -345,14 +340,14 @@ public class TestSlot extends MCRJPATestCase {
         SLOT_MANAGER.addSlot(slot2);
         SLOT_MANAGER.saveOrUpdate(slot2);
 
-        assertNotNull(slot1.getMCRObjectID());
-        assertNotNull(slot2.getMCRObjectID());
+        Assertions.assertNotNull(slot1.getMCRObjectID());
+        Assertions.assertNotNull(slot2.getMCRObjectID());
 
         SLOT_MANAGER.getSlotList().getSlots().clear();
-        assertEquals(0, SLOT_MANAGER.getSlotList().getSlots().size());
+        Assertions.assertEquals(0, SLOT_MANAGER.getSlotList().getSlots().size());
 
         SLOT_MANAGER.loadList();
-        assertEquals(2, SLOT_MANAGER.getSlotList().getSlots().size());
+        Assertions.assertEquals(2, SLOT_MANAGER.getSlotList().getSlots().size());
     }
 
     @Test
@@ -371,13 +366,14 @@ public class TestSlot extends MCRJPATestCase {
 
         SlotEntry<?> entry = slot.getEntryById(slotEntry.getId());
 
-        assertEquals(slotEntry.getId(), entry.getId());
+        Assertions.assertEquals(slotEntry.getId(), entry.getId());
 
         ((HeadlineEntry) entry.getEntry()).setText("Neue Überschrift");
 
         slot.setEntry(entry);
 
-        assertEquals("Neue Überschrift", ((HeadlineEntry) slot.getEntryById(slotEntry.getId()).getEntry()).getText());
+        Assertions.assertEquals("Neue Überschrift",
+            ((HeadlineEntry) slot.getEntryById(slotEntry.getId()).getEntry()).getText());
     }
 
     @Test
@@ -396,11 +392,11 @@ public class TestSlot extends MCRJPATestCase {
 
         SlotEntry<?> entry = slot.getEntryById(slotEntry.getId());
 
-        assertEquals(slotEntry.getId(), entry.getId());
-        assertEquals(1, slot.getEntries().size());
+        Assertions.assertEquals(slotEntry.getId(), entry.getId());
+        Assertions.assertEquals(1, slot.getEntries().size());
 
-        assertTrue("slot entry remove", slot.removeEntry(slotEntry));
-        assertEquals(0, slot.getEntries().size());
+        Assertions.assertTrue(slot.removeEntry(slotEntry), "slot entry remove");
+        Assertions.assertEquals(0, slot.getEntries().size());
     }
 
     private Slot activeSlot() {

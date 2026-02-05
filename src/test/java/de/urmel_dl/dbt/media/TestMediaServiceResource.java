@@ -18,8 +18,8 @@
  */
 package de.urmel_dl.dbt.media;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import org.glassfish.jersey.server.ResourceConfig;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mycore.common.config.MCRConfiguration2;
 
 import de.urmel_dl.dbt.media.entity.ConverterJob;
@@ -59,7 +59,7 @@ public class TestMediaServiceResource extends JerseyTestCase {
     }
 
     @Override
-    @Before()
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 
