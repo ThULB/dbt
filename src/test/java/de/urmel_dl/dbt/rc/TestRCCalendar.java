@@ -17,11 +17,6 @@
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
@@ -30,10 +25,11 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Before;
-import org.junit.Test;
-import org.mycore.common.MCRTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.test.MyCoReTest;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
@@ -44,15 +40,13 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  *
  * @author René Adler (eagle)
  */
-public class TestRCCalendar extends MCRTestCase {
+@MyCoReTest
+public class TestRCCalendar {
 
     private static RCCalendar calendar;
 
-    @Override
-    @Before()
+    @BeforeEach
     public void setUp() throws Exception {
-        super.setUp();
-
         if (calendar == null) {
             calendar = RCCalendar.instance();
         }
@@ -62,34 +56,34 @@ public class TestRCCalendar extends MCRTestCase {
     public void testRCCalendarExport() throws IOException {
         Document cal = new EntityFactory<>(calendar).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(cal, System.out);
-        assertNotNull(cal);
+        Assertions.assertNotNull(cal);
     }
 
     @Test
     public void testRCCalendarGetPeriod() throws IOException {
         Period period = RCCalendar.getPeriod("2700", new Date());
-        assertNotNull(period);
+        Assertions.assertNotNull(period);
 
         Document p = new EntityFactory<>(period).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
     }
 
     @Test
     public void testRCCalendarGetSettable() throws IOException {
         Period period = RCCalendar.getPeriodBySettable("2700", new Date());
-        assertNotNull(period);
+        Assertions.assertNotNull(period);
 
         Document p = new EntityFactory<>(period).toDocument();
         new XMLOutputter(Format.getPrettyFormat()).output(p, System.out);
-        assertNotNull(p);
+        Assertions.assertNotNull(p);
     }
 
     @Test
     public void testPeriodResolverSingle() throws IOException {
         Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
-        assertNotNull(input);
+        Assertions.assertNotNull(input);
     }
 
     @Test
@@ -97,7 +91,8 @@ public class TestRCCalendar extends MCRTestCase {
         Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertTrue(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
+        Assertions.assertTrue(
+            Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
     }
 
     @Test
@@ -106,7 +101,8 @@ public class TestRCCalendar extends MCRTestCase {
             .resolve("period:areacode=0&date=31.03.2015&onlySettable=false&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertFalse(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
+        Assertions.assertFalse(
+            Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
     }
 
     @Test
@@ -120,7 +116,7 @@ public class TestRCCalendar extends MCRTestCase {
             .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertEquals(2, input.getChildren("period").size());
+        Assertions.assertEquals(2, input.getChildren("period").size());
     }
 
     @Test
@@ -134,8 +130,9 @@ public class TestRCCalendar extends MCRTestCase {
             .resolve("period:areacode=0&date=" + p.getSettableFrom() + "&list=true");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertTrue(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
-        assertEquals(2, input.getChildren("period").size());
+        Assertions.assertTrue(
+            Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
+        Assertions.assertEquals(2, input.getChildren("period").size());
     }
 
     @Test
@@ -143,7 +140,7 @@ public class TestRCCalendar extends MCRTestCase {
         Element input = MCRURIResolver.obtainInstance().resolve("period:areacode=0&date=now&list=true&numnext=2");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertEquals(3, input.getChildren("period").size());
+        Assertions.assertEquals(3, input.getChildren("period").size());
     }
 
     @Test
@@ -152,7 +149,8 @@ public class TestRCCalendar extends MCRTestCase {
             .resolve("period:areacode=0&date=30.09.2014&list=true&onlySettable=false&numnext=1");
         new XMLOutputter(Format.getPrettyFormat()).output(input, System.out);
 
-        assertFalse(Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
+        Assertions.assertFalse(
+            Boolean.parseBoolean(input.getChildren("period").getFirst().getAttributeValue("settable")));
 
         int numbSettable = 0;
         for (Element child : input.getChildren("period")) {
@@ -160,6 +158,6 @@ public class TestRCCalendar extends MCRTestCase {
                 numbSettable++;
             }
         }
-        assertEquals(2, numbSettable);
+        Assertions.assertEquals(2, numbSettable);
     }
 }
