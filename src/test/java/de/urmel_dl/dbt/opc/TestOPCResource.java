@@ -56,7 +56,7 @@ import jakarta.ws.rs.core.Response;
  */
 @MCRTestConfiguration(
     properties = {
-        @MCRTestProperty(key="DBT.OPCResource.Marshaller.eclipselink.json.include-root", string="true")
+        @MCRTestProperty(key="DBT.EntityFactory.Marshaller.eclipselink.json.include-root", string="true")
     }
 )
 public class TestOPCResource extends JerseyTestCase {
