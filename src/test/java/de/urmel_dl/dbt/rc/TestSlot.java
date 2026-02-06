@@ -29,7 +29,9 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +47,6 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
-import org.mycore.datamodel.ifs2.MCRStoreCenter;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.test.MCRJPAExtension;
@@ -78,27 +79,28 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 @ExtendWith(MCRMetadataExtension.class)
 public class TestSlot {
 
-    private static final MCRCategoryDAO DAO = new MCRCategoryDAOImpl();
-
+    private static Document RCLOC;
     private static SlotManager SLOT_MANAGER;
+
+    @BeforeAll
+    public static void setupSlotManager() {
+        RCLOC = new Document(MCRURIResolver.obtainInstance().resolve("resource:setup/classifications/RCLOC.xml"));
+        SLOT_MANAGER = SlotManager.instance();
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
         MCRSession session = MCRSessionMgr.getCurrentSession();
-        session.setCurrentIP("127.0.0.1");
         session.setUserInformation(MCRSystemUserInformation.SUPER_USER);
 
-        // Clears all stores
-        MCRStoreCenter.getInstance().clear();
+        MCRCategory category = MCRXMLTransformer.getCategory(RCLOC);
+        MCRCategoryDAO dao = new MCRCategoryDAOImpl();
+        dao.addCategory(null, category);
+    }
 
-        if (SLOT_MANAGER == null) {
-            SLOT_MANAGER = SlotManager.instance();
-        }
+    @AfterEach
+    public void tearDown() throws Exception {
         SLOT_MANAGER.getSlotList().getSlots().clear();
-
-        Document xml = new Document(MCRURIResolver.obtainInstance().resolve("resource:setup/classifications/RCLOC.xml"));
-        MCRCategory category = MCRXMLTransformer.getCategory(xml);
-        DAO.addCategory(null, category);
     }
 
     @Test
