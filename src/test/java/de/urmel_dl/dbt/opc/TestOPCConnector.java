@@ -17,13 +17,12 @@
  */
 package de.urmel_dl.dbt.opc;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
-import org.junit.Test;
-import org.mycore.common.MCRTestCase;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mycore.test.MyCoReTest;
 
 import de.urmel_dl.dbt.opc.datamodel.Catalog;
 import de.urmel_dl.dbt.opc.datamodel.Catalogues;
@@ -36,7 +35,8 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @author René Adler (eagle)
  *
  */
-public class TestOPCConnector extends MCRTestCase {
+@MyCoReTest
+public class TestOPCConnector {
 
     private final String OPC_URL = "https://opac.lbs-ilmenau.gbv.de";
 
@@ -46,7 +46,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testIKTList() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         IKTList iktList = opc.getIKTList();
-        assertNotNull(iktList);
+        Assertions.assertNotNull(iktList);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(iktList).toDocument(), System.out);
     }
@@ -55,7 +55,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testSearchWoIKT() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.search("papula");
-        assertNotNull(result);
+        Assertions.assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
@@ -64,7 +64,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testSearchWIKT() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.search("papula", "1004");
-        assertNotNull(result);
+        Assertions.assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
@@ -73,7 +73,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testFamily() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Result result = opc.family("785761829");
-        assertNotNull(result);
+        Assertions.assertNotNull(result);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(result).toDocument(), System.out);
     }
@@ -82,7 +82,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testRecord() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Record record = opc.getRecord("785761829");
-        assertNotNull(record);
+        Assertions.assertNotNull(record);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(record).toDocument(), System.out);
     }
@@ -91,7 +91,7 @@ public class TestOPCConnector extends MCRTestCase {
     public void testRecordBasicCopy() throws Exception {
         OPCConnector opc = new OPCConnector(OPC_URL, OPC_DB);
         Record record = opc.getRecord("785761829");
-        assertNotNull(record);
+        Assertions.assertNotNull(record);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(record.getBasicCopy()).toDocument(),
             System.out);
@@ -100,7 +100,7 @@ public class TestOPCConnector extends MCRTestCase {
     @Test
     public void testCatalogues() throws Exception {
         Catalogues catalogues = Catalogues.instance();
-        assertNotNull(catalogues);
+        Assertions.assertNotNull(catalogues);
 
         new XMLOutputter(Format.getPrettyFormat()).output(new EntityFactory<>(catalogues).toDocument(), System.out);
     }
@@ -115,6 +115,6 @@ public class TestOPCConnector extends MCRTestCase {
 
         Document doc = new EntityFactory<>(result).toDocument();
 
-        assertNotNull(doc.getRootElement().getAttribute("catalogId"));
+        Assertions.assertNotNull(doc.getRootElement().getAttribute("catalogId"));
     }
 }

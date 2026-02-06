@@ -18,9 +18,9 @@
  */
 package de.urmel_dl.dbt.rc;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -36,10 +36,10 @@ import jakarta.ws.rs.core.Application;
 import jakarta.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.ResourceConfig;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mycore.test.MCRJPAExtension;
 
 import de.urmel_dl.dbt.rc.datamodel.Lecturer;
 import de.urmel_dl.dbt.rc.datamodel.PendingStatus;
@@ -60,6 +60,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @author René Adler (eagle)
  *
  */
+@ExtendWith(MCRJPAExtension.class)
 public class TestRCResource extends JerseyTestCase {
 
     private static final String TEST_SLOT_ID = "0027.01.01.0001";
@@ -68,16 +69,13 @@ public class TestRCResource extends JerseyTestCase {
 
     private WebTarget webResource;
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
-
     @Override
     protected Application configure() {
         return new ResourceConfig(RCResource.class, EntityMessageBodyWriter.class);
     }
 
     @Override
-    @Before()
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
 

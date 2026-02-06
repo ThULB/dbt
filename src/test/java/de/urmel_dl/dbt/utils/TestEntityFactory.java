@@ -18,51 +18,38 @@
  */
 package de.urmel_dl.dbt.utils;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Map;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.mycore.common.MCRTestConfiguration;
+import org.mycore.common.MCRTestProperty;
+import org.mycore.common.config.MCRConfiguration2;
+import org.mycore.test.MyCoReTest;
 
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlValue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mycore.common.MCRTestCase;
-import org.mycore.common.config.MCRConfiguration2;
-
 /**
- * @author Ren\u00E9 Adler (eagle)
+ * @author René Adler (eagle)
  *
  */
-public class TestEntityFactory extends MCRTestCase {
-
-    /* (non-Javadoc)
-     * @see org.mycore.common.MCRTestCase#setUp()
-     */
-    @Before
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+@MyCoReTest
+@MCRTestConfiguration(
+    properties = {
+        @MCRTestProperty(key = EntityFactory.CONFIG_PREFIX + "de.urmel_dl.dbt.utils."
+            + EntityFactory.CONFIG_MARSHALLER
+            + "eclipselink.json.include-root", string = "false")
     }
-
-    @Override
-    protected Map<String, String> getTestProperties() {
-        final Map<String, String> testProperties = super.getTestProperties();
-        testProperties.put(
-            EntityFactory.CONFIG_PREFIX + TestEntity.class.getPackage().getName() + "."
-                + EntityFactory.CONFIG_MARSHALLER
-                + "eclipselink.json.include-root",
-            "false");
-        return testProperties;
-    }
+)
+public class TestEntityFactory {
 
     @Test
     public void testProperties() {
         EntityFactory<TestEntity> ef = new EntityFactory<>(testEntity());
         Map<String, ?> props = ef.properties(EntityFactory.CONFIG_MARSHALLER);
-        assertFalse((Boolean) props.get("eclipselink.json.include-root"));
+        Assertions.assertFalse((Boolean) props.get("eclipselink.json.include-root"));
     }
 
     @Test
@@ -76,7 +63,7 @@ public class TestEntityFactory extends MCRTestCase {
         EntityFactory<TestEntity> ef = new EntityFactory<>(testEntity());
 
         Map<String, ?> props = ef.properties(EntityFactory.CONFIG_MARSHALLER);
-        assertTrue((Boolean) props.get("eclipselink.json.include-root"));
+        Assertions.assertTrue((Boolean) props.get("eclipselink.json.include-root"));
     }
 
     private TestEntity testEntity() {

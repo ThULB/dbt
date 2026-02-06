@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -31,55 +30,26 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.glassfish.jersey.test.JerseyTest;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.ClassRule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mycore.common.config.MCRComponent;
 import org.mycore.common.config.MCRConfigurationBase;
 import org.mycore.common.config.MCRConfigurationLoader;
 import org.mycore.common.config.MCRConfigurationLoaderFactory;
 import org.mycore.common.config.MCRRuntimeComponentDetector;
-import org.mycore.datamodel.niofs.utils.MCRRecursiveDeleter;
+import org.mycore.test.MCRMetadataExtension;
+import org.mycore.test.MyCoReTest;
 
 /**
  * @author René Adler (eagle)
  *
  */
+@MyCoReTest
+@ExtendWith(MCRMetadataExtension.class)
 public class JerseyTestCase extends JerseyTest {
 
-    @ClassRule
-    public static TemporaryFolder junitFolder = new TemporaryFolder();
-
     protected File properties = null;
-
-    @BeforeClass
-    public static void initBaseDir() throws IOException {
-        if (System.getProperties().getProperty("MCR.Home") == null) {
-            File baseDir = junitFolder.newFolder("mcrhome");
-            System.out.println("Setting MCR.Home=" + baseDir.getAbsolutePath());
-            System.getProperties().setProperty("MCR.Home", baseDir.getAbsolutePath());
-        }
-        if (System.getProperties().getProperty("MCR.AppName") == null) {
-            String currentComponentName = getCurrentComponentName();
-            System.out.println("Setting MCR.AppName=" + currentComponentName);
-            System.getProperties().setProperty("MCR.AppName", getCurrentComponentName());
-        }
-        File configDir = new File(System.getProperties().getProperty("MCR.Home"),
-            System.getProperties().getProperty("MCR.AppName"));
-        System.out.println("Creating config directory: " + configDir);
-        configDir.mkdirs();
-    }
-
-    @AfterClass
-    public static void clearBaseDir() throws IOException {
-        File configDir = new File(System.getProperties().getProperty("MCR.Home"),
-            System.getProperties().getProperty("MCR.AppName"));
-        //delete configDir recursively
-        Files.walkFileTree(configDir.toPath(), new MCRRecursiveDeleter());
-    }
 
     /**
      * initializes MCRConfiguration with an empty property file. This can be used to test MyCoRe classes without any
@@ -89,7 +59,7 @@ public class JerseyTestCase extends JerseyTest {
      * @see org.mycore.common.config.MCRConfiguration2#set(String, String)
      */
     @Override
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUp();
         initProperties();
@@ -111,7 +81,7 @@ public class JerseyTestCase extends JerseyTest {
     }
 
     @Override
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         if (properties != null) {
             properties.delete();
