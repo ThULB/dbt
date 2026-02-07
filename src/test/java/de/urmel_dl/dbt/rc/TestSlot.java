@@ -40,6 +40,8 @@ import org.mycore.common.MCRPersistenceException;
 import org.mycore.common.MCRSession;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
+import org.mycore.common.MCRTestConfiguration;
+import org.mycore.common.MCRTestProperty;
 import org.mycore.common.xml.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
@@ -47,6 +49,7 @@ import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.classifications2.utils.MCRXMLTransformer;
 import org.mycore.datamodel.common.MCRActiveLinkException;
+import org.mycore.datamodel.common.MCRDefaultObjectIDGenerator;
 import org.mycore.datamodel.metadata.MCRMetadataManager;
 import org.mycore.datamodel.metadata.MCRObject;
 import org.mycore.test.MCRJPAExtension;
@@ -77,6 +80,10 @@ import de.urmel_dl.dbt.utils.EntityFactory;
 @MyCoReTest
 @ExtendWith(MCRJPAExtension.class)
 @ExtendWith(MCRMetadataExtension.class)
+@MCRTestConfiguration(
+    properties = {
+        @MCRTestProperty(key = "MCR.Metadata.ObjectID.Generator.Class", classNameOf = MCRDefaultObjectIDGenerator.class)
+    })
 public class TestSlot {
 
     private static Document RCLOC;
