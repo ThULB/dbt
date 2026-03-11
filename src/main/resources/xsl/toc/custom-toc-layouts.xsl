@@ -202,6 +202,39 @@
     </xsl:template>
 
     <!-- ====================
+         Podcasts_by_volume:
+         - - - - - - - - - -
+        ->vol
+            title   (year)
+            authors
+    ==================== -->
+
+    <xsl:template match="toc[@layout='podcasts_by_volume']//publications/doc" priority="2">
+        <div class="row">
+            <div class="col-8">
+                <xsl:call-template name="toc.title">
+                    <xsl:with-param name="class">col-10</xsl:with-param>
+                    <xsl:with-param name="titlePrefix" select="false()"/>
+                </xsl:call-template>
+            </div>
+            <div class="col-4">
+                <xsl:for-each select="field[@name='mods.yearIssued']">
+                    <xsl:text> (</xsl:text>
+                    <xsl:value-of select="text()"/>
+                    <xsl:text>)</xsl:text>
+                </xsl:for-each>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <xsl:call-template name="toc.authors">
+                    <xsl:with-param name="class">col-12</xsl:with-param>
+                </xsl:call-template>
+            </div>
+        </div>
+    </xsl:template>
+
+    <!-- ====================
          blog article:
          - - - - - - - - - -
          date    linked title
@@ -226,6 +259,7 @@
 
     <xsl:template name="toc.title">
         <xsl:param name="class" select="''"/>
+        <xsl:param name="titlePrefix" select="true()"/>
 
         <h4>
             <xsl:attribute name="class">
@@ -234,6 +268,7 @@
                     <xsl:value-of select="concat(' ', $class)"/>
                 </xsl:if>
             </xsl:attribute>
+            <xsl:if test="$titlePrefix">
             <xsl:choose>
                 <xsl:when test="field[@name='mir.toc.series.volume.top']">
                     <xsl:value-of select="i18n:translate('mir.details.volume.series')"/>
@@ -251,6 +286,7 @@
                     <xsl:value-of select="concat('#',field[@name='mir.toc.host.articleNumber.top'],': ')"/>
                 </xsl:when>
             </xsl:choose>
+            </xsl:if>
             <a href="{$WebApplicationBaseURL}receive/{@id}">
                 <xsl:value-of select="field[@name='mir.toc.title']"/>
             </a>
