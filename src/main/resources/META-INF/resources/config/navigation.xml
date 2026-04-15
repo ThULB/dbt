@@ -164,6 +164,10 @@
         <label xml:lang="de">WebCLI</label>
         <label xml:lang="en">WebCLI</label>
       </item>
+      <item href="/modules/webtools/processing" type="intern">
+        <label xml:lang="de">Aktive Prozesse</label>
+        <label xml:lang="en">Processing</label>
+      </item>
       <item href="/modules/webtools/session/sessionListing.xml" type="extern">
         <label xml:lang="de">Aktive Sitzungen</label>
         <label xml:lang="en">Session Management</label>
