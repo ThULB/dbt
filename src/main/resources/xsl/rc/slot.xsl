@@ -14,7 +14,7 @@
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', $slotId))" />
 
   <xsl:template match="/slot">
-    <xsl:param name="isUserGuest" select="document('userobjectrights:isCurrentUserGuestUser:')/boolean"/>
+    <xsl:param name="isUserGuest" select="document('userobjectrights:isCurrentUserGuestUser:')/boolean/text()='true'"/>
     <xsl:apply-templates mode="slotHead" select="." />
     <div class="slot-body mt-3">
       <xsl:choose>
