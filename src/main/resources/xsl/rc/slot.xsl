@@ -96,7 +96,7 @@
             group: 'slot-entries',
             containerSelector: '.slot-section',
             itemPath: ".card-body",
-            itemSelector: '.media',
+            itemSelector: '.d-flex',
             handle: '.entry-mover',
             placeholderClass: 'entry-placeholder',
             placeholder: '<div class="d-flex entry-placeholder"><div class="flex-grow-1 mw-100"></div></div>',
