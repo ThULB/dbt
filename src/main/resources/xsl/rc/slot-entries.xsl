@@ -9,7 +9,7 @@
   <xsl:include href="xslInclude:objectTypes" />
 
   <xsl:include href="resource:xsl/opc/pica-record-isbd.xsl" />
-  
+
    <!-- OPC vars -->
   <xsl:variable name="catalogues" select="document('resource:catalogues.xml')/catalogues" />
   <xsl:variable name="catalogId" select="document(concat('slot:slotId=',$slotId,'&amp;catalogId'))" />
@@ -188,7 +188,7 @@
   <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="view">
     <div>
       <xsl:attribute name="class">
-        <xsl:value-of select="concat('entry-', name(), ' media-body mw-100 p-2 ')" />
+        <xsl:value-of select="concat('entry-', name(), ' w-100 p-2 ')" />
         <xsl:apply-templates select="." mode="extraClasses" />
       </xsl:attribute>
       <xsl:apply-templates select="." />
@@ -213,7 +213,7 @@
   <xsl:template match="text|webLink|mcrobject|file|opcrecord" mode="edit">
     <div id="{../@id}">
       <xsl:attribute name="class">
-        <xsl:value-of select="concat('entry-', name(), ' media-body mw-100 p-2 ')" />
+        <xsl:value-of select="concat('entry-', name(), ' w-100 p-2 ')" />
         <xsl:apply-templates select="." mode="extraClasses" />
       </xsl:attribute>
       <xsl:apply-templates select="." mode="extraAttributes" />
@@ -279,16 +279,16 @@
       </small>
     </xsl:if>
   </xsl:template>
-  
+
   <!-- ==== ENTRIES ======================================================= -->
-  
+
   <!-- HeadlineEntry -->
   <xsl:template match="headline">
     <h5 class="my-0">
       <xsl:value-of select="." />
     </h5>
   </xsl:template>
-  
+
   <!-- TextEntry -->
   <xsl:template match="text">
     <xsl:choose>
@@ -317,7 +317,7 @@
       <xsl:value-of select="@format" />
     </xsl:attribute>
   </xsl:template>
-  
+
   <!-- WebLinkEntry -->
   <xsl:template match="webLink">
     <div class="d-flex flex-row flex-fill">
@@ -357,7 +357,7 @@
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
-  
+
   <!-- MCRObjectEntry -->
   <xsl:template match="mcrobject">
     <div class="mcr-object">
@@ -375,7 +375,7 @@
       </xsl:if>
     </div>
   </xsl:template>
-  
+
   <!-- File -->
   <xsl:template match="file">
     <xsl:variable name="internalId" select="menc:buildInternalId(concat($slotId, '_', ../@id, '_', @name))" />
@@ -480,7 +480,7 @@
       </div>
     </div>
   </xsl:template>
-  
+
   <!-- OPCRecordEntry -->
 
   <xsl:template match="opcrecord" mode="editButtons">
