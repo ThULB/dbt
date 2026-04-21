@@ -8,10 +8,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a:hover,
-a:focus {
+a {
   text-decoration: none;
+
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
 }
+
 
 body {
   background-color: $body-bg-color;
