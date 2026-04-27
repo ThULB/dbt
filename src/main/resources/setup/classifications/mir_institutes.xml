@@ -126,12 +126,6 @@
           <label xml:lang="x-destatis" text="7350" />
           <label xml:lang="x-gnd" text="1047352494" />
         </category>
-        <category ID="3003">
-          <label xml:lang="de" text="Graduiertenkolleg &quot;Identität und Erbe&quot;" />
-          <label xml:lang="en" text="Research Training Group &quot;Identity and Heritage&quot;" />
-          <label xml:lang="x-destatis" text="9200" />
-          <label xml:lang="x-gnd" text="1169345719" />
-        </category>
         <category ID="3004">
           <label xml:lang="de" text="Gropius-Professur" />
         </category>
@@ -339,6 +333,16 @@
           <label xml:lang="en" text="Professorship Cultural History" />
           <label xml:lang="x-destatis" text="7310" />
         </category>
+        <category ID="3084">
+          <label xml:lang="de" text="Professur Bauphysik, Fak.A" />
+          <label xml:lang="en" text="Professorship Building Physics, Fac.B" />
+          <label xml:lang="x-destatis" text="7330" />
+        </category>
+         <category ID="3085">
+          <label xml:lang="de" text="Professur Projektentwicklung und Bauökonomie" />
+          <label xml:lang="en" text="Professorship Project Development and Construction Economics" />
+          <label xml:lang="x-destatis" text="7330" />
+        </category>
       </category>
       <category ID="3100">
         <label xml:lang="de" text="Fakultät Bau- und Umweltingenieurwissenschaften (vormals Bauingenieurwesen)" />
@@ -433,11 +437,6 @@
         <category ID="3127">
           <label xml:lang="de" text="Professur Bodenmechanik" />
         </category>
-        <category ID="3128">
-          <label xml:lang="de" text="Professur Computer Vision in Engineering" />
-          <label xml:lang="en" text="Professorship Computer Vision in Engineering" />
-          <label xml:lang="x-destatis" text="7580" />
-        </category>
         <category ID="3130">
           <label xml:lang="de" text="Professur Informations- und Wissensverarbeitung" />
         </category>
@@ -452,9 +451,6 @@
         </category>
         <category ID="3138">
           <label xml:lang="de" text="Professur Volkswirtschaftslehre - Infrastrukturökonomie-Infrastrukturmanagement" />
-        </category>
-        <category ID="3139">
-          <label xml:lang="de" text="Professur Erdbebenzentrum" />
         </category>
         <category ID="3140">
           <label xml:lang="de" text="Finger-Institut für Baustoffkunde (FIB)" />
@@ -654,7 +650,7 @@
           <label xml:lang="x-destatis" text="8070" />
         </category>
         <category ID="3207">
-          <label xml:lang="de" text="Instructional Design - Didaktik medialer Lernumgebungen" />
+          <label xml:lang="de" text="Professur Instructional Design" />
         </category>
         <category ID="3209">
           <label xml:lang="de" text="Professur Kunst und ihre Didaktik" />
@@ -727,7 +723,7 @@
           <label xml:lang="x-destatis" text="8010" />
         </category>
         <category ID="3231">
-          <label xml:lang="de" text="Professur Crossmediales Bewegtbild" />
+          <label xml:lang="de" text="Professur Crossmediales Bewegtbild / Bewegtbild cossmedial" />
           <label xml:lang="en" text="Professorship Cross-media Moving Image" />
           <label xml:lang="x-destatis" text="8030" />
         </category>
@@ -809,6 +805,10 @@
         </category>
         <category ID="3252">
           <label xml:lang="de" text="Professur Geschichte, Theorie und Ästhetik materialer Kulturen" />
+          <label xml:lang="x-destatis" text="8070" />
+        </category>
+        <category ID="3253">
+          <label xml:lang="de" text="Professur experimental industrial design" />
           <label xml:lang="x-destatis" text="8070" />
         </category>
       </category>
@@ -944,9 +944,6 @@
         <category ID="3332">
           <label xml:lang="de" text="Professur Experimentelle Television" />
         </category>
-        <category ID="3333">
-          <label xml:lang="de" text="Internationales Kolleg für Kulturtechnikforschung und Medienphilosophie (IKKM)" />
-        </category>
         <category ID="3334">
           <label xml:lang="de" text="Professur Kultur- und Mediensoziologie" />
           <label xml:lang="x-destatis" text="0130" />
@@ -1029,8 +1026,8 @@
           <label xml:lang="x-destatis" text="3520" />
         </category>
         <category ID="3359">
-          <label xml:lang="de" text="Professur Computer Vision in Engineering" />
-          <label xml:lang="en" text="Professorship Computer Vision in Engineering" />
+          <label xml:lang="de" text="Professur Computer Vision in Engineering, Fak.M" />
+          <label xml:lang="en" text="Professorship Computer Vision in Engineering, Fac.M" />
           <label xml:lang="x-destatis" text="3520" />
         </category>
         <category ID="3360">
@@ -1066,7 +1063,7 @@
         </category>
       </category>
       <category ID="3800">
-        <label xml:lang="de" text="Sonstige Institute (Fakultätsübergreifende Einrichtungen)" />
+        <label xml:lang="de" text="Fakultätsübergreifende Einrichtungen" />
         <category ID="3801">
           <label xml:lang="de" text="Bauhaus-Research School" />
           <label xml:lang="en" text="Bauhaus-Research-School" />
@@ -1107,8 +1104,8 @@
         <label xml:lang="en" text="University Management Team" />
         <label xml:lang="x-gnd" text="5180842-0" />
         <category ID="3701">
-          <label xml:lang="de" text="Präsident/Universitätsleitung" />
-          <label xml:lang="en" text="President" />
+          <label xml:lang="de" text="Büro des Präsidenten" />
+          <label xml:lang="en" text="Office of the President" />
           <label xml:lang="x-destatis" text="8800" />
         </category>
         <category ID="3703">
@@ -1117,8 +1114,8 @@
           <label xml:lang="x-destatis" text="8800" />
         </category>
         <category ID="3704">
-          <label xml:lang="de" text="Kanzler/ Universitätsverwaltung" />
-          <label xml:lang="en" text="Chancellor´s Office" />
+          <label xml:lang="de" text="Büro des Kanzlers" />
+          <label xml:lang="en" text="Chancellor's Office" />
           <label xml:lang="x-destatis" text="8800" />
         </category>
         <category ID="3705">
@@ -1128,6 +1125,10 @@
         <category ID="3706">
           <label xml:lang="de" text="eTeach-Netzwerk Thüringen" />
           <label xml:lang="en" text="eTeach Network Thuringia" />
+        </category>
+        <category ID="3707">
+          <label xml:lang="de" text="Digital Bauhaus Lab" />
+          <label xml:lang="en" text="Digital Bauhaus Lab" />
         </category>
       </category>
       <category ID="3400">
@@ -1162,6 +1163,11 @@
         <category ID="3406">
           <label xml:lang="de" text="Gleichstellungsbüro" />
           <label xml:lang="en" text="Equal Opportunity Office" />
+          <label xml:lang="x-destatis" text="8806" />
+        </category>
+        <category ID="3407">
+          <label xml:lang="de" text="Universitätsentwicklung" />
+          <label xml:lang="en" text="University development" />
           <label xml:lang="x-destatis" text="8806" />
         </category>
       </category>
