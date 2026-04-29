@@ -509,10 +509,10 @@
   <xsl:template match="opcrecord" mode="extraClasses">
     <xsl:if test="$writePermission or (($onlineOnly = 'false') and (string-length(@epn) &gt; 0)) or ($onlineOnly = 'true')">
       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (string-length(@epn) = 0)">
-        <xsl:text>border-left border-warning</xsl:text>
+        <xsl:text>border-start border-3 border-warning</xsl:text>
       </xsl:if>
       <xsl:if test="$writePermission and ($onlineOnly = 'false') and (@deleted = 'true')">
-        <xsl:text>border-left border-danger</xsl:text>
+        <xsl:text>border-start border-3 border-danger</xsl:text>
       </xsl:if>
     </xsl:if>
   </xsl:template>
