@@ -30,7 +30,7 @@
 
   <xsl:variable name="include.HTML.Head.CSS" />
   <xsl:variable name="include.HTML.Head.JS" />
-  
+
   <!-- ************************************************************ -->
   <!-- *                    Main HTML Elements                    * -->
   <!-- ************************************************************ -->
@@ -68,11 +68,11 @@
       <xsl:call-template name="layout.scripts" />
     </body>
   </xsl:template>
-  
+
   <!-- ************************************************************ -->
   <!-- *                    Main Page Elements                    * -->
   <!-- ************************************************************ -->
-    
+
   <!-- HTML Content Type -->
 
   <xsl:template name="layout.htmlContentType">
@@ -121,7 +121,7 @@
     <script src="{$WebApplicationBaseURL}js/mir/session-polling.js" type="text/javascript"></script>
     <script src="{$WebApplicationBaseURL}modules/webtools/upload/js/upload-api.js"></script>
     <script src="{$WebApplicationBaseURL}modules/webtools/upload/js/upload-gui.js"></script>
-    
+
     <!-- extra scripts from each page -->
     <xsl:apply-templates select="//script" mode="html.scripts" />
 
@@ -356,7 +356,7 @@
         <xsl:with-param name="class" select="'d-xs-inline d-sm-inline d-md-none'" />
       </xsl:call-template>
     </ul>
-    <ul class="navbar-nav me-auto navbar-right">
+    <ul class="navbar-nav ms-auto navbar-right">
       <xsl:call-template name="layout.head.basketMenu">
         <xsl:with-param name="class" select="'d-none d-md-inline'" />
         <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
@@ -531,7 +531,7 @@
   <xsl:template match="script" mode="html.scripts">
     <xsl:copy-of select="." />
   </xsl:template>
-  
+
   <!-- ************************************************************ -->
   <!-- *                      Action Buttons                      * -->
   <!-- ************************************************************ -->
@@ -596,7 +596,7 @@
       </xsl:choose>
     </xsl:element>
   </xsl:template>
-  
+
   <!-- Standard Copy Template -->
   <xsl:template match="@*|node()">
     <xsl:copy>

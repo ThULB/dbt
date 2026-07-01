@@ -235,7 +235,7 @@ export class Player {
                     sources.id,
                     src.src),
                 language: this.extractLanguage(src.src),
-                default: i === 0
+                default: false
             }, true));
         } else {
             this.player.controlBar.subsCapsButton.disable();

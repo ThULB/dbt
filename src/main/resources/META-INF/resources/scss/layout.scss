@@ -38,7 +38,6 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "../mir-layout/scss/common/helper";
 @import "../mir-layout/scss/common/panels";
 @import "../mir-layout/scss/common/print";
-@import "../mir-layout/scss/common/user-login";
 @import "../mir-layout/scss/common/responsive";
 
 
@@ -58,6 +57,7 @@ $fa-font-path: "../../../dbt/assets/fontawesome-free/webfonts";
 @import "./dbt/_rc";
 @import "./dbt/_video-js";
 @import "./dbt/mir2fix/base";
+@import "./dbt/mir2fix/badges";
 @import "./dbt/mir2fix/metadata";
 @import "./dbt/mir2fix/resultlist";
 @import "./dbt/mir2fix/login";

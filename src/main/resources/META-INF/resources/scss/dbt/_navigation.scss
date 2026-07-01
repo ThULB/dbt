@@ -34,6 +34,12 @@ $navbar-nav-link-padding-y: 0.8rem !default;
   padding: $navbar-padding;
   min-height: $navbar-height;
 
+  .nav-item {
+    a, .nav-link {
+      text-decoration: none !important;
+    }
+  }
+
   @include media-breakpoint-up($float-breakpoint-max) {
     margin-bottom: 20px;
     margin-left: -($navbar-margin);

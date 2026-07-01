@@ -1,0 +1,30 @@
+.mir-badge-container {
+
+  [class*="mir-badge-genre-"] {
+    background-color: rgba(var(--bs-info-rgb));
+  }
+
+  .mir-badge-state-published {
+    background-color: rgba(var(--bs-success-rgb));
+  }
+  .mir-badge-state-submitted,
+  .mir-badge-state-new,
+  .mir-badge-state-imported {
+    background-color: rgba(var(--bs-warning-rgb));
+  }
+  .mir-badge-state-review {
+    background-color: rgba(var(--bs-primary-rgb));
+  }
+  .mir-badge-state-blocked,
+  .mir-badge-state-deleted {
+    background-color: rgba(var(--bs-danger-rgb));
+  }
+
+  .mir-badge-oa-true {
+    background-color: rgba(var(--bs-success-rgb));
+  }
+  .mir-badge-oa-false {
+    background-color: rgba(var(--bs-warning-rgb));
+  }
+}
+

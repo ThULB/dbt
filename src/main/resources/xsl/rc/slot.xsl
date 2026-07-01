@@ -14,8 +14,8 @@
   <xsl:variable name="PageTitle" select="i18n:translate('component.rc.slot.pageTitle', concat(/slot/title, ';', $slotId))" />
 
   <xsl:template match="/slot">
+    <xsl:param name="isUserGuest" select="document('userobjectrights:isCurrentUserGuestUser:')/boolean/text()='true'"/>
     <xsl:apply-templates mode="slotHead" select="." />
-    <xsl:param name="isUserGuest" select="document('userobjectrights:isCurrentUserGuestUser:')/boolean"/>
     <div class="slot-body mt-3">
       <xsl:choose>
         <xsl:when test="$isUserGuest and not($readPermission)">
@@ -96,7 +96,7 @@
             group: 'slot-entries',
             containerSelector: '.slot-section',
             itemPath: ".card-body",
-            itemSelector: '.media',
+            itemSelector: '.card-body > .d-flex',
             handle: '.entry-mover',
             placeholderClass: 'entry-placeholder',
             placeholder: '<div class="d-flex entry-placeholder"><div class="flex-grow-1 mw-100"></div></div>',

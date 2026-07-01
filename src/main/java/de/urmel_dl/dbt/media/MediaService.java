@@ -239,13 +239,19 @@ public class MediaService {
         if (files == null) {
             Path parent = MEDIA_STORAGE_PATH.resolve(id);
 
-            try (Stream<Path> fs = Files.walk(parent)) {
-                files = fs.filter(f -> !f.equals(parent))
-                    .collect(Collectors.toList());
-                MEDIA_FILES_CACHE.put(id, files);
-            } catch (IOException e) {
-                LOGGER.warn(() -> "Could not get media files for " + id, e);
+            if (!Files.exists(parent)) {
+                LOGGER.warn(() -> "Could not get media files for " + id + ". Directory does not exist: " + parent);
+                files = List.of();
+            } else {
+                try (Stream<Path> fs = Files.walk(parent)) {
+                    files = fs.filter(f -> !f.equals(parent))
+                        .collect(Collectors.toList());
+                } catch (IOException e) {
+                    LOGGER.error(() -> "Could not get media files for " + id, e);
+                    files = List.of();
+                }
             }
+            MEDIA_FILES_CACHE.put(id, files);
         }
 
         return files;
