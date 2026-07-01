@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mcrpermissions xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRPermissions.xsd">
+  <mcrpermission name="create-slot" ruledescription="submitter, editor and administrator">
+    <condition format="xml">
+      <boolean operator="or">
+        <condition field="group" operator="=" value="admin" />
+        <condition field="group" operator="=" value="editor" />
+        <condition field="group" operator="=" value="submitter" />
+      </boolean>
+    </condition>
+  </mcrpermission>
+  <mcrpermission name="edit-slot" ruledescription="rc administrators and rc editors">
+    <condition format="xml">
+      <boolean operator="or">
+        <condition field="group" operator="=" value="rcadmin" />
+        <condition field="group" operator="=" value="rceditor" />
+        <condition field="group" operator="=" value="admin" />
+      </boolean>
+    </condition>
+  </mcrpermission>
+  <mcrpermission name="administrate-slot" ruledescription="rc administrators">
+    <condition format="xml">
+      <boolean operator="or">
+        <condition field="group" operator="=" value="rcadmin" />
+        <condition field="group" operator="=" value="admin" />
+      </boolean>
+    </condition>
+  </mcrpermission>
+  <mcrpermission name="rcmail" ruledescription="rc administrators">
+    <condition format="xml">
+      <boolean operator="or">
+        <condition field="group" operator="=" value="rcadmin" />
+        <condition field="group" operator="=" value="admin" />
+      </boolean>
+    </condition>
+  </mcrpermission>
+</mcrpermissions>

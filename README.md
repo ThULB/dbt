@@ -16,7 +16,7 @@ For the moment see [agis-:Git-Style-Guide](https://github.com/agis-/git-style-gu
 
 
 2. **Deploy the JAR File**:
-    - Move the generated JAR file (located in `dbt/target`) to the `lib` folder in your home directory.
+    - Move the generated JAR file (located in `dbt-module/target`) to the `lib` folder in your home directory.
       For example: `~/.mycore/dev-mir/lib`
 
 
@@ -28,7 +28,7 @@ For the moment see [agis-:Git-Style-Guide](https://github.com/agis-/git-style-gu
 4. **Launch and Setup DBT**:
     - After starting your MIR, the DBT interface will launch.
     - Log in as the administrator (Superuser) and navigate in the User menu to "Edit Classifications".
-    - Import all files from `src/main/resources/setup/classifications` for DBT to function correctly.
+    - Import all files from `dbt-module/src/main/resources/setup/classifications` for DBT to function correctly.
    - Reload main and classifications in the WebCLI if needed.
 
      `reload solr configuration main in core main`
