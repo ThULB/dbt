@@ -172,5 +172,6 @@
   </dependencyManagement>
   <modules>
     <module>dbt-module</module>
+    <module>dbt-it</module>
   </modules>
 </project>
