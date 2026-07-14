@@ -20,6 +20,7 @@
   </licenses>
   <modules>
     <module>dbt-module</module>
+    <module>dbt-it</module>
   </modules>
   <issueManagement>
     <system>JIRA</system>
