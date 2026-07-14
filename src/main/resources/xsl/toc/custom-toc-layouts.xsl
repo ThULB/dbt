@@ -12,15 +12,6 @@
 
     <xsl:param name="CurrentLang" select="'de'" />
 
-    <!-- ====================
-         level default:
-         - - - - - - - - - -
-         value
-    -or- value(linked)
-    -or- value: title(linked)
-         authors
-         ==================== -->
-
     <xsl:template match="item[doc[not(field[@name='mir.toc.title'])]]">
         <a href="{$WebApplicationBaseURL}receive/{doc/@id}">
             <xsl:apply-templates select="." mode="text" />
@@ -60,64 +51,26 @@
         </xsl:for-each>
     </xsl:template>
 
-    <!-- ====================
-         volume level:
-         - - - - - - - - - -
-         Vol. #
-    -or- Vol. #: title(linked)
-         authors
-         ==================== -->
-
-    <xsl:template match="level[@field='mir.toc.series.volume']/item" mode="label" priority="1">
-        <xsl:value-of select="i18n:translate('mir.details.volume.series')" />
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="@value" />
-        <xsl:apply-templates select="doc" />
-    </xsl:template>
-
-    <!-- ====================
-         volume level:
-         - - - - - - - - - -
-         Vol. #
-    -or- Vol. #: title(linked)
-         authors
-         ==================== -->
-
-    <xsl:template match="level[@field='mir.toc.host.volume']/item" mode="label" priority="1">
+    <xsl:template match="level[@field='mir.toc.host.volume.top']/item" mode="label" priority="1">
         <xsl:value-of select="i18n:translate('mir.details.volume.journal')" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="@value" />
-<!--
-        <xsl:for-each select="doc/field[@name='mods.yearIssued']">
-            <xsl:text> (</xsl:text>
-            <xsl:value-of select="text()" />
-            <xsl:text>)</xsl:text>
-        </xsl:for-each>
--->
         <xsl:apply-templates select="doc" />
     </xsl:template>
 
-    <!-- ====================
-         issue level:
-         - - - - - - - - - -
-         No. #
-    -or- No. #: title(linked)
-         authors
-         ==================== -->
-
-    <xsl:template match="level[@field='mir.toc.host.issue']/item" mode="label" priority="1">
+    <xsl:template match="level[@field='mir.toc.host.issue.top']/item" mode="label" priority="1">
         <xsl:value-of select="i18n:translate('mir.details.issue')" />
         <xsl:text> </xsl:text>
         <xsl:value-of select="@value" />
         <xsl:apply-templates select="doc" />
     </xsl:template>
 
-    <!-- ====================
-         default publication:
-         - - - - - - - - - -
-         linked title    page
-         authors
-         ==================== -->
+    <xsl:template match="level[@field='mir.toc.series.volume.top']/item" mode="label" priority="1">
+        <xsl:value-of select="i18n:translate('mir.details.volume.series')" />
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="@value" />
+        <xsl:apply-templates select="doc" />
+    </xsl:template>
 
     <xsl:template match="publications/doc" priority="1">
         <div class="row">
@@ -133,12 +86,7 @@
         </div>
     </xsl:template>
 
-    <!-- ====================
-         legacy publication:
-         - - - - - - - - - -
-         [vol -] title   page
-         authors
-         ==================== -->
+    <!-- templates with priority 2 -->
     <xsl:template match="toc[@layout='legacy']//publications/doc" priority="2">
         <div class="row">
             <xsl:call-template name="toc.title">
@@ -153,23 +101,27 @@
         </div>
     </xsl:template>
 
-    <!-- ====================
-         blog article:
-         - - - - - - - - - -
-         date    linked title
-                 authors
-         ==================== -->
-
-    <xsl:template match="toc[@layout='blog']//publications/doc" priority="2">
+    <xsl:template match="level[@field='mir.toc.series.volume.top']//publications/doc |
+                         level[@field='mir.toc.host.volume.top']//publications/doc |
+                         level[@field='mir.toc.host.issue.top']//publications/doc" priority="2">
         <div class="row">
-            <xsl:call-template name="toc.day.month">
-                <xsl:with-param name="class">col-1</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="toc.title">
-                <xsl:with-param name="class">col-11</xsl:with-param>
+            <h4 class="mir-toc-section-title col-10">
+                <a href="{$WebApplicationBaseURL}receive/{@id}">
+                    <xsl:choose>
+                        <xsl:when test="string-length(field[@name='mir.toc.title']) &gt; 0">
+                            <xsl:value-of select="field[@name='mir.toc.title']" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="field[@name='search_result_link_text']" />
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </a>
+            </h4>
+            <xsl:call-template name="toc.page">
+                <xsl:with-param name="class">col-2</xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="toc.authors">
-                <xsl:with-param name="class">offset-1 col-11</xsl:with-param>
+                <xsl:with-param name="class">col-10</xsl:with-param>
             </xsl:call-template>
         </div>
     </xsl:template>
