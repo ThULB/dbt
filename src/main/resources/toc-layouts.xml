@@ -27,7 +27,7 @@
 
     <!-- journal layouts start -->
     <toc-layout id="journal_by_year" field="mods.relatedItem.host">
-        <label>journal Modell 1: Jahr > Heft > Artikel mit Autor:Titel, Seitenzahl</label>
+        <label>Journal Modell 1: Jahr > Heft > Artikel mit Autor: Titel, Seitenzahl</label>
         <level field="mods.yearIssued" order="desc" expanded="true">
             <level field="mir.toc.host.issue" order="desc" expanded="false">
                 <publications>
@@ -39,7 +39,7 @@
     </toc-layout>
 
     <toc-layout id="journal_by_year_volume-issue" field="mods.relatedItem.host">
-        <label>journal Modell 2: Jahr > Jahrgang > Heft > Artikel mit Autor:Titel, Seitenzählung</label>
+        <label>Journal Modell 2: Jahr > Jahrgang > Heft > Artikel mit Autor: Titel, Seitenzahl</label>
         <level field="mods.yearIssued" order="desc" expanded="first">
             <level field="mir.toc.host.volume" order="desc" expanded="first">
                 <level field="mir.toc.host.issue" order="desc" expanded="false">
@@ -53,7 +53,7 @@
     </toc-layout>
 
     <toc-layout id="journal_by_year_volume" field="mods.relatedItem.host">
-        <label>journal Modell 3: Jahr > Bandbezeichnung > Artikel mit Autor:Titel, Seitenzählung</label>
+        <label>Journal Modell 3: Jahr > Bandbezeichnung > Artikel mit Autor: Titel, Seitenzahl</label>
         <level field="mods.yearIssued" order="desc" expanded="first">
             <level field="mir.toc.host.volume" order="desc" expanded="first">
                 <publications>
@@ -68,7 +68,7 @@
     <!-- Serie Layout start -->
     <toc-layout id="sorted_by_volume" field="mods.relatedItem.series">
         <label>Serie Modell 1: Bandbezeichnung > Titel, Autor, Jahr</label>
-        <level field="mir.toc.series.volume" order="asc" expanded="true">
+        <level field="mir.toc.series.volume" order="desc" expanded="true">
             <publications>
                 <sortBy field="mods.yearIssued" order="desc"/>
                 <sortBy field="mir.toc.authors" order="desc"/>
@@ -78,7 +78,7 @@
     </toc-layout>
 
     <toc-layout id="sorted_by_year_volume" field="mods.relatedItem.series">
-        <label>Serie Modell 2: Jahr > Bandbezeichnung > Artikel mit Autor:Titel</label>
+        <label>Serie Modell 2: Jahr > Bandbezeichnung > Artikel mit Autor: Titel</label>
         <level field="mods.yearIssued" order="desc" expanded="first">
             <level field="mir.toc.series.volume" order="desc" expanded="first">
                 <publications>
@@ -100,15 +100,6 @@
                 <sortBy field="mir.toc.host.page.int" order="asc" />
                 <sortBy field="mir.toc.host.page.str" order="asc" />
                 <sortBy field="mods.title.main" order="desc" />
-            </publications>
-        </level>
-    </toc-layout>
-
-    <toc-layout id="blog" field="parent">
-        <label>Blog (gruppiert nach Erscheinungsjahr), Artikel mit Datum</label>
-        <level field="mods.yearIssued" order="desc" expanded="first">
-            <publications>
-                <sortBy field="mods.yearIssued" order="desc"/>
             </publications>
         </level>
     </toc-layout>
