@@ -38,7 +38,7 @@
         </level>
     </toc-layout>
 
-    <toc-layout id="journal_by_year_volume-issue" field="mods.relatedItem.host">
+    <toc-layout id="journal_by_volume" field="mods.relatedItem.host">
         <label>Journal Modell 2: Jahr > Jahrgang > Heft > Artikel mit Autor: Titel, Seitenzahl</label>
         <level field="mods.yearIssued" order="desc" expanded="first">
             <level field="mir.toc.host.volume.top" order="desc" expanded="first">
@@ -52,7 +52,7 @@
         </level>
     </toc-layout>
 
-    <toc-layout id="journal_by_year_volume" field="mods.relatedItem.host">
+    <toc-layout id="volume_only" field="mods.relatedItem.host">
         <label>Journal Modell 3: Jahr > Bandbezeichnung > Artikel mit Autor: Titel, Seitenzahl</label>
         <level field="mods.yearIssued" order="desc" expanded="first">
             <level field="mir.toc.host.volume.top" order="desc" expanded="first">
