@@ -115,7 +115,7 @@
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/assets/waves/waves.min.js" />
     <script type="text/javascript" src="{$WebApplicationBaseURL}dbt/js/layout.min.js" />
 
-    <script type="text/javascript" src="{$WebApplicationBaseURL}assets/jquery/plugins/jquery-confirm/jquery.confirm.min.js"></script>
+    <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/confirm.js"></script>
     <script type="text/javascript" src="{$WebApplicationBaseURL}js/mir/base.min.js"></script>
 
     <script src="{$WebApplicationBaseURL}js/mir/session-polling.js" type="text/javascript"></script>
@@ -132,7 +132,7 @@
     <script type="text/javascript">
       $( document ).ready(function() {
       $('.overtext').tooltip();
-      $.confirm.options = {
+      MIRConfirm.options = {
       <xsl:value-of select="concat('title: &quot;', i18n:translate('mir.confirm.title'), '&quot;,')" />
       <xsl:value-of select="concat('confirmButton: &quot;',i18n:translate('mir.confirm.confirmButton'), '&quot;,')" />
       <xsl:value-of select="concat('cancelButton: &quot;',i18n:translate('mir.confirm.cancelButton'), '&quot;,')" />
@@ -166,7 +166,7 @@
     <nav class="navbar navbar-expand-md navbar-dbt fixed-top" role="navigation">
       <div class="container">
         <a class="navbar-brand" href="{concat($WebApplicationBaseURL,substring($loaded_navigation_xml/@hrefStartingPage,2))}">
-          <span class="img-placeholder"></span>
+          <span id="logo_modul" class="img-placeholder"></span>
         </a>
         <button type="button" class="navbar-toggler collapsed plus-sign" data-bs-toggle="collapse" data-bs-target="#navbar,#container-overlay"
           aria-expanded="false" aria-controls="navbar"
@@ -211,7 +211,7 @@
 
   <xsl:template name="layout.head.login">
     <li class="nav-item">
-      <a class="nav-link" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
+      <a id="loginURL" class="nav-link" href="{$ServletsBaseURL}MCRLoginServlet?url={encoder:encode(string($RequestURL),'UTF-8')}">
         <i class="fa fa-sign-in-alt" aria-hidden="true"></i>
         <span class="d-inline d-xl-inline d-sm-inline d-md-none ms-1">
           <xsl:value-of select="i18n:translate('component.userlogin.button.login')" />
@@ -255,10 +255,11 @@
     <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
       <xsl:with-param name="class" select="'nav-item d-none d-md-inline'" />
       <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
+      <xsl:with-param name="idSuffix" select="'-desktop'" />
     </xsl:apply-templates>
 
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+      <a id="user-profile" class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
         <i class="fa fa-user" aria-hidden="true"></i>
         <span class="d-inline d-xl-inline d-sm-inline d-md-none ms-1">
           <xsl:choose>
@@ -350,16 +351,19 @@
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='user']">
           <xsl:with-param name="class" select="'nav-item d-xs-inline d-sm-inline d-md-none'" />
           <xsl:with-param name="linkClass" select="'nav-link'" />
+          <xsl:with-param name="idSuffix" select="'-mobile'" />
         </xsl:apply-templates>
       </xsl:if>
       <xsl:call-template name="layout.head.basketMenu">
         <xsl:with-param name="class" select="'d-xs-inline d-sm-inline d-md-none'" />
+        <xsl:with-param name="idSuffix" select="'-mobile'" />
       </xsl:call-template>
     </ul>
     <ul class="navbar-nav ms-auto navbar-right">
       <xsl:call-template name="layout.head.basketMenu">
         <xsl:with-param name="class" select="'d-none d-md-inline'" />
         <xsl:with-param name="dropdownClass" select="'dropdown-menu-right'" />
+        <xsl:with-param name="idSuffix" select="'-desktop'" />
       </xsl:call-template>
       <li class="nav-item d-none d-md-inline">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
@@ -381,12 +385,13 @@
   <xsl:template name="layout.head.basketMenu">
     <xsl:param name="class" select="''" />
     <xsl:param name="dropdownClass" select="''" />
+    <xsl:param name="idSuffix" select="''" />
 
     <xsl:variable name="basketType" select="'objects'" />
     <xsl:variable name="basket" select="document(concat('basket:',$basketType))/basket" />
     <xsl:variable name="entryCount" select="count($basket/entry)" />
-    <li class="nav-item dropdown {$class}" id="basket-list-item">
-      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
+    <li class="nav-item dropdown {$class}" id="basket-list-item{$idSuffix}">
+      <a id="basket-toggle{$idSuffix}" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" title="{i18n:translate('basket.title.objects')}">
         <i class="fa fa-bookmark" />
         <sup>
           <xsl:value-of select="$entryCount" />
