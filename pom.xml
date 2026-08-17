@@ -40,7 +40,7 @@
     <maven.compiler.release>${java.target.version}</maven.compiler.release>
     <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir-layout-assets>${project.build.directory}/mir-layout-assets</mir-layout-assets>
-    <mir.version>2025.12.2-SNAPSHOT</mir.version>
+    <mir.version>2025.12.3-SNAPSHOT</mir.version>
     <npm.version>10.9.2</npm.version>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
