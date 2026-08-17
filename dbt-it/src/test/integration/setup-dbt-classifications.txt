@@ -1,0 +1,3 @@
+update all classifications from directory ${dbt.classifications.dir}
+reload solr configuration classification in core classification
+rebuild solr classification index in core classification
