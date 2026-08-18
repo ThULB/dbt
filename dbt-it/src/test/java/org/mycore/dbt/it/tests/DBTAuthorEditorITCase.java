@@ -6,6 +6,7 @@ import org.mycore.dbt.it.controller.DBTControllerFactory;
 import org.mycore.dbt.it.controller.DBTModsEditorController;
 import org.mycore.dbt.it.model.DBTInstitutes;
 import org.mycore.mir.it.controller.MIRControllerFactory;
+import org.mycore.mir.it.model.MIRSampleInstitutes;
 import org.mycore.mir.it.tests.MIRAuthorEditorITCase;
 
 public class DBTAuthorEditorITCase extends MIRAuthorEditorITCase {
@@ -35,8 +36,8 @@ public class DBTAuthorEditorITCase extends MIRAuthorEditorITCase {
     }
 
     @Override
-    protected String institutionTestValue() {
-        return DBTInstitutes.Friedrich_Schiller_Universitaet_Jena.getValue();
+    protected MIRSampleInstitutes institutionTestValue() {
+        return DBTInstitutes.Friedrich_Schiller_Universitaet_Jena;
     }
 
     @Override
