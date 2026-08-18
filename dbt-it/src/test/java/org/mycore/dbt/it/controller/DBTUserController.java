@@ -21,7 +21,7 @@ public class DBTUserController extends MIRUserController {
 
 
     @Override
-    public void CheckCurrentUser(String user){
+    public void checkCurrentUser(String user){
         driver.waitAndFindElement(USER_PROFILE_TOGGLE);
     }
 
