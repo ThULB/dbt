@@ -32,7 +32,7 @@ public class DBTSimpleSearchITCase extends MIRSimpleSearchITCase {
 
     @Override
     protected MIRSearchTestDataLoader createSearchTestDataLoader() {
-        return new DBTSearchTestDataLoader();
+        return new DBTSearchTestDataLoader(controllerFactory);
     }
 
 }
