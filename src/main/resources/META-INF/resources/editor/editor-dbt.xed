@@ -93,6 +93,10 @@
         </div>
         <mir:help-pmud help-text="{i18n:editor.itunes-podcast.help}" />
       </div>
+      <xed:validate required="true"
+                    relevant-if="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                    display="global here"
+                    i18n="mir.validation.podcast_series.category" />
     </xed:bind>
   </xed:template>
   <xed:modify ref="admin.fields">
