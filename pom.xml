@@ -18,10 +18,6 @@
       <distribution>repo</distribution>
     </license>
   </licenses>
-  <modules>
-    <module>dbt-module</module>
-    <module>dbt-it</module>
-  </modules>
   <issueManagement>
     <system>JIRA</system>
     <url>https://mycore.atlassian.net/browse/DBT</url>
@@ -47,6 +43,9 @@
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
     <template.mirassetsdir>${mir-layout-assets}/META-INF/resources/mir-layout</template.mirassetsdir>
     <template.targetdir>${project.build.directory}/classes/META-INF/resources</template.targetdir>
+    <tomcat.version>10.1.31</tomcat.version>
+    <solr-runner.solrVersionString>9.8.1</solr-runner.solrVersionString>
+    <cargo.version>1.10.15</cargo.version>
   </properties>
   <build>
     <pluginManagement>
@@ -119,6 +118,22 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.cargo</groupId>
+          <artifactId>cargo-maven3-plugin</artifactId>
+          <version>${cargo.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.mycore.plugins</groupId>
+          <artifactId>solr-runner-maven-plugin</artifactId>
+          <version>1.5</version>
+          <configuration>
+            <solrVersionString>${solr-runner.solrVersionString}</solrVersionString>
+            <cloudMode>true</cloudMode>
+            <verbose>true</verbose>
+            <additionalParams>-Dsolr.config.lib.enabled=true</additionalParams>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
@@ -174,4 +189,8 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <modules>
+    <module>dbt-module</module>
+    <module>dbt-it</module>
+  </modules>
 </project>
