@@ -25,7 +25,6 @@
     <dbt.setup.dir>${project.basedir}/../dbt-module/src/main/resources/setup</dbt.setup.dir>
     <failsafe.arg />
     <it.host>127.0.0.1</it.host>
-    <tomcat.version>10.1.31</tomcat.version>
     <maven.deploy.skip>true</maven.deploy.skip>
     <maven.install.skip>true</maven.install.skip>
     <solr.home>${MCR.Home.Integration}/solr-home</solr.home>
@@ -122,7 +121,7 @@
             <phase>pre-integration-test</phase>
             <configuration>
               <target>
-                <unzip src="${project.build.directory}/solr-zip/WEB-INF/classes/solr-home.zip" dest="${project.build.directory}/solr-template" />
+                <unzip dest="${project.build.directory}/solr-template" src="${project.build.directory}/solr-zip/WEB-INF/classes/solr-home.zip" />
               </target>
             </configuration>
           </execution>
@@ -152,12 +151,10 @@
       <plugin>
         <groupId>org.mycore.plugins</groupId>
         <artifactId>solr-runner-maven-plugin</artifactId>
-        <version>1.5</version>
         <configuration>
           <solrHome>${solr.home}</solrHome>
           <solrHomeTemplate>${project.build.directory}/solr-template</solrHomeTemplate>
           <solrPort>${solr.port}</solrPort>
-          <cloudMode>true</cloudMode>
         </configuration>
         <executions>
           <execution>
@@ -234,7 +231,6 @@
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven3-plugin</artifactId>
-        <version>1.10.15</version>
         <configuration>
           <container>
             <containerId>tomcat10x</containerId>
