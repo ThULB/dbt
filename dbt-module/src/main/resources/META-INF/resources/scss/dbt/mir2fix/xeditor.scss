@@ -4,7 +4,7 @@
       position: inherit;
     }
 
-    div.is-invalid {
+    div.mcr-invalid {
       color: map-get(map-get($form-validation-states, 'invalid'),'color');
       input, select {
         border-color: map-get(map-get($form-validation-states, 'invalid'),'color');

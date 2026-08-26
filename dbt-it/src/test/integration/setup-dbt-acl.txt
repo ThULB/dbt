@@ -1,0 +1,20 @@
+# DBT specific access rules for the integration test instance.
+#
+# This mirrors dbt-module/src/main/resources/setup/acl/defaultrules-commands.txt and webacl-commands.txt, which the
+# production setup runs via "process acl/...". Those files reference their rule files relatively, which only resolves
+# inside the DBT setup directory, so the commands are repeated here with the absolute (maven filtered) path instead.
+#
+# Without the permissions file no rule exists for create-slot/edit-slot/administrate-slot at all, and a pool privilege
+# without a rule is granted by MyCoRe only to its internal super user (MCRAccessControlSystem#checkAccess) - neither
+# to a submitter nor to the administrator. The "Einrichten" menu item would not even be rendered, because it is gated
+# on read access to webpage:/content/rc/slot.xed, granted further down.
+
+load permissions data from file ${dbt.setup.dir}/acl/permissions.xml
+
+update permission read for id default_slot with rulefile ${dbt.setup.dir}/acl/grant-rc-editors.xml described by rc administrators and rc editor and administrators
+update permission writedb for id default_slot with rulefile ${dbt.setup.dir}/acl/grant-rc-editors.xml described by rc administrators and rc editor and administrators
+update permission deletedb for id default_slot with rulefile ${dbt.setup.dir}/acl/grant-rc-editors.xml described by rc administrators and rc editor and administrators
+
+update permission read for id de.urmel_dl.dbt.common.MailJob with rulefile ${dbt.setup.dir}/acl/grant-rc-admin.xml described by rc administrators and rc editor and administrators
+update permission read for id webpage:/content/rc/mail-queue.xml with rulefile ${dbt.setup.dir}/acl/grant-rc-admin.xml described by rc administrators and rc editor and administrators
+update permission read for id webpage:/content/rc/slot.xed with rulefile ${dbt.setup.dir}/acl/grant-submitter.xml described by submitter, editor and administrator
