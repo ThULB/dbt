@@ -9,23 +9,27 @@ import org.mycore.mir.it.controller.MIRUserController;
 
 public class DBTControllerFactory extends MIRControllerFactory {
 
+    public DBTControllerFactory(MCRWebdriverWrapper driver, String appURL) {
+        super(driver, appURL);
+    }
+
     @Override
-    public MIRUserController createUserController(MCRWebdriverWrapper driver, String appURL) {
+    public MIRUserController createUserController() {
         return new DBTUserController(driver, appURL);
     }
 
     @Override
-    public MIRPublishEditorController createPublishEditorController(MCRWebdriverWrapper driver, String appURL) {
+    public MIRPublishEditorController createPublishEditorController() {
         return new DBTPublishEditorController(driver, appURL);
     }
 
     @Override
-    public MIRModsEditorController createModsEditorController(MCRWebdriverWrapper driver, String appURL) {
+    public MIRModsEditorController createModsEditorController() {
         return new DBTModsEditorController(driver, appURL);
     }
 
     @Override
-    public MIRSearchController createSearchController(MCRWebdriverWrapper driver, String appURL) {
+    public MIRSearchController createSearchController() {
         return new DBTSearchController(driver, appURL);
     }
 
@@ -33,7 +37,7 @@ public class DBTControllerFactory extends MIRControllerFactory {
      * The Semesterapparat (reserve collection) is a DBT only feature, so this controller has no MIR counterpart to
      * override - it is added here instead.
      */
-    public DBTSlotController createSlotController(MCRWebdriverWrapper driver, String appURL) {
+    public DBTSlotController createSlotController() {
         return new DBTSlotController(driver, appURL);
     }
 

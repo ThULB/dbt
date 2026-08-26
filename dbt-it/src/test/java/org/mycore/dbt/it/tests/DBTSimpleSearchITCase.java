@@ -1,6 +1,7 @@
 package org.mycore.dbt.it.tests;
 
 import org.junit.runners.Parameterized;
+import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.dbt.it.controller.DBTControllerFactory;
 import org.mycore.dbt.it.model.DBTSearchTestDataLoader;
 import org.mycore.mir.it.controller.MIRControllerFactory;
@@ -19,8 +20,8 @@ public class DBTSimpleSearchITCase extends MIRSimpleSearchITCase {
     }
 
     @Override
-    protected MIRControllerFactory createControllerFactory() {
-        return new DBTControllerFactory();
+    protected MIRControllerFactory createControllerFactory(MCRWebdriverWrapper driver, String appURL) {
+        return new DBTControllerFactory(driver, appURL);
     }
 
     @Parameterized.Parameters
