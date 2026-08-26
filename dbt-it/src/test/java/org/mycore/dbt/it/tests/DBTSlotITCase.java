@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.dbt.it.controller.DBTControllerFactory;
 import org.mycore.dbt.it.controller.DBTSlotController;
 import org.mycore.mir.it.controller.MIRControllerFactory;
@@ -32,18 +33,16 @@ public class DBTSlotITCase extends MIRITBase {
     private DBTSlotController slotController;
 
     @Override
-    protected MIRControllerFactory createControllerFactory() {
-        return new DBTControllerFactory();
+    protected MIRControllerFactory createControllerFactory(MCRWebdriverWrapper driver, String appURL) {
+        return new DBTControllerFactory(driver, appURL);
     }
 
     @Before
     public final void init() {
-        slotController = ((DBTControllerFactory) controllerFactory).createSlotController(driver, getAPPUrlString());
+        slotController = ((DBTControllerFactory) controllerFactory).createSlotController();
 
         userController.logoutIfLoggedIn();
         userController.loginAs(MIRUserController.ADMIN_LOGIN, MIRUserController.ADMIN_PASSWD);
-        // the user page is titled with the realName once the account has one, so the default assertion of
-        // createUser - which expects the login name - has to be replaced
         userController.createUser(LECTURER_LOGIN, LECTURER_PASSWORD, LECTURER_NAME, LECTURER_EMAIL,
             () -> userController.assertUserCreated(LECTURER_NAME), "submitter");
         userController.logoutIfLoggedIn();

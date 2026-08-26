@@ -25,7 +25,6 @@ public class DBTModsEditorController extends MIRModsEditorController {
         input.clear();
         input.click();
         input.sendKeys(text);
-        // TAB statt clickOutside(): ein Klick daneben trifft in DBT den fixierten Kopfbereich
         input.sendKeys(Keys.TAB);
 
         driver.waitFor(webDriver -> inputHasNoFocus(input));
@@ -53,7 +52,7 @@ public class DBTModsEditorController extends MIRModsEditorController {
                 toggle.click();
             }
         } catch (NoSuchElementException e) {
-            // Formular hat keine Zustimmung-Fieldset (z.B. Verwaltungsformulare) - einfach überspringen
+
         }
     }
 
