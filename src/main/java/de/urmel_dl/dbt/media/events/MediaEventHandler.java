@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Optional;
 
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
@@ -46,7 +47,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
         }
 
         handlePathDeleted(evt, path, attrs);
-        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.ofPath(path), 0));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> handleFile(MCRPath.ofPath(path), 0));
     }
 
     /* (non-Javadoc)
@@ -58,7 +59,7 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
-        MCRSessionMgr.getCurrentSession().onCommit(() -> deleteMediaFile(MCRPath.ofPath(path)));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> deleteFile(MCRPath.ofPath(path)));
     }
 
     /* (non-Javadoc)
@@ -69,13 +70,26 @@ public class MediaEventHandler extends MCREventHandlerBase {
         if (!(path instanceof MCRPath)) {
             return;
         }
-        MCRSessionMgr.getCurrentSession().onCommit(() -> encodeMediaFile(MCRPath.ofPath(path), 10));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> handleFile(MCRPath.ofPath(path), 10));
     }
 
-    private void deleteMediaFile(MCRPath path) {
+    private void deleteFile(MCRPath path) {
         try {
-            String id = MediaService
-                .buildInternalId(MCRPath.ofPath(path).getOwner() + "_" + path.getFileName().toString());
+            if (MediaService.isSubtitleSupported(path)) {
+                Optional<Path> mediaFile = MediaService.findMediaFile(path);
+
+                if (mediaFile.isPresent()) {
+                    MediaService.deleteImportedSubtitleFile(internalMediaId(path, mediaFile.get()));
+                }
+
+                return;
+            }
+
+            String id = internalMediaId(path, path);
+
+            // an imported subtitle can exist even if the media file was never encoded
+            MediaService.deleteImportedSubtitleFile(id);
+
             if (MediaService.hasMediaFiles(id)) {
                 MediaService.deleteMediaFiles(id);
             }
@@ -84,9 +98,45 @@ public class MediaEventHandler extends MCREventHandlerBase {
         }
     }
 
-    private void encodeMediaFile(MCRPath path, int priority) {
-        if (MediaService.isMediaSupported(path)) {
-            MediaService.encodeMediaFile(path.getOwner() + "_" + path.getFileName().toString(), path, priority);
+    private void handleFile(MCRPath path, int priority) {
+        try {
+            if (MediaService.isMediaSupported(path)) {
+
+                MediaService.encodeMediaFile( mediaId(path, path), path, priority);
+
+                // the subtitle may have been uploaded before the media file
+                Optional<Path> subtitleFile = MediaService.findSubtitleFile(path);
+
+                if (subtitleFile.isPresent()) {
+                    MediaService.importSubtitleFile(internalMediaId(path, path), subtitleFile.get());
+                }
+            } else if (MediaService.isSubtitleSupported(path)) {
+                Optional<Path> mediaFile = MediaService.findMediaFile(path);
+
+                if (mediaFile.isPresent()) {
+                    MediaService.importSubtitleFile(internalMediaId(path, mediaFile.get()), path);
+                }
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
+
+    /**
+     * Returns the media id of given media file, e.g. <code>dbt_derivate_00000001_video.mp4</code>.
+     * It's used by the encoder service as job id. The derivate is taken from <code>path</code>, so
+     * a sibling file can be passed too.
+     */
+    private static String mediaId(MCRPath path, Path mediaFile) {
+        return path.getOwner() + "_" + mediaFile.getFileName().toString();
+    }
+
+    /**
+     * Returns the internal media id of given media file, that is used to address the media, thumb
+     * and subtitle store.
+     */
+    private static String internalMediaId(MCRPath path, Path mediaFile) {
+        return MediaService.buildInternalId(mediaId(path, mediaFile));
+    }
+
 }
