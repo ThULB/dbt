@@ -396,6 +396,15 @@ public class MediaService {
     }
 
     public static void importSubtitleFile(String id, Path subtitleFile) throws IOException {
+        String webVTT = SubtitleConverter.toWebVTT(subtitleFile);
+
+        // an imported subtitle replaces the generated ones, so an unusable one must not be taken
+        if (!SubtitleConverter.hasCues(webVTT)) {
+            LOGGER.warn("Ignore subtitle {}: it holds no timings. The generated subtitles are kept, "
+                + "the file has to be corrected and uploaded again.", subtitleFile);
+            return;
+        }
+
         Path storePath = SUBT_STORAGE_PATH.resolve(id);
 
         if (Files.notExists(storePath)) {
@@ -404,7 +413,7 @@ public class MediaService {
 
         Path target = storePath.resolve(IMPORTED_SUBT_FILE_NAME);
         LOGGER.info("import subtitle {} to {}", subtitleFile, target);
-        SubtitleConverter.toWebVTT(subtitleFile, target);
+        Files.writeString(target, webVTT, StandardCharsets.UTF_8);
         SUBT_FILES_CACHE.remove(id);
     }
 

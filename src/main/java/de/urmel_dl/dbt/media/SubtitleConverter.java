@@ -41,7 +41,11 @@ public final class SubtitleConverter {
     }
 
     public static void toWebVTT(Path source, Path target) throws IOException {
-        Files.writeString(target, toWebVTT(readText(source)), StandardCharsets.UTF_8);
+        Files.writeString(target, toWebVTT(source), StandardCharsets.UTF_8);
+    }
+
+    public static String toWebVTT(Path source) throws IOException {
+        return toWebVTT(readText(source));
     }
 
     public static String toWebVTT(String subtitle) {
@@ -50,6 +54,15 @@ public final class SubtitleConverter {
                 .collect(Collectors.joining("\n", "", "\n"));
 
         return vtt.startsWith(WEBVTT_HEADER) ? vtt : WEBVTT_HEADER + "\n\n" + vtt;
+    }
+
+    /**
+     * Returns true, if given subtitle holds at least one cue timing. An empty file or a text file
+     * with a subtitle extension holds none and would replace the generated subtitles by an empty
+     * track, so it must not be imported.
+     */
+    public static boolean hasCues(String webVTT) {
+        return webVTT.lines().anyMatch(line -> line.contains(CUE_TIMING_ARROW));
     }
 
     /**
