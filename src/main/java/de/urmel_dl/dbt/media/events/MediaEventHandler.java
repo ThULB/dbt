@@ -24,6 +24,8 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Optional;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.events.MCREvent;
 import org.mycore.common.events.MCREventHandlerBase;
@@ -37,6 +39,8 @@ import de.urmel_dl.dbt.media.MediaService;
  */
 public class MediaEventHandler extends MCREventHandlerBase {
 
+    private static final Logger LOGGER = LogManager.getLogger();
+
     /* (non-Javadoc)
      * @see org.mycore.common.events.MCREventHandlerBase#handlePathUpdated(org.mycore.common.events.MCREvent, java.nio.file.Path, java.nio.file.attribute.BasicFileAttributes)
      */
@@ -46,8 +50,10 @@ public class MediaEventHandler extends MCREventHandlerBase {
             return;
         }
 
-        handlePathDeleted(evt, path, attrs);
-        MCRSessionMgr.getCurrentSession().onCommit(() -> handleFile(MCRPath.ofPath(path), 0));
+        MCRSessionMgr.getCurrentSession().onCommit(() -> {
+            deleteFile(MCRPath.ofPath(path));
+            handleFile(MCRPath.ofPath(path), 0);
+        });
     }
 
     /* (non-Javadoc)
@@ -118,7 +124,8 @@ public class MediaEventHandler extends MCREventHandlerBase {
                 }
             }
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            // the file itself was stored fine, so a failing subtitle import must not fail the upload
+            LOGGER.error("Could not import subtitle for {}.", path, e);
         }
     }
 
