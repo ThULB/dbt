@@ -50,6 +50,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -121,6 +122,12 @@ public class MediaService {
     private static final MCRCache<String, List<Path>> SUBT_FILES_CACHE = new MCRCache<>(1000L, "SubFileCache");
 
     private static final List<String> CP_SUBT_FILE_EXT = Arrays.asList(".vtt", ".srt");
+
+    /**
+     * Name of a subtitle that was imported from a derivate. It's a fixed name, so it can't clash
+     * with a generated subtitle, and it ends on the language, so the player can detect it.
+     */
+    private static final String IMPORTED_SUBT_FILE_NAME = "imported.de.vtt";
 
     private static final Closeable TASK_SHUTDOWNHANDLER = new Closeable() {
         @Override
@@ -345,6 +352,80 @@ public class MediaService {
         return SUBT_STORAGE_PATH.resolve(id).resolve(fileName);
     }
 
+    public static boolean isSubtitleSupported(Path path) {
+        String fn = path.getFileName().toString().toLowerCase(Locale.ROOT);
+        for (String ext : CP_SUBT_FILE_EXT) {
+            if (fn.endsWith(ext)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Optional<Path> findSubtitleFile(Path mediaFile) throws IOException {
+        return findSibling(mediaFile, MediaService::isSubtitleSupported);
+    }
+
+    public static Optional<Path> findMediaFile(Path subtitleFile) throws IOException {
+        return findSibling(subtitleFile, MediaService::isMediaSupported);
+    }
+
+    /**
+     * Returns the file from the same directory, that has the same name but another type.
+     */
+    private static Optional<Path> findSibling(Path file, Predicate<Path> filter) throws IOException {
+        Path dir = file.getParent();
+
+        if (dir == null || Files.notExists(dir)) {
+            return Optional.empty();
+        }
+
+        String baseName = baseName(file);
+
+        try (Stream<Path> fs = Files.list(dir)) {
+            return fs.filter(f -> filter.test(f) && baseName.equalsIgnoreCase(baseName(f)))
+                    .sorted(Comparator.comparing(f -> f.getFileName().toString()))
+                    .findFirst();
+        }
+    }
+
+    private static String baseName(Path file) {
+        String fn = file.getFileName().toString();
+        int pos = fn.lastIndexOf(".");
+        return pos > 0 ? fn.substring(0, pos) : fn;
+    }
+
+    public static void importSubtitleFile(String id, Path subtitleFile) throws IOException {
+        String webVTT = SubtitleConverter.toWebVTT(subtitleFile);
+
+        // an imported subtitle replaces the generated ones, so an unusable one must not be taken
+        if (!SubtitleConverter.hasCues(webVTT)) {
+            LOGGER.warn("Ignore subtitle {}: it holds no timings. The generated subtitles are kept, "
+                + "the file has to be corrected and uploaded again.", subtitleFile);
+            return;
+        }
+
+        Path storePath = SUBT_STORAGE_PATH.resolve(id);
+
+        if (Files.notExists(storePath)) {
+            Files.createDirectories(storePath);
+        }
+
+        Path target = storePath.resolve(IMPORTED_SUBT_FILE_NAME);
+        LOGGER.info("import subtitle {} to {}", subtitleFile, target);
+        Files.writeString(target, webVTT, StandardCharsets.UTF_8);
+        SUBT_FILES_CACHE.remove(id);
+    }
+
+    public static void deleteImportedSubtitleFile(String id) throws IOException {
+        Path target = SUBT_STORAGE_PATH.resolve(id).resolve(IMPORTED_SUBT_FILE_NAME);
+
+        if (Files.deleteIfExists(target)) {
+            LOGGER.info("deleted imported subtitle {}", target);
+            SUBT_FILES_CACHE.remove(id);
+        }
+    }
+
     public static void deleteMediaFiles(String id) throws IOException {
         deleteFiles(MEDIA_STORAGE_PATH.resolve(id));
         MEDIA_FILES_CACHE.remove(id);
@@ -408,11 +489,19 @@ public class MediaService {
 
     public static Sources buildSubtitleSources(String id) {
         return Optional.ofNullable(getSubtitleFiles(id))
-            .map(f -> new Sources(id,
+                .map(MediaService::preferImportedSubtitle)
+                .map(f -> new Sources(id,
                 f.stream().map(Path::getFileName).sorted()
                     .map(file -> new Source(getSubtitleMimeType(file), file.toString()))
                     .collect(Collectors.toList())))
             .orElse(null);
+    }
+
+    private static List<Path> preferImportedSubtitle(List<Path> files) {
+        return files.stream().filter(f -> IMPORTED_SUBT_FILE_NAME.equals(f.getFileName().toString()))
+                .findFirst()
+                .map(List::of)
+                .orElse(files);
     }
 
     /**
