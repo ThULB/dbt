@@ -19,6 +19,7 @@
 package de.urmel_dl.dbt.media;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -67,10 +68,13 @@ public class TestSubtitleConverter {
     }
 
     @Test
-    public void testSingleDigitHourIsConverted() {
-        String vtt = SubtitleConverter.toWebVTT("1\n0:00:01,000 --> 0:00:04,500\nEinstellige Stunde.\n");
+    public void testSubtitleWithoutCuesIsDetected() {
+        assertFalse(SubtitleConverter.hasCues(SubtitleConverter.toWebVTT("")), "an empty subtitle has no cue");
+        assertFalse(SubtitleConverter.hasCues(SubtitleConverter.toWebVTT("this is not a subtitle at all")),
+                "a subtitle without any timing has no cue");
 
-        assertTrue(vtt.contains("0:00:01.000 --> 0:00:04.500"), "non standard timings should be converted too");
+        assertTrue(SubtitleConverter.hasCues(SubtitleConverter.toWebVTT(SUBRIP)));
+        assertTrue(SubtitleConverter.hasCues(WEBVTT));
     }
 
     @Test

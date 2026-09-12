@@ -26,10 +26,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -65,15 +63,9 @@ public class TestMediaService {
 
     @AfterEach
     public void cleanUp() throws IOException {
-        Path root = MediaService.SUBT_STORAGE_PATH;
-
-        if (Files.notExists(root)) {
-            return;
-        }
-
-        try (Stream<Path> walk = Files.walk(root)) {
-            walk.sorted(Comparator.reverseOrder()).forEach(p -> p.toFile().delete());
-        }
+        // removes only what this test created and evicts the file caches, so nothing leaks into
+        // the next test
+        MediaService.deleteMediaFiles(internalMediaId("myVideo.mp4"));
     }
 
     @Test
@@ -139,6 +131,18 @@ public class TestMediaService {
 
         assertEquals(List.of(IMPORTED_NAME), subtitleSourcesOf("myVideo.mp4"),
             "only the imported subtitle should be offered");
+    }
+
+    @Test
+    public void testSubtitleWithoutCuesIsNotImported() throws IOException {
+        writeGenerated("myVideo.mp4");
+
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.srt", ""));
+
+        assertFalse(Files.exists(storeOf("myVideo.mp4").resolve(IMPORTED_NAME)),
+            "an empty subtitle must not be imported");
+        assertEquals(List.of("myVideo_de.vtt"), subtitleSourcesOf("myVideo.mp4"),
+            "the generated subtitle must be kept");
     }
 
     @Test
