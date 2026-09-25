@@ -2,44 +2,13 @@
 <MyCoReWebPage>
   <section xml:lang="de" title="Online-Publikations-System der Bauhaus-Universität Weimar">
     <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <img src="images/logo-weimar_r0_g155_b180.png"
-               class="img-fluid mb-4"
-               alt="Logo der Universitätsbibliothek Weimar" />
-        </div>
-      </div>
-      <h3>Digitale Bibliothek Thüringen – Startseite Bauhaus-Universität Weimar</h3>
-      <div class="row">
-        <div class="col-md-6">
-          <p>Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</p>
-          <p>Die eingestellten Dokumente sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
-            Sie sind über Bibliothekskataloge und Suchmaschinen erschlossen und leicht zugänglich.
-            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch eingestellt werden.
-          </p>
-        </div>
+      <h3><strong>Digitale Bibliothek Thüringen -</strong> Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</h3>
 
-        <div class="col-md-6">
-          <p><strong>Wenn Sie nach Texten der Bauhaus-Universität Weimar suchen möchten,</strong>
-            wählen Sie bitte die <strong>„Suche“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
-            stehen Ihnen weitere Recherchemöglichkeiten zur Verfügung.
-          </p>
-          <p>
-            <strong>Wenn Sie ein Dokument veröffentlichen möchten,</strong> nutzen Sie bitte die
-            <strong>„Publizieren“</strong>-Option im Menü.
-            Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an.
-            In nur wenigen Schritten können Sie Ihr Dokument an unseren Publikationsservice übertragen.
-          </p>
-          <p>
-            Bitte beachten Sie die Voraussetzungen für studentische Abschlussarbeiten in den <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
-          </p>
-        </div>
-      </div>
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center my-3">
         <div class="col-md-6">
           <form action="../../servlets/solr/find" role="search" class="form">
             <div class="input-group">
-              <input placeholder="Suchen im Bestand" name="condQuery" id="searchTerm" type="text"
+              <input placeholder="Suche von Dokumenten der Bauhaus-Universität" name="condQuery" id="searchTerm" type="text"
                      class="form-control"/>
               <span class="input-group-btn">
                 <button class="btn btn-outline-secondary" type="submit">
@@ -49,50 +18,65 @@
             </div>
             <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
           </form>
+        </div>
+      </div>
+
+      <h5><strong>Eine Publikation einreichen</strong></h5>
+      <p>Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an. Nutzen Sie nun die Option <strong>Publizieren</strong> im Menü. Tragen Sie die Metadaten ein und laden Sie nach dem Abspeichern Ihre Datei hoch.</p>
+      <p>Die Freischaltung und Veröffentlichung Ihrer Einreichung findet nach redaktioneller Prüfung durch die Universitätsbibliothek statt. Als angemeldeter Nutzer erhalten Sie im Menü Publizieren/Meine Einreichungen einen Überblick über Ihre eingestellten Dokumente und den Veröffentlichungsstatus.</p>
+      <p>Die Dokumente sind weltweit zugänglich und werden langzeitarchiviert. Sie sind über die Bibliothekskataloge der Bauhaus-Universität und der Deutschen Nationalbibliothek und Suchmaschinen zugänglich und über die DOI leicht auffindbar.</p>
+
+      <h5><strong>Unterstützte Publikationsarten</strong></h5>
+      <div class="row">
+        <div class="col-md-6">
+          <div>
+            <p>➢ <strong>Wissenschaftliche Publikationen</strong></p>
+            <p>Wissenschaftliche Arbeiten (Aufsätze, Tagungsbeiträge etc.) können als Erst- oder Zweitveröffentlichung in der DBT eingestellt werden. Die Werke müssen während Ihrer Tätigkeit an der Bauhaus-Universität Weimar entstanden sein.</p>
+          </div>
+          <div>
+            <p>➢ <strong>Dissertationen, Habilitationen, studentische Abschlussarbeiten</strong></p>
+            <p>In der DBT werden die elektronisch eingereichten Dissertationen und Habilitationen an der Bauhaus-Universität Weimar veröffentlicht.
+            Studentische Abschlussarbeiten (Bachelor-, Master- und Diplomarbeiten) können eingereicht werden, wenn die Veröffentlichung durch die Betreuerin oder den Betreuer oder ein anderes Mitglied des Lehrkörpers befürwortet und die Arbeit mindestens mit der Note «gut» bewertet wurde.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <p>➢ <strong>Forschungsberichte - Forschungsdaten</strong></p>
+            <p>Forschungsberichte, Vorträge oder Abstracts zu Forschungsdaten publizieren Sie in der Digitalen Bibliothek Thüringen.
+            Für die Veröffentlichung Ihrer digitalen Daten aus einer Forschung steht Ihnen das Repositorium <a href="https://refodat.de/content/index.xml" target="_blank">REFODAT</a> zur Verfügung.
+            Veröffentlichungen in REFODAT und der DBT können miteinander verlinkt werden.</p>
+          </div>
+          <div>
+            <p>➢ <strong>Video- und Tondokumente</strong></p>
+            <p>Die DBT bietet die Möglichkeit, multimediale Inhalte wie Vortragsmitschnitte, Interviews oder Podcasts zu veröffentlichen. Kontaktieren Sie uns bitte unter hss[at]ub.uni-weimar.de.</p>
+          </div>
+        </div>
+      </div>
+      <p>Bei Fragen wenden Sie sich gerne an:</p>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Heidi Körner</strong></p>
+          <p>Tel.: + 49 (0) 3643 / 58 28 23 <br/>
+          E-Mail: hss[at]ub.uni-weimar.de</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Katharina Anding</strong></p>
+          <p>Tel.: + 49 (0) 3643 / 58 28 28 <br/>
+          E-Mail: hss[at]ub.uni-weimar.de</p>
         </div>
       </div>
     </div>
   </section>
+
   <section xml:lang="en" title="Publication Server of Weimar Bauhaus-University">
     <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <img src="images/logo-weimar_r0_g155_b180.png"
-               class="img-fluid mb-4"
-               alt="Logo of university library Weimar" />
-        </div>
-      </div>
-      <h3>Digitale Bibliothek Thüringen – Bauhaus-Universität Weimar</h3>
-      <div class="row">
-        <div class="col-md-6">
-          <p>Welcome to the Publication Service of the Bauhaus-Universität Weimar.</p>
-          <p>The published texts are accessible worldwide on the internet and are permanently archived.
-            They are accessible through library catalogs and search engines of the World Wide Web and
-            are easily accessible.
-            Both initial publications and secondary publications can be electronically published.</p>
-        </div>
+      <h3><strong>Digital Library of Thuringia -</strong> Welcome to the Publication Service of the Weimar Bauhaus-University.</h3>
 
-        <div class="col-md-6">
-          <p><strong>If you wish to search for texts from Bauhaus-Universität Weimar,</strong>
-            please select the <strong>“Search”</strong> option in the menu.
-            Additional research options are available under <strong>“Browse.”</strong>
-          </p>
-          <p>
-            <strong>If you'd like to publish a document,</strong> please use the <strong>“Publish”</strong>
-            option in the menu.
-            Log in with your Bauhaus-Universität Weimar credentials.
-            In just a few steps, you can transfer your document to our publication service.
-          </p>
-          <p>
-            Please note the requirements for student theses in the <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
-          </p>
-        </div>
-      </div>
-      <div class="row justify-content-md-center">
+      <div class="row justify-content-md-center my-3">
         <div class="col-md-6">
           <form action="../../servlets/solr/find" role="search" class="form">
             <div class="input-group">
-              <input placeholder="search in inventory" name="condQuery" id="searchTerm" type="text"
+              <input placeholder="Search Documents of the Bauhaus-University" name="condQuery" id="searchTerm" type="text"
                      class="form-control"/>
               <span class="input-group-btn">
                 <button class="btn btn-outline-secondary" type="submit">
@@ -102,6 +86,51 @@
             </div>
             <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
           </form>
+        </div>
+      </div>
+
+      <h5><strong>Submit a Publication</strong></h5>
+      <p>Log in with your Weimar Bauhaus-University credentials. Then use the <strong>Publish</strong> option in the menu. Enter the metadata and upload your file after saving.</p>
+      <p>Your submission will be activated and published after editorial review by the University Library. As a registered user, you will find an overview of your submitted documents and their publication status under Publish/My Submissions in the menu.</p>
+      <p>The documents are accessible worldwide and are archived long-term. They are accessible through the library catalogues of the Bauhaus-University and the German National Library as well as search engines, and are easily discoverable via the DOI.</p>
+
+      <h5><strong>Supported Publication Types</strong></h5>
+      <div class="row">
+        <div class="col-md-6">
+          <div>
+            <p>➢ <strong>Scientific Publications</strong></p>
+            <p>Scientific works (articles, conference papers, etc.) can be submitted to the DBT as first or secondary publications. The works must have been created during your employment at the Weimar Bauhaus-University.</p>
+          </div>
+          <div>
+            <p>➢ <strong>Dissertations, Habilitations, Student Theses</strong></p>
+            <p>Electronically submitted dissertations and habilitations from the Weimar Bauhaus-University are published in the DBT.
+            Student theses (Bachelor's, Master's and Diploma theses) can be submitted if the publication is endorsed by the supervisor or another member of the faculty and the thesis was graded at least «good».</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <p>➢ <strong>Research Reports - Research Data</strong></p>
+            <p>Publish research reports, presentations or abstracts on research data in the Digital Library of Thuringia.
+            For publishing your digital research data, the <a href="https://refodat.de/content/index.xml" target="_blank">REFODAT</a> repository is available to you.
+            Publications in REFODAT and the DBT can be linked to one another.</p>
+          </div>
+          <div>
+            <p>➢ <strong>Video and Audio Documents</strong></p>
+            <p>The DBT offers the option of publishing multimedia content such as recordings of talks, interviews or podcasts. Please contact us at hss[at]ub.uni-weimar.de.</p>
+          </div>
+        </div>
+      </div>
+      <p>If you have any questions, please feel free to contact:</p>
+      <div class="row">
+        <div class="col-md-6">
+          <p><strong>Heidi Körner</strong></p>
+          <p>Tel.: + 49 (0) 3643 / 58 28 23 <br/>
+          E-Mail: hss[at]ub.uni-weimar.de</p>
+        </div>
+        <div class="col-md-6">
+          <p><strong>Katharina Anding</strong></p>
+          <p>Tel.: + 49 (0) 3643 / 58 28 28 <br/>
+          E-Mail: hss[at]ub.uni-weimar.de</p>
         </div>
       </div>
     </div>
