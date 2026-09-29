@@ -16,11 +16,6 @@ public class DBTComplexSearchITCase extends MIRComplexSearchITCase {
     }
 
     @Override
-    protected String getPageTitle(){
-        return "MODS-Dokument erstellen – Digitale Bibliothek Thüringen";
-    }
-
-    @Override
     protected MIRInstitutes institutionTestValue() {
         return DBTSampleInstitutes.Friedrich_Schiller_Universitaet_Jena;
     }

@@ -13,7 +13,7 @@ public class DBTPublishEditorController extends MIRPublishEditorController {
 
     @Override
     public void open(Runnable assertion) {
-        driver.waitAndFindElement(By.xpath(".//a[contains(@class,'dropdown-toggle') and contains(normalize-space(.), 'Publizieren')]")).click();
+        driver.waitAndFindElement(By.id("menu-publish")).click();
         driver.waitAndFindElement(MCRBy.partialLinkText("Publizieren")).click();
         if (assertion != null) {
             assertion.run();
@@ -22,7 +22,7 @@ public class DBTPublishEditorController extends MIRPublishEditorController {
 
     @Override
     public void openAdmin(Runnable assertion) {
-        driver.waitAndFindElement(By.xpath(".//a[contains(@class,'dropdown-toggle') and contains(normalize-space(.), 'Publizieren')]")).click();
+        driver.waitAndFindElement(By.id("menu-publish")).click();
         driver.waitAndFindElement(MCRBy.partialLinkText("Publizieren (Admin)")).click();
         if (assertion != null) {
             assertion.run();

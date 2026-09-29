@@ -3,8 +3,10 @@ package org.mycore.dbt.it.tests;
 import org.junit.runners.Parameterized;
 import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.dbt.it.controller.DBTControllerFactory;
+import org.mycore.dbt.it.model.DBTSampleInstitutes;
 import org.mycore.dbt.it.model.DBTSearchTestDataLoader;
 import org.mycore.mir.it.controller.MIRControllerFactory;
+import org.mycore.mir.it.model.MIRInstitutes;
 import org.mycore.mir.it.model.MIRSearchTestDataLoader;
 import org.mycore.mir.it.tests.MIRSimpleSearchITCase;
 import java.io.IOException;
@@ -29,6 +31,11 @@ public class DBTSimpleSearchITCase extends MIRSimpleSearchITCase {
         return Stream.of(new Object[] { "simpleTest1.json", "dbt_mods_00010000" },
                         new Object[] { "simpleTest2.json", "dbt_mods_00010000" })
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    protected MIRInstitutes[] institutes() {
+        return DBTSampleInstitutes.values();
     }
 
     @Override

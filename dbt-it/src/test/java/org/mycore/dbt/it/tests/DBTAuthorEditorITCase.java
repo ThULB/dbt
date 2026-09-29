@@ -18,11 +18,6 @@ public class DBTAuthorEditorITCase extends MIRAuthorEditorITCase {
     }
 
     @Override
-    protected String getPageTitle (){
-        return  "MODS-Dokument erstellen – Digitale Bibliothek Thüringen";
-    }
-
-    @Override
     protected void assertBaseValidation() {
         super.assertBaseValidation();
         Assert.assertTrue("Contract validation message should be visible!",

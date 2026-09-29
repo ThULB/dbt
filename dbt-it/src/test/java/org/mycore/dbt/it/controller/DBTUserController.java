@@ -10,6 +10,9 @@ public class DBTUserController extends MIRUserController {
 
     MCRWebdriverWrapper driver;
 
+    private static final By WEBCLI_LINK =
+            By.cssSelector("div[aria-labelledby='menu-user-desktop'] a[href$='webcli/launchpad.xml']");
+
     public DBTUserController(MCRWebdriverWrapper driver, String baseURL) {
         super(driver, baseURL);
         this.driver = driver;
@@ -28,6 +31,12 @@ public class DBTUserController extends MIRUserController {
     @Override
     public void openUserMenu() {
         driver.waitAndFindElement(By.id("menu-user-desktop")).click();
+    }
+
+    @Override
+    public void openWebCLI() {
+        openUserMenu();
+        driver.waitAndFindElement(WEBCLI_LINK).click();
     }
 
     @Override

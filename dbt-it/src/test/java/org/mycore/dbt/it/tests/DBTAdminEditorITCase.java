@@ -12,8 +12,4 @@ public class DBTAdminEditorITCase extends MIRAdminEditorITCase {
         return new DBTAdminControllerFactory(driver, appURL);
     }
 
-    @Override
-    protected String getPageTitle(){
-        return  "MODS-Dokument erstellen – Digitale Bibliothek Thüringen";
-    }
 }
