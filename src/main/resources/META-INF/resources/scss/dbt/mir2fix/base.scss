@@ -5,6 +5,21 @@
   border-top: none;
 }
 
+// undo ".jumbotwo h2" from mir-layout common/base.scss: restore Bootstrap's h2 defaults
+// and let the heading classes (.h1 - .h6) work on h2 elements again
+.jumbotwo {
+  h2 {
+    @include font-size($h2-font-size);
+    margin: 0 0 $headings-margin-bottom;
+  }
+
+  @each $level, $size in $font-sizes {
+    h2.h#{$level} {
+      @include font-size($size);
+    }
+  }
+}
+
 footer{
   $footer-link-color: color.adjust($primary, $lightness:-1%);
   --bs-link-color-rgb: #{color.red($footer-link-color), color.green($footer-link-color), color.blue($footer-link-color)};

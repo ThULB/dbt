@@ -1,108 +1,253 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyCoReWebPage>
   <section xml:lang="de" title="Online-Publikations-System der Bauhaus-Universität Weimar">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <img src="images/logo-weimar_r0_g155_b180.png"
-               class="img-fluid mb-4"
-               alt="Logo der Universitätsbibliothek Weimar" />
+    <div class="jumbotwo">
+      <div class="bg-light rounded p-4 p-md-5 mb-5">
+        <p class="text-uppercase text-muted small fw-semibold mb-2">Digitale Bibliothek Thüringen</p>
+        <h1 class="h2 mb-3" style="hyphens: manual">Publikationsservice der Bauhaus-Universität Weimar</h1>
+        <p class="lead mb-4">Veröffentlichen Sie Ihre Forschung dauerhaft, weltweit sichtbar und mit DOI.</p>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a class="btn btn-primary" href="../publish/index.xml">Jetzt publizieren</a>
+          <a class="btn btn-outline-primary"
+             href="../../servlets/solr/find?condQuery=*&amp;fq=category.top%3A%22mir_institutes%5C%3A3%22">Alle Publikationen ansehen</a>
         </div>
+        <form action="../../servlets/solr/find" role="search" class="form col-lg-8 px-0">
+          <label for="weimarSearchTerm" class="visually-hidden">Suche in Dokumenten der Bauhaus-Universität Weimar</label>
+          <div class="input-group">
+            <input placeholder="Suche in Dokumenten der Bauhaus-Universität Weimar" name="condQuery" id="weimarSearchTerm" type="text"
+                   class="form-control"/>
+            <button class="btn btn-outline-secondary" type="submit" aria-label="Suchen">
+              <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
+            </button>
+          </div>
+          <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+        </form>
       </div>
-      <h3>Digitale Bibliothek Thüringen – Startseite Bauhaus-Universität Weimar</h3>
-      <div class="row">
-        <div class="col-md-6">
-          <p>Willkommen beim Publikationsservice der Bauhaus-Universität Weimar.</p>
-          <p>Die eingestellten Dokumente sind weltweit im Internet zugänglich und werden dauerhaft archiviert.
-            Sie sind über Bibliothekskataloge und Suchmaschinen erschlossen und leicht zugänglich.
-            Sowohl Erstveröffentlichungen als auch Zweitveröffentlichungen können elektronisch eingestellt werden.
-          </p>
-        </div>
 
+      <h2 class="h4 mb-3">So veröffentlichen Sie</h2>
+      <ol class="row list-unstyled g-3 mb-2">
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">1</span>Mit dem Login der Bauhaus-Universität anmelden
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">2</span>Im Menü <strong>Publizieren</strong> die Metadaten eintragen
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">3</span>Nach dem Speichern die Datei hochladen
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">4</span>Prüfung und Freischaltung durch die Universitätsbibliothek
+        </li>
+      </ol>
+      <p class="small text-muted mb-5">Den Status Ihrer Einreichungen sehen Sie jederzeit unter Publizieren/Meine Einreichungen.</p>
+
+      <h2 class="h4 mb-3">Was Sie veröffentlichen können</h2>
+      <div class="row g-4 mb-4">
         <div class="col-md-6">
-          <p><strong>Wenn Sie nach Texten der Bauhaus-Universität Weimar suchen möchten,</strong>
-            wählen Sie bitte die <strong>„Suche“</strong>-Option im Menü. Unter <strong>„Blättern“</strong>
-            stehen Ihnen weitere Recherchemöglichkeiten zur Verfügung.
-          </p>
-          <p>
-            <strong>Wenn Sie ein Dokument veröffentlichen möchten,</strong> nutzen Sie bitte die
-            <strong>„Publizieren“</strong>-Option im Menü.
-            Melden Sie sich mit Ihrem Login der Bauhaus-Universität Weimar an.
-            In nur wenigen Schritten können Sie Ihr Dokument an unseren Publikationsservice übertragen.
-          </p>
-          <p>
-            Bitte beachten Sie die Voraussetzungen für studentische Abschlussarbeiten in den <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
-          </p>
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-file-lines text-primary me-2" aria-hidden="true"></i>Wissenschaftliche Publikationen
+              </h3>
+              <p class="card-text small">
+                Aufsätze, Tagungsbeiträge u. ä. als Erst- oder Zweitveröffentlichung, entstanden während Ihrer Tätigkeit
+                an der Bauhaus-Universität Weimar.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="../publish/index.xml">Publizieren →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-graduation-cap text-primary me-2" aria-hidden="true"></i>Hochschulschriften
+              </h3>
+              <p class="card-text small">
+                Dissertationen und Habilitationen sowie studentische Abschlussarbeiten, wenn die Betreuung die
+                Veröffentlichung befürwortet und die Arbeit mindestens mit „gut“ bewertet wurde.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="../top/faq.xml#hochschulschriftenRegelungen">Regelungen →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-database text-primary me-2" aria-hidden="true"></i>Forschungsberichte <span class="text-nowrap">und -daten</span>
+              </h3>
+              <p class="card-text small">
+                Berichte, Vorträge oder Abstracts in der DBT, die Daten selbst in REFODAT. Beide lassen sich
+                miteinander verlinken.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="https://refodat.de/content/index.xml">Zu REFODAT →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-video text-primary me-2" aria-hidden="true"></i>Video- und Tondokumente
+              </h3>
+              <p class="card-text small">
+                Vortragsmitschnitte, Interviews oder Podcasts. Sprechen Sie uns vorab an.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="mailto:hss@ub.uni-weimar.de">Kontakt aufnehmen →</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row justify-content-md-center">
-        <div class="col-md-6">
-          <form action="../../servlets/solr/find" role="search" class="form">
-            <div class="input-group">
-              <input placeholder="Suchen im Bestand" name="condQuery" id="searchTerm" type="text"
-                     class="form-control"/>
-              <span class="input-group-btn">
-                <button class="btn btn-outline-secondary" type="submit">
-                  <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
-                </button>
-              </span>
-            </div>
-            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
-          </form>
-        </div>
+
+      <ul class="list-inline text-muted mb-5">
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>weltweit zugänglich</li>
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>dauerhaft archiviert</li>
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>zitierbar per DOI</li>
+        <li class="list-inline-item"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>im Katalog der Deutschen Nationalbibliothek</li>
+      </ul>
+
+      <div class="border rounded p-4">
+        <h2 class="h5">Kontakt</h2>
+        <p class="mb-1">E-Mail: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a></p>
+        <ul class="list-unstyled mb-0 d-md-flex column-gap-5">
+          <li>Heidi&#160;Körner, <span class="text-nowrap">Tel. <a href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a></span></li>
+          <li>Katharina&#160;Anding, <span class="text-nowrap">Tel. <a href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a></span></li>
+        </ul>
       </div>
     </div>
   </section>
-  <section xml:lang="en" title="Publication Server of Weimar Bauhaus-University">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-3">
-          <img src="images/logo-weimar_r0_g155_b180.png"
-               class="img-fluid mb-4"
-               alt="Logo of university library Weimar" />
-        </div>
-      </div>
-      <h3>Digitale Bibliothek Thüringen – Bauhaus-Universität Weimar</h3>
-      <div class="row">
-        <div class="col-md-6">
-          <p>Welcome to the Publication Service of the Bauhaus-Universität Weimar.</p>
-          <p>The published texts are accessible worldwide on the internet and are permanently archived.
-            They are accessible through library catalogs and search engines of the World Wide Web and
-            are easily accessible.
-            Both initial publications and secondary publications can be electronically published.</p>
-        </div>
 
+  <section xml:lang="en" title="Publication Server of Bauhaus-Universität Weimar">
+    <div class="jumbotwo">
+      <div class="bg-light rounded p-4 p-md-5 mb-5">
+        <p class="text-uppercase text-muted small fw-semibold mb-2">Digital Library of Thuringia</p>
+        <h1 class="h2 mb-3" style="hyphens: manual">Publication Service of the Bauhaus-Universität Weimar</h1>
+        <p class="lead mb-4">Publish your research permanently, visible worldwide and with a DOI.</p>
+        <div class="d-flex flex-wrap gap-2 mb-4">
+          <a class="btn btn-primary" href="../publish/index.xml">Publish now</a>
+          <a class="btn btn-outline-primary"
+             href="../../servlets/solr/find?condQuery=*&amp;fq=category.top%3A%22mir_institutes%5C%3A3%22">Browse all publications</a>
+        </div>
+        <form action="../../servlets/solr/find" role="search" class="form col-lg-8 px-0">
+          <label for="weimarSearchTerm" class="visually-hidden">Search documents of the Bauhaus-Universität Weimar</label>
+          <div class="input-group">
+            <input placeholder="Search documents of the Bauhaus-Universität Weimar" name="condQuery" id="weimarSearchTerm" type="text"
+                   class="form-control"/>
+            <button class="btn btn-outline-secondary" type="submit" aria-label="Search">
+              <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
+            </button>
+          </div>
+          <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
+        </form>
+      </div>
+
+      <h2 class="h4 mb-3">How to publish</h2>
+      <ol class="row list-unstyled g-3 mb-2">
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">1</span>Log in with your Bauhaus-Universität credentials
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">2</span>Enter the metadata under <strong>Publish</strong> in the menu
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">3</span>Upload your file after saving
+        </li>
+        <li class="col-sm-6 col-lg-3">
+          <span class="badge rounded-pill bg-primary me-2">4</span>Review and release by the University Library
+        </li>
+      </ol>
+      <p class="small text-muted mb-5">You can check the status of your submissions at any time under Publish/My submissions.</p>
+
+      <h2 class="h4 mb-3">What you can publish</h2>
+      <div class="row g-4 mb-4">
         <div class="col-md-6">
-          <p><strong>If you wish to search for texts from Bauhaus-Universität Weimar,</strong>
-            please select the <strong>“Search”</strong> option in the menu.
-            Additional research options are available under <strong>“Browse.”</strong>
-          </p>
-          <p>
-            <strong>If you'd like to publish a document,</strong> please use the <strong>“Publish”</strong>
-            option in the menu.
-            Log in with your Bauhaus-Universität Weimar credentials.
-            In just a few steps, you can transfer your document to our publication service.
-          </p>
-          <p>
-            Please note the requirements for student theses in the <a href="https://www.db-thueringen.de/content/top/faq.xml#about">FAQ. </a>
-          </p>
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-file-lines text-primary me-2" aria-hidden="true"></i>Scientific Publications
+              </h3>
+              <p class="card-text small">
+                Articles, conference papers and similar works as first or secondary publications, created during your
+                time at the Bauhaus-Universität Weimar.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="../publish/index.xml">Publish →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-graduation-cap text-primary me-2" aria-hidden="true"></i>Theses and Dissertations
+              </h3>
+              <p class="card-text small">
+                Dissertations and habilitations as well as student theses, if the supervisor endorses the publication
+                and the thesis was graded at least “good”.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="../top/faq.xml#hochschulschriftenRegelungen">Regulations →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-database text-primary me-2" aria-hidden="true"></i>Research Reports and Research Data
+              </h3>
+              <p class="card-text small">
+                Reports, presentations or abstracts in the DBT, the data itself in REFODAT. Both can be linked to each
+                other.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="https://refodat.de/content/index.xml">Go to REFODAT →</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100">
+            <div class="card-body">
+              <h3 class="h6 card-title">
+                <i class="fas fa-video text-primary me-2" aria-hidden="true"></i>Video and Audio Documents
+              </h3>
+              <p class="card-text small">
+                Recordings of talks, interviews or podcasts. Please contact us in advance.
+              </p>
+            </div>
+            <div class="card-footer bg-transparent border-0 pt-0">
+              <a href="mailto:hss@ub.uni-weimar.de">Get in touch →</a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="row justify-content-md-center">
-        <div class="col-md-6">
-          <form action="../../servlets/solr/find" role="search" class="form">
-            <div class="input-group">
-              <input placeholder="search in inventory" name="condQuery" id="searchTerm" type="text"
-                     class="form-control"/>
-              <span class="input-group-btn">
-                <button class="btn btn-outline-secondary" type="submit">
-                  <span aria-hidden="true" class="fa fa-magnifying-glass"></span>
-                </button>
-              </span>
-            </div>
-            <input type="hidden" name="fq" value="category.top:&#34;mir_institutes\:3&#34;"/>
-          </form>
-        </div>
+
+      <ul class="list-inline text-muted mb-5">
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>accessible worldwide</li>
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>archived long-term</li>
+        <li class="list-inline-item me-4"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>citable via DOI</li>
+        <li class="list-inline-item"><i class="fas fa-check text-primary me-1" aria-hidden="true"></i>listed in the German National Library catalogue</li>
+      </ul>
+
+      <div class="border rounded p-4">
+        <h2 class="h5">Contact</h2>
+        <p class="mb-1">Email: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a></p>
+        <ul class="list-unstyled mb-0 d-md-flex column-gap-5">
+          <li>Heidi&#160;Körner, <span class="text-nowrap">phone <a href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a></span></li>
+          <li>Katharina&#160;Anding, <span class="text-nowrap">phone <a href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a></span></li>
+        </ul>
       </div>
     </div>
   </section>
