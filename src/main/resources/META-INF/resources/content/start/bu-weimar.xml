@@ -117,10 +117,11 @@
 
       <div class="border rounded p-4">
         <h2 class="h5">Kontakt</h2>
-        <p class="mb-0">
-          E-Mail: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a><br/>
-          Heidi Körner, Tel. <a class="text-nowrap" href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a> · Katharina Anding, Tel. <a class="text-nowrap" href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a>
-        </p>
+        <p class="mb-1">E-Mail: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a></p>
+        <ul class="list-unstyled mb-0 d-md-flex column-gap-5">
+          <li>Heidi&#160;Körner, <span class="text-nowrap">Tel. <a href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a></span></li>
+          <li>Katharina&#160;Anding, <span class="text-nowrap">Tel. <a href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a></span></li>
+        </ul>
       </div>
     </div>
   </section>
@@ -242,10 +243,11 @@
 
       <div class="border rounded p-4">
         <h2 class="h5">Contact</h2>
-        <p class="mb-0">
-          Email: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a><br/>
-          Heidi Körner, phone <a class="text-nowrap" href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a> · Katharina Anding, phone <a class="text-nowrap" href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a>
-        </p>
+        <p class="mb-1">Email: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a></p>
+        <ul class="list-unstyled mb-0 d-md-flex column-gap-5">
+          <li>Heidi&#160;Körner, <span class="text-nowrap">phone <a href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a></span></li>
+          <li>Katharina&#160;Anding, <span class="text-nowrap">phone <a href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a></span></li>
+        </ul>
       </div>
     </div>
   </section>
