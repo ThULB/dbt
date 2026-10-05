@@ -119,7 +119,7 @@
         <h2 class="h5">Kontakt</h2>
         <p class="mb-0">
           E-Mail: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a><br/>
-          Heidi Körner, Tel. +49 (0) 3643 / 58 28 23 · Katharina Anding, Tel. +49 (0) 3643 / 58 28 28
+          Heidi Körner, Tel. <a class="text-nowrap" href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a> · Katharina Anding, Tel. <a class="text-nowrap" href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a>
         </p>
       </div>
     </div>
@@ -244,7 +244,7 @@
         <h2 class="h5">Contact</h2>
         <p class="mb-0">
           Email: <a href="mailto:hss@ub.uni-weimar.de">hss@ub.uni-weimar.de</a><br/>
-          Heidi Körner, phone +49 (0) 3643 / 58 28 23 · Katharina Anding, phone +49 (0) 3643 / 58 28 28
+          Heidi Körner, phone <a class="text-nowrap" href="tel:+493643582823">+49 (0) 3643 / 58 28 23</a> · Katharina Anding, phone <a class="text-nowrap" href="tel:+493643582828">+49 (0) 3643 / 58 28 28</a>
         </p>
       </div>
     </div>
