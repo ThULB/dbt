@@ -4,7 +4,7 @@
     <div class="jumbotwo">
       <div class="bg-light rounded p-4 p-md-5 mb-5">
         <p class="text-uppercase text-muted small fw-semibold mb-2">Digitale Bibliothek Thüringen</p>
-        <h1 class="h2 mb-3">Publikationsservice der Bauhaus-Universität Weimar</h1>
+        <h1 class="h2 mb-3" style="hyphens: manual">Publikationsservice der Bauhaus-Universität Weimar</h1>
         <p class="lead mb-4">Veröffentlichen Sie Ihre Forschung dauerhaft, weltweit sichtbar und mit DOI.</p>
         <div class="d-flex flex-wrap gap-2 mb-4">
           <a class="btn btn-primary" href="../publish/index.xml">Jetzt publizieren</a>
@@ -129,7 +129,7 @@
     <div class="jumbotwo">
       <div class="bg-light rounded p-4 p-md-5 mb-5">
         <p class="text-uppercase text-muted small fw-semibold mb-2">Digital Library of Thuringia</p>
-        <h1 class="h2 mb-3">Publication Service of the Bauhaus-Universität Weimar</h1>
+        <h1 class="h2 mb-3" style="hyphens: manual">Publication Service of the Bauhaus-Universität Weimar</h1>
         <p class="lead mb-4">Publish your research permanently, visible worldwide and with a DOI.</p>
         <div class="d-flex flex-wrap gap-2 mb-4">
           <a class="btn btn-primary" href="../publish/index.xml">Publish now</a>
