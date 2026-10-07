@@ -52,9 +52,9 @@ public class TestMediaService {
 
     private static final String IMPORTED_NAME = "imported.de.vtt";
 
-    private static final String SUBRIP = "1\r\n"
-        + "00:00:01,000 --> 00:00:04,500\r\n"
-        + "Schön, dass Sie da sind.\r\n";
+    private static final String WEBVTT = "WEBVTT\n\n"
+        + "00:00:01.000 --> 00:00:04.500 position:10%,line-left\n"
+        + "Schön, dass Sie da sind.\n";
 
     private static final String GENERATED_VTT = "WEBVTT\n\n00:00:01.000 --> 00:00:04.500\nautomatisch erzeugt\n";
 
@@ -70,10 +70,10 @@ public class TestMediaService {
 
     @Test
     public void testIsSubtitleSupported() {
-        assertTrue(MediaService.isSubtitleSupported(derivate.resolve("myVideo.srt")));
         assertTrue(MediaService.isSubtitleSupported(derivate.resolve("myVideo.vtt")));
-        assertTrue(MediaService.isSubtitleSupported(derivate.resolve("myVideo.SRT")), "must ignore case");
+        assertTrue(MediaService.isSubtitleSupported(derivate.resolve("myVideo.VTT")));
 
+        assertFalse(MediaService.isSubtitleSupported(derivate.resolve("myVideo.srt")));
         assertFalse(MediaService.isSubtitleSupported(derivate.resolve("myVideo.mp4")));
         assertFalse(MediaService.isSubtitleSupported(derivate.resolve("myVideo.txt")));
     }
@@ -81,7 +81,7 @@ public class TestMediaService {
     @Test
     public void testFindSubtitleFileOfMediaFile() throws IOException {
         Path mediaFile = write("myVideo.mp4", "not a real video");
-        Path subtitleFile = write("myVideo.srt", SUBRIP);
+        Path subtitleFile = write("myVideo.vtt", WEBVTT);
 
         assertEquals(Optional.of(subtitleFile), MediaService.findSubtitleFile(mediaFile));
     }
@@ -89,7 +89,7 @@ public class TestMediaService {
     @Test
     public void testFindMediaFileOfSubtitleFile() throws IOException {
         Path mediaFile = write("myVideo.mp4", "not a real video");
-        Path subtitleFile = write("myVideo.srt", SUBRIP);
+        Path subtitleFile = write("myVideo.vtt", WEBVTT);
 
         assertEquals(Optional.of(mediaFile), MediaService.findMediaFile(subtitleFile));
     }
@@ -97,7 +97,7 @@ public class TestMediaService {
     @Test
     public void testFindIgnoresDifferentName() throws IOException {
         Path mediaFile = write("myVideo.mp4", "not a real video");
-        Path subtitleFile = write("untertitel.srt", SUBRIP);
+        Path subtitleFile = write("untertitel.vtt", WEBVTT);
 
         assertTrue(MediaService.findSubtitleFile(mediaFile).isEmpty(), "different name must not match");
         assertTrue(MediaService.findMediaFile(subtitleFile).isEmpty(), "different name must not match");
@@ -106,28 +106,27 @@ public class TestMediaService {
     @Test
     public void testFindIgnoresCase() throws IOException {
         Path mediaFile = write("MyVideo.MP4", "not a real video");
-        Path subtitleFile = write("myvideo.SRT", SUBRIP);
+        Path subtitleFile = write("myvideo.VTT", WEBVTT);
 
         assertEquals(Optional.of(subtitleFile), MediaService.findSubtitleFile(mediaFile));
         assertEquals(Optional.of(mediaFile), MediaService.findMediaFile(subtitleFile));
     }
 
     @Test
-    public void testImportedSubtitleIsConvertedToWebVTT() throws IOException {
-        Path subtitleFile = write("myVideo.srt", SUBRIP);
+    public void testImportedSubtitleIsCopied() throws IOException {
+        Path subtitleFile = write("myVideo.vtt", WEBVTT);
 
-        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), subtitleFile);
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), subtitleFile, "de");
 
         Path imported = storeOf("myVideo.mp4").resolve(IMPORTED_NAME);
         assertTrue(Files.exists(imported), "imported subtitle should exist");
-        assertEquals("WEBVTT\n\n1\n00:00:01.000 --> 00:00:04.500\nSchön, dass Sie da sind.\n",
-            Files.readString(imported, StandardCharsets.UTF_8));
+        assertEquals(-1L, Files.mismatch(subtitleFile, imported), "imported subtitle should be unchanged");
     }
 
     @Test
     public void testImportedSubtitleReplacesGeneratedOne() throws IOException {
         writeGenerated("myVideo.mp4");
-        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.srt", SUBRIP));
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", WEBVTT), "de");
 
         assertEquals(List.of(IMPORTED_NAME), subtitleSourcesOf("myVideo.mp4"),
             "only the imported subtitle should be offered");
@@ -137,7 +136,7 @@ public class TestMediaService {
     public void testSubtitleWithoutCuesIsNotImported() throws IOException {
         writeGenerated("myVideo.mp4");
 
-        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.srt", ""));
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", ""), "de");
 
         assertFalse(Files.exists(storeOf("myVideo.mp4").resolve(IMPORTED_NAME)),
             "an empty subtitle must not be imported");
@@ -156,13 +155,47 @@ public class TestMediaService {
     @Test
     public void testDeleteImportedSubtitleRestoresGeneratedOne() throws IOException {
         writeGenerated("myVideo.mp4");
-        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.srt", SUBRIP));
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", WEBVTT), "de");
 
         MediaService.deleteImportedSubtitleFile(internalMediaId("myVideo.mp4"));
 
         assertFalse(Files.exists(storeOf("myVideo.mp4").resolve(IMPORTED_NAME)));
         assertEquals(List.of("myVideo_de.vtt"), subtitleSourcesOf("myVideo.mp4"),
             "the generated subtitle should be offered again");
+    }
+
+    @Test
+    public void testImportedSubtitleIsNamedByLanguage() throws IOException {
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", WEBVTT), "en");
+        assertEquals(List.of("imported.en.vtt"), subtitleSourcesOf("myVideo.mp4"));
+
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", WEBVTT), "es");
+        assertEquals(List.of("imported.es.vtt"), subtitleSourcesOf("myVideo.mp4"),
+            "a changed language must replace the old subtitle, not add a second one");
+    }
+
+    @Test
+    public void testImportedSubtitleNameOfLanguage() {
+        assertEquals("imported.en.vtt", MediaService.importedSubtitleFileName("en"));
+        assertEquals("imported.en.vtt", MediaService.importedSubtitleFileName(" EN-us "),
+            "only the primary language is used");
+
+        assertEquals("imported.vtt", MediaService.importedSubtitleFileName(null), "no language, no label");
+        assertEquals("imported.vtt", MediaService.importedSubtitleFileName(""), "no language, no label");
+        assertEquals("imported.vtt", MediaService.importedSubtitleFileName("../en"),
+            "an invalid language must not end up in the file name");
+    }
+
+    @Test
+    public void testImportedSubtitleWithoutLanguageReplacesGeneratedOne() throws IOException {
+        writeGenerated("myVideo.mp4");
+        MediaService.importSubtitleFile(internalMediaId("myVideo.mp4"), write("myVideo.vtt", WEBVTT), null);
+
+        assertEquals(List.of("imported.vtt"), subtitleSourcesOf("myVideo.mp4"));
+
+        MediaService.deleteImportedSubtitleFile(internalMediaId("myVideo.mp4"));
+        assertEquals(List.of("myVideo_de.vtt"), subtitleSourcesOf("myVideo.mp4"),
+            "an unlabelled import must be deleted too");
     }
 
     private static String internalMediaId(String fileName) {

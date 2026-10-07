@@ -51,6 +51,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -124,10 +126,16 @@ public class MediaService {
     private static final List<String> CP_SUBT_FILE_EXT = Arrays.asList(".vtt", ".srt");
 
     /**
-     * Name of a subtitle that was imported from a derivate. It's a fixed name, so it can't clash
-     * with a generated subtitle, and it ends on the language, so the player can detect it.
+     * Prefix of a subtitle that was imported from a derivate, e.g. <code>imported.en.vtt</code>. It's
+     * a fixed name, so it can't clash with a generated subtitle, and it ends on the language, so the
+     * player can detect it.
      */
-    private static final String IMPORTED_SUBT_FILE_NAME = "imported.de.vtt";
+    private static final String IMPORTED_SUBT_FILE_PREFIX = "imported.";
+
+    private static final String IMPORTED_SUBT_FILE_EXT = ".vtt";
+
+    /** A language code like <code>en</code> or <code>en-US</code>. Only the first part is used. */
+    private static final Pattern LANGUAGE_CODE = Pattern.compile("([a-z]{2,3})(-[a-z0-9]+)*");
 
     private static final Closeable TASK_SHUTDOWNHANDLER = new Closeable() {
         @Override
@@ -353,13 +361,7 @@ public class MediaService {
     }
 
     public static boolean isSubtitleSupported(Path path) {
-        String fn = path.getFileName().toString().toLowerCase(Locale.ROOT);
-        for (String ext : CP_SUBT_FILE_EXT) {
-            if (fn.endsWith(ext)) {
-                return true;
-            }
-        }
-        return false;
+        return path.getFileName().toString().toLowerCase(Locale.ROOT).endsWith(".vtt");
     }
 
     public static Optional<Path> findSubtitleFile(Path mediaFile) throws IOException {
@@ -395,11 +397,9 @@ public class MediaService {
         return pos > 0 ? fn.substring(0, pos) : fn;
     }
 
-    public static void importSubtitleFile(String id, Path subtitleFile) throws IOException {
-        String webVTT = SubtitleConverter.toWebVTT(subtitleFile);
-
+    public static void importSubtitleFile(String id, Path subtitleFile, String language) throws IOException {
         // an imported subtitle replaces the generated ones, so an unusable one must not be taken
-        if (!SubtitleConverter.hasCues(webVTT)) {
+        if (!isWebVTTWithCues(subtitleFile)) {
             LOGGER.warn("Ignore subtitle {}: it holds no timings. The generated subtitles are kept, "
                 + "the file has to be corrected and uploaded again.", subtitleFile);
             return;
@@ -411,17 +411,54 @@ public class MediaService {
             Files.createDirectories(storePath);
         }
 
-        Path target = storePath.resolve(IMPORTED_SUBT_FILE_NAME);
+        // the language may have changed since the last import, so the old file must go
+        deleteImportedSubtitleFile(id);
+
+        Path target = storePath.resolve(importedSubtitleFileName(language));
         LOGGER.info("import subtitle {} to {}", subtitleFile, target);
-        Files.writeString(target, webVTT, StandardCharsets.UTF_8);
+        Files.copy(subtitleFile, target, StandardCopyOption.REPLACE_EXISTING);
         SUBT_FILES_CACHE.remove(id);
     }
 
-    public static void deleteImportedSubtitleFile(String id) throws IOException {
-        Path target = SUBT_STORAGE_PATH.resolve(id).resolve(IMPORTED_SUBT_FILE_NAME);
+    static String importedSubtitleFileName(String language) {
+        return Optional.ofNullable(language)
+            .map(l -> LANGUAGE_CODE.matcher(l.trim().toLowerCase(Locale.ROOT)))
+            .filter(Matcher::matches)
+            .map(m -> IMPORTED_SUBT_FILE_PREFIX + m.group(1) + IMPORTED_SUBT_FILE_EXT)
+            .orElse("imported" + IMPORTED_SUBT_FILE_EXT);
+    }
 
-        if (Files.deleteIfExists(target)) {
+    private static boolean isImportedSubtitle(Path file) {
+        String fn = file.getFileName().toString();
+        return fn.startsWith(IMPORTED_SUBT_FILE_PREFIX) && fn.endsWith(IMPORTED_SUBT_FILE_EXT);
+    }
+
+    /**
+     * Returns true, if given file is a WebVTT file with at least one cue timing.
+     */
+    private static boolean isWebVTTWithCues(Path subtitleFile) throws IOException {
+        String vtt = Files.readString(subtitleFile, StandardCharsets.UTF_8);
+        // a WebVTT file may start with a byte order mark UTF-8
+        if (vtt.startsWith("\uFEFF")) {
+            vtt = vtt.substring(1);
+        }
+        return vtt.startsWith("WEBVTT") && vtt.contains("-->");
+    }
+
+    public static void deleteImportedSubtitleFile(String id) throws IOException {
+        Path storePath = SUBT_STORAGE_PATH.resolve(id);
+        if (Files.notExists(storePath)) {
+            return;
+        }
+        List<Path> imported;
+        try (Stream<Path> fs = Files.list(storePath)) {
+            imported = fs.filter(MediaService::isImportedSubtitle).toList();
+        }
+        for (Path target : imported) {
+            Files.delete(target);
             LOGGER.info("deleted imported subtitle {}", target);
+        }
+        if (!imported.isEmpty()) {
             SUBT_FILES_CACHE.remove(id);
         }
     }
@@ -498,7 +535,7 @@ public class MediaService {
     }
 
     private static List<Path> preferImportedSubtitle(List<Path> files) {
-        return files.stream().filter(f -> IMPORTED_SUBT_FILE_NAME.equals(f.getFileName().toString()))
+        return files.stream().filter(MediaService::isImportedSubtitle)
                 .findFirst()
                 .map(List::of)
                 .orElse(files);

@@ -4,7 +4,7 @@ import { DefaultShareTranslation, ShareOptions, ShareTranslation, ShareType } fr
 
 const PREFIX_OBJECT = "receive";
 const PREFIX_SLOT = "rc";
-const SUPPORTED_LANGUAGES = ["de", "en", "it", "ru"]
+const SUPPORTED_LANGUAGES = ["de", "en", "es", "it", "ru", "fr"]
 
 export class Player {
 
@@ -229,14 +229,19 @@ export class Player {
                 }
             }
 
-            sources.source.forEach((src, i) => this.player.addRemoteTextTrack({
-                kind: "subtitles",
-                src: this.api.mediaSubtitleUrl(
-                    sources.id,
-                    src.src),
-                language: this.extractLanguage(src.src),
-                default: false
-            }, true));
+            sources.source.forEach((src, i) => {
+                const language = this.extractLanguage(src.src);
+
+                this.player.addRemoteTextTrack({
+                    kind: "subtitles",
+                    src: this.api.mediaSubtitleUrl(
+                        sources.id,
+                        src.src),
+                    language: language,
+                    label: this.trackLabel(language),
+                    default: false
+                }, true);
+            });
         } else {
             this.player.controlBar.subsCapsButton.disable();
             this.player.html5.nativeTextTracks.disable();
@@ -282,6 +287,17 @@ export class Player {
     private extractLanguage(src: string): string {
         const ext = this.fileExtension(src);
         return SUPPORTED_LANGUAGES.filter(l => src.indexOf(l + "." + ext) !== -1)[0] || null;
+    }
+
+    /**
+     * Returns the language code as label, e.g. "en". Without a language a generic label is used, so
+     * the menu entry isn't empty.
+     */
+    private trackLabel(language: string | null): string {
+        if (language) {
+            return language;
+        }
+        return this.getCurrentLang() === "de" ? "Untertitel" : "Subtitle";
     }
 
     private getComponent(name: string): any | null {
