@@ -7,7 +7,6 @@ import org.mycore.mir.it.controller.MIRControllerFactory;
 import org.mycore.mir.it.model.MIRInstitutes;
 import org.mycore.mir.it.tests.MIRComplexSearchITCase;
 
-
 public class DBTComplexSearchITCase extends MIRComplexSearchITCase {
 
     @Override

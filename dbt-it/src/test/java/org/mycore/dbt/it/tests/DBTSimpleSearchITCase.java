@@ -1,5 +1,10 @@
 package org.mycore.dbt.it.tests;
 
+import java.io.IOException;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import org.junit.runners.Parameterized;
 import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.dbt.it.controller.DBTControllerFactory;
@@ -9,11 +14,6 @@ import org.mycore.mir.it.controller.MIRControllerFactory;
 import org.mycore.mir.it.model.MIRInstitutes;
 import org.mycore.mir.it.model.MIRSearchTestDataLoader;
 import org.mycore.mir.it.tests.MIRSimpleSearchITCase;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 
 public class DBTSimpleSearchITCase extends MIRSimpleSearchITCase {
 
@@ -29,8 +29,8 @@ public class DBTSimpleSearchITCase extends MIRSimpleSearchITCase {
     @Parameterized.Parameters
     public static Collection<Object[]> input() {
         return Stream.of(new Object[] { "simpleTest1.json", "dbt_mods_00010000" },
-                        new Object[] { "simpleTest2.json", "dbt_mods_00010000" })
-                .collect(Collectors.toList());
+            new Object[] { "simpleTest2.json", "dbt_mods_00010000" })
+            .collect(Collectors.toList());
     }
 
     @Override

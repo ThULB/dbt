@@ -15,6 +15,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class DBTSlotController extends MIREditorController {
 
+    private static final By LOCATION_SELECT_BUTTON = By
+        .xpath(".//button[starts-with(@name,'_xed_submit_subselect:') and contains(@name,'/location')]");
+
     public DBTSlotController(MCRWebdriverWrapper driver, String baseURL) {
         super(driver, baseURL);
     }
@@ -22,8 +25,8 @@ public class DBTSlotController extends MIREditorController {
     public void openNewSlotForm() {
         driver.waitAndFindElement(By.id("menu-rc")).click();
         driver.waitAndFindElement(By.linkText("Einrichten")).click();
-        driver.waitFor(ExpectedConditions.textToBePresentInElementLocated(By.xpath(".//h5[contains(@class,'card-header')]"),
-            "Neuen Semesterapparat anlegen"));
+        driver.waitFor(ExpectedConditions.textToBePresentInElementLocated(
+            By.xpath(".//h5[contains(@class,'card-header')]"), "Neuen Semesterapparat anlegen"));
         driver.waitAndFindElement(By.id("title"));
     }
 
@@ -31,15 +34,13 @@ public class DBTSlotController extends MIREditorController {
         setInputText(By.id("title"), title);
     }
 
-
     public void setAccessKeys(String readKey, String writeKey) {
         setInputText(By.id("readKey"), readKey);
         setInputText(By.id("writeKey"), writeKey);
     }
 
     public void selectLocation(String... path) {
-        driver.waitAndFindElement(By
-                .xpath(".//button[starts-with(@name,'_xed_submit_subselect:') and contains(@name,'/location')]")).click();
+        driver.waitAndFindElement(LOCATION_SELECT_BUTTON).click();
 
         for (int i = 0; i < path.length; i++) {
             driver.waitAndFindElement(By.linkText(path[i])).click();
@@ -48,8 +49,7 @@ public class DBTSlotController extends MIREditorController {
             }
         }
 
-        driver.waitAndFindElement(By
-                .xpath(".//button[starts-with(@name,'_xed_submit_subselect:') and contains(@name,'/location')]"));
+        driver.waitAndFindElement(LOCATION_SELECT_BUTTON);
         Assert.assertTrue("Location " + String.join(" - ", path) + " should be selected!",
             driver.findElement(By.tagName("body")).getText().contains(String.join(" - ", path)));
     }
@@ -58,7 +58,7 @@ public class DBTSlotController extends MIREditorController {
         driver.waitAndFindElement(By.xpath(".//button[starts-with(@name,'_xed_submit_servlet:')]")).click();
         driver.waitFor(ExpectedConditions.or(
             ExpectedConditions.urlMatches(".*/rc/\\d+(\\.\\d+)+.*"),
-            ExpectedConditions.presenceOfElementLocated( By.xpath(".//div[contains(@class,'alert-danger')]")),
+            ExpectedConditions.presenceOfElementLocated(By.xpath(".//div[contains(@class,'alert-danger')]")),
             ExpectedConditions.titleContains("Fehler")));
 
         // the servlet refused server side, e.g. SlotListServlet sends 403 when create-slot is not granted; that is
@@ -69,7 +69,7 @@ public class DBTSlotController extends MIREditorController {
                 + " - a 403 here means the create-slot permission is missing, see setup-dbt-acl.txt");
         }
 
-        List<WebElement> alerts = driver.findElements( By.xpath(".//div[contains(@class,'alert-danger')]"));
+        List<WebElement> alerts = driver.findElements(By.xpath(".//div[contains(@class,'alert-danger')]"));
         if (!alerts.isEmpty()) {
             Assert.fail("Editor rejected the Semesterapparat. Invalid fields: " + invalidFieldIds()
                 + " - " + alerts.get(0).getText());
@@ -87,11 +87,13 @@ public class DBTSlotController extends MIREditorController {
 
     public boolean isSlotCreated() {
         try {
-            return driver.waitAndFindElement(MCRBy.partialText("Ihr neuer Semesterapparat ist jetzt eingerichtet.")).isDisplayed();
+            return driver.waitAndFindElement(MCRBy.partialText("Ihr neuer Semesterapparat ist jetzt eingerichtet."))
+                .isDisplayed();
         } catch (NoSuchElementException | TimeoutException e) {
             return false;
         }
     }
+
     private void setInputText(By locator, String text) {
         WebElement input = driver.waitAndFindElement(locator);
         Assert.assertTrue("Input is hidden: " + locator, input.isDisplayed());

@@ -13,6 +13,7 @@ public enum DBTSampleInstitutes implements MIRInstitutes {
         this.value = value;
     }
 
+    @Override
     public String getValue() {
         return value;
     }

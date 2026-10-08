@@ -21,7 +21,7 @@ public class DBTAuthorEditorITCase extends MIRAuthorEditorITCase {
     protected void assertBaseValidation() {
         super.assertBaseValidation();
         Assert.assertTrue("Contract validation message should be visible!",
-                ((DBTModsEditorController) this.editorController).isContractValidationMessageVisible());
+            ((DBTModsEditorController) this.editorController).isContractValidationMessageVisible());
     }
 
     @Override

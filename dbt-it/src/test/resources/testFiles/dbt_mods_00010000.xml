@@ -6,7 +6,7 @@
             <modsContainer inherited="0">
     <mods:mods xmlns:mods="http://www.loc.gov/mods/v3">
         <mods:typeOfResource>text</mods:typeOfResource>
-        <mods:genre type="intern" authorityURI="https://www.openagrar.de/classifications/genres" valueURI="https://www.openagrar.de/classifications/genres#article"/>
+        <mods:genre type="intern" authorityURI="http://www.mycore.org/classifications/mir_genres" valueURI="http://www.mycore.org/classifications/mir_genres#article"/>
         <mods:titleInfo xml:lang="de" xlink:type="simple">
             <mods:nonSort>Der</mods:nonSort>
             <mods:title>Test_Title</mods:title>

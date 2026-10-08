@@ -4,7 +4,6 @@ import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.mir.it.controller.MIRSearchController;
 import org.openqa.selenium.By;
 
-
 public class DBTSearchController extends MIRSearchController {
 
     private static final By SEARCH_MENU = By.id("menu-search");

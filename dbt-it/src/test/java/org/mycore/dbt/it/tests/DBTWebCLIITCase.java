@@ -5,7 +5,6 @@ import org.mycore.dbt.it.controller.DBTControllerFactory;
 import org.mycore.mir.it.controller.MIRControllerFactory;
 import org.mycore.mir.it.tests.MIRWebCLIITCase;
 
-
 public class DBTWebCLIITCase extends MIRWebCLIITCase {
 
     @Override

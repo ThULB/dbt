@@ -11,7 +11,6 @@ import org.mycore.mir.it.controller.MIRControllerFactory;
 import org.mycore.mir.it.controller.MIRUserController;
 import org.mycore.mir.it.tests.MIRITBase;
 
-
 public class DBTSlotITCase extends MIRITBase {
 
     private static final String LECTURER_LOGIN = "rclecturer";
@@ -20,7 +19,7 @@ public class DBTSlotITCase extends MIRITBase {
 
     private static final String LECTURER_NAME = "Mustermann, Max";
 
-    private static final String LECTURER_EMAIL = "max.mustermann@uni-jena.de";
+    private static final String LECTURER_EMAIL = "max.mustermann@example.org";
 
     private static final String TITLE = "IT_Semesterapparat";
 
@@ -61,7 +60,6 @@ public class DBTSlotITCase extends MIRITBase {
 
         Assert.assertTrue("New Semesterapparat should show its initial entry!", slotController.isSlotCreated());
     }
-
 
     @After
     @Override
