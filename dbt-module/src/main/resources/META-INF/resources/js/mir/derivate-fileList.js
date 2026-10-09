@@ -427,7 +427,7 @@
             }
             $(fileBox).append(fileList);
             mycore.upload.enable($(fileBox)[0]);
-            $(".confirm_deletion").confirm();
+            MIRConfirm.bind('.confirm_deletion');
         }
 
         function buildBreadcrumbs(path) {
