@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="no-js" lang="de">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Development mode</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="podcast-base-path" content="/" />
+    <link rel="icon" href="/favicon.png">
+    <link rel="stylesheet" href="https://www.db-thueringen.de/dbt/assets/waves/waves.min.css">
+    <link rel="stylesheet" href="src/layout.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css">
+    <script type="module" src="/src/index.ts"></script>
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<header>
+    <nav role="navigation" class="navbar navbar-expand-md navbar-dbt fixed-top">
+        <div class="container">
+            <a href="#" class="navbar-brand">
+                <span class="img-placeholder"></span>
+            </a>
+            <button aria-controls="navbar" aria-expanded="false" data-bs-target="#navbar,#container-overlay" data-bs-toggle="collapse" class="navbar-toggler collapsed plus-sign" type="button"><span class="visually-hidden">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <div class="collapse navbar-collapse" id="navbar">
+
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown d-flex">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" id="N20063">
+                            <i class="fas fa-magnifying-glass me-1 d-none d-sm-inline-block d-lg-none"></i>
+                            <span class="d-inline d-lg-inline d-md-none d-sm-inline">Suche</span>
+                        </a>
+                        <div aria-labelledby="N20063" role="menu" class="dropdown-menu rounded-0">
+                            <a href="#" class="dropdown-item">einfach</a>
+                            <a href="#" class="dropdown-item">erweitert</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" id="N20082">
+                            <i class="fas fa-sitemap me-1 d-none d-sm-inline-block d-lg-none"></i>
+                            <span class="d-inline d-lg-inline d-md-none d-sm-inline">Bl&auml;ttern</span>
+                        </a>
+                        <div aria-labelledby="N20082" role="menu" class="dropdown-menu rounded-0 ">
+                            <a href="#" class="dropdown-item">Einrichtungen</a>
+                            <a href="#" class="dropdown-item">Dokumenttypen</a>
+                            <a href="#" class="dropdown-item">Sachgruppen</a>
+                            <a href="#" class="dropdown-item">Personen</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" id="N200B1">
+                            <i class="fas fa-clipboard-check me-1 d-none d-sm-inline-block d-lg-none"></i>
+                            <span class="d-inline d-lg-inline d-md-none d-sm-inline">Semesterapparate</span>
+                        </a>
+                        <div aria-labelledby="N200B1" role="menu" class="dropdown-menu rounded-0 ">
+                            <a href="#" class="dropdown-item">Aktuelle Liste</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle" id="N200C5">
+                            <i class="fas fa-upload me-1 d-none d-sm-inline-block d-lg-none"></i>
+                            <span class="d-inline  d-lg-inline d-md-none d-sm-inline">Publizieren</span>
+                        </a>
+                        <div aria-labelledby="N200C5" role="menu" class="dropdown-menu rounded-0 ">
+                            <a href="#" class="dropdown-item">Leitlinien</a>
+                            <a href="#" class="dropdown-item">Vertragsbedingungen</a>
+                        </div>
+                    </li>
+                    <li class="nav-item ">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-headphones me-1 d-none d-sm-inline-block d-lg-none"></i>
+                            <span class="d-inline  d-lg-inline d-md-none d-sm-inline">Podcasts</span>
+                        </a>
+                    </li>
+                    <li class="nav-item d-xs-inline d-sm-inline d-md-none">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-circle-question me-1 d-none d-sm-inline-block"></i>
+                            FAQ
+                        </a>
+                    </li>
+                    <li id="basket-list-item" class="nav-item dropdown d-xs-inline d-sm-inline d-md-none">
+                        <a title="Merkliste" href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle"><i class="fas fa-bookmark me-1"></i><sup>0</sup></a>
+                        <ul aria-labelledby="dLabel" role="menu" class="dropdown-menu rounded-0 ">
+                            <li class="dropdown-item disabled">
+                                <a>Auf ihrer Merkliste befinden sich keine Dokumente.</a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item">
+                                <a href="#">Merkliste &ouml;ffnen</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav ms-auto navbar-right">
+                    <li id="basket-list-item-2" class="nav-item dropdown d-none d-md-inline">
+                        <a title="Merkliste" href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle"><i class="fas fa-bookmark me-1"></i><sup>0</sup></a>
+                        <ul aria-labelledby="dLabel" role="menu" class="dropdown-menu rounded-0 dropdown-menu rounded-0-right">
+                            <li class="dropdown-item disabled">
+                                <a>Auf ihrer Merkliste befinden sich keine Dokumente.</a>
+                            </li>
+                            <li class="dropdown-divider"></li>
+                            <li class="dropdown-item">
+                                <a href="#">Merkliste &ouml;ffnen</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item d-none d-md-inline">
+                        <a href="#" class="nav-link"><i class="fas fa-circle-question me-1"></i><span class="d-none d-lg-inline">FAQ</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i class="fas fa-right-to-bracket"></i><span class="d-inline d-xl-inline d-sm-inline d-md-none ms-1">Anmelden</span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="searchbar">
+        <div class="container">
+            <form action="" role="search" class="navbar-form d-flex align-items-center navbar-right">
+                <div class="input-group">
+                    <input placeholder="Suchen" name="condQuery" id="searchTerm" type="text" class="form-control rounded-0">
+                    <span class="input-group-btn">
+            <button class="btn btn-outline-secondary rounded-0" type="submit">
+              <i class="fas fa-magnifying-glass"></i>
+            </button>
+          </span>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <noscript>
+        <div style="border-radius: 0;" class="mir-no-script alert alert-warning text-center">Um den vollen Funktionsumfang dieser Webseite zu erfahren, ben&ouml;tigen Sie JavaScript. Hier finden Sie die
+            &nbsp;
+            <a target="_blank" href="">Anleitung wie Sie JavaScript in Ihrem Browser einschalten</a>
+            .
+        </div>
+    </noscript>
+</header>
+
+<section class="flex-grow-1">
+    <div class="container">
+        <div id="main_content">
+            <a id="top"></a>
+            <div class="container" ></div>
+            <button class="btn back-to-top" style="display: none;"><i class="fas fa-chevron-circle-up"></i></button>
+        </div>
+    </div>
+</section>
+
+<footer class="flex-shrink-0">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <ul class="nav-footer">
+                    <li>
+                        <a href="#" class="text-success">Impressum</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-success">Barrierefreiheit</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-success">Datenschutzerkl&auml;rung</a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-success">Kontakt</a>
+                    </li>
+                </ul>
+                <p class="info mb-2">&copy; 2000 - 2026 UrMEL. Alle Rechte vorbehalten.<i title="DBT: 2025.06-SNAPSHOT (00073a7)<br>MIR: 2025.06.3-SNAPSHOT 2025.06.x:v2025.06.2-2-gbdf63ae" data-bs-placement="top" data-bs-html="true" data-bs-toggle="tooltip" class="fas fa-info-circle text-info ms-2 pt-1"></i>
+                </p>
+            </div>
+            <div>
+                <div class="btn-group dropup float-end language-select">
+                    <button data-bs-toggle="dropdown" class="btn btn-outline-secondary btn-sm dropdown-toggle"><span class="language de">Sprache wechseln</span><span class="caret"></span></button>
+                    <div class="dropdown-menu rounded-0 dropdown-menu rounded-0-end">
+                        <a href="#" class="dropdown-item language de active">Deutsch</a><a href="#" class="dropdown-item language en">English</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="powered_by" class="d-flex justify-content-center align-items-center">
+            <a
+                    href="http://www.mycore.de"
+            >
+                <img
+                        title="MyCoRe 2025.06.3-SNAPSHOT 2025.06.x:v2025.06.2-1-gbf96dff"
+                        src="https://www.db-thueringen.de/mir-layout/images/mycore_logo_powered_120x30_blaue_schrift_frei.png"
+                        class="img-responsive"
+                        alt="powered by MyCoRe"
+                >
+            </a>
+        </div>
+    </div>
+</footer>
+
+<div
+        aria-controls="navbar"
+        aria-expanded="false"
+        data-bs-target="#navbar,#container-overlay"
+        data-bs-toggle="collapse"
+        class="collapse"
+        id="container-overlay"
+></div>
+
+<script src="https://www.db-thueringen.de/assets/jquery/jquery.min.js" type="text/javascript"></script>
+<script src="https://www.db-thueringen.de/assets/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="https://www.db-thueringen.de/dbt/assets/waves/waves.min.js" type="text/javascript"></script>
+<script src="https://www.db-thueringen.de/dbt/js/layout.min.js" type="text/javascript"></script>
+<script src="https://www.db-thueringen.de/js/mir/confirm.js" type="text/javascript"></script>
+<script src="https://www.db-thueringen.de/js/mir/base.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://www.db-thueringen.de/js/mir/session-polling.js"></script>
+<script src="https://www.db-thueringen.de/modules/webtools/upload/js/upload-api.js"></script>
+<script src="https://www.db-thueringen.de/modules/webtools/upload/js/upload-gui.js"></script>
+<script src="https://www.db-thueringen.de/assets/jquery/plugins/jquery-placeholder/jquery.placeholder.min.js"></script>
+
+</body>
+</html>
