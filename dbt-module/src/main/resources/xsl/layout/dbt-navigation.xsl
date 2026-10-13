@@ -15,7 +15,8 @@
     <xsl:param name="showIcon" select="string-length(icon) &gt; 0" />
     <xsl:param name="active" select="descendant-or-self::item[@href = $browserAddress]" />
 
-    <xsl:variable name="menuId" select="generate-id(.)" />
+    <xsl:param name="idSuffix" select="''" />
+    <xsl:variable name="menuId" select="concat('menu-', @id, $idSuffix)" />
     <li class="{$class} dropdown ">
       <xsl:if test="$active">
         <xsl:attribute name="class">
@@ -272,6 +273,7 @@
         <xsl:apply-templates select=".">
           <xsl:with-param name="class" select="'breadcrumb-item'" />
           <xsl:with-param name="linkClass" select="''" />
+          <xsl:with-param name="idSuffix" select="'-breadcrumb'" />
         </xsl:apply-templates>
       </xsl:when>
       <xsl:otherwise>

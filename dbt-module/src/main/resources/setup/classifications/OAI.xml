@@ -1,0 +1,38 @@
+
+<mycoreclass xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="MCRClassification.xsd" ID="OAI">
+    <label xml:lang="de" text="OAI"/>
+    <label xml:lang="x-auth" text="OAI"/>
+    <categories>
+        <category ID="bibliography">
+            <label xml:lang="de" text="Hochschulbibliografie"/>
+        </category>
+        <category ID="kulthura">
+            <label xml:lang="de" text="Kulthura"/>
+            <label xml:lang="en" text="Kulthura"/>
+        </category>
+        <category ID="1">
+            <label xml:lang="de" text="für Harvesting bereitgestellt" description="Die Dokumente dieser Kategorie stehen für ein Harvesting zur Verfügung."/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+        <category ID="dnb">
+            <label xml:lang="de" text="DNB Meldung" description="Dokumente dieser Kategorie werden über OAI im XMetaDissPlus Format von der DNB abgeholt."/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+        <category ID="tpe">
+            <label xml:lang="de" text="Thüringer Pflichtexemplare"/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+        <category ID="tb">
+            <label xml:lang="de" text="Thüringenbibliografie"/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+        <category ID="2">
+            <label xml:lang="de" text="Vorlesungsvideo" description="Dokumente dieser Kategorie werden vom IWF über OAI gesammelt."/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+        <category ID="3">
+            <label xml:lang="de" text="GBV" description="Dokumente dieser Kategorie werden vom GBV gesammelt und in den OPC4 geladen."/>
+            <label xml:lang="x-disable" text="true"/>
+        </category>
+    </categories>
+</mycoreclass>
