@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+const route = useRoute()
 const router = useRouter()
 const search = ref('')
 const category = ref('')
@@ -216,10 +217,64 @@ const selectedSubcategories = computed(() => {
   return selectedCategory?.subcategories ?? []
 })
 
+function queryValue(value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
 
-watch(category, () => {
+function syncFiltersFromRoute(): void {
+  search.value = queryValue(route.query.condQuery)
+  sort.value = ['created asc', 'created desc'].includes(
+      queryValue(route.query.sort)
+  )
+      ? queryValue(route.query.sort)
+      : 'created desc'
+
+  category.value = ''
   subCategory.value = ''
-})
+
+  const filter = queryValue(route.query.fq)
+  const categoryMatch = filter.match(
+      /^category:"itunes-podcast:([^"]+)"$/
+  )
+
+  if (!categoryMatch) {
+    return
+  }
+
+  const selectedValue = categoryMatch[1]
+  const parentCategory = itunesPodcastCategories.find(item =>
+      item.value === selectedValue ||
+      item.subcategories.some(sub => sub.value === selectedValue)
+  )
+
+  if (!parentCategory) {
+    return
+  }
+
+  category.value = parentCategory.value
+
+  if (parentCategory.value !== selectedValue) {
+    subCategory.value = selectedValue
+  }
+}
+
+
+watch(
+    category,
+    () => {
+      subCategory.value = ''
+    },
+    { flush: 'sync' }
+)
+
+watch(
+    () => route.query,
+    syncFiltersFromRoute,
+    {
+      immediate: true,
+      deep: true,
+    }
+)
 
 const handleSubmit = () => {
   const query: Record<string, string> = {}
@@ -265,18 +320,19 @@ const handleSubmit = () => {
             <option value="">Alle Kategorien</option>
             <option
                 v-for="category in itunesPodcastCategories"
+                :key="category.value"
                 :value="category.value"
                 :label="category.label"
             >
-              {{category.value}}
+              {{category.label}}
             </option>
           </select>
         </div>
 
         <div class="col-md-4 col-lg-4">
-          <label for="podcast-category" class="form-label fw-semibold">Subkategorie</label>
+          <label for="podcast-subcategory" class="form-label fw-semibold">Subkategorie</label>
           <select
-              id="podcast-category"
+              id="podcast-subcategory"
               v-model="subCategory"
               class="form-select"
               :disabled="selectedSubcategories.length === 0"
@@ -284,10 +340,11 @@ const handleSubmit = () => {
             <option value="">Bitte wählen</option>
             <option
                 v-for="sub in selectedSubcategories"
+                :key="sub.value"
                 :value="sub.value"
                 :label="sub.label"
             >
-              {{sub.value}}
+              {{sub.label}}
             </option>
           </select>
         </div>

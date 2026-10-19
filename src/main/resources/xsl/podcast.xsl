@@ -8,6 +8,7 @@
   <xsl:template match="/podcast">
     <head>
       <meta name="podcast-base-path" content="{$WebApplicationBaseURL}podcast/" />
+      <meta name="podcast-application-base-url" content="{$WebApplicationBaseURL}" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/assets/podcast/podcast.css" />
     </head>
 

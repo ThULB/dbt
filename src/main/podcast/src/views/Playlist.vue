@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, watch } from 'vue'
 
 import type { PodcastPlaylist } from '../types/types.ts'
 
@@ -12,7 +12,7 @@ import PlaylistHeader from '../components/PlaylistHeader.vue'
 import PlaylistEpisode from '../components/PlaylistEpisode.vue'
 
 
-const { podcastId } = defineProps<{
+const props = defineProps<{
   podcastId: string
 }>()
 
@@ -21,19 +21,28 @@ const isError = ref(false)
 const isLoading = ref(false)
 
 const playlistMetadata = ref<PodcastPlaylist | null>(null)
+let requestSequence = 0
 
 async function getPlaylistMetadata(): Promise<void> {
+  const requestId = ++requestSequence
+
   isError.value = false
   error.value = null
   isLoading.value = true
+  playlistMetadata.value = null
 
   try {
-    const xmlString = await requestReceive(podcastId)
+    const xmlString = await requestReceive(props.podcastId)
 
-    playlistMetadata.value =
-        parsePodcastXml(xmlString)
+    if (requestId === requestSequence) {
+      playlistMetadata.value =
+          parsePodcastXml(xmlString)
+    }
 
   } catch (err) {
+    if (requestId !== requestSequence) {
+      return
+    }
 
     error.value =
         err instanceof Error
@@ -43,15 +52,21 @@ async function getPlaylistMetadata(): Promise<void> {
     isError.value = true
 
   } finally {
-    isLoading.value = false
+    if (requestId === requestSequence) {
+      isLoading.value = false
+    }
   }
 }
 
 
-onMounted(() => {
-  getPlaylistMetadata()
-  window.scrollTo(0, 0)
-})
+watch(
+    () => props.podcastId,
+    () => {
+      getPlaylistMetadata()
+      window.scrollTo(0, 0)
+    },
+    { immediate: true }
+)
 </script>
 
 <template>

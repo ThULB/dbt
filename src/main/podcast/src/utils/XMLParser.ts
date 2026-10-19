@@ -1,3 +1,5 @@
+import DOMPurify from 'dompurify'
+
 import type {
     PodcastEpisode,
     PodcastPlaylist
@@ -40,6 +42,15 @@ function getItunesAuthors(
         .split(';')
         .map(author => author.trim())
         .filter(Boolean)
+}
+
+function getSafeHtml(
+    element: Element,
+    tagName: string
+): string {
+    return DOMPurify.sanitize(
+        getText(element, tagName)
+    )
 }
 
 function getItunesAttribute(
@@ -137,7 +148,7 @@ function parsePodcastXml(
                     getItunesAuthors(item),
 
                 description:
-                    getText(
+                    getSafeHtml(
                         item,
                         'description'
                     ),
@@ -205,7 +216,7 @@ function parsePodcastXml(
             getItunesAuthors(channel),
 
         description:
-            getText(
+            getSafeHtml(
                 channel,
                 'description'
             ),

@@ -3,6 +3,7 @@ import {computed, ref, watch} from 'vue'
 import { useRoute } from 'vue-router'
 
 import requestSolr from '../utils/requestSolr.ts'
+import applicationUrl from '../utils/applicationUrl.ts'
 import type { SolrDocument, SolrResponse } from '../types/types.ts'
 import LoadingState from "./LoadingState.vue";
 import ErrorState from "./ErrorState.vue";
@@ -113,7 +114,9 @@ function getPodcastAuthors(podcast: SolrDocument): string {
 }
 
 function getCoverUrl(podcast: SolrDocument): string {
-  return `/mir/api/iiif/image/v2/thumbnail/${podcast.id}/full/!300,300/0/default.jpg`
+  return applicationUrl(
+      `api/iiif/image/v2/thumbnail/${encodeURIComponent(podcast.id)}/full/!300,300/0/default.jpg`
+  )
 }
 
 function handleCoverLoad(podcastId: string): void {
