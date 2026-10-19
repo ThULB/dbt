@@ -289,7 +289,7 @@ watch(
           <!-- Title -->
           <h3 class="h6 card-title px-2 mb-2">
             <RouterLink
-                class="stretched-link text-reset text-decoration-none"
+                class="podcast-card-link stretched-link"
                 :to="podcast.id"
             >
               {{ getPodcastTitle(podcast) }}
@@ -459,6 +459,14 @@ watch(
   grid-row: span 4;
 
   row-gap: 5px;
+}
+
+.podcast-card-link {
+  color: var(--bs-black);
+
+  &:hover {
+    color: var(--bs-success);
+  }
 }
 
 .topic {
