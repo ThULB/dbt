@@ -23,7 +23,6 @@ const props = defineProps<{
   podcastId: string
 }>()
 
-const error = ref<string | null>(null)
 const isError = ref(false)
 const isLoading = ref(false)
 const isNotFound = ref(false)
@@ -53,7 +52,6 @@ async function getPlaylistMetadata(): Promise<void> {
 
   isError.value = false
   isNotFound.value = false
-  error.value = null
   isLoading.value = true
   playlistMetadata.value = null
 
@@ -86,11 +84,7 @@ async function getPlaylistMetadata(): Promise<void> {
       return
     }
 
-    error.value =
-        err instanceof Error
-            ? err.message
-            : 'Unknown error'
-
+    console.error('Podcastdaten konnten nicht geladen werden:', err)
     isError.value = true
 
   } finally {
@@ -124,7 +118,7 @@ watch(
 
     <LoadingState v-if="isLoading" />
 
-    <ErrorState v-else-if="isError">{{error}}</ErrorState>
+    <ErrorState v-else-if="isError" />
 
     <section v-else-if="playlistMetadata" id="playlist-content">
       <PlaylistHeader :playlist-metadata="playlistMetadata"/>

@@ -76,27 +76,27 @@ watch(
         class="accordion accordion-flush rounded-0"
     >
       <div
-          v-for="episode in playlistMetadata.episodes"
+          v-for="(episode, index) in playlistMetadata.episodes"
           :key="episode.guid"
-          :id="`episode-item-${episode.guid}`"
+          :id="`episode-item-${index}`"
           class="accordion-item"
           :class="{ 'is-current': isCurrentEpisode(episode) }"
       >
-        <h2 class="accordion-header">
+        <h3 class="accordion-header">
           <button
               class="accordion-button h5"
               :class="{ collapsed: openEpisodeGuid !== episode.guid }"
               type="button"
               :aria-expanded="openEpisodeGuid === episode.guid"
-              :aria-controls="`episode-${episode.guid}`"
+              :aria-controls="`episode-${index}`"
               @click="toggleEpisodeDetails(episode.guid)"
           >
             {{ episode.title }}
           </button>
-        </h2>
+        </h3>
 
         <div
-            :id="`episode-${episode.guid}`"
+            :id="`episode-${index}`"
             class="accordion-collapse collapse episode-collapse"
             :class="{ show: openEpisodeGuid === episode.guid }"
         >
@@ -236,7 +236,7 @@ watch(
   font-variant-numeric: tabular-nums;
 }
 
-.episode-play-button [data-play-icon] {
+.episode-play-button .fas {
   font-size: 1.1rem;
   line-height: 1;
 }

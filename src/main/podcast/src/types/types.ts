@@ -20,64 +20,64 @@ export interface SolrResult {
 }
 
 export interface SolrDocument {
-    objectKind: string
+    objectKind?: string
     id: string
-    returnId: string
-    objectProject: string
-    objectType: string
+    returnId?: string
+    objectProject?: string
+    objectType?: string
 
-    link: string[]
+    link?: string[]
 
-    modified: string
-    created: string
-    modifiedby: string
-    createdby: string
+    modified?: string
+    created?: string
+    modifiedby?: string
+    createdby?: string
 
-    state: string
+    state?: string
 
-    derCount: number
-    derivates: string[]
+    derCount?: number
+    derivates?: string[]
 
-    worldReadable: boolean
-    worldReadableComplete: boolean
+    worldReadable?: boolean
+    worldReadableComplete?: boolean
 
-    category: string[]
-    'category.top': string[]
+    category?: string[]
+    'category.top'?: string[]
 
-    'mods.title': string[]
-    'mods.title.main': string
+    'mods.title'?: string[]
+    'mods.title.main'?: string
 
-    'mods.name': string[]
-    'mods.name.top': string[]
+    'mods.name'?: string[]
+    'mods.name.top'?: string[]
 
-    'mods.author': string[]
+    'mods.author'?: string[]
 
     'mods.publisher'?: string[]
 
-    'mods.genre': string[]
+    'mods.genre'?: string[]
 
-    'mods.abstract': string[]
+    'mods.abstract'?: string[]
 
-    'mods.dateIssued': string
-    'mods.yearIssued': number
-    'mods.type': string
+    'mods.dateIssued'?: string
+    'mods.yearIssued'?: number
+    'mods.type'?: string
 
-    search_result_link_text: string
+    search_result_link_text?: string
 
-    'mods.pindexname': string[]
-    'mods.pindexname.published': string[]
+    'mods.pindexname'?: string[]
+    'mods.pindexname.published'?: string[]
 
-    'mods.nameByRole.personal.aut': string[]
+    'mods.nameByRole.personal.aut'?: string[]
     'mods.nameByRole.personal.own'?: string[]
 
-    'mods.abstract.result': string
-    'mods.abstract.result.de': string[]
+    'mods.abstract.result'?: string
+    'mods.abstract.result.de'?: string[]
 
-    'mir.toc.title': string
-    'mir.toc.authors': string
+    'mir.toc.title'?: string
+    'mir.toc.authors'?: string
 
-    _version_: number
-    score: number
+    _version_?: number
+    score?: number
 }
 
 export interface SolrFacetCounts {

@@ -10,7 +10,7 @@
     </h2>
 
     <p class="mb-0">
-      <slot>Unbekannter Fehler</slot>
+      Bitte versuchen Sie es später erneut.
     </p>
   </div>
 

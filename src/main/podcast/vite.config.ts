@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [vue()],
 
   server: {
@@ -23,9 +23,11 @@ export default defineConfig({
   },
 
   // This bundle is loaded directly by the browser, not by another bundler.
-  define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
-  },
+  define: command === 'build'
+      ? {
+          'process.env.NODE_ENV': JSON.stringify('production'),
+        }
+      : undefined,
 
   build: {
     lib: {
@@ -36,4 +38,4 @@ export default defineConfig({
       cssFileName: 'podcast',
     },
   },
-})
+}))

@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { usePlayerStore } from '../stores/player'
 
 const playerStore = usePlayerStore()
 
 const audioElement = ref<HTMLAudioElement | null>(null)
+const playerElement = ref<HTMLElement | null>(null)
+
+let playerResizeObserver: ResizeObserver | null = null
 
 const isLoading = ref(false)
 const audioError = ref(false)
@@ -243,10 +246,36 @@ function handleEnded(): void {
   playerStore.isPlaying = false
   playerStore.requestPause()
 }
+
+onMounted(() => {
+  const player = playerElement.value
+
+  if (!player) return
+
+  const updatePlayerHeight = (): void => {
+    document.body.style.setProperty(
+        '--podcast-player-height',
+        `${player.offsetHeight}px`
+    )
+  }
+
+  document.body.classList.add('has-podcast-player')
+  updatePlayerHeight()
+
+  playerResizeObserver = new ResizeObserver(updatePlayerHeight)
+  playerResizeObserver.observe(player)
+})
+
+onUnmounted(() => {
+  playerResizeObserver?.disconnect()
+  document.body.classList.remove('has-podcast-player')
+  document.body.style.removeProperty('--podcast-player-height')
+})
 </script>
 
 <template>
   <section
+      ref="playerElement"
       class="playlist-player"
       aria-label="Podcast-Player"
   >
@@ -532,7 +561,7 @@ function handleEnded(): void {
 
 .playlist-player {
   position: fixed;
-  z-index: 1090;
+  z-index: 1040;
   right: 0;
   bottom: 0;
   left: 0;
@@ -541,6 +570,10 @@ function handleEnded(): void {
 
   background: #f0f3f1;
   color: var(--bs-body-color);
+}
+
+:global(body.has-podcast-player) {
+  padding-bottom: var(--podcast-player-height, 0);
 }
 
 .playlist-player[hidden],

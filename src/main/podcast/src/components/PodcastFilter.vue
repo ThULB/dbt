@@ -358,7 +358,7 @@ const handleSubmit = () => {
         </div>
 
         <div class="col-md-3 col-lg-2 d-grid mt-4">
-          <button id="podcast-reset" class="btn btn-success" type="submit">Suchen</button>
+          <button id="podcast-submit" class="btn btn-success" type="submit">Suchen</button>
         </div>
       </div>
     </div>

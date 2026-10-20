@@ -53,9 +53,17 @@ function checkDescriptionOverflow(): void {
 async function scrollToEpisode(episode: PodcastEpisode): Promise<void> {
   await nextTick()
 
+  const episodeIndex = props.playlistMetadata.episodes.findIndex(
+      item => item.guid === episode.guid
+  )
+
+  if (episodeIndex < 0) {
+    return
+  }
+
   requestAnimationFrame(() => {
     document
-        .getElementById(`episode-item-${episode.guid}`)
+        .getElementById(`episode-item-${episodeIndex}`)
         ?.scrollIntoView({
           behavior: 'smooth',
           block: 'start',

@@ -44,7 +44,6 @@ const currentPage = computed(() => {
 
 const isLoading = ref(false)
 const isError = ref(false)
-const error = ref<string | null>(null)
 
 const coverErrors = ref<Record<string, boolean>>({})
 const coverLoaded = ref<Record<string, boolean>>({})
@@ -69,18 +68,22 @@ const visiblePages = computed<(number | string)[]>(() => {
 
   pages.push(1)
 
-  if (current > 4) {
-    pages.push('...')
-  }
-
   const start = Math.max(2, current - 2)
   const end = Math.min(total - 1, current + 2)
+
+  if (start === 3) {
+    pages.push(2)
+  } else if (start > 3) {
+    pages.push('...')
+  }
 
   for (let page = start; page <= end; page++) {
     pages.push(page)
   }
 
-  if (current < total - 3) {
+  if (end === total - 2) {
+    pages.push(total - 1)
+  } else if (end < total - 2) {
     pages.push('...')
   }
 
@@ -184,7 +187,6 @@ async function searchPodcasts(): Promise<void> {
 
   isLoading.value = true
   isError.value = false
-  error.value = null
 
   const params = createParams()
 
@@ -224,12 +226,7 @@ async function searchPodcasts(): Promise<void> {
     }
 
     podcastMetadata.value = null
-
-    error.value =
-        err instanceof Error
-            ? err.message
-            : 'Unknown error'
-
+    console.error('Podcasts konnten nicht geladen werden:', err)
     isError.value = true
   } finally {
     if (requestId === requestSequence) {
@@ -280,7 +277,7 @@ watch(
       Podcasts werden geladen ...
     </LoadingState>
 
-    <ErrorState v-else-if="error">{{error}}</ErrorState>
+    <ErrorState v-else-if="isError" />
 
     <EmptyState
         v-else-if="podcastMetadata?.response.numFound === 0"
