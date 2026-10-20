@@ -12,6 +12,7 @@ import EmptyState from "./EmptyState.vue";
 const route = useRoute()
 
 const podcastMetadata = ref<SolrResponse | null>(null)
+let requestSequence = 0
 
 const totalItems = ref(0)
 const itemsPerPage = ref(20)
@@ -137,6 +138,8 @@ function scrollToTop(): void {
 }
 
 async function searchPodcasts(): Promise<void> {
+  const requestId = ++requestSequence
+
   isLoading.value = true
   isError.value = false
   error.value = null
@@ -145,6 +148,10 @@ async function searchPodcasts(): Promise<void> {
 
   try {
     const response = await requestSolr(params)
+
+    if (requestId !== requestSequence) {
+      return
+    }
 
     podcastMetadata.value = JSON.parse(response) as SolrResponse
 
@@ -167,6 +174,10 @@ async function searchPodcasts(): Promise<void> {
       await searchPodcasts()
     }
   } catch (err) {
+    if (requestId !== requestSequence) {
+      return
+    }
+
     podcastMetadata.value = null
 
     error.value =
@@ -176,7 +187,9 @@ async function searchPodcasts(): Promise<void> {
 
     isError.value = true
   } finally {
-    isLoading.value = false
+    if (requestId === requestSequence) {
+      isLoading.value = false
+    }
   }
 }
 
