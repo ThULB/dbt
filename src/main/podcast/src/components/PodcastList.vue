@@ -9,6 +9,14 @@ import LoadingState from "./LoadingState.vue";
 import ErrorState from "./ErrorState.vue";
 import EmptyState from "./EmptyState.vue";
 
+const allowedSortValues = new Set([
+  'created asc',
+  'created desc',
+])
+
+const itunesCategoryFilterPattern =
+    /^category:"itunes-podcast:[^"]+"$/
+
 const route = useRoute()
 
 const podcastMetadata = ref<SolrResponse | null>(null)
@@ -78,10 +86,28 @@ function createParams(): URLSearchParams {
       `${(currentPage.value - 1) * itemsPerPage.value}`
   )
 
-  for (const [key, value] of Object.entries(route.query)) {
-    if (typeof value === 'string') {
-      params.append(key, value)
-    }
+  const conditionalQuery = route.query.condQuery
+
+  if (typeof conditionalQuery === 'string') {
+    params.set('condQuery', conditionalQuery)
+  }
+
+  const categoryFilter = route.query.fq
+
+  if (
+      typeof categoryFilter === 'string' &&
+      itunesCategoryFilterPattern.test(categoryFilter)
+  ) {
+    params.append('fq', categoryFilter)
+  }
+
+  const sort = route.query.sort
+
+  if (
+      typeof sort === 'string' &&
+      allowedSortValues.has(sort)
+  ) {
+    params.set('sort', sort)
   }
 
   return params
