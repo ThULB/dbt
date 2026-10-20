@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, ref } from 'vue'
 import type {PodcastEpisode, PodcastPlaylist} from '../types/types.ts'
 import { usePlayerStore } from '../stores/player.ts'
 
@@ -9,13 +9,13 @@ const props = defineProps<{
   playlistMetadata: PodcastPlaylist
 }>()
 
-const episodes = props.playlistMetadata.episodes
+const lastEpisode = computed<PodcastEpisode | null>(() => {
+  const episodes = props.playlistMetadata.episodes
 
-const lastEpisode = ref<PodcastEpisode | null>(
-    episodes.length > 0
-        ? episodes[episodes.length - 1]
-        : null
-)
+  return episodes.length > 0
+      ? episodes[episodes.length - 1]
+      : null
+})
 
 const imageError = ref(false)
 const imageLoaded = ref(false)
