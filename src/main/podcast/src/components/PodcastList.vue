@@ -352,7 +352,10 @@ watch(
           <h3 class="h6 card-title px-2 mb-2">
             <RouterLink
                 class="podcast-card-link stretched-link"
-                :to="podcast.id"
+                :to="{
+                  name: 'podcast',
+                  params: { podcastId: podcast.id },
+                }"
             >
               {{ getPodcastTitle(podcast) }}
             </RouterLink>
