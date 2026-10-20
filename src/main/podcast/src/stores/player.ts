@@ -2,11 +2,24 @@ import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 import type { PodcastEpisode } from '../types/types'
 
+type PlaybackCommand = 'play' | 'pause'
+
+interface PlaybackRequest {
+    id: number
+    command: PlaybackCommand
+}
+
 export const usePlayerStore = defineStore('player', () => {
     const episode = ref<PodcastEpisode | null>(null)
     const episodes = ref<PodcastEpisode[]>([])
     const isPlaying = ref(false)
+    const playbackRequest = ref<PlaybackRequest>({
+        id: 0,
+        command: 'pause',
+    })
     const playlistTitle = ref('')
+
+    let playbackRequestId = 0
 
     const currentTime = ref(0)
     const duration = ref(0)
@@ -32,6 +45,21 @@ export const usePlayerStore = defineStore('player', () => {
 
     function selectEpisode(newEpisode: PodcastEpisode): void {
         episode.value = newEpisode
+        requestPlay()
+    }
+
+    function requestPlay(): void {
+        playbackRequest.value = {
+            id: ++playbackRequestId,
+            command: 'play',
+        }
+    }
+
+    function requestPause(): void {
+        playbackRequest.value = {
+            id: ++playbackRequestId,
+            command: 'pause',
+        }
     }
 
     function nextEpisode(): void {
@@ -42,8 +70,7 @@ export const usePlayerStore = defineStore('player', () => {
             return
         }
 
-        episode.value =
-            episodes.value[currentEpisodeIndex.value + 1]
+        selectEpisode(episodes.value[currentEpisodeIndex.value + 1])
     }
 
     function previousEpisode(): void {
@@ -51,17 +78,26 @@ export const usePlayerStore = defineStore('player', () => {
             return
         }
 
-        episode.value =
-            episodes.value[currentEpisodeIndex.value - 1]
+        selectEpisode(episodes.value[currentEpisodeIndex.value - 1])
     }
 
-    function closePlayer(){
+    function closePlayer(): void {
+        requestPause()
+        isPlaying.value = false
         episode.value = null
     }
 
-    function toggleEpisode(selectedEpisode: PodcastEpisode) {
+    function togglePlayback(): void {
+        if (playbackRequest.value.command === 'play') {
+            requestPause()
+        } else {
+            requestPlay()
+        }
+    }
+
+    function toggleEpisode(selectedEpisode: PodcastEpisode): void {
         if (episode.value?.guid === selectedEpisode.guid) {
-            isPlaying.value = !isPlaying.value
+            togglePlayback()
         } else {
             selectEpisode(selectedEpisode)
         }
@@ -102,6 +138,7 @@ export const usePlayerStore = defineStore('player', () => {
         episode,
         episodes,
         isPlaying,
+        playbackRequest,
         playlistTitle,
         currentEpisodeIndex,
         currentTime,
@@ -110,6 +147,8 @@ export const usePlayerStore = defineStore('player', () => {
 
         setPlaylist,
         selectEpisode,
+        requestPause,
+        togglePlayback,
         nextEpisode,
         previousEpisode,
         closePlayer,

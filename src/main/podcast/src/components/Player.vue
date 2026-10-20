@@ -8,6 +8,8 @@ const audioElement = ref<HTMLAudioElement | null>(null)
 
 const isLoading = ref(false)
 const audioError = ref(false)
+const loadedEpisodeGuid = ref<string | null>(null)
+const loadedEpisodeUrl = ref<string | null>(null)
 
 const imageLoaded = ref(false)
 const imageError = ref(false)
@@ -38,24 +40,25 @@ watch(
 
       await nextTick()
 
-      if (!audioElement.value) {
+      const audio = audioElement.value
+
+      if (!audio || episode !== playerStore.episode) {
         return
       }
 
-      audioElement.value.src = episode.audioUrl
-      audioElement.value.load()
+      loadedEpisodeGuid.value = episode.guid
+      loadedEpisodeUrl.value = episode.audioUrl
+      audio.src = episode.audioUrl
+      audio.load()
 
-      audioElement.value.playbackRate = speeds[speedIndex.value]
-      audioElement.value.volume = volume.value
-      audioElement.value.muted = isMuted.value
+      audio.playbackRate = speeds[speedIndex.value]
+      audio.volume = volume.value
+      audio.muted = isMuted.value
 
-      try {
-        await audioElement.value.play()
-      } catch (error) {
-        console.error('Error playing audio:', error)
+      const request = playerStore.playbackRequest
 
-        audioError.value = true
-        isLoading.value = false
+      if (request.command === 'play') {
+        await playAudio(episode, request.id)
       }
     },
 
@@ -65,36 +68,66 @@ watch(
 )
 
 watch(
-    () => playerStore.isPlaying,
-    async (isPlaying) => {
+    () => playerStore.playbackRequest,
+    request => {
       const audio = audioElement.value
 
       if (!audio) return
 
-      if (isPlaying) {
-        try {
-          await audio.play()
-        } catch (error) {
-          console.error('Error playing audio:', error)
+      if (request.command === 'play') {
+        const episode = playerStore.episode
+
+        if (
+            episode &&
+            loadedEpisodeGuid.value === episode.guid &&
+            loadedEpisodeUrl.value === episode.audioUrl
+        ) {
+          void playAudio(episode, request.id)
         }
       } else {
         audio.pause()
       }
+    },
+    {
+      flush: 'sync',
     }
 )
 
-async function toggleAudio(): Promise<void> {
-  if (!audioElement.value) {
-    return
-  }
+function isPlaybackError(error: unknown, name: string): boolean {
+  return (
+      typeof error === 'object' &&
+      error !== null &&
+      'name' in error &&
+      error.name === name
+  )
+}
+
+async function playAudio(
+    episode: NonNullable<typeof playerStore.episode>,
+    requestId: number
+): Promise<void> {
+  const audio = audioElement.value
+
+  if (!audio) return
 
   try {
-    if (audioElement.value.paused) {
-      await audioElement.value.play()
-    } else {
-      audioElement.value.pause()
-    }
+    await audio.play()
   } catch (error) {
+    if (
+        episode !== playerStore.episode ||
+        requestId !== playerStore.playbackRequest.id ||
+        isPlaybackError(error, 'AbortError')
+    ) {
+      return
+    }
+
+    isLoading.value = false
+    playerStore.requestPause()
+
+    if (isPlaybackError(error, 'NotAllowedError')) {
+      return
+    }
+
     console.error('Error playing audio:', error)
     audioError.value = true
   }
@@ -205,6 +238,11 @@ function handleLoadedMetadata(): void {
   playerStore.duration =
       audioElement.value.duration
 }
+
+function handleEnded(): void {
+  playerStore.isPlaying = false
+  playerStore.requestPause()
+}
 </script>
 
 <template>
@@ -217,7 +255,7 @@ function handleLoadedMetadata(): void {
         preload="metadata"
         @play="playerStore.isPlaying = true"
         @pause="playerStore.isPlaying = false"
-        @ended="playerStore.isPlaying = false"
+        @ended="handleEnded"
         @waiting="isLoading = true"
         @playing="isLoading = false"
         @canplay="isLoading = false"
@@ -348,7 +386,7 @@ function handleLoadedMetadata(): void {
                 ? 'Pause'
                 : 'Folge abspielen'
             "
-            @click="toggleAudio"
+            @click="playerStore.togglePlayback"
         >
           <i
               class="fas"
