@@ -8,13 +8,39 @@ import type {
 const ITUNES_NS =
     'http://www.itunes.com/dtds/podcast-1.0.dtd'
 
+function getDirectChildren(
+    element: Element,
+    tagName: string,
+    namespaceUri: string | null
+): Element[] {
+    return Array.from(element.children).filter(child =>
+        child.localName === tagName &&
+        child.namespaceURI === namespaceUri
+    )
+}
+
+function getDirectChild(
+    element: Element,
+    tagName: string,
+    namespaceUri: string | null
+): Element | undefined {
+    return getDirectChildren(
+        element,
+        tagName,
+        namespaceUri
+    )[0]
+}
+
 function getText(
     element: Element,
     tagName: string
 ): string {
     return (
-        element
-            .getElementsByTagName(tagName)[0]
+        getDirectChild(
+            element,
+            tagName,
+            element.namespaceURI
+        )
             ?.textContent
             ?.trim() ?? ''
     )
@@ -25,11 +51,11 @@ function getItunesText(
     tagName: string
 ): string {
     return (
-        element
-            .getElementsByTagNameNS(
-                ITUNES_NS,
-                tagName
-            )[0]
+        getDirectChild(
+            element,
+            tagName,
+            ITUNES_NS
+        )
             ?.textContent
             ?.trim() ?? ''
     )
@@ -59,11 +85,11 @@ function getItunesAttribute(
     attributeName: string
 ): string {
     return (
-        element
-            .getElementsByTagNameNS(
-                ITUNES_NS,
-                tagName
-            )[0]
+        getDirectChild(
+            element,
+            tagName,
+            ITUNES_NS
+        )
             ?.getAttribute(attributeName) ?? ''
     )
 }
@@ -87,8 +113,12 @@ function parsePodcastXml(
         )
     }
 
-    const channel =
-        xml.getElementsByTagName('channel')[0]
+    const root = xml.documentElement
+    const channel = getDirectChild(
+        root,
+        'channel',
+        root.namespaceURI
+    )
 
     if (!channel) {
         throw new Error(
@@ -96,25 +126,34 @@ function parsePodcastXml(
         )
     }
 
-    const categories =
-        channel.getElementsByTagNameNS(
-            ITUNES_NS,
-            'category'
-        )
+    const categoryElement = getDirectChild(
+        channel,
+        'category',
+        ITUNES_NS
+    )
 
     const category =
-        categories[0]
+        categoryElement
             ?.getAttribute('text') ?? ''
+
+    const subcategoryElement =
+        categoryElement
+            ? getDirectChild(
+                categoryElement,
+                'category',
+                ITUNES_NS
+            )
+            : undefined
 
     const subcategory =
-        categories[1]
+        subcategoryElement
             ?.getAttribute('text') ?? ''
 
-    const owner =
-        channel.getElementsByTagNameNS(
-            ITUNES_NS,
-            'owner'
-        )[0]
+    const owner = getDirectChild(
+        channel,
+        'owner',
+        ITUNES_NS
+    )
 
     const ownerName =
         owner
@@ -126,16 +165,19 @@ function parsePodcastXml(
             ? getItunesText(owner, 'email')
             : ''
 
-    const items = Array.from(
-        channel.getElementsByTagName('item')
+    const items = getDirectChildren(
+        channel,
+        'item',
+        channel.namespaceURI
     )
 
     const episodes: PodcastEpisode[] =
         items.map((item) => {
-            const enclosure =
-                item.getElementsByTagName(
-                    'enclosure'
-                )[0]
+            const enclosure = getDirectChild(
+                item,
+                'enclosure',
+                item.namespaceURI
+            )
 
             return {
                 title:
