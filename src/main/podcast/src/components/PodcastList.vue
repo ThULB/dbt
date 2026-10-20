@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 import requestSolr from '../utils/requestSolr.ts'
 import applicationUrl from '../utils/applicationUrl.ts'
@@ -18,13 +18,29 @@ const itunesCategoryFilterPattern =
     /^category:"itunes-podcast:[^"]+"$/
 
 const route = useRoute()
+const router = useRouter()
 
 const podcastMetadata = ref<SolrResponse | null>(null)
 let requestSequence = 0
 
 const totalItems = ref(0)
 const itemsPerPage = ref(20)
-const currentPage = ref(1)
+const currentPage = computed(() => {
+  const pageQuery = route.query.page
+
+  if (
+      typeof pageQuery !== 'string' ||
+      !/^[1-9]\d*$/.test(pageQuery)
+  ) {
+    return 1
+  }
+
+  const page = Number(pageQuery)
+
+  return Number.isSafeInteger(page)
+      ? page
+      : 1
+})
 
 const isLoading = ref(false)
 const isError = ref(false)
@@ -195,9 +211,12 @@ async function searchPodcasts(): Promise<void> {
         totalPages.value > 0 &&
         currentPage.value > totalPages.value
     ) {
-      currentPage.value = totalPages.value
-
-      await searchPodcasts()
+      await router.replace({
+        query: {
+          ...route.query,
+          page: `${totalPages.value}`,
+        },
+      })
     }
   } catch (err) {
     if (requestId !== requestSequence) {
@@ -228,22 +247,23 @@ async function setPage(page: number): Promise<void> {
     return
   }
 
-  currentPage.value = page
-
-  await searchPodcasts()
+  await router.push({
+    query: {
+      ...route.query,
+      page: `${page}`,
+    },
+  })
 
   scrollToTop()
 }
 
 
 /*
- * Bei Änderung der Filter / Query-Parameter
- * wieder auf Seite 1 springen.
+ * Bei Änderung der Seite oder der Filter neu laden.
  */
 watch(
     () => route.query,
     () => {
-      currentPage.value = 1
       searchPodcasts()
     },
     {
