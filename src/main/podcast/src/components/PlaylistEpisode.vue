@@ -26,11 +26,17 @@ function buildPlayer(episode: PodcastEpisode): void {
 }
 
 function formatDate(value: string): string {
+  const date = new Date(value)
+
+  if (Number.isNaN(date.getTime())) {
+    return ''
+  }
+
   return new Intl.DateTimeFormat('de-DE', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
-  }).format(new Date(value))
+  }).format(date)
 }
 
 function toggleEpisodeDetails(guid: string): void {
