@@ -88,7 +88,7 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     function togglePlayback(): void {
-        if (playbackRequest.value.command === 'play') {
+        if (isPlaying.value) {
             requestPause()
         } else {
             requestPlay()
