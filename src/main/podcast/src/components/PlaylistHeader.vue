@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import type {PodcastEpisode, PodcastPlaylist} from '../types/types.ts'
 import { usePlayerStore } from '../stores/player.ts'
 
@@ -23,6 +23,7 @@ const isDescriptionExpanded = ref(false)
 const isDescriptionOverflowing = ref(false)
 
 const descriptionElement = ref<HTMLElement | null>(null)
+let descriptionResizeObserver: ResizeObserver | null = null
 
 
 function handleImageLoad(): void {
@@ -83,7 +84,23 @@ async function buildPlayer(episode: PodcastEpisode): Promise<void> {
 
 onMounted(async () => {
   await nextTick()
+
+  const element = descriptionElement.value
+
+  if (!element) {
+    return
+  }
+
+  descriptionResizeObserver = new ResizeObserver(
+      checkDescriptionOverflow
+  )
+  descriptionResizeObserver.observe(element)
+
   checkDescriptionOverflow()
+})
+
+onUnmounted(() => {
+  descriptionResizeObserver?.disconnect()
 })
 </script>
 
