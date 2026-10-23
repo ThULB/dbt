@@ -4,14 +4,13 @@
   <parent>
     <groupId>org.mycore</groupId>
     <artifactId>dbt-parent</artifactId>
-    <version>2025.12-SNAPSHOT</version>
+    <version>2026.06-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>dbt-module</artifactId>
   <name>DBT: Application Module</name>
   <build>
     <plugins>
-      <!-- TODO: Replace JUnit4 with JUnit5 -->
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -553,11 +552,6 @@
       <groupId>org.mycore</groupId>
       <artifactId>mycore-base</artifactId>
       <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mycore</groupId>
-      <artifactId>mycore-junit4</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>
