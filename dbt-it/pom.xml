@@ -25,6 +25,7 @@
     <dbt.setup.dir>${project.basedir}/../dbt-module/src/main/resources/setup</dbt.setup.dir>
     <failsafe.arg />
     <it.host>127.0.0.1</it.host>
+    <lobid.port>9109</lobid.port>
     <maven.deploy.skip>true</maven.deploy.skip>
     <maven.install.skip>true</maven.install.skip>
     <solr.home>${MCR.Home.Integration}/solr-home</solr.home>
@@ -304,6 +305,7 @@
             <ResultFolder>${project.build.directory}/failsafe-reports/</ResultFolder>
             <java.awt.headless>true</java.awt.headless>
             <solr.port>${solr.port}</solr.port>
+            <lobid.port>${lobid.port}</lobid.port>
             <mcr.it.solr.core.main>dbt</mcr.it.solr.core.main>
             <mcr.it.solr.core.classifications>dbt-classifications</mcr.it.solr.core.classifications>
           </systemPropertyVariables>

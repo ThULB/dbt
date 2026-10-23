@@ -2,11 +2,9 @@ package org.mycore.dbt.it.controller;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.Assert;
 import org.mycore.common.selenium.drivers.MCRWebdriverWrapper;
 import org.mycore.mir.it.controller.MIRModsEditorController;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
@@ -21,23 +19,6 @@ public class DBTModsEditorController extends MIRModsEditorController {
 
     public DBTModsEditorController(MCRWebdriverWrapper driver, String baseURL) {
         super(driver, baseURL);
-    }
-
-    @Override
-    protected void setInputText(String childElementName, String text) {
-        final WebElement input = driver.waitAndFindElement(
-            By.xpath(".//input[contains(@name,'" + childElementName + "') and contains(@type, 'text')]"));
-
-        Assert.assertTrue("Input is hidden: " + childElementName, input.isDisplayed());
-        input.clear();
-        input.click();
-        input.sendKeys(text);
-        input.sendKeys(Keys.TAB);
-
-        driver.waitFor(webDriver -> inputHasNoFocus(input));
-
-        Assert.assertEquals("Input value changed after blur: " + childElementName, text,
-            input.getDomProperty("value"));
     }
 
     public void setAutoAgree(boolean autoAgree) {
@@ -61,6 +42,11 @@ public class DBTModsEditorController extends MIRModsEditorController {
         } catch (NoSuchElementException e) {
             // not every editor has the publication contract, so there is nothing to agree to
         }
+    }
+
+    @Override
+    public void clickOutside() {
+        DBTClickHelper.clickOutside(driver);
     }
 
     public boolean isContractValidationMessageVisible() {
