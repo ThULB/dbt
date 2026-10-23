@@ -278,11 +278,12 @@ onUnmounted(() => {
 <template>
   <section
       ref="playerElement"
-      class="playlist-player"
+      class="playlist-player position-fixed bottom-0 start-0 w-100 text-body"
       :aria-label="t('podcast.player.ariaLabel')"
   >
     <audio
         ref="audioElement"
+        class="d-none"
         preload="metadata"
         @play="playerStore.isPlaying = true"
         @pause="playerStore.isPlaying = false"
@@ -295,12 +296,12 @@ onUnmounted(() => {
         @loadedmetadata="handleLoadedMetadata"
     />
 
-    <div class="container playlist-player-inner">
+    <div class="playlist-player__inner container">
 
       <!-- Episode -->
-      <div class="playlist-player-track">
+      <div class="playlist-player__track d-flex align-items-center">
 
-        <div class="playlist-player-artwork">
+        <div class="playlist-player__artwork position-relative flex-shrink-0 overflow-hidden rounded-1">
 
           <img
               v-if="
@@ -309,6 +310,7 @@ onUnmounted(() => {
               "
               :src="playerStore.episode.image"
               :alt="t('podcast.image.coverAlt', { title: playerStore.episode.title })"
+              class="position-absolute top-0 start-0 d-block w-100 h-100 object-fit-cover"
               :class="{
                 'is-loaded': imageLoaded
               }"
@@ -321,7 +323,7 @@ onUnmounted(() => {
                 !imageLoaded ||
                 imageError
               "
-              class="playlist-player-artwork-placeholder"
+              class="playlist-player__artwork-placeholder position-absolute top-0 start-0 d-grid w-100 h-100"
               aria-hidden="true"
           >
             <i class="fas fa-headphones"></i>
@@ -329,10 +331,10 @@ onUnmounted(() => {
 
         </div>
 
-        <div class="playlist-player-copy">
+        <div class="playlist-player__copy">
 
           <p
-              class="playlist-player-status"
+              class="playlist-player__status text-truncate mb-0"
               aria-live="polite"
               :data-tone="
                 audioError
@@ -355,11 +357,11 @@ onUnmounted(() => {
             }}
           </p>
 
-          <p class="playlist-player-title">
+          <p class="playlist-player__title text-truncate mb-0">
             {{ playerStore.episode?.title }}
           </p>
 
-          <p class="playlist-player-context">
+          <p class="playlist-player__context text-truncate mb-0 text-body-secondary">
             {{ playerStore.playlistTitle }}
           </p>
 
@@ -369,13 +371,14 @@ onUnmounted(() => {
 
       <!-- Controls -->
       <div
-          class="playlist-player-transport"
+          class="playlist-player__transport d-flex align-items-center justify-content-start justify-content-sm-center"
           role="group"
           :aria-label="t('podcast.player.controls')"
       >
 
         <!-- Previous episode -->
         <button
+            class="playlist-player__button d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
             type="button"
             :aria-label="t('podcast.player.previousEpisode')"
             :title="t('podcast.player.previousEpisode')"
@@ -392,6 +395,7 @@ onUnmounted(() => {
 
         <!-- Back 15 sec -->
         <button
+            class="playlist-player__button d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
             type="button"
             :aria-label="t('podcast.player.back15')"
             :title="t('podcast.player.back15')"
@@ -405,7 +409,7 @@ onUnmounted(() => {
 
         <!-- Play / Pause -->
         <button
-            class="playlist-player-play"
+            class="playlist-player__button playlist-player__play d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
             type="button"
             :aria-label="
               playerStore.isPlaying
@@ -420,7 +424,7 @@ onUnmounted(() => {
             @click="playerStore.togglePlayback"
         >
           <i
-              class="fas"
+              class="playlist-player__play-icon fas"
               :class="
                 playerStore.isPlaying
                   ? 'fa-pause'
@@ -432,6 +436,7 @@ onUnmounted(() => {
 
         <!-- Forward 15 sec -->
         <button
+            class="playlist-player__button d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
             type="button"
             :aria-label="t('podcast.player.forward15')"
             :title="t('podcast.player.forward15')"
@@ -445,6 +450,7 @@ onUnmounted(() => {
 
         <!-- Next episode -->
         <button
+            class="playlist-player__button d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
             type="button"
             :aria-label="t('podcast.player.nextEpisode')"
             :title="t('podcast.player.nextEpisode')"
@@ -463,11 +469,11 @@ onUnmounted(() => {
       </div>
 
       <!-- Tools -->
-      <div class="playlist-player-tools">
+      <div class="playlist-player__tools d-flex align-items-center justify-content-end">
 
         <!-- Speed -->
         <button
-            class="playlist-player-speed"
+            class="playlist-player__button playlist-player__speed d-inline-flex align-items-center justify-content-center flex-shrink-0 border-0 py-0 rounded-1"
             type="button"
             :aria-label="t('podcast.player.changeSpeed')"
             :title="`${speeds[speedIndex]}×`"
@@ -477,9 +483,10 @@ onUnmounted(() => {
         </button>
 
         <!-- Volume -->
-        <div class="playlist-player-volume">
+        <div class="playlist-player__volume d-flex align-items-center">
 
           <button
+              class="playlist-player__button d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
               type="button"
               :aria-label="
                 isMuted
@@ -519,7 +526,7 @@ onUnmounted(() => {
       </div>
 
       <!-- Timeline -->
-      <div class="playlist-player-timeline">
+      <div class="playlist-player__timeline text-body-secondary">
 
         <span>
           {{ playerStore.formatTime(playerStore.currentTime) }}
@@ -544,7 +551,7 @@ onUnmounted(() => {
 
       <!-- Close Button -->
       <button
-          class="close-button"
+          class="playlist-player__button playlist-player__close d-inline-flex align-items-center justify-content-center rounded-circle border-0 p-0"
           type="button"
           :aria-label="t('podcast.player.close')"
           :title="t('podcast.player.close')"
@@ -556,486 +563,327 @@ onUnmounted(() => {
   </section>
 </template>
 
-<style scoped>
-/* =========================
-     Player
-   ========================= */
-
+<style scoped lang="scss">
 .playlist-player {
-  position: fixed;
+  --player-artwork-size: 3.25rem;
+  --player-control-size: 2.25rem;
+  --player-play-size: 3rem;
+
   z-index: 1040;
-  right: 0;
-  bottom: 0;
-  left: 0;
-
-  width: 100%;
-
-  background: #f0f3f1;
-  color: var(--bs-body-color);
-}
-
-:global(body.has-podcast-player) {
-  padding-bottom: var(--podcast-player-height, 0);
-}
-
-.playlist-player[hidden],
-.playlist-player [hidden] {
-  display: none !important;
-}
-
-.playlist-player audio {
-  display: none;
-}
-
-
-/* =========================
-   Layout
-   ========================= */
-
-.playlist-player-inner {
-  display: grid;
-  grid-template-areas:
-    "track transport tools"
-    "timeline timeline timeline";
-  grid-template-columns:
-    minmax(12rem, 1fr)
-    auto
-    minmax(10rem, 0.7fr);
-
-  align-items: center;
-  gap: 0.35rem clamp(0.65rem, 2vw, 1.5rem);
-
-  padding-block: 0.65rem;
-}
-
-
-/* =========================
-   Track information
-   ========================= */
-
-.playlist-player-track {
-  display: flex;
-  grid-area: track;
-
-  min-width: 0;
-
-  align-items: center;
-  gap: 0.65rem;
-}
-
-.playlist-player-artwork {
-  position: relative;
-
-  flex: 0 0 3.25rem;
-  overflow: hidden;
-
-  width: 3.25rem;
-  height: 3.25rem;
-
-  border-radius: 0.25rem;
-  background: #dce7e1;
-}
-
-.playlist-player-artwork img,
-.playlist-player-artwork > span {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-}
-
-.playlist-player-artwork img {
-  display: block;
-
-  object-fit: cover;
-  opacity: 0;
-
-  transition: opacity 0.2s ease;
-}
-
-.playlist-player-artwork img.is-loaded {
-  opacity: 1;
-}
-
-.playlist-player-artwork > span {
-  display: grid;
-  place-items: center;
-
-  color: var(--bs-success);
-  font-size: 1.35rem;
-}
-
-.playlist-player-copy {
-  min-width: 0;
-}
-
-.playlist-player-status,
-.playlist-player-title,
-.playlist-player-context {
-  overflow: hidden;
-
-  margin: 0;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.playlist-player-status {
-  color: var(--bs-secondary-color);
-
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.playlist-player-status[data-tone="playing"] {
-  color: var(--bs-success);
-}
-
-.playlist-player-status[data-tone="loading"] {
-  color: #9a6819;
-}
-
-.playlist-player-status[data-tone="error"] {
-  color: var(--bs-danger);
-}
-
-.playlist-player-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.playlist-player-context {
-  color: var(--bs-secondary-color);
-  font-size: 0.75rem;
-}
-
-
-/* =========================
-   Buttons
-   ========================= */
-
-.playlist-player button {
-  display: inline-grid;
-  place-items: center;
-
-  flex: 0 0 auto;
-
-  width: 2.25rem;
-  height: 2.25rem;
-  padding: 0;
-
-  border: 0;
-  border-radius: 50%;
-
-  background: transparent;
-  color: #34483e;
-
-  cursor: pointer;
-  line-height: 1;
-}
-
-.playlist-player button:hover:not(:disabled) {
-  background: #dce7e1;
-  color: var(--bs-success-text-emphasis);
-}
-
-.playlist-player button:disabled {
-  cursor: not-allowed;
-  opacity: 0.35;
-}
-
-.playlist-player button:focus-visible,
-.playlist-player input:focus-visible {
-  outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
-  outline-offset: 0.14rem;
-}
-
-
-/* =========================
-   Transport
-   ========================= */
-
-.playlist-player-transport {
-  display: flex;
-  grid-area: transport;
-
-  align-items: center;
-  justify-content: center;
-  gap: clamp(0.15rem, 0.8vw, 0.55rem);
-}
-
-.playlist-player .playlist-player-play {
-  width: 3rem;
-  height: 3rem;
-
-  background: var(--bs-success);
-  color: #fff;
-
-  font-size: 1.65rem;
-}
-
-.playlist-player .playlist-player-play:hover:not(:disabled) {
-  background: var(--bs-success-text-emphasis);
-  color: #fff;
-}
-
-.playlist-player .playlist-player-play > .fas {
-  font-size: 1.65rem;
-}
-
-.fa-play {
-  position: relative;
-  left: 3%;
-}
-
-
-/* =========================
-   Tools
-   ========================= */
-
-.playlist-player-tools {
-  display: flex;
-  grid-area: tools;
-
-  min-width: 0;
-
-  align-items: center;
-  justify-content: flex-end;
-  gap: clamp(0.25rem, 1vw, 0.65rem);
-}
-
-.playlist-player .playlist-player-speed {
-  width: auto;
-  min-width: 2.6rem;
-
-  padding-inline: 0.35rem;
-
-  border-radius: 0.25rem;
-
-  color: var(--bs-success-text-emphasis);
-
-  font-size: 0.78rem;
-  font-weight: 700;
-}
-
-
-/* =========================
-   Volume
-   ========================= */
-
-.playlist-player-volume {
-  display: flex;
-
-  min-width: 0;
-
-  align-items: center;
-  gap: 0.2rem;
-}
-
-.playlist-player-volume input {
-  width: clamp(2.25rem, 11vw, 8rem);
-}
-
-
-/* =========================
-   Range inputs
-   ========================= */
-
-.playlist-player input[type="range"] {
-  min-width: 5rem;
-  height: 1rem;
-
-  margin: 0;
-  padding: 0;
-
-  accent-color: var(--bs-success);
-
-  cursor: pointer;
-}
-
-.playlist-player input[type="range"]:disabled {
-  cursor: wait;
-  opacity: 0.55;
-}
-
-
-/* =========================
-   Timeline
-   ========================= */
-
-.playlist-player-timeline {
-  display: grid;
-  grid-area: timeline;
-  grid-template-columns:
-    3.25rem
-    minmax(0, 1fr)
-    3.25rem;
-
-  align-items: center;
-  gap: 0.5rem;
-
-  color: var(--bs-secondary-color);
-
-  font-size: 0.72rem;
-  font-variant-numeric: tabular-nums;
-}
-
-.playlist-player-timeline input {
-  width: 100%;
-}
-
-.playlist-player-timeline > span:last-child {
-  text-align: right;
-}
-
-
-/* =========================
-   Close button
-   ========================= */
-
-.playlist-player .close-button {
-  position: absolute;
-  top: clamp(0.5rem, 1vw, 0.7rem);
-  right: clamp(0.5rem, 1vw, 0.7rem);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: clamp(1.1rem, 2.2vw, 1.5rem);
-  height: clamp(1.1rem, 2.2vw, 1.5rem);
-  padding: 0;
-
-  border: 0;
-  border-radius: 50%;
-
-  color: var(--bs-danger);
-  background-color: rgba(var(--bs-danger-rgb), 0.1);
-
-  font-size: clamp(0.55rem, 1.3vw, 0.75rem);
-  line-height: 1;
-
-  cursor: pointer;
-
-  transition:
-      background-color 0.15s ease,
-      color 0.15s ease,
-      transform 0.15s ease;
-}
-
-.playlist-player .close-button:hover {
-  color: var(--bs-white);
-  background-color: var(--bs-danger);
-  transform: scale(1.08);
-}
-
-.playlist-player .close-button:active {
-  transform: scale(0.92);
-}
-
-
-/* =========================
-   Tablet
-   ========================= */
-
-@media (max-width: 767.98px) {
-  .playlist-player-inner {
+  border-top: 1px solid #c8c8c8;
+  background: #e0e0e0;
+  box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+
+  &__inner {
+    display: grid;
     grid-template-areas:
-      "track tools"
-      "transport transport"
-      "timeline timeline";
-    grid-template-columns: minmax(0, 1fr) auto;
-
-    gap: 0.3rem 0.5rem;
-
-    padding-block: 0.55rem;
-  }
-}
-
-
-/* =========================
-   Mobile
-   ========================= */
-
-@media (max-width: 575.98px) {
-  .playlist-player-inner {
-    grid-template-areas:
-      "track track"
-      "transport tools"
-      "timeline timeline";
-    grid-template-columns: minmax(0, 1fr) auto;
-
-    gap: 0.25rem 0.2rem;
-
-    padding-block: 0.45rem;
-  }
-
-  .playlist-player-artwork {
-    flex-basis: 2.75rem;
-
-    width: 2.75rem;
-    height: 2.75rem;
-  }
-
-  .playlist-player-context {
-    display: none;
-  }
-
-  .playlist-player-title {
-    font-size: 0.84rem;
-  }
-
-  .playlist-player-transport {
-    justify-content: flex-start;
-    gap: 0.1rem;
-  }
-
-  .playlist-player-transport button,
-  .playlist-player-volume button {
-    width: 1.85rem;
-    height: 1.85rem;
-  }
-
-  .playlist-player .playlist-player-play {
-    width: 2.6rem;
-    height: 2.6rem;
-  }
-
-  .playlist-player-tools {
-    gap: 0;
-  }
-
-  .playlist-player .playlist-player-speed {
-    min-width: 2.25rem;
-    height: 1.85rem;
-
-    padding-inline: 0.15rem;
-  }
-
-  .playlist-player-volume {
-    gap: 0;
-  }
-
-  .playlist-player-volume input {
-    width: clamp(2.25rem, 12vw, 3.75rem);
-  }
-
-  .playlist-player-timeline {
+      "track transport tools"
+      "timeline timeline timeline";
     grid-template-columns:
-      max-content
-      minmax(0, 1fr)
-      max-content;
+      minmax(12rem, 1fr)
+      auto
+      minmax(10rem, 0.7fr);
+    align-items: center;
+    gap: 0.35rem clamp(0.65rem, 2vw, 1.5rem);
+    padding-block: 0.65rem;
+  }
 
+  &__track {
+    grid-area: track;
+    min-width: 0;
+    gap: 0.65rem;
+  }
+
+  &__artwork {
+    flex-basis: var(--player-artwork-size);
+    width: var(--player-artwork-size);
+    height: var(--player-artwork-size);
+    background: var(--bs-body-bg);
+
+    img {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+
+      &.is-loaded {
+        opacity: 1;
+      }
+    }
+  }
+
+  &__artwork-placeholder {
+    place-items: center;
+    color: var(--bs-success);
+    font-size: 1.35rem;
+  }
+
+  &__copy {
+    min-width: 0;
+  }
+
+  &__status {
+    color: var(--bs-secondary-color);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+
+    &[data-tone="playing"] {
+      color: var(--bs-success);
+    }
+
+    &[data-tone="loading"] {
+      color: var(--bs-warning-text-emphasis);
+    }
+
+    &[data-tone="error"] {
+      color: var(--bs-danger);
+    }
+  }
+
+  &__title {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  &__context {
+    font-size: 0.75rem;
+  }
+
+  &__button {
+    width: var(--player-control-size);
+    height: var(--player-control-size);
+    background: transparent;
+    color: var(--bs-success-text-emphasis);
+    cursor: pointer;
+    line-height: 1;
+
+    &:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.07);
+      color: var(--bs-success-text-emphasis);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.35;
+    }
+  }
+
+  &__button:focus-visible,
+  input:focus-visible {
+    outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
+    outline-offset: 0.14rem;
+  }
+
+  &__transport {
+    grid-area: transport;
+    gap: clamp(0.15rem, 0.8vw, 0.55rem);
+  }
+
+  &__play {
+    width: var(--player-play-size);
+    height: var(--player-play-size);
+    background: var(--bs-success);
+    color: var(--bs-white);
+    font-size: 1.65rem;
+
+    &:hover:not(:disabled) {
+      background: var(--bs-success-text-emphasis);
+      color: var(--bs-white);
+    }
+  }
+
+  &__play-icon {
+    font-size: 1.65rem;
+
+    &.fa-play {
+      position: relative;
+      left: 3%;
+    }
+  }
+
+  &__tools {
+    grid-area: tools;
+    min-width: 0;
+    gap: clamp(0.25rem, 1vw, 0.65rem);
+  }
+
+  &__speed {
+    width: auto;
+    min-width: 2.6rem;
+    padding-inline: 0.35rem;
+    color: var(--bs-success-text-emphasis);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  &__volume {
+    min-width: 0;
     gap: 0.2rem;
 
-    font-size: 0.66rem;
+    input {
+      width: clamp(2.25rem, 11vw, 8rem);
+      min-width: 0;
+    }
   }
 
-  .playlist-player input[type="range"] {
-    height: 0.8rem;
+  input[type="range"] {
+    height: 1rem;
+    margin: 0;
+    padding: 0;
+    accent-color: var(--bs-success);
+    cursor: pointer;
+
+    &:disabled {
+      cursor: wait;
+      opacity: 0.55;
+    }
   }
+
+  &__timeline {
+    display: grid;
+    grid-area: timeline;
+    grid-template-columns:
+      3.25rem
+      minmax(0, 1fr)
+      3.25rem;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+
+    input {
+      width: 100%;
+      min-width: 0;
+    }
+
+    > span:last-child {
+      text-align: right;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: clamp(0.5rem, 1vw, 0.7rem);
+    right: clamp(0.5rem, 1vw, 0.7rem);
+    width: clamp(1.75rem, 2.2vw, 2rem);
+    height: clamp(1.75rem, 2.2vw, 2rem);
+    color: var(--bs-danger);
+    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    font-size: clamp(0.55rem, 1.3vw, 0.75rem);
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        transform 0.15s ease;
+
+    &:hover {
+      color: var(--bs-white);
+      background-color: var(--bs-danger);
+      transform: scale(1.08);
+    }
+
+    &:active {
+      transform: scale(0.92);
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    &__inner {
+      grid-template-areas:
+        "track tools"
+        "transport transport"
+        "timeline timeline";
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.3rem 0.5rem;
+      padding-block: 0.55rem;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    --player-artwork-size: 2.75rem;
+    --player-control-size: 2.25rem;
+    --player-play-size: 2.75rem;
+
+    &__inner {
+      grid-template-areas:
+        "track track"
+        "transport tools"
+        "timeline timeline";
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.25rem 0.2rem;
+      padding-block: 0.45rem;
+    }
+
+    &__context {
+      display: none;
+    }
+
+    &__track {
+      padding-right: 2rem;
+    }
+
+    &__title {
+      font-size: 0.84rem;
+    }
+
+    &__transport {
+      gap: 0.1rem;
+    }
+
+    &__tools {
+      gap: 0;
+    }
+
+    &__speed {
+      min-width: 2.25rem;
+      padding-inline: 0.15rem;
+    }
+
+    &__volume {
+      gap: 0;
+
+      input {
+        width: clamp(2.5rem, 12vw, 3.75rem);
+      }
+    }
+
+    &__timeline {
+      grid-template-columns:
+        max-content
+        minmax(0, 1fr)
+        max-content;
+      gap: 0.2rem;
+      font-size: 0.66rem;
+    }
+
+    input[type="range"] {
+      height: 0.8rem;
+    }
+  }
+
+  @media (max-width: 375px) {
+    &__inner {
+      grid-template-areas:
+        "track track"
+        "transport transport"
+        "tools tools"
+        "timeline timeline";
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__artwork img,
+    &__close {
+      transition: none;
+    }
+  }
+}
+
+:global(body.has-podcast-player .back-to-top) {
+  bottom: calc(var(--podcast-player-height, 0px) + 1rem);
+}
+
+:global(body.has-podcast-player > footer) {
+  flex-shrink: 0;
+  padding-bottom: calc(var(--podcast-player-height, 0px) + 20px);
 }
 </style>
