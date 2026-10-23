@@ -20,6 +20,10 @@ const { t } = useI18n({ useScope: 'global' })
   </section>
 </template>
 
-<style>
-
+<style scoped lang="scss">
+.podcast-hero {
+  .lead {
+    max-width: 62ch;
+  }
+}
 </style>

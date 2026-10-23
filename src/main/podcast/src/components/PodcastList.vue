@@ -294,7 +294,7 @@ watch(
     <!-- Results -->
     <div
         v-else-if="podcastMetadata"
-        class="wrapper"
+        class="podcast-list__results"
     >
       <h2 class="mb-4">
         {{
@@ -307,20 +307,20 @@ watch(
         }}
       </h2>
 
-      <div class="cards-collection">
+      <div class="podcast-list__grid">
 
         <article
             v-for="podcast in podcastMetadata.response.docs"
             :key="podcast.id"
-            class="card-item h-100 border-0 shadow-sm rounded-2 overflow-hidden position-relative"
+            class="podcast-list__card d-grid h-100 border-0 shadow-sm rounded-2 overflow-hidden position-relative"
         >
 
           <!-- Cover -->
-          <div class="podcast-card-cover ratio ratio-1x1 bg-light border-bottom">
+          <div class="podcast-list__cover ratio ratio-1x1 bg-light border-bottom position-relative overflow-hidden">
 
             <img
                 v-if="!coverErrors[podcast.id]"
-                class="card-img-top w-100 h-100 object-fit-cover"
+                class="podcast-list__cover-image card-img-top position-absolute top-0 start-0 w-100 h-100 object-fit-cover z-2"
                 :class="{ 'is-loaded': coverLoaded[podcast.id] }"
                 :src="getCoverUrl(podcast)"
                 :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
@@ -332,7 +332,7 @@ watch(
 
             <div
                 v-if="!coverLoaded[podcast.id] || coverErrors[podcast.id]"
-                class="podcast-card-cover-placeholder"
+                class="podcast-list__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary z-1"
                 aria-hidden="true"
             >
               <i class="fa-solid fa-images"></i>
@@ -343,7 +343,7 @@ watch(
           <!-- Categories -->
           <div
               v-if="getItunesCategories(podcast).length"
-              class="topic mt-1 px-2"
+              class="podcast-list__categories align-self-center mt-1 px-2"
           >
             <span
                 v-for="category in getItunesCategories(podcast)"
@@ -357,7 +357,7 @@ watch(
           <!-- Title -->
           <h3 class="h6 card-title px-2 mb-2">
             <RouterLink
-                class="podcast-card-link stretched-link"
+                class="podcast-list__card-link stretched-link"
                 :to="{
                   name: 'podcast',
                   params: { podcastId: podcast.id },
@@ -385,7 +385,7 @@ watch(
           class="mt-5"
           :aria-label="t('podcast.pagination.ariaLabel')"
       >
-        <ul class="pagination justify-content-center">
+        <ul class="podcast-list__pagination pagination justify-content-center">
 
           <!-- Previous -->
           <li
@@ -393,7 +393,7 @@ watch(
               :class="{ disabled: currentPage === 1 }"
           >
             <button
-                class="page-link text-success"
+                class="page-link"
                 type="button"
                 :disabled="currentPage === 1"
                 :aria-label="t('podcast.pagination.previousAriaLabel')"
@@ -426,11 +426,6 @@ watch(
             <button
                 v-else
                 class="page-link"
-                :class="
-                page === currentPage
-                  ? 'text-white'
-                  : 'text-success'
-              "
                 type="button"
                 :aria-current="
                 page === currentPage
@@ -452,7 +447,7 @@ watch(
             }"
           >
             <button
-                class="page-link text-success"
+                class="page-link"
                 type="button"
                 :disabled="currentPage === totalPages"
                 :aria-label="t('podcast.pagination.nextAriaLabel')"
@@ -470,102 +465,75 @@ watch(
   </section>
 </template>
 
-<style lang="scss" scoped>
-.cards-collection {
-  display: grid;
-
-  grid-template-columns:
-    repeat(
-      auto-fill,
-      minmax(min(100%, 250px), 1fr)
-    );
-
-  gap: 25px;
-}
-
-.podcast-card-cover {
-  position: relative;
-  overflow: hidden;
-  background: var(--bs-secondary-bg);
-}
-
-.podcast-card-cover > img {
-  position: absolute;
-  inset: 0;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-
-  opacity: 0;
-  transition: opacity 0.2s ease;
-
-  z-index: 2;
-}
-
-.podcast-card-cover > img.is-loaded {
-  opacity: 1;
-}
-
-.podcast-card-cover-placeholder {
-  position: absolute;
-  inset: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background: var(--bs-secondary-bg);
-  color: var(--bs-secondary-color);
-
-  font-size: 3rem;
-
-  z-index: 1;
-}
-
-.card-item {
-  display: grid;
-  grid-template-rows: subgrid;
-  grid-row: span 4;
-
-  row-gap: 5px;
-}
-
-.podcast-card-link {
-  color: var(--bs-black);
-
-  &:hover {
-    color: var(--bs-success);
+<style scoped lang="scss">
+.podcast-list {
+  &__grid {
+    display: grid;
+    grid-template-columns:
+      repeat(
+        auto-fill,
+        minmax(min(100%, 250px), 1fr)
+      );
+    gap: 1.5rem;
   }
-}
 
-.topic {
-  align-self: center;
-}
+  &__cover-image {
+    opacity: 0;
+    transition: opacity 0.2s ease;
 
-.page-item.active {
-  .page-link {
-    background-color: var(--bs-success) !important;
-    border-color: var(--bs-success) !important;
+    &.is-loaded {
+      opacity: 1;
+    }
   }
-}
 
-.page-link {
-  color: var(--bs-secondary);
-}
+  &__cover-placeholder {
+    font-size: 3rem;
+  }
 
-.page-link:hover {
-  color: var(--bs-success);
-}
+  &__card {
+    grid-template-rows: subgrid;
+    grid-row: span 4;
+    row-gap: 5px;
+  }
 
-.page-item.active .page-link:hover {
-  color: var(--bs-white);
-}
+  &__card-link {
+    color: var(--bs-black);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
 
-.page-item.disabled {
-  .page-link {
-    color: var(--bs-secondary);
+    &:hover {
+      color: var(--bs-success);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--bs-success);
+      outline-offset: 2px;
+    }
+  }
+
+  &__pagination {
+    --bs-pagination-color: var(--bs-success);
+    --bs-pagination-hover-color: var(--bs-success-text-emphasis);
+    --bs-pagination-focus-color: var(--bs-success-text-emphasis);
+    --bs-pagination-active-color: var(--bs-white);
+    --bs-pagination-active-bg: var(--bs-success);
+    --bs-pagination-active-border-color: var(--bs-success);
+    --bs-pagination-disabled-color: var(--bs-secondary-color);
+
+    flex-wrap: wrap;
+    gap: 0.375rem;
+
+    .page-link {
+      min-width: 2.25rem;
+      border-radius: var(--bs-border-radius-sm);
+      text-align: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__cover-image {
+      transition: none;
+    }
   }
 }
 </style>

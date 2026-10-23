@@ -108,7 +108,7 @@ const handleSubmit = () => {
 <template>
   <form
       id="podcast-filters"
-      class="card border-0 bg-light shadow-sm mb-5"
+      class="podcast-filter card border-0 bg-light shadow-sm mb-5"
       @submit.prevent="handleSubmit"
       :aria-label="t('podcast.filter.ariaLabel')">
     <div class="card-body p-3 p-lg-4">
@@ -187,14 +187,19 @@ const handleSubmit = () => {
 </template>
 
 <style scoped lang="scss">
-.form-control:focus,
-.form-select:focus {
-  border-color: var(--bs-success);
-  box-shadow: 0 0 0 0.25rem rgba(var(--bs-success-rgb), 0.25);
-}
+.podcast-filter {
+  :is(.form-control, .form-select, .btn) {
+    min-height: 2.75rem;
+  }
 
-.form-select:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
+  :is(.form-control, .form-select):focus {
+    border-color: var(--bs-success);
+    box-shadow: 0 0 0 0.25rem rgba(var(--bs-success-rgb), 0.25);
+  }
+
+  .form-select:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
 }
 </style>
