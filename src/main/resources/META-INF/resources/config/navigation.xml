@@ -106,6 +106,15 @@
       <label xml:lang="en">Mail Queue</label>
     </item>
   </menu>
+  <menu id="podcast">
+    <label xml:lang="de">Podcasts</label>
+    <label xml:lang="en">Podcasts</label>
+    <icon>fas fa-headphones me-1 d-none d-sm-inline-block d-lg-none</icon>
+    <item href="/podcast" type="intern">
+      <label xml:lang="de">Aktuell</label>
+      <label xml:lang="en">Relevant</label>
+    </item>
+  </menu>
   <menu id="publish" dir="/content/publish">
     <label xml:lang="de">Publizieren</label>
     <label xml:lang="en">Publish</label>

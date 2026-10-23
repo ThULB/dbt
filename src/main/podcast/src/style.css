@@ -1,0 +1,3 @@
+#main_content > .container[data-v-app] {
+  min-width: 0;
+}
