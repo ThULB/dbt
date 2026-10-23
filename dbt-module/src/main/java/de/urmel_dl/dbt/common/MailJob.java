@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.jdom2.Element;
 import org.mycore.common.MCRMailer;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobAction;
 

@@ -32,7 +32,7 @@ import org.jdom2.output.XMLOutputter;
 import org.jdom2.transform.JDOMSource;
 import org.mycore.common.content.MCRContent;
 import org.mycore.common.content.MCRSourceContent;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.common.xml.MCRXMLParserFactory;
 
 /**

@@ -32,8 +32,8 @@ import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
+import org.apache.solr.client.solrj.request.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -59,7 +59,7 @@ import org.mycore.datamodel.metadata.MCRObjectService;
 import org.mycore.mcr.acl.accesskey.MCRAccessKeyUtils;
 import org.mycore.mir.authorization.accesskeys.MIRAccessKeyManager;
 import org.mycore.mir.authorization.accesskeys.backend.MIRAccessKeyPair;
-import org.mycore.solr.MCRSolrCoreManager;
+import org.mycore.solr.MCRSolrIndexRegistryManager;
 import org.mycore.solr.MCRSolrUtils;
 import org.mycore.solr.auth.MCRSolrAuthenticationLevel;
 import org.mycore.solr.auth.MCRSolrAuthenticationManager;
@@ -282,7 +282,7 @@ public final class SlotManager {
      * You have to clear the {@link SlotManager#slotList} before.
      */
     public synchronized void loadList() {
-        final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.getInstance();
+        final MCRXMLMetadataManager xmlManager = MCRXMLMetadataManager.obtainInstance();
         final List<String> ids = xmlManager.listIDsForBase(getMCRObjectBaseID());
 
         ids.forEach(objId -> {
@@ -352,7 +352,7 @@ public final class SlotManager {
 
         if (slot != null && revision != null) {
             try {
-                MCRContent cont = MCRXMLMetadataManager.getInstance().retrieveContent(slot.getMCRObjectID(),
+                MCRContent cont = MCRXMLMetadataManager.obtainInstance().retrieveContent(slot.getMCRObjectID(),
                     revision.toString());
                 return SlotWrapper.unwrapMCRObject(new MCRObject(cont.asXML()));
             } catch (IOException | JDOMException e) {
@@ -403,7 +403,7 @@ public final class SlotManager {
      */
     public synchronized Long getLastRevision(final Slot slot) {
         try {
-            final OptionalLong maxRevision = MCRXMLMetadataManager.getInstance().listRevisions(slot.getMCRObjectID())
+            final OptionalLong maxRevision = MCRXMLMetadataManager.obtainInstance().listRevisions(slot.getMCRObjectID())
                 .stream()
                 .filter(Predicate.not(
                     v -> v.getType() == MCRAbstractMetadataVersion.DELETED))
@@ -588,7 +588,7 @@ public final class SlotManager {
      */
     public SlotList getFilteredSlotList(final String search, final String filter, Integer start, Integer rows,
         final List<SortClause> sortClauses) throws SolrServerException, IOException {
-        final SolrClient client = MCRSolrCoreManager.getMainSolrClient();
+        final SolrClient client = MCRSolrIndexRegistryManager.requireMainIndex().getClient();
 
         final SolrQuery query = new SolrQuery();
         final String searchStr = "(slotId:%filter%) OR (slot.title:%filter%) OR (slot.lecturer:%filter%) OR (slot.location:%filter%) OR (slot.validTo:%filter%)"

@@ -28,8 +28,10 @@ import org.jdom2.output.XMLOutputter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.test.MyCoReTest;
+import org.mycore.test.MCRMetadataExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import de.urmel_dl.dbt.rc.datamodel.Period;
 import de.urmel_dl.dbt.rc.datamodel.RCCalendar;
@@ -41,6 +43,7 @@ import de.urmel_dl.dbt.utils.EntityFactory;
  * @author René Adler (eagle)
  */
 @MyCoReTest
+@ExtendWith(MCRMetadataExtension.class)
 public class TestRCCalendar {
 
     private static RCCalendar calendar;

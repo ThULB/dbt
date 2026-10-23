@@ -27,7 +27,6 @@ import org.jdom2.Element;
 import org.mycore.common.content.MCRJDOMContent;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
-import org.mycore.datamodel.classifications2.MCRCategoryDAOFactory;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
 import org.mycore.frontend.servlets.MCRServlet;
 import org.mycore.frontend.servlets.MCRServletJob;
@@ -55,7 +54,7 @@ public class SlotLocationServlet extends MCRServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        categoryDao = MCRCategoryDAOFactory.obtainInstance();
+        categoryDao = MCRCategoryDAO.obtainInstance();
     }
 
     /* (non-Javadoc)
@@ -111,7 +110,7 @@ public class SlotLocationServlet extends MCRServlet {
         }
         final Element rootElement = getRootElement(request);
         rootElement.setAttribute("classID", categoryID.getRootID());
-        if (!categoryID.isRootID()) {
+        if (!categoryID.isRoot()) {
             rootElement.setAttribute("categID", categoryID.getId());
         }
         request.setAttribute(LAYOUT_ELEMENT_KEY, new Document(rootElement));

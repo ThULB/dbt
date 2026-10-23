@@ -125,7 +125,7 @@ public class MediaService {
     private static final Closeable TASK_SHUTDOWNHANDLER = new Closeable() {
         @Override
         public void prepareClose() {
-            TASK_EXECUTOR.getExecutor().shutdown();
+            TASK_EXECUTOR.executor().shutdown();
         }
 
         @Override
@@ -135,7 +135,7 @@ public class MediaService {
 
         @Override
         public void close() {
-            waitForShutdown(TASK_EXECUTOR.getExecutor());
+            waitForShutdown(TASK_EXECUTOR.executor());
         }
 
         private void waitForShutdown(ExecutorService service) {

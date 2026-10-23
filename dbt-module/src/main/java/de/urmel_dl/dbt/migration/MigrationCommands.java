@@ -68,7 +68,7 @@ public class MigrationCommands extends MCRAbstractCommands {
         List<String> cmds = new ArrayList<String>();
         String sf = styleFile.toString();
 
-        MCRXMLMetadataManager mm = MCRXMLMetadataManager.getInstance();
+        MCRXMLMetadataManager mm = MCRXMLMetadataManager.obtainInstance();
         mm.listIDsForBase(base).forEach(id -> {
             cmds.add(new MessageFormat("xslt {0} with file {1}", Locale.ROOT)
                 .format(new Object[] { id, sf }));

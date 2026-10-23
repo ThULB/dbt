@@ -42,7 +42,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRSystemUserInformation;
 import org.mycore.common.MCRTestConfiguration;
 import org.mycore.common.MCRTestProperty;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.datamodel.classifications2.MCRCategory;
 import org.mycore.datamodel.classifications2.MCRCategoryDAO;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
@@ -89,14 +89,11 @@ public class TestSlot {
     private static Document RCLOC;
     private static SlotManager SLOT_MANAGER;
 
-    @BeforeAll
-    public static void setupSlotManager() {
-        RCLOC = new Document(MCRURIResolver.obtainInstance().resolve("resource:setup/classifications/RCLOC.xml"));
-        SLOT_MANAGER = SlotManager.instance();
-    }
-
     @BeforeEach
     public void setUp() throws Exception {
+        RCLOC = new Document(MCRURIResolver.obtainInstance().resolve("resource:setup/classifications/RCLOC.xml"));
+        SLOT_MANAGER = SlotManager.instance();
+
         MCRSession session = MCRSessionMgr.getCurrentSession();
         session.setUserInformation(MCRSystemUserInformation.SUPER_USER);
 
