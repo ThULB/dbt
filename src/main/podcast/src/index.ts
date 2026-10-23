@@ -4,10 +4,15 @@ import { i18n } from './i18n'
 
 import App from './App.vue'
 import router from './router/router'
+import { syncLanguageLinks } from './utils/languageLinks'
 
 import './style.css'
 
 const PODCAST_MOUNT_SELECTOR = '#main_content > .container'
+
+router.afterEach(() => {
+  syncLanguageLinks()
+})
 
 export function mountPodcast(
     selector = PODCAST_MOUNT_SELECTOR
