@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import type {PodcastEpisode, PodcastPlaylist} from '../types/types.ts'
 import { usePlayerStore } from '../stores/player.ts'
+import podcastCategoryValue from '../utils/podcastCategory.ts'
 
 const playerStore = usePlayerStore()
+const { t, te } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   playlistMetadata: PodcastPlaylist
@@ -25,6 +28,12 @@ const isDescriptionOverflowing = ref(false)
 const descriptionElement = ref<HTMLElement | null>(null)
 let descriptionResizeObserver: ResizeObserver | null = null
 
+function categoryLabel(category: string): string {
+  const value = podcastCategoryValue(category)
+  const key = value && `podcast.categories.${value}`
+
+  return key && te(key) ? t(key) : category
+}
 
 function handleImageLoad(): void {
   imageLoaded.value = true
@@ -111,7 +120,7 @@ onUnmounted(() => {
           v-if="playlistMetadata.image && !imageError"
           class="object-fit-cover rounded-2"
           :class="{ 'is-loaded': imageLoaded }"
-          :alt="`Cover von ${playlistMetadata.title}`"
+          :alt="t('podcast.image.coverAlt', { title: playlistMetadata.title })"
           :src="playlistMetadata.image"
           @load="handleImageLoad"
           @error="handleImageError"
@@ -133,29 +142,29 @@ onUnmounted(() => {
 
       <div class="topic d-flex gap-1 mb-3">
         <span class="badge text-bg-success text-wrap text-start">
-          {{ playlistMetadata.category }}
+          {{ categoryLabel(playlistMetadata.category) }}
         </span>
 
         <span
             v-if="playlistMetadata.subcategory"
             class="badge text-bg-success text-wrap text-start"
         >
-          {{ playlistMetadata.subcategory }}
+          {{ categoryLabel(playlistMetadata.subcategory) }}
         </span>
       </div>
 
       <dl class="row mb-2 w-100">
-        <dt class="col-3">Sprache:</dt>
+        <dt class="col-3">{{ t('podcast.details.language') }}:</dt>
         <dd class="col-9">
           {{ playlistMetadata.language.toUpperCase() }}
         </dd>
 
-        <dt class="col-3">Besitzer:</dt>
+        <dt class="col-3">{{ t('podcast.details.owner') }}:</dt>
         <dd class="col-9">
           {{ playlistMetadata.ownerName }}
         </dd>
 
-        <dt class="col-3">E-Mail:</dt>
+        <dt class="col-3">{{ t('podcast.details.email') }}:</dt>
         <dd class="col-9">
           {{ playlistMetadata.ownerEmail }}
         </dd>
@@ -180,7 +189,13 @@ onUnmounted(() => {
           @click="toggleDescription"
       >
         <span>
-          {{ isDescriptionExpanded ? 'Weniger anzeigen' : 'Mehr anzeigen' }}
+          {{
+            t(
+                isDescriptionExpanded
+                    ? 'podcast.description.showLess'
+                    : 'podcast.description.showMore'
+            )
+          }}
         </span>
 
         <i
@@ -204,7 +219,7 @@ onUnmounted(() => {
             class="fas fa-play m-0"
             aria-hidden="true"
         />
-        Neueste Folge
+        {{ t('podcast.episode.latest') }}
       </button>
     </div>
   </header>

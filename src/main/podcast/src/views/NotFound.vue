@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 import applicationUrl from '../utils/applicationUrl'
 
+const { t } = useI18n({ useScope: 'global' })
 const startPageUrl = applicationUrl('content/index.xml')
 </script>
 
@@ -15,12 +17,11 @@ const startPageUrl = applicationUrl('content/index.xml')
           id="not-found-title"
           class="not-found__title fw-semibold"
       >
-        Seite nicht gefunden
+        {{ t('podcast.notFound.title') }}
       </h1>
 
       <p class="not-found__description text-muted fs-5">
-        Die von Ihnen aufgerufene Seite existiert nicht
-        oder wurde möglicherweise verschoben.
+        {{ t('podcast.notFound.description') }}
       </p>
 
       <div class="not-found__actions d-flex flex-wrap justify-content-center align-items-center gap-4 mt-4">
@@ -28,14 +29,14 @@ const startPageUrl = applicationUrl('content/index.xml')
             :to="{ name: 'podcasts' }"
             class="btn btn-success px-4 py-3"
         >
-          Zur Podcast-Übersicht &rarr;
+          {{ t('podcast.navigation.toOverview') }} &rarr;
         </RouterLink>
 
         <a
             :href="startPageUrl"
             class="not-found__link text-success"
         >
-          Zur Startseite &rarr;
+          {{ t('podcast.navigation.toHomepage') }} &rarr;
         </a>
       </div>
     </div>

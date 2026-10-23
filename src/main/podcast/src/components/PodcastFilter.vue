@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import itunesPodcastCategories from '../data/podcast-categories.json'
 
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n({ useScope: 'global' })
 const search = ref('')
 const category = ref('')
 const subCategory = ref('')
@@ -14,6 +16,10 @@ const selectedSubcategories = computed(() => {
 
   return selectedCategory?.subcategories ?? []
 })
+
+function categoryLabel(value: string): string {
+  return t(`podcast.categories.${value}`)
+}
 
 function queryValue(value: unknown): string {
   return typeof value === 'string' ? value : ''
@@ -104,59 +110,76 @@ const handleSubmit = () => {
       id="podcast-filters"
       class="card border-0 bg-light shadow-sm mb-5"
       @submit.prevent="handleSubmit"
-      aria-label="Podcasts filtern">
+      :aria-label="t('podcast.filter.ariaLabel')">
     <div class="card-body p-3 p-lg-4">
       <div class="row g-3 align-items-end justify-content-end">
         <div class="col-12">
-          <label for="podcast-search" class="form-label fw-semibold">Podcasts durchsuchen</label>
-          <input id="podcast-search" v-model="search" class="form-control" type="search" placeholder="Titel, Beschreibung, Herausgeber oder Autor" autocomplete="off">
+          <label for="podcast-search" class="form-label fw-semibold">
+            {{ t('podcast.filter.searchLabel') }}
+          </label>
+          <input
+              id="podcast-search"
+              v-model="search"
+              class="form-control"
+              type="search"
+              :placeholder="t('podcast.filter.searchPlaceholder')"
+              autocomplete="off"
+          >
         </div>
 
         <div class="col-md-4 col-lg-4">
-          <label for="podcast-category" class="form-label fw-semibold">Kategorie</label>
+          <label for="podcast-category" class="form-label fw-semibold">
+            {{ t('podcast.filter.category') }}
+          </label>
           <select id="podcast-category" v-model="category" class="form-select">
-            <option value="">Alle Kategorien</option>
+            <option value="">{{ t('podcast.filter.allCategories') }}</option>
             <option
                 v-for="category in itunesPodcastCategories"
                 :key="category.value"
                 :value="category.value"
-                :label="category.label"
+                :label="categoryLabel(category.value)"
             >
-              {{category.label}}
+              {{ categoryLabel(category.value) }}
             </option>
           </select>
         </div>
 
         <div class="col-md-4 col-lg-4">
-          <label for="podcast-subcategory" class="form-label fw-semibold">Subkategorie</label>
+          <label for="podcast-subcategory" class="form-label fw-semibold">
+            {{ t('podcast.filter.subcategory') }}
+          </label>
           <select
               id="podcast-subcategory"
               v-model="subCategory"
               class="form-select"
               :disabled="selectedSubcategories.length === 0"
           >
-            <option value="">Bitte wählen</option>
+            <option value="">{{ t('podcast.filter.select') }}</option>
             <option
                 v-for="sub in selectedSubcategories"
                 :key="sub.value"
                 :value="sub.value"
-                :label="sub.label"
+                :label="categoryLabel(sub.value)"
             >
-              {{sub.label}}
+              {{ categoryLabel(sub.value) }}
             </option>
           </select>
         </div>
 
         <div class="col-md-4 col-lg-2">
-          <label for="podcast-sort" class="form-label fw-semibold">Sortierung</label>
+          <label for="podcast-sort" class="form-label fw-semibold">
+            {{ t('podcast.filter.sort') }}
+          </label>
           <select id="podcast-sort" v-model="sort" class="form-select">
-            <option value="created desc">Neueste zuerst</option>
-            <option value="created asc">Älteste zuerst</option>
+            <option value="created desc">{{ t('podcast.filter.newestFirst') }}</option>
+            <option value="created asc">{{ t('podcast.filter.oldestFirst') }}</option>
           </select>
         </div>
 
         <div class="col-md-3 col-lg-2 d-grid mt-4">
-          <button id="podcast-submit" class="btn btn-success" type="submit">Suchen</button>
+          <button id="podcast-submit" class="btn btn-success" type="submit">
+            {{ t('podcast.filter.submit') }}
+          </button>
         </div>
       </div>
     </div>

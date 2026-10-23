@@ -1,15 +1,19 @@
-<!-- EmptyState.vue -->
-
 <script setup lang="ts">
-withDefaults(
-    defineProps<{
-      title?: string,
-      description?: string,
-    }>(),
-    {
-      title: 'Keine Daten gefunden',
-      description: 'Passen Sie den Suchbegriff an.',
-    }
+import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const props = defineProps<{
+  title?: string
+  description?: string
+}>()
+
+const { t } = useI18n({ useScope: 'global' })
+
+const stateTitle = computed(() =>
+    props.title ?? t('podcast.state.empty.title')
+)
+const stateDescription = computed(() =>
+    props.description ?? t('podcast.state.empty.description')
 )
 </script>
 
@@ -19,11 +23,11 @@ withDefaults(
       role="status"
   >
     <h2 class="h5">
-      {{ title }}
+      {{ stateTitle }}
     </h2>
 
     <p class="text-body-secondary mb-0">
-      {{ description }}
+      {{ stateDescription }}
     </p>
   </div>
 </template>

@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { usePlayerStore } from '../stores/player'
 
 const playerStore = usePlayerStore()
+const { t } = useI18n({ useScope: 'global' })
 
 const audioElement = ref<HTMLAudioElement | null>(null)
 const playerElement = ref<HTMLElement | null>(null)
@@ -277,7 +279,7 @@ onUnmounted(() => {
   <section
       ref="playerElement"
       class="playlist-player"
-      aria-label="Podcast-Player"
+      :aria-label="t('podcast.player.ariaLabel')"
   >
     <audio
         ref="audioElement"
@@ -306,7 +308,7 @@ onUnmounted(() => {
                 !imageError
               "
               :src="playerStore.episode.image"
-              :alt="`Cover von ${playerStore.episode.title}`"
+              :alt="t('podcast.image.coverAlt', { title: playerStore.episode.title })"
               :class="{
                 'is-loaded': imageLoaded
               }"
@@ -344,12 +346,12 @@ onUnmounted(() => {
           >
             {{
               audioError
-                  ? 'AUDIODATEI NICHT VERFÜGBAR'
+                  ? t('podcast.player.status.unavailable')
                   : isLoading
-                      ? 'WIRD GEPUFFERT …'
+                      ? t('podcast.player.status.buffering')
                       : playerStore.isPlaying
-                          ? 'WIEDERGABE LÄUFT'
-                          : 'PAUSIERT'
+                          ? t('podcast.player.status.playing')
+                          : t('podcast.player.status.paused')
             }}
           </p>
 
@@ -369,14 +371,14 @@ onUnmounted(() => {
       <div
           class="playlist-player-transport"
           role="group"
-          aria-label="Wiedergabesteuerung"
+          :aria-label="t('podcast.player.controls')"
       >
 
         <!-- Previous episode -->
         <button
             type="button"
-            aria-label="Vorherige Folge"
-            title="Vorherige Folge"
+            :aria-label="t('podcast.player.previousEpisode')"
+            :title="t('podcast.player.previousEpisode')"
             :disabled="
               playerStore.currentEpisodeIndex <= 0
             "
@@ -391,8 +393,8 @@ onUnmounted(() => {
         <!-- Back 15 sec -->
         <button
             type="button"
-            aria-label="15 Sekunden zurück"
-            title="15 Sekunden zurück"
+            :aria-label="t('podcast.player.back15')"
+            :title="t('podcast.player.back15')"
             @click="skipBackward15"
         >
           <i
@@ -407,13 +409,13 @@ onUnmounted(() => {
             type="button"
             :aria-label="
               playerStore.isPlaying
-                ? 'Pause'
-                : 'Folge abspielen'
+                ? t('podcast.player.pause')
+                : t('podcast.player.playEpisode')
             "
             :title="
               playerStore.isPlaying
-                ? 'Pause'
-                : 'Folge abspielen'
+                ? t('podcast.player.pause')
+                : t('podcast.player.playEpisode')
             "
             @click="playerStore.togglePlayback"
         >
@@ -431,8 +433,8 @@ onUnmounted(() => {
         <!-- Forward 15 sec -->
         <button
             type="button"
-            aria-label="15 Sekunden vor"
-            title="15 Sekunden vor"
+            :aria-label="t('podcast.player.forward15')"
+            :title="t('podcast.player.forward15')"
             @click="skipForward15"
         >
           <i
@@ -444,8 +446,8 @@ onUnmounted(() => {
         <!-- Next episode -->
         <button
             type="button"
-            aria-label="Nächste Folge"
-            title="Nächste Folge"
+            :aria-label="t('podcast.player.nextEpisode')"
+            :title="t('podcast.player.nextEpisode')"
             :disabled="
               playerStore.currentEpisodeIndex >=
               playerStore.episodes.length - 1
@@ -467,7 +469,7 @@ onUnmounted(() => {
         <button
             class="playlist-player-speed"
             type="button"
-            aria-label="Wiedergabegeschwindigkeit ändern"
+            :aria-label="t('podcast.player.changeSpeed')"
             :title="`${speeds[speedIndex]}×`"
             @click="setSpeed"
         >
@@ -481,13 +483,13 @@ onUnmounted(() => {
               type="button"
               :aria-label="
                 isMuted
-                  ? 'Ton einschalten'
-                  : 'Ton ausschalten'
+                  ? t('podcast.player.unmute')
+                  : t('podcast.player.mute')
               "
               :title="
                 isMuted
-                  ? 'Ton einschalten'
-                  : 'Ton ausschalten'
+                  ? t('podcast.player.unmute')
+                  : t('podcast.player.mute')
               "
               @click="toggleMute"
           >
@@ -508,7 +510,7 @@ onUnmounted(() => {
               min="0"
               max="1"
               step="0.05"
-              aria-label="Lautstärke"
+              :aria-label="t('podcast.player.volume')"
               @input="setVolume"
           >
 
@@ -529,7 +531,7 @@ onUnmounted(() => {
             :max="playerStore.duration"
             :value="playerStore.currentTime"
             step="0.1"
-            aria-label="Wiedergabeposition"
+            :aria-label="t('podcast.player.position')"
             :disabled="!playerStore.duration"
             @input="seekAudio"
         >
@@ -544,8 +546,8 @@ onUnmounted(() => {
       <button
           class="close-button"
           type="button"
-          aria-label="Player schließen"
-          title="Player schließen"
+          :aria-label="t('podcast.player.close')"
+          :title="t('podcast.player.close')"
           @click="playerStore.closePlayer"
       >
         <i class="fa fa-times" aria-hidden="true"></i>

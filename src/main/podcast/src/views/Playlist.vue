@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import type {
   PodcastPlaylist,
@@ -22,6 +23,8 @@ import NotFound from './NotFound.vue'
 const props = defineProps<{
   podcastId: string
 }>()
+
+const { t } = useI18n({ useScope: 'global' })
 
 const isError = ref(false)
 const isLoading = ref(false)
@@ -113,7 +116,7 @@ watch(
         :to="{ name: 'podcasts' }"
         class="text-success"
     >
-      &larr; Zur Podcast-&Uuml;bersicht
+      &larr; {{ t('podcast.navigation.toOverview') }}
     </RouterLink>
 
     <LoadingState v-if="isLoading" />

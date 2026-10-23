@@ -1,4 +1,9 @@
-<!-- LoadingState.vue -->
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n({ useScope: 'global' })
+</script>
+
 <template>
   <div
       class="d-flex justify-content-center align-items-center gap-3 border rounded bg-light py-5"
@@ -12,7 +17,7 @@
 
     <span>
       <slot>
-        Wird geladen ...
+        {{ t('podcast.state.loading') }}
       </slot>
     </span>
   </div>

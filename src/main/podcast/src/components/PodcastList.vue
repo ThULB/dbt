@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import {computed, ref, watch} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
 import requestSolr from '../utils/requestSolr.ts'
 import applicationUrl from '../utils/applicationUrl.ts'
+import podcastCategoryValue from '../utils/podcastCategory.ts'
 import type { SolrDocument, SolrResponse } from '../types/types.ts'
 import LoadingState from "./LoadingState.vue";
 import ErrorState from "./ErrorState.vue";
@@ -19,6 +21,7 @@ const itunesCategoryFilterPattern =
 
 const route = useRoute()
 const router = useRouter()
+const { t, te } = useI18n({ useScope: 'global' })
 
 const podcastMetadata = ref<SolrResponse | null>(null)
 let requestSequence = 0
@@ -138,21 +141,25 @@ function getItunesCategories(podcast: SolrDocument): string[] {
           ?.filter(category =>
               category.startsWith('itunes-podcast:')
           )
-          .map(category =>
-              category
-                  .replace('itunes-podcast:', '')
-                  .replaceAll('_', ' ')
-          ) ?? []
+          .map(category => category.replace('itunes-podcast:', ''))
+          .map(category => {
+            const value = podcastCategoryValue(category)
+            const key = value && `podcast.categories.${value}`
+
+            return key && te(key)
+                ? t(key)
+                : category.replaceAll('_', ' ')
+          }) ?? []
 
   if (itunesCategories.length === 0) {
-    return ['Ohne Kategorie']
+    return [t('podcast.list.uncategorized')]
   }
 
   return itunesCategories
 }
 
 function getPodcastTitle(podcast: SolrDocument): string {
-  return podcast['mods.title']?.[0] ?? 'Ohne Titel'
+  return podcast['mods.title']?.[0] ?? t('podcast.list.untitled')
 }
 
 function getPodcastAuthors(podcast: SolrDocument): string {
@@ -274,14 +281,14 @@ watch(
   <section class="podcast-list">
 
     <LoadingState v-if="isLoading">
-      Podcasts werden geladen ...
+      {{ t('podcast.list.loading') }}
     </LoadingState>
 
     <ErrorState v-else-if="isError" />
 
     <EmptyState
         v-else-if="podcastMetadata?.response.numFound === 0"
-        description="Keine passenden Podcasts gefunden. Ändern Sie den Suchbegriff oder wählen Sie eine andere Kategorie."
+        :description="t('podcast.list.emptyDescription')"
     />
 
     <!-- Results -->
@@ -290,11 +297,13 @@ watch(
         class="wrapper"
     >
       <h2 class="mb-4">
-        {{ totalItems }}
         {{
-          totalItems === 1
-              ? 'Podcast gefunden'
-              : 'Podcasts gefunden'
+          t(
+              totalItems === 1
+                  ? 'podcast.list.resultSingle'
+                  : 'podcast.list.resultMultiple',
+              { count: totalItems }
+          )
         }}
       </h2>
 
@@ -314,7 +323,7 @@ watch(
                 class="card-img-top w-100 h-100 object-fit-cover"
                 :class="{ 'is-loaded': coverLoaded[podcast.id] }"
                 :src="getCoverUrl(podcast)"
-                :alt="`Cover von ${getPodcastTitle(podcast)}`"
+                :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
                 loading="lazy"
                 decoding="async"
                 @load="handleCoverLoad(podcast.id)"
@@ -374,7 +383,7 @@ watch(
       <nav
           v-if="totalPages > 1"
           class="mt-5"
-          aria-label="Podcast-Seitennavigation"
+          :aria-label="t('podcast.pagination.ariaLabel')"
       >
         <ul class="pagination justify-content-center">
 
@@ -387,10 +396,10 @@ watch(
                 class="page-link text-success"
                 type="button"
                 :disabled="currentPage === 1"
-                aria-label="Vorherige Seite"
+                :aria-label="t('podcast.pagination.previousAriaLabel')"
                 @click="setPage(currentPage - 1)"
             >
-              Zurück
+              {{ t('podcast.pagination.previous') }}
             </button>
           </li>
 
@@ -446,10 +455,10 @@ watch(
                 class="page-link text-success"
                 type="button"
                 :disabled="currentPage === totalPages"
-                aria-label="Nächste Seite"
+                :aria-label="t('podcast.pagination.nextAriaLabel')"
                 @click="setPage(currentPage + 1)"
             >
-              Weiter
+              {{ t('podcast.pagination.next') }}
             </button>
           </li>
 

@@ -9,6 +9,7 @@
     <head>
       <meta name="podcast-base-path" content="{$WebApplicationBaseURL}podcast/" />
       <meta name="podcast-application-base-url" content="{$WebApplicationBaseURL}" />
+      <meta name="podcast-locale" content="{$CurrentLang}" />
       <link rel="stylesheet" href="{$WebApplicationBaseURL}dbt/assets/podcast/podcast.css" />
     </head>
 
@@ -17,6 +18,6 @@
       everything generated inside that container, while the MIR header, footer,
       and outer page shell remain server-rendered.
     -->
-    <script type="module" src="{$WebApplicationBaseURL}dbt/assets/podcast/podcast.js"></script>
+    <script type="module" src="{$WebApplicationBaseURL}dbt/assets/podcast/podcast.js?lang={$CurrentLang}"></script>
   </xsl:template>
 </xsl:stylesheet>

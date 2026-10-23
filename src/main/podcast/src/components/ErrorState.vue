@@ -1,4 +1,9 @@
-<!-- ErrorState.vue -->
+<script setup lang="ts">
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n({ useScope: 'global' })
+</script>
+
 <template>
   <div
       id="podcast-error"
@@ -6,11 +11,11 @@
       role="alert"
   >
     <h2 class="h5 alert-heading">
-      Podcastdaten konnten nicht geladen werden
+      {{ t('podcast.state.error.title') }}
     </h2>
 
     <p class="mb-0">
-      Bitte versuchen Sie es später erneut.
+      {{ t('podcast.state.error.description') }}
     </p>
   </div>
 

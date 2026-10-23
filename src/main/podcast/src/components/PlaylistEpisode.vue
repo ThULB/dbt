@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import type { PodcastEpisode, PodcastPlaylist } from '../types/types.ts'
 import { usePlayerStore } from '../stores/player.ts'
 
 const playerStore = usePlayerStore()
+const { locale, t } = useI18n({ useScope: 'global' })
 
 const props = defineProps<{
   playlistMetadata: PodcastPlaylist
@@ -32,7 +34,7 @@ function formatDate(value: string): string {
     return ''
   }
 
-  return new Intl.DateTimeFormat('de-DE', {
+  return new Intl.DateTimeFormat(locale.value, {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
@@ -61,14 +63,14 @@ watch(
 
 <template>
   <div class="episode">
-    <h2 class="visually-hidden">Folgen</h2>
+    <h2 class="visually-hidden">{{ t('podcast.episode.heading') }}</h2>
 
     <p
         v-if="!playlistMetadata.episodes.length"
         id="episode-empty"
         class="alert alert-light border mb-0"
     >
-      Für diesen Podcast sind noch keine Folgen vorhanden.
+      {{ t('podcast.episode.empty') }}
     </p>
 
     <div
@@ -132,9 +134,9 @@ watch(
                   {{
                     isCurrentEpisode(episode)
                         ? playerStore.isPlaying
-                            ? 'Pause'
-                            : 'Fortsetzen'
-                        : 'Abspielen'
+                            ? t('podcast.player.pause')
+                            : t('podcast.player.resume')
+                        : t('podcast.player.play')
                   }}
                 </span>
 
