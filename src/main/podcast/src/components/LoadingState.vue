@@ -22,3 +22,14 @@ const { t } = useI18n({ useScope: 'global' })
     </span>
   </div>
 </template>
+
+<style scoped lang="scss">
+[role="status"] {
+  --bs-border-color: var(--bs-border-color-translucent);
+
+  .spinner-border {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+}
+</style>

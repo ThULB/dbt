@@ -20,3 +20,10 @@ const { t } = useI18n({ useScope: 'global' })
   </div>
 
 </template>
+
+<style scoped lang="scss">
+.alert {
+  border-left: 0.25rem solid var(--bs-warning);
+  border-radius: var(--bs-border-radius-lg);
+}
+</style>

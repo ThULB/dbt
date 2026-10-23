@@ -31,3 +31,13 @@ const stateDescription = computed(() =>
     </p>
   </div>
 </template>
+
+<style scoped lang="scss">
+.alert {
+  border-radius: var(--bs-border-radius-lg);
+
+  h2 {
+    overflow-wrap: anywhere;
+  }
+}
+</style>
