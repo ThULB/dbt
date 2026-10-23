@@ -114,11 +114,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="playlist-header mt-5 px-3 pt-5 pb-4 bg-light">
-    <div class="ratio ratio-1x1 podcast-cover">
+  <header class="playlist-header bg-light">
+    <div class="playlist-header__cover ratio ratio-1x1 overflow-hidden bg-body-secondary">
       <img
           v-if="playlistMetadata.image && !imageError"
-          class="object-fit-cover rounded-2"
+          class="position-absolute top-0 start-0 d-block w-100 h-100 object-fit-cover rounded-2"
           :class="{ 'is-loaded': imageLoaded }"
           :alt="t('podcast.image.coverAlt', { title: playlistMetadata.title })"
           :src="playlistMetadata.image"
@@ -128,19 +128,19 @@ onUnmounted(() => {
 
       <div
           v-if="!imageLoaded || imageError || !playlistMetadata.image"
-          class="podcast-cover-placeholder"
+          class="playlist-header__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary"
           aria-hidden="true"
       >
         <i class="fa-solid fa-images"></i>
       </div>
     </div>
 
-    <div class="playlist-info">
+    <div class="playlist-header__info d-flex flex-column align-items-stretch align-items-md-start">
       <h1>
         {{ playlistMetadata.title }}
       </h1>
 
-      <div class="topic d-flex gap-1 mb-3">
+      <div class="playlist-header__topics d-flex align-self-start gap-1">
         <span class="badge text-bg-success text-wrap text-start">
           {{ categoryLabel(playlistMetadata.category) }}
         </span>
@@ -153,7 +153,7 @@ onUnmounted(() => {
         </span>
       </div>
 
-      <dl class="row mb-2 w-100">
+      <dl class="playlist-header__details row w-100">
         <dt class="col-3">{{ t('podcast.details.language') }}:</dt>
         <dd class="col-9">
           {{ playlistMetadata.language.toUpperCase() }}
@@ -170,20 +170,20 @@ onUnmounted(() => {
         </dd>
       </dl>
 
-      <p class="playlist-authors small text-body-secondary mb-2">
+      <p class="playlist-header__authors text-body-secondary">
         {{ playlistMetadata.author.join(', ') }}
       </p>
 
       <div
           ref="descriptionElement"
-          class="playlist-description rich-description"
+          class="playlist-header__description rich-description"
           :class="{ 'is-expanded': isDescriptionExpanded }"
           v-html="playlistMetadata.description"
       />
 
       <button
           v-if="isDescriptionOverflowing || isDescriptionExpanded"
-          class="playlist-description-toggle"
+          class="playlist-header__description-toggle d-inline-flex align-items-center align-self-start p-0 border-0 bg-transparent"
           type="button"
           :aria-expanded="isDescriptionExpanded"
           @click="toggleDescription"
@@ -210,7 +210,7 @@ onUnmounted(() => {
       </button>
 
       <button
-          class="btn btn-success mt-3 py-1 gap-1 d-flex justify-content-center align-items-center align-self-end"
+          class="playlist-header__latest btn btn-success py-1 gap-1 d-flex justify-content-center align-items-center align-self-stretch align-self-md-end mt-auto"
           type="button"
           :disabled="!lastEpisode"
           @click="lastEpisode && buildPlayer(lastEpisode)"
@@ -225,146 +225,193 @@ onUnmounted(() => {
   </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .playlist-header {
   display: grid;
   grid-template-columns: clamp(12rem, 24vw, 17.5rem) minmax(0, 1fr);
   gap: clamp(1rem, 3vw, 2rem);
-  padding: clamp(1.5rem, 4vw, 3rem);
-}
+  margin-top: 3rem;
+  padding: clamp(1.25rem, 2.5vw, 2rem);
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: var(--bs-border-radius-lg);
 
-.podcast-cover {
-  position: relative;
-  width: 100%;
-  max-width: 17.5rem;
-  align-self: start;
-  justify-self: center;
-  overflow: hidden;
-  background: var(--bs-secondary-bg);
-}
+  &__cover {
+    max-width: 17.5rem;
+    align-self: start;
+    justify-self: center;
+    border-radius: var(--bs-border-radius);
 
-.podcast-cover > img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
+    > img {
+      opacity: 0;
+      transition: opacity 0.2s ease;
 
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
+      &.is-loaded {
+        opacity: 1;
+      }
+    }
+  }
 
-.podcast-cover > img.is-loaded {
-  opacity: 1;
-}
+  &__cover-placeholder {
+    font-size: 3rem;
+  }
 
-.podcast-cover-placeholder {
-  position: absolute;
-  inset: 0;
+  &__info {
+    min-width: 0;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    > h1 {
+      margin-bottom: clamp(0.75rem, 2vw, 1rem);
+      font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+  }
 
-  background: var(--bs-secondary-bg);
-  color: var(--bs-secondary-color);
-  font-size: 3rem;
-}
+  &__topics {
+    margin-bottom: 1rem;
+  }
 
-.playlist-info {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-}
+  &__details {
+    --bs-gutter-x: 0;
 
-.playlist-info > h1 {
-  margin-bottom: clamp(0.75rem, 2vw, 1rem);
-  font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-}
+    margin-bottom: 0.5rem;
 
-.playlist-info > .btn {
-  margin-top: auto !important;
-}
+    dt,
+    dd {
+      overflow-wrap: anywhere;
+    }
+  }
 
-.playlist-authors:empty {
-  display: none;
-}
+  &__authors {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    overflow-wrap: anywhere;
 
-.playlist-description {
-  margin-bottom: 0.65rem;
-  line-height: 1.5;
-}
+    &:empty {
+      display: none;
+    }
+  }
 
-.playlist-description:not(.is-expanded) {
-  display: -webkit-box;
-  overflow: hidden;
-  max-height: 7.5em;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 5;
-}
+  &__description {
+    margin-bottom: 0.65rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
 
-.playlist-description-toggle {
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  gap: 0.3rem;
-  margin-bottom: 0.75rem;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--bs-success);
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-}
+    &:not(.is-expanded) {
+      display: -webkit-box;
+      overflow: hidden;
+      max-height: 7.5em;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 5;
+    }
+  }
 
-.playlist-description-toggle:hover {
-  color: var(--bs-success-text-emphasis);
-}
+  &__description-toggle {
+    gap: 0.3rem;
+    margin-bottom: 0.75rem;
+    color: var(--bs-success);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
 
-.playlist-description-toggle:focus-visible {
-  outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
-  outline-offset: 0.18rem;
-}
+    &:hover {
+      color: var(--bs-success-text-emphasis);
+    }
 
-@media (max-width: 767.98px) {
-  .playlist-header {
+    &:focus-visible {
+      outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
+      outline-offset: 0.18rem;
+    }
+  }
+
+  &__latest {
+    min-height: 2.5rem;
+  }
+
+  @media (max-width: 767.98px) {
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(1.25rem, 5vw, 2rem);
-    padding: clamp(1rem, 5vw, 2rem) !important;
+    padding: clamp(1rem, 5vw, 2rem);
+
+    &__cover {
+      width: min(100%, 22rem);
+      max-width: none;
+    }
+
+    &__latest {
+      width: 100%;
+    }
   }
 
-  .podcast-cover {
-    width: min(100%, 22rem);
-    max-width: none;
+  @media (max-width: 575.98px) {
+    gap: clamp(0.75rem, 3vw, 1rem);
+    margin-top: 1.5rem;
+    padding: clamp(0.75rem, 3.5vw, 1rem);
+
+    &__cover {
+      width: min(100%, 18rem);
+    }
+
+    &__info > h1 {
+      margin-bottom: 0.5rem;
+      font-size: clamp(1.25rem, 6vw, 1.5rem);
+    }
+
+    &__topics {
+      margin-bottom: 0.5rem;
+
+      .badge {
+        padding: 0.3em 0.55em;
+        font-size: 0.7rem;
+      }
+    }
+
+    &__details {
+      margin-bottom: 0.25rem;
+      font-size: 0.85rem;
+      line-height: 1.35;
+
+      dt,
+      dd {
+        flex: 0 0 100%;
+        width: 100%;
+      }
+
+      dt {
+        margin-bottom: 0.125rem;
+      }
+
+      dd {
+        margin-bottom: 0.5rem;
+      }
+    }
+
+    &__authors {
+      margin-bottom: 0.375rem;
+      font-size: 0.75rem;
+    }
+
+    &__description {
+      margin-bottom: 0.4rem;
+      font-size: 0.875rem;
+      line-height: 1.4;
+
+      &:not(.is-expanded) {
+        max-height: 5.6em;
+        -webkit-line-clamp: 4;
+      }
+    }
+
+    &__description-toggle {
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+    }
   }
 
-  .playlist-info {
-    align-items: stretch;
-  }
-
-  .playlist-info > .topic {
-    align-self: flex-start;
-  }
-
-  .playlist-info > .btn {
-    width: 100%;
-    align-self: stretch !important;
-  }
-
-}
-
-@media (max-width: 575.98px) {
-  .playlist-header {
-    margin-top: 2rem !important;
-  }
-
-  .playlist-info > h1 {
-    font-size: clamp(1.5rem, 7vw, 1.9rem);
+  @media (prefers-reduced-motion: reduce) {
+    &__cover > img {
+      transition: none;
+    }
   }
 }
 </style>
