@@ -54,7 +54,7 @@ public final class MCRAccessKeyManager {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String SECRET_STORAGE_MODE_PROP_PREFX = "MCR.ACL.AccessKey.Secret.Storage.Mode";
+    private static final String SECRET_STORAGE_MODE_PROP_PREFX = "DBT.ACL.AccessKey.Secret.Storage.Mode";
 
     private static final String SECRET_STORAGE_MODE = MCRConfiguration2
         .getStringOrThrow(SECRET_STORAGE_MODE_PROP_PREFX);
