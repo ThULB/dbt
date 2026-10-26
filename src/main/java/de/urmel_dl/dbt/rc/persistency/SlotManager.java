@@ -38,6 +38,7 @@ import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
+import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.mycore.access.MCRAccessException;
 import org.mycore.access.MCRAccessManager;
@@ -48,6 +49,7 @@ import org.mycore.common.MCRSessionMgr;
 import org.mycore.common.MCRUserInformation;
 import org.mycore.common.content.MCRContent;
 import org.mycore.datamodel.classifications2.MCRCategoryID;
+import org.mycore.datamodel.classifications2.impl.MCRCategoryDAOImpl;
 import org.mycore.datamodel.common.MCRAbstractMetadataVersion;
 import org.mycore.datamodel.common.MCRActiveLinkException;
 import org.mycore.datamodel.common.MCRCreatorCache;
@@ -76,6 +78,7 @@ import de.urmel_dl.dbt.rc.datamodel.slot.SlotEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.SlotList;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.FileEntry;
 import de.urmel_dl.dbt.rc.utils.SlotWrapper;
+import de.urmel_dl.dbt.utils.EntityFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -240,6 +243,55 @@ public final class SlotManager {
         MCRMetadataManager.update(obj);
 
         MCRCreatorCache.invalidate(objId);
+    }
+
+    /**
+     * Checks if given access key was previously used on slot.
+     * <p>
+     * Called from XEditor via <code>xed:call-java</code> (content/rc/slot-includes.xed).
+     *
+     * @param nodes the slot element
+     * @return <code>true</code> if key is matching
+     */
+    @SuppressWarnings("deprecation")
+    public static boolean isMatchPreviousAccessKeys(List<Element> nodes) {
+        if (nodes != null && !nodes.isEmpty()) {
+            final Slot slot = new EntityFactory<>(Slot.class).fromElement(nodes.get(0));
+            final Slot cSlot = SlotManager.instance().getSlotById(slot.getSlotId());
+
+            final MIRAccessKeyPair accKP = MIRAccessKeyManager.getKeyPair(cSlot.getMCRObjectID());
+
+            return accKP != null
+                && (accKP.getReadKey().equals(slot.getReadKey()) || accKP.getWriteKey().equals(slot.getWriteKey()));
+        }
+        return false;
+    }
+
+    /**
+     * Checks if given slot location and new number is free.
+     * <p>
+     * Called from XEditor via <code>xed:call-java</code> (content/rc/slot-includes.xed).
+     *
+     * @param nodes the location element
+     * @return <code>true</code> if slot number is free
+     */
+    public static boolean isFreeId(List<Element> nodes) {
+        if (nodes != null && !nodes.isEmpty()) {
+            final Element xml = nodes.get(0);
+            final Element location = xml.getChild("location");
+            final String locId = location != null ? location.getAttributeValue("id") : null;
+            final String newId = location != null ? location.getAttributeValue("newId") : null;
+
+            if (locId != null && newId != null) {
+                final Slot slot = new EntityFactory<>(Slot.class).fromElement(xml);
+                final MCRCategoryID locCat = new MCRCategoryDAOImpl()
+                    .getCategory(new MCRCategoryID(Slot.CLASSIF_ROOT_LOCATION, locId), 0).getId();
+                int id = Integer.parseInt(newId);
+
+                return slot.getLocation().equals(locCat) && slot.getId() == id || instance().isFreeId(locCat, id);
+            }
+        }
+        return false;
     }
 
     public static boolean isActive(String slotId) {
