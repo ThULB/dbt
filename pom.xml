@@ -36,7 +36,10 @@
     <media.projectBase>${project.build.directory}/media</media.projectBase>
     <mir-layout-assets>${project.build.directory}/mir-layout-assets</mir-layout-assets>
     <mir.version>2025.06.3-SNAPSHOT</mir.version>
+    <node.version>v20.19.0</node.version>
     <npm.version>10.9.2</npm.version>
+    <podcast.projectBase>${basedir}/src/main/podcast</podcast.projectBase>
+    <podcast.targetBase>${project.build.directory}/podcast</podcast.targetBase>
     <rcclient.projectBase>${project.build.directory}/rcclient</rcclient.projectBase>
     <template.assetsdir>${template.targetdir}/dbt/assets</template.assetsdir>
     <template.cssdir>${template.targetdir}/dbt/css</template.cssdir>
@@ -283,6 +286,31 @@
               <arguments>run build</arguments>
             </configuration>
           </execution>
+          <execution>
+            <id>podcast-deps</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <workingDirectory>${podcast.projectBase}</workingDirectory>
+              <arguments>ci</arguments>
+              <environmentVariables>
+                <NPM_CONFIG_CACHE>${project.build.directory}/npm-cache</NPM_CONFIG_CACHE>
+              </environmentVariables>
+            </configuration>
+          </execution>
+          <execution>
+            <id>podcast-build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <workingDirectory>${podcast.projectBase}</workingDirectory>
+              <arguments>run build -- --outDir=${podcast.targetBase}/dist --emptyOutDir</arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -341,6 +369,22 @@
                     <include>tsconfig.json</include>
                     <include>webpack.config.js</include>
                   </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>podcast-web-resources</id>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <outputDirectory>${template.targetdir}/dbt/assets/podcast</outputDirectory>
+              <resources>
+                <resource>
+                  <filtering>false</filtering>
+                  <directory>${podcast.targetBase}/dist</directory>
                 </resource>
               </resources>
             </configuration>

@@ -1,0 +1,24 @@
+#main_content > .container[data-v-app] {
+    /* Typography */
+    --podcast-font-display: clamp(1.5rem, 1.2rem + 1.2vw, 2.25rem);
+    --podcast-font-heading: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+    --podcast-font-item-title: clamp(0.9375rem, 0.88rem + 0.2vw, 1.0625rem);
+    --podcast-font-body: clamp(0.875rem, 0.82rem + 0.2vw, 1rem);
+    --podcast-font-body-small: clamp(0.8125rem, 0.77rem + 0.15vw, 0.9375rem);
+    --podcast-font-meta: clamp(0.75rem, 0.72rem + 0.12vw, 0.875rem);
+    --podcast-font-caption: clamp(0.6875rem, 0.66rem + 0.1vw, 0.75rem);
+    --podcast-font-control: clamp(0.75rem, 0.71rem + 0.15vw, 0.875rem);
+
+    /* Line Heights */
+    --podcast-line-height-tight: 1.2;
+    --podcast-line-height-compact: 1.4;
+    --podcast-line-height-body: 1.5;
+
+    /* Icons */
+    --podcast-icon-placeholder: clamp(2rem, 1.7rem + 1.2vw, 3rem);
+    --podcast-icon-artwork: clamp(1rem, 0.95rem + 0.2vw, 1.25rem);
+    --podcast-icon-control: clamp(1rem, 0.95rem + 0.2vw, 1.25rem);
+    --podcast-icon-action: clamp(1.25rem, 1.15rem + 0.4vw, 1.75rem);
+
+  min-width: 0;
+}
