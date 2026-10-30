@@ -75,7 +75,7 @@ watch(
         aria-labelledby="episode-heading"
     >
       <div
-          v-for="(episode, index) in playlistMetadata.episodes"
+          v-for="(episode, index) in playlistMetadata.episodes.toReversed()"
           :key="episode.guid"
           :id="`episode-item-${index}`"
           class="episode-list__item accordion-item position-relative"
@@ -166,6 +166,8 @@ watch(
 
   &__heading {
     margin-bottom: 1rem;
+    font-size: var(--podcast-font-heading);
+    line-height: var(--podcast-line-height-tight);
   }
 
   &__item {
@@ -203,6 +205,8 @@ watch(
 
   &__toggle {
     min-height: 3.75rem;
+    font-size: var(--podcast-font-item-title);
+    line-height: var(--podcast-line-height-compact);
 
     &:hover {
       background-color: transparent;
@@ -247,6 +251,16 @@ watch(
 
     .accordion-body {
       overflow-wrap: anywhere;
+
+      > .small {
+        font-size: var(--podcast-font-meta);
+        line-height: var(--podcast-line-height-compact);
+      }
+    }
+
+    .description {
+      font-size: var(--podcast-font-body-small);
+      line-height: var(--podcast-line-height-body);
     }
   }
 
@@ -261,6 +275,8 @@ watch(
     );
     min-height: 2rem;
     padding: 0.2rem 0.75rem;
+    font-size: var(--podcast-font-control);
+    line-height: var(--podcast-line-height-compact);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
     transform: translateY(-50%);
@@ -271,7 +287,7 @@ watch(
     }
 
     .fas {
-      font-size: 1.1rem;
+      font-size: var(--podcast-icon-control);
       line-height: 1;
     }
   }
@@ -286,25 +302,17 @@ watch(
 
     &__heading {
       margin-bottom: 0.75rem;
-      font-size: 1.375rem;
     }
 
     &__toggle {
       min-height: clamp(2.875rem, 13vw, 3.25rem);
       padding-block: clamp(0.45rem, 2vw, 0.625rem);
       padding-left: 0.625rem;
-      font-size: clamp(0.8rem, 3.8vw, 0.9rem);
-      line-height: 1.25;
     }
 
     &__play {
       min-height: clamp(1.5rem, 7vw, 1.875rem);
       padding-inline: clamp(0.25rem, 1.5vw, 0.375rem);
-      font-size: clamp(0.65rem, 2.5vw, 0.7rem);
-
-      .fas {
-        font-size: clamp(0.8rem, 3vw, 0.9rem);
-      }
     }
 
     &__collapse-inner .accordion-body {

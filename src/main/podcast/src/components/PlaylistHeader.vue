@@ -242,7 +242,7 @@ onUnmounted(() => {
   }
 
   &__cover-placeholder {
-    font-size: 3rem;
+    font-size: var(--podcast-icon-placeholder);
   }
 
   &__info {
@@ -250,20 +250,26 @@ onUnmounted(() => {
 
     > h1 {
       margin-bottom: clamp(0.75rem, 2vw, 1rem);
-      font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.5rem);
-      line-height: 1.15;
+      font-size: var(--podcast-font-display);
+      line-height: var(--podcast-line-height-tight);
       overflow-wrap: anywhere;
     }
   }
 
   &__topics {
     margin-bottom: 1rem;
+
+    .badge {
+      font-size: var(--podcast-font-control);
+    }
   }
 
   &__details {
     --bs-gutter-x: 0;
 
     margin-bottom: 0.5rem;
+    font-size: var(--podcast-font-body);
+    line-height: var(--podcast-line-height-compact);
 
     dt,
     dd {
@@ -273,7 +279,8 @@ onUnmounted(() => {
 
   &__authors {
     margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+    font-size: var(--podcast-font-meta);
+    line-height: var(--podcast-line-height-compact);
     overflow-wrap: anywhere;
 
     &:empty {
@@ -283,7 +290,8 @@ onUnmounted(() => {
 
   &__description {
     margin-bottom: 0.65rem;
-    line-height: 1.5;
+    font-size: var(--podcast-font-body);
+    line-height: var(--podcast-line-height-body);
     overflow-wrap: anywhere;
 
     &:not(.is-expanded) {
@@ -300,7 +308,8 @@ onUnmounted(() => {
     margin-bottom: 0.75rem;
     color: var(--bs-success);
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: var(--podcast-font-control);
+    line-height: var(--podcast-line-height-compact);
     font-weight: 600;
 
     &:hover {
@@ -315,6 +324,8 @@ onUnmounted(() => {
 
   &__latest {
     min-height: 2.5rem;
+    font-size: var(--podcast-font-body);
+    line-height: var(--podcast-line-height-compact);
   }
 
   @media (max-width: 767.98px) {
@@ -343,7 +354,6 @@ onUnmounted(() => {
 
     &__info > h1 {
       margin-bottom: 0.5rem;
-      font-size: clamp(1.25rem, 6vw, 1.5rem);
     }
 
     &__topics {
@@ -351,14 +361,11 @@ onUnmounted(() => {
 
       .badge {
         padding: 0.3em 0.55em;
-        font-size: 0.7rem;
       }
     }
 
     &__details {
       margin-bottom: 0.25rem;
-      font-size: 0.85rem;
-      line-height: 1.35;
 
       dt,
       dd {
@@ -377,13 +384,10 @@ onUnmounted(() => {
 
     &__authors {
       margin-bottom: 0.375rem;
-      font-size: 0.75rem;
     }
 
     &__description {
       margin-bottom: 0.4rem;
-      font-size: 0.875rem;
-      line-height: 1.4;
 
       &:not(.is-expanded) {
         max-height: 5.6em;
@@ -394,7 +398,6 @@ onUnmounted(() => {
     &__description-toggle {
       gap: 0.25rem;
       margin-bottom: 0.5rem;
-      font-size: 0.75rem;
     }
   }
 

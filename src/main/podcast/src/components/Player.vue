@@ -369,9 +369,7 @@ onUnmounted(() => {
             type="button"
             :aria-label="t('podcast.player.previousEpisode')"
             :title="t('podcast.player.previousEpisode')"
-            :disabled="
-              playerStore.currentEpisodeIndex <= 0
-            "
+            :disabled="playerStore.currentEpisodeIndex >= playerStore.episodes.length - 1"
             @click="playerStore.previousEpisode"
         >
           <i
@@ -441,10 +439,7 @@ onUnmounted(() => {
             type="button"
             :aria-label="t('podcast.player.nextEpisode')"
             :title="t('podcast.player.nextEpisode')"
-            :disabled="
-              playerStore.currentEpisodeIndex >=
-              playerStore.episodes.length - 1
-            "
+            :disabled="playerStore.currentEpisodeIndex <= 0"
             @click="playerStore.nextEpisode"
         >
           <i
@@ -600,7 +595,7 @@ onUnmounted(() => {
   &__artwork-placeholder {
     place-items: center;
     color: var(--bs-success);
-    font-size: 1.35rem;
+    font-size: var(--podcast-icon-artwork);
   }
 
   &__copy {
@@ -609,7 +604,8 @@ onUnmounted(() => {
 
   &__status {
     color: var(--bs-secondary-color);
-    font-size: 0.68rem;
+    font-size: var(--podcast-font-caption);
+    line-height: var(--podcast-line-height-compact);
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -628,12 +624,14 @@ onUnmounted(() => {
   }
 
   &__title {
-    font-size: 0.95rem;
+    font-size: var(--podcast-font-item-title);
+    line-height: var(--podcast-line-height-compact);
     font-weight: 700;
   }
 
   &__context {
-    font-size: 0.75rem;
+    font-size: var(--podcast-font-meta);
+    line-height: var(--podcast-line-height-compact);
   }
 
   &__button {
@@ -642,6 +640,7 @@ onUnmounted(() => {
     background: transparent;
     color: var(--bs-success-text-emphasis);
     cursor: pointer;
+    font-size: var(--podcast-icon-control);
     line-height: 1;
 
     &:hover:not(:disabled) {
@@ -671,7 +670,7 @@ onUnmounted(() => {
     height: var(--player-play-size);
     background: var(--bs-success);
     color: var(--bs-white);
-    font-size: 1.65rem;
+    font-size: var(--podcast-icon-action);
 
     &:hover:not(:disabled) {
       background: var(--bs-success-text-emphasis);
@@ -680,7 +679,7 @@ onUnmounted(() => {
   }
 
   &__play-icon {
-    font-size: 1.65rem;
+    font-size: var(--podcast-icon-action);
 
     &.fa-play {
       position: relative;
@@ -699,7 +698,7 @@ onUnmounted(() => {
     min-width: 2.6rem;
     padding-inline: 0.35rem;
     color: var(--bs-success-text-emphasis);
-    font-size: 0.78rem;
+    font-size: var(--podcast-font-control);
     font-weight: 700;
   }
 
@@ -735,7 +734,8 @@ onUnmounted(() => {
       3.25rem;
     align-items: center;
     gap: 0.5rem;
-    font-size: 0.72rem;
+    font-size: var(--podcast-font-caption);
+    line-height: var(--podcast-line-height-compact);
     font-variant-numeric: tabular-nums;
 
     input {
@@ -756,7 +756,7 @@ onUnmounted(() => {
     height: clamp(1rem, 1.2vw, 1.25rem);
     color: var(--bs-danger);
     background-color: rgba(var(--bs-danger-rgb), 0.1);
-    font-size: clamp(0.55rem, 1.3vw, 0.75rem);
+    font-size: var(--podcast-font-caption);
     transition:
         background-color 0.15s ease,
         color 0.15s ease,
@@ -808,10 +808,6 @@ onUnmounted(() => {
       padding-right: 2rem;
     }
 
-    &__title {
-      font-size: 0.84rem;
-    }
-
     &__transport {
       gap: 0.1rem;
     }
@@ -839,7 +835,6 @@ onUnmounted(() => {
         minmax(0, 1fr)
         max-content;
       gap: 0.2rem;
-      font-size: 0.66rem;
     }
 
     input[type="range"] {

@@ -58,7 +58,7 @@ export const usePlayerStore = defineStore('player', () => {
     };
   }
 
-  function nextEpisode(): void {
+  function previousEpisode(): void {
     if (currentEpisodeIndex.value < 0 || currentEpisodeIndex.value >= episodes.value.length - 1) {
       return;
     }
@@ -66,7 +66,7 @@ export const usePlayerStore = defineStore('player', () => {
     selectEpisode(episodes.value[currentEpisodeIndex.value + 1]);
   }
 
-  function previousEpisode(): void {
+  function nextEpisode(): void {
     if (currentEpisodeIndex.value <= 0) {
       return;
     }
