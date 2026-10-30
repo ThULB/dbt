@@ -829,7 +829,7 @@ onUnmounted(() => {
       gap: 0;
 
       input {
-        width: clamp(2.5rem, 12vw, 3.75rem);
+        width: clamp(4rem, 18vw, 5.25rem);
       }
     }
 
@@ -848,12 +848,19 @@ onUnmounted(() => {
   }
 
   @media (max-width: 375px) {
+    --player-control-size: 2rem;
+    --player-play-size: 2.5rem;
+
     &__inner {
-      grid-template-areas:
-        "track track"
-        "transport transport"
-        "tools tools"
-        "timeline timeline";
+      column-gap: 0;
+    }
+
+    &__transport {
+      gap: 0;
+    }
+
+    &__volume input {
+      width: clamp(3.5rem, 18vw, 4rem);
     }
   }
 
