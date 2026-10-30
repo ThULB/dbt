@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
-import applicationUrl from '../utils/applicationUrl'
+import { useI18n } from 'vue-i18n';
+import applicationUrl from '../utils/applicationUrl';
 
-const { t } = useI18n({ useScope: 'global' })
-const startPageUrl = applicationUrl('content/index.xml')
+const { t } = useI18n({ useScope: 'global' });
+const startPageUrl = applicationUrl('content/index.xml');
 </script>
 
 <template>

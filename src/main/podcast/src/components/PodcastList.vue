@@ -1,254 +1,222 @@
 <script setup lang="ts">
-import {computed, ref, watch} from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
-import requestSolr from '../utils/requestSolr.ts'
-import applicationUrl from '../utils/applicationUrl.ts'
-import podcastCategoryValue from '../utils/podcastCategory.ts'
-import type { SolrDocument, SolrResponse } from '../types/types.ts'
-import LoadingState from "./LoadingState.vue";
-import ErrorState from "./ErrorState.vue";
-import EmptyState from "./EmptyState.vue";
+import requestSolr from '../utils/requestSolr.ts';
+import applicationUrl from '../utils/applicationUrl.ts';
+import podcastCategoryValue from '../utils/podcastCategory.ts';
+import type { SolrDocument, SolrResponse } from '../types/types.ts';
+import LoadingState from './LoadingState.vue';
+import ErrorState from './ErrorState.vue';
+import EmptyState from './EmptyState.vue';
 
-const allowedSortValues = new Set([
-  'created asc',
-  'created desc',
-])
+const allowedSortValues = new Set(['created asc', 'created desc']);
 
-const itunesCategoryFilterPattern =
-    /^category:"itunes-podcast:[^"]+"$/
+const itunesCategoryFilterPattern = /^category:"itunes-podcast:[^"]+"$/;
 
-const route = useRoute()
-const router = useRouter()
-const { t, te } = useI18n({ useScope: 'global' })
+const route = useRoute();
+const router = useRouter();
+const { t, te } = useI18n({ useScope: 'global' });
 
-const podcastMetadata = ref<SolrResponse | null>(null)
-let requestSequence = 0
+const podcastMetadata = ref<SolrResponse | null>(null);
+let requestSequence = 0;
 
-const totalItems = ref(0)
-const itemsPerPage = ref(20)
+const totalItems = ref(0);
+const itemsPerPage = ref(20);
 const currentPage = computed(() => {
-  const pageQuery = route.query.page
+  const pageQuery = route.query.page;
 
-  if (
-      typeof pageQuery !== 'string' ||
-      !/^[1-9]\d*$/.test(pageQuery)
-  ) {
-    return 1
+  if (typeof pageQuery !== 'string' || !/^[1-9]\d*$/.test(pageQuery)) {
+    return 1;
   }
 
-  const page = Number(pageQuery)
+  const page = Number(pageQuery);
 
-  return Number.isSafeInteger(page)
-      ? page
-      : 1
-})
+  return Number.isSafeInteger(page) ? page : 1;
+});
 
-const isLoading = ref(false)
-const isError = ref(false)
+const isLoading = ref(false);
+const isError = ref(false);
 
-const coverErrors = ref<Record<string, boolean>>({})
-const coverLoaded = ref<Record<string, boolean>>({})
+const coverErrors = ref<Record<string, boolean>>({});
+const coverLoaded = ref<Record<string, boolean>>({});
 
-const totalPages = computed(() =>
-    Math.ceil(totalItems.value / itemsPerPage.value)
-)
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value));
 
 const visiblePages = computed<(number | string)[]>(() => {
-  const pages: (number | string)[] = []
+  const pages: (number | string)[] = [];
 
-  const total = totalPages.value
-  const current = currentPage.value
+  const total = totalPages.value;
+  const current = currentPage.value;
 
   if (total <= 7) {
     for (let page = 1; page <= total; page++) {
-      pages.push(page)
+      pages.push(page);
     }
 
-    return pages
+    return pages;
   }
 
-  pages.push(1)
+  pages.push(1);
 
-  const start = Math.max(2, current - 2)
-  const end = Math.min(total - 1, current + 2)
+  const start = Math.max(2, current - 2);
+  const end = Math.min(total - 1, current + 2);
 
   if (start === 3) {
-    pages.push(2)
+    pages.push(2);
   } else if (start > 3) {
-    pages.push('...')
+    pages.push('...');
   }
 
   for (let page = start; page <= end; page++) {
-    pages.push(page)
+    pages.push(page);
   }
 
   if (end === total - 2) {
-    pages.push(total - 1)
+    pages.push(total - 1);
   } else if (end < total - 2) {
-    pages.push('...')
+    pages.push('...');
   }
 
-  pages.push(total)
+  pages.push(total);
 
-  return pages
-})
+  return pages;
+});
 
 function createParams(): URLSearchParams {
-  const params = new URLSearchParams()
+  const params = new URLSearchParams();
 
-  params.append('fq', 'mods.genre:podcast')
-  params.set('wt', 'json')
+  params.append('fq', 'mods.genre:podcast');
+  params.set('wt', 'json');
 
-  params.set('rows', `${itemsPerPage.value}`)
+  params.set('rows', `${itemsPerPage.value}`);
 
-  params.set(
-      'start',
-      `${(currentPage.value - 1) * itemsPerPage.value}`
-  )
+  params.set('start', `${(currentPage.value - 1) * itemsPerPage.value}`);
 
-  const conditionalQuery = route.query.condQuery
+  const conditionalQuery = route.query.condQuery;
 
   if (typeof conditionalQuery === 'string') {
-    params.set('condQuery', conditionalQuery)
+    params.set('condQuery', conditionalQuery);
   }
 
-  const categoryFilter = route.query.fq
+  const categoryFilter = route.query.fq;
 
-  if (
-      typeof categoryFilter === 'string' &&
-      itunesCategoryFilterPattern.test(categoryFilter)
-  ) {
-    params.append('fq', categoryFilter)
+  if (typeof categoryFilter === 'string' && itunesCategoryFilterPattern.test(categoryFilter)) {
+    params.append('fq', categoryFilter);
   }
 
-  const sort = route.query.sort
+  const sort = route.query.sort;
 
-  if (
-      typeof sort === 'string' &&
-      allowedSortValues.has(sort)
-  ) {
-    params.set('sort', sort)
+  if (typeof sort === 'string' && allowedSortValues.has(sort)) {
+    params.set('sort', sort);
   }
 
-  return params
+  return params;
 }
 
 function getItunesCategories(podcast: SolrDocument): string[] {
   const itunesCategories =
-      podcast['category.top']
-          ?.filter(category =>
-              category.startsWith('itunes-podcast:')
-          )
-          .map(category => category.replace('itunes-podcast:', ''))
-          .map(category => {
-            const value = podcastCategoryValue(category)
-            const key = value && `podcast.categories.${value}`
+    podcast['category.top']
+      ?.filter((category) => category.startsWith('itunes-podcast:'))
+      .map((category) => category.replace('itunes-podcast:', ''))
+      .map((category) => {
+        const value = podcastCategoryValue(category);
+        const key = value && `podcast.categories.${value}`;
 
-            return key && te(key)
-                ? t(key)
-                : category.replaceAll('_', ' ')
-          }) ?? []
+        return key && te(key) ? t(key) : category.replaceAll('_', ' ');
+      }) ?? [];
 
   if (itunesCategories.length === 0) {
-    return [t('podcast.list.uncategorized')]
+    return [t('podcast.list.uncategorized')];
   }
 
-  return itunesCategories
+  return itunesCategories;
 }
 
 function getPodcastTitle(podcast: SolrDocument): string {
-  return podcast['mods.title']?.[0] ?? t('podcast.list.untitled')
+  return podcast['mods.title']?.[0] ?? t('podcast.list.untitled');
 }
 
 function getPodcastAuthors(podcast: SolrDocument): string {
-  return podcast['mods.author']?.join(', ') ?? ''
+  return podcast['mods.author']?.join(', ') ?? '';
 }
 
 function getCoverUrl(podcast: SolrDocument): string {
   return applicationUrl(
-      `api/iiif/image/v2/thumbnail/${encodeURIComponent(podcast.id)}/full/!300,300/0/default.jpg`
-  )
+    `api/iiif/image/v2/thumbnail/${encodeURIComponent(podcast.id)}/full/!300,300/0/default.jpg`,
+  );
 }
 
 function handleCoverLoad(podcastId: string): void {
-  coverLoaded.value[podcastId] = true
-  coverErrors.value[podcastId] = false
+  coverLoaded.value[podcastId] = true;
+  coverErrors.value[podcastId] = false;
 }
 
 function handleCoverError(podcastId: string): void {
-  coverLoaded.value[podcastId] = false
-  coverErrors.value[podcastId] = true
+  coverLoaded.value[podcastId] = false;
+  coverErrors.value[podcastId] = true;
 }
 
 function scrollToTop(): void {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
-  })
+    behavior: 'smooth',
+  });
 }
 
 async function searchPodcasts(): Promise<void> {
-  const requestId = ++requestSequence
+  const requestId = ++requestSequence;
 
-  isLoading.value = true
-  isError.value = false
+  isLoading.value = true;
+  isError.value = false;
 
-  const params = createParams()
+  const params = createParams();
 
   try {
-    const response = await requestSolr(params)
+    const response = await requestSolr(params);
 
     if (requestId !== requestSequence) {
-      return
+      return;
     }
 
-    podcastMetadata.value = JSON.parse(response) as SolrResponse
+    podcastMetadata.value = JSON.parse(response) as SolrResponse;
 
-    totalItems.value =
-        podcastMetadata.value.response.numFound
+    totalItems.value = podcastMetadata.value.response.numFound;
 
-    coverErrors.value = {}
-    coverLoaded.value = {}
+    coverErrors.value = {};
+    coverLoaded.value = {};
 
     /*
      * Falls sich durch Filter die Anzahl der Seiten verkleinert
      * und currentPage nicht mehr existiert.
      */
-    if (
-        totalPages.value > 0 &&
-        currentPage.value > totalPages.value
-    ) {
+    if (totalPages.value > 0 && currentPage.value > totalPages.value) {
       await router.replace({
         query: {
           ...route.query,
           page: `${totalPages.value}`,
         },
-      })
+      });
     }
   } catch (err) {
     if (requestId !== requestSequence) {
-      return
+      return;
     }
 
-    podcastMetadata.value = null
-    console.error('Podcasts konnten nicht geladen werden:', err)
-    isError.value = true
+    podcastMetadata.value = null;
+    console.error('Podcasts konnten nicht geladen werden:', err);
+    isError.value = true;
   } finally {
     if (requestId === requestSequence) {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 }
 
 async function setPage(page: number): Promise<void> {
-  if (
-      page < 1 ||
-      page > totalPages.value ||
-      page === currentPage.value
-  ) {
-    return
+  if (page < 1 || page > totalPages.value || page === currentPage.value) {
+    return;
   }
 
   await router.push({
@@ -256,25 +224,24 @@ async function setPage(page: number): Promise<void> {
       ...route.query,
       page: `${page}`,
     },
-  })
+  });
 
-  scrollToTop()
+  scrollToTop();
 }
-
 
 /*
  * Bei Änderung der Seite oder der Filter neu laden.
  */
 watch(
-    () => route.query,
-    () => {
-      searchPodcasts()
-    },
-    {
-      immediate: true,
-      deep: true
-    }
-)
+  () => route.query,
+  () => {
+    searchPodcasts();
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
 <template>

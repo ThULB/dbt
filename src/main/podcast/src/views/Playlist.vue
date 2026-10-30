@@ -1,117 +1,107 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-import type {
-  PodcastPlaylist,
-  SolrResponse,
-} from '../types/types.ts'
+import type { PodcastPlaylist, SolrResponse } from '../types/types.ts';
 
-import parsePodcastXml from '../utils/XMLParser.ts'
-import requestReceive, {
-  ReceiveRequestError,
-} from '../utils/requestReceive'
-import requestSolr from '../utils/requestSolr.ts'
+import parsePodcastXml from '../utils/XMLParser.ts';
+import requestReceive, { ReceiveRequestError } from '../utils/requestReceive';
+import requestSolr from '../utils/requestSolr.ts';
 
-import LoadingState from '../components/LoadingState.vue'
-import ErrorState from '../components/ErrorState.vue'
-import PlaylistHeader from '../components/PlaylistHeader.vue'
-import PlaylistEpisode from '../components/PlaylistEpisode.vue'
-import NotFound from './NotFound.vue'
-
+import LoadingState from '../components/LoadingState.vue';
+import ErrorState from '../components/ErrorState.vue';
+import PlaylistHeader from '../components/PlaylistHeader.vue';
+import PlaylistEpisode from '../components/PlaylistEpisode.vue';
+import NotFound from './NotFound.vue';
 
 const props = defineProps<{
-  podcastId: string
-}>()
+  podcastId: string;
+}>();
 
-const { t } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' });
 
-const isError = ref(false)
-const isLoading = ref(false)
-const isNotFound = ref(false)
+const isError = ref(false);
+const isLoading = ref(false);
+const isNotFound = ref(false);
 
-const playlistMetadata = ref<PodcastPlaylist | null>(null)
-let requestSequence = 0
+const playlistMetadata = ref<PodcastPlaylist | null>(null);
+let requestSequence = 0;
 
 async function podcastExists(podcastId: string): Promise<boolean> {
   if (!/^dbt_mods_\d{8}$/.test(podcastId)) {
-    return false
+    return false;
   }
 
-  const params = new URLSearchParams()
-  params.append('fq', 'mods.genre:podcast')
-  params.append('fq', `id:"${podcastId}"`)
-  params.set('rows', '0')
-  params.set('wt', 'json')
+  const params = new URLSearchParams();
+  params.append('fq', 'mods.genre:podcast');
+  params.append('fq', `id:"${podcastId}"`);
+  params.set('rows', '0');
+  params.set('wt', 'json');
 
-  const response = await requestSolr(params)
-  const result = JSON.parse(response) as SolrResponse
+  const response = await requestSolr(params);
+  const result = JSON.parse(response) as SolrResponse;
 
-  return result.response.numFound > 0
+  return result.response.numFound > 0;
 }
 
 async function getPlaylistMetadata(): Promise<void> {
-  const requestId = ++requestSequence
+  const requestId = ++requestSequence;
 
-  isError.value = false
-  isNotFound.value = false
-  isLoading.value = true
-  playlistMetadata.value = null
+  isError.value = false;
+  isNotFound.value = false;
+  isLoading.value = true;
+  playlistMetadata.value = null;
 
   try {
-    const exists = await podcastExists(props.podcastId)
+    const exists = await podcastExists(props.podcastId);
 
     if (requestId !== requestSequence) {
-      return
+      return;
     }
 
     if (!exists) {
-      isNotFound.value = true
-      return
+      isNotFound.value = true;
+      return;
     }
 
-    const xmlString = await requestReceive(props.podcastId)
+    const xmlString = await requestReceive(props.podcastId);
 
     if (requestId === requestSequence) {
-      playlistMetadata.value =
-          parsePodcastXml(xmlString)
+      playlistMetadata.value = parsePodcastXml(xmlString);
     }
-
   } catch (err) {
     if (requestId !== requestSequence) {
-      return
+      return;
     }
 
     if (err instanceof ReceiveRequestError && err.status === 404) {
-      isNotFound.value = true
-      return
+      isNotFound.value = true;
+      return;
     }
 
-    console.error('Podcastdaten konnten nicht geladen werden:', err)
-    isError.value = true
-
+    console.error('Podcastdaten konnten nicht geladen werden:', err);
+    isError.value = true;
   } finally {
     if (requestId === requestSequence) {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 }
 
-
 watch(
-    () => props.podcastId,
-    () => {
-      getPlaylistMetadata()
-      window.scrollTo(0, 0)
-    },
-    { immediate: true }
-)
+  () => props.podcastId,
+  () => {
+    getPlaylistMetadata();
+    window.scrollTo(0, 0);
+  },
+  { immediate: true },
+);
 </script>
 
 <template>
   <NotFound v-if="isNotFound" />
 
-  <section v-else class="py-5" aria-labelledby="podcast-title">
+  <section v-else class="pb-5" aria-labelledby="podcast-title">
     <RouterLink
         :to="{ name: 'podcasts' }"
         class="text-success"

@@ -1,64 +1,58 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-import type { PodcastEpisode, PodcastPlaylist } from '../types/types.ts'
-import { usePlayerStore } from '../stores/player.ts'
+import type { PodcastEpisode, PodcastPlaylist } from '../types/types.ts';
+import { usePlayerStore } from '../stores/player.ts';
 
-const playerStore = usePlayerStore()
-const { locale, t } = useI18n({ useScope: 'global' })
+const playerStore = usePlayerStore();
+const { locale, t } = useI18n({ useScope: 'global' });
 
 const props = defineProps<{
-  playlistMetadata: PodcastPlaylist
-}>()
+  playlistMetadata: PodcastPlaylist;
+}>();
 
-const openEpisodeGuid = ref<string | null>(null)
+const openEpisodeGuid = ref<string | null>(null);
 
 function isCurrentEpisode(episode: PodcastEpisode): boolean {
-  return playerStore.episode?.guid === episode.guid
+  return playerStore.episode?.guid === episode.guid;
 }
 
 function buildPlayer(episode: PodcastEpisode): void {
-  playerStore.setPlaylist(
-      props.playlistMetadata.episodes,
-      props.playlistMetadata.title
-  )
+  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title);
 
-  playerStore.toggleEpisode(episode)
+  playerStore.toggleEpisode(episode);
 }
 
 function formatDate(value: string): string {
-  const date = new Date(value)
+  const date = new Date(value);
 
   if (Number.isNaN(date.getTime())) {
-    return ''
+    return '';
   }
 
   return new Intl.DateTimeFormat(locale.value, {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
-  }).format(date)
+  }).format(date);
 }
 
 function toggleEpisodeDetails(guid: string): void {
-  openEpisodeGuid.value =
-      openEpisodeGuid.value === guid
-          ? null
-          : guid
+  openEpisodeGuid.value = openEpisodeGuid.value === guid ? null : guid;
 }
 
 watch(
-    () => playerStore.episode?.guid,
-    guid => {
-      if (!guid) return
+  () => playerStore.episode?.guid,
+  (guid) => {
+    if (!guid) return;
 
-      openEpisodeGuid.value = guid
-    },
-    {
-      immediate: true,
-    }
-)
+    openEpisodeGuid.value = guid;
+  },
+  {
+    immediate: true,
+  },
+);
 </script>
 
 <template>

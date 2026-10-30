@@ -1,20 +1,16 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useI18n } from 'vue-i18n'
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
-  title?: string
-  description?: string
-}>()
+  title?: string;
+  description?: string;
+}>();
 
-const { t } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' });
 
-const stateTitle = computed(() =>
-    props.title ?? t('podcast.state.empty.title')
-)
-const stateDescription = computed(() =>
-    props.description ?? t('podcast.state.empty.description')
-)
+const stateTitle = computed(() => props.title ?? t('podcast.state.empty.title'));
+const stateDescription = computed(() => props.description ?? t('podcast.state.empty.description'));
 </script>
 
 <template>

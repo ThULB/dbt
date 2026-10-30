@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import Player from './components/Player.vue'
-import { usePlayerStore } from './stores/player'
+import Player from './components/Player.vue';
+import { usePlayerStore } from './stores/player';
 
-const playerStore = usePlayerStore()
+const playerStore = usePlayerStore();
 </script>
 
 <template>

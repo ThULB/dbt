@@ -1,116 +1,106 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
-import type {PodcastEpisode, PodcastPlaylist} from '../types/types.ts'
-import { usePlayerStore } from '../stores/player.ts'
-import podcastCategoryValue from '../utils/podcastCategory.ts'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type { PodcastEpisode, PodcastPlaylist } from '../types/types.ts';
+import { usePlayerStore } from '../stores/player.ts';
+import podcastCategoryValue from '../utils/podcastCategory.ts';
 
-const playerStore = usePlayerStore()
-const { t, te } = useI18n({ useScope: 'global' })
+const playerStore = usePlayerStore();
+const { t, te } = useI18n({ useScope: 'global' });
 
 const props = defineProps<{
-  playlistMetadata: PodcastPlaylist
-}>()
+  playlistMetadata: PodcastPlaylist;
+}>();
 
 const lastEpisode = computed<PodcastEpisode | null>(() => {
-  const episodes = props.playlistMetadata.episodes
+  const episodes = props.playlistMetadata.episodes;
 
-  return episodes.length > 0
-      ? episodes[episodes.length - 1]
-      : null
-})
+  return episodes.length > 0 ? episodes[episodes.length - 1] : null;
+});
 
-const imageError = ref(false)
-const imageLoaded = ref(false)
-const isDescriptionExpanded = ref(false)
-const isDescriptionOverflowing = ref(false)
+const imageError = ref(false);
+const imageLoaded = ref(false);
+const isDescriptionExpanded = ref(false);
+const isDescriptionOverflowing = ref(false);
 
-const descriptionElement = ref<HTMLElement | null>(null)
-let descriptionResizeObserver: ResizeObserver | null = null
+const descriptionElement = ref<HTMLElement | null>(null);
+let descriptionResizeObserver: ResizeObserver | null = null;
 
 function categoryLabel(category: string): string {
-  const value = podcastCategoryValue(category)
-  const key = value && `podcast.categories.${value}`
+  const value = podcastCategoryValue(category);
+  const key = value && `podcast.categories.${value}`;
 
-  return key && te(key) ? t(key) : category
+  return key && te(key) ? t(key) : category;
 }
 
 function handleImageLoad(): void {
-  imageLoaded.value = true
-  imageError.value = false
+  imageLoaded.value = true;
+  imageError.value = false;
 }
 
 function handleImageError(): void {
-  imageLoaded.value = false
-  imageError.value = true
+  imageLoaded.value = false;
+  imageError.value = true;
 }
 
 function toggleDescription(): void {
-  isDescriptionExpanded.value = !isDescriptionExpanded.value
+  isDescriptionExpanded.value = !isDescriptionExpanded.value;
 }
 
 function checkDescriptionOverflow(): void {
-  const element = descriptionElement.value
+  const element = descriptionElement.value;
 
   if (!element) {
-    return
+    return;
   }
 
-  isDescriptionOverflowing.value =
-      element.scrollHeight > element.clientHeight
+  isDescriptionOverflowing.value = element.scrollHeight > element.clientHeight;
 }
 
 async function scrollToEpisode(episode: PodcastEpisode): Promise<void> {
-  await nextTick()
+  await nextTick();
 
   const episodeIndex = props.playlistMetadata.episodes.findIndex(
-      item => item.guid === episode.guid
-  )
+    (item) => item.guid === episode.guid,
+  );
 
   if (episodeIndex < 0) {
-    return
+    return;
   }
 
   requestAnimationFrame(() => {
-    document
-        .getElementById(`episode-item-${episodeIndex}`)
-        ?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-        })
-  })
+    document.getElementById(`episode-item-${episodeIndex}`)?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+  });
 }
 
 async function buildPlayer(episode: PodcastEpisode): Promise<void> {
-  playerStore.setPlaylist(
-      props.playlistMetadata.episodes,
-      props.playlistMetadata.title
-  )
+  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title);
 
-  playerStore.selectEpisode(episode)
-  await scrollToEpisode(episode)
+  playerStore.selectEpisode(episode);
+  await scrollToEpisode(episode);
 }
 
 onMounted(async () => {
-  await nextTick()
+  await nextTick();
 
-  const element = descriptionElement.value
+  const element = descriptionElement.value;
 
   if (!element) {
-    return
+    return;
   }
 
-  descriptionResizeObserver = new ResizeObserver(
-      checkDescriptionOverflow
-  )
-  descriptionResizeObserver.observe(element)
+  descriptionResizeObserver = new ResizeObserver(checkDescriptionOverflow);
+  descriptionResizeObserver.observe(element);
 
-  checkDescriptionOverflow()
-})
+  checkDescriptionOverflow();
+});
 
 onUnmounted(() => {
-  descriptionResizeObserver?.disconnect()
-})
+  descriptionResizeObserver?.disconnect();
+});
 </script>
 
 <template>

@@ -1,278 +1,265 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { usePlayerStore } from '../stores/player'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { usePlayerStore } from '../stores/player';
 
-const playerStore = usePlayerStore()
-const { t } = useI18n({ useScope: 'global' })
+const playerStore = usePlayerStore();
+const { t } = useI18n({ useScope: 'global' });
 
-const audioElement = ref<HTMLAudioElement | null>(null)
-const playerElement = ref<HTMLElement | null>(null)
+const audioElement = ref<HTMLAudioElement | null>(null);
+const playerElement = ref<HTMLElement | null>(null);
 
-let playerResizeObserver: ResizeObserver | null = null
+let playerResizeObserver: ResizeObserver | null = null;
 
-const isLoading = ref(false)
-const audioError = ref(false)
-const loadedEpisodeGuid = ref<string | null>(null)
-const loadedEpisodeUrl = ref<string | null>(null)
+const isLoading = ref(false);
+const audioError = ref(false);
+const loadedEpisodeGuid = ref<string | null>(null);
+const loadedEpisodeUrl = ref<string | null>(null);
 
-const imageLoaded = ref(false)
-const imageError = ref(false)
+const imageLoaded = ref(false);
+const imageError = ref(false);
 
-const speedIndex = ref(1)
-const speeds = [0.75, 1, 1.25, 1.5, 2]
+const speedIndex = ref(1);
+const speeds = [0.75, 1, 1.25, 1.5, 2];
 
-const volume = ref(1)
-const previousVolume = ref(1)
-const isMuted = ref(false)
-
-watch(
-    () => playerStore.episode,
-
-    async episode => {
-      if (!episode) {
-        return
-      }
-
-      imageLoaded.value = false
-      imageError.value = false
-
-      audioError.value = false
-      isLoading.value = true
-
-      playerStore.currentTime = 0
-      playerStore.duration = 0
-
-      await nextTick()
-
-      const audio = audioElement.value
-
-      if (!audio || episode !== playerStore.episode) {
-        return
-      }
-
-      loadedEpisodeGuid.value = episode.guid
-      loadedEpisodeUrl.value = episode.audioUrl
-      audio.src = episode.audioUrl
-      audio.load()
-
-      audio.playbackRate = speeds[speedIndex.value]
-      audio.volume = volume.value
-      audio.muted = isMuted.value
-
-      const request = playerStore.playbackRequest
-
-      if (request.command === 'play') {
-        await playAudio(episode, request.id)
-      }
-    },
-
-    {
-      immediate: true,
-    }
-)
+const volume = ref(1);
+const previousVolume = ref(1);
+const isMuted = ref(false);
 
 watch(
-    () => playerStore.playbackRequest,
-    request => {
-      const audio = audioElement.value
+  () => playerStore.episode,
 
-      if (!audio) return
-
-      if (request.command === 'play') {
-        const episode = playerStore.episode
-
-        if (
-            episode &&
-            loadedEpisodeGuid.value === episode.guid &&
-            loadedEpisodeUrl.value === episode.audioUrl
-        ) {
-          void playAudio(episode, request.id)
-        }
-      } else {
-        audio.pause()
-      }
-    },
-    {
-      flush: 'sync',
+  async (episode) => {
+    if (!episode) {
+      return;
     }
-)
+
+    imageLoaded.value = false;
+    imageError.value = false;
+
+    audioError.value = false;
+    isLoading.value = true;
+
+    playerStore.currentTime = 0;
+    playerStore.duration = 0;
+
+    await nextTick();
+
+    const audio = audioElement.value;
+
+    if (!audio || episode !== playerStore.episode) {
+      return;
+    }
+
+    loadedEpisodeGuid.value = episode.guid;
+    loadedEpisodeUrl.value = episode.audioUrl;
+    audio.src = episode.audioUrl;
+    audio.load();
+
+    audio.playbackRate = speeds[speedIndex.value];
+    audio.volume = volume.value;
+    audio.muted = isMuted.value;
+
+    const request = playerStore.playbackRequest;
+
+    if (request.command === 'play') {
+      await playAudio(episode, request.id);
+    }
+  },
+
+  {
+    immediate: true,
+  },
+);
+
+watch(
+  () => playerStore.playbackRequest,
+  (request) => {
+    const audio = audioElement.value;
+
+    if (!audio) return;
+
+    if (request.command === 'play') {
+      const episode = playerStore.episode;
+
+      if (
+        episode &&
+        loadedEpisodeGuid.value === episode.guid &&
+        loadedEpisodeUrl.value === episode.audioUrl
+      ) {
+        void playAudio(episode, request.id);
+      }
+    } else {
+      audio.pause();
+    }
+  },
+  {
+    flush: 'sync',
+  },
+);
 
 function isPlaybackError(error: unknown, name: string): boolean {
-  return (
-      typeof error === 'object' &&
-      error !== null &&
-      'name' in error &&
-      error.name === name
-  )
+  return typeof error === 'object' && error !== null && 'name' in error && error.name === name;
 }
 
 async function playAudio(
-    episode: NonNullable<typeof playerStore.episode>,
-    requestId: number
+  episode: NonNullable<typeof playerStore.episode>,
+  requestId: number,
 ): Promise<void> {
-  const audio = audioElement.value
+  const audio = audioElement.value;
 
-  if (!audio) return
+  if (!audio) return;
 
   try {
-    await audio.play()
+    await audio.play();
   } catch (error) {
     if (
-        episode !== playerStore.episode ||
-        requestId !== playerStore.playbackRequest.id ||
-        isPlaybackError(error, 'AbortError')
+      episode !== playerStore.episode ||
+      requestId !== playerStore.playbackRequest.id ||
+      isPlaybackError(error, 'AbortError')
     ) {
-      return
+      return;
     }
 
-    isLoading.value = false
-    playerStore.requestPause()
+    isLoading.value = false;
+    playerStore.requestPause();
 
     if (isPlaybackError(error, 'NotAllowedError')) {
-      return
+      return;
     }
 
-    console.error('Error playing audio:', error)
-    audioError.value = true
+    console.error('Error playing audio:', error);
+    audioError.value = true;
   }
 }
 
 function skipBackward15(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  audioElement.value.currentTime =
-      Math.max(0, audioElement.value.currentTime - 15)
+  audioElement.value.currentTime = Math.max(0, audioElement.value.currentTime - 15);
 }
 
 function skipForward15(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  audioElement.value.currentTime =
-      Math.min(
-          audioElement.value.duration || Infinity,
-          audioElement.value.currentTime + 15
-      )
+  audioElement.value.currentTime = Math.min(
+    audioElement.value.duration || Infinity,
+    audioElement.value.currentTime + 15,
+  );
 }
 
 function setSpeed(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  speedIndex.value++
+  speedIndex.value++;
 
   if (speedIndex.value >= speeds.length) {
-    speedIndex.value = 0
+    speedIndex.value = 0;
   }
 
-  audioElement.value.playbackRate =
-      speeds[speedIndex.value]
+  audioElement.value.playbackRate = speeds[speedIndex.value];
 }
 
 function toggleMute(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
   if (isMuted.value) {
-    isMuted.value = false
+    isMuted.value = false;
 
-    volume.value = previousVolume.value
+    volume.value = previousVolume.value;
 
-    audioElement.value.muted = false
-    audioElement.value.volume = volume.value
+    audioElement.value.muted = false;
+    audioElement.value.volume = volume.value;
   } else {
     if (volume.value > 0) {
-      previousVolume.value = volume.value
+      previousVolume.value = volume.value;
     }
 
-    volume.value = 0
-    isMuted.value = true
+    volume.value = 0;
+    isMuted.value = true;
 
-    audioElement.value.muted = true
+    audioElement.value.muted = true;
   }
 }
 
 function setVolume(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  audioElement.value.volume = volume.value
+  audioElement.value.volume = volume.value;
 
   if (volume.value > 0) {
-    previousVolume.value = volume.value
+    previousVolume.value = volume.value;
 
-    isMuted.value = false
-    audioElement.value.muted = false
+    isMuted.value = false;
+    audioElement.value.muted = false;
   } else {
-    isMuted.value = true
-    audioElement.value.muted = true
+    isMuted.value = true;
+    audioElement.value.muted = true;
   }
 }
 
 function seekAudio(event: Event): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  const input = event.target as HTMLInputElement
+  const input = event.target as HTMLInputElement;
 
-  audioElement.value.currentTime =
-      Number(input.value)
+  audioElement.value.currentTime = Number(input.value);
 }
 
 function handleTimeUpdate(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  playerStore. currentTime = audioElement.value.currentTime
+  playerStore.currentTime = audioElement.value.currentTime;
 }
 
 function handleLoadedMetadata(): void {
   if (!audioElement.value) {
-    return
+    return;
   }
 
-  playerStore.duration =
-      audioElement.value.duration
+  playerStore.duration = audioElement.value.duration;
 }
 
 function handleEnded(): void {
-  playerStore.isPlaying = false
-  playerStore.requestPause()
+  playerStore.isPlaying = false;
+  playerStore.requestPause();
 }
 
 onMounted(() => {
-  const player = playerElement.value
+  const player = playerElement.value;
 
-  if (!player) return
+  if (!player) return;
 
   const updatePlayerHeight = (): void => {
-    document.body.style.setProperty(
-        '--podcast-player-height',
-        `${player.offsetHeight}px`
-    )
-  }
+    document.body.style.setProperty('--podcast-player-height', `${player.offsetHeight}px`);
+  };
 
-  document.body.classList.add('has-podcast-player')
-  updatePlayerHeight()
+  document.body.classList.add('has-podcast-player');
+  updatePlayerHeight();
 
-  playerResizeObserver = new ResizeObserver(updatePlayerHeight)
-  playerResizeObserver.observe(player)
-})
+  playerResizeObserver = new ResizeObserver(updatePlayerHeight);
+  playerResizeObserver.observe(player);
+});
 
 onUnmounted(() => {
-  playerResizeObserver?.disconnect()
-  document.body.classList.remove('has-podcast-player')
-  document.body.style.removeProperty('--podcast-player-height')
-})
+  playerResizeObserver?.disconnect();
+  document.body.classList.remove('has-podcast-player');
+  document.body.style.removeProperty('--podcast-player-height');
+});
 </script>
 
 <template>
@@ -765,8 +752,8 @@ onUnmounted(() => {
     position: absolute;
     top: clamp(0.5rem, 1vw, 0.7rem);
     right: clamp(0.5rem, 1vw, 0.7rem);
-    width: clamp(1.75rem, 2.2vw, 2rem);
-    height: clamp(1.75rem, 2.2vw, 2rem);
+    width: clamp(1rem, 1.2vw, 1.25rem);
+    height: clamp(1rem, 1.2vw, 1.25rem);
     color: var(--bs-danger);
     background-color: rgba(var(--bs-danger-rgb), 0.1);
     font-size: clamp(0.55rem, 1.3vw, 0.75rem);

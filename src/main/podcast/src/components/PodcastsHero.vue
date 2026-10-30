@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
+import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' });
 </script>
 
 <template>
-  <section class="podcast-hero row align-items-end g-4 pt-5 mb-5">
+  <section class="podcast-hero row align-items-end g-4 pb-5">
     <div class="col-lg-8">
       <p class="text-success fw-semibold text-uppercase small mb-2">
         {{ t('podcast.hero.eyebrow') }}

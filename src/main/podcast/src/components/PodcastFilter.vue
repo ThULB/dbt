@@ -1,108 +1,96 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import itunesPodcastCategories from '../data/podcast-categories.json'
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+import itunesPodcastCategories from '../data/podcast-categories.json';
 
-const route = useRoute()
-const router = useRouter()
-const { t } = useI18n({ useScope: 'global' })
-const search = ref('')
-const category = ref('')
-const subCategory = ref('')
-const sort = ref('created desc')
+const route = useRoute();
+const router = useRouter();
+const { t } = useI18n({ useScope: 'global' });
+const search = ref('');
+const category = ref('');
+const subCategory = ref('');
+const sort = ref('created desc');
 const selectedSubcategories = computed(() => {
-  const selectedCategory = itunesPodcastCategories.find(item => item.value === category.value)
+  const selectedCategory = itunesPodcastCategories.find((item) => item.value === category.value);
 
-  return selectedCategory?.subcategories ?? []
-})
+  return selectedCategory?.subcategories ?? [];
+});
 
 function categoryLabel(value: string): string {
-  return t(`podcast.categories.${value}`)
+  return t(`podcast.categories.${value}`);
 }
 
 function queryValue(value: unknown): string {
-  return typeof value === 'string' ? value : ''
+  return typeof value === 'string' ? value : '';
 }
 
 function syncFiltersFromRoute(): void {
-  search.value = queryValue(route.query.condQuery)
-  sort.value = ['created asc', 'created desc'].includes(
-      queryValue(route.query.sort)
-  )
-      ? queryValue(route.query.sort)
-      : 'created desc'
+  search.value = queryValue(route.query.condQuery);
+  sort.value = ['created asc', 'created desc'].includes(queryValue(route.query.sort))
+    ? queryValue(route.query.sort)
+    : 'created desc';
 
-  category.value = ''
-  subCategory.value = ''
+  category.value = '';
+  subCategory.value = '';
 
-  const filter = queryValue(route.query.fq)
-  const categoryMatch = filter.match(
-      /^category:"itunes-podcast:([^"]+)"$/
-  )
+  const filter = queryValue(route.query.fq);
+  const categoryMatch = filter.match(/^category:"itunes-podcast:([^"]+)"$/);
 
   if (!categoryMatch) {
-    return
+    return;
   }
 
-  const selectedValue = categoryMatch[1]
-  const parentCategory = itunesPodcastCategories.find(item =>
-      item.value === selectedValue ||
-      item.subcategories.some(sub => sub.value === selectedValue)
-  )
+  const selectedValue = categoryMatch[1];
+  const parentCategory = itunesPodcastCategories.find(
+    (item) =>
+      item.value === selectedValue || item.subcategories.some((sub) => sub.value === selectedValue),
+  );
 
   if (!parentCategory) {
-    return
+    return;
   }
 
-  category.value = parentCategory.value
+  category.value = parentCategory.value;
 
   if (parentCategory.value !== selectedValue) {
-    subCategory.value = selectedValue
+    subCategory.value = selectedValue;
   }
 }
 
-
 watch(
-    category,
-    () => {
-      subCategory.value = ''
-    },
-    { flush: 'sync' }
-)
+  category,
+  () => {
+    subCategory.value = '';
+  },
+  { flush: 'sync' },
+);
 
-watch(
-    () => route.query,
-    syncFiltersFromRoute,
-    {
-      immediate: true,
-      deep: true,
-    }
-)
+watch(() => route.query, syncFiltersFromRoute, {
+  immediate: true,
+  deep: true,
+});
 
 const handleSubmit = () => {
-  const query: Record<string, string> = {}
+  const query: Record<string, string> = {};
 
   if (search.value) {
-    query.condQuery = search.value
+    query.condQuery = search.value;
   }
 
   if (subCategory.value) {
-    query.fq = `category:"itunes-podcast:${subCategory.value}"`
-  }
-  else if (category.value) {
-    query.fq =  `category:"itunes-podcast:${category.value}"`
+    query.fq = `category:"itunes-podcast:${subCategory.value}"`;
+  } else if (category.value) {
+    query.fq = `category:"itunes-podcast:${category.value}"`;
   }
 
-
-  query.sort = sort.value
+  query.sort = sort.value;
 
   router.push({
     name: 'podcasts',
     query,
-  })
-}
-
+  });
+};
 </script>
 
 <template>
