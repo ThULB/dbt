@@ -18,6 +18,13 @@ const loadedEpisodeUrl = ref<string | null>(null);
 
 const imageLoaded = ref(false);
 const imageError = ref(false);
+const displayedBackgroundImage = ref<string | null>(null);
+
+const isExpanded = ref(false);
+const isClosing = ref(false);
+
+const playerCloseAnimationDuration = 280;
+let playerCloseAnimationTimer: number | null = null;
 
 const speedIndex = ref(1);
 const speeds = [0.75, 1, 1.25, 1.5, 2];
@@ -31,11 +38,16 @@ watch(
 
   async (episode) => {
     if (!episode) {
+      displayedBackgroundImage.value = null;
       return;
     }
 
     imageLoaded.value = false;
     imageError.value = false;
+
+    if (!episode.image) {
+      displayedBackgroundImage.value = null;
+    }
 
     audioError.value = false;
     isLoading.value = true;
@@ -102,10 +114,77 @@ function isPlaybackError(error: unknown, name: string): boolean {
   return typeof error === 'object' && error !== null && 'name' in error && error.name === name;
 }
 
-async function playAudio(
-  episode: NonNullable<typeof playerStore.episode>,
-  requestId: number,
-): Promise<void> {
+function handleArtworkLoad(event: Event): void {
+  const imageUrl = (event.currentTarget as HTMLImageElement).getAttribute('src');
+
+  if (!imageUrl || imageUrl !== playerStore.episode?.image) {
+    return;
+  }
+
+  imageLoaded.value = true;
+  imageError.value = false;
+  displayedBackgroundImage.value = imageUrl;
+}
+
+function handleArtworkError(event: Event): void {
+  const imageUrl = (event.currentTarget as HTMLImageElement).getAttribute('src');
+
+  if (imageUrl !== playerStore.episode?.image) {
+    return;
+  }
+
+  imageLoaded.value = false;
+  imageError.value = true;
+  displayedBackgroundImage.value = null;
+}
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function animatePlayerOut(onFinished: () => void): void {
+  if (isClosing.value) {
+    return;
+  }
+
+  if (prefersReducedMotion()) {
+    onFinished();
+    return;
+  }
+
+  isClosing.value = true;
+  playerCloseAnimationTimer = window.setTimeout(() => {
+    playerCloseAnimationTimer = null;
+    isClosing.value = false;
+    onFinished();
+  }, playerCloseAnimationDuration);
+}
+
+function expandPlayer(): void {
+  if (isExpanded.value || isClosing.value) {
+    return;
+  }
+
+  isExpanded.value = true;
+}
+
+function collapsePlayer(): void {
+  if (!isExpanded.value || isClosing.value) {
+    return;
+  }
+
+  animatePlayerOut(() => {
+    isExpanded.value = false;
+  });
+}
+
+function closePlayer(): void {
+  animatePlayerOut(() => {
+    playerStore.closePlayer();
+  });
+}
+
+async function playAudio(episode: NonNullable<typeof playerStore.episode>, requestId: number,): Promise<void> {
   const audio = audioElement.value;
 
   if (!audio) return;
@@ -218,6 +297,16 @@ function seekAudio(event: Event): void {
   audioElement.value.currentTime = Number(input.value);
 }
 
+function getRangeProgress(value: number, max: number): string {
+  if (!Number.isFinite(value) || !Number.isFinite(max) || max <= 0) {
+    return '0%';
+  }
+
+  const progress = Math.min(100, Math.max(0, (value / max) * 100));
+
+  return `${progress}%`;
+}
+
 function handleTimeUpdate(): void {
   if (!audioElement.value) {
     return;
@@ -256,6 +345,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  if (playerCloseAnimationTimer !== null) {
+    window.clearTimeout(playerCloseAnimationTimer);
+  }
+
   playerResizeObserver?.disconnect();
   document.body.classList.remove('has-podcast-player');
   document.body.style.removeProperty('--podcast-player-height');
@@ -266,8 +359,26 @@ onUnmounted(() => {
   <section
       ref="playerElement"
       class="playlist-player position-fixed bottom-0 start-0 w-100 text-body"
+      :class="{
+        'playlist-player--expanded': isExpanded,
+        'playlist-player--closing': isClosing,
+      }"
       :aria-label="t('podcast.player.ariaLabel')"
   >
+    <Transition name="playlist-player-background">
+      <div
+          v-if="displayedBackgroundImage"
+          :key="displayedBackgroundImage"
+          class="playlist-player__background"
+          aria-hidden="true"
+      >
+        <img
+            :src="displayedBackgroundImage"
+            alt=""
+        >
+      </div>
+    </Transition>
+
     <audio
         ref="audioElement"
         class="d-none"
@@ -283,12 +394,20 @@ onUnmounted(() => {
         @loadedmetadata="handleLoadedMetadata"
     />
 
-    <div class="playlist-player__inner container">
+    <div
+        class="playlist-player__inner"
+        :class="{'container': !isExpanded}"
+    >
 
       <!-- Episode -->
-      <div class="playlist-player__track d-flex align-items-center">
+      <div
+          class="playlist-player__track d-flex align-items-center"
+          @click="expandPlayer"
+      >
 
-        <div class="playlist-player__artwork position-relative flex-shrink-0 overflow-hidden rounded-1">
+        <div
+            class="playlist-player__artwork position-relative flex-shrink-0 overflow-hidden rounded-4"
+        >
 
           <img
               v-if="
@@ -301,8 +420,8 @@ onUnmounted(() => {
               :class="{
                 'is-loaded': imageLoaded
               }"
-              @load="imageLoaded = true"
-              @error="imageError = true"
+              @load="handleArtworkLoad"
+              @error="handleArtworkError"
           >
 
           <span
@@ -314,6 +433,14 @@ onUnmounted(() => {
               aria-hidden="true"
           >
             <i class="fas fa-headphones"></i>
+          </span>
+
+          <span
+              v-if="!isExpanded"
+              class="playlist-player__artwork-expand"
+              aria-hidden="true"
+          >
+            <i class="fa-solid fa-up-right-and-down-left-from-center"></i>
           </span>
 
         </div>
@@ -453,9 +580,10 @@ onUnmounted(() => {
       <!-- Tools -->
       <div class="playlist-player__tools d-flex align-items-center justify-content-end">
 
+
         <!-- Speed -->
         <button
-            class="playlist-player__button playlist-player__speed d-inline-flex align-items-center justify-content-center flex-shrink-0 border-0 py-0 rounded-1"
+            class="playlist-player__button playlist-player__speed d-inline-flex align-items-center justify-content-center flex-shrink-0 border-0 py-0 rounded-5"
             type="button"
             :aria-label="t('podcast.player.changeSpeed')"
             :title="`${speeds[speedIndex]}×`"
@@ -499,6 +627,7 @@ onUnmounted(() => {
               min="0"
               max="1"
               step="0.05"
+              :style="{ '--range-progress': getRangeProgress(volume, 1) }"
               :aria-label="t('podcast.player.volume')"
               @input="setVolume"
           >
@@ -520,6 +649,12 @@ onUnmounted(() => {
             :max="playerStore.duration"
             :value="playerStore.currentTime"
             step="0.1"
+            :style="{
+              '--range-progress': getRangeProgress(
+                playerStore.currentTime,
+                playerStore.duration,
+              ),
+            }"
             :aria-label="t('podcast.player.position')"
             :disabled="!playerStore.duration"
             @input="seekAudio"
@@ -531,17 +666,29 @@ onUnmounted(() => {
 
       </div>
 
-      <!-- Close Button -->
+      <!-- Collapse Button -->
       <button
-          class="playlist-player__button playlist-player__close d-inline-flex align-items-center justify-content-center rounded-circle border-0 p-0"
+          v-if="isExpanded"
+          class="playlist-player__button playlist-player__collapse d-inline-flex align-items-center justify-content-center rounded-circle border-0 p-0"
           type="button"
-          :aria-label="t('podcast.player.close')"
-          :title="t('podcast.player.close')"
-          @click="playerStore.closePlayer"
+          :aria-label="t('podcast.player.collapse')"
+          :title="t('podcast.player.collapse')"
+          @click="collapsePlayer"
       >
-        <i class="fa fa-times" aria-hidden="true"></i>
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
       </button>
     </div>
+
+    <!-- Close Button -->
+    <button
+        class="playlist-player__button playlist-player__close d-inline-flex align-items-center justify-content-center rounded-circle p-0"
+        type="button"
+        :aria-label="t('podcast.player.close')"
+        :title="t('podcast.player.close')"
+        @click="closePlayer"
+    >
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
   </section>
 </template>
 
@@ -552,11 +699,47 @@ onUnmounted(() => {
   --player-play-size: 3rem;
 
   z-index: 1040;
-  border-top: 1px solid #c8c8c8;
-  background: #e0e0e0;
-  box-shadow: 0 -0.5rem 1.5rem rgba(0, 0, 0, 0.08);
+  border-top: 1px solid var(--bs-border-color);
+  background: var(--bs-secondary-bg);
+  box-shadow: 0 -0.5rem 1.5rem var(--podcast-color-neutral-08);
+  animation: playlist-player-mini-enter 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  &--closing:not(&--expanded) {
+    animation: playlist-player-mini-exit 280ms cubic-bezier(0.4, 0, 1, 1) both;
+    pointer-events: none;
+  }
+
+  &__background {
+    position: absolute;
+    z-index: 0;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.18;
+      filter: blur(3rem) brightness(0.72);
+      transform: scale(1.18);
+    }
+  }
+
+  &-background-enter-active,
+  &-background-leave-active {
+    transition: opacity 350ms ease;
+  }
+
+  &-background-enter-from,
+  &-background-leave-to {
+    opacity: 0;
+  }
 
   &__inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-areas:
       "track transport tools"
@@ -574,6 +757,7 @@ onUnmounted(() => {
     grid-area: track;
     min-width: 0;
     gap: 0.65rem;
+    cursor: pointer;
   }
 
   &__artwork {
@@ -581,6 +765,7 @@ onUnmounted(() => {
     width: var(--player-artwork-size);
     height: var(--player-artwork-size);
     background: var(--bs-body-bg);
+    background: var(--podcast-gradient-artwork);
 
     img {
       opacity: 0;
@@ -594,8 +779,37 @@ onUnmounted(() => {
 
   &__artwork-placeholder {
     place-items: center;
-    color: var(--bs-success);
-    font-size: var(--podcast-icon-artwork);
+    color: var(--bs-white);
+    font-size: calc(var(--player-artwork-size) * 0.45);
+  }
+
+  &__artwork-expand {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: var(--bs-white);
+    background: var(--podcast-color-neutral-28);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+
+    i {
+      font-size: clamp(1.4rem, 1.25rem + 0.5vw, 2rem);
+      transform: scale(0.82);
+      transition: transform 0.18s ease;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &__track:hover &__artwork-expand {
+      opacity: 1;
+
+      i {
+        transform: scale(1);
+      }
+    }
   }
 
   &__copy {
@@ -637,15 +851,18 @@ onUnmounted(() => {
   &__button {
     width: var(--player-control-size);
     height: var(--player-control-size);
-    background: transparent;
+    background-color: var(--podcast-color-control-background);
     color: var(--bs-success-text-emphasis);
     cursor: pointer;
     font-size: var(--podcast-icon-control);
     line-height: 1;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease;
 
     &:hover:not(:disabled) {
-      background: rgba(0, 0, 0, 0.07);
-      color: var(--bs-success-text-emphasis);
+      background-color: var(--podcast-color-neutral-08);
     }
 
     &:disabled {
@@ -656,7 +873,7 @@ onUnmounted(() => {
 
   &__button:focus-visible,
   input:focus-visible {
-    outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
+    outline: 0.16rem solid var(--bs-focus-ring-color);
     outline-offset: 0.14rem;
   }
 
@@ -668,12 +885,12 @@ onUnmounted(() => {
   &__play {
     width: var(--player-play-size);
     height: var(--player-play-size);
-    background: var(--bs-success);
+    background-color: var(--bs-success);
     color: var(--bs-white);
     font-size: var(--podcast-icon-action);
 
     &:hover:not(:disabled) {
-      background: var(--bs-success-text-emphasis);
+      background-color: var(--bs-success-text-emphasis);
       color: var(--bs-white);
     }
   }
@@ -696,7 +913,9 @@ onUnmounted(() => {
   &__speed {
     width: auto;
     min-width: 2.6rem;
+    height: 1.75rem;
     padding-inline: 0.35rem;
+    background-color: var(--podcast-color-control-background);
     color: var(--bs-success-text-emphasis);
     font-size: var(--podcast-font-control);
     font-weight: 700;
@@ -706,6 +925,10 @@ onUnmounted(() => {
     min-width: 0;
     gap: 0.2rem;
 
+    button {
+      background-color: transparent;
+    }
+
     input {
       width: clamp(2.25rem, 11vw, 8rem);
       min-width: 0;
@@ -713,15 +936,90 @@ onUnmounted(() => {
   }
 
   input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
     height: 1rem;
     margin: 0;
     padding: 0;
-    accent-color: var(--bs-success);
+    border: 0;
+    background: transparent;
     cursor: pointer;
+
+    &::-webkit-slider-runnable-track {
+      height: 0.25rem;
+      border-radius: var(--bs-border-radius-pill);
+      background: linear-gradient(
+          to right,
+          var(--bs-success) 0,
+          var(--bs-success) var(--range-progress, 0%),
+          var(--bs-border-color-translucent) var(--range-progress, 0%),
+          var(--bs-border-color-translucent) 100%
+      );
+    }
+
+    &::-moz-range-track {
+      height: 0.25rem;
+      border: 0;
+      border-radius: var(--bs-border-radius-pill);
+      background: var(--bs-border-color-translucent);
+    }
+
+    &::-moz-range-progress {
+      height: 0.25rem;
+      border-radius: var(--bs-border-radius-pill);
+      background: var(--bs-success);
+    }
+
+    &::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      box-sizing: border-box;
+      width: 0.75rem;
+      height: 0.75rem;
+      margin-top: -0.25rem;
+      border: 0;
+      border-radius: 50%;
+      background: var(--bs-success);
+    }
+
+    &::-moz-range-thumb {
+      box-sizing: border-box;
+      width: 0.75rem;
+      height: 0.75rem;
+      border: 0;
+      border-radius: 50%;
+      background: var(--bs-success);
+    }
 
     &:disabled {
       cursor: wait;
       opacity: 0.55;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    input[type="range"] {
+      &::-webkit-slider-thumb {
+        opacity: 0;
+        transition: opacity 0.15s ease;
+      }
+
+      &::-moz-range-thumb {
+        opacity: 0;
+        transition: opacity 0.15s ease;
+      }
+
+      &:hover::-webkit-slider-thumb,
+      &:focus-visible::-webkit-slider-thumb,
+      &:active::-webkit-slider-thumb {
+        opacity: 1;
+      }
+
+      &:hover::-moz-range-thumb,
+      &:focus-visible::-moz-range-thumb,
+      &:active::-moz-range-thumb {
+        opacity: 1;
+      }
     }
   }
 
@@ -750,26 +1048,25 @@ onUnmounted(() => {
 
   &__close {
     position: absolute;
-    top: clamp(0.5rem, 1vw, 0.7rem);
-    right: clamp(0.5rem, 1vw, 0.7rem);
+    z-index: 2;
+    top: max(clamp(0.5rem, 1vw, 0.7rem), env(safe-area-inset-top));
+    right: max(clamp(0.5rem, 1vw, 0.7rem), env(safe-area-inset-right));
     width: clamp(1rem, 1.2vw, 1.25rem);
     height: clamp(1rem, 1.2vw, 1.25rem);
-    color: var(--bs-danger);
-    background-color: rgba(var(--bs-danger-rgb), 0.1);
+    border: 1px solid var(--bs-danger);
     font-size: var(--podcast-font-caption);
     transition:
         background-color 0.15s ease,
-        color 0.15s ease,
-        transform 0.15s ease;
+        border-color 0.15s ease,
+        color 0.15s ease;
 
-    &:hover {
+    border-color: var(--bs-danger);
+    color: var(--bs-danger);
+    background-color: transparent;
+
+    &:hover:not(:disabled) {
       color: var(--bs-white);
       background-color: var(--bs-danger);
-      transform: scale(1.08);
-    }
-
-    &:active {
-      transform: scale(0.92);
     }
   }
 
@@ -813,7 +1110,7 @@ onUnmounted(() => {
     }
 
     &__tools {
-      gap: 0;
+      gap: 0.25rem;
     }
 
     &__speed {
@@ -859,11 +1156,325 @@ onUnmounted(() => {
     }
   }
 
+  &--expanded {
+    --player-artwork-size: clamp(9rem, min(60vw, 48dvh), 31rem);
+    --player-control-size: clamp(2.25rem, 5.5vmin, 3rem);
+    --player-play-size: clamp(3rem, 7vmin, 4rem);
+
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-top: 0;
+    overscroll-behavior: contain;
+    isolation: isolate;
+    animation: playlist-player-expand 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform, opacity;
+
+    &.playlist-player--closing {
+      animation: playlist-player-collapse 280ms cubic-bezier(0.4, 0, 1, 1) both;
+      pointer-events: none;
+    }
+
+    .playlist-player__inner {
+      display: grid;
+      grid-template-areas:
+        "track"
+        "timeline"
+        "transport"
+        "tools";
+      grid-template-columns: minmax(0, 1fr);
+      width: min(100%, 48rem);
+      min-height: 100%;
+      margin-inline: auto;
+      padding:
+        max(1rem, env(safe-area-inset-top))
+        max(clamp(1rem, 4vw, 3rem), env(safe-area-inset-right))
+        max(1rem, env(safe-area-inset-bottom))
+        max(clamp(1rem, 4vw, 3rem), env(safe-area-inset-left));
+      align-items: center;
+      align-content: center;
+      justify-content: center;
+      gap: clamp(0.65rem, 2dvh, 1.5rem);
+    }
+
+    .playlist-player__track,
+    .playlist-player__timeline,
+    .playlist-player__tools {
+      width: 100%;
+      justify-self: stretch;
+    }
+
+    .playlist-player__track {
+      padding-right: 0;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(1.25rem, 3dvh, 2rem);
+      text-align: center;
+      cursor: default;
+    }
+
+    .playlist-player__artwork {
+      box-shadow: 0 0.75rem 2.25rem var(--bs-border-color-translucent);
+    }
+
+    .playlist-player__copy {
+      width: 100%;
+    }
+
+    .playlist-player__status {
+      margin-bottom: 0.15rem !important;
+    }
+
+    .playlist-player__title {
+      font-size: clamp(1rem, 2.8vmin, 1.5rem);
+    }
+
+    .playlist-player__context {
+      display: block;
+      margin-top: 0.2rem;
+    }
+
+    .playlist-player__transport {
+      width: auto;
+      justify-self: center;
+      justify-content: center !important;
+      gap: clamp(0.2rem, 1.4vw, 0.85rem);
+    }
+
+    .playlist-player__tools {
+      justify-content: flex-end !important;
+      gap: 0.25rem;
+
+      > .playlist-player__button:not(.playlist-player__speed) {
+        height: 2rem;
+      }
+
+      .playlist-player__volume .playlist-player__button {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.85rem;
+      }
+
+      .playlist-player__speed .fa-gauge-high {
+        font-size: 0.85rem;
+      }
+    }
+
+    .playlist-player__volume {
+      min-width: 0;
+      flex: 1;
+      gap: 0.35rem;
+
+      input {
+        width: auto;
+        min-width: 0;
+        flex: 1;
+        height: 0.75rem;
+      }
+    }
+
+    .playlist-player__timeline {
+      grid-template-columns: max-content minmax(0, 1fr) max-content;
+      gap: clamp(0.35rem, 1.5vw, 0.75rem);
+    }
+
+    .playlist-player__close {
+      position: fixed;
+      top: max(0.75rem, env(safe-area-inset-top));
+      right: max(0.75rem, env(safe-area-inset-right));
+      width: 2rem;
+      height: 2rem;
+      font-size: 0.85rem;
+    }
+
+    .playlist-player__collapse {
+      position: fixed;
+      z-index: 2;
+      top: max(0.75rem, env(safe-area-inset-top));
+      left: max(0.75rem, env(safe-area-inset-left));
+      width: 2rem;
+      height: 2rem;
+      color: var(--bs-success-text-emphasis);
+      background-color: var(--podcast-color-control-background);
+      backdrop-filter: blur(0.4rem);
+      font-size: 0.85rem;
+      transition:
+          background-color 0.15s ease,
+          color 0.15s ease;
+    }
+  }
+
+  @media (max-width: 575.98px) {
+    &--expanded {
+      --player-artwork-size: clamp(8.5rem, min(76vw, 43dvh), 20rem);
+      --player-control-size: clamp(2rem, 10vw, 2.5rem);
+      --player-play-size: clamp(3rem, 15vw, 3.75rem);
+
+      .playlist-player__inner {
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        padding:
+          max(2.75rem, env(safe-area-inset-top))
+          max(0.75rem, env(safe-area-inset-right))
+          max(0.75rem, env(safe-area-inset-bottom))
+          max(0.75rem, env(safe-area-inset-left));
+        gap: clamp(0.45rem, 1.5dvh, 0.75rem) 0.15rem;
+      }
+
+      .playlist-player__track {
+        gap: clamp(1rem, 2.5dvh, 1.5rem);
+      }
+
+      .playlist-player__title {
+        font-size: clamp(0.95rem, 4.5vw, 1.2rem);
+      }
+
+      .playlist-player__transport {
+        min-width: 0;
+        gap: clamp(0.05rem, 1vw, 0.35rem);
+      }
+
+      .playlist-player__tools {
+        min-width: 0;
+        gap: 0.2rem;
+      }
+
+      .playlist-player__speed {
+        min-width: 2rem;
+        padding-inline: 0.1rem;
+        font-size: 0.75rem;
+      }
+
+      .playlist-player__volume {
+        min-width: 0;
+        flex: 1;
+        gap: 0;
+
+        input {
+          display: block;
+          width: auto;
+        }
+      }
+
+      .playlist-player__timeline {
+        gap: 0.25rem;
+        font-size: 0.7rem;
+      }
+
+      .playlist-player__close {
+        width: 2.25rem;
+        height: 2.25rem;
+      }
+
+      .playlist-player__collapse {
+        width: 2.25rem;
+        height: 2.25rem;
+      }
+    }
+  }
+
+  @media (max-width: 360px) {
+    &--expanded {
+      --player-control-size: 1.9rem;
+      --player-play-size: 2.8rem;
+
+      .playlist-player__inner {
+        padding-right: max(0.5rem, env(safe-area-inset-right));
+        padding-left: max(0.5rem, env(safe-area-inset-left));
+      }
+
+      .playlist-player__status,
+      .playlist-player__context {
+        font-size: 0.68rem;
+      }
+    }
+  }
+
+  @media (max-height: 560px) and (orientation: landscape) {
+    &--expanded {
+      --player-artwork-size: clamp(6.5rem, 42dvh, 13rem);
+      --player-control-size: 2rem;
+      --player-play-size: 2.6rem;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    animation: none;
+
+    &--closing:not(.playlist-player--expanded),
+    &--expanded,
+    &--expanded.playlist-player--closing {
+      animation: none;
+    }
+
     &__artwork img,
+    &__artwork-expand,
+    &__artwork-expand i,
+    &-background-enter-active,
+    &-background-leave-active,
+    &__collapse,
     &__close {
       transition: none;
     }
+
+    input[type="range"]::-webkit-slider-thumb {
+      transition: none;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      transition: none;
+    }
+  }
+}
+
+@keyframes playlist-player-mini-enter {
+  from {
+    opacity: 0.72;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes playlist-player-mini-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0.72;
+    transform: translateY(100%);
+  }
+}
+
+@keyframes playlist-player-expand {
+  from {
+    opacity: 0.72;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes playlist-player-collapse {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0.72;
+    transform: translateY(100%);
   }
 }
 

@@ -20,5 +20,18 @@
     --podcast-icon-control: clamp(1rem, 0.95rem + 0.2vw, 1.25rem);
     --podcast-icon-action: clamp(1.25rem, 1.15rem + 0.4vw, 1.75rem);
 
+    /* Colors */
+    --podcast-color-neutral-08: rgba(var(--bs-emphasis-color-rgb), 0.08);
+    --podcast-color-neutral-28: rgba(var(--bs-emphasis-color-rgb), 0.28);
+    --podcast-color-control-background: rgba(var(--bs-body-bg-rgb), 0.35);
+
+
+    /* Gradients */
+    --podcast-gradient-artwork: linear-gradient(
+            135deg,
+            #176b4b 0%,
+            #2d996b 50%,
+            #5abd79 100%
+    );
   min-width: 0;
 }
