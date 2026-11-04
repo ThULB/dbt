@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute, useRouter, type LocationQueryRaw } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 
 import requestSolr from '../utils/requestSolr.ts';
@@ -15,6 +15,11 @@ import EmptyState from './EmptyState.vue';
 const allowedSortValues = new Set(['created asc', 'created desc']);
 
 const itunesCategoryFilterPattern = /^category:"itunes-podcast:[^"]+"$/;
+
+interface PodcastCategoryBadge {
+  label: string;
+  value?: string;
+}
 
 const podcastsStore = usePodcastsStore();
 const route = useRoute();
@@ -117,7 +122,7 @@ function createParams(): URLSearchParams {
   return params;
 }
 
-function getItunesCategories(podcast: SolrDocument): string[] {
+function getItunesCategories(podcast: SolrDocument): PodcastCategoryBadge[] {
   const itunesCategories =
     podcast['category.top']
       ?.filter((category) => category.startsWith('itunes-podcast:'))
@@ -126,11 +131,14 @@ function getItunesCategories(podcast: SolrDocument): string[] {
         const value = podcastCategoryValue(category);
         const key = value && `podcast.categories.${value}`;
 
-        return key && te(key) ? t(key) : category.replaceAll('_', ' ');
+        return {
+          label: key && te(key) ? t(key) : category.replaceAll('_', ' '),
+          value,
+        };
       }) ?? [];
 
   if (itunesCategories.length === 0) {
-    return [t('podcast.list.uncategorized')];
+    return [{ label: t('podcast.list.uncategorized') }];
   }
 
   return itunesCategories;
@@ -231,6 +239,22 @@ async function setPage(page: number): Promise<void> {
   scrollToTop();
 }
 
+async function setCategoryFilter(category: string): Promise<void> {
+  const query: LocationQueryRaw = {
+    ...route.query,
+    fq: `category:"itunes-podcast:${category}"`,
+  };
+
+  delete query.page;
+
+  await router.push({
+    name: 'podcasts',
+    query,
+  });
+
+  scrollToTop();
+}
+
 /*
  * Bei Änderung der Seite oder der Filter neu laden.
  */
@@ -287,34 +311,25 @@ watch(
           <!-- Cover -->
           <div class="podcast-list__cover ratio ratio-1x1 bg-light border-bottom position-relative overflow-hidden">
 
-            <RouterLink
-                class="podcast-list__cover-link position-absolute top-0 start-0 w-100 h-100 z-2"
-                :to="{
-                  name: 'podcast',
-                  params: { podcastId: podcast.id },
-                }"
-                :aria-label="getPodcastTitle(podcast)"
+            <img
+                v-if="!coverErrors[podcast.id]"
+                class="podcast-list__cover-image card-img-top position-absolute top-0 start-0 w-100 h-100 object-fit-cover z-1"
+                :class="{ 'is-loaded': coverLoaded[podcast.id] }"
+                :src="getCoverUrl(podcast)"
+                :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
+                loading="lazy"
+                decoding="async"
+                @load="handleCoverLoad(podcast.id)"
+                @error="handleCoverError(podcast.id)"
             >
-              <img
-                  v-if="!coverErrors[podcast.id]"
-                  class="podcast-list__cover-image card-img-top position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
-                  :class="{ 'is-loaded': coverLoaded[podcast.id] }"
-                  :src="getCoverUrl(podcast)"
-                  :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
-                  loading="lazy"
-                  decoding="async"
-                  @load="handleCoverLoad(podcast.id)"
-                  @error="handleCoverError(podcast.id)"
-              >
 
-              <div
-                  v-if="!coverLoaded[podcast.id] || coverErrors[podcast.id]"
-                  class="podcast-list__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary z-1"
-                  aria-hidden="true"
-              >
-                <i class="fa-solid fa-images"></i>
-              </div>
-            </RouterLink>
+            <div
+                v-if="!coverLoaded[podcast.id] || coverErrors[podcast.id]"
+                class="podcast-list__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary z-1"
+                aria-hidden="true"
+            >
+              <i class="fa-solid fa-images"></i>
+            </div>
 
             <button
                 class="podcast-list__play d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
@@ -348,21 +363,34 @@ watch(
           <!-- Categories -->
           <div
               v-if="getItunesCategories(podcast).length"
-              class="podcast-list__categories align-self-center mt-1 px-2"
+              class="podcast-list__categories align-self-center position-relative z-3 mt-1 px-2"
           >
-            <span
+            <template
                 v-for="category in getItunesCategories(podcast)"
-                :key="category"
-                class="badge rounded-4 text-bg-success text-wrap text-start me-1"
+                :key="category.value ?? category.label"
             >
-              {{ category }}
-            </span>
+              <button
+                  v-if="category.value"
+                  class="podcast-list__category badge rounded-4 border-0 text-bg-success text-wrap text-start me-1"
+                  type="button"
+                  @click="setCategoryFilter(category.value)"
+              >
+                {{ category.label }}
+              </button>
+
+              <span
+                  v-else
+                  class="badge rounded-4 text-bg-success text-wrap text-start me-1"
+              >
+                {{ category.label }}
+              </span>
+            </template>
           </div>
 
           <!-- Title -->
           <h3 class="h6 card-title px-2 mb-2">
             <RouterLink
-                class="podcast-list__card-link"
+                class="podcast-list__card-link stretched-link"
                 :to="{
                   name: 'podcast',
                   params: { podcastId: podcast.id },
@@ -375,7 +403,7 @@ watch(
           <!-- Authors -->
           <p
               v-if="getPodcastAuthors(podcast)"
-              class="small px-2 text-truncate position-relative z-2 mb-2"
+              class="small px-2 text-truncate mb-2"
           >
             {{ getPodcastAuthors(podcast) }}
           </p>
@@ -495,9 +523,23 @@ watch(
     font-size: 3rem;
   }
 
-  &__cover-link:focus-visible {
-    outline: 0.16rem solid var(--bs-focus-ring-color);
-    outline-offset: -0.25rem;
+  &__categories {
+    pointer-events: none;
+  }
+
+  &__category {
+    position: relative;
+    pointer-events: auto;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--bs-success-text-emphasis) !important;
+    }
+
+    &:focus-visible {
+      outline: 0.16rem solid var(--bs-focus-ring-color);
+      outline-offset: 0.14rem;
+    }
   }
 
   &__play {
@@ -568,13 +610,22 @@ watch(
     line-height: 1.35;
     overflow-wrap: anywhere;
 
+    &::after {
+      z-index: 2;
+    }
+
     &:hover {
       color: var(--bs-success);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--bs-success);
-      outline-offset: 2px;
+      outline: none;
+    }
+
+    &:focus-visible::after {
+      border-radius: var(--bs-border-radius-xxl);
+      outline: 0.16rem solid var(--bs-focus-ring-color);
+      outline-offset: -0.25rem;
     }
   }
 
