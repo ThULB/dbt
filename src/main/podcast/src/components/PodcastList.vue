@@ -7,6 +7,7 @@ import requestSolr from '../utils/requestSolr.ts';
 import applicationUrl from '../utils/applicationUrl.ts';
 import podcastCategoryValue from '../utils/podcastCategory.ts';
 import type { SolrDocument, SolrResponse } from '../types/types.ts';
+import { usePodcastsStore } from '../stores/podcasts.ts';
 import LoadingState from './LoadingState.vue';
 import ErrorState from './ErrorState.vue';
 import EmptyState from './EmptyState.vue';
@@ -15,6 +16,7 @@ const allowedSortValues = new Set(['created asc', 'created desc']);
 
 const itunesCategoryFilterPattern = /^category:"itunes-podcast:[^"]+"$/;
 
+const podcastsStore = usePodcastsStore();
 const route = useRoute();
 const router = useRouter();
 const { t, te } = useI18n({ useScope: 'global' });
@@ -305,6 +307,33 @@ watch(
               <i class="fa-solid fa-images"></i>
             </div>
 
+            <button
+                class="podcast-list__play d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
+                :class="{ 'is-active': podcastsStore.isPodcastPlaying(podcast.id) || podcastsStore.isPlaylistLoading(podcast.id) }"
+                type="button"
+                :aria-pressed="podcastsStore.isPodcastPlaying(podcast.id)"
+                :aria-busy="podcastsStore.isPlaylistLoading(podcast.id) || undefined"
+                :aria-label="podcastsStore.isPodcastCurrent(podcast.id)
+                    ? podcastsStore.isPodcastPlaying(podcast.id)
+                        ? t('podcast.player.pause')
+                        : t('podcast.player.resume')
+                    : t('podcast.episode.latest')"
+                :title="podcastsStore.isPodcastCurrent(podcast.id)
+                    ? podcastsStore.isPodcastPlaying(podcast.id)
+                        ? t('podcast.player.pause')
+                        : t('podcast.player.resume')
+                    : t('podcast.episode.latest')"
+                @click="podcastsStore.playLatestEpisode(podcast.id)"
+            >
+              <i
+                  class="podcast-list__play-icon fas"
+                  :class="podcastsStore.isPlaylistLoading(podcast.id)
+                      ? 'fa-spinner fa-spin'
+                      : podcastsStore.isPodcastPlaying(podcast.id) ? 'fa-pause' : 'fa-play'"
+                  aria-hidden="true"
+              />
+            </button>
+
           </div>
 
           <!-- Categories -->
@@ -457,6 +486,63 @@ watch(
     font-size: 3rem;
   }
 
+  &__play {
+    position: absolute;
+    z-index: 3;
+    inset: auto 0.75rem 0.75rem auto;
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: rgba(var(--bs-body-bg-rgb), 0.85);
+    box-shadow: 0 0.25rem 0.75rem rgba(var(--bs-black-rgb), 0.25);
+    backdrop-filter: blur(0.4rem);
+    color: var(--bs-success-text-emphasis);
+    cursor: pointer;
+    font-size: var(--podcast-icon-control);
+    line-height: 1;
+    opacity: 0;
+    transform: scale(0.9);
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease,
+        transform 0.15s ease;
+
+    // Nur bei Hover, Tastaturfokus oder laufender Wiedergabe sichtbar.
+    .podcast-list__card:hover &,
+    &:focus-visible,
+    &.is-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    // Touch-Geräte haben kein Hover.
+    @media (hover: none) {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    // Wie die Steuertasten im Player; dunkler bei Hover und laufender Wiedergabe.
+    &:hover:not(:disabled),
+    &.is-active {
+      background-color: var(--bs-secondary-bg);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.35;
+    }
+
+    &:focus-visible {
+      outline: 0.16rem solid var(--bs-focus-ring-color);
+      outline-offset: 0.14rem;
+    }
+  }
+
+  &__play-icon.fa-play {
+    position: relative;
+    left: 3%;
+  }
+
   &__card {
     grid-template-rows: subgrid;
     grid-row: span 4;
@@ -498,7 +584,8 @@ watch(
   }
 
   @media (prefers-reduced-motion: reduce) {
-    &__cover-image {
+    &__cover-image,
+    &__play {
       transition: none;
     }
   }

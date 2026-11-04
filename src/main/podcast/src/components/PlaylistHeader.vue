@@ -9,6 +9,7 @@ const playerStore = usePlayerStore();
 const { t, te } = useI18n({ useScope: 'global' });
 
 const props = defineProps<{
+  podcastId: string;
   playlistMetadata: PodcastPlaylist;
 }>();
 
@@ -17,6 +18,12 @@ const lastEpisode = computed<PodcastEpisode | null>(() => {
 
   return episodes.length > 0 ? episodes[episodes.length - 1] : null;
 });
+
+const isLatestCurrent = computed<boolean>(() =>
+  !!lastEpisode.value && playerStore.episode?.guid === lastEpisode.value.guid,
+);
+
+const isLatestPlaying = computed<boolean>(() => isLatestCurrent.value && playerStore.isPlaying);
 
 const imageError = ref(false);
 const imageLoaded = ref(false);
@@ -60,27 +67,23 @@ function checkDescriptionOverflow(): void {
 async function scrollToEpisode(episode: PodcastEpisode): Promise<void> {
   await nextTick();
 
-  const episodeIndex = props.playlistMetadata.episodes.findIndex(
-    (item) => item.guid === episode.guid,
-  );
-
-  if (episodeIndex < 0) {
-    return;
-  }
-
   requestAnimationFrame(() => {
-    document.getElementById(`episode-item-${episodeIndex}`)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    });
+    document
+      .querySelector(`[data-episode-guid="${CSS.escape(episode.guid)}"]`)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
 async function buildPlayer(episode: PodcastEpisode): Promise<void> {
-  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title);
+  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title, props.podcastId);
 
-  playerStore.selectEpisode(episode);
-  await scrollToEpisode(episode);
+  const isAlreadyCurrent = playerStore.episode?.guid === episode.guid;
+
+  playerStore.toggleEpisode(episode);
+
+  if (!isAlreadyCurrent) {
+    await scrollToEpisode(episode);
+  }
 }
 
 onMounted(async () => {
@@ -200,16 +203,24 @@ onUnmounted(() => {
       </button>
 
       <button
-          class="playlist-header__latest btn btn-success py-1 gap-1 d-flex justify-content-center align-items-center align-self-stretch align-self-md-end mt-auto"
+          class="playlist-header__latest btn rounded-pill d-inline-flex justify-content-center align-items-center gap-1 align-self-stretch align-self-md-end mt-auto"
+          :class="isLatestCurrent ? 'btn-success' : 'btn-outline-success'"
           type="button"
           :disabled="!lastEpisode"
+          :aria-pressed="isLatestPlaying"
+          :aria-label="isLatestCurrent
+              ? isLatestPlaying
+                  ? t('podcast.player.pause')
+                  : t('podcast.player.resume')
+              : undefined"
           @click="lastEpisode && buildPlayer(lastEpisode)"
       >
         <i
-            class="fas fa-play m-0"
+            class="fas m-0"
+            :class="isLatestPlaying ? 'fa-pause' : 'fa-play'"
             aria-hidden="true"
         />
-        {{ t('podcast.episode.latest') }}
+        <span>{{ t('podcast.episode.latest') }}</span>
       </button>
     </div>
   </header>

@@ -18,6 +18,7 @@ export const usePlayerStore = defineStore('player', () => {
     command: 'pause',
   });
   const playlistTitle = ref('');
+  const podcastId = ref<string | null>(null);
 
   let playbackRequestId = 0;
 
@@ -34,9 +35,10 @@ export const usePlayerStore = defineStore('player', () => {
     return episodes.value.findIndex((item) => item.guid === episode.value?.guid);
   });
 
-  function setPlaylist(newEpisodes: PodcastEpisode[], title: string): void {
+  function setPlaylist(newEpisodes: PodcastEpisode[], title: string, newPodcastId: string): void {
     episodes.value = newEpisodes;
     playlistTitle.value = title;
+    podcastId.value = newPodcastId;
   }
 
   function selectEpisode(newEpisode: PodcastEpisode): void {
@@ -78,6 +80,7 @@ export const usePlayerStore = defineStore('player', () => {
     requestPause();
     isPlaying.value = false;
     episode.value = null;
+    podcastId.value = null;
   }
 
   function togglePlayback(): void {
@@ -122,6 +125,7 @@ export const usePlayerStore = defineStore('player', () => {
     isPlaying,
     playbackRequest,
     playlistTitle,
+    podcastId,
     currentEpisodeIndex,
     currentTime,
     duration,

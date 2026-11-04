@@ -9,6 +9,7 @@ const playerStore = usePlayerStore();
 const { locale, t } = useI18n({ useScope: 'global' });
 
 const props = defineProps<{
+  podcastId: string;
   playlistMetadata: PodcastPlaylist;
 }>();
 
@@ -19,7 +20,7 @@ function isCurrentEpisode(episode: PodcastEpisode): boolean {
 }
 
 function buildPlayer(episode: PodcastEpisode): void {
-  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title);
+  playerStore.setPlaylist(props.playlistMetadata.episodes, props.playlistMetadata.title, props.podcastId);
 
   playerStore.toggleEpisode(episode);
 }
@@ -78,6 +79,7 @@ watch(
           v-for="(episode, index) in playlistMetadata.episodes.toReversed()"
           :key="episode.guid"
           :id="`episode-item-${index}`"
+          :data-episode-guid="episode.guid"
           class="episode-list__item accordion-item position-relative"
           :class="{ 'is-current': isCurrentEpisode(episode) }"
       >

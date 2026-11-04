@@ -7,6 +7,7 @@ import type { PodcastPlaylist, SolrResponse } from '../types/types.ts';
 import parsePodcastXml from '../utils/XMLParser.ts';
 import requestReceive, { ReceiveRequestError } from '../utils/requestReceive';
 import requestSolr from '../utils/requestSolr.ts';
+import { usePodcastsStore } from '../stores/podcasts.ts';
 
 import LoadingState from '../components/LoadingState.vue';
 import ErrorState from '../components/ErrorState.vue';
@@ -18,6 +19,7 @@ const props = defineProps<{
   podcastId: string;
 }>();
 
+const podcastsStore = usePodcastsStore();
 const { t } = useI18n({ useScope: 'global' });
 
 const isError = ref(false);
@@ -66,8 +68,12 @@ async function getPlaylistMetadata(): Promise<void> {
 
     const xmlString = await requestReceive(props.podcastId);
 
+    const playlist = parsePodcastXml(xmlString);
+
+    podcastsStore.cachePlaylist(props.podcastId, playlist);
+
     if (requestId === requestSequence) {
-      playlistMetadata.value = parsePodcastXml(xmlString);
+      playlistMetadata.value = playlist;
     }
   } catch (err) {
     if (requestId !== requestSequence) {
@@ -114,9 +120,9 @@ watch(
     <ErrorState v-else-if="isError" />
 
     <section v-else-if="playlistMetadata" id="playlist-content">
-      <PlaylistHeader :playlist-metadata="playlistMetadata"/>
+      <PlaylistHeader :podcast-id="podcastId" :playlist-metadata="playlistMetadata"/>
 
-      <PlaylistEpisode :playlist-metadata="playlistMetadata"/>
+      <PlaylistEpisode :podcast-id="podcastId" :playlist-metadata="playlistMetadata"/>
     </section>
   </section>
 </template>
