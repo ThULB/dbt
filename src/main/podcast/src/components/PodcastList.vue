@@ -287,25 +287,34 @@ watch(
           <!-- Cover -->
           <div class="podcast-list__cover ratio ratio-1x1 bg-light border-bottom position-relative overflow-hidden">
 
-            <img
-                v-if="!coverErrors[podcast.id]"
-                class="podcast-list__cover-image card-img-top position-absolute top-0 start-0 w-100 h-100 object-fit-cover z-2"
-                :class="{ 'is-loaded': coverLoaded[podcast.id] }"
-                :src="getCoverUrl(podcast)"
-                :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
-                loading="lazy"
-                decoding="async"
-                @load="handleCoverLoad(podcast.id)"
-                @error="handleCoverError(podcast.id)"
+            <RouterLink
+                class="podcast-list__cover-link position-absolute top-0 start-0 w-100 h-100 z-2"
+                :to="{
+                  name: 'podcast',
+                  params: { podcastId: podcast.id },
+                }"
+                :aria-label="getPodcastTitle(podcast)"
             >
+              <img
+                  v-if="!coverErrors[podcast.id]"
+                  class="podcast-list__cover-image card-img-top position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
+                  :class="{ 'is-loaded': coverLoaded[podcast.id] }"
+                  :src="getCoverUrl(podcast)"
+                  :alt="t('podcast.image.coverAlt', { title: getPodcastTitle(podcast) })"
+                  loading="lazy"
+                  decoding="async"
+                  @load="handleCoverLoad(podcast.id)"
+                  @error="handleCoverError(podcast.id)"
+              >
 
-            <div
-                v-if="!coverLoaded[podcast.id] || coverErrors[podcast.id]"
-                class="podcast-list__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary z-1"
-                aria-hidden="true"
-            >
-              <i class="fa-solid fa-images"></i>
-            </div>
+              <div
+                  v-if="!coverLoaded[podcast.id] || coverErrors[podcast.id]"
+                  class="podcast-list__cover-placeholder position-absolute top-0 start-0 d-flex align-items-center justify-content-center w-100 h-100 bg-body-secondary text-body-secondary z-1"
+                  aria-hidden="true"
+              >
+                <i class="fa-solid fa-images"></i>
+              </div>
+            </RouterLink>
 
             <button
                 class="podcast-list__play d-inline-flex align-items-center justify-content-center flex-shrink-0 rounded-circle border-0 p-0"
@@ -353,7 +362,7 @@ watch(
           <!-- Title -->
           <h3 class="h6 card-title px-2 mb-2">
             <RouterLink
-                class="podcast-list__card-link stretched-link"
+                class="podcast-list__card-link"
                 :to="{
                   name: 'podcast',
                   params: { podcastId: podcast.id },
@@ -484,6 +493,11 @@ watch(
 
   &__cover-placeholder {
     font-size: 3rem;
+  }
+
+  &__cover-link:focus-visible {
+    outline: 0.16rem solid var(--bs-focus-ring-color);
+    outline-offset: -0.25rem;
   }
 
   &__play {
