@@ -86,6 +86,7 @@ export interface SolrFacetCounts {
   facet_fields: {
     'mods.genre': (string | number)[];
     worldReadableComplete: (string | number)[];
+    category?: (string | number)[];
   };
 
   facet_ranges: Record<string, unknown>;

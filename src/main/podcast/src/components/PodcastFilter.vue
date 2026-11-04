@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import itunesPodcastCategories from '../data/podcast-categories.json';
+import requestPodcastCategories from '../utils/requestPodcastCategories';
 
 const route = useRoute();
 const router = useRouter();
@@ -11,10 +12,40 @@ const search = ref('');
 const category = ref('');
 const subCategory = ref('');
 const sort = ref('created desc');
+// Categories with at least one assigned podcast; null = unknown (fall back to full list)
+const availableCategories = ref<Set<string> | null>(null);
+
+const visibleCategories = computed(() => {
+  const available = availableCategories.value;
+
+  if (!available) {
+    return itunesPodcastCategories;
+  }
+
+  // Always keep the currently selected values so deep links stay visibly selected
+  const isVisible = (value: string) =>
+    available.has(value) || value === category.value || value === subCategory.value;
+
+  return itunesPodcastCategories
+    .map((item) => ({
+      ...item,
+      subcategories: item.subcategories.filter((sub) => isVisible(sub.value)),
+    }))
+    .filter((item) => isVisible(item.value) || item.subcategories.length > 0);
+});
+
 const selectedSubcategories = computed(() => {
-  const selectedCategory = itunesPodcastCategories.find((item) => item.value === category.value);
+  const selectedCategory = visibleCategories.value.find((item) => item.value === category.value);
 
   return selectedCategory?.subcategories ?? [];
+});
+
+onMounted(async () => {
+  try {
+    availableCategories.value = await requestPodcastCategories();
+  } catch (error) {
+    console.error('Failed to load podcast categories', error);
+  }
 });
 
 function categoryLabel(value: string): string {
@@ -122,7 +153,7 @@ const handleSubmit = () => {
           <select id="podcast-category" v-model="category" class="form-select">
             <option value="">{{ t('podcast.filter.allCategories') }}</option>
             <option
-                v-for="category in itunesPodcastCategories"
+                v-for="category in visibleCategories"
                 :key="category.value"
                 :value="category.value"
                 :label="categoryLabel(category.value)"
