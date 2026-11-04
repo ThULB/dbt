@@ -340,6 +340,7 @@
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='browse']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='rc']" />
       <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='publish']" />
+      <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='podcast']" />
       <li class="nav-item d-xs-inline d-sm-inline d-md-none">
         <xsl:apply-templates select="$loaded_navigation_xml/menu[@id='top']//item">
           <xsl:with-param name="class" select="'nav-link'" />

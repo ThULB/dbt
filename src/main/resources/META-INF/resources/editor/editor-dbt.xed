@@ -102,6 +102,12 @@
       </div>
     </xed:bind>
   </xed:template>
+
+  <xed:template id="genres.podcast">
+    <xed:include ref="type.of.resource.sound_recording" />
+    <xed:include ref="genres.av.common" />
+  </xed:template>
+
   <xed:modify ref="admin.fields">
     <xed:include ref="oai" after="institutes" />
     <xed:include ref="itunes-podcast" after="genre" />
