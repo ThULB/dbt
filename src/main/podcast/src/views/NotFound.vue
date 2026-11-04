@@ -27,16 +27,18 @@ const startPageUrl = applicationUrl('content/index.xml');
       <div class="not-found__actions d-flex flex-wrap justify-content-center align-items-center gap-4 mt-4">
         <RouterLink
             :to="{ name: 'podcasts' }"
-            class="btn btn-success px-4 py-3"
+            class="btn btn-success rounded-4 px-3 py-2"
         >
-          {{ t('podcast.navigation.toOverview') }} &rarr;
+          <i class="fa fa-podcast" aria-hidden="true"></i>
+          {{ t('podcast.navigation.toOverview') }}
         </RouterLink>
 
         <a
             :href="startPageUrl"
-            class="not-found__link text-success text-decoration-none border-bottom pb-1"
+            class="not-found__link text-success rounded-4 px-3 py-2 border border-success"
         >
-          {{ t('podcast.navigation.toHomepage') }} &rarr;
+          <i class="fa fa-home" aria-hidden="true"></i>
+          {{ t('podcast.navigation.toHomepage') }}
         </a>
       </div>
     </div>
@@ -68,7 +70,7 @@ const startPageUrl = applicationUrl('content/index.xml');
   }
 
   &__actions :is(.btn, .not-found__link):focus-visible {
-    outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.45);
+    outline: 0.16rem solid var(--bs-focus-ring-color);
     outline-offset: 0.2rem;
   }
 }

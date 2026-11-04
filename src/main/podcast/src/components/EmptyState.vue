@@ -15,7 +15,7 @@ const stateDescription = computed(() => props.description ?? t('podcast.state.em
 
 <template>
   <div
-      class="alert alert-light border text-center py-5"
+      class="alert alert-light border rounded-5 text-center py-5"
       role="status"
   >
     <h2 class="h5">
@@ -30,8 +30,6 @@ const stateDescription = computed(() => props.description ?? t('podcast.state.em
 
 <style scoped lang="scss">
 .alert {
-  border-radius: var(--bs-border-radius-lg);
-
   h2 {
     overflow-wrap: anywhere;
   }

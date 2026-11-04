@@ -6,7 +6,7 @@ const { t } = useI18n({ useScope: 'global' });
 
 <template>
   <section class="podcast-hero row align-items-end g-4 pb-5">
-    <div class="col-lg-8">
+    <div class="col-lg-8 m-0">
       <p class="text-success fw-semibold text-uppercase small mb-2">
         {{ t('podcast.hero.eyebrow') }}
       </p>

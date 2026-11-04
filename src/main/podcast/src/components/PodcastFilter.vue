@@ -127,7 +127,7 @@ const handleSubmit = () => {
 <template>
   <form
       id="podcast-filters"
-      class="podcast-filter card border-0 bg-light shadow-sm mb-5"
+      class="podcast-filter card border-0 rounded-5 bg-light shadow-sm mb-5"
       @submit.prevent="handleSubmit"
       :aria-label="t('podcast.filter.ariaLabel')">
     <div class="card-body p-3 p-lg-4">
@@ -139,7 +139,7 @@ const handleSubmit = () => {
           <input
               id="podcast-search"
               v-model="search"
-              class="form-control"
+              class="form-control rounded-4"
               type="search"
               :placeholder="t('podcast.filter.searchPlaceholder')"
               autocomplete="off"
@@ -150,7 +150,7 @@ const handleSubmit = () => {
           <label for="podcast-category" class="form-label fw-semibold">
             {{ t('podcast.filter.category') }}
           </label>
-          <select id="podcast-category" v-model="category" class="form-select">
+          <select id="podcast-category" v-model="category" class="form-select rounded-4">
             <option value="">{{ t('podcast.filter.allCategories') }}</option>
             <option
                 v-for="category in visibleCategories"
@@ -170,7 +170,7 @@ const handleSubmit = () => {
           <select
               id="podcast-subcategory"
               v-model="subCategory"
-              class="form-select"
+              class="form-select rounded-4"
               :disabled="selectedSubcategories.length === 0"
           >
             <option value="">{{ t('podcast.filter.select') }}</option>
@@ -189,14 +189,14 @@ const handleSubmit = () => {
           <label for="podcast-sort" class="form-label fw-semibold">
             {{ t('podcast.filter.sort') }}
           </label>
-          <select id="podcast-sort" v-model="sort" class="form-select">
+          <select id="podcast-sort" v-model="sort" class="form-select rounded-4">
             <option value="created desc">{{ t('podcast.filter.newestFirst') }}</option>
             <option value="created asc">{{ t('podcast.filter.oldestFirst') }}</option>
           </select>
         </div>
 
         <div class="col-md-3 col-lg-2 d-grid mt-4">
-          <button id="podcast-submit" class="btn btn-success" type="submit">
+          <button id="podcast-submit" class="btn btn-success rounded-4" type="submit">
             {{ t('podcast.filter.submit') }}
           </button>
         </div>
@@ -213,7 +213,7 @@ const handleSubmit = () => {
 
   :is(.form-control, .form-select):focus {
     border-color: var(--bs-success);
-    box-shadow: 0 0 0 0.25rem rgba(var(--bs-success-rgb), 0.25);
+    box-shadow: 0 0 0 0.25rem var(--bs-focus-ring-color);
   }
 
   .form-select:disabled {

@@ -107,11 +107,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <header class="playlist-header bg-light">
-    <div class="playlist-header__cover ratio ratio-1x1 overflow-hidden bg-body-secondary">
+  <header class="playlist-header rounded-5 bg-light">
+    <div class="playlist-header__cover ratio ratio-1x1 overflow-hidden rounded-4 bg-body-secondary">
       <img
           v-if="playlistMetadata.image && !imageError"
-          class="position-absolute top-0 start-0 d-block w-100 h-100 object-fit-cover rounded-2"
+          class="position-absolute top-0 start-0 d-block w-100 h-100 object-fit-cover rounded-4"
           :class="{ 'is-loaded': imageLoaded }"
           :alt="t('podcast.image.coverAlt', { title: playlistMetadata.title })"
           :src="playlistMetadata.image"
@@ -134,13 +134,13 @@ onUnmounted(() => {
       </h1>
 
       <div class="playlist-header__topics d-flex align-self-start gap-1">
-        <span class="badge text-bg-success text-wrap text-start">
+        <span class="badge rounded-4 text-bg-success text-wrap text-start">
           {{ categoryLabel(playlistMetadata.category) }}
         </span>
 
         <span
             v-if="playlistMetadata.subcategory"
-            class="badge text-bg-success text-wrap text-start"
+            class="badge rounded-4 text-bg-success text-wrap text-start"
         >
           {{ categoryLabel(playlistMetadata.subcategory) }}
         </span>
@@ -234,13 +234,11 @@ onUnmounted(() => {
   margin-top: 3rem;
   padding: clamp(1.25rem, 2.5vw, 2rem);
   border: 1px solid var(--bs-border-color-translucent);
-  border-radius: var(--bs-border-radius-lg);
 
   &__cover {
     max-width: 17.5rem;
     align-self: start;
     justify-self: center;
-    border-radius: var(--bs-border-radius);
 
     > img {
       opacity: 0;
@@ -328,15 +326,27 @@ onUnmounted(() => {
     }
 
     &:focus-visible {
-      outline: 0.16rem solid rgba(var(--bs-success-rgb), 0.35);
+      outline: 0.16rem solid var(--bs-focus-ring-color);
       outline-offset: 0.18rem;
     }
   }
 
   &__latest {
     min-height: 2.5rem;
+    padding: 0.2rem 0.75rem;
     font-size: var(--podcast-font-body);
     line-height: var(--podcast-line-height-compact);
+    white-space: nowrap;
+
+    &:focus-visible {
+      outline: 2px solid var(--bs-success);
+      outline-offset: 2px;
+    }
+
+    .fas {
+      font-size: var(--podcast-icon-control);
+      line-height: 1;
+    }
   }
 
   @media (max-width: 767.98px) {

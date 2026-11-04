@@ -281,7 +281,7 @@ watch(
         <article
             v-for="podcast in podcastMetadata.response.docs"
             :key="podcast.id"
-            class="podcast-list__card d-grid h-100 border-0 shadow-sm rounded-2 overflow-hidden position-relative"
+            class="podcast-list__card d-grid h-100 border-0 shadow-sm rounded-5 overflow-hidden position-relative"
         >
 
           <!-- Cover -->
@@ -344,7 +344,7 @@ watch(
             <span
                 v-for="category in getItunesCategories(podcast)"
                 :key="category"
-                class="badge rounded-2 text-bg-success text-wrap text-start me-1"
+                class="badge rounded-4 text-bg-success text-wrap text-start me-1"
             >
               {{ category }}
             </span>
@@ -389,7 +389,7 @@ watch(
               :class="{ disabled: currentPage === 1 }"
           >
             <button
-                class="page-link"
+                class="page-link rounded-3"
                 type="button"
                 :disabled="currentPage === 1"
                 :aria-label="t('podcast.pagination.previousAriaLabel')"
@@ -413,7 +413,7 @@ watch(
             <!-- ... -->
             <span
                 v-if="page === '...'"
-                class="page-link text-body-secondary"
+                class="page-link rounded-3 text-body-secondary"
             >
               …
             </span>
@@ -421,7 +421,7 @@ watch(
             <!-- Page -->
             <button
                 v-else
-                class="page-link"
+                class="page-link rounded-3"
                 type="button"
                 :aria-current="
                 page === currentPage
@@ -443,7 +443,7 @@ watch(
             }"
           >
             <button
-                class="page-link"
+                class="page-link rounded-3"
                 type="button"
                 :disabled="currentPage === totalPages"
                 :aria-label="t('podcast.pagination.nextAriaLabel')"
@@ -565,20 +565,11 @@ watch(
   }
 
   &__pagination {
-    --bs-pagination-color: var(--bs-success);
-    --bs-pagination-hover-color: var(--bs-success-text-emphasis);
-    --bs-pagination-focus-color: var(--bs-success-text-emphasis);
-    --bs-pagination-active-color: var(--bs-white);
-    --bs-pagination-active-bg: var(--bs-success);
-    --bs-pagination-active-border-color: var(--bs-success);
-    --bs-pagination-disabled-color: var(--bs-secondary-color);
-
     flex-wrap: wrap;
     gap: 0.375rem;
 
     .page-link {
       min-width: 2.25rem;
-      border-radius: var(--bs-border-radius-sm);
       text-align: center;
     }
   }

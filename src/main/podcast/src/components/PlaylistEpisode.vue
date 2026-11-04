@@ -65,7 +65,7 @@ watch(
     <p
         v-if="!playlistMetadata.episodes.length"
         id="episode-empty"
-        class="alert alert-light border mb-0"
+        class="alert alert-light border rounded-5 mb-0"
     >
       {{ t('podcast.episode.empty') }}
     </p>
