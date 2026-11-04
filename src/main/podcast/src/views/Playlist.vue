@@ -117,7 +117,7 @@ watch(
 
     <LoadingState v-if="isLoading" />
 
-    <ErrorState v-else-if="isError" />
+    <ErrorState v-else-if="isError" @retry="getPlaylistMetadata" />
 
     <section v-else-if="playlistMetadata" id="playlist-content">
       <PlaylistHeader :podcast-id="podcastId" :playlist-metadata="playlistMetadata"/>

@@ -253,7 +253,7 @@ watch(
       {{ t('podcast.list.loading') }}
     </LoadingState>
 
-    <ErrorState v-else-if="isError" />
+    <ErrorState v-else-if="isError" @retry="searchPodcasts" />
 
     <EmptyState
         v-else-if="podcastMetadata?.response.numFound === 0"
