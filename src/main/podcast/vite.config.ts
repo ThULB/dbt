@@ -7,15 +7,7 @@ export default defineConfig(({ command }) => ({
 
   server: {
     proxy: {
-      '/mir/servlets/solr': {
-        target: 'http://localhost:8291',
-        changeOrigin: true,
-      },
-      '/mir/api/iiif/image/v2/thumbnail': {
-        target: 'http://localhost:8291',
-        changeOrigin: true,
-      },
-      '/mir/receive/': {
+      '/mir': {
         target: 'http://localhost:8291',
         changeOrigin: true,
       }
