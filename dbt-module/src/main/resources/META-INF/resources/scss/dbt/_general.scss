@@ -8,6 +8,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  scroll-padding-top: $navbar-brand-height;
+}
+
 a {
   text-decoration: none;
 

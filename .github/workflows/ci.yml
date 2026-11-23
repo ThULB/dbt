@@ -1,30 +1,52 @@
 name: CI
 
-on:
-  push:
-  pull_request:
+on: [ push, pull_request ]
+
+env:
+  MAVEN_OPTS: -Dorg.slf4j.simpleLogger.showDateTime=true -Dorg.slf4j.simpleLogger.dateTimeFormat=HH:mm:ss,SSS
 
 jobs:
   build:
     name: Verify
-    uses: apache/maven-gh-actions-shared/.github/workflows/maven-verify.yml@v3
-    with:
-      ff-site-goal: ''
-      ff-os: 'ubuntu-24.04'
-      ff-jdk: '21'
-      ff-goal: '-P run-its verify'
-      ff-site-run: false
-      failure-upload-path: |
-          ./**/surefire-reports
-          ./**/failsafe-reports
-          ./**/screenshots
-          ./**/*error*.log
-          ./**/*test.log
-      matrix-exclude: >
-        [
-          {"os": "macOS-latest"},
-          {"os": "windows-latest"},
-          {"jdk": "8"},
-          {"jdk": "17"},
-          {"os": "ubuntu-latest", "jdk": "21"}
-        ]
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+
+      - name: Set up Browser
+        run: |
+          # Geckodriver
+          echo ${GECKOWEBDRIVER} >> $GITHUB_PATH
+
+          firefox --version
+          ${GECKOWEBDRIVER}/geckodriver --version
+
+      - name: Build and run tests
+        run: |
+          mkdir ${{ runner.temp }}/${{ github.run_id }}.tmp
+          export TMPDIR=${{ runner.temp }}/${{ github.run_id }}.tmp
+          export FIREFOX_BIN=$(which firefox)
+          export SELENIUM_BROWSER=firefox
+          mvn -B -U -e clean verify
+
+      - name: Upload logs on build failure
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: test-results
+          path: |
+            ./**/surefire-reports
+            ./**/failsafe-reports
+            ./**/screenshots
+            ./**/*error*.log
+            ./**/*test.log
+            dbt-it/target/mycore-home/**/*.log
+            ~/.m2/repository/solr-*/server/logs/*.log
