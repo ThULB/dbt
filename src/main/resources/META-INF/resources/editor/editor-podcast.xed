@@ -112,6 +112,7 @@
                   i18n="mir.validation.podcast_series.children" />
     <xed:validate xpath="/mycoreobject"
                   test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='thumbnail']) = 1&quot;)"
+                  force-check="true"
                   relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
                   display="global"
                   i18n="mir.validation.podcast_series.thumbnail" />
@@ -175,11 +176,13 @@
                   i18n="mir.validation.podcast_episode.children" />
     <xed:validate xpath="/mycoreobject"
                   test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='content']) = 1&quot;)"
+                  force-check="true"
                   relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global"
                   i18n="mir.validation.podcast_episode.content" />
     <xed:validate xpath="/mycoreobject"
                   test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='thumbnail']) &lt;= 1&quot;)"
+                  force-check="true"
                   relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global"
                   i18n="mir.validation.podcast_episode.thumbnail" />
