@@ -172,7 +172,7 @@ public class MediaServiceResource {
         Media media = new Media();
         media.setId(id);
 
-        return transformedResponse(media, "xsl/media/embed.xsl", Collections.emptyMap());
+        return transformedResponse(media, "xslt/media/embed.xsl", Collections.emptyMap());
     }
 
     private Response buildStream(final java.nio.file.Path asset, final String range) throws Exception {

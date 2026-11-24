@@ -69,12 +69,12 @@ public class RepairCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "repair institution fields",
         help = "repairs all mods:name with @valueURI but without @authorityURI")
     public static List<String> updateInstitutions() {
-        URL styleFile = RepairCommands.class.getResource("/xsl/repair/repair-institutions.xsl");
+        URL styleFile = RepairCommands.class.getResource("/xslt/repair/repair-institutions.xsl");
         if (styleFile == null) {
             LOGGER.error("Could not find migration stylesheet. File a bug!");
             return null;
         }
-        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
+        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.obtainInstance().listIDsOfType("mods"));
         ArrayList<String> cmds = new ArrayList<>(ids.size());
         for (String id : ids) {
             cmds.add("xslt " + id + " with file " + styleFile.toString());
@@ -85,7 +85,7 @@ public class RepairCommands extends MCRAbstractCommands {
     @MCRCommand(syntax = "set main file on first derivate",
         help = "set the main file on first derviate with only one file")
     public static void setMainFile() {
-        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
+        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.obtainInstance().listIDsOfType("mods"));
         ids.forEach(id -> {
             MCRExpandedObject obj = MCRMetadataManager.retrieveMCRExpandedObject(MCRObjectID.getInstance(id));
             Optional.ofNullable(obj.getStructure().getDerivates())

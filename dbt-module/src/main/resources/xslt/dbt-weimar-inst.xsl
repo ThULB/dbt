@@ -1,6 +1,5 @@
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dbt="https://www.db-thueringen.de"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xlink="http://www.w3.org/1999/xlink"
-                exclude-result-prefixes="xsi xlink">
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dbt="https://www.db-thueringen.de"
+                exclude-result-prefixes="#all">
     <xsl:output media-type="text/xml" indent="yes" method="xml"/>
     <xsl:variable name="uboClass"
                   select="document('https://raw.githubusercontent.com/ThULB/ThUniBib/develop/weimar/src/setup/classifications/ORIGIN.xml')"/>

@@ -192,7 +192,7 @@ public class MediaServiceCommands extends MCRAbstractCommands {
     }
 
     private static List<String> forAllDerivates(String batchCommandSyntax) {
-        List<String> ids = MCRXMLMetadataManager.getInstance().listIDsOfType("derivate");
+        List<String> ids = MCRXMLMetadataManager.obtainInstance().listIDsOfType("derivate");
         List<String> cmds = new ArrayList<>(ids.size());
 
         ids.stream().sorted(Collections.reverseOrder())

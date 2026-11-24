@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:mcri18n="http://www.mycore.de/xslt/i18n" xmlns:mcrurl="http://www.mycore.de/xslt/url"
+  exclude-result-prefixes="#all"
+>
+  <xsl:template name="paginate">
+    <xsl:param name="id" select="'pagination'" />
+    <xsl:param name="i18nprefix" select="'pagination'" />
+    <xsl:param name="extraStyles" select="''" />
+    <xsl:param name="pages" />
+
+    <ul id="{$id}_paginate" class="pagination {$extraStyles}">
+      <li class="page-item">
+        <xsl:choose>
+          <xsl:when test="number($Page) &gt; 1">
+            <a class="page-link" tabindex="0" id="{$id}_first">
+              <xsl:attribute name="href">
+                  <xsl:call-template name="paginateQuerystring">
+                    <xsl:with-param name="page" select="1" />
+                  </xsl:call-template>
+                </xsl:attribute>
+              <xsl:text>«</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+              </span>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_first">
+              <xsl:text>«</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.first'))" />
+              </span>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </li>
+      <li class="page-item">
+        <xsl:choose>
+          <xsl:when test="number($Page) &gt; 1">
+            <a class="page-link" tabindex="0" id="{$id}_previous">
+              <xsl:attribute name="href">
+                  <xsl:call-template name="paginateQuerystring">
+                    <xsl:with-param name="page" select="number($Page) - 1" />
+                  </xsl:call-template>
+                </xsl:attribute>
+              <xsl:text>‹</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+              </span>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_previous">
+              <xsl:text>‹</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.previous'))" />
+              </span>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </li>
+
+      <!-- variable can be used to change numbers of Page entries to display -->
+      <xsl:variable name="paginateMaxEntries" select="5" />
+      <xsl:variable name="paginateBackCount" select="ceiling($paginateMaxEntries div 2)" />
+      <xsl:variable name="paginatePrevCount" select="$paginateMaxEntries - ceiling($paginateMaxEntries div 2)" />
+
+      <xsl:variable name="paginateStart">
+        <xsl:choose>
+          <xsl:when test="(number($Page) - $paginateBackCount) &lt;= 1">
+            <xsl:value-of select="1" />
+          </xsl:when>
+          <xsl:when test="(number($Page) + $paginatePrevCount) &gt; $pages">
+            <xsl:value-of select="number($Page) - $paginateBackCount - ((number($Page) + $paginatePrevCount) - $pages)" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="number($Page) - $paginateBackCount" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:variable name="paginateEnd">
+        <xsl:choose>
+          <xsl:when test="(number($Page) + $paginatePrevCount + 1) &gt;= $pages">
+            <xsl:value-of select="$pages" />
+          </xsl:when>
+          <xsl:when test="(number($Page) + $paginatePrevCount) &lt; $paginateMaxEntries">
+            <xsl:value-of select="$paginateMaxEntries" />
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="number($Page) + $paginatePrevCount" />
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:call-template name="paginateEntries">
+        <xsl:with-param name="pages" select="$pages" />
+        <xsl:with-param name="paginateStart" select="$paginateStart" />
+        <xsl:with-param name="paginateEnd" select="$paginateEnd" />
+      </xsl:call-template>
+
+      <li class="page-item">
+        <xsl:choose>
+          <xsl:when test="number($Page) &lt; $pages">
+            <a class="page-link" tabindex="0" id="{$id}_next">
+              <xsl:attribute name="href">
+                  <xsl:call-template name="paginateQuerystring">
+                    <xsl:with-param name="page" select="number($Page) + 1" />
+                  </xsl:call-template>
+                </xsl:attribute>
+              <xsl:text>›</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+              </span>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_next">
+              <xsl:text>›</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.next'))" />
+              </span>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </li>
+      <li class="page-item">
+        <xsl:choose>
+          <xsl:when test="number($Page) &lt; $pages">
+            <a class="page-link" tabindex="0" id="{$id}_last">
+              <xsl:attribute name="href">
+                <xsl:call-template name="paginateQuerystring">
+                  <xsl:with-param name="page" select="$pages" />
+                </xsl:call-template>
+              </xsl:attribute>
+              <xsl:text>»</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+              </span>
+            </a>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:attribute name="class">page-item disabled</xsl:attribute>
+            <a class="page-link" tabindex="0" id="{$id}_last">
+              <xsl:text>»</xsl:text>
+              <span class="visually-hidden">
+                <xsl:value-of select="mcri18n:translate(concat($i18nprefix, '.last'))" />
+              </span>
+            </a>
+          </xsl:otherwise>
+        </xsl:choose>
+      </li>
+    </ul>
+  </xsl:template>
+
+  <xsl:template name="paginateEntries">
+    <xsl:param name="pages" />
+    <xsl:param name="paginateStart" />
+    <xsl:param name="paginateEnd" />
+
+    <xsl:if test="$paginateStart = number($Page)">
+      <li class="page-item active">
+        <a class="page-link" tabindex="0">
+          <xsl:value-of select="$paginateStart" />
+        </a>
+      </li>
+    </xsl:if>
+    <xsl:if test="$paginateStart != number($Page)">
+      <li class="page-item">
+        <a class="page-link" tabindex="0">
+          <xsl:attribute name="href">
+            <xsl:call-template name="paginateQuerystring">
+              <xsl:with-param name="page" select="$paginateStart" />
+            </xsl:call-template>
+          </xsl:attribute>
+          <xsl:value-of select="$paginateStart" />
+        </a>
+      </li>
+    </xsl:if>
+
+    <xsl:if test="number($paginateStart) &lt; number($paginateEnd)">
+      <xsl:call-template name="paginateEntries">
+        <xsl:with-param name="pages" select="$pages" />
+        <xsl:with-param name="paginateStart" select="$paginateStart + 1" />
+        <xsl:with-param name="paginateEnd" select="$paginateEnd" />
+      </xsl:call-template>
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="paginateQuerystring">
+    <xsl:param name="page" select="1" />
+
+    <xsl:value-of select="mcrurl:set-param($RequestURL, 'XSL.Page', $page)" />
+  </xsl:template>
+</xsl:stylesheet>

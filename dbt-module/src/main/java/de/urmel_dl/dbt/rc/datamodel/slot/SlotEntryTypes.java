@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import org.jdom2.Element;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 
 import de.urmel_dl.dbt.utils.EntityFactory;
 import jakarta.xml.bind.annotation.XmlAccessType;

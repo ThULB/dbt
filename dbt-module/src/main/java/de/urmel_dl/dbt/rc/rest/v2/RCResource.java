@@ -36,8 +36,8 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import org.apache.solr.client.solrj.SolrQuery.ORDER;
-import org.apache.solr.client.solrj.SolrQuery.SortClause;
+import org.apache.solr.client.solrj.request.SolrQuery.ORDER;
+import org.apache.solr.client.solrj.request.SolrQuery.SortClause;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.mycore.access.MCRAccessManager;
 

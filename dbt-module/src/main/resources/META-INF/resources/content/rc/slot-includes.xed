@@ -7,7 +7,7 @@
     <xed:if test="$xed-validation-failed">
       <div class="alert alert-danger">
         <h4>
-          <xed:output i18n="component.rc.inputhints" />
+          <xed:output i18n="component.rc.inputhints" escape-xml="false" />
         </h4>
         <ul>
           <xed:display-validation-messages />
@@ -66,7 +66,7 @@
           <xed:when test="$action = 'status'">
             <div class="alert alert-info">
               <p>
-                <xed:output i18n="component.rc.slot.message.pendingStatus" />
+                <xed:output i18n="component.rc.slot.message.pendingStatus" escape-xml="false" />
               </p>
             </div>
             <xed:bind xpath="@status" set="pending" />

@@ -58,7 +58,7 @@ public class OPCResource {
 
     private static final Catalogues CATALOGUES = Catalogues.instance();
 
-    private static final String MODS_STYLESHEET = "xsl/opc/transform/pica2mods.xsl";
+    private static final String MODS_STYLESHEET = "xslt/opc/transform/pica2mods.xsl";
 
     private static final String MODS_PARAM_SOURCE = "RecordIdSource";
 

@@ -22,6 +22,11 @@ public class DBTSlotController extends MIREditorController {
         super(driver, baseURL);
     }
 
+    @Override
+    public void clickOutside() {
+        DBTClickHelper.clickOutside(driver);
+    }
+
     public void openNewSlotForm() {
         driver.waitAndFindElement(By.id("menu-rc")).click();
         driver.waitAndFindElement(By.linkText("Einrichten")).click();

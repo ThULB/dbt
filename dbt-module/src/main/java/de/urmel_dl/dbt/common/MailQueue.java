@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jdom2.Element;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.services.queuedjob.MCRJob;
 import org.mycore.services.queuedjob.MCRJobQueue;
 import org.mycore.services.queuedjob.MCRJobQueueManager;

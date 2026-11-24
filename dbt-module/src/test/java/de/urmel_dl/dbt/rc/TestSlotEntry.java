@@ -36,12 +36,15 @@ import de.urmel_dl.dbt.rc.datamodel.slot.entries.OPCRecordEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.TextEntry;
 import de.urmel_dl.dbt.rc.datamodel.slot.entries.WebLinkEntry;
 import de.urmel_dl.dbt.utils.EntityFactory;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mycore.test.MCRMetadataExtension;
 
 /**
  * @author René Adler (eagle)
  *
  */
 @MyCoReTest
+@ExtendWith(MCRMetadataExtension.class)
 public class TestSlotEntry {
 
     private SlotEntry<HeadlineEntry> newHeadLineEntry() {

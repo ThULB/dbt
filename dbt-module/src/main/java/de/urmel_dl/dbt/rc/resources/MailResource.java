@@ -31,7 +31,7 @@ import jakarta.ws.rs.core.StreamingOutput;
 import javax.xml.transform.TransformerException;
 
 import org.mycore.common.content.MCRSourceContent;
-import org.mycore.common.xml.MCRURIResolver;
+import org.mycore.common.xsl.uriresolver.MCRURIResolver;
 import org.mycore.frontend.jersey.filter.access.MCRRestrictedAccess;
 
 /**
