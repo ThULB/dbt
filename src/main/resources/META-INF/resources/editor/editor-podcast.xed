@@ -201,14 +201,15 @@
                   relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global local"
                   i18n="mir.validation.podcast.description.alternate" />
-    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf'])[2]"
+    <!-- The admin form's date range input adds empty dateIssued[@point] nodes; test-based rules do not skip empty values. -->
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf'][normalize-space(.) != ''])[2]"
                   test="false()"
                   relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global local"
                   i18n="mir.validation.podcast_episode.date.cardinality" />
     <!-- W3CDTF validity is checked by MIR's shared rules; podcast episodes require day or finer precision. -->
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf']"
-                  test="string-length(.) &gt;= 10"
+                  test="normalize-space(.) = '' or string-length(.) &gt;= 10"
                   relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global local"
                   i18n="mir.validation.podcast_episode.date.invalid" />
@@ -218,12 +219,12 @@
                   display="global local"
                   i18n="mir.validation.podcast_episode.duration.cardinality" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:physicalDescription/mods:extent"
-                  matches="^(\d{1,2}:\d{2}|\d+:\d{2}:\d{2})$"
+                  matches="^(\d{1,2}:[0-5]\d|[0-5]?\d):[0-5]\d$"
                   relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global local"
                   i18n="mir.validation.podcast_episode.duration.invalid" />
     <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][1]"
-                  test="xed:call-java('org.mycore.datamodel.metadata.MCRObjectID','isValid', string(@xlink:href)) and contains(@xlink:href, '_mods_') and not(contains(@xlink:href, '_mods_00000000')) and count(mods:genre[@type='intern']) = 1 and mods:genre[@type='intern']/@valueURIxEditor = 'podcast_series'"
+                  test="xed:call-java('org.mycore.datamodel.metadata.MCRObjectID','isValid', string(@xlink:href)) and contains(@xlink:href, '_mods_') and not(contains(@xlink:href, '_mods_00000000')) and xed:call-java('org.mycore.mir.validation.MIRStructureValidator','testMetadata', string(@xlink:href), &quot;count(def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']) = 1 and def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURI = 'http://www.mycore.org/classifications/mir_genres#podcast_series'&quot;)"
                   relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
                   display="global local"
                   i18n="mir.validation.podcast_episode.host" />

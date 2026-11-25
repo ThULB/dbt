@@ -21,6 +21,7 @@ package org.mycore.mir.validation;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,19 +37,24 @@ import org.mycore.frontend.MCRFrontendUtil;
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * Evaluates XPath expressions against the current repository structure of an object.
+ * Evaluates XPath expressions against the stored repository version of an object.
+ * <p>
+ * {@link #test(String, String)} uses the object's {@code structure} element as context node,
+ * {@link #testMetadata(String, String)} its {@code metadata} element. Objects are loaded at most once per request.
  */
 public final class MIRStructureValidator {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final String STRUCTURE_CACHE_ATTRIBUTE = MIRStructureValidator.class.getName() + ".structureCache";
+    private static final String OBJECT_CACHE_ATTRIBUTE = MIRStructureValidator.class.getName() + ".objectCache";
 
     private MIRStructureValidator() {
     }
 
     /**
      * Evaluates the given XPath with the object's {@code structure} element as context node.
+     * <p>
+     * If the object is not stored yet, an empty {@code structure} element is used.
      *
      * @param objectId the MyCoRe object ID
      * @param xPath an XPath expression relative to the {@code structure} element
@@ -56,50 +62,71 @@ public final class MIRStructureValidator {
      */
     public static boolean test(String objectId, String xPath) {
         try {
-            return test(getStructure(MCRObjectID.getInstance(objectId)), xPath);
+            Element structure = getObject(MCRObjectID.getInstance(objectId))
+                .map(object -> object.getChild("structure"))
+                .orElse(null);
+            return test(structure == null ? new Element("structure") : structure, xPath);
         } catch (RuntimeException e) {
             LOGGER.error("Unable to validate structure of {} with XPath {}", objectId, xPath, e);
             return false;
         }
     }
 
-    static boolean test(Element structure, String xPath) {
-        return new MCRXPathEvaluator(Map.of(), structure).test(xPath);
-    }
-
-    private static Element getStructure(MCRObjectID objectId) {
-        return MCRFrontendUtil.getCurrentServletJob()
-            .map(job -> getStructure(job.getRequest(), objectId))
-            .orElseGet(() -> loadStructure(objectId));
-    }
-
-    private static Element getStructure(HttpServletRequest request, MCRObjectID objectId) {
-        Object attribute = request.getAttribute(STRUCTURE_CACHE_ATTRIBUTE);
-        StructureCache cache;
-        if (attribute instanceof StructureCache structureCache) {
-            cache = structureCache;
-        } else {
-            cache = new StructureCache();
-            request.setAttribute(STRUCTURE_CACHE_ATTRIBUTE, cache);
+    /**
+     * Evaluates the given XPath with the stored object's {@code metadata} element as context node.
+     * <p>
+     * Returns {@code false} if the object does not exist, so the result can be used to validate references to
+     * other objects.
+     *
+     * @param objectId the MyCoRe object ID
+     * @param xPath an XPath expression relative to the {@code metadata} element
+     * @return the effective boolean value of the XPath expression, or {@code false} if the object does not exist
+     */
+    public static boolean testMetadata(String objectId, String xPath) {
+        try {
+            return getObject(MCRObjectID.getInstance(objectId))
+                .map(object -> object.getChild("metadata"))
+                .map(metadata -> test(metadata, xPath))
+                .orElse(false);
+        } catch (RuntimeException e) {
+            LOGGER.error("Unable to validate metadata of {} with XPath {}", objectId, xPath, e);
+            return false;
         }
-        return cache.structures.computeIfAbsent(objectId, MIRStructureValidator::loadStructure);
     }
 
-    private static Element loadStructure(MCRObjectID objectId) {
+    static boolean test(Element context, String xPath) {
+        return new MCRXPathEvaluator(Map.of(), context).test(xPath);
+    }
+
+    private static Optional<Element> getObject(MCRObjectID objectId) {
+        return MCRFrontendUtil.getCurrentServletJob()
+            .map(job -> getObject(job.getRequest(), objectId))
+            .orElseGet(() -> loadObject(objectId));
+    }
+
+    private static Optional<Element> getObject(HttpServletRequest request, MCRObjectID objectId) {
+        Object attribute = request.getAttribute(OBJECT_CACHE_ATTRIBUTE);
+        ObjectCache cache;
+        if (attribute instanceof ObjectCache objectCache) {
+            cache = objectCache;
+        } else {
+            cache = new ObjectCache();
+            request.setAttribute(OBJECT_CACHE_ATTRIBUTE, cache);
+        }
+        return cache.objects.computeIfAbsent(objectId, MIRStructureValidator::loadObject);
+    }
+
+    private static Optional<Element> loadObject(MCRObjectID objectId) {
         try {
             Document document = MCRXMLMetadataManager.getInstance().retrieveXML(objectId);
-            if (document == null) {
-                return new Element("structure");
-            }
-            Element structure = document.getRootElement().getChild("structure");
-            return structure == null ? new Element("structure") : structure.clone();
+            return Optional.ofNullable(document).map(Document::getRootElement);
         } catch (IOException | JDOMException e) {
-            throw new MCRException("Unable to retrieve structure of " + objectId, e);
+            throw new MCRException("Unable to retrieve " + objectId, e);
         }
     }
 
-    private static final class StructureCache {
+    private static final class ObjectCache {
 
-        private final Map<MCRObjectID, Element> structures = new HashMap<>();
+        private final Map<MCRObjectID, Optional<Element>> objects = new HashMap<>();
     }
 }

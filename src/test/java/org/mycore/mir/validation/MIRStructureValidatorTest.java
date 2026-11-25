@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.jdom2.Element;
 import org.junit.jupiter.api.Test;
+import org.mycore.common.MCRConstants;
 import org.mycore.test.MyCoReTest;
 
 @MyCoReTest
@@ -59,5 +60,28 @@ public class MIRStructureValidatorTest {
     @Test
     public void rejectsInvalidObjectId() {
         assertFalse(MIRStructureValidator.test("not-an-object-id", "count(children/child) = 0"));
+    }
+
+    @Test
+    public void evaluatesXPathRelativeToMetadata() {
+        Element genre = new Element("genre", MCRConstants.MODS_NAMESPACE)
+            .setAttribute("type", "intern")
+            .setAttribute("valueURI", "http://www.mycore.org/classifications/mir_genres#podcast_series");
+        Element metadata = new Element("metadata")
+            .addContent(new Element("def.modsContainer")
+                .addContent(new Element("modsContainer")
+                    .addContent(new Element("mods", MCRConstants.MODS_NAMESPACE).addContent(genre))));
+
+        assertTrue(MIRStructureValidator.test(metadata,
+            "def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURI"
+                + " = 'http://www.mycore.org/classifications/mir_genres#podcast_series'"));
+        assertFalse(MIRStructureValidator.test(metadata,
+            "def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURI"
+                + " = 'http://www.mycore.org/classifications/mir_genres#podcast_episode'"));
+    }
+
+    @Test
+    public void rejectsMetadataOfInvalidObjectId() {
+        assertFalse(MIRStructureValidator.testMetadata("not-an-object-id", "true()"));
     }
 }
