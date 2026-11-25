@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xed:template xmlns:xed="http://www.mycore.de/xeditor"
+              xmlns:mir="http://www.mycore.de/mir"
+              xmlns:mods="http://www.loc.gov/mods/v3"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns:i18n="xalan://org.mycore.services.i18n.MCRTranslation">
+
+  <xed:template id="genres.podcast_series">
+    <xed:include ref="itunes-podcast" />
+    <xed:include ref="title.original" />
+    <xed:include ref="author.repeated" />
+    <xed:include ref="podcast.owner" />
+    <xed:include ref="type.of.resource.sound_recording" />
+    <xed:include ref="podcast.language" />
+    <xed:include ref="link.repeated" />
+    <xed:include ref="abstract.simple" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[1]"
+                  required="true"
+                  display="global here"
+                  i18n="mir.validation.podcast_series.description" />
+    <xed:include ref="sdnb.repeat" />
+    <xed:include ref="rights" />
+    <xed:include ref="institutes" />
+  </xed:template>
+
+  <xed:template id="genres.podcast_episode">
+    <xed:include ref="title.original" />
+    <xed:include ref="author.repeated" />
+    <xed:include ref="date.issued.datetimepicker" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf'])[1]"
+                  required="true"
+                  display="global here"
+                  i18n="mir.validation.podcast_episode.date.required" />
+    <xed:include ref="extent.required" />
+    <xed:include ref="type.of.resource.sound_recording" />
+    <xed:include ref="abstract.simple" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[1]"
+                  required="true"
+                  relevant-if="not(../mods:relatedItem[@type='host']/mods:part/@order = 0)"
+                  display="global here"
+                  i18n="mir.validation.podcast_episode.description" />
+    <xed:include ref="sdnb.repeat" />
+    <xed:include ref="rights" />
+    <xed:include ref="institutes" />
+  </xed:template>
+
+  <xed:template id="podcast.language">
+    <xed:bind xpath="mods:language/mods:languageTerm[@authority='rfc5646'][@type='code']"
+              initially="{$MCR.Metadata.DefaultLang}">
+      <div class="mir-form-group row required {$xed-validation-marker}">
+        <label class="col-md-3 col-form-label text-end form-label">
+          <xed:output i18n="mir.language" />
+        </label>
+        <div class="col-md-6">
+          <div class="controls">
+            <xed:include ref="lang.list" />
+          </div>
+        </div>
+        <mir:help-pmud help-text="{i18n:mir.help.language}" />
+      </div>
+      <xed:validate required="true"
+                    display="global here"
+                    i18n="mir.validation.podcast_series.language" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="podcast.owner">
+    <xed:repeat xpath="mods:name[mods:role/mods:roleTerm[@authority='marcrelator'][@type='code']='own']"
+                min="1" max="1">
+      <xed:bind xpath="mods:role/mods:roleTerm[@authority='marcrelator'][@type='code']" initially="own" />
+      <div class="mir-form-group row">
+        <label class="col-md-3 col-form-label text-end form-label">
+          <xed:output i18n="mir.podcast.owner" />
+        </label>
+        <div class="col-md-6">
+          <div class="controls">
+            <xed:include ref="person.fields" />
+          </div>
+        </div>
+        <mir:help-pmud help-text="{i18n:mir.help.podcast.owner}" />
+      </div>
+      <mir:textfield xpath="mods:affiliation[not(@authorityURI)][1]"
+                     label="mir.podcast.owner.email"
+                     help-text="{i18n:mir.help.podcast.owner.email}" />
+    </xed:repeat>
+  </xed:template>
+
+  <xed:template id="hosts.podcast_series">
+    <xed:bind xpath="mods:relatedItem[@type='host']">
+      <xed:bind xpath="@xlink:href" initially="{$MIR.projectid.default}_mods_00000000">
+        <input id="relItem-podcast-series" type="hidden" />
+      </xed:bind>
+      <mir:relItemsearch searchengine="title"
+                         genre="podcast_series"
+                         responsefield="mods.title"
+                         xpath="mods:titleInfo/mods:title"
+                         label="mir.title"
+                         class="required"
+                         required="true"
+                         required-i18n="mir.validation.podcast_episode.host" />
+      <xed:include ref="host.order" />
+    </xed:bind>
+  </xed:template>
+
+  <xed:template id="podcast_series.validation">
+    <xed:load-resource name="marcrelator" uri="classification:metadata:-1:children:marcrelator" />
+    <xed:validate xpath="/mycoreobject"
+                  test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), 'count(children/child) &gt; 0')"
+                  relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global"
+                  i18n="mir.validation.podcast_series.children" />
+    <xed:validate xpath="/mycoreobject"
+                  test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='thumbnail']) = 1&quot;)"
+                  force-check="true"
+                  relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global"
+                  i18n="mir.validation.podcast_series.thumbnail" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:language/mods:languageTerm[@authority='rfc5646'])[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast_series.language.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo[1]/mods:title[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.title.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods"
+                  test="mods:name[mods:role/mods:roleTerm[@authority='marcrelator'] = $marcrelator/categories/category[@ID='cre']/descendant-or-self::category/@ID][mods:displayForm[normalize-space(.) != ''] or mods:namePart[normalize-space(.) != '']]"
+                  relevant-if="mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast_series.creator" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[3]"
+                  test="false()"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.description.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[2]"
+                  test="../mods:abstract[@altRepGroup]"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.description.alternate" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:classification[@authorityURI='http://www.mycore.org/classifications/itunes-podcast']/@valueURIxEditor)[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast_series.category.cardinality" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:location/mods:url[@access='object in context'])[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.link" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name[mods:role/mods:roleTerm='own'][mods:namePart[normalize-space(.) != ''] or mods:displayForm[normalize-space(.) != ''] or mods:affiliation[normalize-space(.) != '']])[2]"
+                  test="false()"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.owner.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name[mods:role/mods:roleTerm='own'][mods:namePart[normalize-space(.) != ''] or mods:displayForm[normalize-space(.) != ''] or mods:affiliation[normalize-space(.) != '']]"
+                  test="mods:displayForm[normalize-space(.) != ''] and count(mods:affiliation[not(@authorityURI)]) = 1 and mods:affiliation[not(@authorityURI)][normalize-space(.) != '']"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.owner.incomplete" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:name[mods:role/mods:roleTerm='own'][mods:namePart[normalize-space(.) != ''] or mods:displayForm[normalize-space(.) != ''] or mods:affiliation[normalize-space(.) != '']][count(mods:affiliation[not(@authorityURI)]) = 1]/mods:affiliation[not(@authorityURI)]"
+                  matches="[a-zA-Z0-9.!#$%&amp;’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast.owner.email" />
+  </xed:template>
+
+  <xed:template id="podcast_episode.validation">
+    <xed:validate xpath="/mycoreobject"
+                  test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), 'count(children/child) = 0')"
+                  relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global"
+                  i18n="mir.validation.podcast_episode.children" />
+    <xed:validate xpath="/mycoreobject"
+                  test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='content']) = 1&quot;)"
+                  force-check="true"
+                  relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global"
+                  i18n="mir.validation.podcast_episode.content" />
+    <xed:validate xpath="/mycoreobject"
+                  test="xed:call-java('org.mycore.mir.validation.MIRStructureValidator','test', string(@ID), &quot;count(derobjects/derobject[classification/@categid='thumbnail']) &lt;= 1&quot;)"
+                  force-check="true"
+                  relevant-if="service/servstates/servstate[@classid='state']/@categid='published' and metadata/def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global"
+                  i18n="mir.validation.podcast_episode.thumbnail" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo[1]/mods:title[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast.title.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[3]"
+                  test="false()"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast.description.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[2]"
+                  test="../mods:abstract[@altRepGroup]"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast.description.alternate" />
+    <!-- The admin form's date range input adds empty dateIssued[@point] nodes; test-based rules do not skip empty values. -->
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf'][normalize-space(.) != ''])[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.date.cardinality" />
+    <!-- W3CDTF validity is checked by MIR's shared rules; podcast episodes require day or finer precision. -->
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf']"
+                  test="normalize-space(.) = '' or string-length(.) &gt;= 10"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.date.invalid" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:physicalDescription/mods:extent)[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.duration.cardinality" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:physicalDescription/mods:extent"
+                  matches="^(\d{1,2}:[0-5]\d|[0-5]?\d):[0-5]\d$"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.duration.invalid" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][1]"
+                  test="xed:call-java('org.mycore.datamodel.metadata.MCRObjectID','isValid', string(@xlink:href)) and contains(@xlink:href, '_mods_') and not(contains(@xlink:href, '_mods_00000000')) and xed:call-java('org.mycore.mir.validation.MIRStructureValidator','testMetadata', string(@xlink:href), &quot;count(def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']) = 1 and def.modsContainer/modsContainer/mods:mods/mods:genre[@type='intern']/@valueURI = 'http://www.mycore.org/classifications/mir_genres#podcast_series'&quot;)"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.host" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:relatedItem[@type='host'][2]"
+                  test="false()"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.host.cardinality" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:location/mods:url[@access='object in context'])[2]"
+                  test="false()"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast.link" />
+  </xed:template>
+
+  <xed:template id="podcast.admin.validation">
+    <xed:include ref="podcast.validation" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:titleInfo[1]/mods:title[1]"
+                  required="true"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series' or ../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast.title.required" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:language/mods:languageTerm[@authority='rfc5646'])[1]"
+                  required="true"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast_series.language" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[1]"
+                  required="true"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_series'"
+                  display="global local"
+                  i18n="mir.validation.podcast_series.description" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:abstract[1]"
+                  required="true"
+                  relevant-if="../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode' and not(../mods:relatedItem[@type='host']/mods:part/@order = 0)"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.description" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:originInfo[@eventType='publication']/mods:dateIssued[@encoding='w3cdtf'])[1]"
+                  required="true"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.date.required" />
+    <xed:validate xpath="(/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods/mods:physicalDescription/mods:extent)[1]"
+                  required="true"
+                  relevant-if="../../mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global local"
+                  i18n="mir.validation.podcast_episode.duration.required" />
+    <xed:validate xpath="/mycoreobject/metadata/def.modsContainer/modsContainer/mods:mods"
+                  test="count(mods:relatedItem[@type='host']) &gt; 0"
+                  relevant-if="mods:genre[@type='intern']/@valueURIxEditor='podcast_episode'"
+                  display="global"
+                  i18n="mir.validation.podcast_episode.host" />
+  </xed:template>
+
+  <xed:template id="podcast.validation">
+    <xed:include ref="podcast_series.validation" />
+    <xed:include ref="podcast_episode.validation" />
+  </xed:template>
+
+  <xed:template id="podcast.postprocessor">
+    <xed:post-processor class="org.mycore.mir.editor.MIRPostProcessor"
+                        xsl="editor/podcast-xeditor2mods.xsl" />
+  </xed:template>
+
+  <xed:modify ref="in.out">
+    <xed:include ref="podcast.postprocessor" />
+  </xed:modify>
+
+  <xed:modify ref="genres.submit">
+    <xed:include ref="podcast.validation" after="validation-rules" />
+  </xed:modify>
+
+  <xed:modify ref="admin.fields">
+    <xed:include ref="podcast.admin.validation" after="validation-rules" />
+  </xed:modify>
+
+</xed:template>
