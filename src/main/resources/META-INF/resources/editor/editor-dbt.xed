@@ -1,4 +1,5 @@
-<xed:template xmlns:xed="http://www.mycore.de/xeditor">
+<xed:template xmlns:xed="http://www.mycore.de/xeditor"
+              xmlns:mir="http://www.mycore.de/mir">
   <xed:template id="i.agree">
     <xed:bind xpath="../../../../service">
       <!-- When publication is new, force to select "I agree": -->
@@ -12,14 +13,14 @@
       </xed:choose>
 
       <xed:bind xpath="iagree" initially="false" default="false">
-        <fieldset class="form-group {$xed-validation-marker}">
+        <fieldset class="mir-form-group {$xed-validation-marker}">
           <legend class="mir-fieldset-legend required">
             <xed:output i18n="editor.contract.publish" />
           </legend>
           <div class="bg-secondary p-1">
             <xed:output i18n="editor.contract.text" />
           </div>
-          <div class="form-group">
+          <div class="mb-3">
             <div class="form-check form-switch offset-md-2 pt-2 pb-3">
               <input id="iagree_true" type="checkbox" value="true" class="form-check-input" role="switch" />
               <label class="form-check-label" for="iagree_true">
@@ -57,48 +58,40 @@
 
   <xed:template id="oai">
     <xed:bind xpath="mods:classification[@authority='OAI'][@displayLabel='OAI']">
-      <div class="form-group row {$xed-validation-marker}">
-        <label class="col-md-3 control-label text-right">
+      <div class="mir-form-group row {$xed-validation-marker}">
+        <label class="col-md-3 col-form-label text-end form-label">
           <xed:output i18n="editor.oai" />
           :
         </label>
         <div class="col-md-6">
-          <select class="form-control form-control-inline">
+          <select class="form-control form-control-inline form-select">
             <option value="">
               <xed:output i18n="mir.select.optional" />
             </option>
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:OAI" />
           </select>
         </div>
-        <div class="col-md-3">
-          <a tabindex="0" class="btn btn-outline-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.oai.help}">
-            <i class="fa fa-info"></i>
-          </a>
-        </div>
+        <mir:help-pmud help-text="{i18n:editor.oai.help}" />
       </div>
     </xed:bind>
   </xed:template>
 
   <xed:template id="itunes-podcast">
     <xed:bind xpath="mods:classification[@authorityURI='http://www.mycore.org/classifications/itunes-podcast'][@displayLabel='Apple Podcast category']/@valueURIxEditor">
-      <div class="form-group row {$xed-validation-marker}">
-        <label class="col-md-3 control-label text-right">
+      <div class="mir-form-group row {$xed-validation-marker}">
+        <label class="col-md-3 col-form-label text-end form-label">
           <xed:output i18n="editor.itunes-podcast" />
           :
         </label>
         <div class="col-md-6">
-          <select class="form-control form-control-inline">
+          <select class="form-control form-control-inline form-select">
             <option value="">
               <xed:output i18n="mir.select.optional" />
             </option>
             <xed:include uri="xslStyle:items2options:classification:editor:-1:children:itunes-podcast" />
           </select>
         </div>
-        <div class="col-md-3">
-          <a tabindex="0" class="btn btn-outline-secondary info-button" role="button" data-toggle="popover" data-placement="right" data-content="{i18n:editor.itunes-podcast.help}">
-            <i class="fa fa-info"></i>
-          </a>
-        </div>
+        <mir:help-pmud help-text="{i18n:editor.itunes-podcast.help}" />
       </div>
     </xed:bind>
   </xed:template>
