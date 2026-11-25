@@ -87,6 +87,16 @@
     <url-pattern>/rcclient/*</url-pattern>
   </servlet-mapping>
 
+  <servlet id="PodcastServlet">
+    <servlet-name>PodcastServlet</servlet-name>
+    <servlet-class>de.urmel_dl.dbt.podcast.servlets.PodcastServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>PodcastServlet</servlet-name>
+    <url-pattern>/podcast</url-pattern>
+    <url-pattern>/podcast/*</url-pattern>
+  </servlet-mapping>
+
   <servlet>
     <servlet-name>OPCServlet</servlet-name>
     <servlet-class>de.urmel_dl.dbt.opc.servlets.OPCServlet</servlet-class>

@@ -1,0 +1,35 @@
+import { createApp, type App as VueApp } from 'vue';
+import { createPinia } from 'pinia';
+import { i18n } from './i18n';
+
+import App from './App.vue';
+import router from './router/router';
+import { syncLanguageLinks } from './utils/languageLinks';
+
+import './style.css';
+
+const PODCAST_MOUNT_SELECTOR = '#main_content > .container';
+
+router.afterEach(() => {
+  syncLanguageLinks();
+});
+
+export function mountPodcast(selector = PODCAST_MOUNT_SELECTOR): VueApp<Element> {
+  const container = document.querySelector(selector);
+
+  if (!container) {
+    throw new Error(`Podcast mount element not found: ${selector}`);
+  }
+
+  const app = createApp(App);
+
+  app.use(createPinia());
+  app.use(i18n);
+  app.use(router);
+
+  app.mount(container);
+
+  return app;
+}
+
+mountPodcast();
