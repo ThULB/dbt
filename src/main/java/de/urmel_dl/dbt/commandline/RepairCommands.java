@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jdom2.Element;
 import org.mycore.access.MCRAccessException;
 import org.mycore.common.MCRException;
 import org.mycore.common.MCRPersistenceException;
@@ -49,6 +50,9 @@ import org.mycore.frontend.cli.MCRAbstractCommands;
 import org.mycore.frontend.cli.MCRDerivateCommands;
 import org.mycore.frontend.cli.annotation.MCRCommand;
 import org.mycore.frontend.cli.annotation.MCRCommandGroup;
+import org.mycore.mods.MCRMODSWrapper;
+
+import de.urmel_dl.dbt.mods.events.ModsNormalizeEventHandler;
 
 /**
  * The Class RepairCommands.
@@ -79,6 +83,31 @@ public class RepairCommands extends MCRAbstractCommands {
             cmds.add("xslt " + id + " with file " + styleFile.toString());
         }
         return cmds;
+    }
+
+    @MCRCommand(syntax = "remove line breaks from all titles",
+        help = "replaces line breaks and tabs within the title elements of all mods objects by a single space")
+    public static List<String> removeTitleLineBreaks() {
+        TreeSet<String> ids = new TreeSet<>(MCRXMLMetadataManager.getInstance().listIDsOfType("mods"));
+        ArrayList<String> cmds = new ArrayList<>(ids.size());
+        for (String id : ids) {
+            cmds.add("remove line breaks from titles of " + id);
+        }
+        return cmds;
+    }
+
+    /**
+     * remove line breaks from the titles of given object.
+     */
+    @MCRCommand(syntax = "remove line breaks from titles of {0}",
+        help = "replaces line breaks and tabs within the title elements of object {0} by a single space")
+    public static void removeTitleLineBreaksOfObject(String id) throws MCRAccessException {
+        MCRObject obj = MCRMetadataManager.retrieveMCRObject(MCRObjectID.getInstance(id));
+        Element mods = new MCRMODSWrapper(obj).getMODS();
+        if (mods != null && ModsNormalizeEventHandler.normalizeTitleWhitespace(mods)) {
+            MCRMetadataManager.update(obj);
+            LOGGER.info("Removed line breaks from titles of {}.", id);
+        }
     }
 
     @MCRCommand(syntax = "set main file on first derivate",
